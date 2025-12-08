@@ -4,6 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import SearchableSelect from '@/components/ui/SearchableSelect';
+import CountUp from '@/components/ui/CountUp';
+import WhatsAppButton from '@/components/ui/WhatsAppButton';
+import SocialProof from '@/components/ui/SocialProof';
 import { countries } from '@/lib/constants';
 
 const features = [
@@ -11,39 +14,45 @@ const features = [
     image: '/img/curieriinostri.png',
     title: 'Curieri Verificați',
     description: 'Toți curierii noștri trec printr-un proces riguros de verificare. Sunt profesioniști cu experiență în transport internațional.',
+    gradient: 'from-blue-500/20 to-cyan-500/20',
   },
   {
     image: '/img/asigurare.png',
     title: 'Asigurare Gratuită',
     description: 'Fiecare colet beneficiază de asigurare inclusă în preț. Liniște sufletească pentru tine și destinatarul tău.',
+    gradient: 'from-green-500/20 to-emerald-500/20',
   },
   {
     image: '/img/door2door.png',
     title: 'Door to Door',
     description: 'Ridicăm coletul de la ușa ta și îl livrăm direct la destinație. Fără cozi, fără așteptări.',
+    gradient: 'from-orange-500/20 to-amber-500/20',
   },
   {
     image: '/img/track.png',
     title: 'Tracking Live',
     description: 'Urmărește-ți coletul în timp real pe hartă. Știi mereu exact unde se află și când ajunge.',
+    gradient: 'from-purple-500/20 to-pink-500/20',
   },
   {
     image: '/img/heretohelp.png',
     title: 'Suport Non-Stop',
     description: 'Echipa noastră de suport îți răspunde 24/7 pe WhatsApp, telefon sau email.',
+    gradient: 'from-red-500/20 to-rose-500/20',
   },
   {
     image: '/img/pets.png',
     title: 'Transport Special',
     description: 'Transportăm și animale de companie, obiecte fragile sau colete voluminoase cu grijă maximă.',
+    gradient: 'from-teal-500/20 to-cyan-500/20',
   },
 ];
 
 const stats = [
-  { value: '10K+', label: 'Colete livrate', iconType: 'package' },
-  { value: '500+', label: 'Curieri activi', iconType: 'truck' },
-  { value: '16', label: 'Țări acoperite', iconType: 'globe' },
-  { value: '4.9★', label: 'Rating mediu', iconType: 'star' },
+  { value: 10000, suffix: '+', label: 'Colete livrate', iconType: 'package' },
+  { value: 500, suffix: '+', label: 'Curieri activi', iconType: 'truck' },
+  { value: 16, suffix: '', label: 'Țări acoperite', iconType: 'globe' },
+  { value: 4.9, suffix: '★', label: 'Rating mediu', iconType: 'star', isDecimal: true },
 ];
 
 const testimonials = [
@@ -291,7 +300,13 @@ export default function Home() {
                     </svg>
                   )}
                 </div>
-                <div className="stat-value">{stat.value}</div>
+                <div className="stat-value">
+                  {stat.isDecimal ? (
+                    <>{stat.value}{stat.suffix}</>
+                  ) : (
+                    <CountUp end={stat.value} suffix={stat.suffix} />
+                  )}
+                </div>
                 <div className="stat-label">{stat.label}</div>
               </div>
             ))}
@@ -440,26 +455,43 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="card group overflow-hidden p-0">
-                <div className="relative aspect-4/3 overflow-hidden">
-                  <Image
-                    src={feature.image}
-                    alt={feature.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
+              <div 
+                key={index} 
+                className="group relative bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-white/5 hover:border-orange-500/30 transition-all duration-500 hover:transform hover:-translate-y-2"
+              >
+                {/* Gradient background on hover */}
+                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Image container with glow effect */}
+                  <div className="relative w-40 h-40 mx-auto mb-6">
+                    <div className="absolute inset-0 bg-orange-500/20 rounded-full blur-xl group-hover:bg-orange-500/30 transition-all duration-500"></div>
+                    <Image
+                      src={feature.image}
+                      alt={feature.title}
+                      width={160}
+                      height={160}
+                      className="relative z-10 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  
+                  {/* Text */}
+                  <div className="text-center">
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-orange-400 transition-colors duration-300">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
+                      {feature.description}
+                    </p>
+                  </div>
                 </div>
-                <div className="p-5">
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
+
+                {/* Corner accent */}
+                <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden rounded-tr-2xl">
+                  <div className="absolute -top-10 -right-10 w-20 h-20 bg-gradient-to-br from-orange-500/20 to-transparent rotate-45 group-hover:from-orange-500/40 transition-all duration-500"></div>
                 </div>
               </div>
             ))}
@@ -589,6 +621,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Floating Elements */}
+      <WhatsAppButton />
+      <SocialProof />
     </div>
   );
 }
