@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types';
 
@@ -77,14 +76,6 @@ function LoginForm() {
         
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center px-12 xl:px-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center mb-12">
-            <span className="text-2xl font-bold">
-              <span className="text-orange-500">CurierulPerfect</span>
-              <span className="text-emerald-500">.ro</span>
-            </span>
-          </Link>
-
           <h1 className="text-4xl xl:text-5xl font-bold text-white mb-6 leading-tight">
             {isCurier ? (
               <>

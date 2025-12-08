@@ -6,7 +6,6 @@ import { useState } from 'react';
 import SearchableSelect from '@/components/ui/SearchableSelect';
 import CountUp from '@/components/ui/CountUp';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
-import SocialProof from '@/components/ui/SocialProof';
 import { countries } from '@/lib/constants';
 
 const features = [
@@ -681,7 +680,7 @@ export default function Home() {
       </section>
 
       {/* Trust Section */}
-      <section className="py-16 px-4 border-t border-white/5">
+      <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-gray-500 text-sm mb-6">Transportăm colete în siguranță în peste 16 țări europene</p>
           <div className="flex flex-wrap justify-center gap-3 mb-8">
@@ -697,18 +696,28 @@ export default function Home() {
             ))}
           </div>
           
-          <div className="card inline-block px-8 py-6">
-            <p className="text-white font-medium mb-4">Pregătit să trimiți un colet?</p>
-            <Link href="#top" className="btn-primary">
-              Începe acum - Este gratuit →
-            </Link>
+          <div className="relative group inline-block">
+            <div className="absolute -inset-1 bg-linear-to-r from-orange-500 to-emerald-500 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
+            <div className="relative bg-slate-900/90 backdrop-blur-sm border border-white/10 rounded-2xl px-10 py-8">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-linear-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center">
+                <svg className="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                </svg>
+              </div>
+              <p className="text-white font-semibold text-lg mb-2">Pregătit să trimiți un colet?</p>
+              <p className="text-gray-400 text-sm mb-5">Găsește cel mai bun curier în câteva secunde</p>
+              <Link href="#top" className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg shadow-orange-500/30 transition-all group-hover:scale-105">
+                <span>Începe acum</span>
+                <span className="text-orange-200">- Este gratuit →</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Floating Elements */}
       <WhatsAppButton />
-      <SocialProof />
+      {/* <SocialProof /> */}
     </div>
   );
 }

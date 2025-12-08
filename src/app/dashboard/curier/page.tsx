@@ -1,10 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, ReactNode } from 'react';
 import {
   MapIcon,
   CalendarIcon,
@@ -19,7 +18,6 @@ import {
   MoneyIcon,
   BellIcon,
   ArrowRightIcon,
-  LogoIcon,
 } from '@/components/icons/DashboardIcons';
 
 // ============================================
@@ -175,14 +173,6 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
     <header className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center group">
-            <span className="text-lg font-bold transition-all duration-300 group-hover:scale-105">
-              <span className="text-orange-500">CurierulPerfect</span>
-              <span className="text-emerald-500">.ro</span>
-            </span>
-          </Link>
-
           {/* Right Side */}
           <div className="flex items-center gap-4">
             {/* Notifications */}
@@ -390,11 +380,6 @@ function RecentActivity() {
 export default function CurierDashboard() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -408,11 +393,11 @@ export default function CurierDashboard() {
   };
 
   // Loading State
-  if (loading || !mounted) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="spinner mb-4" />
           <p className="text-gray-400">Se încarcă...</p>
         </div>
       </div>

@@ -74,7 +74,7 @@ export default function AdminDashboard() {
   if (loading || loadingData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-green-400 text-xl">Se încarcă...</div>
+        <div className="spinner"></div>
       </div>
     );
   }
