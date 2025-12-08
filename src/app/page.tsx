@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const countries = [
   { code: 'RO', name: 'România', flag: '🇷🇴' },
@@ -130,11 +130,6 @@ const popularRoutes = [
 export default function Home() {
   const [pickupCountry, setPickupCountry] = useState('');
   const [deliveryCountry, setDeliveryCountry] = useState('');
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,7 +156,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto w-full relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left side - Content */}
-            <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className="animate-fade-in">
               {/* Badge */}
               <div className="mb-8">
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-sm">
@@ -224,7 +219,7 @@ export default function Home() {
             </div>
 
             {/* Right side - Search Form */}
-            <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+            <div className="animate-fade-in-delayed">
               <div className="relative">
                 {/* Glow effect */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 to-green-500/20 rounded-3xl blur-xl"></div>
