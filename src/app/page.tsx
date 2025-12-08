@@ -4,25 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import SearchableSelect from '@/components/ui/SearchableSelect';
-
-const countries = [
-  { code: 'RO', name: 'România', flag: '/img/flag/ro.svg' },
-  { code: 'GB', name: 'Anglia', flag: '/img/flag/gb.svg' },
-  { code: 'IT', name: 'Italia', flag: '/img/flag/it.svg' },
-  { code: 'ES', name: 'Spania', flag: '/img/flag/es.svg' },
-  { code: 'DE', name: 'Germania', flag: '/img/flag/de.svg' },
-  { code: 'FR', name: 'Franța', flag: '/img/flag/fr.svg' },
-  { code: 'AT', name: 'Austria', flag: '/img/flag/at.svg' },
-  { code: 'BE', name: 'Belgia', flag: '/img/flag/be.svg' },
-  { code: 'NL', name: 'Olanda', flag: '/img/flag/nl.svg' },
-  { code: 'GR', name: 'Grecia', flag: '/img/flag/gr.svg' },
-  { code: 'PT', name: 'Portugalia', flag: '/img/flag/pt.svg' },
-  { code: 'NO', name: 'Norvegia', flag: '/img/flag/no.svg' },
-  { code: 'SE', name: 'Suedia', flag: '/img/flag/se.svg' },
-  { code: 'DK', name: 'Danemarca', flag: '/img/flag/dk.svg' },
-  { code: 'FI', name: 'Finlanda', flag: '/img/flag/fi.svg' },
-  { code: 'IE', name: 'Irlanda', flag: '/img/flag/ie.svg' },
-];
+import { countries } from '@/lib/constants';
 
 const features = [
   {

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import Link from 'next/link';
+import { countriesSimple as countries } from '@/lib/constants';
 
 const tabs = [
   { id: 'profil', label: 'Profil' },
@@ -16,38 +16,21 @@ const tabs = [
   { id: 'suport', label: 'Suport' },
 ];
 
-const countries = [
-  { code: 'RO', name: 'România' },
-  { code: 'GB', name: 'Anglia' },
-  { code: 'IT', name: 'Italia' },
-  { code: 'ES', name: 'Spania' },
-  { code: 'DE', name: 'Germania' },
-  { code: 'FR', name: 'Franța' },
-];
-
 export default function ClientDashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('profil');
   
-  // Form states
-  const [nume, setNume] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefon, setTelefon] = useState('');
+  // Form states - initialize with user data or empty strings
+  const [nume, setNume] = useState(user?.nume || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [telefon, setTelefon] = useState(user?.telefon || '');
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {
       router.push('/login?role=client');
     }
   }, [user, loading, router]);
-
-  useEffect(() => {
-    if (user) {
-      setEmail(user.email);
-      setNume(user.nume || '');
-      setTelefon(user.telefon || '');
-    }
-  }, [user]);
 
   if (loading) {
     return (

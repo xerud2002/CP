@@ -71,6 +71,7 @@ export default function ZonaAcoperiirePage() {
     if (user) {
       loadSavedZones();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadSavedZones = async () => {
