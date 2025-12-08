@@ -70,33 +70,6 @@ const stats = [
   { value: '4.9★', label: 'Rating mediu', icon: '⭐' },
 ];
 
-const howItWorks = [
-  {
-    step: '01',
-    title: 'Selectează ruta',
-    description: 'Alege țara de origine și destinație pentru coletul tău.',
-    icon: '📍',
-  },
-  {
-    step: '02',
-    title: 'Primește oferte',
-    description: 'Curierii disponibili pe ruta ta îți trimit oferte competitive.',
-    icon: '💰',
-  },
-  {
-    step: '03',
-    title: 'Alege curierul',
-    description: 'Compară prețurile, recenziile și alege curierul potrivit.',
-    icon: '✅',
-  },
-  {
-    step: '04',
-    title: 'Relaxează-te',
-    description: 'Coletul tău este ridicat și livrat în siguranță la destinație.',
-    icon: '🎉',
-  },
-];
-
 const testimonials = [
   {
     name: 'Maria D.',
@@ -331,11 +304,16 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-24 px-4 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/5 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <span className="inline-block px-4 py-2 rounded-full bg-orange-500/10 text-orange-400 text-sm font-medium mb-4">
-              Simplu ca 1-2-3-4
+              Simplu și rapid
             </span>
             <h2 className="text-3xl md:text-5xl font-bold mb-4">
               <span className="text-white">Cum </span>
@@ -347,22 +325,66 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-6">
-            {howItWorks.map((item, index) => (
-              <div key={index} className="relative">
-                {index < howItWorks.length - 1 && (
-                  <div className="hidden md:block absolute top-12 left-[60%] w-full h-0.5 bg-green-500/30"></div>
-                )}
-                <div className="card text-center hover:border-green-500/50 transition-all">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-green-500/20 flex items-center justify-center text-3xl">
-                    {item.icon}
-                  </div>
-                  <span className="text-green-400 text-sm font-bold">PASUL {item.step}</span>
-                  <h3 className="text-xl font-semibold text-white mt-2 mb-2">{item.title}</h3>
-                  <p className="text-gray-400 text-sm">{item.description}</p>
+          <div className="grid md:grid-cols-4 gap-8">
+            {/* Step 1 */}
+            <div className="relative group">
+              <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-linear-to-r from-orange-500/50 to-transparent"></div>
+              <div className="text-center">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-orange-500/40 transition-all duration-300">
+                  <svg className="w-9 h-9 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
                 </div>
+                <div className="inline-block px-3 py-1 rounded-full bg-orange-500/10 text-orange-400 text-xs font-bold mb-3">PASUL 01</div>
+                <h3 className="text-xl font-semibold text-white mb-2">Selectează ruta</h3>
+                <p className="text-gray-400 text-sm">Alege țara de origine și destinație pentru coletul tău.</p>
               </div>
-            ))}
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative group">
+              <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-linear-to-r from-green-500/50 to-transparent"></div>
+              <div className="text-center">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-green-500/20 to-green-600/10 border border-green-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-green-500/40 transition-all duration-300">
+                  <svg className="w-9 h-9 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                </div>
+                <div className="inline-block px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-bold mb-3">PASUL 02</div>
+                <h3 className="text-xl font-semibold text-white mb-2">Primește oferte</h3>
+                <p className="text-gray-400 text-sm">Curierii disponibili pe ruta ta îți trimit oferte competitive.</p>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative group">
+              <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-linear-to-r from-blue-500/50 to-transparent"></div>
+              <div className="text-center">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-blue-500/40 transition-all duration-300">
+                  <svg className="w-9 h-9 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <div className="inline-block px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-bold mb-3">PASUL 03</div>
+                <h3 className="text-xl font-semibold text-white mb-2">Alege curierul</h3>
+                <p className="text-gray-400 text-sm">Compară prețurile, recenziile și alege curierul potrivit.</p>
+              </div>
+            </div>
+
+            {/* Step 4 */}
+            <div className="relative group">
+              <div className="text-center">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-purple-500/40 transition-all duration-300">
+                  <svg className="w-9 h-9 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
+                </div>
+                <div className="inline-block px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-bold mb-3">PASUL 04</div>
+                <h3 className="text-xl font-semibold text-white mb-2">Relaxează-te</h3>
+                <p className="text-gray-400 text-sm">Coletul tău este ridicat și livrat în siguranță la destinație.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
