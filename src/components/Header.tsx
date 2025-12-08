@@ -40,7 +40,7 @@ export default function Header() {
         <Link href="/" className="flex items-center gap-2 group">
           {/* Bird Icon */}
           <Image 
-            src="/img/bird-icon.png" 
+            src="/img/bird-icon.jpg" 
             alt="Curierul Perfect" 
             width={50} 
             height={40} 
@@ -206,3 +206,4 @@ export default function Header() {
     </header>
   );
 }
+

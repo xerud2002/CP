@@ -80,7 +80,7 @@ function LoginForm() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 mb-12">
             <Image
-              src="/img/bird-icon.png"
+              src="/img/bird-icon.jpg"
               alt="Curierul Perfect"
               width={50}
               height={40}
@@ -303,3 +303,4 @@ export default function LoginPage() {
     </Suspense>
   );
 }
+

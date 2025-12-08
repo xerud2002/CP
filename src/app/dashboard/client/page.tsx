@@ -90,7 +90,7 @@ export default function ClientDashboard() {
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2">
               <Image
-                src="/img/bird-icon.png"
+                src="/img/bird-icon.jpg"
                 alt="Curierul Perfect"
                 width={40}
                 height={32}
@@ -518,3 +518,4 @@ export default function ClientDashboard() {
     </div>
   );
 }
+

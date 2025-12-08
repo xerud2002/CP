@@ -178,7 +178,7 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <Image
-              src="/img/bird-icon.png"
+              src="/img/bird-icon.jpg"
               alt="Curierul Perfect"
               width={40}
               height={32}
@@ -462,3 +462,4 @@ export default function CurierDashboard() {
     </div>
   );
 }
+

@@ -13,7 +13,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2 mb-6">
               <Image
-                src="/img/bird-icon.png"
+                src="/img/bird-icon.jpg"
                 alt="Curierul Perfect"
                 width={40}
                 height={32}
@@ -246,3 +246,4 @@ export default function Footer() {
     </footer>
   );
 }
+
