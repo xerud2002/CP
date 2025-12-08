@@ -1,0 +1,37 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "comenzi",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "curierId", "order": "ASCENDING" },
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "comenzi",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "curierId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "comenzi",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid_client", "order": "ASCENDING" },
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "comenzi",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

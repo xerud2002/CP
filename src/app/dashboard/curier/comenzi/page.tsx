@@ -103,8 +103,8 @@ export default function ComenziCurierPage() {
       try {
         const q = query(
           collection(db, 'comenzi'),
-          where('curierId', '==', user.uid),
-          orderBy('createdAt', 'desc')
+          where('uid', '==', user.uid),
+          orderBy('timestamp', 'desc')
         );
         const snapshot = await getDocs(q);
         const loadedOrders: Order[] = [];

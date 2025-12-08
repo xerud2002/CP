@@ -15,10 +15,11 @@ interface Tarif {
   minKg: number;
 }
 
+// Countries sorted alphabetically
 const countries = [
-  'România', 'Anglia', 'Italia', 'Spania', 'Germania', 'Franța',
-  'Austria', 'Belgia', 'Olanda', 'Grecia', 'Scoția', 'Portugalia',
-  'Norvegia', 'Suedia', 'Danemarca', 'Finlanda', 'Irlanda'
+  'Anglia', 'Austria', 'Belgia', 'Danemarca', 'Finlanda', 'Franța',
+  'Germania', 'Grecia', 'Irlanda', 'Italia', 'Norvegia', 'Olanda',
+  'Portugalia', 'România', 'Scoția', 'Spania', 'Suedia'
 ];
 
 const serviceTypes = [
