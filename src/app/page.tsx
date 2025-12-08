@@ -29,37 +29,31 @@ const features = [
     image: '/img/curieriinostri.png',
     title: 'Curieri Verificați',
     description: 'Toți curierii noștri trec printr-un proces riguros de verificare. Sunt profesioniști cu experiență în transport internațional.',
-    icon: '✓',
   },
   {
     image: '/img/asigurare.png',
     title: 'Asigurare Gratuită',
     description: 'Fiecare colet beneficiază de asigurare inclusă în preț. Liniște sufletească pentru tine și destinatarul tău.',
-    icon: '🛡️',
   },
   {
     image: '/img/door2door.png',
     title: 'Door to Door',
     description: 'Ridicăm coletul de la ușa ta și îl livrăm direct la destinație. Fără cozi, fără așteptări.',
-    icon: '🏠',
   },
   {
     image: '/img/track.png',
     title: 'Tracking Live',
     description: 'Urmărește-ți coletul în timp real pe hartă. Știi mereu exact unde se află și când ajunge.',
-    icon: '📍',
   },
   {
     image: '/img/heretohelp.png',
     title: 'Suport Non-Stop',
     description: 'Echipa noastră de suport îți răspunde 24/7 pe WhatsApp, telefon sau email.',
-    icon: '💬',
   },
   {
     image: '/img/pets.png',
     title: 'Transport Special',
     description: 'Transportăm și animale de companie, obiecte fragile sau colete voluminoase cu grijă maximă.',
-    icon: '🐾',
   },
 ];
 
@@ -446,26 +440,25 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <div key={index} className="feature-card group">
-                <div className="relative h-48 overflow-hidden rounded-xl mb-4">
+              <div key={index} className="card group overflow-hidden p-0">
+                <div className="relative aspect-4/3 overflow-hidden">
                   <Image
                     src={feature.image}
                     alt={feature.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
-                  <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-2xl border border-white/20">
-                    {feature.icon}
-                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  {feature.description}
-                </p>
+                <div className="p-5">
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
