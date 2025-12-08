@@ -50,63 +50,82 @@ function LoginForm() {
 
   return (
     <div className="auth-box">
-      <Image
-        src={isClient ? '/img/loginclient.png' : '/img/cont.png'}
-        alt="Login"
-        width={140}
-        height={140}
-        className="mx-auto mb-4"
-      />
+      <div className="relative">
+        <Image
+          src={isClient ? '/img/loginclient.png' : '/img/cont.png'}
+          alt="Login"
+          width={120}
+          height={120}
+          className="mx-auto mb-6 drop-shadow-lg"
+        />
+      </div>
 
-      <h2 className="text-2xl font-bold text-white mb-6">
-        Autentificare {isClient ? 'Client' : 'Curier'}
+      <h2 className="text-2xl font-bold text-white mb-2">
+        {isClient ? '👤 Autentificare Client' : '🚚 Autentificare Curier'}
       </h2>
+      <p className="text-gray-400 text-sm mb-6">
+        Introdu datele tale pentru a continua
+      </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-          autoComplete="username"
-          className="form-input"
-        />
+        <div className="text-left">
+          <label className="form-label">Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="exemplu@email.com"
+            required
+            autoComplete="username"
+            className="form-input"
+          />
+        </div>
 
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Parola"
-          required
-          autoComplete="current-password"
-          className="form-input"
-        />
+        <div className="text-left">
+          <label className="form-label">Parolă</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            required
+            autoComplete="current-password"
+            className="form-input"
+          />
+        </div>
 
         <button
           type="submit"
           disabled={loading}
-          className={'btn-primary w-full ' + (loading ? 'opacity-50 cursor-not-allowed' : '')}
+          className={'btn-primary w-full flex items-center justify-center gap-2 ' + (loading ? 'opacity-50 cursor-not-allowed' : '')}
         >
-          {loading ? 'Se autentifica...' : 'Autentifica-te'}
+          {loading ? (
+            <>
+              <span className="spinner w-5 h-5 border-2"></span>
+              Se autentifică...
+            </>
+          ) : (
+            'Autentifică-te'
+          )}
         </button>
 
         {error && (
-          <p className="text-red-400 text-sm">{error}</p>
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+            <p className="text-red-400 text-sm">⚠️ {error}</p>
+          </div>
         )}
       </form>
 
-      <div className="mt-6 text-gray-400 text-sm space-y-2">
+      <div className="mt-8 pt-6 border-t border-white/10 text-gray-400 text-sm space-y-3">
         <p>
           Nu ai cont?{' '}
-          <Link href={'/register?role=' + role} className="text-green-400 hover:underline">
-            Inregistreaza-te
+          <Link href={'/register?role=' + role} className="text-green-400 hover:text-green-300 font-medium transition-colors">
+            Înregistrează-te gratuit
           </Link>
         </p>
         <p>
-          Ai uitat parola?{' '}
-          <Link href={'/forgot-password?role=' + role} className="text-green-400 hover:underline">
-            Recupereaza parola
+          <Link href={'/forgot-password?role=' + role} className="text-gray-500 hover:text-gray-400 transition-colors">
+            Ai uitat parola?
           </Link>
         </p>
       </div>
@@ -116,8 +135,12 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <Suspense fallback={<div className="auth-box"><p className="text-white">Se incarca...</p></div>}>
+    <div className="min-h-screen flex items-center justify-center p-4 page-transition">
+      <Suspense fallback={
+        <div className="auth-box flex items-center justify-center">
+          <div className="spinner"></div>
+        </div>
+      }>
         <LoginForm />
       </Suspense>
     </div>

@@ -2,147 +2,403 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const countries = [
-  { code: 'RO', name: 'România' },
-  { code: 'GB', name: 'Anglia' },
-  { code: 'IT', name: 'Italia' },
-  { code: 'ES', name: 'Spania' },
-  { code: 'DE', name: 'Germania' },
-  { code: 'FR', name: 'Franța' },
-  { code: 'AT', name: 'Austria' },
-  { code: 'BE', name: 'Belgia' },
-  { code: 'NL', name: 'Olanda' },
-  { code: 'GR', name: 'Grecia' },
-  { code: 'PT', name: 'Portugalia' },
-  { code: 'NO', name: 'Norvegia' },
-  { code: 'SE', name: 'Suedia' },
-  { code: 'DK', name: 'Danemarca' },
-  { code: 'FI', name: 'Finlanda' },
-  { code: 'IE', name: 'Irlanda' },
+  { code: 'RO', name: 'România', flag: '🇷🇴' },
+  { code: 'GB', name: 'Anglia', flag: '🇬🇧' },
+  { code: 'IT', name: 'Italia', flag: '🇮🇹' },
+  { code: 'ES', name: 'Spania', flag: '🇪🇸' },
+  { code: 'DE', name: 'Germania', flag: '🇩🇪' },
+  { code: 'FR', name: 'Franța', flag: '🇫🇷' },
+  { code: 'AT', name: 'Austria', flag: '🇦🇹' },
+  { code: 'BE', name: 'Belgia', flag: '🇧🇪' },
+  { code: 'NL', name: 'Olanda', flag: '🇳🇱' },
+  { code: 'GR', name: 'Grecia', flag: '🇬🇷' },
+  { code: 'PT', name: 'Portugalia', flag: '🇵🇹' },
+  { code: 'NO', name: 'Norvegia', flag: '🇳🇴' },
+  { code: 'SE', name: 'Suedia', flag: '🇸🇪' },
+  { code: 'DK', name: 'Danemarca', flag: '🇩🇰' },
+  { code: 'FI', name: 'Finlanda', flag: '🇫🇮' },
+  { code: 'IE', name: 'Irlanda', flag: '🇮🇪' },
 ];
 
 const features = [
   {
     image: '/img/curieriinostri.png',
-    title: 'Curierii Noștri',
-    description: 'Curierii noștri sunt atent selectați, verificați și dedicați oferirii unui serviciu de livrare sigur și rapid. Cu experiență în transport internațional, aceștia asigură colectarea și livrarea coletelor tale cu responsabilitate și punctualitate.',
+    title: 'Curieri Verificați',
+    description: 'Toți curierii noștri trec printr-un proces riguros de verificare. Sunt profesioniști cu experiență în transport internațional.',
+    icon: '✓',
   },
   {
     image: '/img/asigurare.png',
-    title: 'Asigurare Colete',
-    description: 'Asigurarea coletelor este esențială pentru liniștea ta. Toate expedierile beneficiază de protecție completă împotriva pierderilor sau deteriorărilor. Indiferent de valoare sau destinație, coletul tău este în siguranță.',
+    title: 'Asigurare Gratuită',
+    description: 'Fiecare colet beneficiază de asigurare inclusă în preț. Liniște sufletească pentru tine și destinatarul tău.',
+    icon: '🛡️',
   },
   {
     image: '/img/door2door.png',
     title: 'Door to Door',
-    description: 'Serviciul nostru Door to Door îți oferă confortul ridicării coletului direct de la adresa ta și livrarea la destinație. Fără deplasări, fără griji, doar simplitate și eficiență.',
+    description: 'Ridicăm coletul de la ușa ta și îl livrăm direct la destinație. Fără cozi, fără așteptări.',
+    icon: '🏠',
   },
   {
     image: '/img/track.png',
-    title: 'Tracking în Timp Real',
-    description: 'Urmărește coletul tău în orice moment cu sistemul nostru de tracking avansat. Știi exact unde se află și când ajunge la destinație.',
+    title: 'Tracking Live',
+    description: 'Urmărește-ți coletul în timp real pe hartă. Știi mereu exact unde se află și când ajunge.',
+    icon: '📍',
   },
   {
     image: '/img/heretohelp.png',
-    title: 'Suport 24/7',
-    description: 'Echipa noastră de suport este disponibilă non-stop pentru a răspunde întrebărilor tale și a te ajuta cu orice problemă întâmpinată.',
+    title: 'Suport Non-Stop',
+    description: 'Echipa noastră de suport îți răspunde 24/7 pe WhatsApp, telefon sau email.',
+    icon: '💬',
   },
   {
     image: '/img/pets.png',
-    title: 'Transport Animale',
-    description: 'Oferim servicii specializate pentru transportul în siguranță al animalelor de companie, cu toată grija și atenția de care au nevoie.',
+    title: 'Transport Special',
+    description: 'Transportăm și animale de companie, obiecte fragile sau colete voluminoase cu grijă maximă.',
+    icon: '🐾',
   },
+];
+
+const stats = [
+  { value: '10K+', label: 'Colete livrate', icon: '📦' },
+  { value: '500+', label: 'Curieri activi', icon: '🚚' },
+  { value: '16', label: 'Țări acoperite', icon: '🌍' },
+  { value: '4.9★', label: 'Rating mediu', icon: '⭐' },
+];
+
+const howItWorks = [
+  {
+    step: '01',
+    title: 'Selectează ruta',
+    description: 'Alege țara de origine și destinație pentru coletul tău.',
+    icon: '📍',
+  },
+  {
+    step: '02',
+    title: 'Primește oferte',
+    description: 'Curierii disponibili pe ruta ta îți trimit oferte competitive.',
+    icon: '💰',
+  },
+  {
+    step: '03',
+    title: 'Alege curierul',
+    description: 'Compară prețurile, recenziile și alege curierul potrivit.',
+    icon: '✅',
+  },
+  {
+    step: '04',
+    title: 'Relaxează-te',
+    description: 'Coletul tău este ridicat și livrat în siguranță la destinație.',
+    icon: '🎉',
+  },
+];
+
+const testimonials = [
+  {
+    name: 'Maria D.',
+    location: 'București → Londra',
+    text: 'Am trimis colete mamei mele în UK de nenumărate ori. Serviciu excelent, prețuri corecte și curieri de încredere!',
+    rating: 5,
+    avatar: '👩',
+  },
+  {
+    name: 'Andrei P.',
+    location: 'Milano → Cluj',
+    text: 'Lucrez în Italia și trimit pachete acasă lunar. Curierul Perfect e cea mai bună soluție pe care am găsit-o.',
+    rating: 5,
+    avatar: '👨',
+  },
+  {
+    name: 'Elena M.',
+    location: 'Madrid → Iași',
+    text: 'Rapid, sigur și comunicare excelentă. Coletul a ajuns în 3 zile. Recomand cu încredere!',
+    rating: 5,
+    avatar: '👩‍🦰',
+  },
+];
+
+const popularRoutes = [
+  { from: '🇷🇴 România', to: '🇬🇧 Anglia', price: 'de la 25€', time: '3-5 zile' },
+  { from: '🇷🇴 România', to: '🇩🇪 Germania', price: 'de la 20€', time: '2-4 zile' },
+  { from: '🇷🇴 România', to: '🇮🇹 Italia', price: 'de la 22€', time: '2-4 zile' },
+  { from: '🇷🇴 România', to: '🇪🇸 Spania', price: 'de la 28€', time: '3-5 zile' },
 ];
 
 export default function Home() {
   const [pickupCountry, setPickupCountry] = useState('');
   const [deliveryCountry, setDeliveryCountry] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Redirect to offers page with selected countries
     window.location.href = `/oferte?from=${pickupCountry}&to=${deliveryCountry}`;
   };
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="card text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-green-400 mb-4">
-              Bine ai venit la Curierul Perfect
-            </h1>
-            <p className="text-gray-300 text-lg mb-8">
-              Platforma care conectează românii cu curieri de încredere din Europa.<br />
-              Trimite sau primește colete rapid și în siguranță.
-            </p>
-            
-            <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
-              <select
-                value={pickupCountry}
-                onChange={(e) => setPickupCountry(e.target.value)}
-                className="form-select"
-                required
-              >
-                <option value="">📍 Locație colectare</option>
-                {countries.map((country) => (
-                  <option key={country.code} value={country.code}>
-                    {country.name}
-                  </option>
-                ))}
-              </select>
-              
-              <select
-                value={deliveryCountry}
-                onChange={(e) => setDeliveryCountry(e.target.value)}
-                className="form-select"
-                required
-              >
-                <option value="">🎯 Locație livrare</option>
-                {countries.map((country) => (
-                  <option key={country.code} value={country.code}>
-                    {country.name}
-                  </option>
-                ))}
-              </select>
-              
-              <button type="submit" className="btn-primary w-full">
-                Primește oferte
+      <section id="top" className="relative min-h-[90vh] flex items-center justify-center px-4 overflow-hidden">
+        {/* Background blurs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 -right-20 w-96 h-96 bg-orange-500/20 rounded-full blur-[100px] animate-pulse"></div>
+          <div className="absolute bottom-1/4 -left-20 w-96 h-96 bg-green-500/20 rounded-full blur-[100px] animate-pulse"></div>
+        </div>
+
+        {/* Floating elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
+          <div className="absolute top-20 left-[10%] text-4xl animate-bounce" style={{ animationDuration: '3s' }}>📦</div>
+          <div className="absolute top-40 right-[15%] text-3xl animate-bounce" style={{ animationDuration: '2.5s' }}>🚚</div>
+          <div className="absolute bottom-32 left-[20%] text-3xl animate-bounce" style={{ animationDuration: '2.8s' }}>✈️</div>
+          <div className="absolute bottom-40 right-[10%] text-4xl animate-bounce" style={{ animationDuration: '3.2s' }}>🌍</div>
+        </div>
+        
+        <div className={`max-w-5xl mx-auto relative z-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          {/* Badge */}
+          <div className="text-center mb-6">
+            <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-medium">
+              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+              Platforma #1 de curierat pentru românii din diaspora
+            </span>
+          </div>
+
+          {/* Main Title */}
+          <h1 className="text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+            <span className="text-white">Trimite colete</span>
+            <br />
+            <span className="text-gradient">în toată Europa</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-center text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10">
+            Conectăm românii din diaspora cu curieri de încredere. 
+            <span className="text-white font-medium"> Rapid, sigur și la cele mai bune prețuri.</span>
+          </p>
+
+          {/* Search Card */}
+          <div className="card max-w-2xl mx-auto">
+            <form onSubmit={handleSubmit}>
+              <div className="grid md:grid-cols-2 gap-4 mb-5">
+                <div>
+                  <label className="form-label flex items-center gap-2">
+                    <span className="text-lg">📍</span> De unde trimiți?
+                  </label>
+                  <select
+                    value={pickupCountry}
+                    onChange={(e) => setPickupCountry(e.target.value)}
+                    className="form-select text-lg"
+                    required
+                  >
+                    <option value="">Selectează țara</option>
+                    {countries.map((country) => (
+                      <option key={country.code} value={country.code}>
+                        {country.flag} {country.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label flex items-center gap-2">
+                    <span className="text-lg">🎯</span> Unde livrăm?
+                  </label>
+                  <select
+                    value={deliveryCountry}
+                    onChange={(e) => setDeliveryCountry(e.target.value)}
+                    className="form-select text-lg"
+                    required
+                  >
+                    <option value="">Selectează țara</option>
+                    {countries.map((country) => (
+                      <option key={country.code} value={country.code}>
+                        {country.flag} {country.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <button type="submit" className="btn-primary w-full text-lg py-4 flex items-center justify-center gap-2">
+                <span>Găsește curieri disponibili</span>
+                <span className="text-xl">→</span>
               </button>
             </form>
+            <p className="text-center text-gray-500 text-sm mt-4">
+              ✓ Gratuit • ✓ Fără obligații • ✓ Oferte în 24h
+            </p>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
+          <div className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-white/50 rounded-full"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {stats.map((stat, index) => (
+              <div key={index} className="stat-card">
+                <div className="text-3xl mb-2">{stat.icon}</div>
+                <div className="stat-value">{stat.value}</div>
+                <div className="stat-label">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-2 rounded-full bg-orange-500/10 text-orange-400 text-sm font-medium mb-4">
+              Simplu ca 1-2-3-4
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              <span className="text-white">Cum </span>
+              <span className="text-gradient">funcționează</span>
+              <span className="text-white">?</span>
+            </h2>
+            <p className="text-gray-400 max-w-xl mx-auto">
+              În doar 4 pași simpli, coletul tău ajunge la destinație în siguranță.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-6">
+            {howItWorks.map((item, index) => (
+              <div key={index} className="relative">
+                {index < howItWorks.length - 1 && (
+                  <div className="hidden md:block absolute top-12 left-[60%] w-full h-0.5 bg-green-500/30"></div>
+                )}
+                <div className="card text-center hover:border-green-500/50 transition-all">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-green-500/20 flex items-center justify-center text-3xl">
+                    {item.icon}
+                  </div>
+                  <span className="text-green-400 text-sm font-bold">PASUL {item.step}</span>
+                  <h3 className="text-xl font-semibold text-white mt-2 mb-2">{item.title}</h3>
+                  <p className="text-gray-400 text-sm">{item.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Routes Section */}
+      <section className="py-16 px-4 bg-blue-900/20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <span className="text-white">Rute </span>
+              <span className="text-gradient">Populare</span>
+            </h2>
+            <p className="text-gray-400">Cele mai căutate rute de transport</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {popularRoutes.map((route, index) => (
+              <Link
+                key={index}
+                href={`/oferte?from=RO&to=${route.to.includes('Anglia') ? 'GB' : route.to.includes('Germania') ? 'DE' : route.to.includes('Italia') ? 'IT' : 'ES'}`}
+                className="card hover:border-orange-500/50 transition-all group cursor-pointer"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-lg">{route.from}</span>
+                  <span className="text-orange-400 group-hover:translate-x-1 transition-transform">→</span>
+                  <span className="text-lg">{route.to}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-green-400 font-semibold">{route.price}</span>
+                  <span className="text-gray-500">{route.time}</span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 bg-blue-900/20">
+      <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-green-400 mb-12">
-            De ce să alegi Curierul Perfect?
-          </h2>
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-2 rounded-full bg-green-500/10 text-green-400 text-sm font-medium mb-4">
+              De ce noi?
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              <span className="text-white">Totul pentru o </span>
+              <span className="text-gradient">experiență perfectă</span>
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Am creat platforma perfectă pentru nevoile comunității românești din diaspora.
+            </p>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <div key={index} className="feature-card">
-                <Image
-                  src={feature.image}
-                  alt={feature.title}
-                  width={300}
-                  height={200}
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-                <h3 className="text-xl font-semibold text-green-400 mb-2">
+              <div key={index} className="feature-card group">
+                <div className="relative h-48 overflow-hidden rounded-xl mb-4">
+                  <Image
+                    src={feature.image}
+                    alt={feature.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-4 left-4 w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-2xl border border-white/20">
+                    {feature.icon}
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">
                   {feature.title}
                 </h3>
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-400 text-sm leading-relaxed">
                   {feature.description}
                 </p>
-                <button className="btn-primary mt-4 text-sm px-4 py-2">
-                  Află mai mult
-                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-20 px-4 bg-green-900/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="inline-block px-4 py-2 rounded-full bg-yellow-500/10 text-yellow-400 text-sm font-medium mb-4">
+              ⭐ Recenzii verificate
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <span className="text-white">Ce spun </span>
+              <span className="text-gradient">clienții noștri</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="card hover:border-yellow-500/30 transition-all">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-2xl">
+                    {testimonial.avatar}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white">{testimonial.name}</p>
+                    <p className="text-sm text-gray-500">{testimonial.location}</p>
+                  </div>
+                </div>
+                <div className="mb-3">
+                  {'⭐'.repeat(testimonial.rating)}
+                </div>
+                <p className="text-gray-300 text-sm italic">&ldquo;{testimonial.text}&rdquo;</p>
               </div>
             ))}
           </div>
@@ -150,17 +406,67 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4">
+      <section className="py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="card text-center bg-gradient-to-r from-orange-600/20 to-green-600/20 border-orange-500/30">
+            <span className="text-6xl mb-6 block">🚚</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ești curier? Hai în echipă!
+            </h2>
+            <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
+              Câștigă bani extra transportând colete pe rutele tale obișnuite între România și Europa.
+            </p>
+            
+            <div className="flex flex-wrap gap-6 justify-center mb-8">
+              <div className="flex items-center gap-2 text-white">
+                <span className="text-2xl">💰</span>
+                <span>Câștiguri atractive</span>
+              </div>
+              <div className="flex items-center gap-2 text-white">
+                <span className="text-2xl">📅</span>
+                <span>Program flexibil</span>
+              </div>
+              <div className="flex items-center gap-2 text-white">
+                <span className="text-2xl">🔒</span>
+                <span>Plăți garantate</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/register?role=curier" className="btn-primary">
+                Înregistrează-te Gratuit
+              </Link>
+              <Link href="/despre-curieri" className="btn-outline-green">
+                Află Mai Multe
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Section */}
+      <section className="py-16 px-4 border-t border-white/5">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ești curier? Alătură-te echipei noastre!
-          </h2>
-          <p className="text-gray-300 mb-8">
-            Câștigă bani extra livrând colete pe rutele tale obișnuite.
-          </p>
-          <Link href="/register?role=curier" className="btn-secondary inline-block">
-            Înregistrează-te ca Curier
-          </Link>
+          <p className="text-gray-500 text-sm mb-6">Transportăm colete în siguranță în peste 16 țări europene</p>
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {countries.map((country) => (
+              <div 
+                key={country.code} 
+                className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-default"
+                title={country.name}
+              >
+                <span className="text-xl mr-2">{country.flag}</span>
+                <span className="text-sm text-gray-400">{country.name}</span>
+              </div>
+            ))}
+          </div>
+          
+          <div className="card inline-block px-8 py-6">
+            <p className="text-white font-medium mb-4">Pregătit să trimiți un colet?</p>
+            <Link href="#top" className="btn-primary">
+              Începe acum - Este gratuit →
+            </Link>
+          </div>
         </div>
       </section>
     </div>
