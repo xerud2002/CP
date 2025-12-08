@@ -90,11 +90,11 @@ export default function ClientDashboard() {
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2">
               <Image
-                src="/img/bird-icon.jpg"
+                src="/img/bird-icon.png"
                 alt="Curierul Perfect"
                 width={40}
                 height={32}
-                className="h-8 w-auto"
+                className="h-8 w-auto "
               />
               <span className="text-lg font-bold hidden sm:block">
                 <span className="text-orange-500">CurierulPerfect</span>
@@ -518,4 +518,7 @@ export default function ClientDashboard() {
     </div>
   );
 }
+
+
+
 

@@ -80,11 +80,11 @@ function LoginForm() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 mb-12">
             <Image
-              src="/img/bird-icon.jpg"
+              src="/img/bird-icon.png"
               alt="Curierul Perfect"
               width={50}
               height={40}
-              className="h-10 w-auto"
+              className="h-10 w-auto "
             />
             <span className="text-2xl font-bold">
               <span className="text-orange-500">CurierulPerfect</span>
@@ -303,4 +303,7 @@ export default function LoginPage() {
     </Suspense>
   );
 }
+
+
+
 
