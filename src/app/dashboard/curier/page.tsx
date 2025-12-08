@@ -90,7 +90,7 @@ export default function CurierDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Welcome Header */}
         <div className="card mb-8 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-green-500/10"></div>
+          <div className="absolute inset-0 bg-linear-to-r from-orange-500/10 to-green-500/10"></div>
           <div className="relative flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
@@ -136,7 +136,7 @@ export default function CurierDashboard() {
         <div className="dashboard-grid">
           {dashboardCards.map((card, index) => (
             <Link key={index} href={card.href} className="dashboard-card group">
-              <div className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-0 group-hover:opacity-100 transition-opacity rounded-xl`}></div>
+              <div className={`absolute inset-0 bg-linear-to-br ${card.color} opacity-0 group-hover:opacity-100 transition-opacity rounded-xl`}></div>
               <Image
                 src={card.image}
                 alt={card.title}

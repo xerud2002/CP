@@ -33,7 +33,7 @@ export default function Header() {
         : 'bg-transparent backdrop-blur-sm'
     }`}>
       {/* Gradient line */}
-      <div className={`h-0.5 bg-gradient-to-r from-orange-500 via-green-500 to-orange-500 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
+      <div className={`h-0.5 bg-linear-to-r from-orange-500 via-green-500 to-orange-500 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
       
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4 lg:px-8 py-4">
         {/* Logo */}
@@ -69,7 +69,7 @@ export default function Header() {
               {/* Curier Button - Primary */}
               <Link 
                 href="/login?role=curier" 
-                className="group relative px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5"
+                className="group relative px-5 py-2.5 rounded-xl bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5"
               >
                 <span className="flex items-center gap-2 text-white font-medium">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +83,7 @@ export default function Header() {
             <>
               {/* User info pill */}
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mr-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-sm font-bold text-white">
+                <div className="w-8 h-8 rounded-full bg-linear-to-br from-green-400 to-green-600 flex items-center justify-center text-sm font-bold text-white">
                   {user.email?.charAt(0).toUpperCase()}
                 </div>
                 <span className="text-gray-300 text-sm">
@@ -94,7 +94,7 @@ export default function Header() {
               {/* Dashboard Button */}
               <Link 
                 href={`/dashboard/${user.role}`}
-                className="group px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 hover:-translate-y-0.5"
+                className="group px-5 py-2.5 rounded-xl bg-linear-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 hover:-translate-y-0.5"
               >
                 <span className="flex items-center gap-2 text-white font-medium">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,7 +153,7 @@ export default function Header() {
               </Link>
               <Link 
                 href="/login?role=curier" 
-                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium shadow-lg shadow-orange-500/25"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-linear-to-r from-orange-500 to-orange-600 text-white font-medium shadow-lg shadow-orange-500/25"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,7 +166,7 @@ export default function Header() {
             <>
               {/* User info */}
               <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-lg font-bold text-white">
+                <div className="w-10 h-10 rounded-full bg-linear-to-br from-green-400 to-green-600 flex items-center justify-center text-lg font-bold text-white">
                   {user.email?.charAt(0).toUpperCase()}
                 </div>
                 <div>
@@ -177,7 +177,7 @@ export default function Header() {
               
               <Link 
                 href={`/dashboard/${user.role}`}
-                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-medium shadow-lg shadow-green-500/25"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-linear-to-r from-green-500 to-green-600 text-white font-medium shadow-lg shadow-green-500/25"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

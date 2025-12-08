@@ -142,9 +142,9 @@ export default function Home() {
       <section id="top" className="relative min-h-[90vh] flex items-center px-4 overflow-hidden">
         {/* Background gradient mesh */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800"></div>
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-orange-500/10 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-gradient-to-tr from-green-500/10 to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-900 to-slate-800"></div>
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-l from-orange-500/10 to-transparent"></div>
+          <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-linear-to-tr from-green-500/10 to-transparent"></div>
         </div>
 
         {/* Grid pattern overlay */}
@@ -222,7 +222,7 @@ export default function Home() {
             <div className="animate-fade-in-delayed">
               <div className="relative">
                 {/* Glow effect */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 to-green-500/20 rounded-3xl blur-xl"></div>
+                <div className="absolute -inset-1 bg-linear-to-r from-orange-500/20 to-green-500/20 rounded-3xl blur-xl"></div>
                 
                 {/* Card */}
                 <div className="relative bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
@@ -479,7 +479,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="card text-center bg-gradient-to-r from-orange-600/20 to-green-600/20 border-orange-500/30">
+          <div className="card text-center bg-linear-to-r from-orange-600/20 to-green-600/20 border-orange-500/30">
             <span className="text-6xl mb-6 block">🚚</span>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ești curier? Hai în echipă!
