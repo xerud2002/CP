@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, ReactNode } from 'react';
@@ -175,11 +176,18 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/25 group-hover:shadow-orange-500/40 transition-shadow">
-              <LogoIcon className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-lg font-bold text-white hidden sm:block">Curierul Perfect</span>
+          <Link href="/" className="flex items-center gap-2 group">
+            <Image
+              src="/img/bird-icon.png"
+              alt="Curierul Perfect"
+              width={40}
+              height={32}
+              className="h-8 w-auto transition-all duration-300 group-hover:scale-105"
+            />
+            <span className="text-lg font-bold hidden sm:block">
+              <span className="text-orange-500">CurierulPerfect</span>
+              <span className="text-emerald-500">.ro</span>
+            </span>
           </Link>
 
           {/* Right Side */}

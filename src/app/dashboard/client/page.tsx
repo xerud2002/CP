@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { countriesSimple as countries } from '@/lib/constants';
 
 const tabs = [
@@ -87,13 +88,18 @@ export default function ClientDashboard() {
       <header className="bg-slate-900/80 backdrop-blur-sm border-b border-white/5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold text-white hidden sm:block">Curierul Perfect</span>
+            <Link href="/" className="flex items-center gap-2">
+              <Image
+                src="/img/bird-icon.png"
+                alt="Curierul Perfect"
+                width={40}
+                height={32}
+                className="h-8 w-auto"
+              />
+              <span className="text-lg font-bold hidden sm:block">
+                <span className="text-orange-500">CurierulPerfect</span>
+                <span className="text-emerald-500">.ro</span>
+              </span>
             </Link>
             
             <div className="flex items-center gap-4">

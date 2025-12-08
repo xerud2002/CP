@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types';
 
@@ -77,13 +78,18 @@ function LoginForm() {
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center px-12 xl:px-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 mb-12">
-            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
-            </div>
-            <span className="text-2xl font-bold text-white">Curierul Perfect</span>
+          <Link href="/" className="flex items-center gap-2 mb-12">
+            <Image
+              src="/img/bird-icon.png"
+              alt="Curierul Perfect"
+              width={50}
+              height={40}
+              className="h-10 w-auto"
+            />
+            <span className="text-2xl font-bold">
+              <span className="text-orange-500">CurierulPerfect</span>
+              <span className="text-emerald-500">.ro</span>
+            </span>
           </Link>
 
           <h1 className="text-4xl xl:text-5xl font-bold text-white mb-6 leading-tight">

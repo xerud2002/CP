@@ -11,15 +11,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-3 mb-6">
+            <Link href="/" className="inline-flex items-center gap-2 mb-6">
               <Image
-                src="/img/logo.png"
+                src="/img/bird-icon.png"
                 alt="Curierul Perfect"
                 width={40}
-                height={40}
-                className="rounded-lg"
+                height={32}
+                className="h-8 w-auto"
               />
-              <span className="text-xl font-bold text-white">Curierul Perfect</span>
+              <span className="text-xl font-bold">
+                <span className="text-orange-500">CurierulPerfect</span>
+                <span className="text-emerald-500">.ro</span>
+              </span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
               Platforma #1 care conectează românii din diaspora cu curieri verificați pentru transport sigur și rapid de colete în toată Europa.

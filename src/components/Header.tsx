@@ -35,18 +35,23 @@ export default function Header() {
       {/* Gradient line */}
       <div className={`h-0.5 bg-linear-to-r from-orange-500 via-green-500 to-orange-500 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
       
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 lg:px-8 py-4">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 lg:px-8 h-16">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative">
-            <Image 
-              src="/logo.png" 
-              alt="Curierul Perfect" 
-              width={120} 
-              height={85} 
-              className="h-12 lg:h-14 w-auto transition-all duration-300 group-hover:scale-105" 
-            />
-          </div>
+        <Link href="/" className="flex items-center gap-2 group">
+          {/* Bird Icon */}
+          <Image 
+            src="/img/bird-icon.png" 
+            alt="Curierul Perfect" 
+            width={50} 
+            height={40} 
+            className="h-10 w-auto transition-all duration-300 group-hover:scale-105" 
+            priority
+          />
+          {/* Logo Text */}
+          <span className="text-xl lg:text-2xl font-bold tracking-tight">
+            <span className="text-orange-500">CurierulPerfect</span>
+            <span className="text-emerald-500">.ro</span>
+          </span>
         </Link>
 
         {/* Desktop Navigation */}
