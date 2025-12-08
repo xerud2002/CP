@@ -112,7 +112,6 @@ export default function Home() {
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-900 to-slate-800"></div>
           <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-l from-orange-500/10 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-linear-to-tr from-green-500/10 to-transparent"></div>
         </div>
 
         {/* Grid pattern overlay */}
