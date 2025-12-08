@@ -7,7 +7,9 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
@@ -19,6 +21,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<User>;
   register: (email: string, password: string, role: UserRole) => Promise<User>;
+  loginWithGoogle: (role: UserRole) => Promise<User>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
 }
@@ -77,6 +80,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return userData;
   };
 
+  const loginWithGoogle = async (role: UserRole): Promise<User> => {
+    const provider = new GoogleAuthProvider();
+    const userCredential = await signInWithPopup(auth, provider);
+    
+    // Check if user already exists in Firestore
+    const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
+    
+    if (userDoc.exists()) {
+      // User exists, return existing data
+      const userData = { uid: userCredential.user.uid, ...userDoc.data() } as User;
+      setUser(userData);
+      return userData;
+    } else {
+      // New user, create record with the specified role
+      const userData: User = {
+        uid: userCredential.user.uid,
+        email: userCredential.user.email || '',
+        role,
+        createdAt: new Date(),
+      };
+      
+      await setDoc(doc(db, 'users', userCredential.user.uid), userData);
+      setUser(userData);
+      return userData;
+    }
+  };
+
   const logout = async () => {
     await signOut(auth);
     setUser(null);
@@ -88,7 +118,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, firebaseUser, loading, login, register, logout, resetPassword }}>
+    <AuthContext.Provider value={{ user, firebaseUser, loading, login, register, loginWithGoogle, logout, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

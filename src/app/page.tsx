@@ -57,25 +57,59 @@ const stats = [
 
 const testimonials = [
   {
-    name: 'Maria D.',
-    location: 'București → Londra',
-    text: 'Am trimis colete mamei mele în UK de nenumărate ori. Serviciu excelent, prețuri corecte și curieri de încredere!',
-    rating: 5,
-    initials: 'MD',
+    company: 'Express Curier SRL',
+    badge: 'Excelent',
+    badgeColor: 'bg-green-500',
+    text: 'Serviciu de top! Am colaborat de peste 2 ani și nu am avut nicio problemă. Recomand cu încredere!',
+    author: 'Andrei M.',
+    location: 'București',
+    rating: 5.0,
+    reviewCount: 12,
+    date: '05 decembrie 2025',
   },
   {
-    name: 'Andrei P.',
-    location: 'Milano → Cluj',
-    text: 'Lucrez în Italia și trimit pachete acasă lunar. Curierul Perfect e cea mai bună soluție pe care am găsit-o.',
-    rating: 5,
-    initials: 'AP',
+    company: 'Trans Europa',
+    badge: 'Excelent',
+    badgeColor: 'bg-green-500',
+    text: 'Foarte profesioniști, coletele ajung mereu la timp. Comunicare excelentă cu clienții.',
+    author: 'Maria P.',
+    location: 'Cluj-Napoca',
+    rating: 4.8,
+    reviewCount: 8,
+    date: '02 decembrie 2025',
   },
   {
-    name: 'Elena M.',
-    location: 'Madrid → Iași',
-    text: 'Rapid, sigur și comunicare excelentă. Coletul a ajuns în 3 zile. Recomand cu încredere!',
-    rating: 5,
-    initials: 'EM',
+    company: 'Rapid Delivery',
+    badge: 'Bun',
+    badgeColor: 'bg-cyan-500',
+    text: 'Servicii bune, prețuri competitive. Uneori durează puțin mai mult, dar ajunge în siguranță.',
+    author: 'Ion V.',
+    location: 'Timișoara',
+    rating: 4.0,
+    reviewCount: 5,
+    date: '28 noiembrie 2025',
+  },
+  {
+    company: 'Euro Transport',
+    badge: 'Excelent',
+    badgeColor: 'bg-green-500',
+    text: 'Cel mai bun serviciu de curierat pe ruta România-Germania. Foarte mulțumit!',
+    author: 'Elena D.',
+    location: 'Iași',
+    rating: 5.0,
+    reviewCount: 15,
+    date: '25 noiembrie 2025',
+  },
+  {
+    company: 'Fast Cargo',
+    badge: 'Bun',
+    badgeColor: 'bg-cyan-500',
+    text: 'Raport calitate-preț excelent. Curieri amabili și colete în stare perfectă.',
+    author: 'Cristian B.',
+    location: 'Brașov',
+    rating: 4.2,
+    reviewCount: 3,
+    date: '20 noiembrie 2025',
   },
 ];
 
@@ -462,7 +496,7 @@ export default function Home() {
                 className="group relative bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-white/5 hover:border-orange-500/30 transition-all duration-500 hover:transform hover:-translate-y-2"
               >
                 {/* Gradient background on hover */}
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                <div className={`absolute inset-0 rounded-2xl bg-linear-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
                 
                 {/* Content */}
                 <div className="relative z-10">
@@ -491,7 +525,7 @@ export default function Home() {
 
                 {/* Corner accent */}
                 <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden rounded-tr-2xl">
-                  <div className="absolute -top-10 -right-10 w-20 h-20 bg-gradient-to-br from-orange-500/20 to-transparent rotate-45 group-hover:from-orange-500/40 transition-all duration-500"></div>
+                  <div className="absolute -top-10 -right-10 w-20 h-20 bg-linear-to-br from-orange-500/20 to-transparent rotate-45 group-hover:from-orange-500/40 transition-all duration-500"></div>
                 </div>
               </div>
             ))}
@@ -500,7 +534,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 px-4 bg-green-900/10">
+      <section className="py-20 px-4 bg-slate-900/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-500/10 text-yellow-400 text-sm font-medium mb-4">
@@ -515,28 +549,68 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="card hover:border-yellow-500/30 transition-all">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold">
-                    {testimonial.initials}
+          {/* Carousel Container */}
+          <div className="relative overflow-hidden">
+            <div className="flex animate-scroll-left gap-6 hover:[animation-play-state:paused]">
+              {/* Duplicate testimonials for infinite scroll effect */}
+              {[...testimonials, ...testimonials].map((testimonial, index) => (
+                <div 
+                  key={index} 
+                  className="shrink-0 w-[calc(33.333%-1rem)] min-w-[320px] group relative bg-slate-800/60 backdrop-blur-sm rounded-2xl p-6 border-l-4 border-l-green-500 border border-white/5 hover:border-white/10 transition-all duration-300"
+                >
+                  {/* Header with company name and rating */}
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-white mb-2">{testimonial.company}</h3>
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold text-white ${testimonial.badgeColor}`}>
+                        {testimonial.badge}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-cyan-400">{testimonial.rating.toFixed(1)}</div>
+                      <div className="text-xs text-gray-500">{testimonial.reviewCount} recenzii</div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-semibold text-white">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.location}</p>
+
+                  {/* Stars */}
+                  <div className="flex gap-0.5 mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <svg 
+                        key={star} 
+                        className={`w-5 h-5 ${star <= Math.floor(testimonial.rating) ? 'text-green-500' : star - 0.5 <= testimonial.rating ? 'text-green-500/50' : 'text-gray-600'}`}
+                        viewBox="0 0 24 24"
+                      >
+                        <path 
+                          fill="currentColor" 
+                          d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                        />
+                      </svg>
+                    ))}
                   </div>
-                </div>
-                <div className="flex gap-1 mb-3">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <svg key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+
+                  {/* Review text */}
+                  <p className="text-gray-300 text-sm leading-relaxed mb-3">&ldquo;{testimonial.text}&rdquo;</p>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-2 text-gray-400 text-sm mb-3 border-t border-white/5 pt-3">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                  ))}
+                    <span className="font-medium">{testimonial.author}</span>
+                    <span className="text-gray-600">•</span>
+                    <span>{testimonial.location}</span>
+                  </div>
+
+                  {/* Date */}
+                  <div className="flex items-center gap-2 text-gray-500 text-xs">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {testimonial.date}
+                  </div>
                 </div>
-                <p className="text-gray-300 text-sm italic">&ldquo;{testimonial.text}&rdquo;</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -544,51 +618,61 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="card text-center bg-linear-to-r from-orange-600/20 to-green-600/20 border-orange-500/30">
-            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+          <div className="relative overflow-hidden rounded-3xl bg-slate-800/80 backdrop-blur-sm border border-white/10 p-10 md:p-14 text-center">
+            {/* Background gradient effect */}
+            <div className="absolute inset-0 bg-linear-to-br from-orange-500/10 via-transparent to-green-500/10 pointer-events-none"></div>
+            
+            {/* Icon */}
+            <div className="relative w-20 h-20 mx-auto mb-8 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
               <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 17h8M8 17a2 2 0 11-4 0m4 0a2 2 0 10-4 0m12 0a2 2 0 11-4 0m4 0a2 2 0 10-4 0M3 9h13a2 2 0 012 2v4H3V9zm13 0V5a2 2 0 00-2-2H5a2 2 0 00-2 2v4h13z" />
               </svg>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ești curier? Hai în echipă!
+            
+            {/* Title */}
+            <h2 className="relative text-3xl md:text-4xl font-bold text-white mb-4">
+              Ești curier? Alătură-te platformei!
             </h2>
-            <p className="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-              Câștigă bani extra transportând colete pe rutele tale obișnuite între România și Europa.
+            
+            {/* Description */}
+            <p className="relative text-gray-400 text-lg mb-10 max-w-xl mx-auto">
+              Găsește comenzi pe rutele tale existente. Selectezi țările și județele pe care le acoperi, iar noi îți trimitem clienți potriviți.
             </p>
             
-            <div className="flex flex-wrap gap-6 justify-center mb-8">
-              <div className="flex items-center gap-3 text-white">
-                <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+            {/* Benefits */}
+            <div className="relative flex flex-wrap gap-6 justify-center mb-10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center">
                   <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                   </svg>
                 </div>
-                <span>Câștiguri atractive</span>
+                <span className="text-white font-medium">Alegi rutele tale</span>
               </div>
-              <div className="flex items-center gap-3 text-white">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
                   <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                 </div>
-                <span>Program flexibil</span>
+                <span className="text-white font-medium">Câștiguri pe drum</span>
               </div>
-              <div className="flex items-center gap-3 text-white">
-                <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center">
                   <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <span>Plăți garantate</span>
+                <span className="text-white font-medium">Program flexibil</span>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/register?role=curier" className="btn-primary">
+            {/* Buttons */}
+            <div className="relative flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/register?role=curier" className="btn-primary px-8 py-3 text-base font-semibold shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-shadow">
                 Înregistrează-te Gratuit
               </Link>
-              <Link href="/despre-curieri" className="btn-outline-green">
+              <Link href="/despre-curieri" className="btn-outline-green px-8 py-3 text-base font-semibold">
                 Află Mai Multe
               </Link>
             </div>

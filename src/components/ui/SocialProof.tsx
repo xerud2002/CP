@@ -50,13 +50,13 @@ export default function SocialProof() {
   return (
     <div
       className={`fixed bottom-24 left-6 z-40 transition-all duration-300 ${
-        isExiting ? 'opacity-0 translate-x-[-20px]' : 'opacity-100 translate-x-0'
+        isExiting ? 'opacity-0 -translate-x-5' : 'opacity-100 translate-x-0'
       }`}
     >
       <div className="bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl p-4 shadow-2xl max-w-xs">
         <div className="flex items-start gap-3">
           {/* Avatar */}
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-green-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+          <div className="w-10 h-10 rounded-full bg-linear-to-br from-orange-500 to-green-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
             {notification.name.charAt(0)}
           </div>
           
