@@ -50,14 +50,7 @@ function ForgotPasswordForm() {
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center px-12 xl:px-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 mb-12">
-            <Image
-              src="/img/bird-icon.png"
-              alt="Curierul Perfect"
-              width={50}
-              height={40}
-              className="h-10 w-auto "
-            />
+          <Link href="/" className="flex items-center mb-12">
             <span className="text-2xl font-bold">
               <span className="text-orange-500">CurierulPerfect</span>
               <span className="text-emerald-500">.ro</span>

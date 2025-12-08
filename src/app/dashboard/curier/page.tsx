@@ -176,15 +176,8 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <Image
-              src="/img/bird-icon.png"
-              alt="Curierul Perfect"
-              width={40}
-              height={32}
-              className="h-8 w-auto transition-all duration-300 group-hover:scale-105"
-            />
-            <span className="text-lg font-bold hidden sm:block">
+          <Link href="/" className="flex items-center group">
+            <span className="text-lg font-bold transition-all duration-300 group-hover:scale-105">
               <span className="text-orange-500">CurierulPerfect</span>
               <span className="text-emerald-500">.ro</span>
             </span>

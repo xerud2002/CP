@@ -88,15 +88,8 @@ export default function ClientDashboard() {
       <header className="bg-slate-900/80 backdrop-blur-sm border-b border-white/5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <Image
-                src="/img/bird-icon.png"
-                alt="Curierul Perfect"
-                width={40}
-                height={32}
-                className="h-8 w-auto "
-              />
-              <span className="text-lg font-bold hidden sm:block">
+            <Link href="/" className="flex items-center">
+              <span className="text-lg font-bold">
                 <span className="text-orange-500">CurierulPerfect</span>
                 <span className="text-emerald-500">.ro</span>
               </span>

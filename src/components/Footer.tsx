@@ -11,14 +11,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-2 mb-6">
-              <Image
-                src="/img/bird-icon.png"
-                alt="Curierul Perfect"
-                width={40}
-                height={32}
-                className="h-8 w-auto "
-              />
+            <Link href="/" className="inline-flex items-center mb-6">
               <span className="text-xl font-bold">
                 <span className="text-orange-500">CurierulPerfect</span>
                 <span className="text-emerald-500">.ro</span>

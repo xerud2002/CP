@@ -37,18 +37,8 @@ export default function Header() {
       
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4 lg:px-8 h-16">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          {/* Bird Icon */}
-          <Image 
-            src="/img/bird-icon.png" 
-            alt="Curierul Perfect" 
-            width={50} 
-            height={40} 
-            className="h-10 w-auto transition-all duration-300 group-hover:scale-105" 
-            priority
-          />
-          {/* Logo Text */}
-          <span className="text-xl lg:text-2xl font-bold tracking-tight">
+        <Link href="/" className="flex items-center group">
+          <span className="text-xl lg:text-2xl font-bold tracking-tight transition-all duration-300 group-hover:scale-105">
             <span className="text-orange-500">CurierulPerfect</span>
             <span className="text-emerald-500">.ro</span>
           </span>
