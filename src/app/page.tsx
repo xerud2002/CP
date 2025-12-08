@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import SearchableSelect from '@/components/ui/SearchableSelect';
 
 const countries = [
   { code: 'RO', name: 'România', flag: '🇷🇴' },
@@ -240,19 +241,14 @@ export default function Home() {
                             De unde trimiți?
                           </span>
                         </label>
-                        <select
+                        <SearchableSelect
+                          options={countries}
                           value={pickupCountry}
-                          onChange={(e) => setPickupCountry(e.target.value)}
-                          className="form-select"
+                          onChange={setPickupCountry}
+                          placeholder="Selectează țara de origine"
+                          searchPlaceholder="Caută țara..."
                           required
-                        >
-                          <option value="">Selectează țara de origine</option>
-                          {countries.map((country) => (
-                            <option key={country.code} value={country.code}>
-                              {country.flag} {country.name}
-                            </option>
-                          ))}
-                        </select>
+                        />
                       </div>
                       
                       {/* Arrow connector */}
@@ -271,19 +267,14 @@ export default function Home() {
                             Unde livrăm?
                           </span>
                         </label>
-                        <select
+                        <SearchableSelect
+                          options={countries}
                           value={deliveryCountry}
-                          onChange={(e) => setDeliveryCountry(e.target.value)}
-                          className="form-select"
+                          onChange={setDeliveryCountry}
+                          placeholder="Selectează țara de destinație"
+                          searchPlaceholder="Caută țara..."
                           required
-                        >
-                          <option value="">Selectează țara de destinație</option>
-                          {countries.map((country) => (
-                            <option key={country.code} value={country.code}>
-                              {country.flag} {country.name}
-                            </option>
-                          ))}
-                        </select>
+                        />
                       </div>
                     </div>
                     
