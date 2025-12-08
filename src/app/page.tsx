@@ -144,99 +144,175 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section id="top" className="relative min-h-[90vh] flex items-center justify-center px-4 overflow-hidden">
-        {/* Background blurs */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 -right-20 w-96 h-96 bg-orange-500/20 rounded-full blur-[100px] animate-pulse"></div>
-          <div className="absolute bottom-1/4 -left-20 w-96 h-96 bg-green-500/20 rounded-full blur-[100px] animate-pulse"></div>
+      <section id="top" className="relative min-h-[90vh] flex items-center px-4 overflow-hidden">
+        {/* Background gradient mesh */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800"></div>
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-orange-500/10 to-transparent"></div>
+          <div className="absolute bottom-0 left-0 w-1/3 h-1/2 bg-gradient-to-tr from-green-500/10 to-transparent"></div>
         </div>
 
-        {/* Floating elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
-          <div className="absolute top-20 left-[10%] text-4xl animate-bounce" style={{ animationDuration: '3s' }}>📦</div>
-          <div className="absolute top-40 right-[15%] text-3xl animate-bounce" style={{ animationDuration: '2.5s' }}>🚚</div>
-          <div className="absolute bottom-32 left-[20%] text-3xl animate-bounce" style={{ animationDuration: '2.8s' }}>✈️</div>
-          <div className="absolute bottom-40 right-[10%] text-4xl animate-bounce" style={{ animationDuration: '3.2s' }}>🌍</div>
-        </div>
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{
+          backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
+          backgroundSize: '50px 50px'
+        }}></div>
         
-        <div className={`max-w-5xl mx-auto relative z-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          {/* Badge */}
-          <div className="text-center mb-6">
-            <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-medium">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-              Platforma #1 de curierat pentru românii din diaspora
-            </span>
-          </div>
+        <div className="max-w-7xl mx-auto w-full relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Left side - Content */}
+            <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              {/* Badge */}
+              <div className="mb-8">
+                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-sm">
+                  <span className="flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  Peste 500+ curieri activi acum
+                </span>
+              </div>
 
-          {/* Main Title */}
-          <h1 className="text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            <span className="text-white">Trimite colete</span>
-            <br />
-            <span className="text-gradient">în toată Europa</span>
-          </h1>
+              {/* Main Title */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1]">
+                <span className="text-white">Trimite colete</span>
+                <br />
+                <span className="text-gradient">rapid și sigur</span>
+                <br />
+                <span className="text-white">în toată Europa</span>
+              </h1>
 
-          {/* Subtitle */}
-          <p className="text-center text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10">
-            Conectăm românii din diaspora cu curieri de încredere. 
-            <span className="text-white font-medium"> Rapid, sigur și la cele mai bune prețuri.</span>
-          </p>
+              {/* Subtitle */}
+              <p className="text-gray-400 text-lg max-w-lg mb-8">
+                Platformă de curierat care conectează românii din diaspora cu curieri verificați. Prețuri competitive, tracking în timp real.
+              </p>
 
-          {/* Search Card */}
-          <div className="card max-w-2xl mx-auto">
-            <form onSubmit={handleSubmit}>
-              <div className="grid md:grid-cols-2 gap-4 mb-5">
-                <div>
-                  <label className="form-label flex items-center gap-2">
-                    <span className="text-lg">📍</span> De unde trimiți?
-                  </label>
-                  <select
-                    value={pickupCountry}
-                    onChange={(e) => setPickupCountry(e.target.value)}
-                    className="form-select text-lg"
-                    required
-                  >
-                    <option value="">Selectează țara</option>
-                    {countries.map((country) => (
-                      <option key={country.code} value={country.code}>
-                        {country.flag} {country.name}
-                      </option>
-                    ))}
-                  </select>
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap gap-4 mb-8">
+                <Link href="/register?role=client" className="btn-primary px-8 py-4 text-lg flex items-center gap-2">
+                  Trimite un colet
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+                <Link href="/register?role=curier" className="btn-secondary px-8 py-4 text-lg">
+                  Devino curier
+                </Link>
+              </div>
+
+              {/* Trust indicators */}
+              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Curieri verificați</span>
                 </div>
-                <div>
-                  <label className="form-label flex items-center gap-2">
-                    <span className="text-lg">🎯</span> Unde livrăm?
-                  </label>
-                  <select
-                    value={deliveryCountry}
-                    onChange={(e) => setDeliveryCountry(e.target.value)}
-                    className="form-select text-lg"
-                    required
-                  >
-                    <option value="">Selectează țara</option>
-                    {countries.map((country) => (
-                      <option key={country.code} value={country.code}>
-                        {country.flag} {country.name}
-                      </option>
-                    ))}
-                  </select>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Asigurare inclusă</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Tracking live</span>
                 </div>
               </div>
-              <button type="submit" className="btn-primary w-full text-lg py-4 flex items-center justify-center gap-2">
-                <span>Găsește curieri disponibili</span>
-                <span className="text-xl">→</span>
-              </button>
-            </form>
-            <p className="text-center text-gray-500 text-sm mt-4">
-              ✓ Gratuit • ✓ Fără obligații • ✓ Oferte în 24h
-            </p>
-          </div>
-        </div>
+            </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
-          <div className="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-2">
-            <div className="w-1 h-2 bg-white/50 rounded-full"></div>
+            {/* Right side - Search Form */}
+            <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+              <div className="relative">
+                {/* Glow effect */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 to-green-500/20 rounded-3xl blur-xl"></div>
+                
+                {/* Card */}
+                <div className="relative bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
+                  <div className="text-center mb-6">
+                    <h2 className="text-xl font-semibold text-white mb-2">Găsește curieri disponibili</h2>
+                    <p className="text-gray-400 text-sm">Compară prețuri și alege cel mai bun curier</p>
+                  </div>
+                  
+                  <form onSubmit={handleSubmit}>
+                    <div className="space-y-4 mb-6">
+                      <div>
+                        <label className="block text-gray-300 text-sm font-medium mb-2">
+                          <span className="flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-xs">1</span>
+                            De unde trimiți?
+                          </span>
+                        </label>
+                        <select
+                          value={pickupCountry}
+                          onChange={(e) => setPickupCountry(e.target.value)}
+                          className="form-select"
+                          required
+                        >
+                          <option value="">Selectează țara de origine</option>
+                          {countries.map((country) => (
+                            <option key={country.code} value={country.code}>
+                              {country.flag} {country.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      
+                      {/* Arrow connector */}
+                      <div className="flex justify-center">
+                        <div className="w-8 h-8 rounded-full bg-slate-700/50 flex items-center justify-center">
+                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                          </svg>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-gray-300 text-sm font-medium mb-2">
+                          <span className="flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-xs">2</span>
+                            Unde livrăm?
+                          </span>
+                        </label>
+                        <select
+                          value={deliveryCountry}
+                          onChange={(e) => setDeliveryCountry(e.target.value)}
+                          className="form-select"
+                          required
+                        >
+                          <option value="">Selectează țara de destinație</option>
+                          {countries.map((country) => (
+                            <option key={country.code} value={country.code}>
+                              {country.flag} {country.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                    
+                    <button type="submit" className="btn-primary w-full py-4 text-lg font-semibold flex items-center justify-center gap-2 group">
+                      <span>Caută curieri</span>
+                      <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </button>
+                  </form>
+                  
+                  <div className="mt-6 pt-6 border-t border-white/10">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400">Rute populare:</span>
+                      <div className="flex gap-2">
+                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs">🇷🇴→🇬🇧</span>
+                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs">🇷🇴→🇩🇪</span>
+                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs">🇷🇴→🇮🇹</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
