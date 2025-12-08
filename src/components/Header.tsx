@@ -3,11 +3,20 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Header() {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -18,52 +27,94 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-lg bg-blue-950/80 border-b border-white/10">
-      <div className="gradient-line"></div>
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3">
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+      scrolled 
+        ? 'bg-slate-900/95 backdrop-blur-xl shadow-lg shadow-black/20' 
+        : 'bg-transparent backdrop-blur-sm'
+    }`}>
+      {/* Gradient line */}
+      <div className={`h-0.5 bg-gradient-to-r from-orange-500 via-green-500 to-orange-500 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
+      
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 lg:px-8 py-4">
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <Image 
-            src="/logo.png" 
-            alt="Curierul Perfect" 
-            width={120} 
-            height={85} 
-            className="h-16 w-auto transition-transform group-hover:scale-105" 
-          />
+          <div className="relative">
+            <Image 
+              src="/logo.png" 
+              alt="Curierul Perfect" 
+              width={120} 
+              height={85} 
+              className="h-12 lg:h-14 w-auto transition-all duration-300 group-hover:scale-105" 
+            />
+          </div>
         </Link>
-        
+
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex gap-3 items-center">
+        <nav className="hidden md:flex items-center gap-2">
           {!user ? (
             <>
+              {/* Client Button */}
               <Link 
                 href="/login?role=client" 
-                className="btn-outline-green"
+                className="group relative px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-green-500/50 transition-all duration-300 hover:bg-green-500/10"
               >
-                👤 Client
+                <span className="flex items-center gap-2 text-gray-300 group-hover:text-green-400 transition-colors">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span className="font-medium">Client</span>
+                </span>
               </Link>
+              
+              {/* Curier Button - Primary */}
               <Link 
                 href="/login?role=curier" 
-                className="btn-outline-orange"
+                className="group relative px-5 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5"
               >
-                🚚 Curier
+                <span className="flex items-center gap-2 text-white font-medium">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                  </svg>
+                  <span>Curier</span>
+                </span>
               </Link>
             </>
           ) : (
             <>
-              <span className="text-gray-400 text-sm mr-2">
-                Salut, <span className="text-green-400 font-medium">{user.email?.split('@')[0]}</span>
-              </span>
+              {/* User info pill */}
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mr-2">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-sm font-bold text-white">
+                  {user.email?.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-gray-300 text-sm">
+                  <span className="text-white font-medium">{user.email?.split('@')[0]}</span>
+                </span>
+              </div>
+              
+              {/* Dashboard Button */}
               <Link 
                 href={`/dashboard/${user.role}`}
-                className="btn-outline-green"
+                className="group px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 hover:-translate-y-0.5"
               >
-                📊 Dashboard
+                <span className="flex items-center gap-2 text-white font-medium">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                  <span>Dashboard</span>
+                </span>
               </Link>
+              
+              {/* Logout Button */}
               <button
                 onClick={handleLogout}
-                className="px-4 py-2 rounded-lg border-2 border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white transition-all"
+                className="group px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-red-500/50 hover:bg-red-500/10 transition-all duration-300"
               >
-                Ieșire
+                <span className="flex items-center gap-2 text-gray-400 group-hover:text-red-400 transition-colors">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  <span className="font-medium">Ieșire</span>
+                </span>
               </button>
             </>
           )}
@@ -71,58 +122,82 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <button 
-          className="md:hidden text-white p-2"
+          className="md:hidden relative w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center transition-all hover:bg-white/10"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {mobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
+          <div className="w-5 h-4 relative flex flex-col justify-between">
+            <span className={`w-full h-0.5 bg-white rounded-full transition-all duration-300 origin-center ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
+            <span className={`w-full h-0.5 bg-white rounded-full transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 scale-0' : ''}`}></span>
+            <span className={`w-full h-0.5 bg-white rounded-full transition-all duration-300 origin-center ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
+          </div>
         </button>
       </div>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <nav className="md:hidden bg-blue-950/95 backdrop-blur-lg border-t border-white/10 p-4 space-y-3">
+      <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+        mobileMenuOpen ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'
+      }`}>
+        <nav className="bg-slate-900/95 backdrop-blur-xl border-t border-white/10 p-4 space-y-3">
           {!user ? (
             <>
               <Link 
                 href="/login?role=client" 
-                className="btn-outline-green w-full block text-center"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300 font-medium transition-all hover:bg-green-500/10 hover:border-green-500/50 hover:text-green-400"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                👤 Client
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Intră ca Client
               </Link>
               <Link 
                 href="/login?role=curier" 
-                className="btn-outline-orange w-full block text-center"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium shadow-lg shadow-orange-500/25"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                🚚 Curier
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+                Intră ca Curier
               </Link>
             </>
           ) : (
             <>
+              {/* User info */}
+              <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-lg font-bold text-white">
+                  {user.email?.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-white font-medium">{user.email?.split('@')[0]}</p>
+                  <p className="text-gray-500 text-xs capitalize">{user.role}</p>
+                </div>
+              </div>
+              
               <Link 
                 href={`/dashboard/${user.role}`}
-                className="btn-outline-green w-full block text-center"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-medium shadow-lg shadow-green-500/25"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                📊 Dashboard
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                </svg>
+                Dashboard
               </Link>
               <button
                 onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                className="w-full px-4 py-2 rounded-lg border-2 border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white transition-all"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-400 font-medium transition-all hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-400"
               >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
                 Ieșire
               </button>
             </>
           )}
         </nav>
-      )}
+      </div>
     </header>
   );
 }
