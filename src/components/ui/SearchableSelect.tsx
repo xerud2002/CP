@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 interface Option {
   code: string;
@@ -83,8 +84,14 @@ export default function SearchableSelect({
         className="form-select w-full text-left flex items-center justify-between gap-2"
       >
         {selectedOption ? (
-          <span className="flex items-center gap-2">
-            <span className="text-xl">{selectedOption.flag}</span>
+          <span className="flex items-center gap-3">
+            <Image 
+              src={selectedOption.flag} 
+              alt={selectedOption.name} 
+              width={24} 
+              height={18} 
+              className="rounded-sm object-cover"
+            />
             <span>{selectedOption.name}</span>
           </span>
         ) : (
@@ -155,7 +162,13 @@ export default function SearchableSelect({
                       : 'text-gray-300 hover:bg-white/5 hover:text-white'
                   }`}
                 >
-                  <span className="text-xl">{option.flag}</span>
+                  <Image 
+                    src={option.flag} 
+                    alt={option.name} 
+                    width={24} 
+                    height={18} 
+                    className="rounded-sm object-cover"
+                  />
                   <span className="flex-1">{option.name}</span>
                   {value === option.code && (
                     <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">

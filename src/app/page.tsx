@@ -6,22 +6,22 @@ import { useState } from 'react';
 import SearchableSelect from '@/components/ui/SearchableSelect';
 
 const countries = [
-  { code: 'RO', name: 'România', flag: '🇷🇴' },
-  { code: 'GB', name: 'Anglia', flag: '🇬🇧' },
-  { code: 'IT', name: 'Italia', flag: '🇮🇹' },
-  { code: 'ES', name: 'Spania', flag: '🇪🇸' },
-  { code: 'DE', name: 'Germania', flag: '🇩🇪' },
-  { code: 'FR', name: 'Franța', flag: '🇫🇷' },
-  { code: 'AT', name: 'Austria', flag: '🇦🇹' },
-  { code: 'BE', name: 'Belgia', flag: '🇧🇪' },
-  { code: 'NL', name: 'Olanda', flag: '🇳🇱' },
-  { code: 'GR', name: 'Grecia', flag: '🇬🇷' },
-  { code: 'PT', name: 'Portugalia', flag: '🇵🇹' },
-  { code: 'NO', name: 'Norvegia', flag: '🇳🇴' },
-  { code: 'SE', name: 'Suedia', flag: '🇸🇪' },
-  { code: 'DK', name: 'Danemarca', flag: '🇩🇰' },
-  { code: 'FI', name: 'Finlanda', flag: '🇫🇮' },
-  { code: 'IE', name: 'Irlanda', flag: '🇮🇪' },
+  { code: 'RO', name: 'România', flag: '/img/flag/ro.svg' },
+  { code: 'GB', name: 'Anglia', flag: '/img/flag/gb.svg' },
+  { code: 'IT', name: 'Italia', flag: '/img/flag/it.svg' },
+  { code: 'ES', name: 'Spania', flag: '/img/flag/es.svg' },
+  { code: 'DE', name: 'Germania', flag: '/img/flag/de.svg' },
+  { code: 'FR', name: 'Franța', flag: '/img/flag/fr.svg' },
+  { code: 'AT', name: 'Austria', flag: '/img/flag/at.svg' },
+  { code: 'BE', name: 'Belgia', flag: '/img/flag/be.svg' },
+  { code: 'NL', name: 'Olanda', flag: '/img/flag/nl.svg' },
+  { code: 'GR', name: 'Grecia', flag: '/img/flag/gr.svg' },
+  { code: 'PT', name: 'Portugalia', flag: '/img/flag/pt.svg' },
+  { code: 'NO', name: 'Norvegia', flag: '/img/flag/no.svg' },
+  { code: 'SE', name: 'Suedia', flag: '/img/flag/se.svg' },
+  { code: 'DK', name: 'Danemarca', flag: '/img/flag/dk.svg' },
+  { code: 'FI', name: 'Finlanda', flag: '/img/flag/fi.svg' },
+  { code: 'IE', name: 'Irlanda', flag: '/img/flag/ie.svg' },
 ];
 
 const features = [
@@ -122,10 +122,10 @@ const testimonials = [
 ];
 
 const popularRoutes = [
-  { from: '🇷🇴 România', to: '🇬🇧 Anglia', price: 'de la 25€', time: '3-5 zile' },
-  { from: '🇷🇴 România', to: '🇩🇪 Germania', price: 'de la 20€', time: '2-4 zile' },
-  { from: '🇷🇴 România', to: '🇮🇹 Italia', price: 'de la 22€', time: '2-4 zile' },
-  { from: '🇷🇴 România', to: '🇪🇸 Spania', price: 'de la 28€', time: '3-5 zile' },
+  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Anglia', toFlag: '/img/flag/gb.svg', toCode: 'GB', price: 'de la 25€', time: '3-5 zile' },
+  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Germania', toFlag: '/img/flag/de.svg', toCode: 'DE', price: 'de la 20€', time: '2-4 zile' },
+  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Italia', toFlag: '/img/flag/it.svg', toCode: 'IT', price: 'de la 22€', time: '2-4 zile' },
+  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Spania', toFlag: '/img/flag/es.svg', toCode: 'ES', price: 'de la 28€', time: '3-5 zile' },
 ];
 
 export default function Home() {
@@ -290,9 +290,21 @@ export default function Home() {
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-400">Rute populare:</span>
                       <div className="flex gap-2">
-                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs">🇷🇴→🇬🇧</span>
-                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs">🇷🇴→🇩🇪</span>
-                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs">🇷🇴→🇮🇹</span>
+                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs flex items-center gap-1">
+                          <Image src="/img/flag/ro.svg" alt="RO" width={16} height={12} className="rounded-sm" />
+                          →
+                          <Image src="/img/flag/gb.svg" alt="GB" width={16} height={12} className="rounded-sm" />
+                        </span>
+                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs flex items-center gap-1">
+                          <Image src="/img/flag/ro.svg" alt="RO" width={16} height={12} className="rounded-sm" />
+                          →
+                          <Image src="/img/flag/de.svg" alt="DE" width={16} height={12} className="rounded-sm" />
+                        </span>
+                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs flex items-center gap-1">
+                          <Image src="/img/flag/ro.svg" alt="RO" width={16} height={12} className="rounded-sm" />
+                          →
+                          <Image src="/img/flag/it.svg" alt="IT" width={16} height={12} className="rounded-sm" />
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -370,13 +382,19 @@ export default function Home() {
             {popularRoutes.map((route, index) => (
               <Link
                 key={index}
-                href={`/oferte?from=RO&to=${route.to.includes('Anglia') ? 'GB' : route.to.includes('Germania') ? 'DE' : route.to.includes('Italia') ? 'IT' : 'ES'}`}
+                href={`/oferte?from=RO&to=${route.toCode}`}
                 className="card hover:border-orange-500/50 transition-all group cursor-pointer"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-lg">{route.from}</span>
+                  <span className="flex items-center gap-2">
+                    <Image src={route.fromFlag} alt={route.from} width={20} height={15} className="rounded-sm" />
+                    <span className="text-sm">{route.from}</span>
+                  </span>
                   <span className="text-orange-400 group-hover:translate-x-1 transition-transform">→</span>
-                  <span className="text-lg">{route.to}</span>
+                  <span className="flex items-center gap-2">
+                    <Image src={route.toFlag} alt={route.to} width={20} height={15} className="rounded-sm" />
+                    <span className="text-sm">{route.to}</span>
+                  </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-green-400 font-semibold">{route.price}</span>
@@ -514,10 +532,10 @@ export default function Home() {
             {countries.map((country) => (
               <div 
                 key={country.code} 
-                className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-default"
+                className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-default flex items-center gap-2"
                 title={country.name}
               >
-                <span className="text-xl mr-2">{country.flag}</span>
+                <Image src={country.flag} alt={country.name} width={20} height={15} className="rounded-sm" />
                 <span className="text-sm text-gray-400">{country.name}</span>
               </div>
             ))}
