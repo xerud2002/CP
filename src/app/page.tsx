@@ -58,10 +58,10 @@ const features = [
 ];
 
 const stats = [
-  { value: '10K+', label: 'Colete livrate', icon: '📦' },
-  { value: '500+', label: 'Curieri activi', icon: '🚚' },
-  { value: '16', label: 'Țări acoperite', icon: '🌍' },
-  { value: '4.9★', label: 'Rating mediu', icon: '⭐' },
+  { value: '10K+', label: 'Colete livrate', iconType: 'package' },
+  { value: '500+', label: 'Curieri activi', iconType: 'truck' },
+  { value: '16', label: 'Țări acoperite', iconType: 'globe' },
+  { value: '4.9★', label: 'Rating mediu', iconType: 'star' },
 ];
 
 const testimonials = [
@@ -70,21 +70,21 @@ const testimonials = [
     location: 'București → Londra',
     text: 'Am trimis colete mamei mele în UK de nenumărate ori. Serviciu excelent, prețuri corecte și curieri de încredere!',
     rating: 5,
-    avatar: '👩',
+    initials: 'MD',
   },
   {
     name: 'Andrei P.',
     location: 'Milano → Cluj',
     text: 'Lucrez în Italia și trimit pachete acasă lunar. Curierul Perfect e cea mai bună soluție pe care am găsit-o.',
     rating: 5,
-    avatar: '👨',
+    initials: 'AP',
   },
   {
     name: 'Elena M.',
     location: 'Madrid → Iași',
     text: 'Rapid, sigur și comunicare excelentă. Coletul a ajuns în 3 zile. Recomand cu încredere!',
     rating: 5,
-    avatar: '👩‍🦰',
+    initials: 'EM',
   },
 ];
 
@@ -287,7 +287,28 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
               <div key={index} className="stat-card">
-                <div className="text-3xl mb-2">{stat.icon}</div>
+                <div className="w-10 h-10 mb-3 mx-auto rounded-xl bg-orange-500/10 flex items-center justify-center">
+                  {stat.iconType === 'package' && (
+                    <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                  )}
+                  {stat.iconType === 'truck' && (
+                    <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 17h8M8 17a2 2 0 11-4 0m4 0a2 2 0 10-4 0m12 0a2 2 0 11-4 0m4 0a2 2 0 10-4 0M3 9h13a2 2 0 012 2v4H3V9zm13 0V5a2 2 0 00-2-2H5a2 2 0 00-2 2v4h13z" />
+                    </svg>
+                  )}
+                  {stat.iconType === 'globe' && (
+                    <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  )}
+                  {stat.iconType === 'star' && (
+                    <svg className="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  )}
+                </div>
                 <div className="stat-value">{stat.value}</div>
                 <div className="stat-label">{stat.label}</div>
               </div>
@@ -468,8 +489,11 @@ export default function Home() {
       <section className="py-20 px-4 bg-green-900/10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <span className="inline-block px-4 py-2 rounded-full bg-yellow-500/10 text-yellow-400 text-sm font-medium mb-4">
-              ⭐ Recenzii verificate
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-500/10 text-yellow-400 text-sm font-medium mb-4">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              Recenzii verificate
             </span>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               <span className="text-white">Ce spun </span>
@@ -481,16 +505,20 @@ export default function Home() {
             {testimonials.map((testimonial, index) => (
               <div key={index} className="card hover:border-yellow-500/30 transition-all">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-2xl">
-                    {testimonial.avatar}
+                  <div className="w-12 h-12 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold">
+                    {testimonial.initials}
                   </div>
                   <div>
                     <p className="font-semibold text-white">{testimonial.name}</p>
                     <p className="text-sm text-gray-500">{testimonial.location}</p>
                   </div>
                 </div>
-                <div className="mb-3">
-                  {'⭐'.repeat(testimonial.rating)}
+                <div className="flex gap-1 mb-3">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <svg key={i} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                  ))}
                 </div>
                 <p className="text-gray-300 text-sm italic">&ldquo;{testimonial.text}&rdquo;</p>
               </div>
@@ -503,7 +531,11 @@ export default function Home() {
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="card text-center bg-linear-to-r from-orange-600/20 to-green-600/20 border-orange-500/30">
-            <span className="text-6xl mb-6 block">🚚</span>
+            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+              <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 17h8M8 17a2 2 0 11-4 0m4 0a2 2 0 10-4 0m12 0a2 2 0 11-4 0m4 0a2 2 0 10-4 0M3 9h13a2 2 0 012 2v4H3V9zm13 0V5a2 2 0 00-2-2H5a2 2 0 00-2 2v4h13z" />
+              </svg>
+            </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ești curier? Hai în echipă!
             </h2>
@@ -512,16 +544,28 @@ export default function Home() {
             </p>
             
             <div className="flex flex-wrap gap-6 justify-center mb-8">
-              <div className="flex items-center gap-2 text-white">
-                <span className="text-2xl">💰</span>
+              <div className="flex items-center gap-3 text-white">
+                <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
                 <span>Câștiguri atractive</span>
               </div>
-              <div className="flex items-center gap-2 text-white">
-                <span className="text-2xl">📅</span>
+              <div className="flex items-center gap-3 text-white">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
                 <span>Program flexibil</span>
               </div>
-              <div className="flex items-center gap-2 text-white">
-                <span className="text-2xl">🔒</span>
+              <div className="flex items-center gap-3 text-white">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
                 <span>Plăți garantate</span>
               </div>
             </div>
