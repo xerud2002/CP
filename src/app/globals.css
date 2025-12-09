@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Hide number input spinners/arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 :root {
   --orange: #f97316;
   --orange-light: #fb923c;
