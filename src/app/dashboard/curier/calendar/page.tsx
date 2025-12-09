@@ -379,7 +379,11 @@ export default function CalendarColectiiPage() {
           <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="p-2 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl">
-                <span className="text-sm sm:text-lg">🌍</span>
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M2 12h20" />
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-white">{totalCountries}</p>

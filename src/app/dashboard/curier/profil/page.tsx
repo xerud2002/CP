@@ -415,7 +415,14 @@ export default function ProfilCurierPage() {
           <div className="lg:col-span-1 space-y-4">
             <div className="card p-4">
               <h3 className="text-green-400 font-medium mb-2 flex items-center gap-2">
-                <span>🌍</span> Zonă de acoperire
+                <div className="p-1.5 bg-green-500/20 rounded-lg">
+                  <svg className="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M2 12h20" />
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                  </svg>
+                </div>
+                Zonă de acoperire
               </h3>
               <p className="text-gray-400 text-sm mb-3">Configurează țările și județele acoperite</p>
               <Link href="/dashboard/curier/zona-acoperire" className="btn-outline-green text-sm w-full text-center">
