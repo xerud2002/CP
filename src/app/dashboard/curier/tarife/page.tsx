@@ -472,7 +472,11 @@ export default function TarifePracticatePage() {
           <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="p-2 sm:p-2.5 bg-orange-500/20 rounded-lg sm:rounded-xl">
-                <span className="text-sm sm:text-lg">💶</span>
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 10h12" />
+                  <path d="M4 14h9" />
+                  <path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2" />
+                </svg>
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-white">{avgPrice}€</p>
@@ -736,7 +740,12 @@ export default function TarifePracticatePage() {
           ) : Object.keys(tarifeByCountry).length === 0 ? (
             <div className="text-center py-16">
               <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
-                <span className="text-4xl">💸</span>
+                <svg className="w-10 h-10 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="8" cy="8" r="6" />
+                  <path d="M18.09 10.37A6 6 0 1 1 10.34 18" />
+                  <path d="M7 6h1v4" />
+                  <path d="m16.71 13.88.7.71-2.82 2.82" />
+                </svg>
               </div>
               <p className="text-gray-400 text-lg mb-2">Nu ai niciun tarif salvat</p>
               <p className="text-gray-500 text-sm">Adaugă primul tău tarif folosind formularul de mai sus</p>

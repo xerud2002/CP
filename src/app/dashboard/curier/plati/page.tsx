@@ -216,7 +216,14 @@ export default function PlatiFacturiPage() {
               </div>
             ) : payments.length === 0 ? (
               <div className="text-center py-12">
-                <div className="text-6xl mb-4">💸</div>
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
+                  <svg className="w-10 h-10 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="8" cy="8" r="6" />
+                    <path d="M18.09 10.37A6 6 0 1 1 10.34 18" />
+                    <path d="M7 6h1v4" />
+                    <path d="m16.71 13.88.7.71-2.82 2.82" />
+                  </svg>
+                </div>
                 <p className="text-gray-400">Nu ai nicio plată înregistrată.</p>
               </div>
             ) : (
