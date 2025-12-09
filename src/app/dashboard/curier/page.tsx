@@ -355,7 +355,15 @@ function RecentActivity() {
     <section className="bg-slate-800/30 rounded-2xl p-6 border border-white/5">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-          <span>📋</span> Activitate recentă
+          <div className="p-1.5 bg-purple-500/20 rounded-lg">
+            <svg className="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+              <path d="M9 12h6" />
+              <path d="M9 16h6" />
+            </svg>
+          </div>
+          Activitate recentă
         </h3>
         <Link href="/dashboard/curier/comenzi" className="text-sm text-orange-400 hover:text-orange-300 transition-colors">
           Vezi tot →

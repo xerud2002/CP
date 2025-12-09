@@ -684,7 +684,14 @@ export default function TarifePracticatePage() {
         {/* Service Types Legend */}
         <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-xl">📋</span>
+            <div className="p-2 bg-indigo-500/20 rounded-lg">
+              <svg className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                <path d="M9 12h6" />
+                <path d="M9 16h6" />
+              </svg>
+            </div>
             <h2 className="text-lg font-semibold text-white">Tipuri de servicii disponibile</h2>
             <span className="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">{serviceTypes.length} servicii</span>
           </div>
@@ -707,7 +714,14 @@ export default function TarifePracticatePage() {
         <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <span className="text-xl">📊</span>
+              <div className="p-2 bg-emerald-500/20 rounded-lg">
+                <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 3v18h18" />
+                  <path d="M18 17V9" />
+                  <path d="M13 17V5" />
+                  <path d="M8 17v-3" />
+                </svg>
+              </div>
               <h2 className="text-lg font-semibold text-white">Tarife Active</h2>
             </div>
             <span className="text-sm bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full">

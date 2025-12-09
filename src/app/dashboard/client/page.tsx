@@ -745,7 +745,15 @@ export default function ClientDashboard() {
               {/* Activity Sidebar */}
               <div className="lg:col-span-1">
                 <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                  <span>📊</span> Activitate recentă
+                  <div className="p-1.5 bg-blue-500/20 rounded-lg">
+                    <svg className="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M3 3v18h18" />
+                      <path d="M18 17V9" />
+                      <path d="M13 17V5" />
+                      <path d="M8 17v-3" />
+                    </svg>
+                  </div>
+                  Activitate recentă
                 </h2>
                 <div className="bg-slate-800/30 backdrop-blur-sm rounded-2xl border border-white/5 p-4">
                   <div className="space-y-1">
