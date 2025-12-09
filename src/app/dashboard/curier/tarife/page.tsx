@@ -47,12 +47,195 @@ const countriesWithCodes = [
   { name: 'Suedia', code: 'se' },
 ];
 
+// Service types with custom SVG icons
 const serviceTypes = [
-  { value: 'Standard', label: 'Standard', description: 'Transport standard de colete', icon: '📦' },
-  { value: 'Door2Door', label: 'Door2Door', description: 'Ridicare și livrare la adresă', icon: '🚪' },
-  { value: 'Frigo', label: 'Frigo', description: 'Transport frigorific', icon: '❄️' },
-  { value: 'Express', label: 'Express', description: 'Livrare urgentă', icon: '⚡' },
+  { 
+    value: 'Standard', 
+    label: 'Standard', 
+    description: 'Transport standard de colete',
+    color: 'text-blue-400',
+    bgColor: 'bg-blue-500/20',
+  },
+  { 
+    value: 'Express', 
+    label: 'Express', 
+    description: 'Livrare urgentă 24-48h',
+    color: 'text-yellow-400',
+    bgColor: 'bg-yellow-500/20',
+  },
+  { 
+    value: 'Door2Door', 
+    label: 'Door to Door', 
+    description: 'Ridicare și livrare la adresă',
+    color: 'text-emerald-400',
+    bgColor: 'bg-emerald-500/20',
+  },
+  { 
+    value: 'Frigo', 
+    label: 'Frigorific', 
+    description: 'Transport refrigerat',
+    color: 'text-cyan-400',
+    bgColor: 'bg-cyan-500/20',
+  },
+  { 
+    value: 'Mobila', 
+    label: 'Mobilă', 
+    description: 'Transport mobilier și electrocasnice',
+    color: 'text-amber-400',
+    bgColor: 'bg-amber-500/20',
+  },
+  { 
+    value: 'Animale', 
+    label: 'Animale', 
+    description: 'Transport animale de companie',
+    color: 'text-pink-400',
+    bgColor: 'bg-pink-500/20',
+  },
+  { 
+    value: 'Documente', 
+    label: 'Documente', 
+    description: 'Plicuri și documente importante',
+    color: 'text-indigo-400',
+    bgColor: 'bg-indigo-500/20',
+  },
+  { 
+    value: 'Auto', 
+    label: 'Piese Auto', 
+    description: 'Piese auto și componente',
+    color: 'text-red-400',
+    bgColor: 'bg-red-500/20',
+  },
+  { 
+    value: 'Electronice', 
+    label: 'Electronice', 
+    description: 'Produse electronice fragile',
+    color: 'text-purple-400',
+    bgColor: 'bg-purple-500/20',
+  },
+  { 
+    value: 'Paleti', 
+    label: 'Paleți', 
+    description: 'Transport paleți și marfă paletizată',
+    color: 'text-orange-400',
+    bgColor: 'bg-orange-500/20',
+  },
+  { 
+    value: 'Fragil', 
+    label: 'Fragil', 
+    description: 'Colete fragile cu manipulare atentă',
+    color: 'text-rose-400',
+    bgColor: 'bg-rose-500/20',
+  },
+  { 
+    value: 'Alimente', 
+    label: 'Alimente', 
+    description: 'Produse alimentare neperisabile',
+    color: 'text-lime-400',
+    bgColor: 'bg-lime-500/20',
+  },
 ];
+
+// Service icons as components
+const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; className?: string }) => {
+  const icons: Record<string, JSX.Element> = {
+    Standard: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+        <path d="m3.3 7 8.7 5 8.7-5" />
+        <path d="M12 22V12" />
+      </svg>
+    ),
+    Express: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+      </svg>
+    ),
+    Door2Door: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+    ),
+    Frigo: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 12h10" />
+        <path d="M9 4v16" />
+        <path d="m3 9 3 3-3 3" />
+        <path d="M12 6 9 9 6 6" />
+        <path d="m6 18 3-3 1.5 1.5" />
+        <path d="M20 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" />
+      </svg>
+    ),
+    Mobila: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" />
+        <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" />
+        <path d="M4 18v2" />
+        <path d="M20 18v2" />
+        <path d="M12 4v9" />
+      </svg>
+    ),
+    Animale: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="4" r="2" />
+        <circle cx="18" cy="8" r="2" />
+        <circle cx="20" cy="16" r="2" />
+        <path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z" />
+      </svg>
+    ),
+    Documente: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </svg>
+    ),
+    Auto: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+        <circle cx="7" cy="17" r="2" />
+        <path d="M9 17h6" />
+        <circle cx="17" cy="17" r="2" />
+      </svg>
+    ),
+    Electronice: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <line x1="8" y1="21" x2="16" y2="21" />
+        <line x1="12" y1="17" x2="12" y2="21" />
+      </svg>
+    ),
+    Paleti: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 6h18" />
+        <path d="M3 12h18" />
+        <path d="M3 18h18" />
+        <path d="M4 6v12" />
+        <path d="M12 6v12" />
+        <path d="M20 6v12" />
+        <rect x="5" y="2" width="14" height="4" rx="1" />
+      </svg>
+    ),
+    Fragil: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M11 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" />
+        <path d="M18 2v6" />
+        <path d="M15 5h6" />
+        <path d="M12 11v5" />
+        <path d="M9.5 14h5" />
+      </svg>
+    ),
+    Alimente: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2" />
+        <path d="M6 10h12" />
+        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <circle cx="12" cy="15" r="2" />
+      </svg>
+    ),
+  };
+  
+  return icons[service] || icons.Standard;
+};
 
 export default function TarifePracticatePage() {
   const { user, loading } = useAuth();
@@ -393,8 +576,10 @@ export default function TarifePracticatePage() {
                   >
                     {tipServiciu ? (
                       <>
-                        <span className="text-lg">{serviceTypes.find(s => s.value === tipServiciu)?.icon}</span>
-                        <span className="flex-1">{tipServiciu}</span>
+                        <div className={`p-1.5 rounded-lg ${serviceTypes.find(s => s.value === tipServiciu)?.bgColor}`}>
+                          <ServiceIcon service={tipServiciu} className={`w-4 h-4 ${serviceTypes.find(s => s.value === tipServiciu)?.color}`} />
+                        </div>
+                        <span className="flex-1">{serviceTypes.find(s => s.value === tipServiciu)?.label}</span>
                       </>
                     ) : (
                       <span className="flex-1 text-gray-500">Selectează serviciul</span>
@@ -405,7 +590,7 @@ export default function TarifePracticatePage() {
                   </button>
 
                   {isServiceDropdownOpen && (
-                    <div className="absolute z-50 w-full mt-2 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                    <div className="absolute z-50 w-full mt-2 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto">
                       {serviceTypes.map((service) => (
                         <button
                           key={service.value}
@@ -418,7 +603,9 @@ export default function TarifePracticatePage() {
                             tipServiciu === service.value ? 'bg-emerald-500/20' : ''
                           }`}
                         >
-                          <span className="text-lg">{service.icon}</span>
+                          <div className={`p-1.5 rounded-lg ${service.bgColor}`}>
+                            <ServiceIcon service={service.value} className={`w-4 h-4 ${service.color}`} />
+                          </div>
                           <div className="flex-1 text-left">
                             <span className="text-white block">{service.label}</span>
                             <span className="text-xs text-gray-500">{service.description}</span>
@@ -493,15 +680,18 @@ export default function TarifePracticatePage() {
         <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-4">
             <span className="text-xl">📋</span>
-            <h2 className="text-lg font-semibold text-white">Tipuri de servicii</h2>
+            <h2 className="text-lg font-semibold text-white">Tipuri de servicii disponibile</h2>
+            <span className="text-xs bg-slate-700 text-gray-400 px-2 py-1 rounded-full">{serviceTypes.length} servicii</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
             {serviceTypes.map((service) => (
-              <div key={service.value} className="flex items-center gap-3 p-3 bg-slate-800/50 rounded-xl border border-white/5">
-                <span className="text-2xl">{service.icon}</span>
-                <div>
-                  <p className="font-medium text-white text-sm">{service.label}</p>
-                  <p className="text-xs text-gray-500">{service.description}</p>
+              <div key={service.value} className="flex items-center gap-3 p-3 bg-slate-800/50 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+                <div className={`p-2 rounded-lg ${service.bgColor}`}>
+                  <ServiceIcon service={service.value} className={`w-5 h-5 ${service.color}`} />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-medium text-white text-sm truncate">{service.label}</p>
+                  <p className="text-xs text-gray-500 truncate">{service.description}</p>
                 </div>
               </div>
             ))}
@@ -571,9 +761,11 @@ export default function TarifePracticatePage() {
                           return (
                             <div key={t.id} className="flex items-center justify-between p-3 hover:bg-slate-700/30 transition-colors">
                               <div className="flex items-center gap-3">
-                                <span className="text-lg">{serviceInfo?.icon || '📦'}</span>
+                                <div className={`p-1.5 rounded-lg ${serviceInfo?.bgColor || 'bg-slate-600/50'}`}>
+                                  <ServiceIcon service={t.tipServiciu} className={`w-4 h-4 ${serviceInfo?.color || 'text-gray-400'}`} />
+                                </div>
                                 <div>
-                                  <p className="text-white text-sm font-medium">{t.tipServiciu}</p>
+                                  <p className="text-white text-sm font-medium">{serviceInfo?.label || t.tipServiciu}</p>
                                   <p className="text-xs text-gray-500">min. {t.minKg} kg</p>
                                 </div>
                               </div>
