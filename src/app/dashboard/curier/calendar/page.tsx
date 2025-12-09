@@ -363,22 +363,6 @@ export default function CalendarColectiiPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {/* Info Banner */}
-        <div className="bg-linear-to-r from-purple-500/10 via-pink-500/10 to-purple-500/10 border border-purple-500/20 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div className="p-3 bg-purple-500/20 rounded-xl shrink-0">
-              <CalendarIcon className="w-6 h-6 text-purple-400" />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-white mb-1">📅 Calendar de Colecții</h3>
-              <p className="text-sm text-gray-300">
-                Setează datele când vei fi disponibil să colectezi colete din fiecare țară. 
-                Clienții vor vedea aceste date și își vor programa trimiterile în consecință.
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Stats Cards */}
         <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
           <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
