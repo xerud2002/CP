@@ -403,7 +403,13 @@ export default function CalendarColectiiPage() {
         {/* Add Entry Form */}
         <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
           <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2">
-            <span className="text-xl">➕</span> Adaugă dată de colecție
+            <div className="p-1.5 bg-purple-500/20 rounded-lg">
+              <svg className="w-5 h-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+              </svg>
+            </div>
+            <span>Adaugă dată de colecție</span>
           </h2>
           
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -485,7 +485,12 @@ export default function TarifePracticatePage() {
         {/* Add Form Section */}
         <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-5">
-            <span className="text-xl">➕</span>
+            <div className="p-2 bg-emerald-500/20 rounded-lg">
+              <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 5v14" />
+                <path d="M5 12h14" />
+              </svg>
+            </div>
             <h2 className="text-lg font-semibold text-white">Adaugă tarif nou</h2>
           </div>
 
