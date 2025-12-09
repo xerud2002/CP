@@ -65,6 +65,12 @@ export default function CalendarColectiiPage() {
   const [countrySearch, setCountrySearch] = useState('');
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const countrySearchRef = useRef<HTMLInputElement>(null);
+  
+  // Custom calendar picker state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
+  const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -77,6 +83,9 @@ export default function CalendarColectiiPage() {
     const handleClickOutside = (event: MouseEvent) => {
       if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
         setIsCountryDropdownOpen(false);
+      }
+      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+        setIsCalendarOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -152,6 +161,63 @@ export default function CalendarColectiiPage() {
     setSelectedCountry(countryName);
     setIsCountryDropdownOpen(false);
     setCountrySearch('');
+  };
+
+  // Calendar helper functions
+  const monthNames = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 
+                      'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
+  const dayNames = ['Lu', 'Ma', 'Mi', 'Jo', 'Vi', 'Sâ', 'Du'];
+
+  const getDaysInMonth = (month: number, year: number) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (month: number, year: number) => {
+    const day = new Date(year, month, 1).getDay();
+    return day === 0 ? 6 : day - 1; // Convert to Monday-first (0 = Monday)
+  };
+
+  const isDateDisabled = (day: number) => {
+    const date = new Date(calendarYear, calendarMonth, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
+
+  const handleDateSelect = (day: number) => {
+    if (isDateDisabled(day)) return;
+    const date = new Date(calendarYear, calendarMonth, day);
+    const formattedValue = date.toISOString().split('T')[0]; // YYYY-MM-DD for internal use
+    setSelectedDate(formattedValue);
+    setIsCalendarOpen(false);
+  };
+
+  const goToPrevMonth = () => {
+    if (calendarMonth === 0) {
+      setCalendarMonth(11);
+      setCalendarYear(calendarYear - 1);
+    } else {
+      setCalendarMonth(calendarMonth - 1);
+    }
+  };
+
+  const goToNextMonth = () => {
+    if (calendarMonth === 11) {
+      setCalendarMonth(0);
+      setCalendarYear(calendarYear + 1);
+    } else {
+      setCalendarMonth(calendarMonth + 1);
+    }
+  };
+
+  const formatSelectedDate = () => {
+    if (!selectedDate) return '';
+    const date = new Date(selectedDate);
+    return date.toLocaleDateString('ro-RO', { 
+      day: 'numeric', 
+      month: 'long', 
+      year: 'numeric' 
+    });
   };
 
   const handleAddEntry = async () => {
@@ -437,15 +503,123 @@ export default function CalendarColectiiPage() {
             </div>
 
             {/* Date Picker */}
-            <div>
+            <div className="relative" ref={calendarRef}>
               <label className="block text-sm font-medium text-gray-300 mb-2">Data Colecție</label>
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
-                className="w-full px-4 py-3 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:border-purple-500/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 scheme-dark"
-              />
+              <button
+                type="button"
+                onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                className="w-full px-4 py-3 bg-slate-900/80 border border-white/10 rounded-xl text-left text-white hover:border-purple-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              >
+                <div className="flex items-center gap-3">
+                  <CalendarIcon className="w-5 h-5 text-purple-400" />
+                  {selectedDate ? (
+                    <span>{formatSelectedDate()}</span>
+                  ) : (
+                    <span className="text-gray-400">Selectează o dată</span>
+                  )}
+                </div>
+                <svg className={`w-5 h-5 text-gray-400 transition-transform ${isCalendarOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {isCalendarOpen && (
+                <div className="absolute z-50 mt-2 w-full sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                  {/* Calendar Header */}
+                  <div className="flex items-center justify-between p-4 border-b border-white/5">
+                    <button
+                      onClick={goToPrevMonth}
+                      className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <span className="font-semibold text-white">
+                      {monthNames[calendarMonth]} {calendarYear}
+                    </span>
+                    <button
+                      onClick={goToNextMonth}
+                      className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Day Names */}
+                  <div className="grid grid-cols-7 gap-1 px-3 pt-3">
+                    {dayNames.map(day => (
+                      <div key={day} className="text-center text-xs font-medium text-gray-400 py-2">
+                        {day}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Calendar Days */}
+                  <div className="grid grid-cols-7 gap-1 p-3">
+                    {/* Empty cells for days before the first day of the month */}
+                    {Array.from({ length: getFirstDayOfMonth(calendarMonth, calendarYear) }).map((_, i) => (
+                      <div key={`empty-${i}`} className="h-10" />
+                    ))}
+                    
+                    {/* Days of the month */}
+                    {Array.from({ length: getDaysInMonth(calendarMonth, calendarYear) }).map((_, i) => {
+                      const day = i + 1;
+                      const isDisabled = isDateDisabled(day);
+                      const isToday = new Date().getDate() === day && 
+                                      new Date().getMonth() === calendarMonth && 
+                                      new Date().getFullYear() === calendarYear;
+                      const isSelected = selectedDate && 
+                                        new Date(selectedDate).getDate() === day &&
+                                        new Date(selectedDate).getMonth() === calendarMonth &&
+                                        new Date(selectedDate).getFullYear() === calendarYear;
+                      
+                      return (
+                        <button
+                          key={day}
+                          onClick={() => handleDateSelect(day)}
+                          disabled={isDisabled}
+                          className={`h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
+                            isDisabled 
+                              ? 'text-gray-600 cursor-not-allowed' 
+                              : isSelected
+                                ? 'bg-linear-to-br from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/30'
+                                : isToday
+                                  ? 'bg-purple-500/20 text-purple-300 hover:bg-purple-500/30'
+                                  : 'text-white hover:bg-slate-700/50'
+                          }`}
+                        >
+                          {day}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="flex items-center justify-between px-3 pb-3">
+                    <button
+                      onClick={() => {
+                        const today = new Date();
+                        setCalendarMonth(today.getMonth());
+                        setCalendarYear(today.getFullYear());
+                      }}
+                      className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
+                    >
+                      Astăzi
+                    </button>
+                    {selectedDate && (
+                      <button
+                        onClick={() => setSelectedDate('')}
+                        className="text-xs text-gray-400 hover:text-red-400 transition-colors"
+                      >
+                        Șterge
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Add Button */}
