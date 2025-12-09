@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
-import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp, orderBy } from 'firebase/firestore';
+import { useEffect, useState, useMemo, useRef } from 'react';
+import { ArrowLeftIcon, CloseIcon, CalendarIcon, TrashIcon } from '@/components/icons/DashboardIcons';
+import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp, orderBy, writeBatch } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 interface CalendarEntry {
@@ -15,11 +16,39 @@ interface CalendarEntry {
   dataTimestamp: Date;
 }
 
-// Countries sorted alphabetically
-const countries = [
-  'Anglia', 'Austria', 'Belgia', 'Danemarca', 'Finlanda', 'Franța',
-  'Germania', 'Grecia', 'Irlanda', 'Italia', 'Norvegia', 'Olanda',
-  'Portugalia', 'România', 'Scoția', 'Spania', 'Suedia'
+// Lista de țări cu coduri pentru steaguri
+const countriesWithCodes = [
+  { name: 'România', code: 'ro' },
+  { name: 'Germania', code: 'de' },
+  { name: 'Franța', code: 'fr' },
+  { name: 'Italia', code: 'it' },
+  { name: 'Spania', code: 'es' },
+  { name: 'Anglia', code: 'gb' },
+  { name: 'Scoția', code: 'gb-sct' },
+  { name: 'Austria', code: 'at' },
+  { name: 'Belgia', code: 'be' },
+  { name: 'Olanda', code: 'nl' },
+  { name: 'Elveția', code: 'ch' },
+  { name: 'Ungaria', code: 'hu' },
+  { name: 'Cehia', code: 'cz' },
+  { name: 'Polonia', code: 'pl' },
+  { name: 'Slovacia', code: 'sk' },
+  { name: 'Slovenia', code: 'si' },
+  { name: 'Croația', code: 'hr' },
+  { name: 'Grecia', code: 'gr' },
+  { name: 'Portugalia', code: 'pt' },
+  { name: 'Irlanda', code: 'ie' },
+  { name: 'Danemarca', code: 'dk' },
+  { name: 'Suedia', code: 'se' },
+  { name: 'Norvegia', code: 'no' },
+  { name: 'Finlanda', code: 'fi' },
+  { name: 'Bulgaria', code: 'bg' },
+  { name: 'Luxemburg', code: 'lu' },
+  { name: 'Cipru', code: 'cy' },
+  { name: 'Malta', code: 'mt' },
+  { name: 'Estonia', code: 'ee' },
+  { name: 'Letonia', code: 'lv' },
+  { name: 'Lituania', code: 'lt' },
 ];
 
 export default function CalendarColectiiPage() {
@@ -30,12 +59,36 @@ export default function CalendarColectiiPage() {
   const [entries, setEntries] = useState<CalendarEntry[]>([]);
   const [saving, setSaving] = useState(false);
   const [loadingEntries, setLoadingEntries] = useState(true);
+  
+  // Custom dropdown state
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
+  const countryDropdownRef = useRef<HTMLDivElement>(null);
+  const countrySearchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
       router.push('/login?role=curier');
     }
   }, [user, loading, router]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
+        setIsCountryDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Focus search when dropdown opens
+  useEffect(() => {
+    if (isCountryDropdownOpen && countrySearchRef.current) {
+      countrySearchRef.current.focus();
+    }
+  }, [isCountryDropdownOpen]);
 
   // Load saved entries from Firebase
   useEffect(() => {
@@ -50,12 +103,12 @@ export default function CalendarColectiiPage() {
         );
         const snapshot = await getDocs(q);
         const loadedEntries: CalendarEntry[] = [];
-        snapshot.forEach((doc) => {
+        snapshot.forEach((docSnapshot) => {
           loadedEntries.push({
-            id: doc.id,
-            tara: doc.data().tara,
-            data: doc.data().data,
-            dataTimestamp: doc.data().dataTimestamp?.toDate(),
+            id: docSnapshot.id,
+            tara: docSnapshot.data().tara,
+            data: docSnapshot.data().data,
+            dataTimestamp: docSnapshot.data().dataTimestamp?.toDate(),
           });
         });
         setEntries(loadedEntries);
@@ -70,6 +123,36 @@ export default function CalendarColectiiPage() {
       loadEntries();
     }
   }, [user]);
+
+  // Group entries by country
+  const entriesByCountry = useMemo(() => {
+    return entries.reduce((acc, entry) => {
+      if (!acc[entry.tara]) {
+        acc[entry.tara] = [];
+      }
+      acc[entry.tara].push(entry);
+      return acc;
+    }, {} as Record<string, CalendarEntry[]>);
+  }, [entries]);
+
+  // Filter countries for dropdown
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch) return countriesWithCodes;
+    return countriesWithCodes.filter(c => 
+      c.name.toLowerCase().includes(countrySearch.toLowerCase())
+    );
+  }, [countrySearch]);
+
+  // Get country code by name
+  const getCountryCode = (name: string) => {
+    return countriesWithCodes.find(c => c.name === name)?.code || '';
+  };
+
+  const handleSelectCountry = (countryName: string) => {
+    setSelectedCountry(countryName);
+    setIsCountryDropdownOpen(false);
+    setCountrySearch('');
+  };
 
   const handleAddEntry = async () => {
     if (!selectedCountry || !selectedDate || !user) return;
@@ -106,7 +189,6 @@ export default function CalendarColectiiPage() {
         dataTimestamp: dateObj,
       }]);
 
-      setSelectedCountry('');
       setSelectedDate('');
     } catch (error) {
       console.error('Error adding entry:', error);
@@ -128,14 +210,54 @@ export default function CalendarColectiiPage() {
     }
   };
 
-  // Group entries by country
-  const entriesByCountry = entries.reduce((acc, entry) => {
-    if (!acc[entry.tara]) {
-      acc[entry.tara] = [];
+  const handleDeleteCountry = async (countryName: string) => {
+    const countryEntries = entriesByCountry[countryName] || [];
+    if (countryEntries.length === 0) return;
+
+    if (!confirm(`Sigur dorești să ștergi toate cele ${countryEntries.length} date de colecție pentru ${countryName}?`)) {
+      return;
     }
-    acc[entry.tara].push(entry);
-    return acc;
-  }, {} as Record<string, CalendarEntry[]>);
+
+    try {
+      const batch = writeBatch(db);
+      countryEntries.forEach((entry) => {
+        batch.delete(doc(db, 'calendar_colectii', entry.id));
+      });
+      await batch.commit();
+
+      setEntries((prev) => prev.filter((e) => e.tara !== countryName));
+    } catch (error) {
+      console.error('Error deleting country entries:', error);
+      alert('Eroare la ștergere. Încercați din nou.');
+    }
+  };
+
+  // Format date for display
+  const formatDateDisplay = (dateString: string) => {
+    // dateString is already in DD.MM.YYYY format from Firebase
+    const parts = dateString.split('.');
+    if (parts.length !== 3) return dateString;
+    
+    const date = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+    const options: Intl.DateTimeFormatOptions = { 
+      weekday: 'short', 
+      day: 'numeric', 
+      month: 'short',
+      year: 'numeric'
+    };
+    return date.toLocaleDateString('ro-RO', options);
+  };
+
+  // Check if date is past
+  const isPastDate = (dateString: string) => {
+    const parts = dateString.split('.');
+    if (parts.length !== 3) return false;
+    
+    const date = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
 
   if (loading) {
     return (
@@ -147,91 +269,202 @@ export default function CalendarColectiiPage() {
 
   if (!user) return null;
 
+  // Stats
+  const totalEntries = entries.length;
+  const totalCountries = Object.keys(entriesByCountry).length;
+  const upcomingEntries = entries.filter(e => !isPastDate(e.data)).length;
+
   return (
-    <div className="min-h-screen p-6 page-transition">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <Link href="/dashboard/curier" className="text-gray-400 hover:text-white transition-colors mb-2 inline-flex items-center gap-2">
-              <ArrowLeftIcon className="w-5 h-5" />
-              Înapoi la Dashboard
+    <div className="min-h-screen bg-slate-950">
+      {/* Header */}
+      <div className="bg-slate-900/80 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center gap-4">
+            <Link 
+              href="/dashboard/curier" 
+              className="p-2.5 hover:bg-slate-800/80 rounded-xl transition-all duration-200 group"
+            >
+              <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
             </Link>
-            <h1 className="text-3xl font-bold text-white">📅 Calendar Colecții</h1>
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-linear-to-br from-purple-500/20 to-pink-500/20 rounded-xl border border-purple-500/20">
+                <CalendarIcon className="w-7 h-7 text-purple-400" />
+              </div>
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-white">Calendar Colecții</h1>
+                <p className="text-sm text-gray-400 hidden sm:block">Programează datele de colecție pentru fiecare țară</p>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Left Column - Info */}
-          <div className="card">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                <span className="text-2xl">📆</span>
-              </div>
-              <h2 className="text-xl font-semibold text-white">Despre Calendar</h2>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {/* Info Banner */}
+        <div className="bg-linear-to-r from-purple-500/10 via-pink-500/10 to-purple-500/10 border border-purple-500/20 rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="p-3 bg-purple-500/20 rounded-xl shrink-0">
+              <CalendarIcon className="w-6 h-6 text-purple-400" />
             </div>
-            <p className="text-gray-400 leading-relaxed mb-4">
-              Această secțiune te ajută să selectezi zilele în care poți efectua colecții de colete. 
-              În funcție de țara și data selectată, platforma va ști când ești disponibil și îți va 
-              trimite cereri relevante.
-            </p>
-            <p className="text-gray-400 leading-relaxed">
-              Poți adăuga una sau mai multe zile de colecție pentru fiecare țară, apoi le poți 
-              modifica oricând din contul tău.
-            </p>
-
-            <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
-              <div className="flex items-center gap-2 text-green-400 font-medium mb-2">
-                <span>💡</span> Sfat
-              </div>
-              <p className="text-gray-400 text-sm">
-                Adaugă cât mai multe date de colecție pentru a primi mai multe cereri de la clienți!
+            <div className="flex-1">
+              <h3 className="font-semibold text-white mb-1">📅 Calendar de Colecții</h3>
+              <p className="text-sm text-gray-300">
+                Setează datele când vei fi disponibil să colectezi colete din fiecare țară. 
+                Clienții vor vedea aceste date și își vor programa trimiterile în consecință.
               </p>
             </div>
           </div>
+        </div>
 
-          {/* Right Column - Form */}
-          <div className="card">
-            <h2 className="text-xl font-semibold text-white mb-6">Adaugă Dată Colecție</h2>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="form-label">Țară Colecție</label>
-                <select
-                  value={selectedCountry}
-                  onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="form-select"
-                >
-                  <option value="">Selectează o țară</option>
-                  {countries.map((country) => (
-                    <option key={country} value={country}>{country}</option>
-                  ))}
-                </select>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-emerald-500/20 rounded-lg sm:rounded-xl">
+                <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
               </div>
-
               <div>
-                <label className="form-label">Data Colecție</label>
-                <input
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  min={new Date().toISOString().split('T')[0]}
-                  className="form-input"
-                />
+                <p className="text-lg sm:text-2xl font-bold text-white">{totalEntries}</p>
+                <p className="text-xs text-gray-400">Total date</p>
               </div>
+            </div>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl">
+                <span className="text-sm sm:text-lg">🌍</span>
+              </div>
+              <div>
+                <p className="text-lg sm:text-2xl font-bold text-white">{totalCountries}</p>
+                <p className="text-xs text-gray-400">Țări active</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-purple-500/20 rounded-lg sm:rounded-xl">
+                <span className="text-sm sm:text-lg">📆</span>
+              </div>
+              <div>
+                <p className="text-lg sm:text-2xl font-bold text-white">{upcomingEntries}</p>
+                <p className="text-xs text-gray-400">Viitoare</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        {/* Add Entry Form */}
+        <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2">
+            <span className="text-xl">➕</span> Adaugă dată de colecție
+          </h2>
+          
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Custom Country Dropdown */}
+            <div className="relative" ref={countryDropdownRef}>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Țara</label>
+              <button
+                type="button"
+                onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+                className="w-full px-4 py-3 bg-slate-900/80 border border-white/10 rounded-xl text-left text-white hover:border-purple-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              >
+                <div className="flex items-center gap-3">
+                  {selectedCountry ? (
+                    <>
+                      <Image
+                        src={`/img/flag/${getCountryCode(selectedCountry)}.svg`}
+                        alt={selectedCountry}
+                        width={24}
+                        height={18}
+                        className="rounded shadow-sm"
+                      />
+                      <span>{selectedCountry}</span>
+                    </>
+                  ) : (
+                    <span className="text-gray-400">Selectează o țară</span>
+                  )}
+                </div>
+                <svg className={`w-5 h-5 text-gray-400 transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {isCountryDropdownOpen && (
+                <div className="absolute z-50 mt-2 w-full bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                  {/* Search Input */}
+                  <div className="p-3 border-b border-white/5">
+                    <input
+                      ref={countrySearchRef}
+                      type="text"
+                      placeholder="Caută țara..."
+                      value={countrySearch}
+                      onChange={(e) => setCountrySearch(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-900/80 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 text-sm"
+                    />
+                  </div>
+                  {/* Country List */}
+                  <div className="max-h-60 overflow-y-auto">
+                    {filteredCountries.length === 0 ? (
+                      <div className="px-4 py-3 text-gray-400 text-sm">Nicio țară găsită</div>
+                    ) : (
+                      filteredCountries.map((country) => (
+                        <button
+                          key={country.code}
+                          onClick={() => handleSelectCountry(country.name)}
+                          className={`w-full px-4 py-3 text-left hover:bg-slate-700/50 transition-colors flex items-center gap-3 ${
+                            selectedCountry === country.name ? 'bg-purple-500/20 text-purple-300' : 'text-white'
+                          }`}
+                        >
+                          <Image
+                            src={`/img/flag/${country.code}.svg`}
+                            alt={country.name}
+                            width={24}
+                            height={18}
+                            className="rounded shadow-sm"
+                          />
+                          <span>{country.name}</span>
+                          {selectedCountry === country.name && (
+                            <svg className="w-5 h-5 ml-auto text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Date Picker */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Data Colecție</label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+                className="w-full px-4 py-3 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:border-purple-500/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 scheme-dark"
+              />
+            </div>
+
+            {/* Add Button */}
+            <div className="flex items-end">
               <button
                 onClick={handleAddEntry}
                 disabled={!selectedCountry || !selectedDate || saving}
-                className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20"
               >
                 {saving ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    Se salvează...
-                  </span>
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Se salvează...</span>
+                  </>
                 ) : (
-                  'Adaugă data'
+                  <>
+                    <CalendarIcon className="w-5 h-5" />
+                    <span>Adaugă data</span>
+                  </>
                 )}
               </button>
             </div>
@@ -239,53 +472,116 @@ export default function CalendarColectiiPage() {
         </div>
 
         {/* Saved Entries */}
-        <div className="card mt-8">
-          <h2 className="text-xl font-semibold text-white mb-6">📋 Program Colecții Salvate</h2>
+        <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-4 sm:p-6">
+          <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2">
+            <span className="text-xl">📋</span> Program Colecții Salvate
+          </h2>
           
           {loadingEntries ? (
-            <div className="flex justify-center py-8">
+            <div className="flex justify-center py-12">
               <div className="spinner"></div>
             </div>
           ) : Object.keys(entriesByCountry).length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-6xl mb-4">📭</div>
-              <p className="text-gray-400">Nu ai nicio dată de colecție salvată.</p>
-              <p className="text-gray-500 text-sm mt-2">Adaugă prima ta dată de colecție folosind formularul de mai sus.</p>
+            <div className="text-center py-12 sm:py-16">
+              <div className="text-6xl sm:text-7xl mb-4">📭</div>
+              <p className="text-gray-300 text-lg font-medium">Nu ai nicio dată de colecție salvată</p>
+              <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
+                Adaugă prima ta dată de colecție folosind formularul de mai sus pentru a-ți anunța clienții când vei fi disponibil.
+              </p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Object.entries(entriesByCountry).map(([country, countryEntries]) => (
-                <div key={country} className="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xl">🌍</span>
-                    <h3 className="font-semibold text-green-400">{country}</h3>
-                    <span className="ml-auto text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">
-                      {countryEntries.length} {countryEntries.length === 1 ? 'dată' : 'date'}
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    {countryEntries.map((entry) => (
-                      <div 
-                        key={entry.id} 
-                        className="flex items-center justify-between bg-slate-900/50 rounded-lg px-3 py-2"
-                      >
-                        <span className="text-white">{entry.data}</span>
-                        <button
-                          onClick={() => handleDeleteEntry(entry.id)}
-                          className="text-red-400 hover:text-red-300 transition-colors p-1"
-                          title="Șterge"
-                        >
-                          <CloseIcon className="w-4 h-4" />
-                        </button>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.entries(entriesByCountry).map(([country, countryEntries]) => {
+                const countryCode = getCountryCode(country);
+                const upcomingCount = countryEntries.filter(e => !isPastDate(e.data)).length;
+                
+                return (
+                  <div 
+                    key={country} 
+                    className="bg-slate-900/50 rounded-xl p-4 border border-white/5 hover:border-purple-500/30 transition-all duration-200"
+                  >
+                    {/* Country Header */}
+                    <div className="flex items-center gap-3 mb-4 pb-3 border-b border-white/5">
+                      {countryCode && (
+                        <Image
+                          src={`/img/flag/${countryCode}.svg`}
+                          alt={country}
+                          width={32}
+                          height={24}
+                          className="rounded shadow-md"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-white truncate">{country}</h3>
+                        <p className="text-xs text-gray-400">
+                          {upcomingCount} viitoare din {countryEntries.length} total
+                        </p>
                       </div>
-                    ))}
+                      <button
+                        onClick={() => handleDeleteCountry(country)}
+                        className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200"
+                        title={`Șterge toate datele pentru ${country}`}
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                    
+                    {/* Dates List */}
+                    <div className="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+                      {countryEntries.map((entry) => {
+                        const past = isPastDate(entry.data);
+                        return (
+                          <div 
+                            key={entry.id} 
+                            className={`flex items-center justify-between rounded-lg px-3 py-2.5 transition-all duration-200 ${
+                              past 
+                                ? 'bg-slate-800/30 opacity-60' 
+                                : 'bg-slate-800/50 hover:bg-slate-800/80'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className={`text-sm ${past ? 'text-gray-500' : 'text-purple-400'}`}>
+                                {past ? '⏰' : '📅'}
+                              </span>
+                              <span className={`text-sm ${past ? 'text-gray-400 line-through' : 'text-white'}`}>
+                                {formatDateDisplay(entry.data)}
+                              </span>
+                            </div>
+                            <button
+                              onClick={() => handleDeleteEntry(entry.id)}
+                              className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200"
+                              title="Șterge"
+                            >
+                              <CloseIcon className="w-4 h-4" />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
       </div>
+
+      {/* Custom Scrollbar Styles */}
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(139, 92, 246, 0.3);
+          border-radius: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(139, 92, 246, 0.5);
+        }
+      `}</style>
     </div>
   );
 }

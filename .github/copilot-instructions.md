@@ -6,37 +6,42 @@ Romanian courier marketplace (Next.js 16, React 19, Firebase, Tailwind CSS 4) co
 ## Architecture
 
 ### Role-Based Dashboard System
-Three user roles with distinct UX patterns:
-- `client` → `/dashboard/client` — **single-page tabs** (profil, trimite, comenzi, servicii, fidelitate, facturi, suport)
-- `curier` → `/dashboard/curier` — **card grid + sub-pages** (`/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati`)
-- `admin` → `/dashboard/admin`
+| Role | Path | UX Pattern |
+|------|------|------------|
+| `client` | `/dashboard/client` | Single-page with tab switching (profil, trimite, comenzi, servicii, fidelitate, facturi, suport) |
+| `curier` | `/dashboard/curier` | Card grid → sub-pages (`/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati`) |
+| `admin` | `/dashboard/admin` | Admin panel |
 
-**Auth flow**: Login/register use `?role=client|curier` query param → redirect to `/dashboard/{role}` after auth.
+**Auth flow**: `?role=client|curier` query param on login/register → redirect to `/dashboard/{role}`.
 
-### Data Flow
+### Layout Architecture
 ```
-RootLayout (AuthProvider) → useAuth() hook → Firebase Auth
-                                           ↓
-                          Firestore collections:
-                            • users/{uid} - User profile
-                            • comenzi - Orders
-                            • zona_acoperire - Courier coverage zones
+RootLayout (AuthProvider)
+  └── LayoutWrapper (conditionally renders Header/Footer)
+       └── /dashboard/* routes → DashboardLayout (no Header/Footer, slate-950 bg)
+       └── other routes → Header + content + Footer
 ```
+
+### Firestore Collections
+- `users/{uid}` — User profile with `role: 'client' | 'curier' | 'admin'`
+- `comenzi` — Orders with status workflow
+- `zona_acoperire` — Courier coverage zones by country/region
 
 ### Key Files
 | Purpose | Location |
 |---------|----------|
-| Auth context | `src/contexts/AuthContext.tsx` |
-| Firebase singleton | `src/lib/firebase.ts` (uses `getApps()` pattern) |
-| Types | `src/types/index.ts` |
+| Auth context + hooks | `src/contexts/AuthContext.tsx` |
+| Firebase singleton | `src/lib/firebase.ts` (`getApps()` pattern) |
+| TypeScript types | `src/types/index.ts` (`User`, `Order`, `CoverageZone`, `CourierProfile`) |
 | Country/region data | `src/lib/constants.ts` |
 | Custom CSS classes | `src/app/globals.css` |
 | Dashboard icons | `src/components/icons/DashboardIcons.tsx` |
+| Reusable UI | `src/components/ui/` (`SearchableSelect`, `CountUp`, `SocialProof`, `WhatsAppButton`) |
 
 ## Code Patterns
 
 ### Protected Page Template
-All dashboard pages follow this auth guard pattern:
+All dashboard pages MUST use this auth guard pattern:
 ```tsx
 'use client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -55,12 +60,12 @@ export default function CurierPage() {
 
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="spinner"></div></div>;
   if (!user) return null;
-  // ...
+  // Page content...
 }
 ```
 
-### Suspense for useSearchParams
-Required for `useSearchParams()` in Next.js App Router (see `src/app/(auth)/login/page.tsx`):
+### Suspense Boundary for useSearchParams
+Required for any component using `useSearchParams()`:
 ```tsx
 export default function Page() {
   return <Suspense fallback={<div className="spinner"></div>}><LoginForm /></Suspense>;
@@ -68,15 +73,21 @@ export default function Page() {
 ```
 
 ### Styling System
-Use custom CSS classes from `globals.css`, not inline Tailwind for common elements:
-- **Buttons**: `btn-primary` (orange), `btn-secondary` (green), `btn-danger`, `btn-outline-orange`, `btn-outline-green`
-- **Cards**: `card` (glassmorphism)
-- **Loading**: `spinner`
-- **Text effects**: `text-gradient`
+**Use custom CSS classes from `globals.css`** — avoid inline Tailwind for these elements:
 
-**Color variables**: `--orange: #f97316`, `--green: #34d399`, `--blue: #0f172a`
+| Element | Classes | Notes |
+|---------|---------|-------|
+| Buttons | `btn-primary` (orange), `btn-secondary` (green), `btn-danger`, `btn-outline-orange`, `btn-outline-green` | Include hover effects |
+| Cards | `card` (glassmorphism), `stat-card` | Glass effect with blur |
+| Forms | `form-input`, `form-select`, `form-label` | Dark theme inputs |
+| Tabs | `tab-menu`, `tab-button`, `tab-button.active` | For client dashboard |
+| Loading | `spinner` | Animated green spinner |
+| Text | `text-gradient` | Orange→green gradient |
 
-### Firestore Pattern
+**CSS Variables**: `--orange: #f97316`, `--green: #34d399`, `--blue: #0f172a`, `--glass-bg`, `--glass-border`
+
+### Firestore Operations
+Always use `serverTimestamp()` for date fields:
 ```tsx
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -85,29 +96,56 @@ await addDoc(collection(db, 'zona_acoperire'), {
   uid: user.uid,
   tara,
   judet,
-  addedAt: serverTimestamp(), // Always use for dates
+  addedAt: serverTimestamp(),
 });
 ```
 
 ### Icon Components
-Import from `@/components/icons/DashboardIcons` — all icons accept `className` prop with default size.
+Import from `@/components/icons/DashboardIcons` — all accept `className` prop (default: `w-7 h-7` or `w-6 h-6`):
+```tsx
+import { MapIcon, CalendarIcon, UserIcon, BoxIcon } from '@/components/icons/DashboardIcons';
+```
 
 ### Country/Region Data
-- **Shared use**: Import from `src/lib/constants.ts` (`countries`, `countriesSimple`, `judetByCountry`)
-- **Extended lists**: Define locally when page needs more regions (see `zona-acoperire/page.tsx` for full Romanian județe)
+- **Basic use**: Import from `src/lib/constants.ts` (`countries`, `countriesSimple`, `judetByCountry`)
+- **Extended lists**: Define locally when page needs full regions (see `zona-acoperire/page.tsx` for complete Romanian județe list)
+
+### Dashboard Card Pattern
+Both dashboards use typed configuration arrays for cards:
+```tsx
+interface DashboardCard {
+  href?: string;  // curier uses href (sub-pages)
+  id?: string;    // client uses id (tabs)
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+  gradient: string;       // e.g., 'from-emerald-500/10 to-teal-500/10'
+  iconBg: string;
+  iconColor: string;
+  badge?: string;
+  badgeColor?: string;
+}
+```
 
 ## Conventions
-- **UI text**: Romanian (labels, messages, placeholders)
-- **Code**: English (variables, functions, comments)
+- **UI text**: Romanian (toate labels, mesaje, placeholder-uri)
+- **Code**: English (variabile, funcții, comentarii)
 - **Path alias**: `@/*` → `./src/*`
-- **Images**: Use `next/image` with explicit dimensions, assets in `public/img/`
+- **Images**: `next/image` with explicit dimensions, assets in `public/img/`
+- **Flags**: SVG files in `public/img/flag/{code}.svg` (lowercase country code)
 
 ## Commands
 ```bash
 npm run dev    # localhost:3000
 npm run build  # Production build
-npm run lint   # ESLint
+npm run lint   # ESLint check
 ```
 
 ## Environment Variables
-Firebase config via `NEXT_PUBLIC_FIREBASE_*` env vars (see `src/lib/firebase.ts`).
+Firebase config via `NEXT_PUBLIC_FIREBASE_*` (see `src/lib/firebase.ts`):
+- `NEXT_PUBLIC_FIREBASE_API_KEY`
+- `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
+- `NEXT_PUBLIC_FIREBASE_PROJECT_ID`
+- `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`
+- `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`
+- `NEXT_PUBLIC_FIREBASE_APP_ID`

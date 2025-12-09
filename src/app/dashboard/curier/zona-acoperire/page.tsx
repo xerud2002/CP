@@ -97,7 +97,7 @@ export default function ZonaAcoperiirePage() {
   }, [user, loading, router]);
 
   useEffect(() => {
-    // Set default judet when tara changes
+    // Reset judet when tara changes - let user choose (default to first region)
     const judete = judetByCountry[tara] || [];
     setJudet(judete[0] || '');
   }, [tara]);
@@ -132,24 +132,50 @@ export default function ZonaAcoperiirePage() {
     setSubmitting(true);
     setMessage('');
 
-    // Check for duplicates
-    const exists = savedZones.some(z => z.tara === tara && z.judet === judet);
-    if (exists) {
-      setMessage('⚠️ Această zonă a fost deja adăugată!');
-      setSubmitting(false);
-      return;
-    }
-
     try {
-      await addDoc(collection(db, 'zona_acoperire'), {
-        uid: user.uid,
-        tara,
-        judet,
-        addedAt: serverTimestamp(),
-      });
-      
-      setMessage('✅ Zonă salvată cu succes!');
-      loadSavedZones();
+      // If "Toate" is selected, add all regions from the country
+      if (judet === 'Toate') {
+        const allRegions = judetByCountry[tara] || [];
+        const existingRegions = savedZones.filter(z => z.tara === tara).map(z => z.judet);
+        const newRegions = allRegions.filter(r => !existingRegions.includes(r));
+        
+        if (newRegions.length === 0) {
+          setMessage('⚠️ Toate regiunile din această țară sunt deja adăugate!');
+          setSubmitting(false);
+          return;
+        }
+
+        // Add all new regions
+        for (const region of newRegions) {
+          await addDoc(collection(db, 'zona_acoperire'), {
+            uid: user.uid,
+            tara,
+            judet: region,
+            addedAt: serverTimestamp(),
+          });
+        }
+        
+        setMessage(`✅ ${newRegions.length} regiuni adăugate cu succes!`);
+        loadSavedZones();
+      } else {
+        // Single region - check for duplicates
+        const exists = savedZones.some(z => z.tara === tara && z.judet === judet);
+        if (exists) {
+          setMessage('⚠️ Această zonă a fost deja adăugată!');
+          setSubmitting(false);
+          return;
+        }
+
+        await addDoc(collection(db, 'zona_acoperire'), {
+          uid: user.uid,
+          tara,
+          judet,
+          addedAt: serverTimestamp(),
+        });
+        
+        setMessage('✅ Zonă salvată cu succes!');
+        loadSavedZones();
+      }
     } catch (error) {
       console.error('❌ Firebase error:', error);
       setMessage('❌ Eroare la salvare în Firebase.');
@@ -165,6 +191,28 @@ export default function ZonaAcoperiirePage() {
       loadSavedZones();
     } catch (error) {
       console.error('❌ Delete error:', error);
+      setMessage('❌ Eroare la ștergere.');
+    }
+  };
+
+  const handleDeleteCountry = async (countryCode: string) => {
+    const countryZones = savedZones.filter(z => z.tara === countryCode);
+    const countryName = countries.find(c => c.code === countryCode)?.name || countryCode;
+    
+    if (!confirm(`Ești sigur că vrei să ștergi toate cele ${countryZones.length} zone din ${countryName}?`)) {
+      return;
+    }
+
+    try {
+      for (const zone of countryZones) {
+        if (zone.id) {
+          await deleteDoc(doc(db, 'zona_acoperire', zone.id));
+        }
+      }
+      setMessage(`✅ Toate cele ${countryZones.length} zone din ${countryName} au fost șterse!`);
+      loadSavedZones();
+    } catch (error) {
+      console.error('❌ Delete country error:', error);
       setMessage('❌ Eroare la ștergere.');
     }
   };
@@ -325,6 +373,21 @@ export default function ZonaAcoperiirePage() {
                     
                     {regionDropdownOpen && (
                       <div className="absolute z-50 w-full mt-2 bg-slate-800 border border-white/10 rounded-xl shadow-2xl max-h-64 overflow-y-auto">
+                        {/* Option for all regions */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setJudet('Toate');
+                            setRegionDropdownOpen(false);
+                          }}
+                          className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-emerald-500/10 transition-colors border-b border-white/5 ${
+                            judet === 'Toate' ? 'bg-emerald-500/20 text-emerald-400' : 'text-white'
+                          }`}
+                        >
+                          <GlobeIcon className="w-4 h-4 text-emerald-400" />
+                          <span className="font-medium">Toate regiunile</span>
+                          {judet === 'Toate' && <CheckIcon className="w-4 h-4 ml-auto" />}
+                        </button>
                         {judete.map((j) => (
                           <button
                             key={j}
@@ -426,9 +489,18 @@ export default function ZonaAcoperiirePage() {
                             className="rounded-sm shadow-md"
                           />
                           <span className="font-medium text-white">{country?.name || countryCode}</span>
-                          <span className="ml-auto text-xs text-gray-500 bg-slate-700/50 px-2 py-1 rounded-full">
-                            {zones.length} {zones.length === 1 ? 'regiune' : 'regiuni'}
-                          </span>
+                          <div className="ml-auto flex items-center gap-2">
+                            <span className="text-xs text-gray-500 bg-slate-700/50 px-2 py-1 rounded-full">
+                              {zones.length} {zones.length === 1 ? 'regiune' : 'regiuni'}
+                            </span>
+                            <button
+                              onClick={() => handleDeleteCountry(countryCode)}
+                              className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                              title={`Șterge toate zonele din ${country?.name || countryCode}`}
+                            >
+                              <TrashIcon className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                         
                         {/* Zones Grid */}
