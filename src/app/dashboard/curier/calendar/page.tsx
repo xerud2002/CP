@@ -97,14 +97,38 @@ export default function CalendarColectiiPage() {
         );
         const snapshot = await getDocs(q);
         const loadedEntries: CalendarEntry[] = [];
+        const entriesToDelete: string[] = [];
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
         snapshot.forEach((docSnapshot) => {
-          loadedEntries.push({
-            id: docSnapshot.id,
-            tara: docSnapshot.data().tara,
-            data: docSnapshot.data().data,
-            dataTimestamp: docSnapshot.data().dataTimestamp?.toDate(),
-          });
+          const data = docSnapshot.data();
+          const entryDate = data.dataTimestamp?.toDate();
+          
+          // Check if date is in the past
+          if (entryDate && entryDate < today) {
+            // Mark for deletion
+            entriesToDelete.push(docSnapshot.id);
+          } else {
+            loadedEntries.push({
+              id: docSnapshot.id,
+              tara: data.tara,
+              data: data.data,
+              dataTimestamp: entryDate,
+            });
+          }
         });
+        
+        // Delete past entries automatically
+        if (entriesToDelete.length > 0) {
+          const batch = writeBatch(db);
+          entriesToDelete.forEach((entryId) => {
+            batch.delete(doc(db, 'calendar_colectii', entryId));
+          });
+          await batch.commit();
+          console.log(`Auto-deleted ${entriesToDelete.length} past entries`);
+        }
+        
         setEntries(loadedEntries);
       } catch (error) {
         console.error('Error loading entries:', error);
@@ -299,17 +323,6 @@ export default function CalendarColectiiPage() {
     return date.toLocaleDateString('ro-RO', options);
   };
 
-  // Check if date is past
-  const isPastDate = (dateString: string) => {
-    const parts = dateString.split('.');
-    if (parts.length !== 3) return false;
-    
-    const date = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -320,10 +333,9 @@ export default function CalendarColectiiPage() {
 
   if (!user) return null;
 
-  // Stats
+  // Stats (all entries are now future dates since past ones are auto-deleted)
   const totalEntries = entries.length;
   const totalCountries = Object.keys(entriesByCountry).length;
-  const upcomingEntries = entries.filter(e => !isPastDate(e.data)).length;
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -394,11 +406,11 @@ export default function CalendarColectiiPage() {
           <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="p-2 sm:p-2.5 bg-purple-500/20 rounded-lg sm:rounded-xl">
-                <span className="text-sm sm:text-lg">📆</span>
+                <span className="text-sm sm:text-lg">✅</span>
               </div>
               <div>
-                <p className="text-lg sm:text-2xl font-bold text-white">{upcomingEntries}</p>
-                <p className="text-xs text-gray-400">Viitoare</p>
+                <p className="text-lg sm:text-2xl font-bold text-white">Auto</p>
+                <p className="text-xs text-gray-400">Curățare</p>
               </div>
             </div>
           </div>
@@ -652,7 +664,6 @@ export default function CalendarColectiiPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {Object.entries(entriesByCountry).map(([country, countryEntries]) => {
                 const countryCode = getCountryCode(country);
-                const upcomingCount = countryEntries.filter(e => !isPastDate(e.data)).length;
                 
                 return (
                   <div 
@@ -673,7 +684,7 @@ export default function CalendarColectiiPage() {
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-white truncate">{country}</h3>
                         <p className="text-xs text-gray-400">
-                          {upcomingCount} viitoare din {countryEntries.length} total
+                          {countryEntries.length} {countryEntries.length === 1 ? 'dată' : 'date'} programate
                         </p>
                       </div>
                       <button
@@ -687,35 +698,26 @@ export default function CalendarColectiiPage() {
                     
                     {/* Dates List */}
                     <div className="space-y-2 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
-                      {countryEntries.map((entry) => {
-                        const past = isPastDate(entry.data);
-                        return (
-                          <div 
-                            key={entry.id} 
-                            className={`flex items-center justify-between rounded-lg px-3 py-2.5 transition-all duration-200 ${
-                              past 
-                                ? 'bg-slate-800/30 opacity-60' 
-                                : 'bg-slate-800/50 hover:bg-slate-800/80'
-                            }`}
-                          >
-                            <div className="flex items-center gap-2">
-                              <span className={`text-sm ${past ? 'text-gray-500' : 'text-purple-400'}`}>
-                                {past ? '⏰' : '📅'}
-                              </span>
-                              <span className={`text-sm ${past ? 'text-gray-400 line-through' : 'text-white'}`}>
-                                {formatDateDisplay(entry.data)}
-                              </span>
-                            </div>
-                            <button
-                              onClick={() => handleDeleteEntry(entry.id)}
-                              className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200"
-                              title="Șterge"
-                            >
-                              <CloseIcon className="w-4 h-4" />
-                            </button>
+                      {countryEntries.map((entry) => (
+                        <div 
+                          key={entry.id} 
+                          className="flex items-center justify-between rounded-lg px-3 py-2.5 transition-all duration-200 bg-slate-800/50 hover:bg-slate-800/80"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-purple-400">📅</span>
+                            <span className="text-sm text-white">
+                              {formatDateDisplay(entry.data)}
+                            </span>
                           </div>
-                        );
-                      })}
+                          <button
+                            onClick={() => handleDeleteEntry(entry.id)}
+                            className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200"
+                            title="Șterge"
+                          >
+                            <CloseIcon className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 );
