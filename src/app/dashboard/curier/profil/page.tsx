@@ -113,13 +113,18 @@ const getDocumentRequirements = (
 ): DocumentRequirement[] => {
   const documents: DocumentRequirement[] = [];
 
-  // === ALWAYS REQUIRED: ID Card ===
+  // === ALWAYS REQUIRED: ID Document ===
+  // UK accepts Driving License as ID, other countries require ID Card/Passport
   documents.push({
     id: 'id_card',
-    title: 'Carte de Identitate / Pașaport',
-    description: 'Copie față-verso a actului de identitate valid',
+    title: countryCode === 'gb' 
+      ? 'Driving Licence / Passport' 
+      : 'Carte de Identitate / Pașaport',
+    description: countryCode === 'gb'
+      ? 'Full UK Driving Licence or valid Passport'
+      : 'Copie față-verso a actului de identitate valid',
     required: true,
-    icon: 'id',
+    icon: countryCode === 'gb' ? 'license' : 'id',
     category: 'identity',
   });
 
@@ -479,22 +484,22 @@ function ProfilCurierContent() {
     }
   }, [user]);
 
-  // Load active services from tarife_curier collection
+  // Load active services from user's serviciiOferite (selected in Servicii oferite)
   useEffect(() => {
     const loadActiveServices = async () => {
       if (!user) return;
       
       try {
-        const q = query(collection(db, 'tarife_curier'), where('uid', '==', user.uid));
-        const querySnapshot = await getDocs(q);
-        const services = new Set<string>();
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          if (data.tipServiciu) {
-            services.add(data.tipServiciu);
+        // Get services from user document's serviciiOferite field
+        const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
+        const userSnapshot = await getDocs(userQuery);
+        
+        if (!userSnapshot.empty) {
+          const userData = userSnapshot.docs[0].data();
+          if (userData.serviciiOferite && Array.isArray(userData.serviciiOferite)) {
+            setActiveServices(userData.serviciiOferite);
           }
-        });
-        setActiveServices(Array.from(services));
+        }
       } catch (error) {
         console.error('Error loading active services:', error);
       }
