@@ -316,7 +316,7 @@ export default function PlatiFacturiPage() {
                         <span className={`px-3 py-1 rounded-full text-xs ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
                           {paymentStatusLabels[payment.status].label}
                         </span>
-                        <p className={`text-xl font-bold min-w-[80px] text-right ${
+                        <p className={`text-xl font-bold min-w-20 text-right ${
                           payment.tip === 'incasare' ? 'text-green-400' : 'text-orange-400'
                         }`}>
                           {payment.tip === 'incasare' ? '+' : '-'}{payment.suma} €

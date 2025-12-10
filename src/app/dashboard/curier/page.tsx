@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import {
   MapIcon,
@@ -411,6 +411,7 @@ export default function CurierDashboard() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [hasNoServices, setHasNoServices] = useState(false);
+  const [userNume, setUserNume] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -418,12 +419,24 @@ export default function CurierDashboard() {
     }
   }, [user, loading, router]);
 
-  // Check if user has selected services
+  // Check if user has selected services and get user name from Firestore
   useEffect(() => {
-    const checkServices = async () => {
+    const fetchUserData = async () => {
       if (!user) return;
       
       try {
+        // First, try to get name from profil_curier collection
+        const profilRef = doc(db, 'profil_curier', user.uid);
+        const profilSnap = await getDoc(profilRef);
+        
+        if (profilSnap.exists()) {
+          const profilData = profilSnap.data();
+          if (profilData.nume) {
+            setUserNume(profilData.nume);
+          }
+        }
+        
+        // Check services from users collection
         const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
         const userSnapshot = await getDocs(userQuery);
         
@@ -431,17 +444,23 @@ export default function CurierDashboard() {
           const userData = userSnapshot.docs[0].data();
           const services = userData.serviciiOferite;
           setHasNoServices(!services || !Array.isArray(services) || services.length === 0);
+          
+          // Fallback: if no name from profil_curier, try users collection
+          if (!userNume && userData.nume) {
+            setUserNume(userData.nume);
+          }
         } else {
           setHasNoServices(true);
         }
       } catch (error) {
-        console.error('Error checking services:', error);
+        console.error('Error fetching user data:', error);
       }
     };
 
     if (user) {
-      checkServices();
+      fetchUserData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const handleLogout = async () => {
@@ -463,12 +482,19 @@ export default function CurierDashboard() {
 
   if (!user) return null;
 
-  // Extract first name from displayName, fallback to email prefix or 'Curier'
+  // Extract first name: prioritize Firestore 'nume', then displayName, then email prefix
   const getFirstName = () => {
+    // First check Firestore 'nume' field (from profile)
+    if (userNume) {
+      const firstName = userNume.split(' ')[0];
+      return firstName || 'Curier';
+    }
+    // Then check Firebase Auth displayName
     if (user.displayName) {
       const firstName = user.displayName.split(' ')[0];
       return firstName || 'Curier';
     }
+    // Fallback to email prefix or 'Curier'
     if (user.email) {
       return user.email.split('@')[0];
     }

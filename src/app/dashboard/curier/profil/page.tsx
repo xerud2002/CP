@@ -881,76 +881,78 @@ function ProfilCurierContent() {
             )}
 
             {activeTab === 'company' && (
-              <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
+              <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6">
                 <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
-                  <div className="p-1.5 sm:p-2 bg-blue-500/20 rounded-lg">
+                  <div className="p-1.5 sm:p-2 bg-blue-500/20 rounded-lg shrink-0">
                     <BuildingIcon />
                   </div>
-                  Date Firmă
+                  <span>Date Firmă</span>
                 </h2>
 
-                {/* Business Type Selector */}
+                {/* Business Type Selector - Improved Mobile */}
                 <div className="mb-4 sm:mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2 sm:mb-3">Tip activitate *</label>
+                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2 sm:mb-3">Tip activitate *</label>
                   <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     <button
                       type="button"
                       onClick={() => setProfile({ ...profile, tipBusiness: 'firma' })}
-                      className={`p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all ${
+                      className={`p-2.5 sm:p-4 rounded-xl border-2 transition-all active:scale-[0.98] ${
                         profile.tipBusiness === 'firma'
                           ? 'border-purple-500 bg-purple-500/10'
                           : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
                       }`}
                     >
-                      <div className="flex flex-col items-center gap-1.5 sm:gap-2">
-                        <span className="text-xl sm:text-2xl">🏢</span>
-                        <span className={`font-medium text-sm sm:text-base ${profile.tipBusiness === 'firma' ? 'text-purple-400' : 'text-gray-300'}`}>
+                      <div className="flex flex-col items-center gap-1 sm:gap-2">
+                        <span className="text-2xl sm:text-3xl">🏢</span>
+                        <span className={`font-medium text-xs sm:text-base ${profile.tipBusiness === 'firma' ? 'text-purple-400' : 'text-gray-300'}`}>
                           Firmă
                         </span>
-                        <span className="text-xs text-gray-500 text-center">SRL, SA, PFA, II, IF</span>
+                        <span className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">SRL, SA, PFA, II, IF</span>
                       </div>
                     </button>
                     <button
                       type="button"
                       onClick={() => setProfile({ ...profile, tipBusiness: 'pf' })}
-                      className={`p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all ${
+                      className={`p-2.5 sm:p-4 rounded-xl border-2 transition-all active:scale-[0.98] ${
                         profile.tipBusiness === 'pf'
                           ? 'border-blue-500 bg-blue-500/10'
                           : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
                       }`}
                     >
-                      <div className="flex flex-col items-center gap-1.5 sm:gap-2">
-                        <span className="text-xl sm:text-2xl">👤</span>
-                        <span className={`font-medium text-sm sm:text-base ${profile.tipBusiness === 'pf' ? 'text-blue-400' : 'text-gray-300'}`}>
+                      <div className="flex flex-col items-center gap-1 sm:gap-2">
+                        <span className="text-2xl sm:text-3xl">👤</span>
+                        <span className={`font-medium text-xs sm:text-base ${profile.tipBusiness === 'pf' ? 'text-blue-400' : 'text-gray-300'}`}>
                           Persoană Fizică
                         </span>
-                        <span className="text-xs text-gray-500 text-center">Fără firmă înregistrată</span>
+                        <span className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">Fără firmă înregistrată</span>
                       </div>
                     </button>
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
+                <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4">
+                  {/* Denumire firmă - Full width */}
                   <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
                       {profile.tipBusiness === 'firma' ? 'Denumire firmă *' : 'Nume complet *'}
                     </label>
                     <input
                       type="text"
                       value={profile.firma}
                       onChange={(e) => setProfile({ ...profile, firma: e.target.value })}
-                      className="form-input"
+                      className="form-input text-sm sm:text-base"
                       placeholder={profile.tipBusiness === 'firma' ? 'SC Exemplu SRL' : 'Ion Popescu'}
                     />
                   </div>
 
+                  {/* Țara și Adresa - Stack on mobile */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Țara sediu</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Țara sediu</label>
                     <div className="relative" ref={countryDropdownRef}>
                       <button
                         type="button"
                         onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
-                        className="form-select w-full flex items-center gap-3 cursor-pointer"
+                        className="form-select w-full flex items-center gap-2 sm:gap-3 cursor-pointer min-h-[42px] sm:min-h-[46px] text-sm sm:text-base"
                       >
                         <Image
                           src={countries.find(c => c.code === profile.taraSediu)?.flag || '/img/flag/ro.svg'}
@@ -959,8 +961,8 @@ function ProfilCurierContent() {
                           height={16}
                           className="rounded-sm shrink-0"
                         />
-                        <span className="flex-1 text-left">{countries.find(c => c.code === profile.taraSediu)?.name || 'România'}</span>
-                        <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span className="flex-1 text-left truncate">{countries.find(c => c.code === profile.taraSediu)?.name || 'România'}</span>
+                        <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${countryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </button>
@@ -975,7 +977,7 @@ function ProfilCurierContent() {
                                 setProfile({ ...profile, taraSediu: c.code });
                                 setCountryDropdownOpen(false);
                               }}
-                              className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                              className={`w-full flex items-center gap-2 sm:gap-3 px-3 py-2.5 sm:py-3 hover:bg-slate-700 transition-colors ${
                                 profile.taraSediu === c.code ? 'bg-slate-700/50' : ''
                               }`}
                             >
@@ -986,7 +988,7 @@ function ProfilCurierContent() {
                                 height={16}
                                 className="rounded-sm shrink-0"
                               />
-                              <span className="text-white text-sm">{c.name}</span>
+                              <span className="text-white text-sm sm:text-base">{c.name}</span>
                             </button>
                           ))}
                         </div>
@@ -995,62 +997,64 @@ function ProfilCurierContent() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Adresă sediu</label>
+                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Adresă sediu</label>
                     <input
                       type="text"
                       value={profile.sediu}
                       onChange={(e) => setProfile({ ...profile, sediu: e.target.value })}
-                      className="form-input"
+                      className="form-input text-sm sm:text-base"
                       placeholder="Str. Exemplu, Nr. 1, Oraș"
                     />
                   </div>
 
+                  {/* CUI/VAT and Registration */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
                       {countryTaxInfo[profile.taraSediu]?.taxLabel || 'CUI / CIF'} *
                     </label>
                     <input
                       type="text"
                       value={profile.cui}
                       onChange={(e) => setProfile({ ...profile, cui: e.target.value })}
-                      className="form-input"
+                      className="form-input text-sm sm:text-base"
                       placeholder={countryTaxInfo[profile.taraSediu]?.taxPlaceholder || 'RO12345678'}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
                       {countryTaxInfo[profile.taraSediu]?.regLabel || 'Nr. înregistrare'}
                     </label>
                     <input
                       type="text"
                       value={profile.nrInmatriculare}
                       onChange={(e) => setProfile({ ...profile, nrInmatriculare: e.target.value })}
-                      className="form-input"
+                      className="form-input text-sm sm:text-base"
                       placeholder={countryTaxInfo[profile.taraSediu]?.regPlaceholder || 'J40/1234/2024'}
                     />
                   </div>
 
+                  {/* Banking Section - Improved Mobile */}
                   {countryTaxInfo[profile.taraSediu]?.bankType === 'uk' ? (
                     // UK: Sort Code + Account Number
                     <>
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Sort Code *</label>
+                        <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Sort Code *</label>
                         <input
                           type="text"
                           value={profile.sortCode}
                           onChange={(e) => setProfile({ ...profile, sortCode: e.target.value })}
-                          className="form-input"
+                          className="form-input text-sm sm:text-base font-mono"
                           placeholder={countryTaxInfo[profile.taraSediu]?.sortCodePlaceholder || '12-34-56'}
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Account Number *</label>
+                        <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Account Number *</label>
                         <input
                           type="text"
                           value={profile.accountNumber}
                           onChange={(e) => setProfile({ ...profile, accountNumber: e.target.value })}
-                          className="form-input"
+                          className="form-input text-sm sm:text-base font-mono"
                           placeholder={countryTaxInfo[profile.taraSediu]?.accountNumberPlaceholder || '12345678'}
                         />
                       </div>
@@ -1058,18 +1062,23 @@ function ProfilCurierContent() {
                   ) : (
                     // All other countries: IBAN
                     <div className="sm:col-span-2">
-                      <label className="block text-sm font-medium text-gray-300 mb-2">IBAN *</label>
+                      <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">IBAN *</label>
                       <input
                         type="text"
                         value={profile.iban}
                         onChange={(e) => setProfile({ ...profile, iban: e.target.value })}
-                        className="form-input"
+                        className="form-input text-sm sm:text-base font-mono"
                         placeholder={countryTaxInfo[profile.taraSediu]?.ibanPlaceholder || 'RO49 AAAA 1B31 0075 9384 0000'}
                       />
                     </div>
                   )}
                   <div className="sm:col-span-2">
-                    <p className="text-xs text-gray-500">Contul în care vei primi plățile pentru transporturi</p>
+                    <p className="text-[10px] sm:text-xs text-gray-500 flex items-center gap-1.5">
+                      <svg className="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                      Contul în care vei primi plățile pentru transporturi
+                    </p>
                   </div>
                 </div>
               </div>
