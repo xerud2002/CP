@@ -16,7 +16,7 @@ interface Tarif {
   tipServiciu: string;
   pret: number;
   minUnit: number;
-  unitType: 'kg' | 'm3' | 'nr';
+  unitType: 'kg' | 'm3' | 'nr' | 'plic';
   // Animale specific fields
   tipAnimal?: 'caine' | 'pisica' | 'pasare' | 'rozator' | 'reptila' | 'altul';
   pretAnimal?: number;
@@ -311,6 +311,16 @@ export default function TarifePracticatePage() {
   const [countrySearch, setCountrySearch] = useState('');
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const serviceDropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Expanded countries state for tarife list
+  const [expandedCountries, setExpandedCountries] = useState<Record<string, boolean>>({});
+  
+  const toggleCountryExpand = (country: string) => {
+    setExpandedCountries(prev => ({
+      ...prev,
+      [country]: !prev[country]
+    }));
+  };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -437,10 +447,15 @@ export default function TarifePracticatePage() {
     
     // Different validation for Animale/Platforma vs other services
     const isAnimalOrPlatform = tipServiciu === 'Animale' || tipServiciu === 'Platforma';
+    const isSimplePriceService = tipServiciu === 'Documente' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila';
+    const isM3Selected = unitType === 'm3';
     
     if (!selectedCountry || !tipServiciu || !user) return;
     if (tipServiciu === 'Animale' && !pretAnimal) return;
-    if (!isAnimalOrPlatform && (!pret || !minUnit)) return;
+    if (isSimplePriceService && !pret) return;
+    // Pentru m³ nu cerem minUnit
+    if (!isAnimalOrPlatform && !isSimplePriceService && !isM3Selected && (!pret || !minUnit)) return;
+    if (!isAnimalOrPlatform && !isSimplePriceService && isM3Selected && !pret) return;
 
     // For Animale service, check combination with tipAnimal
     const existsForAnimale = tipServiciu === 'Animale' 
@@ -473,14 +488,15 @@ export default function TarifePracticatePage() {
     setSaving(true);
     try {
       // Build document data
+      const noMinUnit = isAnimalOrPlatform || isSimplePriceService || isM3Selected;
       const docData: Record<string, unknown> = {
         uid: user.uid,
         tara: selectedCountry.name,
         taraCode: selectedCountry.code,
         tipServiciu,
         pret: isAnimalOrPlatform ? 0 : parseFloat(pret),
-        minUnit: isAnimalOrPlatform ? 0 : parseInt(minUnit),
-        unitType,
+        minUnit: noMinUnit ? 0 : parseInt(minUnit),
+        unitType: isSimplePriceService ? (tipServiciu === 'Mobila' ? 'm3' : tipServiciu === 'Paleti' ? 'nr' : 'plic') : unitType,
         addedAt: serverTimestamp(),
       };
       
@@ -507,8 +523,8 @@ export default function TarifePracticatePage() {
         taraCode: selectedCountry.code,
         tipServiciu,
         pret: isAnimalOrPlatform ? 0 : parseFloat(pret),
-        minUnit: isAnimalOrPlatform ? 0 : parseInt(minUnit),
-        unitType,
+        minUnit: noMinUnit ? 0 : parseInt(minUnit),
+        unitType: isSimplePriceService ? (tipServiciu === 'Mobila' ? 'm3' : tipServiciu === 'Paleti' ? 'nr' : 'plic') : unitType,
       };
       
       if (tipServiciu === 'Animale') {
@@ -769,7 +785,9 @@ export default function TarifePracticatePage() {
                   ? 'lg:grid-cols-[0.6fr_0.4fr_auto]'
                   : tipServiciu === 'Documente' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila'
                     ? 'lg:grid-cols-[0.6fr_0.4fr_0.35fr_auto]'
-                    : 'lg:grid-cols-[0.6fr_0.85fr_0.4fr_0.32fr_0.32fr_auto]'
+                    : unitType === 'm3'
+                      ? 'lg:grid-cols-[0.6fr_0.85fr_0.4fr_0.32fr_auto]'
+                      : 'lg:grid-cols-[0.6fr_0.85fr_0.4fr_0.32fr_0.32fr_auto]'
             }`}>
               {/* Country Dropdown */}
               <div ref={countryDropdownRef}>
@@ -1071,7 +1089,10 @@ export default function TarifePracticatePage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Tip Vehicul */}
                     <div>
-                      <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">Tip Vehicul <span className="text-sky-400">(multi-select)</span></label>
+                      <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
+                        Tip Vehicul <span className="text-sky-400">(selectează unul sau mai multe)</span>
+                        {tipVehicul.length > 0 && <span className="ml-2 text-sky-400">({tipVehicul.length} selectate)</span>}
+                      </label>
                       <div className="grid grid-cols-4 gap-2">
                         {[
                           { value: 'masina', icon: '🚗', label: 'Mașină' },
@@ -1092,12 +1113,19 @@ export default function TarifePracticatePage() {
                                   setTipVehicul([...tipVehicul, val]);
                                 }
                               }}
-                              className={`flex flex-col items-center gap-1 p-2.5 rounded-xl transition-all duration-200 ${
+                              className={`relative flex flex-col items-center gap-1 p-2.5 rounded-xl transition-all duration-200 ${
                                 isSelected
                                   ? 'bg-sky-500/20 border-2 border-sky-400 shadow-lg shadow-sky-500/10'
                                   : 'bg-slate-800/50 border border-white/10 hover:border-sky-500/30 hover:bg-slate-800'
                               }`}
                             >
+                              {isSelected && (
+                                <div className="absolute top-1 right-1 w-4 h-4 bg-sky-500 rounded-full flex items-center justify-center">
+                                  <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </div>
+                              )}
                               <span className="text-xl">{vehicul.icon}</span>
                               <span className={`text-xs font-medium ${isSelected ? 'text-sky-400' : 'text-gray-400'}`}>
                                 {vehicul.label}
@@ -1249,12 +1277,12 @@ export default function TarifePracticatePage() {
                 );
               })()}
 
-              {/* Min unit - hidden for Animale, Platforma, Documente, Paleti and Mobila */}
-              {tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && tipServiciu !== 'Paleti' && tipServiciu !== 'Mobila' && (() => {
+              {/* Min unit - hidden for Animale, Platforma, Documente, Paleti, Mobila and when m3 is selected */}
+              {tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && tipServiciu !== 'Paleti' && tipServiciu !== 'Mobila' && unitType === 'kg' && (() => {
                 return (
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-2">
-                  {unitType === 'kg' ? 'kg' : 'm³'}
+                  Taxare min. nr. KG
                 </label>
                 <div className="relative">
                   <input
@@ -1362,7 +1390,8 @@ export default function TarifePracticatePage() {
                     (tipServiciu === 'Documente' && !pret) ||
                     (tipServiciu === 'Paleti' && !pret) ||
                     (tipServiciu === 'Mobila' && !pret) ||
-                    (tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && tipServiciu !== 'Paleti' && tipServiciu !== 'Mobila' && (!pret || !minUnit))}
+                    (unitType === 'm3' && !pret) ||
+                    (tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && tipServiciu !== 'Paleti' && tipServiciu !== 'Mobila' && unitType === 'kg' && (!pret || !minUnit))}
                   className="h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
                 >
                   {saving ? (
@@ -1444,20 +1473,36 @@ export default function TarifePracticatePage() {
                             <p className="text-xs text-gray-500">{countryTarife.length} {countryTarife.length === 1 ? 'tarif' : 'tarife'}</p>
                           </div>
                         </div>
-                        <button
-                          onClick={() => handleDeleteAllForCountry(country)}
-                          className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-                          title="Șterge toate tarifele pentru această țară"
-                        >
-                          <TrashIcon className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => toggleCountryExpand(country)}
+                            className="p-2 text-gray-500 hover:text-sky-400 hover:bg-sky-500/10 rounded-lg transition-all"
+                            title={expandedCountries[country] ? 'Restrânge lista' : 'Extinde lista'}
+                          >
+                            <svg 
+                              className={`w-4 h-4 transition-transform duration-200 ${expandedCountries[country] ? 'rotate-180' : ''}`} 
+                              fill="none" 
+                              stroke="currentColor" 
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteAllForCountry(country)}
+                            className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                            title="Șterge toate tarifele pentru această țară"
+                          >
+                            <TrashIcon className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
 
-                      {/* Tarife List */}
-                      <div className="divide-y divide-white/5">
+                      {/* Tarife List - collapsible */}
+                      <div className={`divide-y divide-white/5 transition-all duration-200 overflow-hidden ${expandedCountries[country] ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
                         {countryTarife.map((t) => {
                           const serviceInfo = serviceTypes.find(s => s.value === t.tipServiciu);
-                          const unitLabel = t.unitType === 'm3' ? 'm³' : 'kg';
+                          const unitLabel = t.unitType === 'm3' ? 'm³' : t.unitType === 'plic' ? 'plic' : t.unitType === 'nr' ? 'buc' : 'kg';
                           
                           // Get animal label
                           const animalLabels: Record<string, string> = {
@@ -1497,18 +1542,30 @@ export default function TarifePracticatePage() {
                                         </span>
                                       )}
                                     </p>
-                                    <p className="text-xs text-gray-500 flex items-center gap-1">
-                                      {t.minUnit} {unitLabel}
-                                      {t.unitType === 'm3' && <CubeIcon className="w-3 h-3 text-purple-400" />}
-                                      {t.unitType === 'kg' && <WeightIcon className="w-3 h-3 text-emerald-400" />}
-                                      {t.unitType === 'nr' && <span className="text-orange-400 font-bold">#</span>}
-                                    </p>
+                                    {/* Nu afișa minUnit pentru Animale sau Platforma */}
+                                    {t.tipServiciu !== 'Animale' && t.tipServiciu !== 'Platforma' && (
+                                      <p className="text-xs text-gray-500 flex items-center gap-1">
+                                        {t.minUnit > 0 && <>{t.minUnit} {unitLabel}</>}
+                                        {t.unitType === 'm3' && <CubeIcon className="w-3 h-3 text-purple-400" />}
+                                        {t.unitType === 'kg' && <WeightIcon className="w-3 h-3 text-emerald-400" />}
+                                        {t.unitType === 'nr' && <span className="text-orange-400 font-bold">#</span>}
+                                      </p>
+                                    )}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                  <span className={`font-bold ${t.unitType === 'm3' ? 'text-purple-400' : t.unitType === 'nr' ? 'text-orange-400' : 'text-emerald-400'}`}>
-                                    {t.pret}{currencySymbol}/{unitLabel}
-                                  </span>
+                                  {/* Preț pentru Animale */}
+                                  {t.tipServiciu === 'Animale' && t.pretAnimal !== undefined && (
+                                    <span className="font-bold text-pink-400">
+                                      {t.pretAnimal}{currencySymbol}
+                                    </span>
+                                  )}
+                                  {/* Preț pentru alte servicii (nu Animale, nu Platforma) */}
+                                  {t.tipServiciu !== 'Animale' && t.tipServiciu !== 'Platforma' && (
+                                    <span className={`font-bold ${t.unitType === 'm3' ? 'text-purple-400' : t.unitType === 'nr' ? 'text-orange-400' : 'text-emerald-400'}`}>
+                                      {t.pret}{currencySymbol}/{unitLabel}
+                                    </span>
+                                  )}
                                   <button
                                     onClick={() => handleDelete(t.id)}
                                     className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
