@@ -135,45 +135,45 @@ export default function PlatiFacturiPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen p-6 page-transition">
+    <div className="min-h-screen p-3 sm:p-6 page-transition">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-4 sm:mb-8">
           <div>
-            <Link href="/dashboard/curier" className="text-gray-400 hover:text-white transition-colors mb-2 inline-flex items-center gap-2">
-              <ArrowLeftIcon className="w-5 h-5" />
-              Înapoi la Dashboard
+            <Link href="/dashboard/curier" className="text-gray-400 hover:text-white transition-colors mb-2 inline-flex items-center gap-2 text-sm">
+              <ArrowLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">Înapoi la Dashboard</span>
             </Link>
-            <h1 className="text-3xl font-bold text-white">💳 Plăți & Facturi</h1>
+            <h1 className="text-xl sm:text-3xl font-bold text-white">💳 Plăți & Facturi</h1>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-8">
           <div className="stat-card">
-            <div className="stat-value text-green-400">{soldDisponibil} €</div>
+            <div className="stat-value text-base sm:text-xl text-green-400">{soldDisponibil} €</div>
             <div className="stat-label">Sold disponibil</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value text-blue-400">{totalIncasari} €</div>
+            <div className="stat-value text-base sm:text-xl text-blue-400">{totalIncasari} €</div>
             <div className="stat-label">Total încasări</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value text-orange-400">{totalRetrageri} €</div>
+            <div className="stat-value text-base sm:text-xl text-orange-400">{totalRetrageri} €</div>
             <div className="stat-label">Total retrageri</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value text-yellow-400">{facturiNeplatite} €</div>
+            <div className="stat-value text-base sm:text-xl text-yellow-400">{facturiNeplatite} €</div>
             <div className="stat-label">Facturi neplătite</div>
           </div>
         </div>
 
         {/* Action Button */}
-        <div className="card mb-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="card mb-4 sm:mb-6 p-3 sm:p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold text-white">Retrage fonduri</h2>
-              <p className="text-gray-400 text-sm">Sold disponibil pentru retragere: <span className="text-green-400 font-medium">{soldDisponibil} €</span></p>
+              <h2 className="text-base sm:text-lg font-semibold text-white">Retrage fonduri</h2>
+              <p className="text-gray-400 text-xs sm:text-sm">Sold disponibil pentru retragere: <span className="text-green-400 font-medium">{soldDisponibil} €</span></p>
             </div>
             <button className="btn-secondary">
               Solicită retragere
@@ -182,10 +182,10 @@ export default function PlatiFacturiPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-1.5 sm:gap-2 mb-4 sm:mb-6">
           <button
             onClick={() => setActiveTab('plati')}
-            className={`px-6 py-3 rounded-xl font-medium transition-all ${
+            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium text-sm sm:text-base transition-all ${
               activeTab === 'plati'
                 ? 'bg-green-500 text-white'
                 : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
@@ -195,7 +195,7 @@ export default function PlatiFacturiPage() {
           </button>
           <button
             onClick={() => setActiveTab('facturi')}
-            className={`px-6 py-3 rounded-xl font-medium transition-all ${
+            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium text-sm sm:text-base transition-all ${
               activeTab === 'facturi'
                 ? 'bg-orange-500 text-white'
                 : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
@@ -207,8 +207,8 @@ export default function PlatiFacturiPage() {
 
         {/* Content */}
         {activeTab === 'plati' && (
-          <div className="card">
-            <h2 className="text-xl font-semibold text-white mb-6">Istoric Plăți</h2>
+          <div className="card p-3 sm:p-4">
+            <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6">Istoric Plăți</h2>
             
             {loadingData ? (
               <div className="flex justify-center py-12">

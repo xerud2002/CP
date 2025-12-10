@@ -670,7 +670,7 @@ export default function TarifePracticatePage() {
               </span>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
             {serviceTypes.map((service) => {
               const isSelected = selectedServices.includes(service.value);
               return (
@@ -678,7 +678,7 @@ export default function TarifePracticatePage() {
                   key={service.value}
                   type="button"
                   onClick={() => toggleService(service.value)}
-                  className={`relative flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 text-left ${
+                  className={`relative flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border transition-all duration-200 text-left ${
                     isSelected
                       ? 'bg-indigo-500/20 border-indigo-500/50 shadow-lg shadow-indigo-500/10'
                       : 'bg-slate-800/50 border-white/5 hover:border-white/20 hover:bg-slate-800'
@@ -721,9 +721,9 @@ export default function TarifePracticatePage() {
         </div>
 
         {/* Add Form Section */}
-        <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="p-2 bg-emerald-500/20 rounded-lg">
+        <div className="bg-slate-900/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6 mb-4 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5">
+            <div className="p-1.5 sm:p-2 bg-emerald-500/20 rounded-lg">
               <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 5v14" />
                 <path d="M5 12h14" />

@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, ReactNode } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import {
   MapIcon,
   CalendarIcon,
@@ -55,7 +57,7 @@ interface ActivityItem {
 // ============================================
 // CONFIGURATION DATA
 // ============================================
-const configurationCards: DashboardCard[] = [
+const getConfigurationCards = (hasNoServices: boolean): DashboardCard[] => [
   {
     href: '/dashboard/curier/zona-acoperire',
     icon: MapIcon,
@@ -82,6 +84,8 @@ const configurationCards: DashboardCard[] = [
     gradient: 'from-amber-500/10 to-yellow-500/10',
     iconBg: 'bg-amber-500/20',
     iconColor: 'text-amber-400',
+    badge: hasNoServices ? '!' : undefined,
+    badgeColor: hasNoServices ? 'bg-red-500 animate-pulse' : undefined,
   },
   {
     href: '/dashboard/curier/profil',
@@ -249,21 +253,21 @@ function WelcomeSection({ userName }: { userName: string }) {
 // Stats Grid Component
 function StatsGrid() {
   return (
-    <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <section className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
       {statsData.map((stat, index) => (
         <div
           key={index}
-          className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all group"
+          className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/5 hover:border-white/10 transition-all group"
         >
-          <div className="flex items-center gap-3 mb-3">
-            <div className={`w-10 h-10 rounded-lg ${stat.bgColor} flex items-center justify-center`}>
-              <stat.icon className={`w-5 h-5 ${stat.color}`} />
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg ${stat.bgColor} flex items-center justify-center shrink-0`}>
+              <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${stat.color}`} />
             </div>
-            <span className="text-gray-400 text-sm">{stat.label}</span>
+            <span className="text-gray-400 text-xs sm:text-sm truncate">{stat.label}</span>
           </div>
           <div className="flex items-end justify-between">
-            <span className="text-2xl font-bold text-white">{stat.value}</span>
-            <span className={`text-xs ${stat.trendUp ? 'text-emerald-400' : 'text-red-400'}`}>
+            <span className="text-lg sm:text-2xl font-bold text-white">{stat.value}</span>
+            <span className={`text-[10px] sm:text-xs ${stat.trendUp ? 'text-emerald-400' : 'text-red-400'}`}>
               {stat.trend}
             </span>
           </div>
@@ -276,33 +280,45 @@ function StatsGrid() {
 // Dashboard Card Component
 function DashboardCard({ card }: { card: DashboardCard }) {
   const IconComponent = card.icon;
+  const isWarningBadge = card.badge === '!';
 
   return (
     <Link
       href={card.href}
-      className={`group relative overflow-hidden rounded-2xl bg-linear-to-br ${card.gradient} border border-white/10 p-6 hover:border-white/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl bg-slate-800/50 backdrop-blur-sm`}
+      className={`group relative overflow-hidden rounded-xl sm:rounded-2xl bg-linear-to-br ${card.gradient} border border-white/10 p-4 sm:p-6 hover:border-white/20 transition-all duration-300 active:scale-[0.98] sm:hover:scale-[1.02] hover:shadow-2xl bg-slate-800/50 backdrop-blur-sm`}
     >
       {/* Badge */}
       {card.badge && (
-        <span className={`absolute top-4 right-4 px-2 py-1 ${card.badgeColor} rounded-full text-xs font-medium text-white`}>
-          {card.badge}
-        </span>
+        isWarningBadge ? (
+          // Notification badge with glow effect - amber/orange theme
+          <div className="absolute -top-1 -right-1">
+            <span className="relative flex h-5 w-5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex items-center justify-center rounded-full h-5 w-5 bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-amber-500/40">
+              </span>
+            </span>
+          </div>
+        ) : (
+          <span className={`absolute top-4 right-4 px-2 py-1 ${card.badgeColor} rounded-full text-xs font-medium text-white`}>
+            {card.badge}
+          </span>
+        )
       )}
 
       {/* Icon */}
-      <div className={`w-14 h-14 rounded-xl ${card.iconBg} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-        <IconComponent className={`w-7 h-7 ${card.iconColor}`} />
+      <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-xl ${card.iconBg} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform`}>
+        <IconComponent className={`w-5 h-5 sm:w-7 sm:h-7 ${card.iconColor}`} />
       </div>
 
       {/* Content */}
-      <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-emerald-400 transition-colors">
+      <h3 className="text-base sm:text-lg font-semibold text-white mb-0.5 sm:mb-1 group-hover:text-emerald-400 transition-colors">
         {card.title}
       </h3>
-      <p className="text-gray-400 text-sm">{card.description}</p>
+      <p className="text-gray-400 text-xs sm:text-sm line-clamp-2">{card.description}</p>
 
       {/* Arrow Indicator */}
-      <div className="absolute bottom-6 right-6 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1">
-        <ArrowRightIcon className="w-4 h-4 text-white" />
+      <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1">
+        <ArrowRightIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
       </div>
     </Link>
   );
@@ -312,12 +328,12 @@ function DashboardCard({ card }: { card: DashboardCard }) {
 function CardsSection({ title, icon, cards }: { title: string; icon: ReactNode; cards: DashboardCard[] }) {
   return (
     <section>
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-xl">{icon}</span>
-        <h2 className="text-lg font-semibold text-white">{title}</h2>
+      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+        <span className="text-lg sm:text-xl">{icon}</span>
+        <h2 className="text-base sm:text-lg font-semibold text-white">{title}</h2>
         <div className="flex-1 h-px bg-white/10" />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-4">
         {cards.map((card, index) => (
           <DashboardCard key={index} card={card} />
         ))}
@@ -428,12 +444,39 @@ function RecentActivity() {
 export default function CurierDashboard() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
+  const [hasNoServices, setHasNoServices] = useState(false);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
       router.push('/login?role=curier');
     }
   }, [user, loading, router]);
+
+  // Check if user has selected services
+  useEffect(() => {
+    const checkServices = async () => {
+      if (!user) return;
+      
+      try {
+        const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
+        const userSnapshot = await getDocs(userQuery);
+        
+        if (!userSnapshot.empty) {
+          const userData = userSnapshot.docs[0].data();
+          const services = userData.serviciiOferite;
+          setHasNoServices(!services || !Array.isArray(services) || services.length === 0);
+        } else {
+          setHasNoServices(true);
+        }
+      } catch (error) {
+        console.error('Error checking services:', error);
+      }
+    };
+
+    if (user) {
+      checkServices();
+    }
+  }, [user]);
 
   const handleLogout = async () => {
     await logout();
@@ -466,7 +509,7 @@ export default function CurierDashboard() {
       />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-4 sm:space-y-8">
         {/* Welcome Section */}
         <WelcomeSection userName={userName} />
 
@@ -474,7 +517,7 @@ export default function CurierDashboard() {
         <StatsGrid />
 
         {/* Configuration Cards */}
-        <CardsSection title="Configurare cont" icon="⚙️" cards={configurationCards} />
+        <CardsSection title="Configurare cont" icon="⚙️" cards={getConfigurationCards(hasNoServices)} />
 
         {/* Operations Cards */}
         <CardsSection title="Operațiuni" icon="📦" cards={operationsCards} />

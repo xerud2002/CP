@@ -180,45 +180,45 @@ export default function ComenziCurierPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen p-6 page-transition">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen p-3 sm:p-6 page-transition">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-4 sm:mb-8">
           <div>
-            <Link href="/dashboard/curier" className="text-gray-400 hover:text-white transition-colors mb-2 inline-flex items-center gap-2">
-              <ArrowLeftIcon className="w-5 h-5" />
-              Înapoi la Dashboard
+            <Link href="/dashboard/curier" className="text-gray-400 hover:text-white transition-colors mb-2 inline-flex items-center gap-2 text-sm">
+              <ArrowLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">Înapoi la Dashboard</span>
             </Link>
-            <h1 className="text-3xl font-bold text-white">📦 Comenzile Mele</h1>
+            <h1 className="text-xl sm:text-3xl font-bold text-white">Comenzile Mele</h1>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-8">
           <div className="stat-card">
-            <div className="stat-value">{stats.total}</div>
+            <div className="stat-value text-lg sm:text-xl">{stats.total}</div>
             <div className="stat-label">Total comenzi</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value text-blue-400">{stats.noi}</div>
+            <div className="stat-value text-lg sm:text-xl text-blue-400">{stats.noi}</div>
             <div className="stat-label">Comenzi noi</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value text-orange-400">{stats.inTranzit}</div>
+            <div className="stat-value text-lg sm:text-xl text-orange-400">{stats.inTranzit}</div>
             <div className="stat-label">În tranzit</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value text-green-400">{stats.livrate}</div>
+            <div className="stat-value text-lg sm:text-xl text-green-400">{stats.livrate}</div>
             <div className="stat-label">Livrate</div>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="card mb-6">
-          <div className="flex flex-wrap gap-2">
+        <div className="card mb-4 sm:mb-6 p-3 sm:p-4">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             <button
               onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg transition-all ${
+              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition-all ${
                 filter === 'all' 
                   ? 'bg-green-500 text-white' 
                   : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
@@ -232,7 +232,7 @@ export default function ComenziCurierPage() {
                 <button
                   key={status}
                   onClick={() => setFilter(status as Order['status'])}
-                  className={`px-4 py-2 rounded-lg transition-all ${
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition-all ${
                     filter === status 
                       ? `${bg} ${color} border border-current` 
                       : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
@@ -257,11 +257,11 @@ export default function ComenziCurierPage() {
               <p className="text-gray-400">Nu ai nicio comandă {filter !== 'all' && `cu status "${statusLabels[filter].label}"`}.</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {filteredOrders.map((order) => (
                 <div 
                   key={order.id} 
-                  className="bg-slate-800/50 rounded-xl p-5 border border-slate-700 hover:border-slate-600 transition-all"
+                  className="bg-slate-800/50 rounded-xl p-3 sm:p-5 border border-slate-700 hover:border-slate-600 transition-all"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     {/* Order Info */}

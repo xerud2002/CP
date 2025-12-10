@@ -618,10 +618,10 @@ function ProfilCurierContent() {
 
       {/* Header */}
       <div className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
-            <Link href="/dashboard/curier" className="text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2">
-              <ArrowLeftIcon className="w-5 h-5" />
+            <Link href="/dashboard/curier" className="text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 text-sm">
+              <ArrowLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">Înapoi la Dashboard</span>
             </Link>
             <button
@@ -636,15 +636,15 @@ function ProfilCurierContent() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Profile Header Card */}
-        <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-6 mb-6">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
+        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6 mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
             {/* Profile Image */}
             <div className="relative group">
               <div 
                 onClick={handleImageClick}
-                className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center cursor-pointer overflow-hidden border-4 border-slate-700 group-hover:border-orange-500/50 transition-all"
+                className="relative w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center cursor-pointer overflow-hidden border-4 border-slate-700 group-hover:border-orange-500/50 transition-all"
               >
                 {profile.profileImage ? (
                   <Image 
@@ -678,10 +678,10 @@ function ProfilCurierContent() {
 
             {/* Profile Info */}
             <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1">
+              <h1 className="text-xl sm:text-3xl font-bold text-white mb-1">
                 {profile.nume || 'Completează profilul'}
               </h1>
-              <p className="text-gray-400 mb-3">{profile.firma || 'Adaugă firma ta'}</p>
+              <p className="text-gray-400 text-sm sm:text-base mb-2 sm:mb-3">{profile.firma || 'Adaugă firma ta'}</p>
               
               {/* Completion Progress */}
               <div className="max-w-xs mx-auto sm:mx-0">
@@ -701,17 +701,17 @@ function ProfilCurierContent() {
             </div>
 
             {/* Quick Stats */}
-            <div className="flex gap-4 sm:gap-6">
+            <div className="flex gap-3 sm:gap-6">
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">0</div>
+                <div className="text-lg sm:text-2xl font-bold text-white">0</div>
                 <div className="text-xs text-gray-500">Comenzi</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-400">⭐ 0.0</div>
+                <div className="text-lg sm:text-2xl font-bold text-yellow-400">⭐ 0.0</div>
                 <div className="text-xs text-gray-500">Rating</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-400">0</div>
+                <div className="text-lg sm:text-2xl font-bold text-green-400">0</div>
                 <div className="text-xs text-gray-500">Recenzii</div>
               </div>
             </div>
@@ -719,10 +719,10 @@ function ProfilCurierContent() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex gap-1.5 sm:gap-2 mb-4 sm:mb-6 overflow-x-auto pb-2">
           <button
             onClick={() => handleTabChange('personal')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-medium text-sm transition-all whitespace-nowrap ${
               activeTab === 'personal'
                 ? 'bg-orange-500 text-white'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-700/50'
@@ -733,7 +733,7 @@ function ProfilCurierContent() {
           </button>
           <button
             onClick={() => handleTabChange('company')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-medium text-sm transition-all whitespace-nowrap ${
               activeTab === 'company'
                 ? 'bg-orange-500 text-white'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-700/50'
@@ -744,7 +744,7 @@ function ProfilCurierContent() {
           </button>
           <button
             onClick={() => handleTabChange('documents')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-medium text-sm transition-all whitespace-nowrap ${
               activeTab === 'documents'
                 ? 'bg-orange-500 text-white'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-700/50'
@@ -756,12 +756,12 @@ function ProfilCurierContent() {
         </div>
 
         {/* Tab Content */}
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Main Form */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 order-1">
             {activeTab === 'personal' && (
-              <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-6">
-                <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-3">
+              <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
+                <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
                   <div className="p-2 bg-orange-500/20 rounded-lg">
                     <UserIcon />
                   </div>
@@ -881,30 +881,30 @@ function ProfilCurierContent() {
             )}
 
             {activeTab === 'company' && (
-              <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-6">
-                <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-3">
-                  <div className="p-2 bg-blue-500/20 rounded-lg">
+              <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
+                <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 bg-blue-500/20 rounded-lg">
                     <BuildingIcon />
                   </div>
                   Date Firmă
                 </h2>
 
                 {/* Business Type Selector */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-3">Tip activitate *</label>
-                  <div className="grid grid-cols-2 gap-3">
+                <div className="mb-4 sm:mb-6">
+                  <label className="block text-sm font-medium text-gray-300 mb-2 sm:mb-3">Tip activitate *</label>
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     <button
                       type="button"
                       onClick={() => setProfile({ ...profile, tipBusiness: 'firma' })}
-                      className={`p-4 rounded-xl border-2 transition-all ${
+                      className={`p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all ${
                         profile.tipBusiness === 'firma'
                           ? 'border-purple-500 bg-purple-500/10'
                           : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
                       }`}
                     >
-                      <div className="flex flex-col items-center gap-2">
-                        <span className="text-2xl">🏢</span>
-                        <span className={`font-medium ${profile.tipBusiness === 'firma' ? 'text-purple-400' : 'text-gray-300'}`}>
+                      <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+                        <span className="text-xl sm:text-2xl">🏢</span>
+                        <span className={`font-medium text-sm sm:text-base ${profile.tipBusiness === 'firma' ? 'text-purple-400' : 'text-gray-300'}`}>
                           Firmă
                         </span>
                         <span className="text-xs text-gray-500 text-center">SRL, SA, PFA, II, IF</span>
@@ -913,15 +913,15 @@ function ProfilCurierContent() {
                     <button
                       type="button"
                       onClick={() => setProfile({ ...profile, tipBusiness: 'pf' })}
-                      className={`p-4 rounded-xl border-2 transition-all ${
+                      className={`p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all ${
                         profile.tipBusiness === 'pf'
                           ? 'border-blue-500 bg-blue-500/10'
                           : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
                       }`}
                     >
-                      <div className="flex flex-col items-center gap-2">
-                        <span className="text-2xl">👤</span>
-                        <span className={`font-medium ${profile.tipBusiness === 'pf' ? 'text-blue-400' : 'text-gray-300'}`}>
+                      <div className="flex flex-col items-center gap-1.5 sm:gap-2">
+                        <span className="text-xl sm:text-2xl">👤</span>
+                        <span className={`font-medium text-sm sm:text-base ${profile.tipBusiness === 'pf' ? 'text-blue-400' : 'text-gray-300'}`}>
                           Persoană Fizică
                         </span>
                         <span className="text-xs text-gray-500 text-center">Fără firmă înregistrată</span>
@@ -930,7 +930,7 @@ function ProfilCurierContent() {
                   </div>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="sm:col-span-2">
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       {profile.tipBusiness === 'firma' ? 'Denumire firmă *' : 'Nume complet *'}
@@ -1076,16 +1076,16 @@ function ProfilCurierContent() {
             )}
 
             {activeTab === 'documents' && (
-              <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-6">
-                <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-3">
-                  <div className="p-2 bg-green-500/20 rounded-lg">
+              <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
+                <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 bg-green-500/20 rounded-lg">
                     <DocumentIcon />
                   </div>
                   Documente Necesare
                 </h2>
 
                 {/* Business type & Services info */}
-                <div className="mb-4 p-3 bg-slate-700/30 rounded-xl space-y-3">
+                <div className="mb-3 sm:mb-4 p-2.5 sm:p-3 bg-slate-700/30 rounded-lg sm:rounded-xl space-y-2 sm:space-y-3">
                   <div className="flex items-center gap-2">
                     <span className="text-gray-400 text-xs">Tip activitate:</span>
                     <span className={`text-xs px-2 py-1 rounded-full ${
@@ -1110,26 +1110,26 @@ function ProfilCurierContent() {
                   )}
                 </div>
 
-                <p className="text-gray-400 text-sm mb-2">
+                <p className="text-gray-400 text-xs sm:text-sm mb-1 sm:mb-2">
                   Documentele sunt afișate în funcție de tipul de activitate și serviciile activate.
                 </p>
-                <p className="text-gray-500 text-xs mb-6">
+                <p className="text-gray-500 text-xs mb-4 sm:mb-6">
                   Documentele cu <span className="text-red-400">*</span> sunt obligatorii.
                 </p>
 
                 {/* Required Documents */}
-                <div className="mb-6">
-                  <h3 className="text-sm font-semibold text-orange-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <div className="mb-4 sm:mb-6">
+                  <h3 className="text-xs sm:text-sm font-semibold text-orange-400 uppercase tracking-wider mb-2 sm:mb-3 flex items-center gap-2">
                     <span className="w-2 h-2 bg-orange-400 rounded-full"></span>
                     Documente Obligatorii ({getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness).filter(d => d.required).length})
                   </h3>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness)
                       .filter(doc => doc.required)
                       .map((doc) => (
-                        <div key={doc.id} className="border border-dashed border-slate-600 rounded-xl p-4 hover:border-orange-500/50 transition-colors">
-                          <div className="flex items-start gap-4">
-                            <div className={`p-3 rounded-lg ${
+                        <div key={doc.id} className="border border-dashed border-slate-600 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:border-orange-500/50 transition-colors">
+                          <div className="flex items-start gap-3 sm:gap-4">
+                            <div className={`p-2 sm:p-3 rounded-lg ${
                               doc.category === 'identity' ? 'bg-blue-500/20 text-blue-400' :
                               doc.category === 'company' ? 'bg-purple-500/20 text-purple-400' :
                               doc.category === 'transport' ? 'bg-green-500/20 text-green-400' :
@@ -1141,7 +1141,7 @@ function ProfilCurierContent() {
                               {getDocIcon(doc.icon)}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-white font-medium mb-1 flex items-center gap-2">
+                              <h4 className="text-white font-medium text-sm sm:text-base mb-1 flex flex-wrap items-center gap-1 sm:gap-2">
                                 {doc.title}
                                 <span className="text-red-400 text-xs">*</span>
                                 {doc.forServices && (
@@ -1150,10 +1150,10 @@ function ProfilCurierContent() {
                                   </span>
                                 )}
                               </h4>
-                              <p className="text-gray-500 text-sm mb-3">{doc.description}</p>
-                              <label className="inline-flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg cursor-pointer transition-colors">
+                              <p className="text-gray-500 text-xs sm:text-sm mb-2 sm:mb-3">{doc.description}</p>
+                              <label className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-700 hover:bg-slate-600 rounded-lg cursor-pointer transition-colors">
                                 <UploadIcon />
-                                <span className="text-sm text-gray-300">Încărcați document</span>
+                                <span className="text-xs sm:text-sm text-gray-300">Încărcați document</span>
                                 <input type="file" accept="image/*,.pdf" className="hidden" />
                               </label>
                             </div>
@@ -1170,34 +1170,34 @@ function ProfilCurierContent() {
 
                 {/* Optional Documents - Only shown if there are any */}
                 {getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness).filter(d => !d.required).length > 0 && (
-                  <div className="mb-6">
-                    <h3 className="text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <div className="mb-4 sm:mb-6">
+                    <h3 className="text-xs sm:text-sm font-semibold text-emerald-400 uppercase tracking-wider mb-2 sm:mb-3 flex items-center gap-2">
                       <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
                       Documente Recomandate ({getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness).filter(d => !d.required).length})
                     </h3>
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness)
                         .filter(doc => !doc.required)
                         .map((doc) => (
-                          <div key={doc.id} className="border border-dashed border-slate-700 rounded-xl p-4 hover:border-emerald-500/50 transition-colors opacity-80 hover:opacity-100">
-                            <div className="flex items-start gap-4">
-                              <div className={`p-3 rounded-lg ${
+                          <div key={doc.id} className="border border-dashed border-slate-700 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:border-emerald-500/50 transition-colors opacity-80 hover:opacity-100">
+                            <div className="flex items-start gap-3 sm:gap-4">
+                              <div className={`p-2 sm:p-3 rounded-lg ${
                                 doc.category === 'insurance' ? 'bg-yellow-500/20 text-yellow-400' :
                                 'bg-slate-700/50 text-gray-400'
                               }`}>
                                 {getDocIcon(doc.icon)}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-gray-300 font-medium mb-1 flex items-center gap-2">
+                                <h4 className="text-gray-300 font-medium text-sm sm:text-base mb-1 flex flex-wrap items-center gap-1 sm:gap-2">
                                   {doc.title}
                                   <span className="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full">
                                     Opțional
                                   </span>
                                 </h4>
-                                <p className="text-gray-500 text-sm mb-3">{doc.description}</p>
-                                <label className="inline-flex items-center gap-2 px-4 py-2 bg-slate-700/50 hover:bg-slate-700 rounded-lg cursor-pointer transition-colors">
+                                <p className="text-gray-500 text-xs sm:text-sm mb-2 sm:mb-3">{doc.description}</p>
+                                <label className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-700/50 hover:bg-slate-700 rounded-lg cursor-pointer transition-colors">
                                   <UploadIcon />
-                                  <span className="text-sm text-gray-400">Încărcați document</span>
+                                  <span className="text-xs sm:text-sm text-gray-400">Încărcați document</span>
                                   <input type="file" accept="image/*,.pdf" className="hidden" />
                                 </label>
                               </div>
@@ -1209,16 +1209,16 @@ function ProfilCurierContent() {
                 )}
 
                 {/* Info box */}
-                <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-                  <p className="text-blue-400 text-sm">
+                <div className="p-3 sm:p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg sm:rounded-xl">
+                  <p className="text-blue-400 text-xs sm:text-sm">
                     <strong>💡 Verificare rapidă:</strong> Documentele sunt verificate în 24-48 ore. Vei primi notificare la aprobare.
                   </p>
                 </div>
 
                 {/* Hint for more services */}
                 {activeServices.length === 0 && (
-                  <div className="mt-4 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                    <p className="text-amber-400 text-sm">
+                  <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg sm:rounded-xl">
+                    <p className="text-amber-400 text-xs sm:text-sm">
                       <strong>💼 Adaugă servicii:</strong> Mergi la <Link href="/dashboard/curier/tarife" className="underline hover:text-amber-300">Servicii și Tarife</Link> pentru a activa servicii și a vedea documentele necesare.
                     </p>
                   </div>
@@ -1228,16 +1228,16 @@ function ProfilCurierContent() {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4 order-2">
             {/* Quick Links */}
-            <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-5">
-              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Acțiuni rapide</h3>
+            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-5">
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Acțiuni rapide</h3>
               <div className="space-y-2">
                 <Link
                   href="/dashboard/curier/zona-acoperire"
-                  className="flex items-center gap-3 p-3 rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
+                  className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
                 >
-                  <div className="p-2 bg-emerald-500/20 rounded-lg group-hover:bg-emerald-500/30 transition-colors">
+                  <div className="p-1.5 sm:p-2 bg-emerald-500/20 rounded-lg group-hover:bg-emerald-500/30 transition-colors">
                     <svg className="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="12" r="10" />
                       <path d="M2 12h20" />
@@ -1252,9 +1252,9 @@ function ProfilCurierContent() {
 
                 <Link
                   href="/dashboard/curier/tarife"
-                  className="flex items-center gap-3 p-3 rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
+                  className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
                 >
-                  <div className="p-2 bg-amber-500/20 rounded-lg group-hover:bg-amber-500/30 transition-colors">
+                  <div className="p-1.5 sm:p-2 bg-amber-500/20 rounded-lg group-hover:bg-amber-500/30 transition-colors">
                     <svg className="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M4 10h12" />
                       <path d="M4 14h9" />
@@ -1269,9 +1269,9 @@ function ProfilCurierContent() {
 
                 <Link
                   href="/dashboard/curier/calendar"
-                  className="flex items-center gap-3 p-3 rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
+                  className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
                 >
-                  <div className="p-2 bg-purple-500/20 rounded-lg group-hover:bg-purple-500/30 transition-colors">
+                  <div className="p-1.5 sm:p-2 bg-purple-500/20 rounded-lg group-hover:bg-purple-500/30 transition-colors">
                     <svg className="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                       <line x1="16" y1="2" x2="16" y2="6" />
@@ -1288,11 +1288,11 @@ function ProfilCurierContent() {
             </div>
 
             {/* Tips */}
-            <div className="bg-linear-to-br from-orange-500/10 to-amber-500/10 rounded-2xl border border-orange-500/20 p-5">
-              <h3 className="text-orange-400 font-medium mb-3 flex items-center gap-2">
+            <div className="bg-linear-to-br from-orange-500/10 to-amber-500/10 rounded-xl sm:rounded-2xl border border-orange-500/20 p-4 sm:p-5">
+              <h3 className="text-orange-400 font-medium text-sm sm:text-base mb-2 sm:mb-3 flex items-center gap-2">
                 <span>💡</span> Sfaturi
               </h3>
-              <ul className="text-sm text-gray-400 space-y-2">
+              <ul className="text-xs sm:text-sm text-gray-400 space-y-1.5 sm:space-y-2">
                 <li className="flex items-start gap-2">
                   <span className="text-orange-400 mt-0.5">•</span>
                   Un profil complet atrage mai mulți clienți
@@ -1309,9 +1309,9 @@ function ProfilCurierContent() {
             </div>
 
             {/* Status Card */}
-            <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-5">
-              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Status cont</h3>
-              <div className="space-y-3">
+            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-5">
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Status cont</h3>
+              <div className="space-y-2 sm:space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400 text-sm">Verificat</span>
                   <span className="text-yellow-400 text-sm flex items-center gap-1">

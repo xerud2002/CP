@@ -241,28 +241,28 @@ export default function ZonaAcoperiirePage() {
     <div className="min-h-screen bg-slate-950">
       {/* Header */}
       <header className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-4">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center gap-2 sm:gap-4">
               <Link 
                 href="/dashboard/curier" 
-                className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+                className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
               >
                 <ArrowLeftIcon className="w-5 h-5" />
               </Link>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                  <MapIcon className="w-6 h-6 text-emerald-400" />
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                  <MapIcon className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold text-white">Zona de Acoperire</h1>
-                  <p className="text-xs text-gray-500">Configurează zonele tale de livrare</p>
+                  <h1 className="text-base sm:text-lg font-bold text-white">Zona de Acoperire</h1>
+                  <p className="text-xs text-gray-500 hidden sm:block">Configurează zonele tale de livrare</p>
                 </div>
               </div>
             </div>
             
-            <div className="flex items-center gap-2 text-sm">
-              <span className="px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 font-medium border border-emerald-500/30">
+            <div className="flex items-center gap-2 text-xs sm:text-sm">
+              <span className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 font-medium border border-emerald-500/30">
                 {savedZones.length} {savedZones.length === 1 ? 'zonă' : 'zone'} active
               </span>
             </div>
@@ -270,16 +270,16 @@ export default function ZonaAcoperiirePage() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Info Banner */}
-        <div className="mb-8 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
-              <GlobeIcon className="w-5 h-5 text-blue-400" />
+        <div className="mb-4 sm:mb-8 p-3 sm:p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
+          <div className="flex items-start gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
+              <GlobeIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
             </div>
             <div>
-              <h3 className="font-medium text-white mb-1">De ce este important?</h3>
-              <p className="text-gray-400 text-sm">
+              <h3 className="font-medium text-white text-sm sm:text-base mb-1">De ce este important?</h3>
+              <p className="text-gray-400 text-xs sm:text-sm">
                 Zonele de acoperire permit platformei să îți trimită doar comenzile care se potrivesc cu ruta și disponibilitatea ta. 
                 Cu cât adaugi mai multe zone, cu atât vei primi mai multe comenzi relevante.
               </p>
@@ -287,11 +287,11 @@ export default function ZonaAcoperiirePage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
           {/* Add Zone Form */}
-          <div className="lg:col-span-1">
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-white/5 p-6 sticky top-24">
-              <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6 lg:sticky lg:top-24">
+              <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2">
                 <PlusIcon className="w-5 h-5 text-emerald-400" />
                 Adaugă zonă nouă
               </h2>
@@ -453,9 +453,9 @@ export default function ZonaAcoperiirePage() {
           </div>
 
           {/* Saved Zones */}
-          <div className="lg:col-span-2">
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-white/5 p-6">
-              <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+          <div className="lg:col-span-2 order-1 lg:order-2">
+            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2">
                 <MapIcon className="w-5 h-5 text-emerald-400" />
                 Zonele tale salvate
                 {savedZones.length > 0 && (
@@ -539,17 +539,17 @@ export default function ZonaAcoperiirePage() {
 
             {/* Quick Stats */}
             {savedZones.length > 0 && (
-              <div className="grid grid-cols-3 gap-4 mt-6">
-                <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5 text-center">
-                  <p className="text-2xl font-bold text-white">{savedZones.length}</p>
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-4 sm:mt-6">
+                <div className="bg-slate-800/30 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/5 text-center">
+                  <p className="text-lg sm:text-2xl font-bold text-white">{savedZones.length}</p>
                   <p className="text-xs text-gray-500">Total zone</p>
                 </div>
-                <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5 text-center">
-                  <p className="text-2xl font-bold text-white">{Object.keys(zonesByCountry).length}</p>
+                <div className="bg-slate-800/30 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/5 text-center">
+                  <p className="text-lg sm:text-2xl font-bold text-white">{Object.keys(zonesByCountry).length}</p>
                   <p className="text-xs text-gray-500">Țări acoperite</p>
                 </div>
-                <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5 text-center">
-                  <p className="text-2xl font-bold text-emerald-400">Activ</p>
+                <div className="bg-slate-800/30 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/5 text-center">
+                  <p className="text-lg sm:text-2xl font-bold text-emerald-400">Activ</p>
                   <p className="text-xs text-gray-500">Status</p>
                 </div>
               </div>
