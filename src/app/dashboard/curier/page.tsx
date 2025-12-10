@@ -77,8 +77,8 @@ const configurationCards: DashboardCard[] = [
   {
     href: '/dashboard/curier/tarife',
     icon: CurrencyIcon,
-    title: 'Tarife',
-    description: 'Gestionează prețurile',
+    title: 'Servicii și Tarife',
+    description: 'Gestionează serviciile și prețurile',
     gradient: 'from-amber-500/10 to-yellow-500/10',
     iconBg: 'bg-amber-500/20',
     iconColor: 'text-amber-400',
