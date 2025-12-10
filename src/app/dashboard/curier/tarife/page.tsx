@@ -895,7 +895,7 @@ export default function TarifePracticatePage() {
                   </button>
 
                   {isServiceDropdownOpen && (
-                    <div className="absolute z-50 w-full mt-2 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto">
+                    <div className="absolute z-50 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto">
                       {serviceTypes.map((service) => (
                         <button
                           key={service.value}
@@ -908,21 +908,23 @@ export default function TarifePracticatePage() {
                             else if (service.kgOnly) setUnitType('kg');
                             setIsServiceDropdownOpen(false);
                           }}
-                          className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-700/50 transition-colors ${
-                            tipServiciu === service.value ? 'bg-emerald-500/20' : ''
+                          className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-700/50 transition-colors border-b border-white/5 last:border-b-0 ${
+                            tipServiciu === service.value ? 'bg-emerald-500/10' : ''
                           }`}
                         >
-                          <div className={`p-1 rounded-md ${service.bgColor}`}>
-                            <ServiceIcon service={service.value} className={`w-3.5 h-3.5 ${service.color}`} />
+                          <div className={`p-2 rounded-xl ${service.bgColor} shadow-lg`}>
+                            <ServiceIcon service={service.value} className={`w-5 h-5 ${service.color}`} />
                           </div>
                           <div className="flex-1 text-left min-w-0">
-                            <span className="text-white text-sm">{service.label}</span>
-                            <span className="text-xs text-gray-500 ml-2 truncate">{service.description}</span>
+                            <p className="text-white text-sm font-medium">{service.label}</p>
+                            <p className="text-xs text-gray-500 truncate">{service.description}</p>
                           </div>
                           {tipServiciu === service.value && (
-                            <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
+                            <div className="p-1 bg-emerald-500/20 rounded-full">
+                              <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
                           )}
                         </button>
                       ))}
@@ -1095,12 +1097,63 @@ export default function TarifePracticatePage() {
                       </label>
                       <div className="grid grid-cols-4 gap-2">
                         {[
-                          { value: 'masina', icon: '🚗', label: 'Mașină' },
-                          { value: 'van', icon: '🚐', label: 'Van' },
-                          { value: 'camion', icon: '🚛', label: 'Camion' },
-                          { value: 'tractor', icon: '🚜', label: 'Tractor' },
+                          { value: 'masina', label: 'Mașină' },
+                          { value: 'van', label: 'Van' },
+                          { value: 'camion', label: 'Camion' },
+                          { value: 'tractor', label: 'Tractor' },
                         ].map((vehicul) => {
                           const isSelected = tipVehicul.includes(vehicul.value as 'masina' | 'van' | 'camion' | 'tractor');
+                          
+                          // Custom vehicle icons
+                          const VehicleIcon = () => {
+                            const iconClass = `w-6 h-6 ${isSelected ? 'text-sky-400' : 'text-gray-400'}`;
+                            switch(vehicul.value) {
+                              case 'masina':
+                                return (
+                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0Zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
+                                    <path d="M5 17H3v-4l2-5h9l4 5h3v4h-2" />
+                                    <path d="M9 17h6" />
+                                    <path d="M7 8v3" />
+                                    <path d="M11 8v3" />
+                                  </svg>
+                                );
+                              case 'van':
+                                return (
+                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0Zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
+                                    <path d="M9 17h6" />
+                                    <path d="M3 9h13v8H3z" />
+                                    <path d="M16 9h2l3 4v4h-2" />
+                                    <path d="M3 9V6h13v3" />
+                                  </svg>
+                                );
+                              case 'camion':
+                                return (
+                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0Zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
+                                    <path d="M9 18h6" />
+                                    <path d="M3 12h11V5H3z" />
+                                    <path d="M14 8h3l3 4v6h-2" />
+                                    <path d="M3 18h2" />
+                                    <path d="M3 8h11" />
+                                  </svg>
+                                );
+                              case 'tractor':
+                                return (
+                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M4 17a3 3 0 1 0 6 0 3 3 0 0 0-6 0Zm11 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
+                                    <path d="M10 17h5" />
+                                    <path d="M7 14V9h7l3 5" />
+                                    <path d="M7 9V5h5" />
+                                    <path d="M3 17h1" />
+                                  </svg>
+                                );
+                              default:
+                                return null;
+                            }
+                          };
+                          
                           return (
                             <button
                               key={vehicul.value}
@@ -1113,7 +1166,7 @@ export default function TarifePracticatePage() {
                                   setTipVehicul([...tipVehicul, val]);
                                 }
                               }}
-                              className={`relative flex flex-col items-center gap-1 p-2.5 rounded-xl transition-all duration-200 ${
+                              className={`relative flex flex-col items-center gap-1.5 p-3 rounded-xl transition-all duration-200 ${
                                 isSelected
                                   ? 'bg-sky-500/20 border-2 border-sky-400 shadow-lg shadow-sky-500/10'
                                   : 'bg-slate-800/50 border border-white/10 hover:border-sky-500/30 hover:bg-slate-800'
@@ -1126,7 +1179,7 @@ export default function TarifePracticatePage() {
                                   </svg>
                                 </div>
                               )}
-                              <span className="text-xl">{vehicul.icon}</span>
+                              <VehicleIcon />
                               <span className={`text-xs font-medium ${isSelected ? 'text-sky-400' : 'text-gray-400'}`}>
                                 {vehicul.label}
                               </span>
@@ -1426,7 +1479,7 @@ export default function TarifePracticatePage() {
                   <path d="M8 17v-3" />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold text-white">Tarife Active</h2>
+              <h2 className="text-lg font-semibold text-white">Tarife și Servicii Active</h2>
             </div>
             <span className="text-sm bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full">
               {tarife.length} {tarife.length === 1 ? 'tarif' : 'tarife'}
@@ -1514,12 +1567,51 @@ export default function TarifePracticatePage() {
                             altul: '🐾 Altul',
                           };
                           
-                          // Get vehicle label
-                          const vehiculLabels: Record<string, string> = {
-                            masina: '🚗 Mașină',
-                            van: '🚐 Van',
-                            camion: '🚛 Camion',
-                            tractor: '🚜 Tractor',
+                          // Get vehicle icon component
+                          const VehicleIconSmall = ({ type }: { type: string }) => {
+                            const iconClass = "w-3.5 h-3.5 text-sky-400 inline-block";
+                            switch(type) {
+                              case 'masina':
+                                return (
+                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0Zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
+                                    <path d="M5 17H3v-4l2-5h9l4 5h3v4h-2" />
+                                  </svg>
+                                );
+                              case 'van':
+                                return (
+                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0Zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
+                                    <path d="M3 9h13v8H3z" />
+                                    <path d="M16 9h2l3 4v4h-2" />
+                                  </svg>
+                                );
+                              case 'camion':
+                                return (
+                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0Zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
+                                    <path d="M3 12h11V5H3z" />
+                                    <path d="M14 8h3l3 4v6h-2" />
+                                  </svg>
+                                );
+                              case 'tractor':
+                                return (
+                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M4 17a3 3 0 1 0 6 0 3 3 0 0 0-6 0Zm11 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
+                                    <path d="M7 14V9h7l3 5" />
+                                    <path d="M7 9V5h5" />
+                                  </svg>
+                                );
+                              default:
+                                return null;
+                            }
+                          };
+                          
+                          const vehicleLabelsText: Record<string, string> = {
+                            masina: 'Mașină',
+                            van: 'Van',
+                            camion: 'Camion',
+                            tractor: 'Tractor',
                           };
                           
                           // Currency based on country
@@ -1533,12 +1625,18 @@ export default function TarifePracticatePage() {
                                     <ServiceIcon service={t.tipServiciu} className={`w-4 h-4 ${serviceInfo?.color || 'text-gray-400'}`} />
                                   </div>
                                   <div>
-                                    <p className="text-white text-sm font-medium">
+                                    <p className="text-white text-sm font-medium flex items-center gap-1 flex-wrap">
                                       {serviceInfo?.label || t.tipServiciu}
                                       {t.tipAnimal && <span className="ml-2 text-pink-400 text-xs">{animalLabels[t.tipAnimal]}</span>}
                                       {t.tipVehicul && t.tipVehicul.length > 0 && (
-                                        <span className="ml-2 text-sky-400 text-xs">
-                                          {t.tipVehicul.map(v => vehiculLabels[v]).join(', ')}
+                                        <span className="ml-1 text-sky-400 text-xs flex items-center gap-1">
+                                          {t.tipVehicul.map((v, idx) => (
+                                            <span key={v} className="inline-flex items-center gap-0.5">
+                                              <VehicleIconSmall type={v} />
+                                              <span>{vehicleLabelsText[v]}</span>
+                                              {idx < t.tipVehicul!.length - 1 && <span>,</span>}
+                                            </span>
+                                          ))}
                                         </span>
                                       )}
                                     </p>
