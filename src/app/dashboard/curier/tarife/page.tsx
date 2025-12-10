@@ -16,14 +16,14 @@ interface Tarif {
   tipServiciu: string;
   pret: number;
   minUnit: number;
-  unitType: 'kg' | 'm3';
+  unitType: 'kg' | 'm3' | 'nr';
   // Animale specific fields
   tipAnimal?: 'caine' | 'pisica' | 'pasare' | 'rozator' | 'reptila' | 'altul';
   pretAnimal?: number;
   areCertificat?: boolean;
   areAsigurare?: boolean;
   // Platforma specific fields
-  tipVehicul?: 'masina' | 'van' | 'camion' | 'tractor' | 'utilaj';
+  tipVehicul?: ('masina' | 'van' | 'camion' | 'tractor')[];
   acceptaAvariat?: boolean;
 }
 
@@ -157,6 +157,7 @@ const serviceTypes = [
     description: 'Transport paleți și marfă paletizată',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/20',
+    nrOnly: true,
   },
   { 
     value: 'Platforma', 
@@ -292,7 +293,7 @@ export default function TarifePracticatePage() {
   const [tipServiciu, setTipServiciu] = useState('');
   const [pret, setPret] = useState('');
   const [minUnit, setMinUnit] = useState('');
-  const [unitType, setUnitType] = useState<'kg' | 'm3'>('kg');
+  const [unitType, setUnitType] = useState<'kg' | 'm3' | 'nr'>('kg');
   
   // Animale specific state
   const [tipAnimal, setTipAnimal] = useState<'caine' | 'pisica' | 'pasare' | 'rozator' | 'reptila' | 'altul'>('caine');
@@ -301,7 +302,7 @@ export default function TarifePracticatePage() {
   const [areAsigurare, setAreAsigurare] = useState(false);
   
   // Platforma specific state
-  const [tipVehicul, setTipVehicul] = useState<'masina' | 'van' | 'camion' | 'tractor' | 'utilaj'>('masina');
+  const [tipVehicul, setTipVehicul] = useState<('masina' | 'van' | 'camion' | 'tractor')[]>([]);
   const [acceptaAvariat, setAcceptaAvariat] = useState(true);
 
   // Custom dropdowns state
@@ -536,7 +537,7 @@ export default function TarifePracticatePage() {
       setAreCertificat(false);
       setAreAsigurare(false);
       // Reset Platforma fields
-      setTipVehicul('masina');
+      setTipVehicul([]);
       setAcceptaAvariat(true);
     } catch (error) {
       console.error('Error adding tarif:', error);
@@ -757,16 +758,18 @@ export default function TarifePracticatePage() {
                 <path d="M5 12h14" />
               </svg>
             </div>
-            <h2 className="text-lg font-semibold text-white">Adaugă tarif nou</h2>
+            <h2 className="text-lg font-semibold text-white">Adaugă serviciu</h2>
           </div>
 
           <form onSubmit={handleSubmit}>
             <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 items-end ${
               tipServiciu === 'Animale' 
                 ? 'lg:grid-cols-[0.6fr_0.4fr_0.35fr_auto]'
-                : tipServiciu === 'Platforma' || tipServiciu === 'Documente'
+                : tipServiciu === 'Platforma'
                   ? 'lg:grid-cols-[0.6fr_0.4fr_auto]'
-                  : 'lg:grid-cols-[0.6fr_0.85fr_0.4fr_0.32fr_0.32fr_auto]'
+                  : tipServiciu === 'Documente' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila'
+                    ? 'lg:grid-cols-[0.6fr_0.4fr_0.35fr_auto]'
+                    : 'lg:grid-cols-[0.6fr_0.85fr_0.4fr_0.32fr_0.32fr_auto]'
             }`}>
               {/* Country Dropdown */}
               <div ref={countryDropdownRef}>
@@ -881,6 +884,10 @@ export default function TarifePracticatePage() {
                           type="button"
                           onClick={() => {
                             setTipServiciu(service.value);
+                            // Auto-set unit type based on service
+                            if (service.nrOnly) setUnitType('nr');
+                            else if (service.m3Only) setUnitType('m3');
+                            else if (service.kgOnly) setUnitType('kg');
                             setIsServiceDropdownOpen(false);
                           }}
                           className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-700/50 transition-colors ${
@@ -932,7 +939,7 @@ export default function TarifePracticatePage() {
                   <button
                     type="submit"
                     disabled={saving || !selectedCountry || !pretAnimal}
-                    className="h-[46px] px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
+                    className="h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
                   >
                     {saving ? (
                       <>
@@ -1064,31 +1071,40 @@ export default function TarifePracticatePage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {/* Tip Vehicul */}
                     <div>
-                      <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">Tip Vehicul</label>
-                      <div className="grid grid-cols-5 gap-2">
+                      <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">Tip Vehicul <span className="text-sky-400">(multi-select)</span></label>
+                      <div className="grid grid-cols-4 gap-2">
                         {[
                           { value: 'masina', icon: '🚗', label: 'Mașină' },
                           { value: 'van', icon: '🚐', label: 'Van' },
                           { value: 'camion', icon: '🚛', label: 'Camion' },
                           { value: 'tractor', icon: '🚜', label: 'Tractor' },
-                          { value: 'utilaj', icon: '🏗️', label: 'Utilaj' },
-                        ].map((vehicul) => (
-                          <button
-                            key={vehicul.value}
-                            type="button"
-                            onClick={() => setTipVehicul(vehicul.value as typeof tipVehicul)}
-                            className={`flex flex-col items-center gap-1 p-2.5 rounded-xl transition-all duration-200 ${
-                              tipVehicul === vehicul.value
-                                ? 'bg-sky-500/20 border-2 border-sky-400 shadow-lg shadow-sky-500/10'
-                                : 'bg-slate-800/50 border border-white/10 hover:border-sky-500/30 hover:bg-slate-800'
-                            }`}
-                          >
-                            <span className="text-xl">{vehicul.icon}</span>
-                            <span className={`text-xs font-medium ${tipVehicul === vehicul.value ? 'text-sky-400' : 'text-gray-400'}`}>
-                              {vehicul.label}
-                            </span>
-                          </button>
-                        ))}
+                        ].map((vehicul) => {
+                          const isSelected = tipVehicul.includes(vehicul.value as 'masina' | 'van' | 'camion' | 'tractor');
+                          return (
+                            <button
+                              key={vehicul.value}
+                              type="button"
+                              onClick={() => {
+                                const val = vehicul.value as 'masina' | 'van' | 'camion' | 'tractor';
+                                if (isSelected) {
+                                  setTipVehicul(tipVehicul.filter(v => v !== val));
+                                } else {
+                                  setTipVehicul([...tipVehicul, val]);
+                                }
+                              }}
+                              className={`flex flex-col items-center gap-1 p-2.5 rounded-xl transition-all duration-200 ${
+                                isSelected
+                                  ? 'bg-sky-500/20 border-2 border-sky-400 shadow-lg shadow-sky-500/10'
+                                  : 'bg-slate-800/50 border border-white/10 hover:border-sky-500/30 hover:bg-slate-800'
+                              }`}
+                            >
+                              <span className="text-xl">{vehicul.icon}</span>
+                              <span className={`text-xs font-medium ${isSelected ? 'text-sky-400' : 'text-gray-400'}`}>
+                                {vehicul.label}
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                     
@@ -1137,11 +1153,33 @@ export default function TarifePracticatePage() {
                       </div>
                     </div>
                   </div>
+                  
+                  {/* Submit Button for Platforma */}
+                  <button
+                    type="submit"
+                    disabled={saving || !selectedCountry}
+                    className="w-full mt-4 h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {saving ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <span>Se salvează...</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 5v14" />
+                          <path d="M5 12h14" />
+                        </svg>
+                        <span>Adaugă</span>
+                      </>
+                    )}
+                  </button>
                 </div>
               )}
 
-              {/* Unit Type Toggle - hidden for Animale, Platforma and Documente services */}
-              {tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && (() => {
+              {/* Unit Type Toggle - hidden for Animale, Platforma, Documente, Paleti and Mobila services */}
+              {tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && tipServiciu !== 'Paleti' && tipServiciu !== 'Mobila' && (() => {
                 const currentService = serviceTypes.find(s => s.value === tipServiciu);
                 const isKgOnly = currentService?.kgOnly;
                 const isM3Only = currentService?.m3Only;
@@ -1211,11 +1249,12 @@ export default function TarifePracticatePage() {
                 );
               })()}
 
-              {/* Min unit - hidden for Animale, Platforma and Documente */}
-              {tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && (
+              {/* Min unit - hidden for Animale, Platforma, Documente, Paleti and Mobila */}
+              {tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && tipServiciu !== 'Paleti' && tipServiciu !== 'Mobila' && (() => {
+                return (
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Min. {unitType === 'kg' ? 'kg' : 'm³'}
+                  {unitType === 'kg' ? 'kg' : 'm³'}
                 </label>
                 <div className="relative">
                   <input
@@ -1224,7 +1263,7 @@ export default function TarifePracticatePage() {
                     onChange={(e) => setMinUnit(e.target.value)}
                     step="1"
                     min="0"
-                    placeholder={unitType === 'kg' ? 'ex: 1' : 'ex: 1'}
+                    placeholder="ex: 1"
                     className="w-full px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors pr-12"
                     required
                   />
@@ -1237,7 +1276,8 @@ export default function TarifePracticatePage() {
                   </div>
                 </div>
               </div>
-              )}
+              );
+              })()}
 
               {/* Documente - Preț per plic */}
               {tipServiciu === 'Documente' && (
@@ -1266,14 +1306,64 @@ export default function TarifePracticatePage() {
                 </div>
               )}
 
-              {/* Submit Button - pentru toate serviciile EXCEPTÂND Animale */}
-              {tipServiciu !== 'Animale' && (
+              {/* Paleti - Preț per palet */}
+              {tipServiciu === 'Paleti' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                    Preț / palet ({selectedCountry?.name === 'Anglia' ? '£' : '€'})
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={pret}
+                      onChange={(e) => setPret(e.target.value)}
+                      step="0.5"
+                      min="0"
+                      placeholder="ex: 10"
+                      className="w-full px-4 py-3 bg-slate-800/50 border border-orange-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/50 transition-colors pr-12"
+                      required
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <BoxIcon className="w-5 h-5 text-orange-400" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Mobila - Preț per m³ */}
+              {tipServiciu === 'Mobila' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                    Preț / m³ ({selectedCountry?.name === 'Anglia' ? '£' : '€'})
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={pret}
+                      onChange={(e) => setPret(e.target.value)}
+                      step="0.5"
+                      min="0"
+                      placeholder="ex: 45"
+                      className="w-full px-4 py-3 bg-slate-800/50 border border-amber-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50 transition-colors pr-12"
+                      required
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <CubeIcon className="w-5 h-5 text-amber-400" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Submit Button - pentru toate serviciile EXCEPTÂND Animale și Platforma */}
+              {tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && (
                 <button
                   type="submit"
                   disabled={saving || !selectedCountry || !tipServiciu || 
                     (tipServiciu === 'Documente' && !pret) ||
-                    (tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && (!pret || !minUnit))}
-                  className="h-[46px] px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
+                    (tipServiciu === 'Paleti' && !pret) ||
+                    (tipServiciu === 'Mobila' && !pret) ||
+                    (tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && tipServiciu !== 'Paleti' && tipServiciu !== 'Mobila' && (!pret || !minUnit))}
+                  className="h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
                 >
                   {saving ? (
                     <>
@@ -1385,7 +1475,6 @@ export default function TarifePracticatePage() {
                             van: '🚐 Van',
                             camion: '🚛 Camion',
                             tractor: '🚜 Tractor',
-                            utilaj: '🏗️ Utilaj',
                           };
                           
                           // Currency based on country
@@ -1402,17 +1491,22 @@ export default function TarifePracticatePage() {
                                     <p className="text-white text-sm font-medium">
                                       {serviceInfo?.label || t.tipServiciu}
                                       {t.tipAnimal && <span className="ml-2 text-pink-400 text-xs">{animalLabels[t.tipAnimal]}</span>}
-                                      {t.tipVehicul && <span className="ml-2 text-sky-400 text-xs">{vehiculLabels[t.tipVehicul]}</span>}
+                                      {t.tipVehicul && t.tipVehicul.length > 0 && (
+                                        <span className="ml-2 text-sky-400 text-xs">
+                                          {t.tipVehicul.map(v => vehiculLabels[v]).join(', ')}
+                                        </span>
+                                      )}
                                     </p>
                                     <p className="text-xs text-gray-500 flex items-center gap-1">
-                                      min. {t.minUnit} {unitLabel}
+                                      {t.minUnit} {unitLabel}
                                       {t.unitType === 'm3' && <CubeIcon className="w-3 h-3 text-purple-400" />}
                                       {t.unitType === 'kg' && <WeightIcon className="w-3 h-3 text-emerald-400" />}
+                                      {t.unitType === 'nr' && <span className="text-orange-400 font-bold">#</span>}
                                     </p>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                  <span className={`font-bold ${t.unitType === 'm3' ? 'text-purple-400' : 'text-orange-400'}`}>
+                                  <span className={`font-bold ${t.unitType === 'm3' ? 'text-purple-400' : t.unitType === 'nr' ? 'text-orange-400' : 'text-emerald-400'}`}>
                                     {t.pret}{currencySymbol}/{unitLabel}
                                   </span>
                                   <button
