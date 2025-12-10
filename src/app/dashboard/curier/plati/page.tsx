@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ArrowLeftIcon, DownloadIcon } from '@/components/icons/DashboardIcons';
+import { ArrowLeftIcon, DownloadIcon, CreditCardIcon } from '@/components/icons/DashboardIcons';
 // Firebase imports ready for production use
 // import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 // import { db } from '@/lib/firebase';
@@ -135,70 +135,112 @@ export default function PlatiFacturiPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen p-3 sm:p-6 page-transition">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4 sm:mb-8">
-          <div>
-            <Link href="/dashboard/curier" className="text-gray-400 hover:text-white transition-colors mb-2 inline-flex items-center gap-2 text-sm">
-              <ArrowLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="hidden sm:inline">Înapoi la Dashboard</span>
-            </Link>
-            <h1 className="text-xl sm:text-3xl font-bold text-white">💳 Plăți & Facturi</h1>
-          </div>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-8">
-          <div className="stat-card">
-            <div className="stat-value text-base sm:text-xl text-green-400">{soldDisponibil} €</div>
-            <div className="stat-label">Sold disponibil</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value text-base sm:text-xl text-blue-400">{totalIncasari} €</div>
-            <div className="stat-label">Total încasări</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value text-base sm:text-xl text-orange-400">{totalRetrageri} €</div>
-            <div className="stat-label">Total retrageri</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-value text-base sm:text-xl text-yellow-400">{facturiNeplatite} €</div>
-            <div className="stat-label">Facturi neplătite</div>
-          </div>
-        </div>
-
-        {/* Action Button */}
-        <div className="card mb-4 sm:mb-6 p-3 sm:p-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 className="text-base sm:text-lg font-semibold text-white">Retrage fonduri</h2>
-              <p className="text-gray-400 text-xs sm:text-sm">Sold disponibil pentru retragere: <span className="text-green-400 font-medium">{soldDisponibil} €</span></p>
+    <div className="min-h-screen bg-slate-950">
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <Link 
+                href="/dashboard/curier" 
+                className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+              >
+                <ArrowLeftIcon className="w-5 h-5" />
+              </Link>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-emerald-500 to-green-600 flex items-center justify-center">
+                  <CreditCardIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-lg sm:text-xl font-bold text-white">Plăți & Facturi</h1>
+                  <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Gestionează încasările și facturile</p>
+                </div>
+              </div>
             </div>
-            <button className="btn-secondary">
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
+                <span className="text-sm">💰</span>
+              </div>
+              <span className="text-gray-400 text-xs sm:text-sm">Sold disponibil</span>
+            </div>
+            <p className="text-xl sm:text-2xl font-bold text-green-400">{soldDisponibil} €</p>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                <span className="text-sm">📥</span>
+              </div>
+              <span className="text-gray-400 text-xs sm:text-sm">Total încasări</span>
+            </div>
+            <p className="text-xl sm:text-2xl font-bold text-blue-400">{totalIncasari} €</p>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                <span className="text-sm">📤</span>
+              </div>
+              <span className="text-gray-400 text-xs sm:text-sm">Total retrageri</span>
+            </div>
+            <p className="text-xl sm:text-2xl font-bold text-orange-400">{totalRetrageri} €</p>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                <span className="text-sm">⏳</span>
+              </div>
+              <span className="text-gray-400 text-xs sm:text-sm">De încasat</span>
+            </div>
+            <p className="text-xl sm:text-2xl font-bold text-yellow-400">{facturiNeplatite} €</p>
+          </div>
+        </div>
+
+        {/* Withdraw Card */}
+        <div className="bg-linear-to-br from-emerald-500/10 to-green-500/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-emerald-500/20">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
+                <span className="text-xl sm:text-2xl">💸</span>
+              </div>
+              <div>
+                <h2 className="text-base sm:text-lg font-semibold text-white">Retrage fonduri</h2>
+                <p className="text-gray-400 text-xs sm:text-sm">
+                  Disponibil: <span className="text-emerald-400 font-medium">{soldDisponibil} €</span>
+                </p>
+              </div>
+            </div>
+            <button className="w-full sm:w-auto py-2.5 sm:py-3 px-4 sm:px-6 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl transition-colors text-sm sm:text-base">
               Solicită retragere
             </button>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1.5 sm:gap-2 mb-4 sm:mb-6">
+        <div className="flex gap-2 p-1 bg-slate-800/50 rounded-xl border border-white/5">
           <button
             onClick={() => setActiveTab('plati')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium text-sm sm:text-base transition-all ${
+            className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg font-medium text-sm transition-all ${
               activeTab === 'plati'
-                ? 'bg-green-500 text-white'
-                : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
+                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
+                : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
             💰 Plăți
           </button>
           <button
             onClick={() => setActiveTab('facturi')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium text-sm sm:text-base transition-all ${
+            className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg font-medium text-sm transition-all ${
               activeTab === 'facturi'
-                ? 'bg-orange-500 text-white'
-                : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
+                ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
+                : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
             📄 Facturi
@@ -207,52 +249,79 @@ export default function PlatiFacturiPage() {
 
         {/* Content */}
         {activeTab === 'plati' && (
-          <div className="card p-3 sm:p-4">
-            <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6">Istoric Plăți</h2>
+          <div className="bg-slate-800/30 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
+            <div className="p-4 sm:p-6 border-b border-white/5">
+              <h2 className="text-base sm:text-lg font-semibold text-white">Istoric Plăți</h2>
+            </div>
             
             {loadingData ? (
               <div className="flex justify-center py-12">
                 <div className="spinner"></div>
               </div>
             ) : payments.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
-                  <svg className="w-10 h-10 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="8" cy="8" r="6" />
-                    <path d="M18.09 10.37A6 6 0 1 1 10.34 18" />
-                    <path d="M7 6h1v4" />
-                    <path d="m16.71 13.88.7.71-2.82 2.82" />
-                  </svg>
+              <div className="text-center py-12 px-4">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
+                  <span className="text-3xl sm:text-4xl">💳</span>
                 </div>
-                <p className="text-gray-400">Nu ai nicio plată înregistrată.</p>
+                <p className="text-gray-400 text-sm sm:text-base">Nu ai nicio plată înregistrată.</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="divide-y divide-white/5">
                 {payments.map((payment) => (
                   <div 
                     key={payment.id} 
-                    className="bg-slate-800/50 rounded-xl p-4 border border-slate-700 flex items-center justify-between"
+                    className="p-3 sm:p-4 hover:bg-white/5 transition-colors"
                   >
-                    <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                        payment.tip === 'incasare' ? 'bg-green-500/20' : 'bg-orange-500/20'
-                      }`}>
-                        <span className="text-2xl">{payment.tip === 'incasare' ? '📥' : '📤'}</span>
+                    {/* Mobile Layout */}
+                    <div className="sm:hidden">
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
+                            payment.tip === 'incasare' ? 'bg-green-500/20' : 'bg-orange-500/20'
+                          }`}>
+                            <span className="text-lg">{payment.tip === 'incasare' ? '📥' : '📤'}</span>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-white font-medium text-sm truncate">{payment.descriere}</p>
+                            <p className="text-gray-500 text-xs">{payment.data}</p>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-white font-medium">{payment.descriere}</p>
-                        <p className="text-gray-500 text-sm">{payment.data}</p>
+                      <div className="flex items-center justify-between pl-13">
+                        <span className={`px-2 py-0.5 rounded-full text-xs ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
+                          {paymentStatusLabels[payment.status].label}
+                        </span>
+                        <p className={`text-lg font-bold ${
+                          payment.tip === 'incasare' ? 'text-green-400' : 'text-orange-400'
+                        }`}>
+                          {payment.tip === 'incasare' ? '+' : '-'}{payment.suma} €
+                        </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className={`text-xl font-bold ${
-                        payment.tip === 'incasare' ? 'text-green-400' : 'text-orange-400'
-                      }`}>
-                        {payment.tip === 'incasare' ? '+' : '-'}{payment.suma} €
-                      </p>
-                      <span className={`px-2 py-1 rounded-full text-xs ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
-                        {paymentStatusLabels[payment.status].label}
-                      </span>
+
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
+                          payment.tip === 'incasare' ? 'bg-green-500/20' : 'bg-orange-500/20'
+                        }`}>
+                          <span className="text-2xl">{payment.tip === 'incasare' ? '📥' : '📤'}</span>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-white font-medium truncate">{payment.descriere}</p>
+                          <p className="text-gray-500 text-sm">{payment.data}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 shrink-0">
+                        <span className={`px-3 py-1 rounded-full text-xs ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
+                          {paymentStatusLabels[payment.status].label}
+                        </span>
+                        <p className={`text-xl font-bold min-w-[80px] text-right ${
+                          payment.tip === 'incasare' ? 'text-green-400' : 'text-orange-400'
+                        }`}>
+                          {payment.tip === 'incasare' ? '+' : '-'}{payment.suma} €
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -262,73 +331,104 @@ export default function PlatiFacturiPage() {
         )}
 
         {activeTab === 'facturi' && (
-          <div className="card">
-            <h2 className="text-xl font-semibold text-white mb-6">Facturi Emise</h2>
+          <div className="bg-slate-800/30 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
+            <div className="p-4 sm:p-6 border-b border-white/5">
+              <h2 className="text-base sm:text-lg font-semibold text-white">Facturi Emise</h2>
+            </div>
             
             {loadingData ? (
               <div className="flex justify-center py-12">
                 <div className="spinner"></div>
               </div>
             ) : invoices.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="text-6xl mb-4">📄</div>
-                <p className="text-gray-400">Nu ai nicio factură.</p>
+              <div className="text-center py-12 px-4">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
+                  <span className="text-3xl sm:text-4xl">📄</span>
+                </div>
+                <p className="text-gray-400 text-sm sm:text-base">Nu ai nicio factură.</p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-slate-700">
-                      <th className="text-left py-3 px-4 text-gray-400 font-medium">Nr. Factură</th>
-                      <th className="text-left py-3 px-4 text-gray-400 font-medium">Data</th>
-                      <th className="text-left py-3 px-4 text-gray-400 font-medium">Suma</th>
-                      <th className="text-left py-3 px-4 text-gray-400 font-medium">Status</th>
-                      <th className="text-right py-3 px-4 text-gray-400 font-medium">Acțiuni</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {invoices.map((invoice) => (
-                      <tr key={invoice.id} className="border-b border-slate-700/50 hover:bg-slate-800/50">
-                        <td className="py-4 px-4">
-                          <span className="text-white font-medium">{invoice.numar}</span>
-                        </td>
-                        <td className="py-4 px-4 text-gray-400">{invoice.data}</td>
-                        <td className="py-4 px-4">
-                          <span className="text-green-400 font-medium">{invoice.suma} €</span>
-                        </td>
-                        <td className="py-4 px-4">
-                          <span className={`px-3 py-1 rounded-full text-sm ${invoiceStatusLabels[invoice.status].bg} ${invoiceStatusLabels[invoice.status].color}`}>
-                            {invoiceStatusLabels[invoice.status].label}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4 text-right">
-                          <button className="text-orange-400 hover:text-orange-300 transition-colors inline-flex items-center gap-1">
-                            <DownloadIcon className="w-4 h-4" />
-                            Descarcă PDF
-                          </button>
-                        </td>
+              <>
+                {/* Mobile Cards */}
+                <div className="sm:hidden divide-y divide-white/5">
+                  {invoices.map((invoice) => (
+                    <div key={invoice.id} className="p-3">
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div>
+                          <p className="text-white font-medium text-sm">{invoice.numar}</p>
+                          <p className="text-gray-500 text-xs">{invoice.data}</p>
+                        </div>
+                        <span className={`px-2 py-0.5 rounded-full text-xs shrink-0 ${invoiceStatusLabels[invoice.status].bg} ${invoiceStatusLabels[invoice.status].color}`}>
+                          {invoiceStatusLabels[invoice.status].label}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <p className="text-green-400 font-bold">{invoice.suma} €</p>
+                        <button className="text-orange-400 hover:text-orange-300 transition-colors inline-flex items-center gap-1 text-xs">
+                          <DownloadIcon className="w-3.5 h-3.5" />
+                          PDF
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Desktop Table */}
+                <div className="hidden sm:block overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-white/5">
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Nr. Factură</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Data</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Suma</th>
+                        <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Status</th>
+                        <th className="text-right py-3 px-4 text-gray-400 font-medium text-sm">Acțiuni</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {invoices.map((invoice) => (
+                        <tr key={invoice.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                          <td className="py-4 px-4">
+                            <span className="text-white font-medium">{invoice.numar}</span>
+                          </td>
+                          <td className="py-4 px-4 text-gray-400">{invoice.data}</td>
+                          <td className="py-4 px-4">
+                            <span className="text-green-400 font-medium">{invoice.suma} €</span>
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className={`px-3 py-1 rounded-full text-xs ${invoiceStatusLabels[invoice.status].bg} ${invoiceStatusLabels[invoice.status].color}`}>
+                              {invoiceStatusLabels[invoice.status].label}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-right">
+                            <button className="text-orange-400 hover:text-orange-300 transition-colors inline-flex items-center gap-1 text-sm">
+                              <DownloadIcon className="w-4 h-4" />
+                              Descarcă PDF
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
           </div>
         )}
 
         {/* Info Box */}
-        <div className="card mt-6 bg-slate-800/30">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0">
-              <span className="text-2xl">ℹ️</span>
+        <div className="bg-linear-to-br from-blue-500/10 to-cyan-500/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-blue-500/20">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0">
+              <span className="text-xl sm:text-2xl">ℹ️</span>
             </div>
             <div>
-              <h3 className="font-medium text-white mb-2">Informații despre plăți</h3>
-              <ul className="text-gray-400 text-sm space-y-1">
-                <li>• Retragerile sunt procesate în termen de 1-3 zile lucrătoare</li>
-                <li>• Suma minimă pentru retragere este de 50 €</li>
-                <li>• Facturile sunt generate automat la fiecare final de lună</li>
-                <li>• Pentru întrebări contactează suportul la support@curierulperfect.ro</li>
+              <h3 className="font-semibold text-white mb-2 text-sm sm:text-base">Informații despre plăți</h3>
+              <ul className="text-gray-400 text-xs sm:text-sm space-y-1">
+                <li>• Retragerile sunt procesate în 1-3 zile lucrătoare</li>
+                <li>• Suma minimă pentru retragere: <span className="text-white">50 €</span></li>
+                <li>• Facturile sunt generate automat lunar</li>
+                <li className="hidden sm:block">• Pentru întrebări: <span className="text-blue-400">support@curierulperfect.ro</span></li>
               </ul>
             </div>
           </div>

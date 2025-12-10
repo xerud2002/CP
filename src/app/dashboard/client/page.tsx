@@ -119,6 +119,14 @@ const statsData: StatItem[] = [
   { icon: CreditCardIcon, label: 'Economisit', value: '45€', trend: 'vs prețuri standard', trendUp: true, color: 'text-green-400', bgColor: 'bg-green-500/20' },
 ];
 
+// Helper function for greeting based on time of day
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Bună dimineața';
+  if (hour < 18) return 'Bună ziua';
+  return 'Bună seara';
+}
+
 const recentActivities: ActivityItem[] = [
   { type: 'delivery', message: 'Colet #CP1234 a fost livrat cu succes', time: 'Acum 2 ore', color: 'bg-emerald-500' },
   { type: 'transit', message: 'Colet #CP1235 a ajuns în Germania', time: 'Acum 5 ore', color: 'bg-blue-500' },
@@ -702,7 +710,7 @@ export default function ClientDashboard() {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                    Bună, <span className="text-gradient">{nume || 'Client'}</span>! 👋
+                    {getGreeting()}, <span className="text-gradient">{nume ? nume.split(' ')[0] : 'Client'}</span>! 👋
                   </h1>
                   <p className="text-gray-400">Trimite colete în toată Europa cu curieri verificați.</p>
                 </div>

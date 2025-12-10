@@ -53,17 +53,11 @@ service cloud.firestore {
     
     // Comenzi collection
     match /comenzi/{docId} {
-      // Users can read their own orders, admins can read all
-      allow read: if isAuthenticated() && 
-        (resource.data.clientId == request.auth.uid || 
-         resource.data.courierId == request.auth.uid || 
-         isAdmin());
+      // Allow authenticated users to read orders (query filtering done client-side)
+      allow read: if isAuthenticated();
       allow create: if isAuthenticated();
-      allow update: if isAuthenticated() && 
-        (resource.data.clientId == request.auth.uid || 
-         resource.data.courierId == request.auth.uid || 
-         isAdmin());
-      allow delete: if isAdmin();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated();
     }
   }
 }

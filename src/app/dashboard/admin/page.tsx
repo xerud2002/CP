@@ -725,7 +725,18 @@ export default function AdminDashboard() {
 
   if (!user || user.role !== 'admin') return null;
 
-  const userName = user.displayName || user.email?.split('@')[0] || 'Admin';
+  // Extract first name from displayName, fallback to email prefix or 'Admin'
+  const getFirstName = () => {
+    if (user.displayName) {
+      const firstName = user.displayName.split(' ')[0];
+      return firstName || 'Admin';
+    }
+    if (user.email) {
+      return user.email.split('@')[0];
+    }
+    return 'Admin';
+  };
+  const userName = getFirstName();
 
   return (
     <div className="min-h-screen bg-slate-950">
