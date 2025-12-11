@@ -420,7 +420,7 @@ export default function ComenziCurierPage() {
         </div>
 
         {/* Filters - Improved pill design */}
-        <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6">
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6 relative z-50">
           {/* Status filters */}
           <div className="flex gap-1.5 sm:gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
             <button
@@ -471,10 +471,10 @@ export default function ComenziCurierPage() {
           
           {/* Advanced filters panel */}
           {showAdvancedFilters && (
-            <div className="pt-3 border-t border-white/5 relative z-30">
+            <div className="pt-3 border-t border-white/5 relative z-[60]">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {/* Country filter with flags */}
-                <div ref={countryDropdownRef} className="relative z-40">
+                <div ref={countryDropdownRef} className="relative z-[70]">
                   <label className="block text-xs text-gray-400 mb-1.5">Țară</label>
                   <div className="relative">
                     <button
@@ -509,7 +509,7 @@ export default function ComenziCurierPage() {
                     </button>
                     
                     {isCountryDropdownOpen && (
-                      <div className="absolute z-[100] w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                      <div className="absolute z-[200] w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
                         <div className="p-2 border-b border-white/10">
                           <input
                             type="text"
@@ -577,7 +577,7 @@ export default function ComenziCurierPage() {
                 </div>
                 
                 {/* Service filter with icons */}
-                <div ref={serviceDropdownRef} className="relative z-40">
+                <div ref={serviceDropdownRef} className="relative z-[70]">
                   <label className="block text-xs text-gray-400 mb-1.5">Tip serviciu</label>
                   <div className="relative">
                     <button
@@ -606,7 +606,7 @@ export default function ComenziCurierPage() {
                     </button>
                     
                     {isServiceDropdownOpen && (
-                      <div className="absolute z-[100] w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                      <div className="absolute z-[200] w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
                         <div className="max-h-72 overflow-y-auto">
                           <button
                             type="button"
@@ -686,7 +686,7 @@ export default function ComenziCurierPage() {
         </div>
 
         {/* Orders List - Improved */}
-        <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden relative z-10">
           {/* Header */}
           <div className="bg-slate-800/50 px-4 sm:px-6 py-3 sm:py-4 border-b border-white/5">
             <div className="flex items-center justify-between">

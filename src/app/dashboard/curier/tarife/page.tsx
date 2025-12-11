@@ -14,7 +14,8 @@ interface Tarif {
   tara: string;
   taraCode: string;
   tipServiciu: string;
-  pret: number;
+  pretMin: number;
+  pretMax: number;
   minUnit: number;
   unitType: 'kg' | 'm3' | 'nr' | 'plic';
   // Colete sub-options
@@ -328,8 +329,8 @@ export default function TarifePracticatePage() {
   // Form state
   const [selectedCountry, setSelectedCountry] = useState<{ name: string; code: string } | null>(null);
   const [tipServiciu, setTipServiciu] = useState('');
-  const [pret, setPret] = useState('');
-  const [minUnit, setMinUnit] = useState('');
+  const [pretMin, setPretMin] = useState('');
+  const [pretMax, setPretMax] = useState('');
   const [unitType, setUnitType] = useState<'kg' | 'm3' | 'nr'>('kg');
   
   // Colete sub-options state
@@ -425,9 +426,12 @@ export default function TarifePracticatePage() {
             tara: data.tara,
             taraCode: data.taraCode || countriesWithCodes.find(c => c.name === data.tara)?.code || 'eu',
             tipServiciu: data.tipServiciu,
-            pret: data.pret ?? data.pretKg ?? 0,
+            pretMin: data.pretMin ?? data.pret ?? data.pretKg ?? 0,
+            pretMax: data.pretMax ?? data.pret ?? data.pretKg ?? 0,
             minUnit: data.minUnit ?? data.minKg ?? 0,
             unitType: data.unitType || 'kg',
+            // Colete options
+            coleteOptions: data.coleteOptions,
             // Animale fields
             tipAnimal: data.tipAnimal,
             pretAnimal: data.pretAnimal,
@@ -457,14 +461,12 @@ export default function TarifePracticatePage() {
     // Different validation for Animale/Platforma vs other services
     const isAnimalOrPlatform = tipServiciu === 'Animale' || tipServiciu === 'Platforma';
     const isSimplePriceService = tipServiciu === 'Plicuri' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila';
-    const isM3Selected = unitType === 'm3';
     
     if (!selectedCountry || !tipServiciu || !user) return;
     if (tipServiciu === 'Animale' && !pretAnimal) return;
-    if (isSimplePriceService && !pret) return;
-    // Pentru m³ nu cerem minUnit
-    if (!isAnimalOrPlatform && !isSimplePriceService && !isM3Selected && (!pret || !minUnit)) return;
-    if (!isAnimalOrPlatform && !isSimplePriceService && isM3Selected && !pret) return;
+    if (isSimplePriceService && (!pretMin || !pretMax)) return;
+    // Pentru toate celelalte servicii (inclusiv Colete), cerem pretMin și pretMax
+    if (!isAnimalOrPlatform && !isSimplePriceService && (!pretMin || !pretMax)) return;
 
     // For Animale service, check combination with tipAnimal
     const existsForAnimale = tipServiciu === 'Animale' 
@@ -496,15 +498,15 @@ export default function TarifePracticatePage() {
 
     setSaving(true);
     try {
-      // Build document data
-      const noMinUnit = isAnimalOrPlatform || isSimplePriceService || isM3Selected;
+      // Build document data - minUnit is always 0 now (field removed from UI)
       const docData: Record<string, unknown> = {
         uid: user.uid,
         tara: selectedCountry.name,
         taraCode: selectedCountry.code,
         tipServiciu,
-        pret: isAnimalOrPlatform ? 0 : parseFloat(pret),
-        minUnit: noMinUnit ? 0 : parseInt(minUnit),
+        pretMin: isAnimalOrPlatform ? 0 : parseFloat(pretMin),
+        pretMax: isAnimalOrPlatform ? 0 : parseFloat(pretMax),
+        minUnit: 0,
         unitType: isSimplePriceService ? (tipServiciu === 'Mobila' ? 'm3' : tipServiciu === 'Paleti' ? 'nr' : 'plic') : unitType,
         addedAt: serverTimestamp(),
       };
@@ -536,8 +538,9 @@ export default function TarifePracticatePage() {
         tara: selectedCountry.name,
         taraCode: selectedCountry.code,
         tipServiciu,
-        pret: isAnimalOrPlatform ? 0 : parseFloat(pret),
-        minUnit: noMinUnit ? 0 : parseInt(minUnit),
+        pretMin: isAnimalOrPlatform ? 0 : parseFloat(pretMin),
+        pretMax: isAnimalOrPlatform ? 0 : parseFloat(pretMax),
+        minUnit: 0,
         unitType: isSimplePriceService ? (tipServiciu === 'Mobila' ? 'm3' : tipServiciu === 'Paleti' ? 'nr' : 'plic') : unitType,
       };
       
@@ -560,11 +563,11 @@ export default function TarifePracticatePage() {
 
       setTarife([newTarif, ...tarife]);
 
-      // Reset form
-      setSelectedCountry(null);
+      // Reset form - păstrăm țara selectată pentru adăugare rapidă
+      // setSelectedCountry(null); // Nu resetăm țara
       setTipServiciu('');
-      setPret('');
-      setMinUnit('');
+      setPretMin('');
+      setPretMax('');
       setUnitType('kg');
       // Reset Colete options
       setColeteOptions({ standard: false, express: false, frigo: false, fragil: false, door2door: false, asigurare: false });
@@ -712,7 +715,7 @@ export default function TarifePracticatePage() {
                 ? 'lg:grid-cols-[1fr_1fr_0.8fr_auto]'
                 : tipServiciu === 'Platforma'
                   ? 'lg:grid-cols-[1fr_1fr_auto]'
-                  : 'lg:grid-cols-[1fr_1fr_0.9fr_auto]'
+                  : 'lg:grid-cols-[1fr_1fr_1.5fr_auto]'
             }`}>
               {/* Country Dropdown */}
               <div ref={countryDropdownRef}>
@@ -1205,79 +1208,86 @@ export default function TarifePracticatePage() {
                     <label className="block text-sm font-medium text-gray-400 mb-2">
                       Preț / {unitLabel} ({currencySymbol})
                     </label>
-                    <div className="flex h-[46px]">
+                    <div className="flex gap-2 h-[46px]">
                       {/* Show kg/m³ toggle only for services that support both */}
-                      {showKgM3Toggle ? (
-                        <>
-                          <div className="flex bg-slate-800/50 border border-white/10 rounded-l-xl">
-                            <button
-                              type="button"
-                              onClick={() => setUnitType('kg')}
-                              className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 rounded-l-xl ${
-                                unitType === 'kg'
-                                  ? 'bg-emerald-500/20 text-emerald-400 border-r border-emerald-500/30'
-                                  : 'text-gray-400 hover:text-white hover:bg-slate-700/50 border-r border-white/10'
-                              }`}
-                            >
-                              <WeightIcon className="w-4 h-4" />
-                              <span className="font-medium text-sm">kg</span>
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => setUnitType('m3')}
-                              className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 ${
-                                unitType === 'm3'
-                                  ? 'bg-purple-500/20 text-purple-400'
-                                  : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
-                              }`}
-                            >
-                              <CubeIcon className="w-4 h-4" />
-                              <span className="font-medium text-sm">m³</span>
-                            </button>
-                          </div>
-                          <div className="relative flex-1">
-                            <input
-                              type="number"
-                              value={pret}
-                              onChange={(e) => setPret(e.target.value)}
-                              step="0.1"
-                              min="0"
-                              placeholder={unitType === 'kg' ? '2.5' : '45'}
-                              className="w-full h-full px-3 bg-slate-800/50 border border-l-0 border-white/10 rounded-r-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors pr-10"
-                              required
-                            />
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                              <span className={`text-sm font-medium ${unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400'}`}>
-                                {currencySymbol}
-                              </span>
-                            </div>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          {/* Fixed unit badge */}
-                          <div className={`flex items-center justify-center gap-1.5 px-4 ${unitStyle.bg} border border-white/10 rounded-l-xl ${unitStyle.color}`}>
-                            <span className="font-medium text-sm">{unitLabel}</span>
-                          </div>
-                          <div className="relative flex-1">
-                            <input
-                              type="number"
-                              value={pret}
-                              onChange={(e) => setPret(e.target.value)}
-                              step="0.1"
-                              min="0"
-                              placeholder="ex: 25"
-                              className="w-full h-full px-3 bg-slate-800/50 border border-l-0 border-white/10 rounded-r-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors pr-10"
-                              required
-                            />
-                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                              <span className={`text-sm font-medium ${unitStyle.color}`}>
-                                {currencySymbol}
-                              </span>
-                            </div>
-                          </div>
-                        </>
+                      {showKgM3Toggle && (
+                        <div className="flex bg-slate-800/50 border border-white/10 rounded-xl">
+                          <button
+                            type="button"
+                            onClick={() => setUnitType('kg')}
+                            className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 rounded-l-xl ${
+                              unitType === 'kg'
+                                ? 'bg-emerald-500/20 text-emerald-400 border-r border-emerald-500/30'
+                                : 'text-gray-400 hover:text-white hover:bg-slate-700/50 border-r border-white/10'
+                            }`}
+                          >
+                            <WeightIcon className="w-4 h-4" />
+                            <span className="font-medium text-sm">kg</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setUnitType('m3')}
+                            className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 rounded-r-xl ${
+                              unitType === 'm3'
+                                ? 'bg-purple-500/20 text-purple-400'
+                                : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                            }`}
+                          >
+                            <CubeIcon className="w-4 h-4" />
+                            <span className="font-medium text-sm">m³</span>
+                          </button>
+                        </div>
                       )}
+                      {/* Fixed unit badge for non-toggle services */}
+                      {!showKgM3Toggle && (
+                        <div className={`flex items-center justify-center gap-1.5 px-4 ${unitStyle.bg} border border-white/10 rounded-xl ${unitStyle.color}`}>
+                          <span className="font-medium text-sm">{unitLabel}</span>
+                        </div>
+                      )}
+                      {/* Min price input */}
+                      <div className="relative flex-1">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                          <span className="text-xs text-gray-500">Min</span>
+                        </div>
+                        <input
+                          type="number"
+                          value={pretMin}
+                          onChange={(e) => setPretMin(e.target.value)}
+                          step="0.1"
+                          min="0"
+                          placeholder="1"
+                          className="w-full h-full pl-10 pr-8 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
+                          required
+                        />
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          <span className={`text-sm font-medium ${showKgM3Toggle ? (unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400') : unitStyle.color}`}>
+                            {currencySymbol}
+                          </span>
+                        </div>
+                      </div>
+                      {/* Separator */}
+                      <div className="flex items-center text-gray-500">-</div>
+                      {/* Max price input */}
+                      <div className="relative flex-1">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                          <span className="text-xs text-gray-500">Max</span>
+                        </div>
+                        <input
+                          type="number"
+                          value={pretMax}
+                          onChange={(e) => setPretMax(e.target.value)}
+                          step="0.1"
+                          min="0"
+                          placeholder="10"
+                          className="w-full h-full pl-10 pr-8 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
+                          required
+                        />
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          <span className={`text-sm font-medium ${showKgM3Toggle ? (unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400') : unitStyle.color}`}>
+                            {currencySymbol}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 );
@@ -1288,7 +1298,7 @@ export default function TarifePracticatePage() {
                 return (
                   <button
                     type="submit"
-                    disabled={saving || !selectedCountry || !tipServiciu || !pret}
+                    disabled={saving || !selectedCountry || !tipServiciu || !pretMin || !pretMax}
                     className="h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
                   >
                   {saving ? (
@@ -1561,7 +1571,10 @@ export default function TarifePracticatePage() {
                                   {/* Preț pentru alte servicii (nu Animale, nu Platforma) */}
                                   {t.tipServiciu !== 'Animale' && t.tipServiciu !== 'Platforma' && (
                                     <span className={`font-bold ${t.unitType === 'm3' ? 'text-purple-400' : t.unitType === 'nr' ? 'text-orange-400' : 'text-emerald-400'}`}>
-                                      {t.pret}{currencySymbol}/{unitLabel}
+                                      {t.pretMin === t.pretMax 
+                                        ? `${t.pretMin}${currencySymbol}/${unitLabel}`
+                                        : `${t.pretMin}-${t.pretMax}${currencySymbol}/${unitLabel}`
+                                      }
                                     </span>
                                   )}
                                   <button
