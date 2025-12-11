@@ -97,18 +97,10 @@ const mockInvoices: Invoice[] = [
 export default function PlatiFacturiPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [payments, setPayments] = useState<Payment[]>(mockPayments);
+  const [payments] = useState<Payment[]>(mockPayments);
   const [invoices] = useState<Invoice[]>(mockInvoices);
   const [loadingData] = useState(false);
   const [activeTab, setActiveTab] = useState<'plati' | 'facturi'>('plati');
-  
-  // Modal state
-  const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState<'retragere' | 'depunere'>('retragere');
-  const [amount, setAmount] = useState('');
-  const [iban, setIban] = useState('');
-  const [processingTransaction, setProcessingTransaction] = useState(false);
-  const [transactionSuccess, setTransactionSuccess] = useState(false);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -128,58 +120,10 @@ export default function PlatiFacturiPage() {
   const soldDisponibil = totalIncasari - totalRetrageri;
 
   // const totalFacturi = invoices.reduce((sum, f) => sum + f.suma, 0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const facturiNeplatite = invoices
     .filter(f => f.status === 'neplatita')
     .reduce((sum, f) => sum + f.suma, 0);
-
-  // Open modal functions
-  const openRetragere = () => {
-    setModalType('retragere');
-    setAmount('');
-    setIban('');
-    setTransactionSuccess(false);
-    setShowModal(true);
-  };
-
-  const openDepunere = () => {
-    setModalType('depunere');
-    setAmount('');
-    setTransactionSuccess(false);
-    setShowModal(true);
-  };
-
-  const handleTransaction = async () => {
-    if (!amount || parseFloat(amount) <= 0) return;
-    if (modalType === 'retragere' && parseFloat(amount) > soldDisponibil) return;
-    if (modalType === 'retragere' && parseFloat(amount) < 50) return;
-    if (modalType === 'retragere' && !iban) return;
-    
-    setProcessingTransaction(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const newPayment: Payment = {
-      id: String(Date.now()),
-      tip: modalType === 'retragere' ? 'retragere' : 'incasare',
-      suma: parseFloat(amount),
-      status: 'pending',
-      data: new Date().toLocaleDateString('ro-RO'),
-      descriere: modalType === 'retragere' 
-        ? `Retragere în cont ${iban.slice(-4)}`
-        : 'Depunere manuală în cont',
-    };
-    
-    setPayments(prev => [newPayment, ...prev]);
-    setProcessingTransaction(false);
-    setTransactionSuccess(true);
-    
-    // Close modal after showing success
-    setTimeout(() => {
-      setShowModal(false);
-      setTransactionSuccess(false);
-    }, 2000);
-  };
 
   if (loading) {
     return (
@@ -252,28 +196,19 @@ export default function PlatiFacturiPage() {
                   </div>
                 </div>
                 
-                <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-                  <button 
-                    onClick={openRetragere}
-                    className="flex-1 lg:flex-none py-3.5 sm:py-4 px-6 sm:px-8 bg-linear-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold rounded-xl transition-all shadow-xl shadow-emerald-500/30 hover:shadow-emerald-500/50 active:scale-[0.98] flex items-center justify-center gap-2.5 text-sm sm:text-base"
-                  >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M17 1l4 4-4 4" />
-                      <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                      <path d="M7 23l-4-4 4-4" />
-                      <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-                    </svg>
-                    Retragere
-                  </button>
-                  <button 
-                    onClick={openDepunere}
-                    className="flex-1 lg:flex-none py-3.5 sm:py-4 px-6 sm:px-8 bg-slate-700/80 hover:bg-slate-600/80 text-white font-semibold rounded-xl transition-all border border-white/10 hover:border-white/20 active:scale-[0.98] flex items-center justify-center gap-2.5 text-sm sm:text-base"
-                  >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                    </svg>
-                    Depunere
-                  </button>
+                {/* Free Platform Badge */}
+                <div className="flex flex-col items-center lg:items-end gap-2">
+                  <div className="px-4 sm:px-5 py-2.5 sm:py-3 bg-linear-to-r from-emerald-500/20 to-green-500/10 rounded-xl border border-emerald-500/30 flex items-center gap-3">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-emerald-500/30 flex items-center justify-center">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-emerald-400 font-semibold text-sm sm:text-base">Platformă Gratuită</p>
+                      <p className="text-gray-400 text-xs">0% comision pentru curieri</p>
+                    </div>
+                  </div>
                 </div>
               </div>
               
@@ -617,18 +552,18 @@ export default function PlatiFacturiPage() {
             <span className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
                 <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <span>Retrageri: <span className="text-gray-400">1-3 zile</span></span>
+              <span>Fără comisioane - <span className="text-emerald-400">100% câștiguri</span></span>
             </span>
             <span className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
                 <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <span>Min. retragere: <span className="text-gray-400">50 €</span></span>
+              <span>Plăți directe de la <span className="text-blue-400">clienți</span></span>
             </span>
             <a href="mailto:support@curierulperfect.ro" className="flex items-center gap-2 text-blue-400/80 hover:text-blue-400 transition-colors">
               <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
@@ -641,209 +576,6 @@ export default function PlatiFacturiPage() {
           </div>
         </div>
       </div>
-
-      {/* Transaction Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <div 
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-            onClick={() => !processingTransaction && setShowModal(false)}
-          ></div>
-          
-          {/* Modal Content */}
-          <div className="relative bg-slate-900 rounded-2xl sm:rounded-3xl w-full max-w-md border border-white/10 shadow-2xl overflow-hidden">
-            {/* Header */}
-            <div className={`p-5 sm:p-6 border-b border-white/10 ${
-              modalType === 'retragere' 
-                ? 'bg-linear-to-r from-emerald-500/10 to-green-500/5' 
-                : 'bg-linear-to-r from-blue-500/10 to-cyan-500/5'
-            }`}>
-              <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${
-                  modalType === 'retragere' 
-                    ? 'bg-emerald-500/20' 
-                    : 'bg-blue-500/20'
-                }`}>
-                  {modalType === 'retragere' ? (
-                    <svg className="w-7 h-7 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M17 1l4 4-4 4" />
-                      <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                      <path d="M7 23l-4-4 4-4" />
-                      <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-                    </svg>
-                  ) : (
-                    <svg className="w-7 h-7 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                    </svg>
-                  )}
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-white">
-                    {modalType === 'retragere' ? 'Solicită retragere' : 'Depune fonduri'}
-                  </h2>
-                  <p className="text-gray-400 text-sm">
-                    {modalType === 'retragere' 
-                      ? `Sold disponibil: ${soldDisponibil} €` 
-                      : 'Adaugă fonduri în cont'}
-                  </p>
-                </div>
-              </div>
-              
-              {/* Close button */}
-              <button 
-                onClick={() => !processingTransaction && setShowModal(false)}
-                className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-xl transition-colors"
-              >
-                <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            
-            {/* Body */}
-            <div className="p-5 sm:p-6 space-y-5">
-              {transactionSuccess ? (
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                    <svg className="w-10 h-10 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2">
-                    {modalType === 'retragere' ? 'Retragere înregistrată!' : 'Depunere înregistrată!'}
-                  </h3>
-                  <p className="text-gray-400">
-                    {modalType === 'retragere' 
-                      ? 'Vei primi fondurile în 1-3 zile lucrătoare.' 
-                      : 'Fondurile vor fi disponibile în curând.'}
-                  </p>
-                </div>
-              ) : (
-                <>
-                  {/* Amount Input */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Sumă ({modalType === 'retragere' ? 'min. 50 €' : 'EUR'})
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="number"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        placeholder="0.00"
-                        min={modalType === 'retragere' ? 50 : 1}
-                        max={modalType === 'retragere' ? soldDisponibil : undefined}
-                        className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-4 py-3.5 text-white text-lg font-semibold placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 transition-all"
-                      />
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-400 font-semibold">€</span>
-                    </div>
-                    {modalType === 'retragere' && amount && parseFloat(amount) > soldDisponibil && (
-                      <p className="text-red-400 text-xs mt-2">Suma depășește soldul disponibil</p>
-                    )}
-                    {modalType === 'retragere' && amount && parseFloat(amount) < 50 && parseFloat(amount) > 0 && (
-                      <p className="text-yellow-400 text-xs mt-2">Suma minimă pentru retragere este 50 €</p>
-                    )}
-                  </div>
-                  
-                  {/* Quick Amount Buttons */}
-                  <div className="flex gap-2">
-                    {(modalType === 'retragere' 
-                      ? [50, 100, 200, soldDisponibil].filter(v => v <= soldDisponibil)
-                      : [50, 100, 200, 500]
-                    ).map((quickAmount) => (
-                      <button
-                        key={quickAmount}
-                        onClick={() => setAmount(String(quickAmount))}
-                        className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
-                          amount === String(quickAmount)
-                            ? 'bg-emerald-500/30 text-emerald-400 border border-emerald-500/50'
-                            : 'bg-slate-800/60 text-gray-400 border border-white/5 hover:border-white/20'
-                        }`}
-                      >
-                        {quickAmount === soldDisponibil && modalType === 'retragere' ? 'Tot' : `${quickAmount}€`}
-                      </button>
-                    ))}
-                  </div>
-                  
-                  {/* IBAN Input (only for withdrawal) */}
-                  {modalType === 'retragere' && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        IBAN cont bancar
-                      </label>
-                      <input
-                        type="text"
-                        value={iban}
-                        onChange={(e) => setIban(e.target.value.toUpperCase())}
-                        placeholder="RO49 AAAA 1B31 0075 9384 0000"
-                        className="w-full bg-slate-800/80 border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 transition-all font-mono text-sm"
-                      />
-                    </div>
-                  )}
-                  
-                  {/* Info Box */}
-                  <div className={`p-4 rounded-xl ${
-                    modalType === 'retragere' 
-                      ? 'bg-emerald-500/10 border border-emerald-500/20' 
-                      : 'bg-blue-500/10 border border-blue-500/20'
-                  }`}>
-                    <div className="flex items-start gap-3">
-                      <svg className={`w-5 h-5 mt-0.5 ${modalType === 'retragere' ? 'text-emerald-400' : 'text-blue-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <p className="text-sm text-gray-300">
-                        {modalType === 'retragere' 
-                          ? 'Retragerile sunt procesate în 1-3 zile lucrătoare. Nu se percep comisioane.' 
-                          : 'Depunerile sunt procesate instant. Poți folosi card sau transfer bancar.'}
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-            
-            {/* Footer */}
-            {!transactionSuccess && (
-              <div className="p-5 sm:p-6 pt-0">
-                <button
-                  onClick={handleTransaction}
-                  disabled={
-                    processingTransaction || 
-                    !amount || 
-                    parseFloat(amount) <= 0 ||
-                    (modalType === 'retragere' && parseFloat(amount) > soldDisponibil) ||
-                    (modalType === 'retragere' && parseFloat(amount) < 50) ||
-                    (modalType === 'retragere' && !iban)
-                  }
-                  className={`w-full py-4 rounded-xl font-semibold text-white transition-all flex items-center justify-center gap-2 ${
-                    processingTransaction || !amount || parseFloat(amount) <= 0 ||
-                    (modalType === 'retragere' && parseFloat(amount) > soldDisponibil) ||
-                    (modalType === 'retragere' && parseFloat(amount) < 50) ||
-                    (modalType === 'retragere' && !iban)
-                      ? 'bg-slate-700/50 cursor-not-allowed'
-                      : modalType === 'retragere'
-                        ? 'bg-linear-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 shadow-lg shadow-emerald-500/30'
-                        : 'bg-linear-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 shadow-lg shadow-blue-500/30'
-                  }`}
-                >
-                  {processingTransaction ? (
-                    <>
-                      <div className="spinner w-5 h-5 border-2"></div>
-                      <span>Se procesează...</span>
-                    </>
-                  ) : (
-                    <>
-                      {modalType === 'retragere' ? 'Confirmă retragerea' : 'Confirmă depunerea'}
-                      {amount && parseFloat(amount) > 0 && <span className="opacity-75">({amount} €)</span>}
-                    </>
-                  )}
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
