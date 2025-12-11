@@ -671,16 +671,17 @@ export default function TarifePracticatePage() {
           </div>
 
           <form onSubmit={handleSubmit}>
+            {/* Main Form Row - Always on one line on desktop */}
             <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 items-end ${
               tipServiciu === 'Animale' 
-                ? 'lg:grid-cols-[0.6fr_0.4fr_0.35fr_auto]'
+                ? 'lg:grid-cols-[1fr_1fr_0.8fr_auto]'
                 : tipServiciu === 'Platforma'
-                  ? 'lg:grid-cols-[0.6fr_0.4fr_auto]'
-                  : tipServiciu === 'Documente' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila'
-                    ? 'lg:grid-cols-[0.6fr_0.4fr_0.35fr_auto]'
-                    : unitType === 'm3'
-                      ? 'lg:grid-cols-[0.6fr_0.85fr_0.55fr_0.32fr_auto]'
-                      : 'lg:grid-cols-[0.6fr_0.85fr_0.55fr_0.32fr_0.32fr_auto]'
+                  ? 'lg:grid-cols-[1fr_1fr_auto]'
+                  : tipServiciu === 'Colete' || tipServiciu === 'Electronice'
+                    ? unitType === 'm3'
+                      ? 'lg:grid-cols-[1fr_1fr_0.9fr_auto]'
+                      : 'lg:grid-cols-[1fr_1fr_0.9fr_0.7fr_auto]'
+                    : 'lg:grid-cols-[1fr_1fr_0.9fr_auto]'
             }`}>
               {/* Country Dropdown */}
               <div ref={countryDropdownRef}>
@@ -821,53 +822,6 @@ export default function TarifePracticatePage() {
                   )}
                 </div>
               </div>
-
-              {/* Colete Sub-Options */}
-              {tipServiciu === 'Colete' && (
-                <div className="lg:col-span-4 p-5 bg-linear-to-br from-blue-500/10 to-cyan-500/5 rounded-2xl border border-blue-500/20 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 mb-4 pb-3 border-b border-blue-500/10">
-                    <div className="p-2.5 bg-blue-500/20 rounded-xl">
-                      <ServiceIcon service="Colete" className="w-5 h-5 text-blue-400" />
-                    </div>
-                    <div>
-                      <span className="text-base font-semibold text-white">Opțiuni Transport Colete</span>
-                      <p className="text-xs text-gray-500">Selectează serviciile adiționale pe care le oferi</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {serviceTypes.find(s => s.value === 'Colete')?.subOptions?.map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => setColeteOptions(prev => ({
-                          ...prev,
-                          [option.value]: !prev[option.value as keyof typeof prev]
-                        }))}
-                        className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all duration-200 ${
-                          coleteOptions[option.value as keyof typeof coleteOptions]
-                            ? `${option.bgColor} border-current ${option.color} shadow-lg`
-                            : 'bg-slate-800/50 border-white/10 text-gray-400 hover:border-white/20'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg ${coleteOptions[option.value as keyof typeof coleteOptions] ? option.bgColor : 'bg-slate-700/50'}`}>
-                          <ServiceIcon 
-                            service={option.value === 'express' ? 'Express' : option.value === 'frigo' ? 'Frigo' : option.value === 'fragil' ? 'Fragil' : 'Door2Door'} 
-                            className={`w-5 h-5 ${coleteOptions[option.value as keyof typeof coleteOptions] ? option.color : 'text-gray-500'}`} 
-                          />
-                        </div>
-                        <span className="text-sm font-medium">{option.label}</span>
-                        {coleteOptions[option.value as keyof typeof coleteOptions] && (
-                          <div className="absolute top-2 right-2 p-1 bg-emerald-500/20 rounded-full">
-                            <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* Animale - Preț per animal pe linia principală */}
               {tipServiciu === 'Animale' && (
@@ -1358,6 +1312,40 @@ export default function TarifePracticatePage() {
                 );
               })()}
             </div>
+
+            {/* Colete Sub-Options - Displayed below main form */}
+            {tipServiciu === 'Colete' && (
+              <div className="mt-4 p-4 bg-linear-to-br from-blue-500/10 to-cyan-500/5 rounded-xl border border-blue-500/20">
+                <div className="flex items-center gap-2 mb-3">
+                  <ServiceIcon service="Colete" className="w-4 h-4 text-blue-400" />
+                  <span className="text-sm font-medium text-white">Opțiuni Transport</span>
+                  <span className="text-xs text-gray-500">(opțional)</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {serviceTypes.find(s => s.value === 'Colete')?.subOptions?.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => setColeteOptions(prev => ({
+                        ...prev,
+                        [option.value]: !prev[option.value as keyof typeof prev]
+                      }))}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 ${
+                        coleteOptions[option.value as keyof typeof coleteOptions]
+                          ? `${option.bgColor} border-current ${option.color}`
+                          : 'bg-slate-800/50 border-white/10 text-gray-400 hover:border-white/20'
+                      }`}
+                    >
+                      <ServiceIcon 
+                        service={option.value === 'express' ? 'Express' : option.value === 'frigo' ? 'Frigo' : option.value === 'fragil' ? 'Fragil' : 'Door2Door'} 
+                        className={`w-4 h-4 ${coleteOptions[option.value as keyof typeof coleteOptions] ? option.color : 'text-gray-500'}`} 
+                      />
+                      <span className="text-sm font-medium">{option.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </form>
         </div>
 
