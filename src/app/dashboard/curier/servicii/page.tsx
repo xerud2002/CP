@@ -380,7 +380,7 @@ export default function TarifePracticatePage() {
                   key={service.value}
                   type="button"
                   onClick={() => toggleService(service.value)}
-                  className={`group relative flex flex-col gap-4 p-5 rounded-2xl border-2 transition-all duration-300 text-left overflow-hidden ${
+                  className={`group relative flex flex-col gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 text-left overflow-hidden ${
                     isSelected
                       ? 'bg-linear-to-br from-indigo-500/20 via-purple-500/10 to-indigo-500/20 border-indigo-500/60 shadow-2xl shadow-indigo-500/20 scale-[1.02]'
                       : 'bg-slate-800/40 border-slate-700/50 hover:border-indigo-500/30 hover:bg-slate-800/60 hover:scale-[1.01]'
@@ -392,43 +392,43 @@ export default function TarifePracticatePage() {
                   }`}></div>
                   
                   {/* Checkmark indicator */}
-                  <div className={`absolute top-4 right-4 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
+                  <div className={`absolute top-3 right-3 sm:top-4 sm:right-4 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
                     isSelected 
                       ? 'bg-linear-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/50 scale-110' 
                       : 'bg-slate-700/50 group-hover:bg-slate-600/50'
                   }`}>
                     {isSelected ? (
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
                     ) : (
-                      <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 group-hover:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
                     )}
                   </div>
                   
                   {/* Icon */}
-                  <div className="relative z-10 flex items-center gap-4">
-                    <div className={`p-3.5 rounded-xl transition-all duration-300 ${
+                  <div className="relative z-10 flex items-center gap-3 sm:gap-4">
+                    <div className={`p-2.5 sm:p-3.5 rounded-lg sm:rounded-xl transition-all duration-300 ${
                       isSelected 
                         ? `${service.bgColor} shadow-lg` 
                         : 'bg-slate-700/50 group-hover:bg-slate-700'
                     }`}>
-                      <ServiceIcon service={service.value} className={`w-7 h-7 transition-colors ${
+                      <ServiceIcon service={service.value} className={`w-6 h-6 sm:w-7 sm:h-7 transition-colors ${
                         isSelected ? service.color : 'text-gray-500 group-hover:text-gray-400'
                       }`} />
                     </div>
                   </div>
                   
                   {/* Content */}
-                  <div className="relative z-10 space-y-2">
-                    <p className={`font-bold text-lg transition-colors ${
+                  <div className="relative z-10 space-y-1.5 sm:space-y-2">
+                    <p className={`font-bold text-base sm:text-lg transition-colors ${
                       isSelected ? 'text-white' : 'text-gray-300 group-hover:text-white'
                     }`}>
                       {service.label}
                     </p>
-                    <p className={`text-sm leading-relaxed transition-colors ${
+                    <p className={`text-xs sm:text-sm leading-relaxed transition-colors ${
                       isSelected ? 'text-gray-300' : 'text-gray-500 group-hover:text-gray-400'
                     }`}>
                       {service.description}
@@ -447,7 +447,7 @@ export default function TarifePracticatePage() {
             })}
           </div>
           {selectedServices.length === 0 && (
-            <div className="mt-6 p-5 bg-linear-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border-2 border-amber-500/30 rounded-2xl flex items-start gap-4 shadow-lg shadow-amber-500/10">
+            <div className="mt-4 sm:mt-6 p-4 sm:p-5 bg-linear-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border-2 border-amber-500/30 rounded-xl sm:rounded-2xl flex items-start gap-3 sm:gap-4 shadow-lg shadow-amber-500/10">
               <div className="p-2.5 bg-amber-500/20 rounded-xl shrink-0">
                 <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
