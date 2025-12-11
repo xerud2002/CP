@@ -1497,7 +1497,7 @@ function ProfilCurierContent() {
                 {activeServices.length === 0 && (
                   <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg sm:rounded-xl">
                     <p className="text-amber-400 text-xs sm:text-sm">
-                      <strong>💼 Adaugă servicii:</strong> Mergi la <Link href="/dashboard/curier/tarife" className="underline hover:text-amber-300">Servicii și Tarife</Link> pentru a activa servicii și a vedea documentele necesare.
+                      <strong>💼 Adaugă servicii:</strong> Mergi la <Link href="/dashboard/curier/servicii" className="underline hover:text-amber-300">Servicii și Tarife</Link> pentru a activa servicii și a vedea documentele necesare.
                     </p>
                   </div>
                 )}
@@ -1529,7 +1529,7 @@ function ProfilCurierContent() {
                 </Link>
 
                 <Link
-                  href="/dashboard/curier/tarife"
+                  href="/dashboard/curier/servicii"
                   className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
                 >
                   <div className="p-1.5 sm:p-2 bg-amber-500/20 rounded-lg group-hover:bg-amber-500/30 transition-colors">

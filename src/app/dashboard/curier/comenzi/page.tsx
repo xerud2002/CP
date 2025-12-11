@@ -32,6 +32,29 @@ const statusLabels: Record<Order['status'], { label: string; color: string; bg: 
   anulata: { label: 'Anulată', color: 'text-red-400', bg: 'bg-red-500/20' },
 };
 
+// Predefined countries list
+const availableCountries = [
+  'România', 'Germania', 'Anglia', 'Franța', 'Italia', 'Spania', 
+  'Austria', 'Belgia', 'Olanda', 'Elveția', 'Portugalia', 'Grecia',
+  'Irlanda', 'Danemarca', 'Suedia', 'Norvegia', 'Finlanda', 'Polonia',
+  'Cehia', 'Ungaria', 'Bulgaria', 'Croația', 'Slovenia', 'Slovacia'
+].sort();
+
+// Predefined service types
+const availableServices = [
+  'Colet standard',
+  'Colet fragil',
+  'Document',
+  'Plic',
+  'Bagaj',
+  'Mobilă',
+  'Electronice',
+  'Alimente',
+  'Medicamente',
+  'Auto/Piese',
+  'Altele'
+];
+
 // Initial empty orders - data loaded from Firestore
 const initialOrders: Order[] = [];
 
@@ -44,6 +67,7 @@ export default function ComenziCurierPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   
   // Advanced filters
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [countryFilter, setCountryFilter] = useState<string>('all');
   const [serviceFilter, setServiceFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<string>('');
@@ -118,27 +142,21 @@ export default function ComenziCurierPage() {
     }
   };
 
-  // Get unique countries and services for filter dropdowns
-  const uniqueCountries = useMemo(() => {
-    const countries = new Set<string>();
-    orders.forEach(o => {
-      if (o.expeditorTara) countries.add(o.expeditorTara);
-      if (o.destinatarTara) countries.add(o.destinatarTara);
-    });
-    return Array.from(countries).sort();
-  }, [orders]);
-
-  const uniqueServices = useMemo(() => {
-    const services = new Set<string>();
-    orders.forEach(o => {
-      if (o.tipColet) services.add(o.tipColet);
-    });
-    return Array.from(services).sort();
-  }, [orders]);
-
   // Apply all filters
   const filteredOrders = useMemo(() => {
     return orders.filter(order => {
+      // Search query (name, phone, ID)
+      if (searchQuery) {
+        const query = searchQuery.toLowerCase();
+        const matchesSearch = 
+          order.clientName?.toLowerCase().includes(query) ||
+          order.clientPhone?.toLowerCase().includes(query) ||
+          order.id.toLowerCase().includes(query) ||
+          order.expeditorJudet?.toLowerCase().includes(query) ||
+          order.destinatarJudet?.toLowerCase().includes(query);
+        if (!matchesSearch) return false;
+      }
+      
       // Status filter
       if (statusFilter !== 'all' && order.status !== statusFilter) return false;
       
@@ -157,12 +175,13 @@ export default function ComenziCurierPage() {
       
       return true;
     });
-  }, [orders, statusFilter, countryFilter, serviceFilter, dateFilter]);
+  }, [orders, searchQuery, statusFilter, countryFilter, serviceFilter, dateFilter]);
 
   // Check if any advanced filter is active
-  const hasActiveAdvancedFilters = countryFilter !== 'all' || serviceFilter !== 'all' || dateFilter !== '';
+  const hasActiveAdvancedFilters = countryFilter !== 'all' || serviceFilter !== 'all' || dateFilter !== '' || searchQuery !== '';
 
   const clearAllFilters = () => {
+    setSearchQuery('');
     setStatusFilter('all');
     setCountryFilter('all');
     setServiceFilter('all');
@@ -328,6 +347,33 @@ export default function ComenziCurierPage() {
           {/* Advanced filters panel */}
           {showAdvancedFilters && (
             <div className="pt-3 border-t border-white/5">
+              {/* Search input */}
+              <div className="mb-3">
+                <label className="block text-xs text-gray-400 mb-1.5">Caută comandă</label>
+                <div className="relative">
+                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Nume client, telefon, ID comandă..."
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
+              
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {/* Country filter */}
                 <div>
@@ -338,7 +384,7 @@ export default function ComenziCurierPage() {
                     className="w-full px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
                   >
                     <option value="all">Toate țările</option>
-                    {uniqueCountries.map(country => (
+                    {availableCountries.map(country => (
                       <option key={country} value={country}>{country}</option>
                     ))}
                   </select>
@@ -353,7 +399,7 @@ export default function ComenziCurierPage() {
                     className="w-full px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
                   >
                     <option value="all">Toate serviciile</option>
-                    {uniqueServices.map(service => (
+                    {availableServices.map(service => (
                       <option key={service} value={service}>{service}</option>
                     ))}
                   </select>
