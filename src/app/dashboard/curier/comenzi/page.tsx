@@ -32,59 +32,13 @@ const statusLabels: Record<Order['status'], { label: string; color: string; bg: 
   anulata: { label: 'Anulată', color: 'text-red-400', bg: 'bg-red-500/20' },
 };
 
-// Mock data for demo
-const mockOrders: Order[] = [
-  {
-    id: '1',
-    clientName: 'Maria Ionescu',
-    clientPhone: '0722 123 456',
-    expeditorTara: 'România',
-    expeditorJudet: 'București',
-    destinatarTara: 'Germania',
-    destinatarJudet: 'München',
-    tipColet: 'Standard',
-    greutate: 5,
-    status: 'noua',
-    dataColectare: '28.01.2025',
-    pret: 45,
-    createdAt: new Date(),
-  },
-  {
-    id: '2',
-    clientName: 'Ion Popa',
-    clientPhone: '0733 456 789',
-    expeditorTara: 'România',
-    expeditorJudet: 'Cluj',
-    destinatarTara: 'Italia',
-    destinatarJudet: 'Roma',
-    tipColet: 'Door2Door',
-    greutate: 12,
-    status: 'acceptata',
-    dataColectare: '30.01.2025',
-    pret: 85,
-    createdAt: new Date(),
-  },
-  {
-    id: '3',
-    clientName: 'Elena Vasile',
-    clientPhone: '0744 789 012',
-    expeditorTara: 'România',
-    expeditorJudet: 'Timișoara',
-    destinatarTara: 'Spania',
-    destinatarJudet: 'Madrid',
-    tipColet: 'Standard',
-    greutate: 3,
-    status: 'in_tranzit',
-    dataColectare: '25.01.2025',
-    pret: 35,
-    createdAt: new Date(),
-  },
-];
+// Initial empty orders - data loaded from Firestore
+const initialOrders: Order[] = [];
 
 export default function ComenziCurierPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [orders, setOrders] = useState<Order[]>(mockOrders); // Using mock data for demo
+  const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [filter, setFilter] = useState<'all' | Order['status']>('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);

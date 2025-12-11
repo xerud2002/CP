@@ -226,12 +226,8 @@ export default function ClientDashboard() {
   const [email, setEmail] = useState('');
   const [telefon, setTelefon] = useState('');
 
-  // Comenzi mock data
-  const comenzi = [
-    { id: 'CP20251201', data: '01/12/2025', ruta: 'România → Germania', greutate: '5kg', status: 'Livrat', statusColor: 'bg-green-500' },
-    { id: 'CP20251128', data: '28/11/2025', ruta: 'Italia → România', greutate: '3kg', status: 'În tranzit', statusColor: 'bg-yellow-500' },
-    { id: 'CP20251120', data: '20/11/2025', ruta: 'România → Anglia', greutate: '8kg', status: 'Preluat', statusColor: 'bg-blue-500' },
-  ];
+  // Comenzi - loaded from Firestore
+  const [comenzi] = useState<{id: string; data: string; ruta: string; greutate: string; status: string; statusColor: string}[]>([]);
 
   // Initialize form when user data is available (only once)
   if (user && !formInitialized) {
