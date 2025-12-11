@@ -692,92 +692,27 @@ export default function TarifePracticatePage() {
           </div>
         </div>
 
-        {/* Service Types Selection */}
-        <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
-          <div className="flex items-center justify-between mb-4">
+        {/* Add Form Section */}
+        <div className="bg-linear-to-br from-slate-900/80 via-slate-800/50 to-slate-900/80 rounded-2xl border border-emerald-500/20 p-4 sm:p-6 mb-4 sm:mb-8 shadow-xl shadow-emerald-500/5">
+          <div className="flex items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-white/5">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-500/20 rounded-lg">
-                <svg className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                  <path d="M9 12h6" />
-                  <path d="M9 16h6" />
+              <div className="p-2.5 sm:p-3 bg-linear-to-br from-emerald-500/20 to-teal-500/20 rounded-xl border border-emerald-500/30">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 5v14" />
+                  <path d="M5 12h14" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-white">Servicii Transport și Curierat Oferite</h2>
-                <p className="text-xs text-gray-500">Selectează serviciile de transport și logistică pe care le oferi clienților pentru expediții în Europa</p>
+                <h2 className="text-lg sm:text-xl font-bold text-white">Adaugă Tarif Nou</h2>
+                <p className="text-xs sm:text-sm text-gray-400 mt-0.5">Configurează prețul pentru fiecare țară și serviciu</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              {savingServices && (
-                <div className="w-4 h-4 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
-              )}
-              <span className="text-xs bg-indigo-500/20 text-indigo-400 px-2.5 py-1 rounded-full font-medium">
-                {selectedServices.length} / {serviceTypes.length} active
-              </span>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
-            {serviceTypes.map((service) => {
-              const isSelected = selectedServices.includes(service.value);
-              return (
-                <button
-                  key={service.value}
-                  type="button"
-                  onClick={() => toggleService(service.value)}
-                  className={`relative flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border transition-all duration-200 text-left ${
-                    isSelected
-                      ? 'bg-indigo-500/20 border-indigo-500/50 shadow-lg shadow-indigo-500/10'
-                      : 'bg-slate-800/50 border-white/5 hover:border-white/20 hover:bg-slate-800'
-                  }`}
-                >
-                  {/* Checkmark indicator */}
-                  <div className={`absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center transition-all ${
-                    isSelected ? 'bg-indigo-500' : 'bg-slate-700/50'
-                  }`}>
-                    {isSelected ? (
-                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                      <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    )}
-                  </div>
-                  
-                  <div className={`p-2 rounded-lg ${isSelected ? service.bgColor : 'bg-slate-700/50'}`}>
-                    <ServiceIcon service={service.value} className={`w-5 h-5 ${isSelected ? service.color : 'text-gray-500'}`} />
-                  </div>
-                  <div className="min-w-0 pr-6">
-                    <p className={`font-medium text-sm truncate ${isSelected ? 'text-white' : 'text-gray-400'}`}>{service.label}</p>
-                    <p className="text-xs text-gray-500 truncate">{service.description}</p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-          {selectedServices.length === 0 && (
-            <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center gap-3">
-              <svg className="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <p className="text-sm text-amber-400">Selectează cel puțin un serviciu pentru a fi vizibil clienților!</p>
-            </div>
-          )}
-        </div>
-
-        {/* Add Form Section */}
-        <div className="bg-slate-900/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6 mb-4 sm:mb-8">
-          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5">
-            <div className="p-1.5 sm:p-2 bg-emerald-500/20 rounded-lg">
-              <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5v14" />
-                <path d="M5 12h14" />
-              </svg>
-            </div>
-            <h2 className="text-lg font-semibold text-white">Adaugă serviciu</h2>
+            {saving && (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/20 rounded-full">
+                <div className="w-3 h-3 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin"></div>
+                <span className="text-xs text-emerald-400 font-medium">Salvare...</span>
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit}>
