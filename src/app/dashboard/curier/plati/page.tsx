@@ -136,153 +136,188 @@ export default function PlatiFacturiPage() {
 
   return (
     <div className="min-h-screen bg-slate-950">
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
+      {/* Header - Same style as comenzi */}
+      <div className="bg-slate-900/80 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <Link 
+              href="/dashboard/curier" 
+              className="p-2 sm:p-2.5 hover:bg-slate-800/80 rounded-xl transition-all duration-200 group"
+            >
+              <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+            </Link>
             <div className="flex items-center gap-3 sm:gap-4">
-              <Link 
-                href="/dashboard/curier" 
-                className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-              >
-                <ArrowLeftIcon className="w-5 h-5" />
-              </Link>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-emerald-500 to-green-600 flex items-center justify-center">
-                  <CreditCardIcon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-lg sm:text-xl font-bold text-white">Plăți & Facturi</h1>
-                  <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Gestionează încasările și facturile</p>
-                </div>
+              <div className="p-2.5 sm:p-3 bg-linear-to-br from-emerald-500/20 to-green-500/20 rounded-xl border border-emerald-500/20">
+                <CreditCardIcon className="w-6 h-6 sm:w-7 sm:h-7 text-emerald-400" />
+              </div>
+              <div>
+                <h1 className="text-lg sm:text-2xl font-bold text-white">Plăți & Facturi</h1>
+                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Gestionează încasările și facturile</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
-        
-        {/* Balance Hero Card */}
-        <div className="bg-linear-to-br from-slate-800 to-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-8 border border-white/10 relative overflow-hidden">
-          {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-          
-          <div className="relative">
-            {/* Main Balance */}
-            <div className="text-center mb-6 sm:mb-8">
-              <p className="text-gray-400 text-sm sm:text-base mb-2">Sold disponibil pentru retragere</p>
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-4xl sm:text-6xl font-bold text-white">{soldDisponibil}</span>
-                <span className="text-2xl sm:text-3xl font-bold text-emerald-400">€</span>
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+        {/* Stats Cards - Same style as comenzi */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-emerald-500/20 rounded-lg sm:rounded-xl">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
               </div>
-              <div className="mt-4">
-                <button className="py-3 px-8 bg-linear-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 active:scale-[0.98]">
-                  💸 Solicită retragere
-                </button>
+              <div>
+                <p className="text-lg sm:text-2xl font-bold text-emerald-400">{soldDisponibil} €</p>
+                <p className="text-xs text-gray-400">Sold disponibil</p>
               </div>
             </div>
-
-            {/* Mini Stats Row */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-4">
-              <div className="text-center p-3 sm:p-4 bg-white/5 rounded-xl backdrop-blur-sm">
-                <div className="flex justify-center mb-2">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                    </svg>
-                  </div>
-                </div>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                </svg>
+              </div>
+              <div>
                 <p className="text-lg sm:text-2xl font-bold text-blue-400">{totalIncasari} €</p>
-                <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Total încasări</p>
+                <p className="text-xs text-gray-400">Total încasări</p>
               </div>
-              
-              <div className="text-center p-3 sm:p-4 bg-white/5 rounded-xl backdrop-blur-sm">
-                <div className="flex justify-center mb-2">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-500/20 flex items-center justify-center">
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                    </svg>
-                  </div>
-                </div>
+            </div>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-orange-500/20 rounded-lg sm:rounded-xl">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                </svg>
+              </div>
+              <div>
                 <p className="text-lg sm:text-2xl font-bold text-orange-400">{totalRetrageri} €</p>
-                <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Total retrageri</p>
+                <p className="text-xs text-gray-400">Total retrageri</p>
               </div>
-              
-              <div className="text-center p-3 sm:p-4 bg-white/5 rounded-xl backdrop-blur-sm">
-                <div className="flex justify-center mb-2">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                </div>
+            </div>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-yellow-500/20 rounded-lg sm:rounded-xl">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
                 <p className="text-lg sm:text-2xl font-bold text-yellow-400">{facturiNeplatite} €</p>
-                <p className="text-[10px] sm:text-xs text-gray-500 mt-1">De încasat</p>
+                <p className="text-xs text-gray-400">De încasat</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-2 p-1 bg-slate-800/50 rounded-xl border border-white/5">
-          <button
-            onClick={() => setActiveTab('plati')}
-            className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg font-medium text-sm transition-all ${
-              activeTab === 'plati'
-                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            💰 Plăți
-          </button>
-          <button
-            onClick={() => setActiveTab('facturi')}
-            className={`flex-1 sm:flex-none px-4 sm:px-6 py-2.5 rounded-lg font-medium text-sm transition-all ${
-              activeTab === 'facturi'
-                ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            📄 Facturi
-          </button>
+        {/* Withdraw CTA Card */}
+        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6 mb-4 sm:mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-linear-to-br from-emerald-500/20 to-green-500/20 rounded-xl sm:rounded-2xl">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-base sm:text-lg font-semibold text-white">Retrage fonduri</h2>
+                <p className="text-gray-400 text-sm">
+                  Disponibil: <span className="text-emerald-400 font-semibold">{soldDisponibil} €</span>
+                </p>
+              </div>
+            </div>
+            <button className="w-full sm:w-auto py-2.5 sm:py-3 px-5 sm:px-6 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 active:scale-[0.98]">
+              💸 Solicită retragere
+            </button>
+          </div>
+        </div>
+
+        {/* Tabs - Same style as filters in comenzi */}
+        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-4 mb-4 sm:mb-6">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+            <button
+              onClick={() => setActiveTab('plati')}
+              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                activeTab === 'plati'
+                  ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
+                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700'
+              }`}
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
+              Plăți
+            </button>
+            <button
+              onClick={() => setActiveTab('facturi')}
+              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                activeTab === 'facturi'
+                  ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
+                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700'
+              }`}
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+              Facturi
+            </button>
+          </div>
         </div>
 
         {/* Content */}
         {activeTab === 'plati' && (
-          <div className="bg-slate-800/30 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
-            <div className="p-4 sm:p-6 border-b border-white/5">
-              <h2 className="text-base sm:text-lg font-semibold text-white">Istoric Plăți</h2>
-            </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
+              Istoric Plăți
+            </h2>
             
             {loadingData ? (
               <div className="flex justify-center py-12">
                 <div className="spinner"></div>
               </div>
             ) : payments.length === 0 ? (
-              <div className="text-center py-12 px-4">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
-                  <span className="text-3xl sm:text-4xl">💳</span>
-                </div>
-                <p className="text-gray-400 text-sm sm:text-base">Nu ai nicio plată înregistrată.</p>
+              <div className="text-center py-12 sm:py-16">
+                <div className="text-5xl sm:text-7xl mb-4">💳</div>
+                <p className="text-gray-300 text-base sm:text-lg font-medium">Nu ai nicio plată</p>
+                <p className="text-gray-500 text-sm mt-2">Plățile vor apărea aici când finalizezi livrări.</p>
               </div>
             ) : (
-              <div className="divide-y divide-white/5">
+              <div className="space-y-3">
                 {payments.map((payment) => (
                   <div 
                     key={payment.id} 
-                    className="p-3 sm:p-4 hover:bg-white/5 transition-colors"
+                    className="bg-slate-900/50 rounded-xl p-3 sm:p-4 border border-white/5 hover:border-white/10 transition-all"
                   >
                     {/* Mobile Layout */}
-                    <div className="sm:hidden">
-                      <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="sm:hidden space-y-2">
+                      <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
                             payment.tip === 'incasare' ? 'bg-green-500/20' : 'bg-orange-500/20'
                           }`}>
-                            <span className="text-lg">{payment.tip === 'incasare' ? '📥' : '📤'}</span>
+                            {payment.tip === 'incasare' ? (
+                              <svg className="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                              </svg>
+                            ) : (
+                              <svg className="w-5 h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                              </svg>
+                            )}
                           </div>
                           <div className="min-w-0">
                             <p className="text-white font-medium text-sm truncate">{payment.descriere}</p>
@@ -291,7 +326,7 @@ export default function PlatiFacturiPage() {
                         </div>
                       </div>
                       <div className="flex items-center justify-between pl-13">
-                        <span className={`px-2 py-0.5 rounded-full text-xs ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
                           {paymentStatusLabels[payment.status].label}
                         </span>
                         <p className={`text-lg font-bold ${
@@ -308,7 +343,15 @@ export default function PlatiFacturiPage() {
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
                           payment.tip === 'incasare' ? 'bg-green-500/20' : 'bg-orange-500/20'
                         }`}>
-                          <span className="text-2xl">{payment.tip === 'incasare' ? '📥' : '📤'}</span>
+                          {payment.tip === 'incasare' ? (
+                            <svg className="w-6 h-6 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                            </svg>
+                          ) : (
+                            <svg className="w-6 h-6 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                            </svg>
+                          )}
                         </div>
                         <div className="min-w-0">
                           <p className="text-white font-medium truncate">{payment.descriere}</p>
@@ -316,7 +359,7 @@ export default function PlatiFacturiPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-4 shrink-0">
-                        <span className={`px-3 py-1 rounded-full text-xs ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
                           {paymentStatusLabels[payment.status].label}
                         </span>
                         <p className={`text-xl font-bold min-w-20 text-right ${
@@ -334,119 +377,114 @@ export default function PlatiFacturiPage() {
         )}
 
         {activeTab === 'facturi' && (
-          <div className="bg-slate-800/30 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
-            <div className="p-4 sm:p-6 border-b border-white/5">
-              <h2 className="text-base sm:text-lg font-semibold text-white">Facturi Emise</h2>
-            </div>
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6">
+            <h2 className="text-base sm:text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <svg className="w-5 h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+              </svg>
+              Facturi Emise
+            </h2>
             
             {loadingData ? (
               <div className="flex justify-center py-12">
                 <div className="spinner"></div>
               </div>
             ) : invoices.length === 0 ? (
-              <div className="text-center py-12 px-4">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
-                  <span className="text-3xl sm:text-4xl">📄</span>
-                </div>
-                <p className="text-gray-400 text-sm sm:text-base">Nu ai nicio factură.</p>
+              <div className="text-center py-12 sm:py-16">
+                <div className="text-5xl sm:text-7xl mb-4">📄</div>
+                <p className="text-gray-300 text-base sm:text-lg font-medium">Nu ai nicio factură</p>
+                <p className="text-gray-500 text-sm mt-2">Facturile sunt generate automat lunar.</p>
               </div>
             ) : (
-              <>
-                {/* Mobile Cards */}
-                <div className="sm:hidden divide-y divide-white/5">
-                  {invoices.map((invoice) => (
-                    <div key={invoice.id} className="p-3">
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div>
-                          <p className="text-white font-medium text-sm">{invoice.numar}</p>
-                          <p className="text-gray-500 text-xs">{invoice.data}</p>
+              <div className="space-y-3">
+                {invoices.map((invoice) => (
+                  <div 
+                    key={invoice.id} 
+                    className="bg-slate-900/50 rounded-xl p-3 sm:p-4 border border-white/5 hover:border-white/10 transition-all"
+                  >
+                    {/* Mobile Layout */}
+                    <div className="sm:hidden space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center shrink-0">
+                            <svg className="w-5 h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                              <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                          </div>
+                          <div>
+                            <p className="text-white font-medium text-sm">{invoice.numar}</p>
+                            <p className="text-gray-500 text-xs">{invoice.data}</p>
+                          </div>
                         </div>
-                        <span className={`px-2 py-0.5 rounded-full text-xs shrink-0 ${invoiceStatusLabels[invoice.status].bg} ${invoiceStatusLabels[invoice.status].color}`}>
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${invoiceStatusLabels[invoice.status].bg} ${invoiceStatusLabels[invoice.status].color}`}>
                           {invoiceStatusLabels[invoice.status].label}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between pl-13">
                         <p className="text-green-400 font-bold">{invoice.suma} €</p>
-                        <button className="text-orange-400 hover:text-orange-300 transition-colors inline-flex items-center gap-1 text-xs">
+                        <button className="text-orange-400 hover:text-orange-300 transition-colors inline-flex items-center gap-1.5 text-xs font-medium bg-orange-500/10 px-3 py-1.5 rounded-lg">
                           <DownloadIcon className="w-3.5 h-3.5" />
                           PDF
                         </button>
                       </div>
                     </div>
-                  ))}
-                </div>
 
-                {/* Desktop Table */}
-                <div className="hidden sm:block overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-white/5">
-                        <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Nr. Factură</th>
-                        <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Data</th>
-                        <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Suma</th>
-                        <th className="text-left py-3 px-4 text-gray-400 font-medium text-sm">Status</th>
-                        <th className="text-right py-3 px-4 text-gray-400 font-medium text-sm">Acțiuni</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {invoices.map((invoice) => (
-                        <tr key={invoice.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                          <td className="py-4 px-4">
-                            <span className="text-white font-medium">{invoice.numar}</span>
-                          </td>
-                          <td className="py-4 px-4 text-gray-400">{invoice.data}</td>
-                          <td className="py-4 px-4">
-                            <span className="text-green-400 font-medium">{invoice.suma} €</span>
-                          </td>
-                          <td className="py-4 px-4">
-                            <span className={`px-3 py-1 rounded-full text-xs ${invoiceStatusLabels[invoice.status].bg} ${invoiceStatusLabels[invoice.status].color}`}>
-                              {invoiceStatusLabels[invoice.status].label}
-                            </span>
-                          </td>
-                          <td className="py-4 px-4 text-right">
-                            <button className="text-orange-400 hover:text-orange-300 transition-colors inline-flex items-center gap-1 text-sm">
-                              <DownloadIcon className="w-4 h-4" />
-                              Descarcă PDF
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-4 flex-1 min-w-0">
+                        <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center shrink-0">
+                          <svg className="w-6 h-6 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-white font-medium">{invoice.numar}</p>
+                          <p className="text-gray-500 text-sm">{invoice.data}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 shrink-0">
+                        <p className="text-green-400 font-bold text-lg">{invoice.suma} €</p>
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${invoiceStatusLabels[invoice.status].bg} ${invoiceStatusLabels[invoice.status].color}`}>
+                          {invoiceStatusLabels[invoice.status].label}
+                        </span>
+                        <button className="text-orange-400 hover:text-orange-300 transition-colors inline-flex items-center gap-1.5 text-sm font-medium bg-orange-500/10 px-4 py-2 rounded-lg hover:bg-orange-500/20">
+                          <DownloadIcon className="w-4 h-4" />
+                          Descarcă PDF
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         )}
 
-        {/* Info Box - Compact */}
-        <div className="bg-slate-800/30 rounded-xl p-3 sm:p-4 border border-white/5">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-400">
-            <span className="flex items-center gap-1.5">
-              <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Retrageri: 1-3 zile
-            </span>
-            <span className="hidden sm:flex items-center gap-1.5">
-              <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              Min. retragere: 50 €
-            </span>
-            <span className="flex items-center gap-1.5">
-              <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              Facturi automat lunar
-            </span>
-            <a href="mailto:support@curierulperfect.ro" className="hidden sm:flex items-center gap-1.5 text-blue-400 hover:text-blue-300 transition-colors">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-              support@curierulperfect.ro
-            </a>
-          </div>
+        {/* Info Box - Subtle */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm text-gray-500 py-2">
+          <span className="flex items-center gap-1.5">
+            <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Retrageri: 1-3 zile lucrătoare
+          </span>
+          <span className="flex items-center gap-1.5">
+            <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Min. retragere: 50 €
+          </span>
+          <a href="mailto:support@curierulperfect.ro" className="flex items-center gap-1.5 text-blue-400/70 hover:text-blue-400 transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            support@curierulperfect.ro
+          </a>
         </div>
       </div>
     </div>
