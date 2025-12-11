@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
-import { ArrowLeftIcon, TrashIcon, BoxIcon } from '@/components/icons/DashboardIcons';
+import { ArrowLeftIcon, TrashIcon } from '@/components/icons/DashboardIcons';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp, orderBy, writeBatch } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -88,7 +88,7 @@ const serviceTypes = [
     description: 'Transport rapid colete și pachete internaționale în Europa',
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/20',
-    kgOnly: true,
+    defaultUnit: 'kg' as const,
     hasSubOptions: true,
     subOptions: [
       { value: 'express', label: 'Express', description: 'Livrare urgentă rapidă 24-48h în Europa', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' },
@@ -103,7 +103,8 @@ const serviceTypes = [
     description: 'Curierat rapid documente și acte importante în toată Europa',
     color: 'text-yellow-400',
     bgColor: 'bg-yellow-500/20',
-    plicuriOnly: true,
+    defaultUnit: 'plic' as const,
+    unitLabel: 'plic',
   },
   { 
     value: 'Mobila', 
@@ -111,7 +112,8 @@ const serviceTypes = [
     description: 'Transport mobilier și servicii mutări internaționale',
     color: 'text-amber-400',
     bgColor: 'bg-amber-500/20',
-    m3Only: true,
+    defaultUnit: 'm3' as const,
+    unitLabel: 'm³',
   },
   { 
     value: 'Electronice', 
@@ -119,6 +121,7 @@ const serviceTypes = [
     description: 'Transport siguranță maximă TV, electrocasnice și produse electronice în Europa',
     color: 'text-purple-400',
     bgColor: 'bg-purple-500/20',
+    defaultUnit: 'kg' as const,
   },
   { 
     value: 'Animale', 
@@ -126,6 +129,8 @@ const serviceTypes = [
     description: 'Transport autorizat animale de companie cu certificat sanitar-veterinar',
     color: 'text-pink-400',
     bgColor: 'bg-pink-500/20',
+    defaultUnit: 'animal' as const,
+    unitLabel: 'animal',
   },
   { 
     value: 'Platforma', 
@@ -133,6 +138,8 @@ const serviceTypes = [
     description: 'Transport auto pe platformă - mașini, utilaje, tractoare',
     color: 'text-red-400',
     bgColor: 'bg-red-500/20',
+    defaultUnit: 'vehicul' as const,
+    unitLabel: 'vehicul',
   },
   { 
     value: 'Tractari', 
@@ -140,6 +147,8 @@ const serviceTypes = [
     description: 'Servicii tractare auto și asistență rutieră',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/20',
+    defaultUnit: 'km' as const,
+    unitLabel: 'km',
   },
   { 
     value: 'Aeroport', 
@@ -147,7 +156,8 @@ const serviceTypes = [
     description: 'Servicii transfer aeroport rapid și confortabil pentru pasageri',
     color: 'text-cyan-400',
     bgColor: 'bg-cyan-500/20',
-    persoaneOnly: true,
+    defaultUnit: 'persoana' as const,
+    unitLabel: 'persoană',
   },
   { 
     value: 'Persoane', 
@@ -155,7 +165,8 @@ const serviceTypes = [
     description: 'Transport persoane confortabil și sigur în toată Europa',
     color: 'text-rose-400',
     bgColor: 'bg-rose-500/20',
-    persoaneOnly: true,
+    defaultUnit: 'persoana' as const,
+    unitLabel: 'persoană',
   },
   { 
     value: 'Paleti', 
@@ -163,7 +174,8 @@ const serviceTypes = [
     description: 'Transport paleți europeni EUR și marfă paletizată industrială',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/20',
-    nrOnly: true,
+    defaultUnit: 'palet' as const,
+    unitLabel: 'palet',
   },
 ];
 
@@ -343,12 +355,12 @@ export default function TarifePracticatePage() {
     country.name.toLowerCase().includes(countrySearch.toLowerCase())
   );
 
-  // Force kg unit when selecting a kgOnly service, or m3 for m3Only services
+  // Force unit type based on service's defaultUnit
   useEffect(() => {
     const currentService = serviceTypes.find(s => s.value === tipServiciu);
-    if (currentService?.kgOnly) {
+    if (currentService?.defaultUnit === 'kg' && !currentService.unitLabel) {
       setUnitType('kg');
-    } else if (currentService?.m3Only) {
+    } else if (currentService?.defaultUnit === 'm3') {
       setUnitType('m3');
     }
   }, [tipServiciu]);
@@ -785,10 +797,6 @@ export default function TarifePracticatePage() {
                           type="button"
                           onClick={() => {
                             setTipServiciu(service.value);
-                            // Auto-set unit type based on service
-                            if (service.nrOnly) setUnitType('nr');
-                            else if (service.m3Only) setUnitType('m3');
-                            else if (service.kgOnly) setUnitType('kg');
                             setIsServiceDropdownOpen(false);
                           }}
                           className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-700/50 transition-colors border-b border-white/5 last:border-b-0 ${
@@ -1189,70 +1197,106 @@ export default function TarifePracticatePage() {
                 </div>
               )}
 
-              {/* Unit Type Toggle - hidden for Animale, Platforma, Documente, Paleti and Mobila services */}
-              {tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && tipServiciu !== 'Paleti' && tipServiciu !== 'Mobila' && (() => {
+              {/* Price Input - Dynamic based on service type */}
+              {tipServiciu && tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && (() => {
                 const currentService = serviceTypes.find(s => s.value === tipServiciu);
-                const isKgOnly = currentService?.kgOnly;
-                const isM3Only = currentService?.m3Only;
-                const isLocked = isKgOnly || isM3Only;
                 const currencySymbol = selectedCountry?.name === 'Anglia' ? '£' : '€';
+                const unitLabel = currentService?.unitLabel || (currentService?.defaultUnit === 'm3' ? 'm³' : currentService?.defaultUnit || 'kg');
+                const showKgM3Toggle = currentService?.defaultUnit === 'kg' && !currentService?.unitLabel;
+                
+                // Get icon and color based on unit
+                const getUnitStyle = () => {
+                  switch (currentService?.defaultUnit) {
+                    case 'm3': return { color: 'text-purple-400', bg: 'bg-purple-500/20' };
+                    case 'palet': return { color: 'text-orange-400', bg: 'bg-orange-500/20' };
+                    case 'plic': return { color: 'text-yellow-400', bg: 'bg-yellow-500/20' };
+                    case 'persoana': return { color: 'text-cyan-400', bg: 'bg-cyan-500/20' };
+                    case 'km': return { color: 'text-orange-400', bg: 'bg-orange-500/20' };
+                    default: return { color: 'text-emerald-400', bg: 'bg-emerald-500/20' };
+                  }
+                };
+                const unitStyle = getUnitStyle();
                 
                 return (
-                  <>
-                    {/* Unit Type + Price Combined */}
-                    <div className="flex flex-col">
-                      <label className="block text-sm font-medium text-gray-400 mb-2">Unitate / Preț ({currencySymbol})</label>
-                      <div className="flex h-[46px]">
-                        {/* Unit Toggle */}
-                        <div className={`flex bg-slate-800/50 border border-white/10 rounded-l-xl ${isLocked ? 'opacity-60' : ''}`}>
-                          <button
-                            type="button"
-                            onClick={() => !isLocked && setUnitType('kg')}
-                            disabled={isLocked}
-                            className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 rounded-l-xl ${
-                              (unitType === 'kg' || isKgOnly) && !isM3Only
-                                ? 'bg-emerald-500/20 text-emerald-400 border-r border-emerald-500/30'
-                                : 'text-gray-400 hover:text-white hover:bg-slate-700/50 border-r border-white/10'
-                            } ${isLocked ? 'cursor-not-allowed' : ''} ${isM3Only ? 'opacity-50' : ''}`}
-                          >
-                            <WeightIcon className="w-4 h-4" />
-                            <span className="font-medium text-sm">kg</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => !isLocked && setUnitType('m3')}
-                            disabled={isLocked}
-                            className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 ${
-                              (unitType === 'm3' || isM3Only) && !isKgOnly
-                                ? 'bg-purple-500/20 text-purple-400'
-                                : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
-                            } ${isLocked ? 'cursor-not-allowed' : ''} ${isKgOnly ? 'opacity-50' : ''}`}
-                          >
-                            <CubeIcon className="w-4 h-4" />
-                            <span className="font-medium text-sm">m³</span>
-                          </button>
-                        </div>
-                        {/* Price Input */}
-                        <div className="relative flex-1">
-                          <input
-                            type="number"
-                            value={pret}
-                            onChange={(e) => setPret(e.target.value)}
-                            step="0.1"
-                            min="0"
-                            placeholder={isKgOnly || unitType === 'kg' ? '2.5' : '45'}
-                            className="w-full h-full px-3 bg-slate-800/50 border border-l-0 border-white/10 rounded-r-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors pr-10"
-                            required
-                          />
-                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                            <span className={`text-sm font-medium ${(isKgOnly || unitType === 'kg') ? 'text-emerald-400' : 'text-purple-400'}`}>
-                              {currencySymbol}
-                            </span>
+                  <div className="flex flex-col">
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Preț / {unitLabel} ({currencySymbol})
+                    </label>
+                    <div className="flex h-[46px]">
+                      {/* Show kg/m³ toggle only for services that support both */}
+                      {showKgM3Toggle ? (
+                        <>
+                          <div className="flex bg-slate-800/50 border border-white/10 rounded-l-xl">
+                            <button
+                              type="button"
+                              onClick={() => setUnitType('kg')}
+                              className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 rounded-l-xl ${
+                                unitType === 'kg'
+                                  ? 'bg-emerald-500/20 text-emerald-400 border-r border-emerald-500/30'
+                                  : 'text-gray-400 hover:text-white hover:bg-slate-700/50 border-r border-white/10'
+                              }`}
+                            >
+                              <WeightIcon className="w-4 h-4" />
+                              <span className="font-medium text-sm">kg</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setUnitType('m3')}
+                              className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 ${
+                                unitType === 'm3'
+                                  ? 'bg-purple-500/20 text-purple-400'
+                                  : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                              }`}
+                            >
+                              <CubeIcon className="w-4 h-4" />
+                              <span className="font-medium text-sm">m³</span>
+                            </button>
                           </div>
-                        </div>
-                      </div>
+                          <div className="relative flex-1">
+                            <input
+                              type="number"
+                              value={pret}
+                              onChange={(e) => setPret(e.target.value)}
+                              step="0.1"
+                              min="0"
+                              placeholder={unitType === 'kg' ? '2.5' : '45'}
+                              className="w-full h-full px-3 bg-slate-800/50 border border-l-0 border-white/10 rounded-r-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors pr-10"
+                              required
+                            />
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <span className={`text-sm font-medium ${unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400'}`}>
+                                {currencySymbol}
+                              </span>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          {/* Fixed unit badge */}
+                          <div className={`flex items-center justify-center gap-1.5 px-4 ${unitStyle.bg} border border-white/10 rounded-l-xl ${unitStyle.color}`}>
+                            <span className="font-medium text-sm">{unitLabel}</span>
+                          </div>
+                          <div className="relative flex-1">
+                            <input
+                              type="number"
+                              value={pret}
+                              onChange={(e) => setPret(e.target.value)}
+                              step="0.1"
+                              min="0"
+                              placeholder="ex: 25"
+                              className="w-full h-full px-3 bg-slate-800/50 border border-l-0 border-white/10 rounded-r-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors pr-10"
+                              required
+                            />
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <span className={`text-sm font-medium ${unitStyle.color}`}>
+                                {currencySymbol}
+                              </span>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
-                  </>
+                  </div>
                 );
               })()}
 
@@ -1286,93 +1330,18 @@ export default function TarifePracticatePage() {
               );
               })()}
 
-              {/* Documente - Preț per plic */}
-              {tipServiciu === 'Documente' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Preț / plic ({selectedCountry?.name === 'Anglia' ? '£' : '€'})
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={pret}
-                      onChange={(e) => setPret(e.target.value)}
-                      step="0.5"
-                      min="0"
-                      placeholder="ex: 5"
-                      className="w-full px-4 py-3 bg-slate-800/50 border border-indigo-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500/50 transition-colors pr-12"
-                      required
-                    />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                      <svg className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Paleti - Preț per palet */}
-              {tipServiciu === 'Paleti' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Preț / palet ({selectedCountry?.name === 'Anglia' ? '£' : '€'})
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={pret}
-                      onChange={(e) => setPret(e.target.value)}
-                      step="0.5"
-                      min="0"
-                      placeholder="ex: 10"
-                      className="w-full px-4 py-3 bg-slate-800/50 border border-orange-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/50 transition-colors pr-12"
-                      required
-                    />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                      <BoxIcon className="w-5 h-5 text-orange-400" />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Mobila - Preț per m³ */}
-              {tipServiciu === 'Mobila' && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Preț / m³ ({selectedCountry?.name === 'Anglia' ? '£' : '€'})
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={pret}
-                      onChange={(e) => setPret(e.target.value)}
-                      step="0.5"
-                      min="0"
-                      placeholder="ex: 45"
-                      className="w-full px-4 py-3 bg-slate-800/50 border border-amber-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500/50 transition-colors pr-12"
-                      required
-                    />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                      <CubeIcon className="w-5 h-5 text-amber-400" />
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Submit Button - pentru toate serviciile EXCEPTÂND Animale și Platforma */}
-              {tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && (
-                <button
-                  type="submit"
-                  disabled={saving || !selectedCountry || !tipServiciu || 
-                    (tipServiciu === 'Documente' && !pret) ||
-                    (tipServiciu === 'Paleti' && !pret) ||
-                    (tipServiciu === 'Mobila' && !pret) ||
-                    (unitType === 'm3' && !pret) ||
-                    (tipServiciu !== 'Platforma' && tipServiciu !== 'Documente' && tipServiciu !== 'Paleti' && tipServiciu !== 'Mobila' && unitType === 'kg' && (!pret || !minUnit))}
-                  className="h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
-                >
+              {tipServiciu && tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && (() => {
+                const currentService = serviceTypes.find(s => s.value === tipServiciu);
+                const showKgM3Toggle = currentService?.defaultUnit === 'kg' && !currentService?.unitLabel;
+                const needsMinUnit = showKgM3Toggle && unitType === 'kg';
+                
+                return (
+                  <button
+                    type="submit"
+                    disabled={saving || !selectedCountry || !tipServiciu || !pret || (needsMinUnit && !minUnit)}
+                    className="h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
+                  >
                   {saving ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -1388,7 +1357,8 @@ export default function TarifePracticatePage() {
                     </>
                   )}
                 </button>
-              )}
+                );
+              })()}
             </div>
           </form>
         </div>
