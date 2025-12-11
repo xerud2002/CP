@@ -8,8 +8,9 @@ Romanian courier marketplace connecting clients with couriers for European packa
 ### Role-Based Dashboards
 | Role | Path | Pattern |
 |------|------|---------|
-| `client` | `/dashboard/client` | Single-page with tab switching (`id` prop) |
-| `curier` | `/dashboard/curier` | Card grid → sub-pages (`href` prop): `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati` |
+| `client` | `/dashboard/client` | Single-page with tab switching |
+| `curier` | `/dashboard/curier` | Card grid → sub-pages: `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati` |
+| `admin` | `/dashboard/admin` | Admin panel |
 
 **Auth flow**: `?role=client|curier` on login/register → stores role in Firestore `users/{uid}` → redirects to `/dashboard/{role}`
 
@@ -18,18 +19,32 @@ Romanian courier marketplace connecting clients with couriers for European packa
 RootLayout (AuthProvider) → LayoutWrapper → /dashboard/* uses DashboardLayout (no Header/Footer)
                                           → other routes get Header + Footer
 ```
+- `LayoutWrapper` checks `pathname.startsWith('/dashboard')` to exclude global Header/Footer
+- Dashboard pages render their own headers with back navigation
 
 ### Key Files
-- **Auth**: `src/contexts/AuthContext.tsx` — `useAuth()` hook with `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`
-- **Types**: `src/types/index.ts` — `User`, `UserRole`, `Order`, `CoverageZone`, `CourierProfile`
-- **Firebase**: `src/lib/firebase.ts` — singleton with `getApps()` pattern
-- **Styling**: `src/app/globals.css` — custom classes (see below)
-- **Icons**: `src/components/icons/DashboardIcons.tsx` — all dashboard icons
-- **Data**: `src/lib/constants.ts` — `countries`, `judetByCountry` (extend locally for full regions)
+| Purpose | File |
+|---------|------|
+| Auth hook | `src/contexts/AuthContext.tsx` — `useAuth()` with `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
+| Types | `src/types/index.ts` — `User`, `UserRole`, `Order`, `CoverageZone`, `CourierProfile` |
+| Firebase | `src/lib/firebase.ts` — singleton with `getApps()` pattern |
+| Styling | `src/app/globals.css` — custom component classes |
+| Icons | `src/components/icons/DashboardIcons.tsx` — all SVG icons |
+| Data | `src/lib/constants.ts` — `countries`, `judetByCountry` (extend locally for full regions) |
+
+### Firestore Collections
+| Collection | Document ID | Owner Field | Purpose |
+|------------|-------------|-------------|---------|
+| `users` | `{uid}` | `uid` | User profiles & roles |
+| `zona_acoperire` | auto | `uid` | Courier coverage zones |
+| `tarife_curier` | auto | `uid` | Courier pricing |
+| `calendar_colectii` | auto | `courierId` | Courier availability |
+| `profil_curier` | `{uid}` | — | Extended courier profile |
+| `comenzi` | auto | `uid_client` | Orders |
 
 ## Critical Patterns
 
-### Protected Page Template (REQUIRED)
+### Protected Page Template (REQUIRED for all dashboard pages)
 ```tsx
 'use client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -52,7 +67,7 @@ export default function CurierPage() {
 }
 ```
 
-### Suspense for useSearchParams
+### Suspense for useSearchParams (auth pages)
 ```tsx
 export default function Page() {
   return <Suspense fallback={<div className="spinner"></div>}><LoginForm /></Suspense>;
@@ -61,10 +76,37 @@ export default function Page() {
 
 ### Firestore Writes — Always use serverTimestamp()
 ```tsx
-await addDoc(collection(db, 'zona_acoperire'), { uid: user.uid, tara, judet, addedAt: serverTimestamp() });
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+
+await addDoc(collection(db, 'zona_acoperire'), { 
+  uid: user.uid, 
+  tara, 
+  judet, 
+  addedAt: serverTimestamp() 
+});
 ```
 
-## Styling (globals.css classes)
+### Sub-page Header Pattern (curier sub-pages)
+```tsx
+<div className="bg-slate-900/80 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
+  <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+    <div className="flex items-center gap-3">
+      <Link href="/dashboard/curier" className="p-2 hover:bg-slate-800/80 rounded-xl">
+        <ArrowLeftIcon className="w-5 h-5 text-gray-400" />
+      </Link>
+      <div className="p-2.5 bg-linear-to-br from-{color}-500/20 to-{color}-500/20 rounded-xl border border-{color}-500/20">
+        <PageIcon className="w-6 h-6 text-{color}-400" />
+      </div>
+      <div><h1 className="text-lg sm:text-2xl font-bold text-white">Page Title</h1></div>
+    </div>
+  </div>
+</div>
+```
+
+## Styling
+
+### CSS Classes (from globals.css)
 | Use | Classes |
 |-----|---------|
 | Buttons | `btn-primary` (orange), `btn-secondary` (green), `btn-danger`, `btn-outline-orange`, `btn-outline-green` |
@@ -73,14 +115,20 @@ await addDoc(collection(db, 'zona_acoperire'), { uid: user.uid, tara, judet, add
 | Tabs | `tab-menu`, `tab-button`, `tab-button.active` |
 | Loading | `spinner` |
 | Text | `text-gradient` (orange→green) |
+| Scroll | `custom-scrollbar` |
 
-**CSS vars**: `--orange: #f97316`, `--green: #34d399`, `--blue: #0f172a`
+### Color Palette
+- **Orange** (primary): `#f97316` — buttons, CTAs, courier accent
+- **Green** (secondary): `#34d399` — success, client accent
+- **Blue** (background): `#0f172a` → `slate-950` — dark theme base
+- Gradients: `bg-linear-to-br from-{color}-500/20 to-{color}-500/20`
 
 ## Conventions
-- **UI text**: Romanian | **Code**: English
+- **UI text**: Romanian | **Code/variables**: English
 - **Path alias**: `@/*` → `./src/*`
-- **Flags**: `public/img/flag/{code}.svg` (lowercase)
-- **Firestore security**: Owner-based rules in `firestore.rules` — check `uid` matches `request.auth.uid`
+- **Flags**: `public/img/flag/{code}.svg` (lowercase country code)
+- **Firestore security**: Owner-based rules — `resource.data.uid == request.auth.uid`
+- **Extended regions**: Pages needing full region lists define local `judetByCountry` (see `zona-acoperire/page.tsx`)
 
 ## Commands
 ```bash
@@ -90,4 +138,12 @@ npm run lint   # ESLint
 ```
 
 ## Environment Variables
-`NEXT_PUBLIC_FIREBASE_*`: `API_KEY`, `AUTH_DOMAIN`, `PROJECT_ID`, `STORAGE_BUCKET`, `MESSAGING_SENDER_ID`, `APP_ID`
+Required in `.env.local`:
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+```

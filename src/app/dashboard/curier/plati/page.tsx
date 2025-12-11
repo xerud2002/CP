@@ -69,7 +69,7 @@ export default function PlatiFacturiPage() {
   const soldDisponibil = totalIncasari - totalRetrageri;
 
   // const totalFacturi = invoices.reduce((sum, f) => sum + f.suma, 0);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const facturiNeplatite = invoices
     .filter(f => f.status === 'neplatita')
     .reduce((sum, f) => sum + f.suma, 0);

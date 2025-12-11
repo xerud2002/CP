@@ -409,6 +409,15 @@ const SaveIcon = () => (
   </svg>
 );
 
+// Document status type
+interface UploadedDocument {
+  id: string;
+  url: string;
+  fileName: string;
+  uploadedAt: Date;
+  status: 'pending' | 'approved' | 'rejected';
+}
+
 function ProfilCurierContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -428,6 +437,11 @@ function ProfilCurierContent() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const prefixDropdownRef = useRef<HTMLDivElement>(null);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Document upload state
+  const [uploadedDocuments, setUploadedDocuments] = useState<Record<string, UploadedDocument>>({});
+  const [uploadingDoc, setUploadingDoc] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   // Function to change tab and update URL
   const handleTabChange = (tab: 'personal' | 'company' | 'documents') => {
@@ -467,7 +481,24 @@ function ProfilCurierContent() {
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
-          setProfile({ ...defaultProfile, ...docSnap.data() } as CourierProfile);
+          const data = docSnap.data();
+          setProfile({ ...defaultProfile, ...data } as CourierProfile);
+          
+          // Load uploaded documents if they exist
+          if (data.documents) {
+            const docs: Record<string, UploadedDocument> = {};
+            for (const [docId, docData] of Object.entries(data.documents)) {
+              const d = docData as { url: string; fileName: string; uploadedAt?: { toDate?: () => Date }; status: string };
+              docs[docId] = {
+                id: docId,
+                url: d.url,
+                fileName: d.fileName,
+                uploadedAt: d.uploadedAt?.toDate?.() || new Date(),
+                status: d.status as 'pending' | 'approved' | 'rejected',
+              };
+            }
+            setUploadedDocuments(docs);
+          }
         } else {
           // Pre-fill email from auth
           setProfile({ ...defaultProfile, email: user.email || '' });
@@ -532,6 +563,89 @@ function ProfilCurierContent() {
     } finally {
       setSaving(false);
     }
+  };
+
+  // Handle document upload
+  const handleDocumentUpload = async (docId: string, file: File) => {
+    if (!user) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+    if (!validTypes.includes(file.type)) {
+      alert('Format invalid. Acceptăm doar: JPG, PNG, WEBP sau PDF.');
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Fișierul este prea mare. Dimensiunea maximă este 10MB.');
+      return;
+    }
+
+    setUploadingDoc(docId);
+    setUploadProgress(0);
+
+    try {
+      // Create a reference to the file in Firebase Storage
+      const fileName = `${Date.now()}_${file.name}`;
+      const storageRef = ref(storage, `courier_documents/${user.uid}/${docId}/${fileName}`);
+      
+      // Upload the file
+      const snapshot = await uploadBytes(storageRef, file);
+      setUploadProgress(50);
+      
+      // Get the download URL
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      setUploadProgress(75);
+      
+      // Create document record
+      const docRecord: UploadedDocument = {
+        id: docId,
+        url: downloadURL,
+        fileName: file.name,
+        uploadedAt: new Date(),
+        status: 'pending',
+      };
+      
+      // Update local state
+      setUploadedDocuments(prev => ({
+        ...prev,
+        [docId]: docRecord,
+      }));
+      
+      // Save to Firestore
+      const docRef = doc(db, 'profil_curier', user.uid);
+      await setDoc(docRef, {
+        documents: {
+          [docId]: {
+            url: downloadURL,
+            fileName: file.name,
+            uploadedAt: serverTimestamp(),
+            status: 'pending',
+          },
+        },
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+      
+      setUploadProgress(100);
+      showSavedMessage(`Document "${file.name}" încărcat cu succes!`);
+    } catch (error) {
+      console.error('Error uploading document:', error);
+      alert('Eroare la încărcarea documentului. Încearcă din nou.');
+    } finally {
+      setUploadingDoc(null);
+      setUploadProgress(0);
+    }
+  };
+
+  // Handle document file input change
+  const handleDocumentFileChange = (docId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleDocumentUpload(docId, file);
+    }
+    // Reset input so same file can be selected again
+    e.target.value = '';
   };
 
   const handleImageClick = () => {
@@ -1129,8 +1243,14 @@ function ProfilCurierContent() {
                   <div className="space-y-2 sm:space-y-3">
                     {getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness)
                       .filter(doc => doc.required)
-                      .map((doc) => (
-                        <div key={doc.id} className="border border-dashed border-slate-600 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:border-orange-500/50 transition-colors">
+                      .map((doc) => {
+                        const uploaded = uploadedDocuments[doc.id];
+                        const isUploading = uploadingDoc === doc.id;
+                        
+                        return (
+                        <div key={doc.id} className={`border border-dashed rounded-lg sm:rounded-xl p-3 sm:p-4 transition-colors ${
+                          uploaded ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-slate-600 hover:border-orange-500/50'
+                        }`}>
                           <div className="flex items-start gap-3 sm:gap-4">
                             <div className={`p-2 sm:p-3 rounded-lg ${
                               doc.category === 'identity' ? 'bg-blue-500/20 text-blue-400' :
@@ -1154,20 +1274,94 @@ function ProfilCurierContent() {
                                 )}
                               </h4>
                               <p className="text-gray-500 text-xs sm:text-sm mb-2 sm:mb-3">{doc.description}</p>
-                              <label className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-700 hover:bg-slate-600 rounded-lg cursor-pointer transition-colors">
+                              
+                              {/* Upload Progress */}
+                              {isUploading && (
+                                <div className="mb-3">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <div className="animate-spin w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full"></div>
+                                    <span className="text-xs text-orange-400">Se încarcă... {uploadProgress}%</span>
+                                  </div>
+                                  <div className="w-full bg-slate-700 rounded-full h-1.5">
+                                    <div 
+                                      className="bg-orange-500 h-1.5 rounded-full transition-all duration-300"
+                                      style={{ width: `${uploadProgress}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Uploaded File Info */}
+                              {uploaded && !isUploading && (
+                                <div className="mb-3 p-2 bg-slate-700/50 rounded-lg">
+                                  <div className="flex items-center gap-2">
+                                    <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <span className="text-xs text-gray-300 truncate flex-1">{uploaded.fileName}</span>
+                                    <a 
+                                      href={uploaded.url} 
+                                      target="_blank" 
+                                      rel="noopener noreferrer"
+                                      className="text-xs text-blue-400 hover:text-blue-300"
+                                    >
+                                      Vezi
+                                    </a>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              <label className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg cursor-pointer transition-colors ${
+                                isUploading 
+                                  ? 'bg-slate-700/50 cursor-not-allowed' 
+                                  : uploaded 
+                                    ? 'bg-slate-700/50 hover:bg-slate-700 text-gray-400'
+                                    : 'bg-slate-700 hover:bg-slate-600'
+                              }`}>
                                 <UploadIcon />
-                                <span className="text-xs sm:text-sm text-gray-300">Încărcați document</span>
-                                <input type="file" accept="image/*,.pdf" className="hidden" />
+                                <span className="text-xs sm:text-sm text-gray-300">
+                                  {uploaded ? 'Înlocuiește document' : 'Încărcați document'}
+                                </span>
+                                <input 
+                                  type="file" 
+                                  accept="image/jpeg,image/png,image/webp,application/pdf" 
+                                  className="hidden" 
+                                  onChange={handleDocumentFileChange(doc.id)}
+                                  disabled={isUploading}
+                                />
                               </label>
                             </div>
-                            <div className="text-yellow-500 shrink-0" title="În așteptare">
-                              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                              </svg>
+                            <div className={`shrink-0 ${
+                              uploaded?.status === 'approved' ? 'text-emerald-500' :
+                              uploaded?.status === 'rejected' ? 'text-red-500' :
+                              uploaded ? 'text-yellow-500' : 'text-gray-600'
+                            }`} title={
+                              uploaded?.status === 'approved' ? 'Aprobat' :
+                              uploaded?.status === 'rejected' ? 'Respins' :
+                              uploaded ? 'În verificare' : 'Neîncărcat'
+                            }>
+                              {uploaded?.status === 'approved' ? (
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                </svg>
+                              ) : uploaded?.status === 'rejected' ? (
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                </svg>
+                              ) : uploaded ? (
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                                </svg>
+                              ) : (
+                                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd" />
+                                </svg>
+                              )}
                             </div>
                           </div>
                         </div>
-                      ))}
+                      );
+                      })}
                   </div>
                 </div>
 
@@ -1181,8 +1375,14 @@ function ProfilCurierContent() {
                     <div className="space-y-2 sm:space-y-3">
                       {getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness)
                         .filter(doc => !doc.required)
-                        .map((doc) => (
-                          <div key={doc.id} className="border border-dashed border-slate-700 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:border-emerald-500/50 transition-colors opacity-80 hover:opacity-100">
+                        .map((doc) => {
+                          const uploaded = uploadedDocuments[doc.id];
+                          const isUploading = uploadingDoc === doc.id;
+                          
+                          return (
+                          <div key={doc.id} className={`border border-dashed rounded-lg sm:rounded-xl p-3 sm:p-4 transition-colors ${
+                            uploaded ? 'border-emerald-500/50 bg-emerald-500/5 opacity-100' : 'border-slate-700 hover:border-emerald-500/50 opacity-80 hover:opacity-100'
+                          }`}>
                             <div className="flex items-start gap-3 sm:gap-4">
                               <div className={`p-2 sm:p-3 rounded-lg ${
                                 doc.category === 'insurance' ? 'bg-yellow-500/20 text-yellow-400' :
@@ -1198,15 +1398,90 @@ function ProfilCurierContent() {
                                   </span>
                                 </h4>
                                 <p className="text-gray-500 text-xs sm:text-sm mb-2 sm:mb-3">{doc.description}</p>
-                                <label className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-slate-700/50 hover:bg-slate-700 rounded-lg cursor-pointer transition-colors">
+                                
+                                {/* Upload Progress */}
+                                {isUploading && (
+                                  <div className="mb-3">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <div className="animate-spin w-4 h-4 border-2 border-emerald-500 border-t-transparent rounded-full"></div>
+                                      <span className="text-xs text-emerald-400">Se încarcă... {uploadProgress}%</span>
+                                    </div>
+                                    <div className="w-full bg-slate-700 rounded-full h-1.5">
+                                      <div 
+                                        className="bg-emerald-500 h-1.5 rounded-full transition-all duration-300"
+                                        style={{ width: `${uploadProgress}%` }}
+                                      ></div>
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                {/* Uploaded File Info */}
+                                {uploaded && !isUploading && (
+                                  <div className="mb-3 p-2 bg-slate-700/50 rounded-lg">
+                                    <div className="flex items-center gap-2">
+                                      <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                      </svg>
+                                      <span className="text-xs text-gray-300 truncate flex-1">{uploaded.fileName}</span>
+                                      <a 
+                                        href={uploaded.url} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-xs text-blue-400 hover:text-blue-300"
+                                      >
+                                        Vezi
+                                      </a>
+                                    </div>
+                                  </div>
+                                )}
+                                
+                                <label className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg cursor-pointer transition-colors ${
+                                  isUploading 
+                                    ? 'bg-slate-700/30 cursor-not-allowed' 
+                                    : 'bg-slate-700/50 hover:bg-slate-700'
+                                }`}>
                                   <UploadIcon />
-                                  <span className="text-xs sm:text-sm text-gray-400">Încărcați document</span>
-                                  <input type="file" accept="image/*,.pdf" className="hidden" />
+                                  <span className="text-xs sm:text-sm text-gray-400">
+                                    {uploaded ? 'Înlocuiește document' : 'Încărcați document'}
+                                  </span>
+                                  <input 
+                                    type="file" 
+                                    accept="image/jpeg,image/png,image/webp,application/pdf" 
+                                    className="hidden" 
+                                    onChange={handleDocumentFileChange(doc.id)}
+                                    disabled={isUploading}
+                                  />
                                 </label>
                               </div>
+                              {uploaded && (
+                                <div className={`shrink-0 ${
+                                  uploaded.status === 'approved' ? 'text-emerald-500' :
+                                  uploaded.status === 'rejected' ? 'text-red-500' :
+                                  'text-yellow-500'
+                                }`} title={
+                                  uploaded.status === 'approved' ? 'Aprobat' :
+                                  uploaded.status === 'rejected' ? 'Respins' :
+                                  'În verificare'
+                                }>
+                                  {uploaded.status === 'approved' ? (
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                    </svg>
+                                  ) : uploaded.status === 'rejected' ? (
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                    </svg>
+                                  ) : (
+                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                                    </svg>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
-                        ))}
+                        );
+                        })}
                     </div>
                   </div>
                 )}
@@ -1324,7 +1599,13 @@ function ProfilCurierContent() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400 text-sm">Documente</span>
-                  <span className="text-orange-400 text-sm">0 / 3</span>
+                  <span className={`text-sm ${
+                    Object.keys(uploadedDocuments).length >= getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness).filter(d => d.required).length
+                      ? 'text-emerald-400'
+                      : 'text-orange-400'
+                  }`}>
+                    {Object.keys(uploadedDocuments).length} / {getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness).filter(d => d.required).length}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400 text-sm">Membru din</span>
