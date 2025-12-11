@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -40,8 +40,14 @@ export default function ComenziCurierPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>(initialOrders);
   const [loadingOrders, setLoadingOrders] = useState(false);
-  const [filter, setFilter] = useState<'all' | Order['status']>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | Order['status']>('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  
+  // Advanced filters
+  const [countryFilter, setCountryFilter] = useState<string>('all');
+  const [serviceFilter, setServiceFilter] = useState<string>('all');
+  const [dateFilter, setDateFilter] = useState<string>('');
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -112,9 +118,56 @@ export default function ComenziCurierPage() {
     }
   };
 
-  const filteredOrders = filter === 'all' 
-    ? orders 
-    : orders.filter(o => o.status === filter);
+  // Get unique countries and services for filter dropdowns
+  const uniqueCountries = useMemo(() => {
+    const countries = new Set<string>();
+    orders.forEach(o => {
+      if (o.expeditorTara) countries.add(o.expeditorTara);
+      if (o.destinatarTara) countries.add(o.destinatarTara);
+    });
+    return Array.from(countries).sort();
+  }, [orders]);
+
+  const uniqueServices = useMemo(() => {
+    const services = new Set<string>();
+    orders.forEach(o => {
+      if (o.tipColet) services.add(o.tipColet);
+    });
+    return Array.from(services).sort();
+  }, [orders]);
+
+  // Apply all filters
+  const filteredOrders = useMemo(() => {
+    return orders.filter(order => {
+      // Status filter
+      if (statusFilter !== 'all' && order.status !== statusFilter) return false;
+      
+      // Country filter (checks both expeditor and destinatar)
+      if (countryFilter !== 'all') {
+        if (order.expeditorTara !== countryFilter && order.destinatarTara !== countryFilter) return false;
+      }
+      
+      // Service filter
+      if (serviceFilter !== 'all' && order.tipColet !== serviceFilter) return false;
+      
+      // Date filter
+      if (dateFilter) {
+        if (order.dataColectare !== dateFilter) return false;
+      }
+      
+      return true;
+    });
+  }, [orders, statusFilter, countryFilter, serviceFilter, dateFilter]);
+
+  // Check if any advanced filter is active
+  const hasActiveAdvancedFilters = countryFilter !== 'all' || serviceFilter !== 'all' || dateFilter !== '';
+
+  const clearAllFilters = () => {
+    setStatusFilter('all');
+    setCountryFilter('all');
+    setServiceFilter('all');
+    setDateFilter('');
+  };
 
   const stats = {
     total: orders.length,
@@ -224,11 +277,12 @@ export default function ComenziCurierPage() {
 
         {/* Filters - Improved pill design */}
         <div className="bg-slate-800/30 rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6">
-          <div className="flex flex-wrap gap-1.5 sm:gap-2">
+          {/* Status filters */}
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3">
             <button
-              onClick={() => setFilter('all')}
+              onClick={() => setStatusFilter('all')}
               className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all ${
-                filter === 'all' 
+                statusFilter === 'all' 
                   ? 'bg-linear-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-500/25' 
                   : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
               }`}
@@ -240,9 +294,9 @@ export default function ComenziCurierPage() {
               return (
                 <button
                   key={status}
-                  onClick={() => setFilter(status as Order['status'])}
+                  onClick={() => setStatusFilter(status as Order['status'])}
                   className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all ${
-                    filter === status 
+                    statusFilter === status 
                       ? `${bg} ${color} shadow-lg ring-1 ring-current/20` 
                       : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
                   }`}
@@ -251,7 +305,86 @@ export default function ComenziCurierPage() {
                 </button>
               );
             })}
+            
+            {/* Toggle advanced filters button */}
+            <button
+              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+              className={`ml-auto px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5 ${
+                showAdvancedFilters || hasActiveAdvancedFilters
+                  ? 'bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/30' 
+                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
+              }`}
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              <span className="hidden sm:inline">Filtre</span>
+              {hasActiveAdvancedFilters && (
+                <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+              )}
+            </button>
           </div>
+          
+          {/* Advanced filters panel */}
+          {showAdvancedFilters && (
+            <div className="pt-3 border-t border-white/5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
+                {/* Country filter */}
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1.5">Țară</label>
+                  <select
+                    value={countryFilter}
+                    onChange={(e) => setCountryFilter(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
+                  >
+                    <option value="all">Toate țările</option>
+                    {uniqueCountries.map(country => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Service filter */}
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1.5">Tip serviciu</label>
+                  <select
+                    value={serviceFilter}
+                    onChange={(e) => setServiceFilter(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
+                  >
+                    <option value="all">Toate serviciile</option>
+                    {uniqueServices.map(service => (
+                      <option key={service} value={service}>{service}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Date filter */}
+                <div>
+                  <label className="block text-xs text-gray-400 mb-1.5">Data colectare</label>
+                  <input
+                    type="date"
+                    value={dateFilter}
+                    onChange={(e) => setDateFilter(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 scheme-dark"
+                  />
+                </div>
+              </div>
+              
+              {/* Clear filters button */}
+              {hasActiveAdvancedFilters && (
+                <button
+                  onClick={clearAllFilters}
+                  className="mt-3 px-4 py-2 text-xs sm:text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors flex items-center gap-1.5"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Resetează filtrele
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Orders List - Improved */}
@@ -268,7 +401,16 @@ export default function ComenziCurierPage() {
                 </div>
                 Lista Comenzilor
               </h2>
-              <span className="text-xs sm:text-sm text-gray-500">{filteredOrders.length} comenzi</span>
+              <div className="flex items-center gap-2">
+                {hasActiveAdvancedFilters && (
+                  <span className="text-xs text-purple-400 bg-purple-500/10 px-2 py-1 rounded-lg">
+                    Filtrate
+                  </span>
+                )}
+                <span className="text-xs sm:text-sm text-gray-500">
+                  {filteredOrders.length} {filteredOrders.length !== orders.length && `din ${orders.length}`} comenzi
+                </span>
+              </div>
             </div>
           </div>
           
@@ -284,10 +426,22 @@ export default function ComenziCurierPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
               </div>
-              <p className="text-gray-300 text-base sm:text-lg font-semibold mb-1">Nu ai nicio comandă</p>
-              <p className="text-gray-500 text-sm max-w-xs mx-auto">
-                {filter !== 'all' ? `cu status "${statusLabels[filter].label}"` : 'Comenzile vor apărea aici când clienții plasează comenzi.'}
+              <p className="text-gray-300 text-base sm:text-lg font-semibold mb-1">
+                {hasActiveAdvancedFilters || statusFilter !== 'all' ? 'Nicio comandă găsită' : 'Nu ai nicio comandă'}
               </p>
+              <p className="text-gray-500 text-sm max-w-xs mx-auto">
+                {hasActiveAdvancedFilters || statusFilter !== 'all' 
+                  ? 'Încearcă să modifici filtrele pentru a vedea mai multe comenzi.' 
+                  : 'Comenzile vor apărea aici când clienții plasează comenzi.'}
+              </p>
+              {(hasActiveAdvancedFilters || statusFilter !== 'all') && (
+                <button
+                  onClick={clearAllFilters}
+                  className="mt-4 px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-lg transition-colors"
+                >
+                  Resetează filtrele
+                </button>
+              )}
             </div>
           ) : (
             <div className="space-y-3">
