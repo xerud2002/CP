@@ -148,37 +148,49 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
 }) {
   return (
     <header className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16">
+          {/* Logo/Brand - Mobile */}
+          <Link href="/" className="flex items-center gap-1.5">
+            <span className="text-base sm:text-lg font-bold">
+              <span className="text-orange-500">Curierul</span>
+              <span className="text-emerald-500">Perfect</span>
+            </span>
+          </Link>
+
           {/* Right Side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {/* Notifications */}
-            <button className="relative p-2 text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
-              <BellIcon className="w-6 h-6" />
+            <button className="relative p-2.5 sm:p-2 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/5 active:bg-white/10">
+              <BellIcon className="w-5 h-5 sm:w-6 sm:h-6" />
               {notificationCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 rounded-full text-xs font-medium text-white flex items-center justify-center">
+                <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 rounded-full text-[10px] sm:text-xs font-medium text-white flex items-center justify-center">
                   {notificationCount}
                 </span>
               )}
             </button>
 
             {/* User Avatar */}
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-linear-to-br from-orange-400 to-orange-600 flex items-center justify-center overflow-hidden shadow-lg shadow-orange-500/25">
+            <Link href="/dashboard/curier/profil" className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-linear-to-br from-orange-400 to-orange-600 flex items-center justify-center overflow-hidden shadow-lg shadow-orange-500/25">
                 <Image src="/img/default-avatar.png" alt="Avatar" width={36} height={36} className="w-full h-full object-cover" />
               </div>
               <div className="hidden sm:block">
                 <p className="text-sm font-medium text-white">{userName}</p>
                 <p className="text-xs text-emerald-400">Curier verificat ✓</p>
               </div>
-            </div>
+            </Link>
 
             {/* Logout */}
             <button 
               onClick={onLogout}
-              className="px-4 py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+              className="p-2.5 sm:px-4 sm:py-2 text-sm text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-all active:bg-white/10"
+              title="Ieșire"
             >
-              Ieșire
+              <svg className="w-5 h-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+              </svg>
+              <span className="hidden sm:inline">Ieșire</span>
             </button>
           </div>
         </div>
@@ -192,32 +204,32 @@ function WelcomeSection({ userName, hasNewOrders }: { userName: string; hasNewOr
   const greeting = getGreeting();
 
   return (
-    <section className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-linear-to-br from-slate-800/80 to-slate-900/80 border border-white/10 p-4 sm:p-6">
+    <section className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-800/80 to-slate-900/80 border border-white/10 p-4 sm:p-6">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-emerald-500/5 rounded-full blur-3xl" />
 
       <div className="relative z-10">
-        <div className="flex items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <h1 className="text-xl sm:text-2xl font-bold text-white mb-1">
-              {greeting}, <span className="text-emerald-400 truncate">{userName}</span>!
+            <h1 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">
+              {greeting}, <span className="text-emerald-400">{userName}</span>!
             </h1>
             {hasNewOrders ? (
-              <p className="text-orange-400 text-sm sm:text-base flex items-center gap-2">
-                <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
-                Ai comenzi noi de procesat
+              <p className="text-orange-400 text-xs sm:text-base flex items-center gap-1.5 sm:gap-2">
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full animate-pulse"></span>
+                Comenzi noi de procesat
               </p>
             ) : (
-              <p className="text-gray-400 text-sm sm:text-base">Bine ai revenit în panoul tău</p>
+              <p className="text-gray-400 text-xs sm:text-base">Bine ai revenit în panoul tău</p>
             )}
           </div>
 
           {/* Status Badge */}
-          <div className="shrink-0 flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-medium border border-emerald-500/30">
+          <div className="shrink-0 flex flex-col sm:flex-row items-end sm:items-center gap-1.5 sm:gap-2">
+            <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] sm:text-sm font-medium border border-emerald-500/30">
               ● Online
             </span>
-            <span className="hidden sm:flex px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs sm:text-sm font-medium border border-amber-500/30 items-center gap-1">
+            <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-amber-500/20 text-amber-400 text-[10px] sm:text-sm font-medium border border-amber-500/30 flex items-center gap-0.5 sm:gap-1">
               ⭐ 4.9
             </span>
           </div>
@@ -290,29 +302,29 @@ function SetupProgress({ setupComplete, completedSteps, totalSteps }: { setupCom
 function MainNavigation({ badges }: { badges: Record<string, boolean> }) {
   return (
     <section>
-      <h2 className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-3">Meniu rapid</h2>
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
+      <h2 className="text-xs sm:text-sm font-medium text-gray-400 uppercase tracking-wide mb-2 sm:mb-3">Meniu rapid</h2>
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
         {mainNavTiles.map((tile) => {
           const needsAttention = tile.badgeKey && badges[tile.badgeKey];
           return (
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative p-3 sm:p-4 rounded-xl border ${tile.bgColor} ${tile.borderColor} transition-all`}
+              className={`group relative p-2.5 sm:p-4 rounded-xl border ${tile.bgColor} ${tile.borderColor} transition-all active:scale-95`}
             >
               {/* Badge indicator */}
               {needsAttention && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 sm:h-5 sm:w-5">
+                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 sm:h-5 sm:w-5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-4 w-4 sm:h-5 sm:w-5 bg-orange-500 items-center justify-center">
-                    <span className="text-[8px] sm:text-[10px] font-bold text-white">!</span>
+                  <span className="relative inline-flex rounded-full h-3.5 w-3.5 sm:h-5 sm:w-5 bg-orange-500 items-center justify-center">
+                    <span className="text-[7px] sm:text-[10px] font-bold text-white">!</span>
                   </span>
                 </span>
               )}
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-slate-800/50 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform`}>
-                <tile.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${tile.color}`} />
+              <div className={`w-9 h-9 sm:w-12 sm:h-12 rounded-lg bg-slate-800/50 flex items-center justify-center mx-auto mb-1.5 sm:mb-2 group-hover:scale-110 transition-transform`}>
+                <tile.icon className={`w-4 h-4 sm:w-6 sm:h-6 ${tile.color}`} />
               </div>
-              <h3 className="text-white font-medium text-xs sm:text-sm text-center truncate">{tile.title}</h3>
+              <h3 className="text-white font-medium text-[11px] sm:text-sm text-center leading-tight">{tile.title}</h3>
               <p className="text-gray-500 text-[10px] sm:text-xs text-center truncate hidden sm:block">{tile.description}</p>
             </Link>
           );
@@ -325,37 +337,37 @@ function MainNavigation({ badges }: { badges: Record<string, boolean> }) {
 // Orders Summary Component - Replaces Quick Actions
 function OrdersSummary() {
   return (
-    <section className="bg-slate-800/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base sm:text-lg font-semibold text-white flex items-center gap-2">
+    <section className="bg-slate-800/30 rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h3 className="text-sm sm:text-lg font-semibold text-white flex items-center gap-2">
           <div className="p-1.5 bg-orange-500/20 rounded-lg">
-            <BoxIcon className="w-4 h-4 text-orange-400" />
+            <BoxIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400" />
           </div>
           Sumar comenzi
         </h3>
-        <Link href="/dashboard/curier/comenzi" className="text-xs sm:text-sm text-orange-400 hover:text-orange-300 transition-colors">
+        <Link href="/dashboard/curier/comenzi" className="text-[11px] sm:text-sm text-orange-400 hover:text-orange-300 transition-colors">
           Vezi toate →
         </Link>
       </div>
       
-      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4">
-        <div className="text-center p-2 sm:p-3 bg-orange-500/10 rounded-lg border border-orange-500/20">
-          <p className="text-lg sm:text-2xl font-bold text-orange-400">0</p>
-          <p className="text-[10px] sm:text-xs text-gray-400">Noi</p>
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-4 mb-3 sm:mb-4">
+        <div className="text-center p-2 sm:p-3 bg-orange-500/10 rounded-xl border border-orange-500/20">
+          <p className="text-base sm:text-2xl font-bold text-orange-400">0</p>
+          <p className="text-[9px] sm:text-xs text-gray-400">Noi</p>
         </div>
-        <div className="text-center p-2 sm:p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
-          <p className="text-lg sm:text-2xl font-bold text-blue-400">0</p>
-          <p className="text-[10px] sm:text-xs text-gray-400">În tranzit</p>
+        <div className="text-center p-2 sm:p-3 bg-blue-500/10 rounded-xl border border-blue-500/20">
+          <p className="text-base sm:text-2xl font-bold text-blue-400">0</p>
+          <p className="text-[9px] sm:text-xs text-gray-400">În tranzit</p>
         </div>
-        <div className="text-center p-2 sm:p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-          <p className="text-lg sm:text-2xl font-bold text-emerald-400">0</p>
-          <p className="text-[10px] sm:text-xs text-gray-400">Livrate</p>
+        <div className="text-center p-2 sm:p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+          <p className="text-base sm:text-2xl font-bold text-emerald-400">0</p>
+          <p className="text-[9px] sm:text-xs text-gray-400">Livrate</p>
         </div>
       </div>
       
       <Link 
         href="/dashboard/curier/comenzi"
-        className="flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl transition-colors text-sm"
+        className="flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-medium rounded-xl transition-colors text-xs sm:text-sm"
       >
         <BoxIcon className="w-4 h-4" />
         Vezi comenzile
@@ -367,26 +379,29 @@ function OrdersSummary() {
 // Recent Activity Component - Improved
 function RecentActivity() {
   return (
-    <section className="bg-slate-800/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base sm:text-lg font-semibold text-white flex items-center gap-2">
+    <section className="bg-slate-800/30 rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full flex flex-col">
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h3 className="text-sm sm:text-lg font-semibold text-white flex items-center gap-2">
           <div className="p-1.5 bg-purple-500/20 rounded-lg">
-            <BellIcon className="w-4 h-4 text-purple-400" />
+            <BellIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400" />
           </div>
-          Activitate recentă
+          Activitate
         </h3>
       </div>
-      <div className="space-y-2">
+      <div className="space-y-1.5 sm:space-y-2 flex-1 flex flex-col justify-center">
         {recentActivities.length === 0 ? (
-          <div className="text-center py-6">
-            <p className="text-gray-500 text-sm">Nicio activitate recentă</p>
+          <div className="text-center">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 rounded-xl bg-purple-500/10 flex items-center justify-center">
+              <BellIcon className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400/50" />
+            </div>
+            <p className="text-gray-500 text-xs sm:text-sm">Nicio activitate recentă</p>
           </div>
         ) : (
           recentActivities.map((activity, index) => (
-            <div key={index} className="flex items-center gap-3 p-2.5 sm:p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
-              <div className={`w-2 h-2 rounded-full shrink-0 ${activity.color}`} />
-              <span className="text-gray-300 text-xs sm:text-sm flex-1 truncate">{activity.message}</span>
-              <span className="text-gray-500 text-[10px] sm:text-xs shrink-0">{activity.time}</span>
+            <div key={index} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors">
+              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${activity.color}`} />
+              <span className="text-gray-300 text-[11px] sm:text-sm flex-1 truncate">{activity.message}</span>
+              <span className="text-gray-500 text-[9px] sm:text-xs shrink-0">{activity.time}</span>
             </div>
           ))
         )}
@@ -398,43 +413,43 @@ function RecentActivity() {
 // Help Card Component
 function HelpCard() {
   return (
-    <section className="bg-linear-to-br from-slate-800/80 to-slate-900/80 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/10 relative overflow-hidden">
+    <section className="bg-linear-to-br from-slate-800/80 to-slate-900/80 rounded-2xl p-3.5 sm:p-6 border border-white/10 relative overflow-hidden">
       {/* Decorative gradient */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
       
-      <div className="relative flex flex-col sm:flex-row sm:items-center gap-4">
-        <div className="flex items-center gap-3 flex-1">
-          <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500/30 to-cyan-500/20 flex items-center justify-center shrink-0 border border-blue-500/20">
-            <svg className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <div className="relative flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2.5 sm:gap-3 flex-1">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-linear-to-br from-blue-500/30 to-cyan-500/20 flex items-center justify-center shrink-0 border border-blue-500/20">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
             </svg>
           </div>
           <div>
-            <h3 className="font-semibold text-white text-sm sm:text-base">Ai nevoie de ajutor?</h3>
-            <p className="text-gray-400 text-xs sm:text-sm">Echipa noastră îți răspunde rapid</p>
+            <h3 className="font-semibold text-white text-xs sm:text-base">Ai nevoie de ajutor?</h3>
+            <p className="text-gray-400 text-[11px] sm:text-sm">Echipa noastră îți răspunde rapid</p>
           </div>
         </div>
         
-        <div className="flex gap-2 sm:gap-3">
+        <div className="flex gap-2">
           <a 
             href="mailto:support@curierulperfect.ro" 
-            className="flex items-center gap-2 px-4 py-2.5 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-xl transition-all hover:scale-105 border border-blue-500/20 hover:border-blue-500/40"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 bg-blue-500/20 hover:bg-blue-500/30 active:bg-blue-500/40 text-blue-400 rounded-xl transition-all border border-blue-500/20"
           >
             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
             </svg>
-            <span className="text-xs sm:text-sm font-medium">Email</span>
+            <span className="text-[11px] sm:text-sm font-medium">Email</span>
           </a>
           <a 
             href="https://wa.me/40700000000" 
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded-xl transition-all hover:scale-105 border border-emerald-500/20 hover:border-emerald-500/40"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 active:bg-emerald-500/40 text-emerald-400 rounded-xl transition-all border border-emerald-500/20"
           >
             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
-            <span className="text-xs sm:text-sm font-medium">WhatsApp</span>
+            <span className="text-[11px] sm:text-sm font-medium">WhatsApp</span>
           </a>
         </div>
       </div>
@@ -577,7 +592,7 @@ export default function CurierDashboard() {
       />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6">
+      <main className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Welcome Section */}
         <WelcomeSection userName={userName} hasNewOrders={false} />
 
@@ -588,7 +603,7 @@ export default function CurierDashboard() {
         <MainNavigation badges={menuBadges} />
 
         {/* Stats and Activity Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-6">
           {/* Orders Summary - Takes 3 columns on large screens */}
           <div className="lg:col-span-3">
             <OrdersSummary />

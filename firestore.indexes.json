@@ -36,7 +36,7 @@
       "collectionGroup": "calendar_colectii",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "uid", "order": "ASCENDING" },
+        { "fieldPath": "courierId", "order": "ASCENDING" },
         { "fieldPath": "dataTimestamp", "order": "ASCENDING" }
       ]
     }

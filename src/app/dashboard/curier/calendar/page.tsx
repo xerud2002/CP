@@ -92,7 +92,7 @@ export default function CalendarColectiiPage() {
       try {
         const q = query(
           collection(db, 'calendar_colectii'),
-          where('uid', '==', user.uid),
+          where('courierId', '==', user.uid),
           orderBy('dataTimestamp', 'asc')
         );
         const snapshot = await getDocs(q);
@@ -250,7 +250,7 @@ export default function CalendarColectiiPage() {
     setSaving(true);
     try {
       const docRef = await addDoc(collection(db, 'calendar_colectii'), {
-        uid: user.uid,
+        courierId: user.uid,
         tara: selectedCountry,
         data: formattedDate,
         dataTimestamp: dateObj,
