@@ -51,12 +51,10 @@ const CubeIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
   </svg>
 );
 
-// Euro icon component
-const EuroIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 10h12" />
-    <path d="M4 14h9" />
-    <path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2" />
+// Tarife/Transport icon component - truck with price tag style
+const TarifeIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
   </svg>
 );
 
@@ -620,7 +618,7 @@ export default function TarifePracticatePage() {
             </Link>
             <div className="flex items-center gap-4">
               <div className="p-3 bg-linear-to-br from-emerald-500/20 to-teal-500/20 rounded-xl border border-emerald-500/20">
-                <EuroIcon className="w-7 h-7 text-emerald-400" />
+                <TarifeIcon className="w-7 h-7 text-emerald-400" />
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold text-white">Tarife Transport Internațional Europa</h1>
