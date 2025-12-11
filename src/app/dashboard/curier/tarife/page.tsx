@@ -601,12 +601,12 @@ export default function TarifePracticatePage() {
     return acc;
   }, {} as Record<string, Tarif[]>);
 
-  // Stats
-  const totalTarife = tarife.length;
-  const totalCountries = Object.keys(tarifeByCountry).length;
-  const avgPrice = tarife.length > 0 
-    ? (tarife.reduce((sum, t) => sum + t.pret, 0) / tarife.length).toFixed(1)
-    : '0';
+  // Stats - available for future use
+  // const totalTarife = tarife.length;
+  // const totalCountries = Object.keys(tarifeByCountry).length;
+  // const avgPrice = tarife.length > 0 
+  //   ? (tarife.reduce((sum, t) => sum + t.pret, 0) / tarife.length).toFixed(1)
+  //   : '0';
 
   if (loading) {
     return (

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -163,7 +164,7 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
             {/* User Avatar */}
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-linear-to-br from-orange-400 to-orange-600 flex items-center justify-center overflow-hidden shadow-lg shadow-orange-500/25">
-                <img src="/img/default-avatar.png" alt="Avatar" className="w-full h-full object-cover" />
+                <Image src="/img/default-avatar.png" alt="Avatar" width={36} height={36} className="w-full h-full object-cover" />
               </div>
               <div className="hidden sm:block">
                 <p className="text-sm font-medium text-white">{userName}</p>
