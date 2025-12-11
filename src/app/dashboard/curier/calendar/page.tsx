@@ -130,6 +130,7 @@ export default function CalendarColectiiPage() {
         }
         
         setEntries(loadedEntries);
+        console.log('📅 Loaded calendar entries:', loadedEntries);
       } catch (error) {
         console.error('Error loading entries:', error);
       } finally {
@@ -750,6 +751,177 @@ export default function CalendarColectiiPage() {
           )}
         </div>
       </div>
+
+      {/* Visual Calendar Month View */}
+      {entries.length > 0 && (
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
+          <div className="bg-linear-to-br from-slate-800/50 to-slate-900/30 rounded-2xl border border-white/5 p-4 sm:p-6">
+            {/* Calendar Header */}
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-500/20 rounded-xl">
+                  <CalendarIcon className="w-5 h-5 text-purple-400" />
+                </div>
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-white">Calendar Disponibilitate</h2>
+                  <p className="text-xs sm:text-sm text-gray-400">Vezi zilele programate cu steagurile țărilor</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    if (calendarMonth === 0) {
+                      setCalendarMonth(11);
+                      setCalendarYear(calendarYear - 1);
+                    } else {
+                      setCalendarMonth(calendarMonth - 1);
+                    }
+                  }}
+                  className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+                >
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <div className="text-center min-w-[120px]">
+                  <p className="text-sm sm:text-base font-semibold text-white">
+                    {new Date(calendarYear, calendarMonth).toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' })}
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    if (calendarMonth === 11) {
+                      setCalendarMonth(0);
+                      setCalendarYear(calendarYear + 1);
+                    } else {
+                      setCalendarMonth(calendarMonth + 1);
+                    }
+                  }}
+                  className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+                >
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Calendar Grid */}
+            <div className="bg-slate-900/50 rounded-xl p-2 sm:p-4">
+              {/* Day Headers */}
+              <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2">
+                {['Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm', 'Dum'].map(day => (
+                  <div key={day} className="text-center text-[10px] sm:text-xs font-medium text-gray-400 py-1">
+                    {day}
+                  </div>
+                ))}
+              </div>
+
+              {/* Calendar Days */}
+              <div className="grid grid-cols-7 gap-1 sm:gap-2">
+                {(() => {
+                  const firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
+                  const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+                  const startDay = firstDay === 0 ? 6 : firstDay - 1; // Adjust so Monday is first
+                  const days = [];
+                  
+                  // Empty cells before first day
+                  for (let i = 0; i < startDay; i++) {
+                    days.push(
+                      <div key={`empty-${i}`} className="aspect-square"></div>
+                    );
+                  }
+                  
+                  // Days of month
+                  for (let day = 1; day <= daysInMonth; day++) {
+                    // Format to match Romanian DD.MM.YYYY format saved in Firestore (with dots, not slashes)
+                    const dateStr = `${String(day).padStart(2, '0')}.${String(calendarMonth + 1).padStart(2, '0')}.${calendarYear}`;
+                    const dayEntries = entries.filter(e => e.data === dateStr);
+                    
+                    // Debug logging for days with entries
+                    if (dayEntries.length > 0) {
+                      console.log(`🗓️ Day ${day}: Found ${dayEntries.length} entries for ${dateStr}`, dayEntries);
+                    }
+                    
+                    const isToday = new Date().toDateString() === new Date(calendarYear, calendarMonth, day).toDateString();
+                    
+                    days.push(
+                      <div
+                        key={day}
+                        className={`aspect-square rounded-lg border transition-all ${
+                          isToday 
+                            ? 'bg-purple-500/20 border-purple-500/40' 
+                            : dayEntries.length > 0 
+                              ? 'bg-slate-800/80 border-emerald-500/30 hover:border-emerald-500/50' 
+                              : 'bg-slate-800/30 border-white/5 hover:border-white/10'
+                        }`}
+                      >
+                        <div className="h-full flex flex-col items-center justify-center p-0.5 sm:p-1">
+                          <span className={`text-[10px] sm:text-xs font-medium mb-0.5 ${
+                            isToday ? 'text-purple-400' : dayEntries.length > 0 ? 'text-white' : 'text-gray-500'
+                          }`}>
+                            {day}
+                          </span>
+                          {dayEntries.length > 0 && (
+                            <div className="flex flex-wrap gap-0.5 justify-center mt-1">
+                              {dayEntries.slice(0, 4).map((entry, idx) => {
+                                const countryCode = getCountryCode(entry.tara);
+                                if (!countryCode) {
+                                  console.log('Missing country code for:', entry.tara);
+                                  return null;
+                                }
+                                return (
+                                  <div key={idx} className="shrink-0">
+                                    <Image
+                                      src={`/img/flag/${countryCode}.svg`}
+                                      alt={entry.tara}
+                                      width={16}
+                                      height={12}
+                                      className="rounded-sm shadow-md border border-white/10"
+                                      title={entry.tara}
+                                    />
+                                  </div>
+                                );
+                              })}
+                              {dayEntries.length > 4 && (
+                                <span className="text-[9px] text-emerald-400 font-bold">+{dayEntries.length - 4}</span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  }
+                  
+                  return days;
+                })()}
+              </div>
+
+              {/* Legend */}
+              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-4 pt-4 border-t border-white/5">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded bg-purple-500/20 border border-purple-500/40"></div>
+                  <span className="text-xs text-gray-400">Astăzi</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded bg-slate-800/80 border border-emerald-500/30"></div>
+                  <span className="text-xs text-gray-400">Zi programată</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Image
+                    src="/img/flag/gb.svg"
+                    alt="Flag"
+                    width={16}
+                    height={12}
+                    className="rounded-sm border border-white/10"
+                  />
+                  <span className="text-xs text-gray-400">Țară disponibilă</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Custom Scrollbar Styles */}
       <style jsx>{`

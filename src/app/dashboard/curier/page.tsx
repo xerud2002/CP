@@ -46,7 +46,7 @@ interface SetupStep {
 const getSetupSteps = (profileComplete: boolean, zonesComplete: boolean, servicesComplete: boolean, calendarComplete: boolean): SetupStep[] => [
   { id: 'profile', title: 'Completează profilul', description: 'Adaugă informațiile tale', href: '/dashboard/curier/profil', icon: UserIcon, completed: profileComplete },
   { id: 'zones', title: 'Setează zonele', description: 'Unde livrezi?', href: '/dashboard/curier/zona-acoperire', icon: MapIcon, completed: zonesComplete },
-  { id: 'services', title: 'Adaugă servicii', description: 'Ce oferi clienților?', href: '/dashboard/curier/tarife', icon: CurrencyIcon, completed: servicesComplete },
+  { id: 'services', title: 'Adaugă servicii', description: 'Ce oferi clienților?', href: '/dashboard/curier/servicii', icon: CurrencyIcon, completed: servicesComplete },
   { id: 'calendar', title: 'Configurează calendarul', description: 'Când ești disponibil?', href: '/dashboard/curier/calendar', icon: CalendarIcon, completed: calendarComplete },
 ];
 
@@ -76,10 +76,10 @@ const mainNavTiles: NavTile[] = [
     borderColor: 'border-orange-500/20 hover:border-orange-500/40',
   },
   {
-    href: '/dashboard/curier/tarife',
+    href: '/dashboard/curier/servicii',
     icon: StarIcon,
     title: 'Servicii',
-    description: 'Servicii și prețuri',
+    description: 'Servicii active',
     color: 'text-amber-400',
     bgColor: 'bg-amber-500/10 hover:bg-amber-500/20',
     borderColor: 'border-amber-500/20 hover:border-amber-500/40',
@@ -106,10 +106,10 @@ const mainNavTiles: NavTile[] = [
     badgeKey: 'calendar',
   },
   {
-    href: '/dashboard/curier/plati',
-    icon: CreditCardIcon,
-    title: 'Plăți',
-    description: 'Istoric plăți',
+    href: '/dashboard/curier/tarife',
+    icon: CurrencyIcon,
+    title: 'Tarife',
+    description: 'Configurează prețuri',
     color: 'text-emerald-400',
     bgColor: 'bg-emerald-500/10 hover:bg-emerald-500/20',
     borderColor: 'border-emerald-500/20 hover:border-emerald-500/40',

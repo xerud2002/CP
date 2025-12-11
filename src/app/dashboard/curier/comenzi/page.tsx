@@ -206,6 +206,7 @@ export default function ComenziCurierPage() {
               </div>
               <div>
                 <h1 className="text-lg sm:text-2xl font-bold text-white">Comenzile Mele</h1>
+                <p className="text-xs text-gray-400 mt-0.5 sm:hidden">Gestionează comenzile tale</p>
                 <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Gestionează comenzile și livrările tale</p>
               </div>
             </div>
@@ -216,60 +217,60 @@ export default function ComenziCurierPage() {
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Stats Cards - Improved design */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
-          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-emerald-500/30 transition-all">
             <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
-            <div className="relative flex items-center gap-2 sm:gap-3">
-              <div className="p-2 sm:p-2.5 bg-emerald-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
+              <div className="p-1.5 sm:p-2.5 bg-emerald-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 6v6l4 2" />
                 </svg>
               </div>
               <div>
-                <p className="text-lg sm:text-2xl font-bold text-white">{stats.total}</p>
-                <p className="text-[10px] sm:text-xs text-gray-400">Total comenzi</p>
+                <p className="text-xl sm:text-2xl font-bold text-white leading-none">{stats.total}</p>
+                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Total comenzi</p>
               </div>
             </div>
           </div>
-          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-blue-500/30 transition-all">
+          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-blue-500/30 transition-all">
             <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
-            <div className="relative flex items-center gap-2 sm:gap-3">
-              <div className="p-2 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
+              <div className="p-1.5 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
                 </svg>
               </div>
               <div>
-                <p className="text-lg sm:text-2xl font-bold text-blue-400">{stats.noi}</p>
-                <p className="text-[10px] sm:text-xs text-gray-400">Comenzi noi</p>
+                <p className="text-xl sm:text-2xl font-bold text-blue-400 leading-none">{stats.noi}</p>
+                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Comenzi noi</p>
               </div>
             </div>
           </div>
-          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-orange-500/30 transition-all">
+          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-orange-500/30 transition-all">
             <div className="absolute top-0 right-0 w-20 h-20 bg-orange-500/10 rounded-full blur-2xl group-hover:bg-orange-500/20 transition-all"></div>
-            <div className="relative flex items-center gap-2 sm:gap-3">
-              <div className="p-2 sm:p-2.5 bg-orange-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
+              <div className="p-1.5 sm:p-2.5 bg-orange-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                 </svg>
               </div>
               <div>
-                <p className="text-lg sm:text-2xl font-bold text-orange-400">{stats.inTranzit}</p>
-                <p className="text-[10px] sm:text-xs text-gray-400">În tranzit</p>
+                <p className="text-xl sm:text-2xl font-bold text-orange-400 leading-none">{stats.inTranzit}</p>
+                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">În tranzit</p>
               </div>
             </div>
           </div>
-          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-green-500/30 transition-all">
+          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-green-500/30 transition-all">
             <div className="absolute top-0 right-0 w-20 h-20 bg-green-500/10 rounded-full blur-2xl group-hover:bg-green-500/20 transition-all"></div>
-            <div className="relative flex items-center gap-2 sm:gap-3">
-              <div className="p-2 sm:p-2.5 bg-green-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
+              <div className="p-1.5 sm:p-2.5 bg-green-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </div>
               <div>
-                <p className="text-lg sm:text-2xl font-bold text-green-400">{stats.livrate}</p>
-                <p className="text-[10px] sm:text-xs text-gray-400">Livrate</p>
+                <p className="text-xl sm:text-2xl font-bold text-green-400 leading-none">{stats.livrate}</p>
+                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Livrate</p>
               </div>
             </div>
           </div>
@@ -278,10 +279,10 @@ export default function ComenziCurierPage() {
         {/* Filters - Improved pill design */}
         <div className="bg-slate-800/30 rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6">
           {/* Status filters */}
-          <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3">
+          <div className="flex gap-1.5 sm:gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
             <button
               onClick={() => setStatusFilter('all')}
-              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all ${
+              className={`px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
                 statusFilter === 'all' 
                   ? 'bg-linear-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-500/25' 
                   : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
@@ -295,7 +296,7 @@ export default function ComenziCurierPage() {
                 <button
                   key={status}
                   onClick={() => setStatusFilter(status as Order['status'])}
-                  className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all ${
+                  className={`px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
                     statusFilter === status 
                       ? `${bg} ${color} shadow-lg ring-1 ring-current/20` 
                       : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
@@ -309,7 +310,7 @@ export default function ComenziCurierPage() {
             {/* Toggle advanced filters button */}
             <button
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-              className={`ml-auto px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5 ${
+              className={`ml-auto px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5 shrink-0 ${
                 showAdvancedFilters || hasActiveAdvancedFilters
                   ? 'bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/30' 
                   : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'

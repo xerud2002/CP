@@ -84,60 +84,67 @@ const countriesWithCodes = [
 const serviceTypes = [
   { 
     value: 'Colete', 
-    label: 'Colete', 
-    description: 'Transport colete și pachete',
+    label: 'Colete & Pachete', 
+    description: 'Transport rapid colete și pachete internaționale în Europa',
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/20',
     kgOnly: true,
     hasSubOptions: true,
     subOptions: [
-      { value: 'express', label: 'Express', description: 'Livrare urgentă 24-48h', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' },
-      { value: 'frigo', label: 'Frigorific', description: 'Transport refrigerat', color: 'text-sky-400', bgColor: 'bg-sky-500/20' },
-      { value: 'fragil', label: 'Fragil', description: 'Manipulare atentă', color: 'text-rose-400', bgColor: 'bg-rose-500/20' },
-      { value: 'door2door', label: 'Door to Door', description: 'Ridicare și livrare la adresă', color: 'text-emerald-400', bgColor: 'bg-emerald-500/20' },
+      { value: 'express', label: 'Express', description: 'Livrare urgentă rapidă 24-48h în Europa', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' },
+      { value: 'frigo', label: 'Frigorific', description: 'Transport refrigerat temperatură controlată', color: 'text-sky-400', bgColor: 'bg-sky-500/20' },
+      { value: 'fragil', label: 'Fragil', description: 'Manipulare atentă și ambalare securizată', color: 'text-rose-400', bgColor: 'bg-rose-500/20' },
+      { value: 'door2door', label: 'Door to Door', description: 'Serviciu ridicare și livrare la adresă Door to Door', color: 'text-emerald-400', bgColor: 'bg-emerald-500/20' },
     ]
   },
   { 
     value: 'Plicuri', 
-    label: 'Plicuri', 
-    description: 'Documente și acte importante',
+    label: 'Plicuri & Documente', 
+    description: 'Curierat rapid documente și acte importante în toată Europa',
     color: 'text-yellow-400',
     bgColor: 'bg-yellow-500/20',
     plicuriOnly: true,
   },
   { 
     value: 'Mobila', 
-    label: 'Mobilă', 
-    description: 'Transport mobilier',
+    label: 'Mobilă & Mutări', 
+    description: 'Transport mobilier și servicii mutări internaționale',
     color: 'text-amber-400',
     bgColor: 'bg-amber-500/20',
     m3Only: true,
   },
   { 
     value: 'Electronice', 
-    label: 'Electronice', 
-    description: 'TV, electrocasnice, produse electronice',
+    label: 'Electronice & Electrocasnice', 
+    description: 'Transport siguranță maximă TV, electrocasnice și produse electronice în Europa',
     color: 'text-purple-400',
     bgColor: 'bg-purple-500/20',
   },
   { 
     value: 'Animale', 
-    label: 'Animale', 
-    description: 'Transport animale de companie',
+    label: 'Animale de Companie', 
+    description: 'Transport autorizat animale de companie cu certificat sanitar-veterinar',
     color: 'text-pink-400',
     bgColor: 'bg-pink-500/20',
   },
   { 
-    value: 'Auto', 
-    label: 'Auto & Piese', 
-    description: 'Mașini și piese auto',
+    value: 'Platforma', 
+    label: 'Transport Platformă', 
+    description: 'Transport auto pe platformă - mașini, utilaje, tractoare',
     color: 'text-red-400',
     bgColor: 'bg-red-500/20',
   },
   { 
+    value: 'Tractari', 
+    label: 'Tractări Auto', 
+    description: 'Servicii tractare auto și asistență rutieră',
+    color: 'text-orange-400',
+    bgColor: 'bg-orange-500/20',
+  },
+  { 
     value: 'Aeroport', 
     label: 'Transfer Aeroport', 
-    description: 'Transfer persoane la/de la aeroport',
+    description: 'Servicii transfer aeroport rapid și confortabil pentru pasageri',
     color: 'text-cyan-400',
     bgColor: 'bg-cyan-500/20',
     persoaneOnly: true,
@@ -145,15 +152,15 @@ const serviceTypes = [
   { 
     value: 'Persoane', 
     label: 'Transport Persoane', 
-    description: 'Transport persoane în Europa',
+    description: 'Transport persoane confortabil și sigur în toată Europa',
     color: 'text-rose-400',
     bgColor: 'bg-rose-500/20',
     persoaneOnly: true,
   },
   { 
     value: 'Paleti', 
-    label: 'Paleți', 
-    description: 'Transport paleți și marfă paletizată',
+    label: 'Paleți & Marfă Paletizată', 
+    description: 'Transport paleți europeni EUR și marfă paletizată industrială',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/20',
     nrOnly: true,
@@ -208,12 +215,24 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
       </svg>
     ),
-    Auto: (
+    Platforma: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="16" width="20" height="4" rx="1" />
+        <path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" />
+        <circle cx="8" cy="20" r="1" />
+        <circle cx="16" cy="20" r="1" />
+        <path d="M12 16V4" />
+        <path d="M9 7h6" />
+      </svg>
+    ),
+    Tractari: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
         <circle cx="7" cy="17" r="2" />
         <path d="M9 17h6" />
         <circle cx="17" cy="17" r="2" />
+        <path d="M14 2l-3 3 3 3" />
+        <path d="M11 5h7" />
       </svg>
     ),
     Aeroport: (
@@ -647,8 +666,8 @@ export default function TarifePracticatePage() {
                 <EuroIcon className="w-7 h-7 text-emerald-400" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-white">Tarife Practicate</h1>
-                <p className="text-sm text-gray-400 hidden sm:block">Setează prețurile pentru fiecare țară și serviciu</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-white">Tarife Transport Internațional Europa</h1>
+                <p className="text-sm text-gray-400 hidden sm:block">Setează prețuri competitive pentru transport colete, mobilă, paleți și servicii de curierat în Europa</p>
               </div>
             </div>
           </div>
@@ -656,6 +675,23 @@ export default function TarifePracticatePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        {/* Info Message */}
+        <div className="bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-blue-600/10 backdrop-blur-sm rounded-2xl border border-blue-500/20 p-5 sm:p-6 mb-6 sm:mb-8 shadow-lg shadow-blue-500/5">
+          <div className="flex items-start gap-4">
+            <div className="p-2.5 bg-blue-500/20 rounded-xl shrink-0 mt-0.5">
+              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-base sm:text-lg font-semibold text-blue-400 mb-2">De ce este important?</h3>
+              <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
+                Serviciile și tarifele configurate permit platformei să îți trimită doar comenzile care se potrivesc cu specializarea ta. Cu cât adaugi mai multe servicii și tarife competitive, cu atât vei primi mai multe comenzi relevante de la clienți din toată Europa.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Service Types Selection */}
         <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -669,8 +705,8 @@ export default function TarifePracticatePage() {
                 </svg>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-white">Servicii oferite</h2>
-                <p className="text-xs text-gray-500">Selectează serviciile pe care le oferi clienților</p>
+                <h2 className="text-lg font-semibold text-white">Servicii Transport și Curierat Oferite</h2>
+                <p className="text-xs text-gray-500">Selectează serviciile de transport și logistică pe care le oferi clienților pentru expediții în Europa</p>
               </div>
             </div>
             <div className="flex items-center gap-2">

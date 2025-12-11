@@ -75,6 +75,16 @@ export default function ZonaAcoperiirePage() {
   const [regionDropdownOpen, setRegionDropdownOpen] = useState(false);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const regionDropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Collapsed countries state
+  const [collapsedCountries, setCollapsedCountries] = useState<Record<string, boolean>>({});
+  
+  const toggleCountryCollapse = (countryCode: string) => {
+    setCollapsedCountries(prev => ({
+      ...prev,
+      [countryCode]: !prev[countryCode]
+    }));
+  };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -123,6 +133,14 @@ export default function ZonaAcoperiirePage() {
       zones.push({ id: doc.id, ...doc.data() } as CoverageZone);
     });
     setSavedZones(zones);
+    
+    // Auto-collapse all countries by default when loading zones
+    const uniqueCountries = [...new Set(zones.map(z => z.tara))];
+    const initialCollapsedState: Record<string, boolean> = {};
+    uniqueCountries.forEach(country => {
+      initialCollapsedState[country] = true;
+    });
+    setCollapsedCountries(initialCollapsedState);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -156,7 +174,9 @@ export default function ZonaAcoperiirePage() {
         }
         
         setMessage(`✅ ${newRegions.length} regiuni adăugate cu succes!`);
-        loadSavedZones();
+        await loadSavedZones();
+        // Collapse the country after adding regions
+        setCollapsedCountries(prev => ({ ...prev, [tara]: true }));
       } else {
         // Single region - check for duplicates
         const exists = savedZones.some(z => z.tara === tara && z.judet === judet);
@@ -174,7 +194,9 @@ export default function ZonaAcoperiirePage() {
         });
         
         setMessage('✅ Zonă salvată cu succes!');
-        loadSavedZones();
+        await loadSavedZones();
+        // Collapse the country after adding a new zone
+        setCollapsedCountries(prev => ({ ...prev, [tara]: true }));
       }
     } catch (error) {
       console.error('❌ Firebase error:', error);
@@ -494,6 +516,13 @@ export default function ZonaAcoperiirePage() {
                               {zones.length} {zones.length === 1 ? 'regiune' : 'regiuni'}
                             </span>
                             <button
+                              onClick={() => toggleCountryCollapse(countryCode)}
+                              className="p-1.5 text-gray-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all"
+                              title={collapsedCountries[countryCode] ? 'Extinde lista' : 'Restrânge lista'}
+                            >
+                              <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${collapsedCountries[countryCode] ? '-rotate-90' : ''}`} />
+                            </button>
+                            <button
                               onClick={() => handleDeleteCountry(countryCode)}
                               className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
                               title={`Șterge toate zonele din ${country?.name || countryCode}`}
@@ -504,6 +533,7 @@ export default function ZonaAcoperiirePage() {
                         </div>
                         
                         {/* Zones Grid */}
+                        {!collapsedCountries[countryCode] && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {zones.map((zone) => (
                             <div 
@@ -522,7 +552,7 @@ export default function ZonaAcoperiirePage() {
                               </div>
                               <button
                                 onClick={() => zone.id && handleDelete(zone.id)}
-                                className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                                className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg sm:opacity-0 sm:group-hover:opacity-100 transition-all"
                                 title="Șterge zona"
                               >
                                 <TrashIcon className="w-4 h-4" />
@@ -530,6 +560,7 @@ export default function ZonaAcoperiirePage() {
                             </div>
                           ))}
                         </div>
+                        )}
                       </div>
                     );
                   })}
