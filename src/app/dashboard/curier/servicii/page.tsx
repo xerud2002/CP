@@ -292,7 +292,7 @@ export default function TarifePracticatePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-900 to-slate-800 flex items-center justify-center">
         <div className="spinner"></div>
       </div>
     );
@@ -301,9 +301,22 @@ export default function TarifePracticatePage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen relative">
+      {/* Background matching hero section */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-900 to-slate-800"></div>
+        <div className="absolute top-0 right-0 w-full lg:w-1/2 h-1/2 lg:h-full bg-linear-to-bl lg:bg-linear-to-l from-indigo-500/10 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 w-full lg:w-1/3 h-1/3 bg-linear-to-tr from-purple-500/5 to-transparent"></div>
+      </div>
+      
+      {/* Grid pattern overlay */}
+      <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
+        backgroundSize: '40px 40px'
+      }}></div>
+
       {/* Sticky Header */}
-      <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
+      <div className="sticky top-0 z-40 bg-slate-900/60 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center gap-4">
             <Link 
@@ -328,9 +341,9 @@ export default function TarifePracticatePage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Info Message */}
-        <div className="bg-linear-to-br from-blue-500/10 via-blue-500/5 to-blue-600/10 backdrop-blur-sm rounded-2xl border border-blue-500/20 p-5 sm:p-6 mb-6 sm:mb-8 shadow-lg shadow-blue-500/5">
+        <div className="bg-slate-800/60 backdrop-blur-xl rounded-2xl border border-indigo-500/20 p-5 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-start gap-4">
             <div className="p-2.5 bg-blue-500/20 rounded-xl shrink-0 mt-0.5">
               <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -347,7 +360,7 @@ export default function TarifePracticatePage() {
         </div>
 
         {/* Service Types Selection */}
-        <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
+        <div className="bg-slate-900/40 backdrop-blur-sm rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-indigo-500/20 rounded-lg">
@@ -372,76 +385,68 @@ export default function TarifePracticatePage() {
               </span>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
             {serviceTypes.map((service) => {
               const isSelected = selectedServices.includes(service.value);
+              
+              // Border color based on service color
+              const borderColorMap: Record<string, string> = {
+                'text-blue-400': 'border-blue-500/30 hover:border-blue-400/50',
+                'text-yellow-400': 'border-yellow-500/30 hover:border-yellow-400/50',
+                'text-amber-400': 'border-amber-500/30 hover:border-amber-400/50',
+                'text-purple-400': 'border-purple-500/30 hover:border-purple-400/50',
+                'text-pink-400': 'border-pink-500/30 hover:border-pink-400/50',
+                'text-red-400': 'border-red-500/30 hover:border-red-400/50',
+                'text-orange-400': 'border-orange-500/30 hover:border-orange-400/50',
+                'text-cyan-400': 'border-cyan-500/30 hover:border-cyan-400/50',
+                'text-rose-400': 'border-rose-500/30 hover:border-rose-400/50',
+              };
+              
+              const gradientMap: Record<string, string> = {
+                'text-blue-400': 'from-blue-500/20 to-cyan-500/20',
+                'text-yellow-400': 'from-yellow-500/20 to-orange-500/20',
+                'text-amber-400': 'from-amber-500/20 to-orange-500/20',
+                'text-purple-400': 'from-purple-500/20 to-pink-500/20',
+                'text-pink-400': 'from-pink-500/20 to-rose-500/20',
+                'text-red-400': 'from-red-500/20 to-orange-500/20',
+                'text-orange-400': 'from-orange-500/20 to-amber-500/20',
+                'text-cyan-400': 'from-cyan-500/20 to-blue-500/20',
+                'text-rose-400': 'from-rose-500/20 to-pink-500/20',
+              };
+              
+              const borderColor = borderColorMap[service.color] || 'border-white/10';
+              const gradient = gradientMap[service.color] || 'from-slate-500/20 to-slate-500/20';
+              
               return (
                 <button
                   key={service.value}
                   type="button"
                   onClick={() => toggleService(service.value)}
-                  className={`group relative flex flex-col gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 text-left overflow-hidden ${
-                    isSelected
-                      ? 'bg-linear-to-br from-indigo-500/20 via-purple-500/10 to-indigo-500/20 border-indigo-500/60 shadow-2xl shadow-indigo-500/20 scale-[1.02]'
-                      : 'bg-slate-800/40 border-slate-700/50 hover:border-indigo-500/30 hover:bg-slate-800/60 hover:scale-[1.01]'
+                  className={`group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95 text-left ${
+                    isSelected 
+                      ? `${borderColor} ring-2 ring-emerald-500/50` 
+                      : borderColor
                   }`}
                 >
-                  {/* Background gradient effect */}
-                  <div className={`absolute inset-0 bg-linear-to-br opacity-0 transition-opacity duration-300 ${
-                    isSelected ? 'from-indigo-500/10 to-purple-500/10 opacity-100' : 'group-hover:opacity-50'
-                  }`}></div>
+                  {/* Hover gradient overlay */}
+                  <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
                   
-                  {/* Checkmark indicator */}
-                  <div className={`absolute top-3 right-3 sm:top-4 sm:right-4 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
-                    isSelected 
-                      ? 'bg-linear-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/50 scale-110' 
-                      : 'bg-slate-700/50 group-hover:bg-slate-600/50'
-                  }`}>
-                    {isSelected ? (
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {/* Selected checkmark */}
+                  {isSelected && (
+                    <div className="absolute top-2 right-2 w-5 h-5 sm:w-6 sm:h-6 bg-emerald-500 rounded-full flex items-center justify-center z-10 shadow-lg shadow-emerald-500/50">
+                      <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
-                    ) : (
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 group-hover:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    )}
-                  </div>
-                  
-                  {/* Icon */}
-                  <div className="relative z-10 flex items-center gap-3 sm:gap-4">
-                    <div className={`p-2.5 sm:p-3.5 rounded-lg sm:rounded-xl transition-all duration-300 ${
-                      isSelected 
-                        ? `${service.bgColor} shadow-lg` 
-                        : 'bg-slate-700/50 group-hover:bg-slate-700'
-                    }`}>
-                      <ServiceIcon service={service.value} className={`w-6 h-6 sm:w-7 sm:h-7 transition-colors ${
-                        isSelected ? service.color : 'text-gray-500 group-hover:text-gray-400'
-                      }`} />
-                    </div>
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="relative z-10 space-y-1.5 sm:space-y-2">
-                    <p className={`font-bold text-base sm:text-lg transition-colors ${
-                      isSelected ? 'text-white' : 'text-gray-300 group-hover:text-white'
-                    }`}>
-                      {service.label}
-                    </p>
-                    <p className={`text-xs sm:text-sm leading-relaxed transition-colors ${
-                      isSelected ? 'text-gray-300' : 'text-gray-500 group-hover:text-gray-400'
-                    }`}>
-                      {service.description}
-                    </p>
-                  </div>
-                  
-                  {/* Active badge */}
-                  {isSelected && (
-                    <div className="relative z-10 flex items-center gap-2 pt-2 border-t border-indigo-500/20">
-                      <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                      <span className="text-xs text-emerald-400 font-medium">Serviciu activ</span>
                     </div>
                   )}
+                  
+                  <div className="relative">
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 ${service.bgColor} rounded-lg flex items-center justify-center mb-2`}>
+                      <ServiceIcon service={service.value} className={`w-5 h-5 sm:w-6 sm:h-6 ${service.color}`} />
+                    </div>
+                    <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">{service.label}</h3>
+                    <p className="text-gray-400 text-[10px] sm:text-xs line-clamp-2">{service.description}</p>
+                  </div>
                 </button>
               );
             })}

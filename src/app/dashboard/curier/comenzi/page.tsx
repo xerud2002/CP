@@ -178,7 +178,7 @@ export default function ComenziCurierPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-900 to-slate-800 flex items-center justify-center">
         <div className="spinner"></div>
       </div>
     );
@@ -187,9 +187,22 @@ export default function ComenziCurierPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen relative">
+      {/* Background matching hero section */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-900 to-slate-800"></div>
+        <div className="absolute top-0 right-0 w-full lg:w-1/2 h-1/2 lg:h-full bg-linear-to-bl lg:bg-linear-to-l from-orange-500/10 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 w-full lg:w-1/3 h-1/3 bg-linear-to-tr from-amber-500/5 to-transparent"></div>
+      </div>
+      
+      {/* Grid pattern overlay */}
+      <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
+        backgroundSize: '40px 40px'
+      }}></div>
+
       {/* Header */}
-      <div className="bg-slate-900/80 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
+      <div className="bg-slate-900/60 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <Link 
@@ -214,10 +227,11 @@ export default function ComenziCurierPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Stats Cards - Improved design */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
-          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+          <div className="bg-slate-800/60 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-emerald-500/20 relative overflow-hidden group hover:border-emerald-500/40 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20">
+            <div className="absolute inset-0 bg-linear-to-br from-emerald-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
             <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
               <div className="p-1.5 sm:p-2.5 bg-emerald-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
@@ -232,7 +246,8 @@ export default function ComenziCurierPage() {
               </div>
             </div>
           </div>
-          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-blue-500/30 transition-all">
+          <div className="bg-slate-800/60 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-blue-500/20 relative overflow-hidden group hover:border-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20">
+            <div className="absolute inset-0 bg-linear-to-br from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
             <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
               <div className="p-1.5 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
@@ -246,7 +261,8 @@ export default function ComenziCurierPage() {
               </div>
             </div>
           </div>
-          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-orange-500/30 transition-all">
+          <div className="bg-slate-800/60 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-orange-500/20 relative overflow-hidden group hover:border-orange-500/40 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20">
+            <div className="absolute inset-0 bg-linear-to-br from-orange-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="absolute top-0 right-0 w-20 h-20 bg-orange-500/10 rounded-full blur-2xl group-hover:bg-orange-500/20 transition-all"></div>
             <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
               <div className="p-1.5 sm:p-2.5 bg-orange-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
@@ -260,7 +276,8 @@ export default function ComenziCurierPage() {
               </div>
             </div>
           </div>
-          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-green-500/30 transition-all">
+          <div className="bg-slate-800/60 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-green-500/20 relative overflow-hidden group hover:border-green-500/40 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20">
+            <div className="absolute inset-0 bg-linear-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="absolute top-0 right-0 w-20 h-20 bg-green-500/10 rounded-full blur-2xl group-hover:bg-green-500/20 transition-all"></div>
             <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
               <div className="p-1.5 sm:p-2.5 bg-green-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
@@ -277,7 +294,7 @@ export default function ComenziCurierPage() {
         </div>
 
         {/* Filters - Improved pill design */}
-        <div className="bg-slate-800/30 rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6">
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6">
           {/* Status filters */}
           <div className="flex gap-1.5 sm:gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
             <button
@@ -389,7 +406,7 @@ export default function ComenziCurierPage() {
         </div>
 
         {/* Orders List - Improved */}
-        <div className="bg-linear-to-br from-slate-800/50 to-slate-900/30 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
           {/* Header */}
           <div className="bg-slate-800/50 px-4 sm:px-6 py-3 sm:py-4 border-b border-white/5">
             <div className="flex items-center justify-between">

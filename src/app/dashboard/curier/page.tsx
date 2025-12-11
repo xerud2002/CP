@@ -147,7 +147,7 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
   onLogout: () => void;
 }) {
   return (
-    <header className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
+    <header className="bg-slate-900/60 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo/Brand - Mobile */}
@@ -204,9 +204,10 @@ function WelcomeSection({ userName, hasNewOrders }: { userName: string; hasNewOr
   const greeting = getGreeting();
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-800/80 to-slate-900/80 border border-white/10 p-4 sm:p-6">
+    <section className="relative overflow-hidden rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-white/10 p-4 sm:p-6">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-emerald-500/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-orange-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-emerald-500/5 rounded-full blur-3xl" />
 
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2">
@@ -300,32 +301,70 @@ function SetupProgress({ setupComplete, completedSteps, totalSteps }: { setupCom
 
 // Main Navigation Grid
 function MainNavigation({ badges }: { badges: Record<string, boolean> }) {
+  // Color mappings for hover gradients
+  const gradientMap: Record<string, string> = {
+    'text-orange-400': 'from-orange-500/20 to-amber-500/20',
+    'text-amber-400': 'from-amber-500/20 to-yellow-500/20',
+    'text-purple-400': 'from-purple-500/20 to-pink-500/20',
+    'text-blue-400': 'from-blue-500/20 to-cyan-500/20',
+    'text-emerald-400': 'from-emerald-500/20 to-green-500/20',
+    'text-pink-400': 'from-pink-500/20 to-rose-500/20',
+  };
+  
+  const borderColorMap: Record<string, string> = {
+    'text-orange-400': 'border-orange-500/30 hover:border-orange-400/50',
+    'text-amber-400': 'border-amber-500/30 hover:border-amber-400/50',
+    'text-purple-400': 'border-purple-500/30 hover:border-purple-400/50',
+    'text-blue-400': 'border-blue-500/30 hover:border-blue-400/50',
+    'text-emerald-400': 'border-emerald-500/30 hover:border-emerald-400/50',
+    'text-pink-400': 'border-pink-500/30 hover:border-pink-400/50',
+  };
+  
+  const iconBgMap: Record<string, string> = {
+    'text-orange-400': 'bg-orange-500/20',
+    'text-amber-400': 'bg-amber-500/20',
+    'text-purple-400': 'bg-purple-500/20',
+    'text-blue-400': 'bg-blue-500/20',
+    'text-emerald-400': 'bg-emerald-500/20',
+    'text-pink-400': 'bg-pink-500/20',
+  };
+
   return (
     <section>
       <h2 className="text-xs sm:text-sm font-medium text-gray-400 uppercase tracking-wide mb-2 sm:mb-3">Meniu rapid</h2>
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
         {mainNavTiles.map((tile) => {
           const needsAttention = tile.badgeKey && badges[tile.badgeKey];
+          const gradient = gradientMap[tile.color] || 'from-slate-500/20 to-slate-500/20';
+          const borderColor = borderColorMap[tile.color] || 'border-white/10 hover:border-white/20';
+          const iconBg = iconBgMap[tile.color] || 'bg-slate-500/20';
+          
           return (
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative p-2.5 sm:p-4 rounded-xl border ${tile.bgColor} ${tile.borderColor} transition-all active:scale-95`}
+              className={`group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
             >
+              {/* Hover gradient overlay */}
+              <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
+              
               {/* Badge indicator */}
               {needsAttention && (
-                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 sm:h-5 sm:w-5">
+                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 sm:h-5 sm:w-5 z-10">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3.5 w-3.5 sm:h-5 sm:w-5 bg-orange-500 items-center justify-center">
                     <span className="text-[7px] sm:text-[10px] font-bold text-white">!</span>
                   </span>
                 </span>
               )}
-              <div className={`w-9 h-9 sm:w-12 sm:h-12 rounded-lg bg-slate-800/50 flex items-center justify-center mx-auto mb-1.5 sm:mb-2 group-hover:scale-110 transition-transform`}>
-                <tile.icon className={`w-4 h-4 sm:w-6 sm:h-6 ${tile.color}`} />
+              
+              <div className="relative">
+                <div className={`w-9 h-9 sm:w-10 sm:h-10 ${iconBg} rounded-lg flex items-center justify-center mb-2`}>
+                  <tile.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${tile.color}`} />
+                </div>
+                <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">{tile.title}</h3>
+                <p className="text-gray-400 text-[10px] sm:text-xs truncate">{tile.description}</p>
               </div>
-              <h3 className="text-white font-medium text-[11px] sm:text-sm text-center leading-tight">{tile.title}</h3>
-              <p className="text-gray-500 text-[10px] sm:text-xs text-center truncate hidden sm:block">{tile.description}</p>
             </Link>
           );
         })}
@@ -337,7 +376,7 @@ function MainNavigation({ badges }: { badges: Record<string, boolean> }) {
 // Orders Summary Component - Replaces Quick Actions
 function OrdersSummary() {
   return (
-    <section className="bg-slate-800/30 rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full">
+    <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full">
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <h3 className="text-sm sm:text-lg font-semibold text-white flex items-center gap-2">
           <div className="p-1.5 bg-orange-500/20 rounded-lg">
@@ -379,7 +418,7 @@ function OrdersSummary() {
 // Recent Activity Component - Improved
 function RecentActivity() {
   return (
-    <section className="bg-slate-800/30 rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full flex flex-col">
+    <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full flex flex-col">
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <h3 className="text-sm sm:text-lg font-semibold text-white flex items-center gap-2">
           <div className="p-1.5 bg-purple-500/20 rounded-lg">
@@ -413,7 +452,7 @@ function RecentActivity() {
 // Help Card Component
 function HelpCard() {
   return (
-    <section className="bg-linear-to-br from-slate-800/80 to-slate-900/80 rounded-2xl p-3.5 sm:p-6 border border-white/10 relative overflow-hidden">
+    <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/10 relative overflow-hidden">
       {/* Decorative gradient */}
       <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
       
@@ -542,7 +581,7 @@ export default function CurierDashboard() {
   // Loading State
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-900 to-slate-800 flex items-center justify-center">
         <div className="text-center">
           <div className="spinner mb-4" />
           <p className="text-gray-400">Se încarcă...</p>
@@ -583,7 +622,20 @@ export default function CurierDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen relative">
+      {/* Background matching hero section */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-900 to-slate-800"></div>
+        <div className="absolute top-0 right-0 w-full lg:w-1/2 h-1/2 lg:h-full bg-linear-to-bl lg:bg-linear-to-l from-orange-500/10 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 w-full lg:w-1/3 h-1/3 bg-linear-to-tr from-emerald-500/5 to-transparent"></div>
+      </div>
+      
+      {/* Grid pattern overlay */}
+      <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
+        backgroundSize: '40px 40px'
+      }}></div>
+
       {/* Header */}
       <DashboardHeader 
         userName={userName} 
@@ -592,7 +644,7 @@ export default function CurierDashboard() {
       />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">
+      <main className="relative z-10 max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Welcome Section */}
         <WelcomeSection userName={userName} hasNewOrders={false} />
 
