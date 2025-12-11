@@ -339,7 +339,7 @@ export default function CalendarColectiiPage() {
   const totalCountries = Object.keys(entriesByCountry).length;
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-slate-900/80 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">

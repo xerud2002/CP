@@ -241,7 +241,7 @@ export default function ZonaAcoperiirePage() {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Se încarcă...</p>
@@ -260,7 +260,7 @@ export default function ZonaAcoperiirePage() {
   }, {} as Record<string, CoverageZone[]>);
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen">
       {/* Header */}
       <header className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">

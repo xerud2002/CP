@@ -714,7 +714,7 @@ export default function AdminDashboard() {
   // Loading State
   if (loading || loadingData) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="spinner mb-4" />
           <p className="text-gray-400">Se încarcă...</p>
@@ -739,7 +739,7 @@ export default function AdminDashboard() {
   const userName = getFirstName();
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen">
       {/* Header */}
       <AdminHeader 
         userName={userName}

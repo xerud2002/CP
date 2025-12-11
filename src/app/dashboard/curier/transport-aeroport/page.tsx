@@ -150,7 +150,7 @@ export default function TransportAeroportPage() {
 
   if (loading || loadingRoutes) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="spinner"></div>
       </div>
     );
@@ -159,7 +159,7 @@ export default function TransportAeroportPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-slate-900/80 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">

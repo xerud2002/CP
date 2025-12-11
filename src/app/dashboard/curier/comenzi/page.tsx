@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -32,6 +33,115 @@ const statusLabels: Record<Order['status'], { label: string; color: string; bg: 
   anulata: { label: 'Anulată', color: 'text-red-400', bg: 'bg-red-500/20' },
 };
 
+// Countries with codes - sorted alphabetically (16 main European countries)
+const countriesWithCodes = [
+  { name: 'Anglia', code: 'gb' },
+  { name: 'Austria', code: 'at' },
+  { name: 'Belgia', code: 'be' },
+  { name: 'Danemarca', code: 'dk' },
+  { name: 'Finlanda', code: 'fi' },
+  { name: 'Franța', code: 'fr' },
+  { name: 'Germania', code: 'de' },
+  { name: 'Grecia', code: 'gr' },
+  { name: 'Irlanda', code: 'ie' },
+  { name: 'Italia', code: 'it' },
+  { name: 'Norvegia', code: 'no' },
+  { name: 'Olanda', code: 'nl' },
+  { name: 'Portugalia', code: 'pt' },
+  { name: 'România', code: 'ro' },
+  { name: 'Spania', code: 'es' },
+  { name: 'Suedia', code: 'se' },
+];
+
+// Service types for filtering
+const serviceTypes = [
+  { value: 'Colete', label: 'Colete & Pachete', color: 'text-blue-400', bgColor: 'bg-blue-500/20' },
+  { value: 'Plicuri', label: 'Plicuri & Documente', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' },
+  { value: 'Mobila', label: 'Mobilă & Mutări', color: 'text-amber-400', bgColor: 'bg-amber-500/20' },
+  { value: 'Electronice', label: 'Electronice', color: 'text-purple-400', bgColor: 'bg-purple-500/20' },
+  { value: 'Animale', label: 'Animale de Companie', color: 'text-pink-400', bgColor: 'bg-pink-500/20' },
+  { value: 'Platforma', label: 'Transport Platformă', color: 'text-red-400', bgColor: 'bg-red-500/20' },
+  { value: 'Tractari', label: 'Tractări Auto', color: 'text-orange-400', bgColor: 'bg-orange-500/20' },
+  { value: 'Aeroport', label: 'Transfer Aeroport', color: 'text-cyan-400', bgColor: 'bg-cyan-500/20' },
+  { value: 'Persoane', label: 'Transport Persoane', color: 'text-rose-400', bgColor: 'bg-rose-500/20' },
+  { value: 'Paleti', label: 'Paleți & Marfă', color: 'text-orange-400', bgColor: 'bg-orange-500/20' },
+];
+
+// Service Icon component
+const ServiceIcon = ({ service, className = "w-5 h-5" }: { service: string; className?: string }) => {
+  const icons: Record<string, React.ReactElement> = {
+    Colete: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+        <path d="m3.3 7 8.7 5 8.7-5" />
+        <path d="M12 22V12" />
+      </svg>
+    ),
+    Plicuri: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </svg>
+    ),
+    Mobila: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" />
+        <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" />
+        <path d="M4 18v2" />
+        <path d="M20 18v2" />
+      </svg>
+    ),
+    Electronice: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <line x1="8" y1="21" x2="16" y2="21" />
+        <line x1="12" y1="17" x2="12" y2="21" />
+      </svg>
+    ),
+    Animale: (
+      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+      </svg>
+    ),
+    Platforma: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="16" width="20" height="4" rx="1" />
+        <circle cx="8" cy="20" r="1" />
+        <circle cx="16" cy="20" r="1" />
+        <path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" />
+      </svg>
+    ),
+    Tractari: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
+        <circle cx="7" cy="17" r="2" />
+        <circle cx="17" cy="17" r="2" />
+      </svg>
+    ),
+    Aeroport: (
+      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+      </svg>
+    ),
+    Persoane: (
+      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+      </svg>
+    ),
+    Paleti: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 6h18" />
+        <path d="M3 12h18" />
+        <path d="M3 18h18" />
+        <path d="M4 6v12" />
+        <path d="M12 6v12" />
+        <path d="M20 6v12" />
+      </svg>
+    ),
+  };
+  return icons[service] || icons.Colete;
+};
+
 // Initial empty orders - data loaded from Firestore
 const initialOrders: Order[] = [];
 
@@ -48,6 +158,35 @@ export default function ComenziCurierPage() {
   const [serviceFilter, setServiceFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<string>('');
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  
+  // Custom dropdown states
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+  const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
+  const countryDropdownRef = useRef<HTMLDivElement>(null);
+  const serviceDropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Filter countries based on search
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch) return countriesWithCodes;
+    return countriesWithCodes.filter(c => 
+      c.name.toLowerCase().includes(countrySearch.toLowerCase())
+    );
+  }, [countrySearch]);
+  
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
+        setIsCountryDropdownOpen(false);
+      }
+      if (serviceDropdownRef.current && !serviceDropdownRef.current.contains(event.target as Node)) {
+        setIsServiceDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -178,7 +317,7 @@ export default function ComenziCurierPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-900 to-slate-800 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="spinner"></div>
       </div>
     );
@@ -187,20 +326,7 @@ export default function ComenziCurierPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen relative">
-      {/* Background matching hero section */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-900 to-slate-800"></div>
-        <div className="absolute top-0 right-0 w-full lg:w-1/2 h-1/2 lg:h-full bg-linear-to-bl lg:bg-linear-to-l from-orange-500/10 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-full lg:w-1/3 h-1/3 bg-linear-to-tr from-amber-500/5 to-transparent"></div>
-      </div>
-      
-      {/* Grid pattern overlay */}
-      <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
-        backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
-        backgroundSize: '40px 40px'
-      }}></div>
-
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-slate-900/60 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
@@ -347,34 +473,188 @@ export default function ComenziCurierPage() {
           {showAdvancedFilters && (
             <div className="pt-3 border-t border-white/5">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
-                {/* Country filter */}
-                <div>
+                {/* Country filter with flags */}
+                <div ref={countryDropdownRef}>
                   <label className="block text-xs text-gray-400 mb-1.5">Țară</label>
-                  <select
-                    value={countryFilter}
-                    onChange={(e) => setCountryFilter(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
-                  >
-                    <option value="all">Toate țările</option>
-                    {uniqueCountries.map(country => (
-                      <option key={country} value={country}>{country}</option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left text-sm"
+                    >
+                      {countryFilter !== 'all' ? (
+                        <>
+                          <Image
+                            src={`/img/flag/${countriesWithCodes.find(c => c.name === countryFilter)?.code || 'ro'}.svg`}
+                            alt={countryFilter}
+                            width={20}
+                            height={20}
+                            className="w-5 h-5 rounded-full object-cover"
+                          />
+                          <span className="flex-1 truncate">{countryFilter}</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M2 12h20" />
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                          </svg>
+                          <span className="flex-1 text-gray-400">Toate țările</span>
+                        </>
+                      )}
+                      <svg className={`w-4 h-4 text-gray-400 transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {isCountryDropdownOpen && (
+                      <div className="absolute z-50 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                        <div className="p-2 border-b border-white/10">
+                          <input
+                            type="text"
+                            placeholder="Caută țara..."
+                            value={countrySearch}
+                            onChange={(e) => setCountrySearch(e.target.value)}
+                            className="w-full px-3 py-2 bg-slate-700/50 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-purple-500/50"
+                          />
+                        </div>
+                        <div className="max-h-60 overflow-y-auto">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCountryFilter('all');
+                              setIsCountryDropdownOpen(false);
+                              setCountrySearch('');
+                            }}
+                            className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-700/50 transition-colors ${
+                              countryFilter === 'all' ? 'bg-purple-500/20' : ''
+                            }`}
+                          >
+                            <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                              <circle cx="12" cy="12" r="10" />
+                              <path d="M2 12h20" />
+                            </svg>
+                            <span className="text-white text-sm">Toate țările</span>
+                            {countryFilter === 'all' && (
+                              <svg className="w-4 h-4 text-purple-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </button>
+                          {filteredCountries.map((country) => (
+                            <button
+                              key={country.code}
+                              type="button"
+                              onClick={() => {
+                                setCountryFilter(country.name);
+                                setIsCountryDropdownOpen(false);
+                                setCountrySearch('');
+                              }}
+                              className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-700/50 transition-colors ${
+                                countryFilter === country.name ? 'bg-purple-500/20' : ''
+                              }`}
+                            >
+                              <Image
+                                src={`/img/flag/${country.code}.svg`}
+                                alt={country.name}
+                                width={20}
+                                height={20}
+                                className="w-5 h-5 rounded-full object-cover"
+                              />
+                              <span className="text-white text-sm">{country.name}</span>
+                              {countryFilter === country.name && (
+                                <svg className="w-4 h-4 text-purple-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 
-                {/* Service filter */}
-                <div>
+                {/* Service filter with icons */}
+                <div ref={serviceDropdownRef}>
                   <label className="block text-xs text-gray-400 mb-1.5">Tip serviciu</label>
-                  <select
-                    value={serviceFilter}
-                    onChange={(e) => setServiceFilter(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
-                  >
-                    <option value="all">Toate serviciile</option>
-                    {uniqueServices.map(service => (
-                      <option key={service} value={service}>{service}</option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setIsServiceDropdownOpen(!isServiceDropdownOpen)}
+                      className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left text-sm"
+                    >
+                      {serviceFilter !== 'all' ? (
+                        <>
+                          <div className={`p-1 rounded-lg ${serviceTypes.find(s => s.value === serviceFilter)?.bgColor}`}>
+                            <ServiceIcon service={serviceFilter} className={`w-4 h-4 ${serviceTypes.find(s => s.value === serviceFilter)?.color}`} />
+                          </div>
+                          <span className="flex-1 truncate">{serviceTypes.find(s => s.value === serviceFilter)?.label}</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                          </svg>
+                          <span className="flex-1 text-gray-400">Toate serviciile</span>
+                        </>
+                      )}
+                      <svg className={`w-4 h-4 text-gray-400 transition-transform ${isServiceDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {isServiceDropdownOpen && (
+                      <div className="absolute z-50 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                        <div className="max-h-72 overflow-y-auto">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setServiceFilter('all');
+                              setIsServiceDropdownOpen(false);
+                            }}
+                            className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-700/50 transition-colors border-b border-white/5 ${
+                              serviceFilter === 'all' ? 'bg-purple-500/20' : ''
+                            }`}
+                          >
+                            <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                            </svg>
+                            <span className="text-white text-sm">Toate serviciile</span>
+                            {serviceFilter === 'all' && (
+                              <svg className="w-4 h-4 text-purple-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </button>
+                          {serviceTypes.map((service) => (
+                            <button
+                              key={service.value}
+                              type="button"
+                              onClick={() => {
+                                setServiceFilter(service.value);
+                                setIsServiceDropdownOpen(false);
+                              }}
+                              className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-700/50 transition-colors border-b border-white/5 last:border-b-0 ${
+                                serviceFilter === service.value ? 'bg-purple-500/20' : ''
+                              }`}
+                            >
+                              <div className={`p-1.5 rounded-lg ${service.bgColor}`}>
+                                <ServiceIcon service={service.value} className={`w-4 h-4 ${service.color}`} />
+                              </div>
+                              <span className="text-white text-sm">{service.label}</span>
+                              {serviceFilter === service.value && (
+                                <svg className="w-4 h-4 text-purple-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 
                 {/* Date filter */}

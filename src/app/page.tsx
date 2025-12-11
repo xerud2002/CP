@@ -120,26 +120,20 @@ const popularRoutes = [
 export default function Home() {
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative overflow-hidden bg-slate-900">
+      {/* Global Background gradient */}
+      <div className="fixed inset-0 bg-linear-to-br from-orange-500/20 via-slate-900 to-green-500/20 pointer-events-none"></div>
+      
+      {/* Decorative circles */}
+      <div className="fixed top-20 left-20 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="fixed bottom-20 right-20 w-96 h-96 bg-green-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
       {/* Hero Section - Optimized for Mobile */}
       <section id="top" className="relative min-h-svh lg:min-h-[90vh] flex items-center px-4 py-6 sm:py-8 overflow-hidden">
-        {/* Background gradient mesh */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-900 to-slate-800"></div>
-          <div className="absolute top-0 right-0 w-full lg:w-1/2 h-1/2 lg:h-full bg-linear-to-bl lg:bg-linear-to-l from-orange-500/10 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-full lg:w-1/3 h-1/3 bg-linear-to-tr from-green-500/5 to-transparent"></div>
-        </div>
-
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
-        }}></div>
-        
         <div className="max-w-7xl mx-auto w-full relative z-10">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             {/* Left side - Content */}
-            <div className="animate-fade-in order-2 lg:order-1">
+            <div className="animate-fade-in">
               {/* Badge - Mobile optimized */}
               <div className="mb-4 sm:mb-6">
                 <span className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-xs sm:text-sm">
@@ -202,7 +196,7 @@ export default function Home() {
             </div>
 
             {/* Right side - Services Grid */}
-            <div className="animate-fade-in-delayed order-1 lg:order-2">
+            <div className="animate-fade-in-delayed">
               <div className="relative">
                 {/* Glow effect */}
                 <div className="absolute -inset-4 bg-linear-to-r from-orange-500/10 to-green-500/10 rounded-3xl blur-2xl"></div>

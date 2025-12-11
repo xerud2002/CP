@@ -292,7 +292,7 @@ export default function TarifePracticatePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-900 to-slate-800 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="spinner"></div>
       </div>
     );
@@ -301,20 +301,7 @@ export default function TarifePracticatePage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen relative">
-      {/* Background matching hero section */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-900 to-slate-800"></div>
-        <div className="absolute top-0 right-0 w-full lg:w-1/2 h-1/2 lg:h-full bg-linear-to-bl lg:bg-linear-to-l from-indigo-500/10 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 w-full lg:w-1/3 h-1/3 bg-linear-to-tr from-purple-500/5 to-transparent"></div>
-      </div>
-      
-      {/* Grid pattern overlay */}
-      <div className="fixed inset-0 opacity-[0.02] pointer-events-none" style={{
-        backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
-        backgroundSize: '40px 40px'
-      }}></div>
-
+    <div className="min-h-screen">
       {/* Sticky Header */}
       <div className="sticky top-0 z-40 bg-slate-900/60 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">

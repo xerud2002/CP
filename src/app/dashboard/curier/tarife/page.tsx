@@ -456,7 +456,7 @@ export default function TarifePracticatePage() {
     
     // Different validation for Animale/Platforma vs other services
     const isAnimalOrPlatform = tipServiciu === 'Animale' || tipServiciu === 'Platforma';
-    const isSimplePriceService = tipServiciu === 'Documente' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila';
+    const isSimplePriceService = tipServiciu === 'Plicuri' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila';
     const isM3Selected = unitType === 'm3';
     
     if (!selectedCountry || !tipServiciu || !user) return;
@@ -640,7 +640,7 @@ export default function TarifePracticatePage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen">
       {/* Sticky Header */}
       <div className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
