@@ -146,11 +146,9 @@ export default function ComenziCurierPage() {
               <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
             </Link>
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-2.5 sm:p-3 bg-linear-to-br from-blue-500/20 to-indigo-500/20 rounded-xl border border-blue-500/20">
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                  <path d="m3.3 7 8.7 5 8.7-5" />
-                  <path d="M12 22V12" />
+              <div className="p-2.5 sm:p-3 bg-linear-to-br from-orange-500/20 to-amber-500/20 rounded-xl border border-orange-500/20">
+                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
               </div>
               <div>
@@ -163,77 +161,76 @@ export default function ComenziCurierPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
-        {/* Stats Cards */}
+        {/* Stats Cards - Improved design */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="p-2 sm:p-2.5 bg-emerald-500/20 rounded-lg sm:rounded-xl">
+          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+            <div className="relative flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-emerald-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-lg sm:text-2xl font-bold text-white">{stats.total}</p>
-                <p className="text-xs text-gray-400">Total comenzi</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="p-2 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <path d="M12 6v6l4 2" />
                 </svg>
               </div>
               <div>
-                <p className="text-lg sm:text-2xl font-bold text-blue-400">{stats.noi}</p>
-                <p className="text-xs text-gray-400">Comenzi noi</p>
+                <p className="text-lg sm:text-2xl font-bold text-white">{stats.total}</p>
+                <p className="text-[10px] sm:text-xs text-gray-400">Total comenzi</p>
               </div>
             </div>
           </div>
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="p-2 sm:p-2.5 bg-orange-500/20 rounded-lg sm:rounded-xl">
+          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-blue-500/30 transition-all">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
+            <div className="relative flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-lg sm:text-2xl font-bold text-blue-400">{stats.noi}</p>
+                <p className="text-[10px] sm:text-xs text-gray-400">Comenzi noi</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-orange-500/30 transition-all">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-orange-500/10 rounded-full blur-2xl group-hover:bg-orange-500/20 transition-all"></div>
+            <div className="relative flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-orange-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.19M15 6h2.81M15 6a2 2 0 0 0 0-4M15 6a2 2 0 0 1 0-4m0 4V2m0 4v4m0-4h-4m4 0h4" />
-                  <path d="M5 18v2" />
-                  <path d="M19 18v2" />
-                  <circle cx="5" cy="18" r="2" />
-                  <circle cx="19" cy="18" r="2" />
-                  <path d="M5 16V8h14v8" />
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                 </svg>
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-orange-400">{stats.inTranzit}</p>
-                <p className="text-xs text-gray-400">În tranzit</p>
+                <p className="text-[10px] sm:text-xs text-gray-400">În tranzit</p>
               </div>
             </div>
           </div>
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="p-2 sm:p-2.5 bg-green-500/20 rounded-lg sm:rounded-xl">
+          <div className="bg-linear-to-br from-slate-800/80 to-slate-900/60 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 relative overflow-hidden group hover:border-green-500/30 transition-all">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-green-500/10 rounded-full blur-2xl group-hover:bg-green-500/20 transition-all"></div>
+            <div className="relative flex items-center gap-2 sm:gap-3">
+              <div className="p-2 sm:p-2.5 bg-green-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-green-400">{stats.livrate}</p>
-                <p className="text-xs text-gray-400">Livrate</p>
+                <p className="text-[10px] sm:text-xs text-gray-400">Livrate</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-4 mb-4 sm:mb-6">
+        {/* Filters - Improved pill design */}
+        <div className="bg-slate-800/30 rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6">
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
             <button
               onClick={() => setFilter('all')}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+              className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all ${
                 filter === 'all' 
-                  ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25' 
-                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700'
+                  ? 'bg-linear-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-500/25' 
+                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
               }`}
             >
               Toate ({orders.length})
@@ -244,10 +241,10 @@ export default function ComenziCurierPage() {
                 <button
                   key={status}
                   onClick={() => setFilter(status as Order['status'])}
-                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+                  className={`px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all ${
                     filter === status 
-                      ? `${bg} ${color} shadow-lg` 
-                      : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700'
+                      ? `${bg} ${color} shadow-lg ring-1 ring-current/20` 
+                      : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
                   }`}
                 >
                   {label} ({count})
@@ -257,27 +254,38 @@ export default function ComenziCurierPage() {
           </div>
         </div>
 
-        {/* Orders List */}
-        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6">
-          <h2 className="text-base sm:text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <svg className="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-              <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-              <path d="M9 12h6" />
-              <path d="M9 16h6" />
-            </svg>
-            Lista Comenzilor
-          </h2>
+        {/* Orders List - Improved */}
+        <div className="bg-linear-to-br from-slate-800/50 to-slate-900/30 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
+          {/* Header */}
+          <div className="bg-slate-800/50 px-4 sm:px-6 py-3 sm:py-4 border-b border-white/5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-base sm:text-lg font-semibold text-white flex items-center gap-2">
+                <div className="p-1.5 bg-blue-500/20 rounded-lg">
+                  <svg className="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                  </svg>
+                </div>
+                Lista Comenzilor
+              </h2>
+              <span className="text-xs sm:text-sm text-gray-500">{filteredOrders.length} comenzi</span>
+            </div>
+          </div>
           
+          <div className="p-3 sm:p-6">
           {loadingOrders ? (
             <div className="flex justify-center py-12">
               <div className="spinner"></div>
             </div>
           ) : filteredOrders.length === 0 ? (
-            <div className="text-center py-12 sm:py-16">
-              <div className="text-5xl sm:text-7xl mb-4">📭</div>
-              <p className="text-gray-300 text-base sm:text-lg font-medium">Nu ai nicio comandă</p>
-              <p className="text-gray-500 text-sm mt-2">
+            <div className="text-center py-12 sm:py-20">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 bg-linear-to-br from-slate-800 to-slate-900 rounded-2xl flex items-center justify-center border border-white/5">
+                <svg className="w-10 h-10 sm:w-12 sm:h-12 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <p className="text-gray-300 text-base sm:text-lg font-semibold mb-1">Nu ai nicio comandă</p>
+              <p className="text-gray-500 text-sm max-w-xs mx-auto">
                 {filter !== 'all' ? `cu status "${statusLabels[filter].label}"` : 'Comenzile vor apărea aici când clienții plasează comenzi.'}
               </p>
             </div>
@@ -441,6 +449,7 @@ export default function ComenziCurierPage() {
               ))}
             </div>
           )}
+          </div>
         </div>
 
         {/* Order Details Modal */}

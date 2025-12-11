@@ -80,54 +80,45 @@ const countriesWithCodes = [
   { name: 'Suedia', code: 'se' },
 ];
 
-// Service types with custom SVG icons - ordered: Colete, Express, Frigorific, Fragil first
+// Service types with custom SVG icons - Colete is main service with sub-options
 const serviceTypes = [
   { 
     value: 'Colete', 
     label: 'Colete', 
-    description: 'Transport standard de colete',
+    description: 'Transport colete și pachete',
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/20',
     kgOnly: true,
+    hasSubOptions: true,
+    subOptions: [
+      { value: 'express', label: 'Express', description: 'Livrare urgentă 24-48h', color: 'text-yellow-400', bgColor: 'bg-yellow-500/20' },
+      { value: 'frigo', label: 'Frigorific', description: 'Transport refrigerat', color: 'text-sky-400', bgColor: 'bg-sky-500/20' },
+      { value: 'fragil', label: 'Fragil', description: 'Manipulare atentă', color: 'text-rose-400', bgColor: 'bg-rose-500/20' },
+      { value: 'door2door', label: 'Door to Door', description: 'Ridicare și livrare la adresă', color: 'text-emerald-400', bgColor: 'bg-emerald-500/20' },
+    ]
   },
   { 
-    value: 'Express', 
-    label: 'Express', 
-    description: 'Livrare urgentă 24-48h',
+    value: 'Plicuri', 
+    label: 'Plicuri', 
+    description: 'Documente și acte importante',
     color: 'text-yellow-400',
     bgColor: 'bg-yellow-500/20',
-    kgOnly: true,
-  },
-  { 
-    value: 'Frigo', 
-    label: 'Frigorific', 
-    description: 'Transport refrigerat',
-    color: 'text-cyan-400',
-    bgColor: 'bg-cyan-500/20',
-    kgOnly: true,
-  },
-  { 
-    value: 'Fragil', 
-    label: 'Fragil', 
-    description: 'Colete fragile cu manipulare atentă',
-    color: 'text-rose-400',
-    bgColor: 'bg-rose-500/20',
-    kgOnly: true,
-  },
-  { 
-    value: 'Door2Door', 
-    label: 'Door to Door', 
-    description: 'Ridicare și livrare la adresă',
-    color: 'text-emerald-400',
-    bgColor: 'bg-emerald-500/20',
+    plicuriOnly: true,
   },
   { 
     value: 'Mobila', 
     label: 'Mobilă', 
-    description: 'Transport mobilier și electrocasnice',
+    description: 'Transport mobilier',
     color: 'text-amber-400',
     bgColor: 'bg-amber-500/20',
     m3Only: true,
+  },
+  { 
+    value: 'Electronice', 
+    label: 'Electronice', 
+    description: 'TV, electrocasnice, produse electronice',
+    color: 'text-purple-400',
+    bgColor: 'bg-purple-500/20',
   },
   { 
     value: 'Animale', 
@@ -137,26 +128,27 @@ const serviceTypes = [
     bgColor: 'bg-pink-500/20',
   },
   { 
-    value: 'Documente', 
-    label: 'Documente', 
-    description: 'Plicuri și documente importante',
-    color: 'text-indigo-400',
-    bgColor: 'bg-indigo-500/20',
-    plicuriOnly: true,
-  },
-  { 
     value: 'Auto', 
-    label: 'Piese Auto', 
-    description: 'Piese auto și componente',
+    label: 'Auto & Piese', 
+    description: 'Mașini și piese auto',
     color: 'text-red-400',
     bgColor: 'bg-red-500/20',
   },
   { 
-    value: 'Electronice', 
-    label: 'Electronice', 
-    description: 'Produse electronice fragile',
-    color: 'text-purple-400',
-    bgColor: 'bg-purple-500/20',
+    value: 'Aeroport', 
+    label: 'Transfer Aeroport', 
+    description: 'Transfer persoane la/de la aeroport',
+    color: 'text-cyan-400',
+    bgColor: 'bg-cyan-500/20',
+    persoaneOnly: true,
+  },
+  { 
+    value: 'Persoane', 
+    label: 'Transport Persoane', 
+    description: 'Transport persoane în Europa',
+    color: 'text-rose-400',
+    bgColor: 'bg-rose-500/20',
+    persoaneOnly: true,
   },
   { 
     value: 'Paleti', 
@@ -165,13 +157,6 @@ const serviceTypes = [
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/20',
     nrOnly: true,
-  },
-  { 
-    value: 'Platforma', 
-    label: 'Platformă Auto', 
-    description: 'Transport vehicule pe platformă',
-    color: 'text-sky-400',
-    bgColor: 'bg-sky-500/20',
   },
 ];
 
@@ -185,6 +170,12 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <path d="M12 22V12" />
       </svg>
     ),
+    Plicuri: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </svg>
+    ),
     Express: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
@@ -196,16 +187,6 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <polyline points="9 22 9 12 15 12 15 22" />
       </svg>
     ),
-    Frigo: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2 12h10" />
-        <path d="M9 4v16" />
-        <path d="m3 9 3 3-3 3" />
-        <path d="M12 6 9 9 6 6" />
-        <path d="m6 18 3-3 1.5 1.5" />
-        <path d="M20 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" />
-      </svg>
-    ),
     Mobila: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" />
@@ -215,18 +196,16 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <path d="M12 4v9" />
       </svg>
     ),
-    Animale: (
+    Electronice: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="11" cy="4" r="2" />
-        <circle cx="18" cy="8" r="2" />
-        <circle cx="20" cy="16" r="2" />
-        <path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z" />
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <line x1="8" y1="21" x2="16" y2="21" />
+        <line x1="12" y1="17" x2="12" y2="21" />
       </svg>
     ),
-    Documente: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2" />
-        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    Animale: (
+      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
       </svg>
     ),
     Auto: (
@@ -237,11 +216,19 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <circle cx="17" cy="17" r="2" />
       </svg>
     ),
-    Electronice: (
+    Aeroport: (
+      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+      </svg>
+    ),
+    Persoane: (
+      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+      </svg>
+    ),
+    Frigorific: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2" />
-        <line x1="8" y1="21" x2="16" y2="21" />
-        <line x1="12" y1="17" x2="12" y2="21" />
+        <path d="M12 3v18m0-18l-3 3m3-3l3 3m-3 15l-3-3m3 3l3-3M3 12h18M3 12l3-3m-3 3l3 3m15-3l-3-3m3 3l-3 3" />
       </svg>
     ),
     Paleti: (
@@ -262,21 +249,6 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <path d="M15 5h6" />
         <path d="M12 11v5" />
         <path d="M9.5 14h5" />
-      </svg>
-    ),
-    Platforma: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        {/* Truck/trailer platform */}
-        <rect x="1" y="14" width="22" height="4" rx="1" />
-        <circle cx="5" cy="20" r="2" />
-        <circle cx="19" cy="20" r="2" />
-        <path d="M7 20h10" />
-        {/* Car on platform */}
-        <path d="M6 10h8l2 4H4l2-4z" />
-        <circle cx="7" cy="14" r="1" />
-        <circle cx="13" cy="14" r="1" />
-        <path d="M17 8l2 2v4" />
-        <path d="M19 8h2" />
       </svg>
     ),
   };
@@ -301,6 +273,14 @@ export default function TarifePracticatePage() {
   const [pret, setPret] = useState('');
   const [minUnit, setMinUnit] = useState('');
   const [unitType, setUnitType] = useState<'kg' | 'm3' | 'nr'>('kg');
+  
+  // Colete sub-options state
+  const [coleteOptions, setColeteOptions] = useState({
+    express: false,
+    frigo: false,
+    fragil: false,
+    door2door: false,
+  });
   
   // Animale specific state
   const [tipAnimal, setTipAnimal] = useState<'caine' | 'pisica' | 'pasare' | 'rozator' | 'reptila' | 'altul'>('caine');
@@ -405,7 +385,20 @@ export default function TarifePracticatePage() {
         if (!userDoc.empty) {
           const userData = userDoc.docs[0].data();
           if (userData.serviciiOferite) {
-            setSelectedServices(userData.serviciiOferite);
+            // Filter out any services that no longer exist in serviceTypes
+            const validServiceValues = serviceTypes.map(s => s.value);
+            const validServices = userData.serviciiOferite.filter(
+              (s: string) => validServiceValues.includes(s)
+            );
+            setSelectedServices(validServices);
+            
+            // If some services were filtered out, update Firebase
+            if (validServices.length !== userData.serviciiOferite.length) {
+              const userDocRef = doc(db, 'users', userDoc.docs[0].id);
+              await import('firebase/firestore').then(({ updateDoc }) => 
+                updateDoc(userDocRef, { serviciiOferite: validServices })
+              );
+            }
           }
         }
       } catch (error) {
@@ -507,6 +500,11 @@ export default function TarifePracticatePage() {
         addedAt: serverTimestamp(),
       };
       
+      // Add Colete sub-options
+      if (tipServiciu === 'Colete') {
+        docData.coleteOptions = coleteOptions;
+      }
+      
       // Add Animale specific fields
       if (tipServiciu === 'Animale') {
         docData.tipAnimal = tipAnimal;
@@ -534,6 +532,11 @@ export default function TarifePracticatePage() {
         unitType: isSimplePriceService ? (tipServiciu === 'Mobila' ? 'm3' : tipServiciu === 'Paleti' ? 'nr' : 'plic') : unitType,
       };
       
+      // Add Colete sub-options to local object
+      if (tipServiciu === 'Colete') {
+        newTarif.coleteOptions = { ...coleteOptions };
+      }
+      
       if (tipServiciu === 'Animale') {
         newTarif.tipAnimal = tipAnimal;
         newTarif.pretAnimal = parseFloat(pretAnimal);
@@ -554,6 +557,8 @@ export default function TarifePracticatePage() {
       setPret('');
       setMinUnit('');
       setUnitType('kg');
+      // Reset Colete options
+      setColeteOptions({ express: false, frigo: false, fragil: false, door2door: false });
       // Reset Animale fields
       setTipAnimal('caine');
       setPretAnimal('');
@@ -894,6 +899,53 @@ export default function TarifePracticatePage() {
                   )}
                 </div>
               </div>
+
+              {/* Colete Sub-Options */}
+              {tipServiciu === 'Colete' && (
+                <div className="lg:col-span-4 p-5 bg-linear-to-br from-blue-500/10 to-cyan-500/5 rounded-2xl border border-blue-500/20 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 mb-4 pb-3 border-b border-blue-500/10">
+                    <div className="p-2.5 bg-blue-500/20 rounded-xl">
+                      <ServiceIcon service="Colete" className="w-5 h-5 text-blue-400" />
+                    </div>
+                    <div>
+                      <span className="text-base font-semibold text-white">Opțiuni Transport Colete</span>
+                      <p className="text-xs text-gray-500">Selectează serviciile adiționale pe care le oferi</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {serviceTypes.find(s => s.value === 'Colete')?.subOptions?.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setColeteOptions(prev => ({
+                          ...prev,
+                          [option.value]: !prev[option.value as keyof typeof prev]
+                        }))}
+                        className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all duration-200 ${
+                          coleteOptions[option.value as keyof typeof coleteOptions]
+                            ? `${option.bgColor} border-current ${option.color} shadow-lg`
+                            : 'bg-slate-800/50 border-white/10 text-gray-400 hover:border-white/20'
+                        }`}
+                      >
+                        <div className={`p-2 rounded-lg ${coleteOptions[option.value as keyof typeof coleteOptions] ? option.bgColor : 'bg-slate-700/50'}`}>
+                          <ServiceIcon 
+                            service={option.value === 'express' ? 'Express' : option.value === 'frigo' ? 'Frigo' : option.value === 'fragil' ? 'Fragil' : 'Door2Door'} 
+                            className={`w-5 h-5 ${coleteOptions[option.value as keyof typeof coleteOptions] ? option.color : 'text-gray-500'}`} 
+                          />
+                        </div>
+                        <span className="text-sm font-medium">{option.label}</span>
+                        {coleteOptions[option.value as keyof typeof coleteOptions] && (
+                          <div className="absolute top-2 right-2 p-1 bg-emerald-500/20 rounded-full">
+                            <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Animale - Preț per animal pe linia principală */}
               {tipServiciu === 'Animale' && (

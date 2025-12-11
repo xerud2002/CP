@@ -11,7 +11,7 @@ import { ArrowLeftIcon, DownloadIcon, CreditCardIcon } from '@/components/icons/
 
 interface Payment {
   id: string;
-  tip: 'incasare' | 'retragere';
+  tip: 'incasare';
   suma: number;
   status: 'pending' | 'completat' | 'anulat';
   data: string;
@@ -57,23 +57,6 @@ export default function PlatiFacturiPage() {
     }
   }, [user, loading, router]);
 
-  // Calculate totals
-  const totalIncasari = payments
-    .filter(p => p.tip === 'incasare' && p.status === 'completat')
-    .reduce((sum, p) => sum + p.suma, 0);
-  
-  const totalRetrageri = payments
-    .filter(p => p.tip === 'retragere' && p.status === 'completat')
-    .reduce((sum, p) => sum + p.suma, 0);
-  
-  const soldDisponibil = totalIncasari - totalRetrageri;
-
-  // const totalFacturi = invoices.reduce((sum, f) => sum + f.suma, 0);
-   
-  const facturiNeplatite = invoices
-    .filter(f => f.status === 'neplatita')
-    .reduce((sum, f) => sum + f.suma, 0);
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -111,108 +94,24 @@ export default function PlatiFacturiPage() {
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         
-        {/* Hero Balance Section */}
+        {/* Free Platform Banner */}
         <div className="relative mb-6 sm:mb-8">
-          {/* Main Balance Card */}
           <div className="bg-linear-to-br from-slate-800 via-slate-800/95 to-slate-900 rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-white/10 relative overflow-hidden">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-56 h-56 bg-blue-500/8 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-56 h-56 bg-green-500/8 rounded-full blur-3xl"></div>
             
-            <div className="relative">
-              {/* Top Row - Balance + Action */}
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
-                <div className="flex items-center gap-3 sm:gap-5">
-                  <div className="relative">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-linear-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                      <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                      </svg>
-                    </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center border-2 border-slate-800">
-                      <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-gray-400 text-xs sm:text-sm mb-0.5">Sold disponibil</p>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">{soldDisponibil}</span>
-                      <span className="text-xl sm:text-2xl font-semibold text-emerald-400">€</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Free Platform Badge */}
-                <div className="flex flex-col items-center lg:items-end">
-                  <div className="px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-emerald-500/20 to-green-500/10 rounded-lg sm:rounded-xl border border-emerald-500/30 flex items-center gap-2 sm:gap-3">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/30 flex items-center justify-center">
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-emerald-400 font-semibold text-xs sm:text-sm">Platformă Gratuită</p>
-                      <p className="text-gray-400 text-[10px] sm:text-xs">0% comision pentru curieri</p>
-                    </div>
-                  </div>
-                </div>
+            <div className="relative flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-linear-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
               </div>
-              
-              {/* Stats Row */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-4">
-                <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/5 hover:border-blue-500/30 transition-all group">
-                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                      </svg>
-                    </div>
-                    <div className="hidden sm:block">
-                      <div className="w-12 h-1 bg-blue-500/30 rounded-full overflow-hidden">
-                        <div className="w-3/4 h-full bg-blue-400 rounded-full"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-lg sm:text-2xl font-bold text-blue-400">{totalIncasari} €</p>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">Total încasări</p>
-                </div>
-                
-                <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/5 hover:border-orange-500/30 transition-all group">
-                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-orange-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                      </svg>
-                    </div>
-                    <div className="hidden sm:block">
-                      <div className="w-12 h-1 bg-orange-500/30 rounded-full overflow-hidden">
-                        <div className="w-2/3 h-full bg-orange-400 rounded-full"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-lg sm:text-2xl font-bold text-orange-400">{totalRetrageri} €</p>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">Total retrageri</p>
-                </div>
-                
-                <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/5 hover:border-yellow-500/30 transition-all group">
-                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div className="hidden sm:block">
-                      <div className="w-12 h-1 bg-yellow-500/30 rounded-full overflow-hidden">
-                        <div className="w-1/2 h-full bg-yellow-400 rounded-full"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-lg sm:text-2xl font-bold text-yellow-400">{facturiNeplatite} €</p>
-                  <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">De încasat</p>
-                </div>
+              <div className="text-center sm:text-left">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Platformă 100% Gratuită</h2>
+                <p className="text-gray-400 text-sm sm:text-base">
+                  Nu există comisioane, taxe sau plăți pe platformă. Conectăm clienții direct cu curierii.
+                </p>
               </div>
             </div>
           </div>
