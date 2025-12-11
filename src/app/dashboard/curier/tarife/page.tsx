@@ -281,10 +281,6 @@ export default function TarifePracticatePage() {
   const [tarife, setTarife] = useState<Tarif[]>([]);
   const [loadingTarife, setLoadingTarife] = useState(true);
   const [saving, setSaving] = useState(false);
-  
-  // Selected services state (services the courier offers)
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [savingServices, setSavingServices] = useState(false);
 
   // Form state
   const [selectedCountry, setSelectedCountry] = useState<{ name: string; code: string } | null>(null);
@@ -398,28 +394,6 @@ export default function TarifePracticatePage() {
           });
         });
         setTarife(loadedTarife);
-        
-        // Load selected services from user profile
-        const userDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', user.uid)));
-        if (!userDoc.empty) {
-          const userData = userDoc.docs[0].data();
-          if (userData.serviciiOferite) {
-            // Filter out any services that no longer exist in serviceTypes
-            const validServiceValues = serviceTypes.map(s => s.value);
-            const validServices = userData.serviciiOferite.filter(
-              (s: string) => validServiceValues.includes(s)
-            );
-            setSelectedServices(validServices);
-            
-            // If some services were filtered out, update Firebase
-            if (validServices.length !== userData.serviciiOferite.length) {
-              const userDocRef = doc(db, 'users', userDoc.docs[0].id);
-              await import('firebase/firestore').then(({ updateDoc }) => 
-                updateDoc(userDocRef, { serviciiOferite: validServices })
-              );
-            }
-          }
-        }
       } catch (error) {
         console.error('Error loading data:', error);
       } finally {
@@ -431,35 +405,6 @@ export default function TarifePracticatePage() {
       loadData();
     }
   }, [user]);
-
-  // Toggle service selection and save to Firebase
-  const toggleService = async (serviceValue: string) => {
-    if (!user) return;
-    
-    setSavingServices(true);
-    const newServices = selectedServices.includes(serviceValue)
-      ? selectedServices.filter(s => s !== serviceValue)
-      : [...selectedServices, serviceValue];
-    
-    try {
-      // Find user document
-      const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
-      const userSnapshot = await getDocs(userQuery);
-      
-      if (!userSnapshot.empty) {
-        const userDocRef = doc(db, 'users', userSnapshot.docs[0].id);
-        await import('firebase/firestore').then(({ updateDoc }) => 
-          updateDoc(userDocRef, { serviciiOferite: newServices })
-        );
-      }
-      
-      setSelectedServices(newServices);
-    } catch (error) {
-      console.error('Error saving services:', error);
-    } finally {
-      setSavingServices(false);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -724,8 +669,8 @@ export default function TarifePracticatePage() {
                   : tipServiciu === 'Documente' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila'
                     ? 'lg:grid-cols-[0.6fr_0.4fr_0.35fr_auto]'
                     : unitType === 'm3'
-                      ? 'lg:grid-cols-[0.6fr_0.85fr_0.4fr_0.32fr_auto]'
-                      : 'lg:grid-cols-[0.6fr_0.85fr_0.4fr_0.32fr_0.32fr_auto]'
+                      ? 'lg:grid-cols-[0.6fr_0.85fr_0.55fr_0.32fr_auto]'
+                      : 'lg:grid-cols-[0.6fr_0.85fr_0.55fr_0.32fr_0.32fr_auto]'
             }`}>
               {/* Country Dropdown */}
               <div ref={countryDropdownRef}>
@@ -1254,60 +1199,56 @@ export default function TarifePracticatePage() {
                 
                 return (
                   <>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-400 mb-2">Unitate de măsură</label>
-                      <div className={`flex bg-slate-800/50 border border-white/10 rounded-xl p-1 ${isLocked ? 'opacity-60' : ''}`}>
-                        <button
-                          type="button"
-                          onClick={() => !isLocked && setUnitType('kg')}
-                          disabled={isLocked}
-                          className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 ${
-                            (unitType === 'kg' || isKgOnly) && !isM3Only
-                              ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                              : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
-                          } ${isLocked ? 'cursor-not-allowed' : ''} ${isM3Only ? 'opacity-50' : ''}`}
-                        >
-                          <WeightIcon className="w-4 h-4" />
-                          <span className="font-medium">kg</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => !isLocked && setUnitType('m3')}
-                          disabled={isLocked}
-                          className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 ${
-                            (unitType === 'm3' || isM3Only) && !isKgOnly
-                              ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                              : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
-                          } ${isLocked ? 'cursor-not-allowed' : ''} ${isKgOnly ? 'opacity-50' : ''}`}
-                        >
-                          <CubeIcon className="w-4 h-4" />
-                          <span className="font-medium">m³</span>
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Price per unit */}
-                    <div>
-                      <label className="block text-sm font-medium text-gray-400 mb-2">
-                        Preț/{isKgOnly || unitType === 'kg' ? 'kg' : 'm³'} ({currencySymbol})
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="number"
-                          value={pret}
-                          onChange={(e) => setPret(e.target.value)}
-                          step="0.1"
-                          min="0"
-                          placeholder={isKgOnly || unitType === 'kg' ? 'ex: 2.5' : 'ex: 45'}
-                          className="w-full px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors pr-12"
-                          required
-                        />
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                          {isKgOnly || unitType === 'kg' ? (
-                            <WeightIcon className="w-5 h-5 text-gray-500" />
-                          ) : (
-                            <CubeIcon className="w-5 h-5 text-gray-500" />
-                          )}
+                    {/* Unit Type + Price Combined */}
+                    <div className="flex flex-col">
+                      <label className="block text-sm font-medium text-gray-400 mb-2">Unitate / Preț ({currencySymbol})</label>
+                      <div className="flex h-[46px]">
+                        {/* Unit Toggle */}
+                        <div className={`flex bg-slate-800/50 border border-white/10 rounded-l-xl ${isLocked ? 'opacity-60' : ''}`}>
+                          <button
+                            type="button"
+                            onClick={() => !isLocked && setUnitType('kg')}
+                            disabled={isLocked}
+                            className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 rounded-l-xl ${
+                              (unitType === 'kg' || isKgOnly) && !isM3Only
+                                ? 'bg-emerald-500/20 text-emerald-400 border-r border-emerald-500/30'
+                                : 'text-gray-400 hover:text-white hover:bg-slate-700/50 border-r border-white/10'
+                            } ${isLocked ? 'cursor-not-allowed' : ''} ${isM3Only ? 'opacity-50' : ''}`}
+                          >
+                            <WeightIcon className="w-4 h-4" />
+                            <span className="font-medium text-sm">kg</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => !isLocked && setUnitType('m3')}
+                            disabled={isLocked}
+                            className={`flex items-center justify-center gap-1.5 px-3 transition-all duration-200 ${
+                              (unitType === 'm3' || isM3Only) && !isKgOnly
+                                ? 'bg-purple-500/20 text-purple-400'
+                                : 'text-gray-400 hover:text-white hover:bg-slate-700/50'
+                            } ${isLocked ? 'cursor-not-allowed' : ''} ${isKgOnly ? 'opacity-50' : ''}`}
+                          >
+                            <CubeIcon className="w-4 h-4" />
+                            <span className="font-medium text-sm">m³</span>
+                          </button>
+                        </div>
+                        {/* Price Input */}
+                        <div className="relative flex-1">
+                          <input
+                            type="number"
+                            value={pret}
+                            onChange={(e) => setPret(e.target.value)}
+                            step="0.1"
+                            min="0"
+                            placeholder={isKgOnly || unitType === 'kg' ? '2.5' : '45'}
+                            className="w-full h-full px-3 bg-slate-800/50 border border-l-0 border-white/10 rounded-r-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors pr-10"
+                            required
+                          />
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                            <span className={`text-sm font-medium ${(isKgOnly || unitType === 'kg') ? 'text-emerald-400' : 'text-purple-400'}`}>
+                              {currencySymbol}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
