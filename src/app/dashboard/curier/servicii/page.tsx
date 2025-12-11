@@ -279,8 +279,6 @@ export default function TarifePracticatePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [tarife, setTarife] = useState<Tarif[]>([]);
-  const [loadingTarife, setLoadingTarife] = useState(true);
-  const [saving, setSaving] = useState(false);
   
   // Selected services state (services the courier offers)
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
@@ -311,31 +309,17 @@ export default function TarifePracticatePage() {
   const [tipVehicul, setTipVehicul] = useState<('masina' | 'van' | 'camion' | 'tractor')[]>([]);
   const [acceptaAvariat, setAcceptaAvariat] = useState(true);
 
-  // Custom dropdowns state
-  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
-  const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
-  const [countrySearch, setCountrySearch] = useState('');
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const serviceDropdownRef = useRef<HTMLDivElement>(null);
   
-  // Expanded countries state for tarife list
-  const [expandedCountries, setExpandedCountries] = useState<Record<string, boolean>>({});
-  
-  const toggleCountryExpand = (country: string) => {
-    setExpandedCountries(prev => ({
-      ...prev,
-      [country]: !prev[country]
-    }));
-  };
-
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
-        setIsCountryDropdownOpen(false);
+        // Dropdown handling if needed
       }
       if (serviceDropdownRef.current && !serviceDropdownRef.current.contains(event.target as Node)) {
-        setIsServiceDropdownOpen(false);
+        // Dropdown handling if needed
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -343,9 +327,7 @@ export default function TarifePracticatePage() {
   }, []);
 
   // Filter countries based on search
-  const filteredCountries = countriesWithCodes.filter(country =>
-    country.name.toLowerCase().includes(countrySearch.toLowerCase())
-  );
+
 
   // Force kg unit when selecting a kgOnly service, or m3 for m3Only services
   useEffect(() => {
@@ -422,8 +404,6 @@ export default function TarifePracticatePage() {
         }
       } catch (error) {
         console.error('Error loading data:', error);
-      } finally {
-        setLoadingTarife(false);
       }
     };
 
@@ -662,7 +642,7 @@ export default function TarifePracticatePage() {
               <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
             </Link>
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-br from-indigo-500/20 via-purple-500/15 to-indigo-500/20 rounded-xl border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
+              <div className="p-3 bg-linear-to-br from-indigo-500/20 via-purple-500/15 to-indigo-500/20 rounded-xl border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
                 <svg className="w-7 h-7 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 11l3 3L22 4" />
                   <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
@@ -679,7 +659,7 @@ export default function TarifePracticatePage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Info Message */}
-        <div className="bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-blue-600/10 backdrop-blur-sm rounded-2xl border border-blue-500/20 p-5 sm:p-6 mb-6 sm:mb-8 shadow-lg shadow-blue-500/5">
+        <div className="bg-linear-to-br from-blue-500/10 via-blue-500/5 to-blue-600/10 backdrop-blur-sm rounded-2xl border border-blue-500/20 p-5 sm:p-6 mb-6 sm:mb-8 shadow-lg shadow-blue-500/5">
           <div className="flex items-start gap-4">
             <div className="p-2.5 bg-blue-500/20 rounded-xl shrink-0 mt-0.5">
               <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -731,19 +711,19 @@ export default function TarifePracticatePage() {
                   onClick={() => toggleService(service.value)}
                   className={`group relative flex flex-col gap-4 p-5 rounded-2xl border-2 transition-all duration-300 text-left overflow-hidden ${
                     isSelected
-                      ? 'bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-indigo-500/20 border-indigo-500/60 shadow-2xl shadow-indigo-500/20 scale-[1.02]'
+                      ? 'bg-linear-to-br from-indigo-500/20 via-purple-500/10 to-indigo-500/20 border-indigo-500/60 shadow-2xl shadow-indigo-500/20 scale-[1.02]'
                       : 'bg-slate-800/40 border-slate-700/50 hover:border-indigo-500/30 hover:bg-slate-800/60 hover:scale-[1.01]'
                   }`}
                 >
                   {/* Background gradient effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-300 ${
+                  <div className={`absolute inset-0 bg-linear-to-br opacity-0 transition-opacity duration-300 ${
                     isSelected ? 'from-indigo-500/10 to-purple-500/10 opacity-100' : 'group-hover:opacity-50'
                   }`}></div>
                   
                   {/* Checkmark indicator */}
                   <div className={`absolute top-4 right-4 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
                     isSelected 
-                      ? 'bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/50 scale-110' 
+                      ? 'bg-linear-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/50 scale-110' 
                       : 'bg-slate-700/50 group-hover:bg-slate-600/50'
                   }`}>
                     {isSelected ? (
@@ -796,7 +776,7 @@ export default function TarifePracticatePage() {
             })}
           </div>
           {selectedServices.length === 0 && (
-            <div className="mt-6 p-5 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border-2 border-amber-500/30 rounded-2xl flex items-start gap-4 shadow-lg shadow-amber-500/10">
+            <div className="mt-6 p-5 bg-linear-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border-2 border-amber-500/30 rounded-2xl flex items-start gap-4 shadow-lg shadow-amber-500/10">
               <div className="p-2.5 bg-amber-500/20 rounded-xl shrink-0">
                 <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />

@@ -856,14 +856,14 @@ export default function CalendarColectiiPage() {
                               : 'bg-slate-800/30 border-white/5 hover:border-white/10'
                         }`}
                       >
-                        <div className="h-full flex flex-col items-center justify-center p-0.5 sm:p-1">
-                          <span className={`text-[10px] sm:text-xs font-medium mb-0.5 ${
+                        <div className="h-full flex flex-col p-0.5 sm:p-1 relative">
+                          <span className={`text-[10px] sm:text-xs font-medium ${
                             isToday ? 'text-purple-400' : dayEntries.length > 0 ? 'text-white' : 'text-gray-500'
                           }`}>
                             {day}
                           </span>
                           {dayEntries.length > 0 && (
-                            <div className="flex flex-wrap gap-0.5 justify-center mt-1">
+                            <div className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 flex flex-wrap gap-0.5 justify-end">
                               {dayEntries.slice(0, 4).map((entry, idx) => {
                                 const countryCode = getCountryCode(entry.tara);
                                 if (!countryCode) {

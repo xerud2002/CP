@@ -676,7 +676,7 @@ export default function TarifePracticatePage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Info Message */}
-        <div className="bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-blue-600/10 backdrop-blur-sm rounded-2xl border border-blue-500/20 p-5 sm:p-6 mb-6 sm:mb-8 shadow-lg shadow-blue-500/5">
+        <div className="bg-linear-to-br from-blue-500/10 via-blue-500/5 to-blue-600/10 backdrop-blur-sm rounded-2xl border border-blue-500/20 p-5 sm:p-6 mb-6 sm:mb-8 shadow-lg shadow-blue-500/5">
           <div className="flex items-start gap-4">
             <div className="p-2.5 bg-blue-500/20 rounded-xl shrink-0 mt-0.5">
               <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
