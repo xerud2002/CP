@@ -646,20 +646,14 @@ function ProfilCurierContent() {
                 onClick={handleImageClick}
                 className="relative w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center cursor-pointer overflow-hidden border-4 border-slate-700 group-hover:border-orange-500/50 transition-all"
               >
-                {profile.profileImage ? (
-                  <Image 
-                    src={profile.profileImage} 
-                    alt="Profile" 
-                    fill 
-                    sizes="(max-width: 640px) 96px, 112px"
-                    className="object-cover object-center"
-                    style={{ objectFit: 'cover', objectPosition: 'center' }}
-                  />
-                ) : (
-                  <span className="text-4xl sm:text-5xl font-bold text-white">
-                    {profile.nume ? profile.nume.charAt(0).toUpperCase() : '?'}
-                  </span>
-                )}
+                <Image 
+                  src={profile.profileImage || '/img/default-avatar.png'} 
+                  alt="Profile" 
+                  fill 
+                  sizes="(max-width: 640px) 96px, 112px"
+                  className="object-cover object-center"
+                  style={{ objectFit: 'cover', objectPosition: 'center' }}
+                />
               </div>
               <button 
                 onClick={handleImageClick}
