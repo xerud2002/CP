@@ -163,63 +163,66 @@ export default function PlatiFacturiPage() {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
-                <span className="text-sm">💰</span>
+        
+        {/* Balance Hero Card */}
+        <div className="bg-linear-to-br from-slate-800 to-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-8 border border-white/10 relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+          
+          <div className="relative">
+            {/* Main Balance */}
+            <div className="text-center mb-6 sm:mb-8">
+              <p className="text-gray-400 text-sm sm:text-base mb-2">Sold disponibil pentru retragere</p>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-4xl sm:text-6xl font-bold text-white">{soldDisponibil}</span>
+                <span className="text-2xl sm:text-3xl font-bold text-emerald-400">€</span>
               </div>
-              <span className="text-gray-400 text-xs sm:text-sm">Sold disponibil</span>
-            </div>
-            <p className="text-xl sm:text-2xl font-bold text-green-400">{soldDisponibil} €</p>
-          </div>
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                <span className="text-sm">📥</span>
+              <div className="mt-4">
+                <button className="py-3 px-8 bg-linear-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 active:scale-[0.98]">
+                  💸 Solicită retragere
+                </button>
               </div>
-              <span className="text-gray-400 text-xs sm:text-sm">Total încasări</span>
             </div>
-            <p className="text-xl sm:text-2xl font-bold text-blue-400">{totalIncasari} €</p>
-          </div>
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
-                <span className="text-sm">📤</span>
-              </div>
-              <span className="text-gray-400 text-xs sm:text-sm">Total retrageri</span>
-            </div>
-            <p className="text-xl sm:text-2xl font-bold text-orange-400">{totalRetrageri} €</p>
-          </div>
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center">
-                <span className="text-sm">⏳</span>
-              </div>
-              <span className="text-gray-400 text-xs sm:text-sm">De încasat</span>
-            </div>
-            <p className="text-xl sm:text-2xl font-bold text-yellow-400">{facturiNeplatite} €</p>
-          </div>
-        </div>
 
-        {/* Withdraw Card */}
-        <div className="bg-linear-to-br from-emerald-500/10 to-green-500/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-emerald-500/20">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-            <div className="flex items-start sm:items-center gap-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
-                <span className="text-xl sm:text-2xl">💸</span>
+            {/* Mini Stats Row */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
+              <div className="text-center p-3 sm:p-4 bg-white/5 rounded-xl backdrop-blur-sm">
+                <div className="flex justify-center mb-2">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                    </svg>
+                  </div>
+                </div>
+                <p className="text-lg sm:text-2xl font-bold text-blue-400">{totalIncasari} €</p>
+                <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Total încasări</p>
               </div>
-              <div>
-                <h2 className="text-base sm:text-lg font-semibold text-white">Retrage fonduri</h2>
-                <p className="text-gray-400 text-xs sm:text-sm">
-                  Disponibil: <span className="text-emerald-400 font-medium">{soldDisponibil} €</span>
-                </p>
+              
+              <div className="text-center p-3 sm:p-4 bg-white/5 rounded-xl backdrop-blur-sm">
+                <div className="flex justify-center mb-2">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-500/20 flex items-center justify-center">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                    </svg>
+                  </div>
+                </div>
+                <p className="text-lg sm:text-2xl font-bold text-orange-400">{totalRetrageri} €</p>
+                <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Total retrageri</p>
+              </div>
+              
+              <div className="text-center p-3 sm:p-4 bg-white/5 rounded-xl backdrop-blur-sm">
+                <div className="flex justify-center mb-2">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <p className="text-lg sm:text-2xl font-bold text-yellow-400">{facturiNeplatite} €</p>
+                <p className="text-[10px] sm:text-xs text-gray-500 mt-1">De încasat</p>
               </div>
             </div>
-            <button className="w-full sm:w-auto py-2.5 sm:py-3 px-4 sm:px-6 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl transition-colors text-sm sm:text-base">
-              Solicită retragere
-            </button>
           </div>
         </div>
 
@@ -416,21 +419,33 @@ export default function PlatiFacturiPage() {
           </div>
         )}
 
-        {/* Info Box */}
-        <div className="bg-linear-to-br from-blue-500/10 to-cyan-500/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-blue-500/20">
-          <div className="flex items-start gap-3 sm:gap-4">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0">
-              <span className="text-xl sm:text-2xl">ℹ️</span>
-            </div>
-            <div>
-              <h3 className="font-semibold text-white mb-2 text-sm sm:text-base">Informații despre plăți</h3>
-              <ul className="text-gray-400 text-xs sm:text-sm space-y-1">
-                <li>• Retragerile sunt procesate în 1-3 zile lucrătoare</li>
-                <li>• Suma minimă pentru retragere: <span className="text-white">50 €</span></li>
-                <li>• Facturile sunt generate automat lunar</li>
-                <li className="hidden sm:block">• Pentru întrebări: <span className="text-blue-400">support@curierulperfect.ro</span></li>
-              </ul>
-            </div>
+        {/* Info Box - Compact */}
+        <div className="bg-slate-800/30 rounded-xl p-3 sm:p-4 border border-white/5">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-400">
+            <span className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Retrageri: 1-3 zile
+            </span>
+            <span className="hidden sm:flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              Min. retragere: 50 €
+            </span>
+            <span className="flex items-center gap-1.5">
+              <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Facturi automat lunar
+            </span>
+            <a href="mailto:support@curierulperfect.ro" className="hidden sm:flex items-center gap-1.5 text-blue-400 hover:text-blue-300 transition-colors">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              support@curierulperfect.ro
+            </a>
           </div>
         </div>
       </div>
