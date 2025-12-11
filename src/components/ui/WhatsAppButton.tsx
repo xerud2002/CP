@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function WhatsAppButton() {
   const [isHovered, setIsHovered] = useState(false);
-  const phoneNumber = '40700000000'; // Înlocuiește cu numărul real
+  const phoneNumber = '447880312621';
   const message = 'Bună! Am o întrebare despre serviciile Curierul Perfect.';
 
   const handleClick = () => {

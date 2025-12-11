@@ -2,8 +2,6 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
-import SearchableSelect from '@/components/ui/SearchableSelect';
 import CountUp from '@/components/ui/CountUp';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
 import { countries } from '@/lib/constants';
@@ -120,38 +118,32 @@ const popularRoutes = [
 ];
 
 export default function Home() {
-  const [pickupCountry, setPickupCountry] = useState('');
-  const [deliveryCountry, setDeliveryCountry] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    window.location.href = `/oferte?from=${pickupCountry}&to=${deliveryCountry}`;
-  };
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section id="top" className="relative min-h-[90vh] flex items-center px-4 overflow-hidden">
+      {/* Hero Section - Optimized for Mobile */}
+      <section id="top" className="relative min-h-svh lg:min-h-[90vh] flex items-center px-4 py-6 sm:py-8 overflow-hidden">
         {/* Background gradient mesh */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-900 to-slate-800"></div>
-          <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-l from-orange-500/10 to-transparent"></div>
+          <div className="absolute top-0 right-0 w-full lg:w-1/2 h-1/2 lg:h-full bg-linear-to-bl lg:bg-linear-to-l from-orange-500/10 to-transparent"></div>
+          <div className="absolute bottom-0 left-0 w-full lg:w-1/3 h-1/3 bg-linear-to-tr from-green-500/5 to-transparent"></div>
         </div>
 
         {/* Grid pattern overlay */}
         <div className="absolute inset-0 opacity-[0.02]" style={{
           backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
-          backgroundSize: '50px 50px'
+          backgroundSize: '40px 40px'
         }}></div>
         
         <div className="max-w-7xl mx-auto w-full relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             {/* Left side - Content */}
-            <div className="animate-fade-in">
-              {/* Badge */}
-              <div className="mb-8">
-                <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-sm">
-                  <span className="flex h-2 w-2">
+            <div className="animate-fade-in order-2 lg:order-1">
+              {/* Badge - Mobile optimized */}
+              <div className="mb-4 sm:mb-6">
+                <span className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-xs sm:text-sm">
+                  <span className="flex h-2 w-2 relative">
                     <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-green-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                   </span>
@@ -159,8 +151,8 @@ export default function Home() {
                 </span>
               </div>
 
-              {/* Main Title */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1]">
+              {/* Main Title - Mobile first */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-[1.1]">
                 <span className="text-white">Trimite colete</span>
                 <br />
                 <span className="text-gradient">rapid și sigur</span>
@@ -168,40 +160,40 @@ export default function Home() {
                 <span className="text-white">în toată Europa</span>
               </h1>
 
-              {/* Subtitle */}
-              <p className="text-gray-400 text-lg max-w-lg mb-8">
-                Platformă de curierat care conectează românii din diaspora cu curieri verificați. Prețuri competitive, tracking în timp real.
+              {/* Subtitle - Mobile optimized */}
+              <p className="text-gray-400 text-base sm:text-lg max-w-lg mb-6 sm:mb-8">
+                Conectăm românii din diaspora cu curieri verificați. Transport door-to-door pentru colete, mobilă, electronice și animale de companie.
               </p>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap gap-4 mb-8">
-                <Link href="/register?role=client" className="btn-primary px-8 py-4 text-lg flex items-center gap-2">
-                  Trimite un colet
+              {/* CTA Buttons - Stack on mobile */}
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <Link href="/comanda" className="btn-primary px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg flex items-center justify-center gap-2 w-full sm:w-auto">
+                  Plasează o comandă
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
-                <Link href="/register?role=curier" className="btn-secondary px-8 py-4 text-lg">
+                <Link href="/register?role=curier" className="btn-secondary px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg flex items-center justify-center w-full sm:w-auto">
                   Devino curier
                 </Link>
               </div>
 
-              {/* Trust indicators */}
-              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400">
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+              {/* Trust indicators - Grid on mobile */}
+              <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-6 text-xs sm:text-sm text-gray-400">
+                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-1 sm:gap-2 text-center sm:text-left">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>Curieri verificați</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-1 sm:gap-2 text-center sm:text-left">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>Asigurare inclusă</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-1 sm:gap-2 text-center sm:text-left">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>Tracking live</span>
@@ -209,99 +201,142 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right side - Search Form */}
-            <div className="animate-fade-in-delayed">
+            {/* Right side - Services Grid */}
+            <div className="animate-fade-in-delayed order-1 lg:order-2">
               <div className="relative">
                 {/* Glow effect */}
-                <div className="absolute -inset-1 bg-linear-to-r from-orange-500/20 to-green-500/20 rounded-3xl blur-xl"></div>
+                <div className="absolute -inset-4 bg-linear-to-r from-orange-500/10 to-green-500/10 rounded-3xl blur-2xl"></div>
                 
-                {/* Card */}
-                <div className="relative bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
-                  <div className="text-center mb-6">
-                    <h2 className="text-xl font-semibold text-white mb-2">Găsește curieri disponibili</h2>
-                    <p className="text-gray-400 text-sm">Compară prețuri și alege cel mai bun curier</p>
-                  </div>
-                  
-                  <form onSubmit={handleSubmit}>
-                    <div className="space-y-4 mb-6">
-                      <div>
-                        <label className="block text-gray-300 text-sm font-medium mb-2">
-                          <span className="flex items-center gap-2">
-                            <span className="w-6 h-6 rounded-full bg-orange-500/20 flex items-center justify-center text-xs">1</span>
-                            De unde trimiți?
-                          </span>
-                        </label>
-                        <SearchableSelect
-                          options={countries}
-                          value={pickupCountry}
-                          onChange={setPickupCountry}
-                          placeholder="Selectează țara de origine"
-                          searchPlaceholder="Caută țara..."
-                          required
-                        />
-                      </div>
+                {/* Services Grid */}
+                <div className="relative grid grid-cols-2 gap-3 sm:gap-4">
+                  {[
+                    { 
+                      name: 'Colete', 
+                      desc: 'Pachete și cutii', 
+                      icon: '📦', 
+                      color: 'from-blue-500/20 to-cyan-500/20',
+                      border: 'border-blue-500/30 hover:border-blue-400/50',
+                      iconBg: 'bg-blue-500/20',
+                      service: 'colete'
+                    },
+                    { 
+                      name: 'Express', 
+                      desc: 'Livrare rapidă', 
+                      icon: '⚡', 
+                      color: 'from-yellow-500/20 to-orange-500/20',
+                      border: 'border-yellow-500/30 hover:border-yellow-400/50',
+                      iconBg: 'bg-yellow-500/20',
+                      service: 'express'
+                    },
+                    { 
+                      name: 'Mobilă', 
+                      desc: 'Transport mobilier', 
+                      icon: '🛋️', 
+                      color: 'from-amber-500/20 to-orange-500/20',
+                      border: 'border-amber-500/30 hover:border-amber-400/50',
+                      iconBg: 'bg-amber-500/20',
+                      service: 'mobila'
+                    },
+                    { 
+                      name: 'Electronice', 
+                      desc: 'TV, electrocasnice', 
+                      icon: '💻', 
+                      color: 'from-purple-500/20 to-pink-500/20',
+                      border: 'border-purple-500/30 hover:border-purple-400/50',
+                      iconBg: 'bg-purple-500/20',
+                      service: 'electronice'
+                    },
+                    { 
+                      name: 'Animale', 
+                      desc: 'Transport animale', 
+                      icon: '🐕', 
+                      color: 'from-pink-500/20 to-rose-500/20',
+                      border: 'border-pink-500/30 hover:border-pink-400/50',
+                      iconBg: 'bg-pink-500/20',
+                      service: 'animale'
+                    },
+                    { 
+                      name: 'Auto & Platformă', 
+                      desc: 'Mașini, piese auto', 
+                      icon: '🚗', 
+                      color: 'from-slate-500/20 to-gray-500/20',
+                      border: 'border-slate-500/30 hover:border-slate-400/50',
+                      iconBg: 'bg-slate-500/20',
+                      service: 'auto'
+                    },
+                  ].map((service) => (
+                    <Link 
+                      key={service.name}
+                      href={`/comanda?serviciu=${service.service}`}
+                      className={`group relative bg-slate-800/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border ${service.border} p-4 sm:p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20`}
+                    >
+                      {/* Gradient overlay on hover */}
+                      <div className={`absolute inset-0 bg-linear-to-br ${service.color} opacity-0 group-hover:opacity-100 rounded-xl sm:rounded-2xl transition-opacity duration-300`}></div>
                       
-                      {/* Arrow connector */}
-                      <div className="flex justify-center">
-                        <div className="w-8 h-8 rounded-full bg-slate-700/50 flex items-center justify-center">
-                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                      <div className="relative">
+                        {/* Icon */}
+                        <div className={`w-10 h-10 sm:w-12 sm:h-12 ${service.iconBg} rounded-xl flex items-center justify-center text-xl sm:text-2xl mb-3`}>
+                          {service.icon}
+                        </div>
+                        
+                        {/* Text */}
+                        <h3 className="text-white font-semibold text-sm sm:text-base mb-1">{service.name}</h3>
+                        <p className="text-gray-400 text-xs sm:text-sm">{service.desc}</p>
+                        
+                        {/* Arrow */}
+                        <div className="absolute top-0 right-0 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:translate-x-1">
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </div>
                       </div>
-                      
-                      <div>
-                        <label className="block text-gray-300 text-sm font-medium mb-2">
-                          <span className="flex items-center gap-2">
-                            <span className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-xs">2</span>
-                            Unde livrăm?
-                          </span>
-                        </label>
-                        <SearchableSelect
-                          options={countries}
-                          value={deliveryCountry}
-                          onChange={setDeliveryCountry}
-                          placeholder="Selectează țara de destinație"
-                          searchPlaceholder="Caută țara..."
-                          required
-                        />
-                      </div>
-                    </div>
-                    
-                    <button type="submit" className="btn-primary w-full py-4 text-lg font-semibold flex items-center justify-center gap-2 group">
-                      <span>Caută curieri</span>
-                      <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </svg>
-                    </button>
-                  </form>
-                  
-                  <div className="mt-6 pt-6 border-t border-white/10">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Rute populare:</span>
-                      <div className="flex gap-2">
-                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs flex items-center gap-1">
-                          <Image src="/img/flag/ro.svg" alt="RO" width={16} height={12} className="rounded-sm" />
-                          →
-                          <Image src="/img/flag/gb.svg" alt="GB" width={16} height={12} className="rounded-sm" />
-                        </span>
-                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs flex items-center gap-1">
-                          <Image src="/img/flag/ro.svg" alt="RO" width={16} height={12} className="rounded-sm" />
-                          →
-                          <Image src="/img/flag/de.svg" alt="DE" width={16} height={12} className="rounded-sm" />
-                        </span>
-                        <span className="px-2 py-1 rounded bg-slate-700/50 text-gray-300 text-xs flex items-center gap-1">
-                          <Image src="/img/flag/ro.svg" alt="RO" width={16} height={12} className="rounded-sm" />
-                          →
-                          <Image src="/img/flag/it.svg" alt="IT" width={16} height={12} className="rounded-sm" />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                    </Link>
+                  ))}
+                </div>
+                
+                {/* More services link */}
+                <div className="mt-4 text-center">
+                  <Link 
+                    href="/servicii" 
+                    className="inline-flex items-center gap-2 text-gray-400 hover:text-orange-400 text-sm transition-colors group"
+                  >
+                    <span>Vezi toate serviciile</span>
+                    <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Stats below services on mobile */}
+              <div className="mt-4 sm:mt-6 grid grid-cols-4 gap-2 sm:hidden">
+                <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-white/5">
+                  <p className="text-white font-bold text-sm">10k+</p>
+                  <p className="text-gray-500 text-[10px]">Colete</p>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-white/5">
+                  <p className="text-white font-bold text-sm">500+</p>
+                  <p className="text-gray-500 text-[10px]">Curieri</p>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-white/5">
+                  <p className="text-white font-bold text-sm">16</p>
+                  <p className="text-gray-500 text-[10px]">Țări</p>
+                </div>
+                <div className="bg-slate-800/50 rounded-lg p-2 text-center border border-white/5">
+                  <p className="text-white font-bold text-sm">4.9★</p>
+                  <p className="text-gray-500 text-[10px]">Rating</p>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        
+        {/* Scroll indicator - Hidden on mobile */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2 animate-bounce">
+          <span className="text-gray-500 text-xs">Scroll</span>
+          <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
         </div>
       </section>
 

@@ -17,6 +17,13 @@ interface Tarif {
   pret: number;
   minUnit: number;
   unitType: 'kg' | 'm3' | 'nr' | 'plic';
+  // Colete sub-options
+  coleteOptions?: {
+    express?: boolean;
+    frigo?: boolean;
+    fragil?: boolean;
+    door2door?: boolean;
+  };
   // Animale specific fields
   tipAnimal?: 'caine' | 'pisica' | 'pasare' | 'rozator' | 'reptila' | 'altul';
   pretAnimal?: number;
@@ -73,11 +80,11 @@ const countriesWithCodes = [
   { name: 'Suedia', code: 'se' },
 ];
 
-// Service types with custom SVG icons - ordered: Standard, Express, Frigorific, Fragil first
+// Service types with custom SVG icons - ordered: Colete, Express, Frigorific, Fragil first
 const serviceTypes = [
   { 
-    value: 'Standard', 
-    label: 'Standard', 
+    value: 'Colete', 
+    label: 'Colete', 
     description: 'Transport standard de colete',
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/20',
@@ -171,7 +178,7 @@ const serviceTypes = [
 // Service icons as components
 const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; className?: string }) => {
   const icons: Record<string, React.ReactElement> = {
-    Standard: (
+    Colete: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
         <path d="m3.3 7 8.7 5 8.7-5" />
@@ -274,7 +281,7 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
     ),
   };
   
-  return icons[service] || icons.Standard;
+  return icons[service] || icons.Colete;
 };
 
 export default function TarifePracticatePage() {

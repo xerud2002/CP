@@ -246,7 +246,7 @@ const getDocumentRequirements = (
   }
 
   // CMR Insurance for international transport (recommended)
-  if (activeServices.some(s => ['Standard', 'Express', 'Fragil', 'Electronice'].includes(s))) {
+  if (activeServices.some(s => ['Colete', 'Express', 'Fragil', 'Electronice'].includes(s))) {
     documents.push({
       id: 'cmr_insurance',
       title: 'Asigurare CMR',
