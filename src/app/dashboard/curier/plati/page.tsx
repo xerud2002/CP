@@ -39,66 +39,15 @@ const invoiceStatusLabels = {
   anulata: { label: 'Anulată', color: 'text-red-400', bg: 'bg-red-500/20' },
 };
 
-// Mock data for demo
-const mockPayments: Payment[] = [
-  {
-    id: '1',
-    tip: 'incasare',
-    suma: 450,
-    status: 'completat',
-    data: '25.01.2025',
-    descriere: 'Încasare pentru 5 colete livrate',
-  },
-  {
-    id: '2',
-    tip: 'retragere',
-    suma: 300,
-    status: 'completat',
-    data: '20.01.2025',
-    descriere: 'Transfer în cont bancar',
-  },
-  {
-    id: '3',
-    tip: 'incasare',
-    suma: 180,
-    status: 'pending',
-    data: '28.01.2025',
-    descriere: 'Încasare pentru 2 colete în tranzit',
-  },
-];
-
-const mockInvoices: Invoice[] = [
-  {
-    id: '1',
-    numar: 'FC-2025-001',
-    data: '25.01.2025',
-    suma: 450,
-    status: 'platita',
-    pdfUrl: '#',
-  },
-  {
-    id: '2',
-    numar: 'FC-2025-002',
-    data: '20.01.2025',
-    suma: 300,
-    status: 'platita',
-    pdfUrl: '#',
-  },
-  {
-    id: '3',
-    numar: 'FC-2025-003',
-    data: '15.01.2025',
-    suma: 225,
-    status: 'neplatita',
-    pdfUrl: '#',
-  },
-];
+// Empty initial state - will be loaded from Firebase
+const initialPayments: Payment[] = [];
+const initialInvoices: Invoice[] = [];
 
 export default function PlatiFacturiPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [payments] = useState<Payment[]>(mockPayments);
-  const [invoices] = useState<Invoice[]>(mockInvoices);
+  const [payments] = useState<Payment[]>(initialPayments);
+  const [invoices] = useState<Invoice[]>(initialInvoices);
   const [loadingData] = useState(false);
   const [activeTab, setActiveTab] = useState<'plati' | 'facturi'>('plati');
 
@@ -174,95 +123,95 @@ export default function PlatiFacturiPage() {
             <div className="relative">
               {/* Top Row - Balance + Action */}
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
-                <div className="flex items-center gap-4 sm:gap-6">
+                <div className="flex items-center gap-3 sm:gap-5">
                   <div className="relative">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-linear-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                      <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-linear-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                      <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                       </svg>
                     </div>
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center border-2 border-slate-800">
-                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                    <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-green-500 rounded-full flex items-center justify-center border-2 border-slate-800">
+                      <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm sm:text-base mb-1">Sold disponibil</p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight">{soldDisponibil}</span>
-                      <span className="text-2xl sm:text-3xl font-semibold text-emerald-400">€</span>
+                    <p className="text-gray-400 text-xs sm:text-sm mb-0.5">Sold disponibil</p>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">{soldDisponibil}</span>
+                      <span className="text-xl sm:text-2xl font-semibold text-emerald-400">€</span>
                     </div>
                   </div>
                 </div>
                 
                 {/* Free Platform Badge */}
-                <div className="flex flex-col items-center lg:items-end gap-2">
-                  <div className="px-4 sm:px-5 py-2.5 sm:py-3 bg-linear-to-r from-emerald-500/20 to-green-500/10 rounded-xl border border-emerald-500/30 flex items-center gap-3">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-emerald-500/30 flex items-center justify-center">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <div className="flex flex-col items-center lg:items-end">
+                  <div className="px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-emerald-500/20 to-green-500/10 rounded-lg sm:rounded-xl border border-emerald-500/30 flex items-center gap-2 sm:gap-3">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/30 flex items-center justify-center">
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
                     <div>
-                      <p className="text-emerald-400 font-semibold text-sm sm:text-base">Platformă Gratuită</p>
-                      <p className="text-gray-400 text-xs">0% comision pentru curieri</p>
+                      <p className="text-emerald-400 font-semibold text-xs sm:text-sm">Platformă Gratuită</p>
+                      <p className="text-gray-400 text-[10px] sm:text-xs">0% comision pentru curieri</p>
                     </div>
                   </div>
                 </div>
               </div>
               
               {/* Stats Row */}
-              <div className="grid grid-cols-3 gap-3 sm:gap-6">
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-blue-500/30 transition-all group">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/5 hover:border-blue-500/30 transition-all group">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
                       </svg>
                     </div>
                     <div className="hidden sm:block">
-                      <div className="w-16 h-1.5 bg-blue-500/30 rounded-full overflow-hidden">
+                      <div className="w-12 h-1 bg-blue-500/30 rounded-full overflow-hidden">
                         <div className="w-3/4 h-full bg-blue-400 rounded-full"></div>
                       </div>
                     </div>
                   </div>
-                  <p className="text-xl sm:text-3xl font-bold text-blue-400">{totalIncasari} €</p>
-                  <p className="text-xs sm:text-sm text-gray-500 mt-1">Total încasări</p>
+                  <p className="text-lg sm:text-2xl font-bold text-blue-400">{totalIncasari} €</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">Total încasări</p>
                 </div>
                 
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-orange-500/30 transition-all group">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-orange-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/5 hover:border-orange-500/30 transition-all group">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-orange-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
                       </svg>
                     </div>
                     <div className="hidden sm:block">
-                      <div className="w-16 h-1.5 bg-orange-500/30 rounded-full overflow-hidden">
+                      <div className="w-12 h-1 bg-orange-500/30 rounded-full overflow-hidden">
                         <div className="w-2/3 h-full bg-orange-400 rounded-full"></div>
                       </div>
                     </div>
                   </div>
-                  <p className="text-xl sm:text-3xl font-bold text-orange-400">{totalRetrageri} €</p>
-                  <p className="text-xs sm:text-sm text-gray-500 mt-1">Total retrageri</p>
+                  <p className="text-lg sm:text-2xl font-bold text-orange-400">{totalRetrageri} €</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">Total retrageri</p>
                 </div>
                 
-                <div className="bg-white/5 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-yellow-500/30 transition-all group">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/5 hover:border-yellow-500/30 transition-all group">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
                     <div className="hidden sm:block">
-                      <div className="w-16 h-1.5 bg-yellow-500/30 rounded-full overflow-hidden">
+                      <div className="w-12 h-1 bg-yellow-500/30 rounded-full overflow-hidden">
                         <div className="w-1/2 h-full bg-yellow-400 rounded-full"></div>
                       </div>
                     </div>
                   </div>
-                  <p className="text-xl sm:text-3xl font-bold text-yellow-400">{facturiNeplatite} €</p>
-                  <p className="text-xs sm:text-sm text-gray-500 mt-1">De încasat</p>
+                  <p className="text-lg sm:text-2xl font-bold text-yellow-400">{facturiNeplatite} €</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">De încasat</p>
                 </div>
               </div>
             </div>
@@ -270,21 +219,21 @@ export default function PlatiFacturiPage() {
         </div>
 
         {/* Tabs with counter badges */}
-        <div className="flex items-center gap-3 mb-4 sm:mb-6">
+        <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
           <button
             onClick={() => setActiveTab('plati')}
-            className={`relative px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-sm sm:text-base font-medium transition-all flex items-center gap-2.5 ${
+            className={`relative px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center gap-2 ${
               activeTab === 'plati'
                 ? 'bg-linear-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-500/30'
                 : 'bg-slate-800/80 text-gray-300 hover:bg-slate-700 border border-white/5'
             }`}
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
               <line x1="1" y1="10" x2="23" y2="10" />
             </svg>
             Plăți
-            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold ${
               activeTab === 'plati' ? 'bg-white/20' : 'bg-emerald-500/20 text-emerald-400'
             }`}>
               {payments.length}
@@ -292,20 +241,20 @@ export default function PlatiFacturiPage() {
           </button>
           <button
             onClick={() => setActiveTab('facturi')}
-            className={`relative px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl text-sm sm:text-base font-medium transition-all flex items-center gap-2.5 ${
+            className={`relative px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center gap-2 ${
               activeTab === 'facturi'
                 ? 'bg-linear-to-r from-orange-500 to-amber-600 text-white shadow-lg shadow-orange-500/30'
                 : 'bg-slate-800/80 text-gray-300 hover:bg-slate-700 border border-white/5'
             }`}
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
               <line x1="16" y1="13" x2="8" y2="13" />
               <line x1="16" y1="17" x2="8" y2="17" />
             </svg>
             Facturi
-            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold ${
               activeTab === 'facturi' ? 'bg-white/20' : 'bg-orange-500/20 text-orange-400'
             }`}>
               {invoices.length}
@@ -315,20 +264,20 @@ export default function PlatiFacturiPage() {
 
         {/* Content */}
         {activeTab === 'plati' && (
-          <div className="bg-slate-800/50 rounded-2xl sm:rounded-3xl border border-white/5 overflow-hidden">
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
             {/* Header with gradient */}
-            <div className="bg-linear-to-r from-emerald-500/10 to-green-500/5 p-4 sm:p-6 border-b border-white/5">
+            <div className="bg-linear-to-r from-emerald-500/10 to-green-500/5 p-3 sm:p-5 border-b border-white/5">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
                       <line x1="1" y1="10" x2="23" y2="10" />
                     </svg>
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-xl font-bold text-white">Istoric Plăți</h2>
-                    <p className="text-gray-400 text-xs sm:text-sm">{payments.length} tranzacții</p>
+                    <h2 className="text-base sm:text-lg font-bold text-white">Istoric Plăți</h2>
+                    <p className="text-gray-400 text-[10px] sm:text-xs">{payments.length} tranzacții</p>
                   </div>
                 </div>
                 <div className="hidden sm:flex items-center gap-2 text-sm text-gray-400">
@@ -346,23 +295,23 @@ export default function PlatiFacturiPage() {
                 <div className="spinner"></div>
               </div>
             ) : payments.length === 0 ? (
-              <div className="text-center py-16 sm:py-20 px-4">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 rounded-2xl bg-slate-800/80 flex items-center justify-center">
-                  <svg className="w-10 h-10 sm:w-12 sm:h-12 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <div className="text-center py-12 sm:py-16 px-4">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-xl bg-slate-800/80 flex items-center justify-center">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                     <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
                     <line x1="1" y1="10" x2="23" y2="10" />
                   </svg>
                 </div>
-                <p className="text-gray-300 text-lg sm:text-xl font-medium mb-2">Nu ai nicio plată</p>
-                <p className="text-gray-500 text-sm">Plățile vor apărea aici când finalizezi livrări.</p>
+                <p className="text-gray-300 text-base sm:text-lg font-medium mb-1">Nu ai nicio plată</p>
+                <p className="text-gray-500 text-xs sm:text-sm">Plățile vor apărea aici când finalizezi livrări.</p>
               </div>
             ) : (
-              <div className="p-3 sm:p-5">
-                <div className="space-y-3">
+              <div className="p-3 sm:p-4">
+                <div className="space-y-2.5">
                   {payments.map((payment, index) => (
                     <div 
                       key={payment.id} 
-                      className={`relative bg-slate-900/60 rounded-xl sm:rounded-2xl p-4 sm:p-5 border transition-all hover:shadow-lg cursor-pointer group ${
+                      className={`relative bg-slate-900/60 rounded-lg sm:rounded-xl p-3 sm:p-4 border transition-all hover:shadow-lg cursor-pointer group ${
                         payment.tip === 'incasare' 
                           ? 'border-green-500/10 hover:border-green-500/30 hover:shadow-green-500/5' 
                           : 'border-orange-500/10 hover:border-orange-500/30 hover:shadow-orange-500/5'
@@ -370,29 +319,29 @@ export default function PlatiFacturiPage() {
                     >
                       {/* Timeline connector */}
                       {index < payments.length - 1 && (
-                        <div className="absolute left-7 sm:left-9 top-full w-0.5 h-3 bg-linear-to-b from-slate-700 to-transparent"></div>
+                        <div className="absolute left-6 sm:left-7 top-full w-0.5 h-2.5 bg-linear-to-b from-slate-700 to-transparent"></div>
                       )}
                       
-                      <div className="flex items-center gap-4 sm:gap-5">
+                      <div className="flex items-center gap-3 sm:gap-4">
                         {/* Icon with ring */}
                         <div className="relative">
-                          <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center transition-transform group-hover:scale-105 ${
+                          <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${
                             payment.tip === 'incasare' 
                               ? 'bg-linear-to-br from-green-500/20 to-emerald-500/10' 
                               : 'bg-linear-to-br from-orange-500/20 to-amber-500/10'
                           }`}>
                             {payment.tip === 'incasare' ? (
-                              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 11l5-5m0 0l5 5m-5-5v12" />
                               </svg>
                             ) : (
-                              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
                               </svg>
                             )}
                           </div>
                           {/* Status dot */}
-                          <div className={`absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-slate-900 ${
+                          <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-slate-900 ${
                             payment.status === 'completat' ? 'bg-green-500' : 
                             payment.status === 'pending' ? 'bg-yellow-500' : 'bg-red-500'
                           }`}></div>
@@ -402,16 +351,16 @@ export default function PlatiFacturiPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4">
                             <div className="min-w-0">
-                              <p className="text-white font-semibold text-sm sm:text-base truncate">{payment.descriere}</p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className="text-gray-500 text-xs sm:text-sm">{payment.data}</span>
+                              <p className="text-white font-semibold text-xs sm:text-sm truncate">{payment.descriere}</p>
+                              <div className="flex items-center gap-1.5 mt-0.5">
+                                <span className="text-gray-500 text-[10px] sm:text-xs">{payment.data}</span>
                                 <span className="text-gray-600">•</span>
-                                <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${paymentStatusLabels[payment.status].bg} ${paymentStatusLabels[payment.status].color}`}>
                                   {paymentStatusLabels[payment.status].label}
                                 </span>
                               </div>
                             </div>
-                            <p className={`text-xl sm:text-2xl font-bold whitespace-nowrap ${
+                            <p className={`text-lg sm:text-xl font-bold whitespace-nowrap ${
                               payment.tip === 'incasare' ? 'text-green-400' : 'text-orange-400'
                             }`}>
                               {payment.tip === 'incasare' ? '+' : '-'}{payment.suma} €
@@ -421,7 +370,7 @@ export default function PlatiFacturiPage() {
                         
                         {/* Arrow indicator */}
                         <div className="hidden sm:block text-gray-600 group-hover:text-gray-400 transition-colors">
-                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                           </svg>
                         </div>
@@ -447,13 +396,13 @@ export default function PlatiFacturiPage() {
         )}
 
         {activeTab === 'facturi' && (
-          <div className="bg-slate-800/50 rounded-2xl sm:rounded-3xl border border-white/5 overflow-hidden">
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden">
             {/* Header with gradient */}
-            <div className="bg-linear-to-r from-orange-500/10 to-amber-500/5 p-4 sm:p-6 border-b border-white/5">
+            <div className="bg-linear-to-r from-orange-500/10 to-amber-500/5 p-3 sm:p-5 border-b border-white/5">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-orange-500/20 flex items-center justify-center">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-orange-500/20 flex items-center justify-center">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                       <polyline points="14 2 14 8 20 8" />
                       <line x1="16" y1="13" x2="8" y2="13" />
@@ -461,12 +410,12 @@ export default function PlatiFacturiPage() {
                     </svg>
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-xl font-bold text-white">Facturi Emise</h2>
-                    <p className="text-gray-400 text-xs sm:text-sm">{invoices.length} facturi</p>
+                    <h2 className="text-base sm:text-lg font-bold text-white">Facturi Emise</h2>
+                    <p className="text-gray-400 text-[10px] sm:text-xs">{invoices.length} facturi</p>
                   </div>
                 </div>
-                <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 rounded-xl text-sm font-medium transition-colors">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <button className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 rounded-lg text-xs font-medium transition-colors">
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" y1="15" x2="12" y2="3" />
@@ -481,35 +430,35 @@ export default function PlatiFacturiPage() {
                 <div className="spinner"></div>
               </div>
             ) : invoices.length === 0 ? (
-              <div className="text-center py-16 sm:py-20 px-4">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 rounded-2xl bg-slate-800/80 flex items-center justify-center">
-                  <svg className="w-10 h-10 sm:w-12 sm:h-12 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <div className="text-center py-12 sm:py-16 px-4">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-xl bg-slate-800/80 flex items-center justify-center">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                     <polyline points="14 2 14 8 20 8" />
                   </svg>
                 </div>
-                <p className="text-gray-300 text-lg sm:text-xl font-medium mb-2">Nu ai nicio factură</p>
-                <p className="text-gray-500 text-sm">Facturile sunt generate automat lunar.</p>
+                <p className="text-gray-300 text-base sm:text-lg font-medium mb-1">Nu ai nicio factură</p>
+                <p className="text-gray-500 text-xs sm:text-sm">Facturile sunt generate automat lunar.</p>
               </div>
             ) : (
-              <div className="p-3 sm:p-5">
-                <div className="space-y-3">
+              <div className="p-3 sm:p-4">
+                <div className="space-y-2.5">
                   {invoices.map((invoice) => (
                     <div 
                       key={invoice.id} 
-                      className="relative bg-slate-900/60 rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-orange-500/10 hover:border-orange-500/30 transition-all hover:shadow-lg hover:shadow-orange-500/5 cursor-pointer group"
+                      className="relative bg-slate-900/60 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-orange-500/10 hover:border-orange-500/30 transition-all hover:shadow-lg hover:shadow-orange-500/5 cursor-pointer group"
                     >
-                      <div className="flex items-center gap-4 sm:gap-5">
+                      <div className="flex items-center gap-3 sm:gap-4">
                         {/* Icon */}
                         <div className="relative">
-                          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-linear-to-br from-orange-500/20 to-amber-500/10 flex items-center justify-center transition-transform group-hover:scale-105">
-                            <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-orange-500/20 to-amber-500/10 flex items-center justify-center transition-transform group-hover:scale-105">
+                            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                               <polyline points="14 2 14 8 20 8" />
                             </svg>
                           </div>
                           {/* Status dot */}
-                          <div className={`absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-slate-900 ${
+                          <div className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-slate-900 ${
                             invoice.status === 'platita' ? 'bg-green-500' : 
                             invoice.status === 'neplatita' ? 'bg-yellow-500' : 'bg-red-500'
                           }`}></div>
@@ -519,19 +468,19 @@ export default function PlatiFacturiPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
                             <div className="min-w-0">
-                              <p className="text-white font-semibold text-sm sm:text-base">{invoice.numar}</p>
-                              <div className="flex items-center gap-2 mt-1">
-                                <span className="text-gray-500 text-xs sm:text-sm">{invoice.data}</span>
+                              <p className="text-white font-semibold text-xs sm:text-sm">{invoice.numar}</p>
+                              <div className="flex items-center gap-1.5 mt-0.5">
+                                <span className="text-gray-500 text-[10px] sm:text-xs">{invoice.data}</span>
                                 <span className="text-gray-600">•</span>
-                                <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${invoiceStatusLabels[invoice.status].bg} ${invoiceStatusLabels[invoice.status].color}`}>
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${invoiceStatusLabels[invoice.status].bg} ${invoiceStatusLabels[invoice.status].color}`}>
                                   {invoiceStatusLabels[invoice.status].label}
                                 </span>
                               </div>
                             </div>
-                            <div className="flex items-center gap-3 sm:gap-4">
-                              <p className="text-xl sm:text-2xl font-bold text-emerald-400 whitespace-nowrap">{invoice.suma} €</p>
-                              <button className="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 rounded-xl text-xs sm:text-sm font-medium transition-colors">
-                                <DownloadIcon className="w-4 h-4" />
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <p className="text-lg sm:text-xl font-bold text-emerald-400 whitespace-nowrap">{invoice.suma} €</p>
+                              <button className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 rounded-lg text-[10px] sm:text-xs font-medium transition-colors">
+                                <DownloadIcon className="w-3.5 h-3.5" />
                                 <span className="hidden sm:inline">Descarcă</span> PDF
                               </button>
                             </div>
@@ -547,27 +496,27 @@ export default function PlatiFacturiPage() {
         )}
 
         {/* Quick Info Footer */}
-        <div className="mt-8 pt-6 border-t border-white/5">
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-gray-500">
-            <span className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <div className="mt-6 pt-4 border-t border-white/5">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm text-gray-500">
+            <span className="flex items-center gap-1.5">
+              <div className="w-6 h-6 rounded-md bg-emerald-500/10 flex items-center justify-center">
+                <svg className="w-3 h-3 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <span>Fără comisioane - <span className="text-emerald-400">100% câștiguri</span></span>
             </span>
-            <span className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <span className="flex items-center gap-1.5">
+              <div className="w-6 h-6 rounded-md bg-blue-500/10 flex items-center justify-center">
+                <svg className="w-3 h-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <span>Plăți directe de la <span className="text-blue-400">clienți</span></span>
             </span>
-            <a href="mailto:support@curierulperfect.ro" className="flex items-center gap-2 text-blue-400/80 hover:text-blue-400 transition-colors">
-              <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <a href="mailto:support@curierulperfect.ro" className="flex items-center gap-1.5 text-blue-400/80 hover:text-blue-400 transition-colors">
+              <div className="w-6 h-6 rounded-md bg-blue-500/10 flex items-center justify-center">
+                <svg className="w-3 h-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
