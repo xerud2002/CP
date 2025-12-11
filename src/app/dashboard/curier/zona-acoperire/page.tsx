@@ -75,6 +75,21 @@ export default function ZonaAcoperiirePage() {
   const [regionDropdownOpen, setRegionDropdownOpen] = useState(false);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const regionDropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Expanded countries state (track which countries show their regions)
+  const [expandedCountries, setExpandedCountries] = useState<Set<string>>(new Set());
+  
+  const toggleCountryExpanded = (countryCode: string) => {
+    setExpandedCountries(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(countryCode)) {
+        newSet.delete(countryCode);
+      } else {
+        newSet.add(countryCode);
+      }
+      return newSet;
+    });
+  };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -493,6 +508,15 @@ export default function ZonaAcoperiirePage() {
                             <span className="text-xs text-gray-500 bg-slate-700/50 px-2 py-1 rounded-full">
                               {zones.length} {zones.length === 1 ? 'regiune' : 'regiuni'}
                             </span>
+                            {/* Toggle expand/collapse button */}
+                            <button
+                              onClick={() => toggleCountryExpanded(countryCode)}
+                              className="p-1.5 text-gray-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all"
+                              title={expandedCountries.has(countryCode) ? 'Ascunde regiunile' : 'Arată regiunile'}
+                            >
+                              <ChevronDownIcon className={`w-4 h-4 transition-transform ${expandedCountries.has(countryCode) ? 'rotate-180' : ''}`} />
+                            </button>
+                            {/* Delete country button */}
                             <button
                               onClick={() => handleDeleteCountry(countryCode)}
                               className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
@@ -503,7 +527,8 @@ export default function ZonaAcoperiirePage() {
                           </div>
                         </div>
                         
-                        {/* Zones Grid */}
+                        {/* Zones Grid - only show when expanded */}
+                        {expandedCountries.has(countryCode) && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {zones.map((zone) => (
                             <div 
@@ -530,6 +555,7 @@ export default function ZonaAcoperiirePage() {
                             </div>
                           ))}
                         </div>
+                        )}
                       </div>
                     );
                   })}

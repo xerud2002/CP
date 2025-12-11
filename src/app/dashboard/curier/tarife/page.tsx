@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
-import { ArrowLeftIcon, TrashIcon, BoxIcon } from '@/components/icons/DashboardIcons';
-import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp, orderBy, writeBatch } from 'firebase/firestore';
+import { ArrowLeftIcon, BoxIcon } from '@/components/icons/DashboardIcons';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 interface Tarif {
@@ -256,17 +256,11 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
   return icons[service] || icons.Colete;
 };
 
-export default function TarifePracticatePage() {
+export default function TarifePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [tarife, setTarife] = useState<Tarif[]>([]);
-  const [loadingTarife, setLoadingTarife] = useState(true);
   const [saving, setSaving] = useState(false);
   
-  // Selected services state (services the courier offers)
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [savingServices, setSavingServices] = useState(false);
-
   // Form state
   const [selectedCountry, setSelectedCountry] = useState<{ name: string; code: string } | null>(null);
   const [tipServiciu, setTipServiciu] = useState('');
@@ -298,16 +292,6 @@ export default function TarifePracticatePage() {
   const [countrySearch, setCountrySearch] = useState('');
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const serviceDropdownRef = useRef<HTMLDivElement>(null);
-  
-  // Expanded countries state for tarife list
-  const [expandedCountries, setExpandedCountries] = useState<Record<string, boolean>>({});
-  
-  const toggleCountryExpand = (country: string) => {
-    setExpandedCountries(prev => ({
-      ...prev,
-      [country]: !prev[country]
-    }));
-  };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -344,104 +328,6 @@ export default function TarifePracticatePage() {
     }
   }, [user, loading, router]);
 
-  // Load tarife and selected services from Firebase
-  useEffect(() => {
-    const loadData = async () => {
-      if (!user) return;
-      
-      try {
-        // Load tarife
-        const q = query(
-          collection(db, 'tarife_curier'),
-          where('uid', '==', user.uid),
-          orderBy('addedAt', 'desc')
-        );
-        const snapshot = await getDocs(q);
-        const loadedTarife: Tarif[] = [];
-        snapshot.forEach((docSnap) => {
-          const data = docSnap.data();
-          loadedTarife.push({
-            id: docSnap.id,
-            tara: data.tara,
-            taraCode: data.taraCode || countriesWithCodes.find(c => c.name === data.tara)?.code || 'eu',
-            tipServiciu: data.tipServiciu,
-            pret: data.pret ?? data.pretKg ?? 0,
-            minUnit: data.minUnit ?? data.minKg ?? 0,
-            unitType: data.unitType || 'kg',
-            // Animale fields
-            tipAnimal: data.tipAnimal,
-            pretAnimal: data.pretAnimal,
-            areCertificat: data.areCertificat,
-            areAsigurare: data.areAsigurare,
-            // Platforma fields
-            tipVehicul: data.tipVehicul,
-            acceptaAvariat: data.acceptaAvariat,
-          });
-        });
-        setTarife(loadedTarife);
-        
-        // Load selected services from user profile
-        const userDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', user.uid)));
-        if (!userDoc.empty) {
-          const userData = userDoc.docs[0].data();
-          if (userData.serviciiOferite) {
-            // Filter out any services that no longer exist in serviceTypes
-            const validServiceValues = serviceTypes.map(s => s.value);
-            const validServices = userData.serviciiOferite.filter(
-              (s: string) => validServiceValues.includes(s)
-            );
-            setSelectedServices(validServices);
-            
-            // If some services were filtered out, update Firebase
-            if (validServices.length !== userData.serviciiOferite.length) {
-              const userDocRef = doc(db, 'users', userDoc.docs[0].id);
-              await import('firebase/firestore').then(({ updateDoc }) => 
-                updateDoc(userDocRef, { serviciiOferite: validServices })
-              );
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
-        setLoadingTarife(false);
-      }
-    };
-
-    if (user) {
-      loadData();
-    }
-  }, [user]);
-
-  // Toggle service selection and save to Firebase
-  const toggleService = async (serviceValue: string) => {
-    if (!user) return;
-    
-    setSavingServices(true);
-    const newServices = selectedServices.includes(serviceValue)
-      ? selectedServices.filter(s => s !== serviceValue)
-      : [...selectedServices, serviceValue];
-    
-    try {
-      // Find user document
-      const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
-      const userSnapshot = await getDocs(userQuery);
-      
-      if (!userSnapshot.empty) {
-        const userDocRef = doc(db, 'users', userSnapshot.docs[0].id);
-        await import('firebase/firestore').then(({ updateDoc }) => 
-          updateDoc(userDocRef, { serviciiOferite: newServices })
-        );
-      }
-      
-      setSelectedServices(newServices);
-    } catch (error) {
-      console.error('Error saving services:', error);
-    } finally {
-      setSavingServices(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -456,34 +342,6 @@ export default function TarifePracticatePage() {
     // Pentru m³ nu cerem minUnit
     if (!isAnimalOrPlatform && !isSimplePriceService && !isM3Selected && (!pret || !minUnit)) return;
     if (!isAnimalOrPlatform && !isSimplePriceService && isM3Selected && !pret) return;
-
-    // For Animale service, check combination with tipAnimal
-    const existsForAnimale = tipServiciu === 'Animale' 
-      ? tarife.some(t => t.tara === selectedCountry.name && t.tipServiciu === tipServiciu && t.tipAnimal === tipAnimal)
-      : false;
-    
-    // For Platforma service, check combination with tipVehicul
-    const existsForPlatforma = tipServiciu === 'Platforma'
-      ? tarife.some(t => t.tara === selectedCountry.name && t.tipServiciu === tipServiciu && t.tipVehicul === tipVehicul)
-      : false;
-    
-    // For other services, check simple combination
-    const existsOther = tipServiciu !== 'Animale' && tipServiciu !== 'Platforma'
-      ? tarife.some(t => t.tara === selectedCountry.name && t.tipServiciu === tipServiciu)
-      : false;
-
-    if (existsForAnimale) {
-      alert(`Ai deja un tarif pentru transport ${tipAnimal} în ${selectedCountry.name}!`);
-      return;
-    }
-    if (existsForPlatforma) {
-      alert(`Ai deja un tarif pentru transport ${tipVehicul} pe platformă în ${selectedCountry.name}!`);
-      return;
-    }
-    if (existsOther) {
-      alert('Ai deja un tarif pentru această combinație țară-serviciu!');
-      return;
-    }
 
     setSaving(true);
     try {
@@ -519,38 +377,11 @@ export default function TarifePracticatePage() {
         docData.acceptaAvariat = acceptaAvariat;
       }
 
-      const docRef = await addDoc(collection(db, 'tarife_curier'), docData);
+      await addDoc(collection(db, 'tarife_curier'), docData);
 
-      // Build local tarif object
-      const newTarif: Tarif = {
-        id: docRef.id,
-        tara: selectedCountry.name,
-        taraCode: selectedCountry.code,
-        tipServiciu,
-        pret: isAnimalOrPlatform ? 0 : parseFloat(pret),
-        minUnit: noMinUnit ? 0 : parseInt(minUnit),
-        unitType: isSimplePriceService ? (tipServiciu === 'Mobila' ? 'm3' : tipServiciu === 'Paleti' ? 'nr' : 'plic') : unitType,
-      };
+      // Show success message and reset form
+      alert('Tariful a fost adăugat cu succes!');
       
-      // Add Colete sub-options to local object
-      if (tipServiciu === 'Colete') {
-        newTarif.coleteOptions = { ...coleteOptions };
-      }
-      
-      if (tipServiciu === 'Animale') {
-        newTarif.tipAnimal = tipAnimal;
-        newTarif.pretAnimal = parseFloat(pretAnimal);
-        newTarif.areCertificat = areCertificat;
-        newTarif.areAsigurare = areAsigurare;
-      }
-      
-      if (tipServiciu === 'Platforma') {
-        newTarif.tipVehicul = tipVehicul;
-        newTarif.acceptaAvariat = acceptaAvariat;
-      }
-
-      setTarife([newTarif, ...tarife]);
-
       // Reset form
       setSelectedCountry(null);
       setTipServiciu('');
@@ -574,51 +405,6 @@ export default function TarifePracticatePage() {
       setSaving(false);
     }
   };
-
-  const handleDelete = async (tarifId: string) => {
-    if (!confirm('Sigur vrei să ștergi acest tarif?')) return;
-
-    try {
-      await deleteDoc(doc(db, 'tarife_curier', tarifId));
-      setTarife(tarife.filter(t => t.id !== tarifId));
-    } catch (error) {
-      console.error('Error deleting tarif:', error);
-      alert('Eroare la ștergere. Încearcă din nou.');
-    }
-  };
-
-  const handleDeleteAllForCountry = async (country: string) => {
-    if (!confirm(`Sigur vrei să ștergi toate tarifele pentru ${country}?`)) return;
-
-    try {
-      const tarifeToDelete = tarife.filter(t => t.tara === country);
-      const batch = writeBatch(db);
-      tarifeToDelete.forEach(t => {
-        batch.delete(doc(db, 'tarife_curier', t.id));
-      });
-      await batch.commit();
-      setTarife(tarife.filter(t => t.tara !== country));
-    } catch (error) {
-      console.error('Error deleting tarife:', error);
-      alert('Eroare la ștergere. Încearcă din nou.');
-    }
-  };
-
-  // Group tarife by country
-  const tarifeByCountry = tarife.reduce((acc, t) => {
-    if (!acc[t.tara]) {
-      acc[t.tara] = [];
-    }
-    acc[t.tara].push(t);
-    return acc;
-  }, {} as Record<string, Tarif[]>);
-
-  // Stats - available for future use
-  // const totalTarife = tarife.length;
-  // const totalCountries = Object.keys(tarifeByCountry).length;
-  // const avgPrice = tarife.length > 0 
-  //   ? (tarife.reduce((sum, t) => sum + t.pret, 0) / tarife.length).toFixed(1)
-  //   : '0';
 
   if (loading) {
     return (
@@ -647,8 +433,8 @@ export default function TarifePracticatePage() {
                 <EuroIcon className="w-7 h-7 text-emerald-400" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-white">Tarife Practicate</h1>
-                <p className="text-sm text-gray-400 hidden sm:block">Setează prețurile pentru fiecare țară și serviciu</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-white">Adaugă Tarife</h1>
+                <p className="text-sm text-gray-400 hidden sm:block">Configurează prețurile pentru serviciile tale</p>
               </div>
             </div>
           </div>
@@ -656,95 +442,23 @@ export default function TarifePracticatePage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {/* Service Types Selection */}
-        <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
-          <div className="flex items-center justify-between mb-4">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-500/20 rounded-lg">
-                <svg className="w-5 h-5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                  <path d="M9 12h6" />
-                  <path d="M9 16h6" />
+              <div className="p-2 bg-emerald-500/20 rounded-lg">
+                <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 5v14" />
+                  <path d="M5 12h14" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-white">Servicii oferite</h2>
-                <p className="text-xs text-gray-500">Selectează serviciile pe care le oferi clienților</p>
+                <h2 className="text-lg font-semibold text-white">Adaugă un tarif nou</h2>
+                <p className="text-xs text-gray-500">Completează formularul pentru a adăuga un tarif</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              {savingServices && (
-                <div className="w-4 h-4 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
-              )}
-              <span className="text-xs bg-indigo-500/20 text-indigo-400 px-2.5 py-1 rounded-full font-medium">
-                {selectedServices.length} / {serviceTypes.length} active
-              </span>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
-            {serviceTypes.map((service) => {
-              const isSelected = selectedServices.includes(service.value);
-              return (
-                <button
-                  key={service.value}
-                  type="button"
-                  onClick={() => toggleService(service.value)}
-                  className={`relative flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border transition-all duration-200 text-left ${
-                    isSelected
-                      ? 'bg-indigo-500/20 border-indigo-500/50 shadow-lg shadow-indigo-500/10'
-                      : 'bg-slate-800/50 border-white/5 hover:border-white/20 hover:bg-slate-800'
-                  }`}
-                >
-                  {/* Checkmark indicator */}
-                  <div className={`absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center transition-all ${
-                    isSelected ? 'bg-indigo-500' : 'bg-slate-700/50'
-                  }`}>
-                    {isSelected ? (
-                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                      <svg className="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    )}
-                  </div>
-                  
-                  <div className={`p-2 rounded-lg ${isSelected ? service.bgColor : 'bg-slate-700/50'}`}>
-                    <ServiceIcon service={service.value} className={`w-5 h-5 ${isSelected ? service.color : 'text-gray-500'}`} />
-                  </div>
-                  <div className="min-w-0 pr-6">
-                    <p className={`font-medium text-sm truncate ${isSelected ? 'text-white' : 'text-gray-400'}`}>{service.label}</p>
-                    <p className="text-xs text-gray-500 truncate">{service.description}</p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-          {selectedServices.length === 0 && (
-            <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center gap-3">
-              <svg className="w-5 h-5 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <p className="text-sm text-amber-400">Selectează cel puțin un serviciu pentru a fi vizibil clienților!</p>
-            </div>
-          )}
-        </div>
-
-        {/* Add Form Section */}
-        <div className="bg-slate-900/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6 mb-4 sm:mb-8">
-          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5">
-            <div className="p-1.5 sm:p-2 bg-emerald-500/20 rounded-lg">
-              <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5v14" />
-                <path d="M5 12h14" />
-              </svg>
-            </div>
-            <h2 className="text-lg font-semibold text-white">Adaugă serviciu</h2>
           </div>
 
-          <form onSubmit={handleSubmit}>
             <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 items-end ${
               tipServiciu === 'Animale' 
                 ? 'lg:grid-cols-[0.6fr_0.4fr_0.35fr_auto]'
@@ -1478,265 +1192,8 @@ export default function TarifePracticatePage() {
                 </button>
               )}
             </div>
-          </form>
-        </div>
 
-        {/* Saved Tarife */}
-        <div className="bg-slate-900/50 rounded-2xl border border-white/5 p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-500/20 rounded-lg">
-                <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 3v18h18" />
-                  <path d="M18 17V9" />
-                  <path d="M13 17V5" />
-                  <path d="M8 17v-3" />
-                </svg>
-              </div>
-              <h2 className="text-lg font-semibold text-white">Tarife și Servicii Active</h2>
-            </div>
-            <span className="text-sm bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-full">
-              {tarife.length} {tarife.length === 1 ? 'tarif' : 'tarife'}
-            </span>
-          </div>
-          
-          {loadingTarife ? (
-            <div className="flex justify-center py-12">
-              <div className="spinner"></div>
-            </div>
-          ) : Object.keys(tarifeByCountry).length === 0 ? (
-            <div className="text-center py-16">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-slate-800/50 flex items-center justify-center">
-                <svg className="w-10 h-10 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="8" cy="8" r="6" />
-                  <path d="M18.09 10.37A6 6 0 1 1 10.34 18" />
-                  <path d="M7 6h1v4" />
-                  <path d="m16.71 13.88.7.71-2.82 2.82" />
-                </svg>
-              </div>
-              <p className="text-gray-400 text-lg mb-2">Nu ai niciun tarif salvat</p>
-              <p className="text-gray-500 text-sm">Adaugă primul tău tarif folosind formularul de mai sus</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Object.entries(tarifeByCountry)
-                .sort((a, b) => a[0].localeCompare(b[0]))
-                .map(([country, countryTarife]) => {
-                  const countryCode = countryTarife[0]?.taraCode || countriesWithCodes.find(c => c.name === country)?.code || 'eu';
-                  return (
-                    <div key={country} className="bg-slate-800/50 rounded-xl border border-white/5 overflow-hidden">
-                      {/* Country Header */}
-                      <div className="flex items-center justify-between p-4 border-b border-white/5">
-                        <div className="flex items-center gap-3">
-                          <Image
-                            src={`/img/flag/${countryCode}.svg`}
-                            alt={country}
-                            width={32}
-                            height={32}
-                            className="w-8 h-8 rounded-full object-cover shadow-lg"
-                          />
-                          <div>
-                            <h3 className="font-semibold text-white">{country}</h3>
-                            <p className="text-xs text-gray-500">{countryTarife.length} {countryTarife.length === 1 ? 'tarif' : 'tarife'}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <button
-                            onClick={() => toggleCountryExpand(country)}
-                            className="p-2 text-gray-500 hover:text-sky-400 hover:bg-sky-500/10 rounded-lg transition-all"
-                            title={expandedCountries[country] ? 'Restrânge lista' : 'Extinde lista'}
-                          >
-                            <svg 
-                              className={`w-4 h-4 transition-transform duration-200 ${expandedCountries[country] ? 'rotate-180' : ''}`} 
-                              fill="none" 
-                              stroke="currentColor" 
-                              viewBox="0 0 24 24"
-                            >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={() => handleDeleteAllForCountry(country)}
-                            className="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-                            title="Șterge toate tarifele pentru această țară"
-                          >
-                            <TrashIcon className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Tarife List - collapsible */}
-                      <div className={`divide-y divide-white/5 transition-all duration-200 overflow-hidden ${expandedCountries[country] ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                        {countryTarife.map((t) => {
-                          const serviceInfo = serviceTypes.find(s => s.value === t.tipServiciu);
-                          const unitLabel = t.unitType === 'm3' ? 'm³' : t.unitType === 'plic' ? 'plic' : t.unitType === 'nr' ? 'buc' : 'kg';
-                          
-                          // Get animal label
-                          const animalLabels: Record<string, string> = {
-                            caine: '🐕 Câine',
-                            pisica: '🐱 Pisică',
-                            pasare: '🐦 Pasăre',
-                            rozator: '🐹 Rozător',
-                            reptila: '🦎 Reptilă',
-                            altul: '🐾 Altul',
-                          };
-                          
-                          // Get vehicle icon component
-                          const VehicleIconSmall = ({ type }: { type: string }) => {
-                            const iconClass = "w-3.5 h-3.5 text-sky-400 inline-block";
-                            switch(type) {
-                              case 'masina':
-                                return (
-                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0Zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
-                                    <path d="M5 17H3v-4l2-5h9l4 5h3v4h-2" />
-                                  </svg>
-                                );
-                              case 'van':
-                                return (
-                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M5 17a2 2 0 1 0 4 0 2 2 0 0 0-4 0Zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
-                                    <path d="M3 9h13v8H3z" />
-                                    <path d="M16 9h2l3 4v4h-2" />
-                                  </svg>
-                                );
-                              case 'camion':
-                                return (
-                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M5 18a2 2 0 1 0 4 0 2 2 0 0 0-4 0Zm10 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
-                                    <path d="M3 12h11V5H3z" />
-                                    <path d="M14 8h3l3 4v6h-2" />
-                                  </svg>
-                                );
-                              case 'tractor':
-                                return (
-                                  <svg className={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M4 17a3 3 0 1 0 6 0 3 3 0 0 0-6 0Zm11 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0Z" />
-                                    <path d="M7 14V9h7l3 5" />
-                                    <path d="M7 9V5h5" />
-                                  </svg>
-                                );
-                              default:
-                                return null;
-                            }
-                          };
-                          
-                          const vehicleLabelsText: Record<string, string> = {
-                            masina: 'Mașină',
-                            van: 'Van',
-                            camion: 'Camion',
-                            tractor: 'Tractor',
-                          };
-                          
-                          // Currency based on country
-                          const currencySymbol = country === 'Anglia' ? '£' : '€';
-                          
-                          return (
-                            <div key={t.id} className="p-3 hover:bg-slate-700/30 transition-colors">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                  <div className={`p-1.5 rounded-lg ${serviceInfo?.bgColor || 'bg-slate-600/50'}`}>
-                                    <ServiceIcon service={t.tipServiciu} className={`w-4 h-4 ${serviceInfo?.color || 'text-gray-400'}`} />
-                                  </div>
-                                  <div>
-                                    <p className="text-white text-sm font-medium flex items-center gap-1 flex-wrap">
-                                      {serviceInfo?.label || t.tipServiciu}
-                                      {t.tipAnimal && <span className="ml-2 text-pink-400 text-xs">{animalLabels[t.tipAnimal]}</span>}
-                                      {t.tipVehicul && t.tipVehicul.length > 0 && (
-                                        <span className="ml-1 text-sky-400 text-xs flex items-center gap-1">
-                                          {t.tipVehicul.map((v, idx) => (
-                                            <span key={v} className="inline-flex items-center gap-0.5">
-                                              <VehicleIconSmall type={v} />
-                                              <span>{vehicleLabelsText[v]}</span>
-                                              {idx < t.tipVehicul!.length - 1 && <span>,</span>}
-                                            </span>
-                                          ))}
-                                        </span>
-                                      )}
-                                    </p>
-                                    {/* Nu afișa minUnit pentru Animale sau Platforma */}
-                                    {t.tipServiciu !== 'Animale' && t.tipServiciu !== 'Platforma' && (
-                                      <p className="text-xs text-gray-500 flex items-center gap-1">
-                                        {t.minUnit > 0 && <>{t.minUnit} {unitLabel}</>}
-                                        {t.unitType === 'm3' && <CubeIcon className="w-3 h-3 text-purple-400" />}
-                                        {t.unitType === 'kg' && <WeightIcon className="w-3 h-3 text-emerald-400" />}
-                                        {t.unitType === 'nr' && <span className="text-orange-400 font-bold">#</span>}
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  {/* Preț pentru Animale */}
-                                  {t.tipServiciu === 'Animale' && t.pretAnimal !== undefined && (
-                                    <span className="font-bold text-pink-400">
-                                      {t.pretAnimal}{currencySymbol}
-                                    </span>
-                                  )}
-                                  {/* Preț pentru alte servicii (nu Animale, nu Platforma) */}
-                                  {t.tipServiciu !== 'Animale' && t.tipServiciu !== 'Platforma' && (
-                                    <span className={`font-bold ${t.unitType === 'm3' ? 'text-purple-400' : t.unitType === 'nr' ? 'text-orange-400' : 'text-emerald-400'}`}>
-                                      {t.pret}{currencySymbol}/{unitLabel}
-                                    </span>
-                                  )}
-                                  <button
-                                    onClick={() => handleDelete(t.id)}
-                                    className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-                                    title="Șterge tarif"
-                                  >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                  </button>
-                                </div>
-                              </div>
-                              
-                              {/* Extra info for Animale */}
-                              {t.tipServiciu === 'Animale' && (
-                                <div className="mt-2 flex gap-2 ml-10">
-                                  {t.areCertificat && (
-                                    <span className="inline-flex items-center gap-1 text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">
-                                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                      </svg>
-                                      Certificat
-                                    </span>
-                                  )}
-                                  {t.areAsigurare && (
-                                    <span className="inline-flex items-center gap-1 text-xs bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">
-                                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                      </svg>
-                                      Asigurare
-                                    </span>
-                                  )}
-                                  {!t.areCertificat && !t.areAsigurare && (
-                                    <span className="text-xs text-gray-500">Fără certificat / asigurare</span>
-                                  )}
-                                </div>
-                              )}
-                              
-                              {/* Extra info for Platforma */}
-                              {t.tipServiciu === 'Platforma' && (
-                                <div className="mt-2 flex gap-2 ml-10">
-                                  <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${
-                                    t.acceptaAvariat 
-                                      ? 'bg-sky-500/20 text-sky-400' 
-                                      : 'bg-amber-500/20 text-amber-400'
-                                  }`}>
-                                    {t.acceptaAvariat ? '✓ Accept și avariate' : '⚠ Doar funcționale'}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-          )}
-        </div>
+        </form>
       </div>
     </div>
   );
