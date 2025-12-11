@@ -856,36 +856,38 @@ export default function CalendarColectiiPage() {
                               : 'bg-slate-800/30 border-white/5 hover:border-white/10'
                         }`}
                       >
-                        <div className="h-full flex flex-col p-0.5 sm:p-1 relative">
+                        <div className="h-full flex flex-col p-0.5 sm:p-1">
                           <span className={`text-[10px] sm:text-xs font-medium ${
                             isToday ? 'text-purple-400' : dayEntries.length > 0 ? 'text-white' : 'text-gray-500'
                           }`}>
                             {day}
                           </span>
                           {dayEntries.length > 0 && (
-                            <div className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 flex flex-wrap gap-0.5 justify-end">
-                              {dayEntries.slice(0, 4).map((entry, idx) => {
-                                const countryCode = getCountryCode(entry.tara);
-                                if (!countryCode) {
-                                  console.log('Missing country code for:', entry.tara);
-                                  return null;
-                                }
-                                return (
-                                  <div key={idx} className="shrink-0">
-                                    <Image
-                                      src={`/img/flag/${countryCode}.svg`}
-                                      alt={entry.tara}
-                                      width={16}
-                                      height={12}
-                                      className="rounded-sm shadow-md border border-white/10"
-                                      title={entry.tara}
-                                    />
-                                  </div>
-                                );
-                              })}
-                              {dayEntries.length > 4 && (
-                                <span className="text-[9px] text-emerald-400 font-bold">+{dayEntries.length - 4}</span>
-                              )}
+                            <div className="flex-1 flex items-end justify-end">
+                              <div className="flex flex-wrap gap-px sm:gap-0.5 justify-end max-w-full">
+                                {dayEntries.slice(0, 2).map((entry, idx) => {
+                                  const countryCode = getCountryCode(entry.tara);
+                                  if (!countryCode) {
+                                    console.log('Missing country code for:', entry.tara);
+                                    return null;
+                                  }
+                                  return (
+                                    <div key={idx} className="shrink-0">
+                                      <Image
+                                        src={`/img/flag/${countryCode}.svg`}
+                                        alt={entry.tara}
+                                        width={12}
+                                        height={9}
+                                        className="rounded-[2px] shadow-sm border border-white/10 sm:w-4 sm:h-3"
+                                        title={entry.tara}
+                                      />
+                                    </div>
+                                  );
+                                })}
+                                {dayEntries.length > 2 && (
+                                  <span className="text-[8px] sm:text-[9px] text-emerald-400 font-bold">+{dayEntries.length - 2}</span>
+                                )}
+                              </div>
                             </div>
                           )}
                         </div>
