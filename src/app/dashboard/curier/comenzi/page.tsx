@@ -58,7 +58,7 @@ export default function ComenziCurierPage() {
       try {
         const q = query(
           collection(db, 'comenzi'),
-          where('uid', '==', user.uid),
+          where('curierId', '==', user.uid),
           orderBy('timestamp', 'desc')
         );
         const snapshot = await getDocs(q);

@@ -4,6 +4,14 @@
       "collectionGroup": "comenzi",
       "queryScope": "COLLECTION",
       "fields": [
+        { "fieldPath": "uid_client", "order": "ASCENDING" },
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "comenzi",
+      "queryScope": "COLLECTION",
+      "fields": [
         { "fieldPath": "curierId", "order": "ASCENDING" },
         { "fieldPath": "timestamp", "order": "DESCENDING" }
       ]
@@ -20,16 +28,16 @@
       "collectionGroup": "comenzi",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "uid_client", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
         { "fieldPath": "timestamp", "order": "DESCENDING" }
       ]
     },
     {
-      "collectionGroup": "comenzi",
+      "collectionGroup": "tarife_curier",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "status", "order": "ASCENDING" },
-        { "fieldPath": "timestamp", "order": "DESCENDING" }
+        { "fieldPath": "uid", "order": "ASCENDING" },
+        { "fieldPath": "addedAt", "order": "DESCENDING" }
       ]
     },
     {

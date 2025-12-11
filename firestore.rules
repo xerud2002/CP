@@ -59,5 +59,21 @@ service cloud.firestore {
       allow update: if isAuthenticated();
       allow delete: if isAuthenticated();
     }
+    
+    // Transport aeroport collection
+    match /transport_aeroport/{docId} {
+      // Couriers can manage their airport transport routes
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+    
+    // Transport persoane collection
+    match /transport_persoane/{docId} {
+      // Couriers can manage their person transport routes
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
   }
 }
