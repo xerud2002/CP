@@ -622,7 +622,7 @@ export default function TarifePracticatePage() {
               </div>
               <div>
                 <h1 className="text-xl sm:text-2xl font-bold text-white">Tarife Transport Internațional Europa</h1>
-                <p className="text-sm text-gray-400 hidden sm:block">Setează prețuri competitive pentru transport colete, mobilă, paleți și servicii de curierat în Europa</p>
+                <p className="text-sm text-gray-400 hidden sm:block">Setează prețuri competitive pentru transport colete, mobilă, paleți, persoane și servicii de curierat în Europa</p>
               </div>
             </div>
           </div>
