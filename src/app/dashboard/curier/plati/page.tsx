@@ -370,7 +370,7 @@ export default function PlatiFacturiPage() {
                     >
                       {/* Timeline connector */}
                       {index < payments.length - 1 && (
-                        <div className="absolute left-7 sm:left-9 top-full w-0.5 h-3 bg-gradient-to-b from-slate-700 to-transparent"></div>
+                        <div className="absolute left-7 sm:left-9 top-full w-0.5 h-3 bg-linear-to-b from-slate-700 to-transparent"></div>
                       )}
                       
                       <div className="flex items-center gap-4 sm:gap-5">

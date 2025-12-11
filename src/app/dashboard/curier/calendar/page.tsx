@@ -341,43 +341,43 @@ export default function CalendarColectiiPage() {
     <div className="min-h-screen bg-slate-950">
       {/* Header */}
       <div className="bg-slate-900/80 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center gap-4">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link 
               href="/dashboard/curier" 
-              className="p-2.5 hover:bg-slate-800/80 rounded-xl transition-all duration-200 group"
+              className="p-2 sm:p-2.5 hover:bg-slate-800/80 rounded-xl transition-all duration-200 group"
             >
               <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
             </Link>
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-linear-to-br from-purple-500/20 to-pink-500/20 rounded-xl border border-purple-500/20">
-                <CalendarIcon className="w-7 h-7 text-purple-400" />
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-2.5 sm:p-3 bg-linear-to-br from-purple-500/20 to-pink-500/20 rounded-xl border border-purple-500/20">
+                <CalendarIcon className="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" />
               </div>
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-white">Calendar Colecții</h1>
-                <p className="text-sm text-gray-400 hidden sm:block">Programează datele de colecție pentru fiecare țară</p>
+                <h1 className="text-lg sm:text-2xl font-bold text-white">Calendar Colecții</h1>
+                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Programează datele de colecție pentru fiecare țară</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 sm:gap-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-5 sm:mb-8">
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5">
+            <div className="flex flex-col sm:flex-row items-center sm:items-center gap-1.5 sm:gap-3 text-center sm:text-left">
               <div className="p-2 sm:p-2.5 bg-emerald-500/20 rounded-lg sm:rounded-xl">
                 <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-white">{totalEntries}</p>
-                <p className="text-xs text-gray-400">Total date</p>
+                <p className="text-[10px] sm:text-xs text-gray-400">Total date</p>
               </div>
             </div>
           </div>
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 sm:gap-3">
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5">
+            <div className="flex flex-col sm:flex-row items-center sm:items-center gap-1.5 sm:gap-3 text-center sm:text-left">
               <div className="p-2 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
@@ -387,12 +387,12 @@ export default function CalendarColectiiPage() {
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-white">{totalCountries}</p>
-                <p className="text-xs text-gray-400">Țări active</p>
+                <p className="text-[10px] sm:text-xs text-gray-400">Țări active</p>
               </div>
             </div>
           </div>
-          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
-            <div className="flex items-center gap-2 sm:gap-3">
+          <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-white/5">
+            <div className="flex flex-col sm:flex-row items-center sm:items-center gap-1.5 sm:gap-3 text-center sm:text-left">
               <div className="p-2 sm:p-2.5 bg-purple-500/20 rounded-lg sm:rounded-xl">
                 <svg className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 6 9 17l-5-5" />
@@ -400,17 +400,17 @@ export default function CalendarColectiiPage() {
               </div>
               <div>
                 <p className="text-lg sm:text-2xl font-bold text-white">Auto</p>
-                <p className="text-xs text-gray-400">Curățare</p>
+                <p className="text-[10px] sm:text-xs text-gray-400">Curățare</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Add Entry Form */}
-        <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-4 sm:p-6 mb-6 sm:mb-8">
-          <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2">
+        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6 mb-5 sm:mb-8">
+          <h2 className="text-base sm:text-xl font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2">
             <div className="p-1.5 bg-purple-500/20 rounded-lg">
-              <svg className="w-5 h-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 5v14" />
                 <path d="M5 12h14" />
               </svg>
@@ -418,35 +418,35 @@ export default function CalendarColectiiPage() {
             <span>Adaugă dată de colecție</span>
           </h2>
           
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {/* Custom Country Dropdown */}
             <div className="relative" ref={countryDropdownRef}>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Țara</label>
+              <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Țara</label>
               <button
                 type="button"
                 onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-                className="w-full px-4 py-3 bg-slate-900/80 border border-white/10 rounded-xl text-left text-white hover:border-purple-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-900/80 border border-white/10 rounded-xl text-left text-white hover:border-purple-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-purple-500/50"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                   {selectedCountry ? (
                     <>
                       <Image
                         src={`/img/flag/${getCountryCode(selectedCountry)}.svg`}
                         alt={selectedCountry}
-                        width={24}
-                        height={18}
-                        className="rounded shadow-sm"
+                        width={20}
+                        height={15}
+                        className="rounded shadow-sm shrink-0"
                       />
-                      <span>{selectedCountry}</span>
+                      <span className="text-sm sm:text-base truncate">{selectedCountry}</span>
                     </>
                   ) : (
                     <>
-                      <svg className="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10" />
                         <path d="M2 12h20" />
                         <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                       </svg>
-                      <span className="text-gray-400">Selectează o țară</span>
+                      <span className="text-gray-400 text-sm sm:text-base">Selectează o țară</span>
                     </>
                   )}
                 </div>
@@ -504,18 +504,18 @@ export default function CalendarColectiiPage() {
 
             {/* Date Picker */}
             <div className="relative" ref={calendarRef}>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Data Colecție</label>
+              <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Data Colecție</label>
               <button
                 type="button"
                 onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                className="w-full px-4 py-3 bg-slate-900/80 border border-white/10 rounded-xl text-left text-white hover:border-purple-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-900/80 border border-white/10 rounded-xl text-left text-white hover:border-purple-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-purple-500/50"
               >
-                <div className="flex items-center gap-3">
-                  <CalendarIcon className="w-5 h-5 text-purple-400" />
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 shrink-0" />
                   {selectedDate ? (
-                    <span>{formatSelectedDate()}</span>
+                    <span className="text-sm sm:text-base truncate">{formatSelectedDate()}</span>
                   ) : (
-                    <span className="text-gray-400">Selectează o dată</span>
+                    <span className="text-gray-400 text-sm sm:text-base">Selectează o dată</span>
                   )}
                 </div>
                 <svg className={`w-5 h-5 text-gray-400 transition-transform ${isCalendarOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -524,7 +524,7 @@ export default function CalendarColectiiPage() {
               </button>
 
               {isCalendarOpen && (
-                <div className="absolute z-50 mt-2 w-full sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                <div className="absolute z-50 mt-2 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
                   {/* Calendar Header */}
                   <div className="flex items-center justify-between p-4 border-b border-white/5">
                     <button
@@ -623,20 +623,20 @@ export default function CalendarColectiiPage() {
             </div>
 
             {/* Add Button */}
-            <div className="flex items-end">
+            <div className="flex items-end sm:col-span-2 lg:col-span-1">
               <button
                 onClick={handleAddEntry}
                 disabled={!selectedCountry || !selectedDate || saving}
-                className="w-full px-6 py-3 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20"
+                className="w-full px-4 sm:px-6 py-2.5 sm:py-3 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20 text-sm sm:text-base"
               >
                 {saving ? (
                   <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                     <span>Se salvează...</span>
                   </>
                 ) : (
                   <>
-                    <CalendarIcon className="w-5 h-5" />
+                    <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                     <span>Adaugă data</span>
                   </>
                 )}
@@ -646,64 +646,72 @@ export default function CalendarColectiiPage() {
         </div>
 
         {/* Saved Entries */}
-        <div className="bg-slate-800/50 rounded-2xl border border-white/5 p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2">
-            <div className="p-2 bg-purple-500/20 rounded-lg">
-              <svg className="w-5 h-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
-                <path d="M9 12h6" />
-                <path d="M9 16h6" />
-              </svg>
-            </div>
-            Program Colecții Salvate
-          </h2>
+        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 className="text-base sm:text-xl font-semibold text-white flex items-center gap-2">
+              <div className="p-1.5 sm:p-2 bg-purple-500/20 rounded-lg">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                  <path d="M9 12h6" />
+                  <path d="M9 16h6" />
+                </svg>
+              </div>
+              <span className="hidden sm:inline">Program Colecții Salvate</span>
+              <span className="sm:hidden">Colecții Salvate</span>
+            </h2>
+            {Object.keys(entriesByCountry).length > 0 && (
+              <span className="text-xs text-gray-500 bg-slate-700/50 px-2 py-1 rounded-lg">
+                {totalEntries} {totalEntries === 1 ? 'dată' : 'date'}
+              </span>
+            )}
+          </div>
           
           {loadingEntries ? (
-            <div className="flex justify-center py-12">
+            <div className="flex justify-center py-10 sm:py-12">
               <div className="spinner"></div>
             </div>
           ) : Object.keys(entriesByCountry).length === 0 ? (
-            <div className="text-center py-12 sm:py-16">
-              <div className="text-6xl sm:text-7xl mb-4">📭</div>
-              <p className="text-gray-300 text-lg font-medium">Nu ai nicio dată de colecție salvată</p>
-              <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
+            <div className="text-center py-10 sm:py-16">
+              <div className="text-5xl sm:text-7xl mb-4">📭</div>
+              <p className="text-gray-300 text-base sm:text-lg font-medium">Nu ai nicio dată de colecție salvată</p>
+              <p className="text-gray-500 text-xs sm:text-sm mt-2 max-w-md mx-auto px-4">
                 Adaugă prima ta dată de colecție folosind formularul de mai sus pentru a-ți anunța clienții când vei fi disponibil.
               </p>
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {Object.entries(entriesByCountry).map(([country, countryEntries]) => {
                 const countryCode = getCountryCode(country);
                 
                 return (
                   <div 
                     key={country} 
-                    className="bg-slate-900/50 rounded-xl p-4 border border-white/5 hover:border-purple-500/30 transition-all duration-200"
+                    className="bg-slate-900/50 rounded-xl p-3 sm:p-4 border border-white/5 hover:border-purple-500/30 transition-all duration-200"
                   >
                     {/* Country Header */}
-                    <div className="flex items-center gap-3 mb-4 pb-3 border-b border-white/5">
+                    <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-white/5">
                       {countryCode && (
                         <Image
                           src={`/img/flag/${countryCode}.svg`}
                           alt={country}
-                          width={32}
-                          height={24}
-                          className="rounded shadow-md"
+                          width={28}
+                          height={21}
+                          className="rounded shadow-md shrink-0"
                         />
                       )}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-white truncate">{country}</h3>
-                        <p className="text-xs text-gray-400">
+                        <h3 className="font-semibold text-white text-sm sm:text-base truncate">{country}</h3>
+                        <p className="text-[10px] sm:text-xs text-gray-400">
                           {countryEntries.length} {countryEntries.length === 1 ? 'dată' : 'date'} programate
                         </p>
                       </div>
                       <button
                         onClick={() => handleDeleteCountry(country)}
-                        className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200"
+                        className="p-1.5 sm:p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200"
                         title={`Șterge toate datele pentru ${country}`}
                       >
-                        <TrashIcon className="w-4 h-4" />
+                        <TrashIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                       </button>
                     </div>
                     
@@ -712,25 +720,25 @@ export default function CalendarColectiiPage() {
                       {countryEntries.map((entry) => (
                         <div 
                           key={entry.id} 
-                          className="flex items-center justify-between rounded-lg px-3 py-2.5 transition-all duration-200 bg-slate-800/50 hover:bg-slate-800/80"
+                          className="flex items-center justify-between rounded-lg px-2.5 sm:px-3 py-2 sm:py-2.5 transition-all duration-200 bg-slate-800/50 hover:bg-slate-800/80"
                         >
-                          <div className="flex items-center gap-2">
-                            <svg className="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                               <line x1="16" y1="2" x2="16" y2="6" />
                               <line x1="8" y1="2" x2="8" y2="6" />
                               <line x1="3" y1="10" x2="21" y2="10" />
                             </svg>
-                            <span className="text-sm text-white">
+                            <span className="text-xs sm:text-sm text-white truncate">
                               {formatDateDisplay(entry.data)}
                             </span>
                           </div>
                           <button
                             onClick={() => handleDeleteEntry(entry.id)}
-                            className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200"
+                            className="p-1 sm:p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all duration-200 shrink-0"
                             title="Șterge"
                           >
-                            <CloseIcon className="w-4 h-4" />
+                            <CloseIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                           </button>
                         </div>
                       ))}
