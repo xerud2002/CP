@@ -1,84 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
-import { ArrowLeftIcon, TrashIcon, BoxIcon } from '@/components/icons/DashboardIcons';
-import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp, orderBy, writeBatch } from 'firebase/firestore';
+import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
+import { collection, query, where, getDocs, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-
-interface Tarif {
-  id: string;
-  tara: string;
-  taraCode: string;
-  tipServiciu: string;
-  pret: number;
-  minUnit: number;
-  unitType: 'kg' | 'm3' | 'nr' | 'plic';
-  // Colete sub-options
-  coleteOptions?: {
-    express?: boolean;
-    frigo?: boolean;
-    fragil?: boolean;
-    door2door?: boolean;
-  };
-  // Animale specific fields
-  tipAnimal?: 'caine' | 'pisica' | 'pasare' | 'rozator' | 'reptila' | 'altul';
-  pretAnimal?: number;
-  areCertificat?: boolean;
-  areAsigurare?: boolean;
-  // Platforma specific fields
-  tipVehicul?: ('masina' | 'van' | 'camion' | 'tractor')[];
-  acceptaAvariat?: boolean;
-}
-
-// Weight icon component
-const WeightIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="5" r="3" />
-    <path d="M6.5 8a2 2 0 0 0-1.905 1.46L2.1 18.5A2 2 0 0 0 4 21h16a2 2 0 0 0 1.925-2.54L19.4 9.5A2 2 0 0 0 17.48 8Z" />
-  </svg>
-);
-
-// Volume/Cube icon component
-const CubeIcon = ({ className = "w-5 h-5" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-    <path d="m3.3 7 8.7 5 8.7-5" />
-    <path d="M12 22V12" />
-  </svg>
-);
-
-// Euro icon component
-const EuroIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 10h12" />
-    <path d="M4 14h9" />
-    <path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2" />
-  </svg>
-);
-
-// Countries with codes - sorted alphabetically (16 main European countries)
-const countriesWithCodes = [
-  { name: 'Anglia', code: 'gb' },
-  { name: 'Austria', code: 'at' },
-  { name: 'Belgia', code: 'be' },
-  { name: 'Danemarca', code: 'dk' },
-  { name: 'Finlanda', code: 'fi' },
-  { name: 'Franța', code: 'fr' },
-  { name: 'Germania', code: 'de' },
-  { name: 'Grecia', code: 'gr' },
-  { name: 'Irlanda', code: 'ie' },
-  { name: 'Italia', code: 'it' },
-  { name: 'Norvegia', code: 'no' },
-  { name: 'Olanda', code: 'nl' },
-  { name: 'Portugalia', code: 'pt' },
-  { name: 'România', code: 'ro' },
-  { name: 'Spania', code: 'es' },
-  { name: 'Suedia', code: 'se' },
-];
 
 // Service types with custom SVG icons - Colete is main service with sub-options
 const serviceTypes = [
@@ -278,36 +206,10 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
 export default function TarifePracticatePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [tarife, setTarife] = useState<Tarif[]>([]);
   
   // Selected services state (services the courier offers)
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [savingServices, setSavingServices] = useState(false);
-
-  // Form state
-  const [selectedCountry, setSelectedCountry] = useState<{ name: string; code: string } | null>(null);
-  const [tipServiciu, setTipServiciu] = useState('');
-  const [pret, setPret] = useState('');
-  const [minUnit, setMinUnit] = useState('');
-  const [unitType, setUnitType] = useState<'kg' | 'm3' | 'nr'>('kg');
-  
-  // Colete sub-options state
-  const [coleteOptions, setColeteOptions] = useState({
-    express: false,
-    frigo: false,
-    fragil: false,
-    door2door: false,
-  });
-  
-  // Animale specific state
-  const [tipAnimal, setTipAnimal] = useState<'caine' | 'pisica' | 'pasare' | 'rozator' | 'reptila' | 'altul'>('caine');
-  const [pretAnimal, setPretAnimal] = useState('');
-  const [areCertificat, setAreCertificat] = useState(false);
-  const [areAsigurare, setAreAsigurare] = useState(false);
-  
-  // Platforma specific state
-  const [tipVehicul, setTipVehicul] = useState<('masina' | 'van' | 'camion' | 'tractor')[]>([]);
-  const [acceptaAvariat, setAcceptaAvariat] = useState(true);
 
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const serviceDropdownRef = useRef<HTMLDivElement>(null);
@@ -326,81 +228,28 @@ export default function TarifePracticatePage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Filter countries based on search
-
-
-  // Force kg unit when selecting a kgOnly service, or m3 for m3Only services
-  useEffect(() => {
-    const currentService = serviceTypes.find(s => s.value === tipServiciu);
-    if (currentService?.kgOnly) {
-      setUnitType('kg');
-    } else if (currentService?.m3Only) {
-      setUnitType('m3');
-    }
-  }, [tipServiciu]);
-
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
       router.push('/login?role=curier');
     }
   }, [user, loading, router]);
 
-  // Load tarife and selected services from Firebase
+  // Load selected services from Firebase
   useEffect(() => {
     const loadData = async () => {
       if (!user) return;
       
       try {
-        // Load tarife
-        const q = query(
-          collection(db, 'tarife_curier'),
-          where('uid', '==', user.uid),
-          orderBy('addedAt', 'desc')
+        // Load selected services from users collection
+        const userQuery = query(
+          collection(db, 'users'),
+          where('uid', '==', user.uid)
         );
-        const snapshot = await getDocs(q);
-        const loadedTarife: Tarif[] = [];
-        snapshot.forEach((docSnap) => {
-          const data = docSnap.data();
-          loadedTarife.push({
-            id: docSnap.id,
-            tara: data.tara,
-            taraCode: data.taraCode || countriesWithCodes.find(c => c.name === data.tara)?.code || 'eu',
-            tipServiciu: data.tipServiciu,
-            pret: data.pret ?? data.pretKg ?? 0,
-            minUnit: data.minUnit ?? data.minKg ?? 0,
-            unitType: data.unitType || 'kg',
-            // Animale fields
-            tipAnimal: data.tipAnimal,
-            pretAnimal: data.pretAnimal,
-            areCertificat: data.areCertificat,
-            areAsigurare: data.areAsigurare,
-            // Platforma fields
-            tipVehicul: data.tipVehicul,
-            acceptaAvariat: data.acceptaAvariat,
-          });
-        });
-        setTarife(loadedTarife);
+        const userSnapshot = await getDocs(userQuery);
         
-        // Load selected services from user profile
-        const userDoc = await getDocs(query(collection(db, 'users'), where('uid', '==', user.uid)));
-        if (!userDoc.empty) {
-          const userData = userDoc.docs[0].data();
-          if (userData.serviciiOferite) {
-            // Filter out any services that no longer exist in serviceTypes
-            const validServiceValues = serviceTypes.map(s => s.value);
-            const validServices = userData.serviciiOferite.filter(
-              (s: string) => validServiceValues.includes(s)
-            );
-            setSelectedServices(validServices);
-            
-            // If some services were filtered out, update Firebase
-            if (validServices.length !== userData.serviciiOferite.length) {
-              const userDocRef = doc(db, 'users', userDoc.docs[0].id);
-              await import('firebase/firestore').then(({ updateDoc }) => 
-                updateDoc(userDocRef, { serviciiOferite: validServices })
-              );
-            }
-          }
+        if (!userSnapshot.empty) {
+          const userData = userSnapshot.docs[0].data();
+          setSelectedServices(userData.serviciiOferite || []);
         }
       } catch (error) {
         console.error('Error loading data:', error);
@@ -440,184 +289,6 @@ export default function TarifePracticatePage() {
       setSavingServices(false);
     }
   };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Different validation for Animale/Platforma vs other services
-    const isAnimalOrPlatform = tipServiciu === 'Animale' || tipServiciu === 'Platforma';
-    const isSimplePriceService = tipServiciu === 'Documente' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila';
-    const isM3Selected = unitType === 'm3';
-    
-    if (!selectedCountry || !tipServiciu || !user) return;
-    if (tipServiciu === 'Animale' && !pretAnimal) return;
-    if (isSimplePriceService && !pret) return;
-    // Pentru m³ nu cerem minUnit
-    if (!isAnimalOrPlatform && !isSimplePriceService && !isM3Selected && (!pret || !minUnit)) return;
-    if (!isAnimalOrPlatform && !isSimplePriceService && isM3Selected && !pret) return;
-
-    // For Animale service, check combination with tipAnimal
-    const existsForAnimale = tipServiciu === 'Animale' 
-      ? tarife.some(t => t.tara === selectedCountry.name && t.tipServiciu === tipServiciu && t.tipAnimal === tipAnimal)
-      : false;
-    
-    // For Platforma service, check combination with tipVehicul
-    const existsForPlatforma = tipServiciu === 'Platforma'
-      ? tarife.some(t => t.tara === selectedCountry.name && t.tipServiciu === tipServiciu && t.tipVehicul === tipVehicul)
-      : false;
-    
-    // For other services, check simple combination
-    const existsOther = tipServiciu !== 'Animale' && tipServiciu !== 'Platforma'
-      ? tarife.some(t => t.tara === selectedCountry.name && t.tipServiciu === tipServiciu)
-      : false;
-
-    if (existsForAnimale) {
-      alert(`Ai deja un tarif pentru transport ${tipAnimal} în ${selectedCountry.name}!`);
-      return;
-    }
-    if (existsForPlatforma) {
-      alert(`Ai deja un tarif pentru transport ${tipVehicul} pe platformă în ${selectedCountry.name}!`);
-      return;
-    }
-    if (existsOther) {
-      alert('Ai deja un tarif pentru această combinație țară-serviciu!');
-      return;
-    }
-
-    setSaving(true);
-    try {
-      // Build document data
-      const noMinUnit = isAnimalOrPlatform || isSimplePriceService || isM3Selected;
-      const docData: Record<string, unknown> = {
-        uid: user.uid,
-        tara: selectedCountry.name,
-        taraCode: selectedCountry.code,
-        tipServiciu,
-        pret: isAnimalOrPlatform ? 0 : parseFloat(pret),
-        minUnit: noMinUnit ? 0 : parseInt(minUnit),
-        unitType: isSimplePriceService ? (tipServiciu === 'Mobila' ? 'm3' : tipServiciu === 'Paleti' ? 'nr' : 'plic') : unitType,
-        addedAt: serverTimestamp(),
-      };
-      
-      // Add Colete sub-options
-      if (tipServiciu === 'Colete') {
-        docData.coleteOptions = coleteOptions;
-      }
-      
-      // Add Animale specific fields
-      if (tipServiciu === 'Animale') {
-        docData.tipAnimal = tipAnimal;
-        docData.pretAnimal = parseFloat(pretAnimal);
-        docData.areCertificat = areCertificat;
-        docData.areAsigurare = areAsigurare;
-      }
-      
-      // Add Platforma specific fields
-      if (tipServiciu === 'Platforma') {
-        docData.tipVehicul = tipVehicul;
-        docData.acceptaAvariat = acceptaAvariat;
-      }
-
-      const docRef = await addDoc(collection(db, 'tarife_curier'), docData);
-
-      // Build local tarif object
-      const newTarif: Tarif = {
-        id: docRef.id,
-        tara: selectedCountry.name,
-        taraCode: selectedCountry.code,
-        tipServiciu,
-        pret: isAnimalOrPlatform ? 0 : parseFloat(pret),
-        minUnit: noMinUnit ? 0 : parseInt(minUnit),
-        unitType: isSimplePriceService ? (tipServiciu === 'Mobila' ? 'm3' : tipServiciu === 'Paleti' ? 'nr' : 'plic') : unitType,
-      };
-      
-      // Add Colete sub-options to local object
-      if (tipServiciu === 'Colete') {
-        newTarif.coleteOptions = { ...coleteOptions };
-      }
-      
-      if (tipServiciu === 'Animale') {
-        newTarif.tipAnimal = tipAnimal;
-        newTarif.pretAnimal = parseFloat(pretAnimal);
-        newTarif.areCertificat = areCertificat;
-        newTarif.areAsigurare = areAsigurare;
-      }
-      
-      if (tipServiciu === 'Platforma') {
-        newTarif.tipVehicul = tipVehicul;
-        newTarif.acceptaAvariat = acceptaAvariat;
-      }
-
-      setTarife([newTarif, ...tarife]);
-
-      // Reset form
-      setSelectedCountry(null);
-      setTipServiciu('');
-      setPret('');
-      setMinUnit('');
-      setUnitType('kg');
-      // Reset Colete options
-      setColeteOptions({ express: false, frigo: false, fragil: false, door2door: false });
-      // Reset Animale fields
-      setTipAnimal('caine');
-      setPretAnimal('');
-      setAreCertificat(false);
-      setAreAsigurare(false);
-      // Reset Platforma fields
-      setTipVehicul([]);
-      setAcceptaAvariat(true);
-    } catch (error) {
-      console.error('Error adding tarif:', error);
-      alert('Eroare la salvare. Încearcă din nou.');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDelete = async (tarifId: string) => {
-    if (!confirm('Sigur vrei să ștergi acest tarif?')) return;
-
-    try {
-      await deleteDoc(doc(db, 'tarife_curier', tarifId));
-      setTarife(tarife.filter(t => t.id !== tarifId));
-    } catch (error) {
-      console.error('Error deleting tarif:', error);
-      alert('Eroare la ștergere. Încearcă din nou.');
-    }
-  };
-
-  const handleDeleteAllForCountry = async (country: string) => {
-    if (!confirm(`Sigur vrei să ștergi toate tarifele pentru ${country}?`)) return;
-
-    try {
-      const tarifeToDelete = tarife.filter(t => t.tara === country);
-      const batch = writeBatch(db);
-      tarifeToDelete.forEach(t => {
-        batch.delete(doc(db, 'tarife_curier', t.id));
-      });
-      await batch.commit();
-      setTarife(tarife.filter(t => t.tara !== country));
-    } catch (error) {
-      console.error('Error deleting tarife:', error);
-      alert('Eroare la ștergere. Încearcă din nou.');
-    }
-  };
-
-  // Group tarife by country
-  const tarifeByCountry = tarife.reduce((acc, t) => {
-    if (!acc[t.tara]) {
-      acc[t.tara] = [];
-    }
-    acc[t.tara].push(t);
-    return acc;
-  }, {} as Record<string, Tarif[]>);
-
-  // Stats - available for future use
-  // const totalTarife = tarife.length;
-  // const totalCountries = Object.keys(tarifeByCountry).length;
-  // const avgPrice = tarife.length > 0 
-  //   ? (tarife.reduce((sum, t) => sum + t.pret, 0) / tarife.length).toFixed(1)
-  //   : '0';
 
   if (loading) {
     return (
