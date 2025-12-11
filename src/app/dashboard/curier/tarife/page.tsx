@@ -1316,33 +1316,52 @@ export default function TarifePracticatePage() {
             {/* Colete Sub-Options - Displayed below main form */}
             {tipServiciu === 'Colete' && (
               <div className="mt-4 p-4 bg-linear-to-br from-blue-500/10 to-cyan-500/5 rounded-xl border border-blue-500/20">
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex items-center gap-2 mb-4">
                   <ServiceIcon service="Colete" className="w-4 h-4 text-blue-400" />
                   <span className="text-sm font-medium text-white">Opțiuni Transport</span>
                   <span className="text-xs text-gray-500">(opțional)</span>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {serviceTypes.find(s => s.value === 'Colete')?.subOptions?.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => setColeteOptions(prev => ({
-                        ...prev,
-                        [option.value]: !prev[option.value as keyof typeof prev]
-                      }))}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 ${
-                        coleteOptions[option.value as keyof typeof coleteOptions]
-                          ? `${option.bgColor} border-current ${option.color}`
-                          : 'bg-slate-800/50 border-white/10 text-gray-400 hover:border-white/20'
-                      }`}
-                    >
-                      <ServiceIcon 
-                        service={option.value === 'express' ? 'Express' : option.value === 'frigo' ? 'Frigo' : option.value === 'fragil' ? 'Fragil' : 'Door2Door'} 
-                        className={`w-4 h-4 ${coleteOptions[option.value as keyof typeof coleteOptions] ? option.color : 'text-gray-500'}`} 
-                      />
-                      <span className="text-sm font-medium">{option.label}</span>
-                    </button>
-                  ))}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {[
+                    { value: 'express', label: 'Express', desc: 'Livrare rapidă 24-48h', service: 'Express' },
+                    { value: 'frigo', label: 'Frigorific', desc: 'Temperatură controlată', service: 'Frigo' },
+                    { value: 'fragil', label: 'Fragil', desc: 'Manipulare atentă', service: 'Fragil' },
+                    { value: 'door2door', label: 'Door to Door', desc: 'Ridicare și livrare', service: 'Door2Door' },
+                  ].map((option) => {
+                    const optionData = serviceTypes.find(s => s.value === 'Colete')?.subOptions?.find(o => o.value === option.value);
+                    const isSelected = coleteOptions[option.value as keyof typeof coleteOptions];
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setColeteOptions(prev => ({
+                          ...prev,
+                          [option.value]: !prev[option.value as keyof typeof prev]
+                        }))}
+                        className={`relative flex flex-col items-center gap-2 p-4 rounded-xl border transition-all duration-200 ${
+                          isSelected
+                            ? `${optionData?.bgColor} border-current ${optionData?.color} shadow-lg`
+                            : 'bg-slate-800/50 border-white/10 text-gray-400 hover:border-white/20 hover:bg-slate-800'
+                        }`}
+                      >
+                        {isSelected && (
+                          <div className="absolute top-2 right-2 p-1 bg-emerald-500/20 rounded-full">
+                            <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                        )}
+                        <div className={`p-2.5 rounded-xl ${isSelected ? optionData?.bgColor : 'bg-slate-700/50'}`}>
+                          <ServiceIcon 
+                            service={option.service} 
+                            className={`w-5 h-5 ${isSelected ? optionData?.color : 'text-gray-500'}`} 
+                          />
+                        </div>
+                        <span className="text-sm font-semibold">{option.label}</span>
+                        <span className={`text-xs text-center ${isSelected ? 'text-gray-300' : 'text-gray-500'}`}>{option.desc}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
