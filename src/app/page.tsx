@@ -111,7 +111,7 @@ const testimonials = [
 ];
 
 const popularRoutes = [
-  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Anglia', toFlag: '/img/flag/gb.svg', toCode: 'GB', price: 'de la 25€', time: '3-5 zile' },
+  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Anglia', toFlag: '/img/flag/gb.svg', toCode: 'GB', price: 'de la £25', time: '3-5 zile' },
   { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Germania', toFlag: '/img/flag/de.svg', toCode: 'DE', price: 'de la 20€', time: '2-4 zile' },
   { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Italia', toFlag: '/img/flag/it.svg', toCode: 'IT', price: 'de la 22€', time: '2-4 zile' },
   { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Spania', toFlag: '/img/flag/es.svg', toCode: 'ES', price: 'de la 28€', time: '3-5 zile' },
@@ -120,14 +120,7 @@ const popularRoutes = [
 export default function Home() {
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-slate-900">
-      {/* Global Background gradient */}
-      <div className="fixed inset-0 bg-linear-to-br from-orange-500/20 via-slate-900 to-green-500/20 pointer-events-none"></div>
-      
-      {/* Decorative circles */}
-      <div className="fixed top-20 left-20 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="fixed bottom-20 right-20 w-96 h-96 bg-green-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      
+    <div className="min-h-screen relative bg-slate-900">
       {/* Hero Section - Optimized for Mobile */}
       <section id="top" className="relative min-h-svh lg:min-h-[90vh] flex items-center px-4 py-6 sm:py-8 overflow-hidden">
         <div className="max-w-7xl mx-auto w-full relative z-10">
@@ -229,7 +222,8 @@ export default function Home() {
                     <div className="relative">
                       <div className="w-9 h-9 sm:w-10 sm:h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-2">
                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                          <rect x="2" y="4" width="20" height="16" rx="2" />
+                          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </div>
                       <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Plicuri</h3>
@@ -237,22 +231,20 @@ export default function Home() {
                     </div>
                   </Link>
 
-                  {/* Mobilă */}
+                  {/* Transport Persoane */}
                   <Link 
-                    href="/comanda?serviciu=mobila"
-                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-amber-500/30 hover:border-amber-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
+                    href="/comanda?serviciu=persoane"
+                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-rose-500/30 hover:border-rose-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-linear-to-br from-amber-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-rose-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-amber-500/20 rounded-lg flex items-center justify-center mb-2">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M20 10c0-4.4-3.6-8-8-8s-8 3.6-8 8h2c0-3.3 2.7-6 6-6s6 2.7 6 6h2z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 10v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8H4z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 14h16" />
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-rose-500/20 rounded-lg flex items-center justify-center mb-2">
+                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-rose-400" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
                         </svg>
                       </div>
-                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Mobilă</h3>
-                      <p className="text-gray-400 text-[10px] sm:text-xs">Transport mobilier</p>
+                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Transport Persoane</h3>
+                      <p className="text-gray-400 text-[10px] sm:text-xs">În Europa</p>
                     </div>
                   </Link>
 
@@ -265,7 +257,9 @@ export default function Home() {
                     <div className="relative">
                       <div className="w-9 h-9 sm:w-10 sm:h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mb-2">
                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+                          <rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <line x1="8" y1="21" x2="16" y2="21" strokeLinecap="round" strokeLinejoin="round" />
+                          <line x1="12" y1="17" x2="12" y2="21" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </div>
                       <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Electronice</h3>
@@ -290,26 +284,50 @@ export default function Home() {
                     </div>
                   </Link>
 
-                  {/* Auto */}
+                  {/* Transport Platformă */}
                   <Link 
-                    href="/comanda?serviciu=auto"
+                    href="/comanda?serviciu=platforma"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-red-500/30 hover:border-red-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
                     <div className="absolute inset-0 bg-linear-to-br from-red-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-9 h-9 sm:w-10 sm:h-10 bg-red-500/20 rounded-lg flex items-center justify-center mb-2">
                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h1" />
-                          <circle cx="7" cy="17" r="2" />
-                          <circle cx="17" cy="17" r="2" />
+                          <rect x="2" y="16" width="20" height="4" rx="1" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" strokeLinecap="round" strokeLinejoin="round" />
+                          <circle cx="8" cy="20" r="1" />
+                          <circle cx="16" cy="20" r="1" />
+                          <path d="M12 16V4" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M9 7h6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </div>
-                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Auto</h3>
-                      <p className="text-gray-400 text-[10px] sm:text-xs">Mașini, piese</p>
+                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Transport Platformă</h3>
+                      <p className="text-gray-400 text-[10px] sm:text-xs">Mașini, utilaje</p>
                     </div>
                   </Link>
 
-                  {/* Aeroport */}
+                  {/* Tractări Auto */}
+                  <Link 
+                    href="/comanda?serviciu=tractari"
+                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-orange-500/30 hover:border-orange-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
+                  >
+                    <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
+                    <div className="relative">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-orange-500/20 rounded-lg flex items-center justify-center mb-2">
+                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                          <path d="M5 17h-2a1 1 0 0 1-1-1v-5l3-3h14l3 3v5a1 1 0 0 1-1 1h-2" strokeLinecap="round" strokeLinejoin="round" />
+                          <circle cx="7" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="m9 17 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="m15 11 4 4" strokeLinecap="round" strokeLinejoin="round" />
+                          <circle cx="17" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Tractări Auto</h3>
+                      <p className="text-gray-400 text-[10px] sm:text-xs">Asistență rutieră</p>
+                    </div>
+                  </Link>
+
+                  {/* Transfer Aeroport */}
                   <Link 
                     href="/comanda?serviciu=aeroport"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-cyan-500/30 hover:border-cyan-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
@@ -321,42 +339,29 @@ export default function Home() {
                           <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
                         </svg>
                       </div>
-                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Aeroport</h3>
-                      <p className="text-gray-400 text-[10px] sm:text-xs">Transfer aeroport</p>
+                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Transfer Aeroport</h3>
+                      <p className="text-gray-400 text-[10px] sm:text-xs">La/de la aeroport</p>
                     </div>
                   </Link>
 
-                  {/* Persoane */}
+                  {/* Mutări Mobilă */}
                   <Link 
-                    href="/comanda?serviciu=persoane"
-                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-rose-500/30 hover:border-rose-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
+                    href="/comanda?serviciu=mobila"
+                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-amber-500/30 hover:border-amber-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-linear-to-br from-rose-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-amber-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-rose-500/20 rounded-lg flex items-center justify-center mb-2">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-rose-400" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-amber-500/20 rounded-lg flex items-center justify-center mb-2">
+                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                          <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </div>
-                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Persoane</h3>
-                      <p className="text-gray-400 text-[10px] sm:text-xs">Transport persoane</p>
-                    </div>
-                  </Link>
-
-                  {/* Frigorific */}
-                  <Link 
-                    href="/comanda?serviciu=frigorific"
-                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-sky-500/30 hover:border-sky-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
-                  >
-                    <div className="absolute inset-0 bg-linear-to-br from-sky-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
-                    <div className="relative">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-sky-500/20 rounded-lg flex items-center justify-center mb-2">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-sky-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18m0-18l-3 3m3-3l3 3m-3 15l-3-3m3 3l3-3M3 12h18M3 12l3-3m-3 3l3 3m15-3l-3-3m3 3l-3 3" />
-                        </svg>
-                      </div>
-                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Frigorific</h3>
-                      <p className="text-gray-400 text-[10px] sm:text-xs">Marfă refrigerată</p>
+                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Mutări Mobilă</h3>
+                      <p className="text-gray-400 text-[10px] sm:text-xs">Transport mobilier</p>
                     </div>
                   </Link>
                 </div>

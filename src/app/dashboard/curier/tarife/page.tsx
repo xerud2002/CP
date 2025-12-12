@@ -29,7 +29,8 @@ interface Tarif {
   };
   // Animale specific fields
   tipAnimal?: 'caine' | 'pisica' | 'pasare' | 'rozator' | 'reptila' | 'altul';
-  pretAnimal?: number;
+  pretAnimalMin?: number;
+  pretAnimalMax?: number;
   areCertificat?: boolean;
   areAsigurare?: boolean;
   // Platforma specific fields
@@ -60,6 +61,25 @@ const TarifeIcon = ({ className = "w-6 h-6" }: { className?: string }) => (
     <path d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
   </svg>
 );
+
+// Helper function to format price with correct currency position
+// £ goes BEFORE the price, € goes AFTER the price
+const formatPrice = (amount: number | string, isUK: boolean, unit?: string): string => {
+  if (isUK) {
+    return unit ? `£${amount}/${unit}` : `£${amount}`;
+  }
+  return unit ? `${amount}€/${unit}` : `${amount}€`;
+};
+
+const formatPriceRange = (min: number | string, max: number | string, isUK: boolean, unit?: string): string => {
+  if (min === max) {
+    return formatPrice(min, isUK, unit);
+  }
+  if (isUK) {
+    return unit ? `£${min}-${max}/${unit}` : `£${min}-${max}`;
+  }
+  return unit ? `${min}-${max}€/${unit}` : `${min}-${max}€`;
+};
 
 // Countries with codes - sorted alphabetically (16 main European countries)
 const countriesWithCodes = [
@@ -198,29 +218,22 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
       </svg>
     ),
-    Standard: (
+    'Plicuri & Documente': (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="8" width="18" height="12" rx="2" />
-        <path d="M7 8V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" />
-        <path d="M12 12v4" />
-        <path d="M8 16h8" />
-      </svg>
-    ),
-    Express: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
-      </svg>
-    ),
-    Door2Door: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 11l2-2m0 0l7-7 7 7m-9 9v-6h4v6m3-9l2 2" />
-        <path d="M9 21h6" />
-        <path d="M19 21v-8" />
-        <path d="M5 21v-8" />
-        <path d="M12 3v4" />
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
       </svg>
     ),
     Mobila: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" />
+        <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" />
+        <path d="M4 18v2" />
+        <path d="M20 18v2" />
+        <path d="M12 4v9" />
+      </svg>
+    ),
+    'Mobilă & Mutări': (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" />
         <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" />
@@ -236,7 +249,19 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <line x1="12" y1="17" x2="12" y2="21" />
       </svg>
     ),
+    'Electronice & Electrocasnice': (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <line x1="8" y1="21" x2="16" y2="21" />
+        <line x1="12" y1="17" x2="12" y2="21" />
+      </svg>
+    ),
     Animale: (
+      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+      </svg>
+    ),
+    'Animale de Companie': (
       <svg className={className} viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
       </svg>
@@ -249,6 +274,35 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <circle cx="16" cy="20" r="1" />
         <path d="M12 16V4" />
         <path d="M9 7h6" />
+      </svg>
+    ),
+    'Platforma Auto': (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="16" width="20" height="4" rx="1" />
+        <path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" />
+        <circle cx="8" cy="20" r="1" />
+        <circle cx="16" cy="20" r="1" />
+        <path d="M12 16V4" />
+        <path d="M9 7h6" />
+      </svg>
+    ),
+    Standard: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="8" width="18" height="12" rx="2" />
+        <path d="M7 8V6a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" />
+        <path d="M12 12v4" />
+        <path d="M8 16h8" />
+      </svg>
+    ),
+    Express: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
+      </svg>
+    ),
+    Door2Door: (
+      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
       </svg>
     ),
     Tractari: (
@@ -271,20 +325,19 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
       </svg>
     ),
+    'Transport Persoane': (
+      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+      </svg>
+    ),
     Frigorific: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2v20M2 12h20" />
-        <path d="M12 6l-2-2m2 2l2-2m-2 14l-2 2m2-2l2 2" />
-        <path d="M6 12l-2-2m2 2l-2 2m14-2l2-2m-2 2l2 2" />
-        <path d="M6 6l1.5 1.5M18 6l-1.5 1.5M6 18l1.5-1.5M18 18l-1.5-1.5" />
+        <path d="M12 3v18m0-18l-3 3m3-3l3 3m-3 15l-3-3m3 3l3-3M3 12h18M3 12l3-3m-3 3l3 3m15-3l-3-3m3 3l-3 3" />
       </svg>
     ),
     Frigo: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2v20M2 12h20" />
-        <path d="M12 6l-2-2m2 2l2-2m-2 14l-2 2m2-2l2 2" />
-        <path d="M6 12l-2-2m2 2l-2 2m14-2l2-2m-2 2l2 2" />
-        <path d="M6 6l1.5 1.5M18 6l-1.5 1.5M6 18l1.5-1.5M18 18l-1.5-1.5" />
+        <path d="M12 3v18m0-18l-3 3m3-3l3 3m-3 15l-3-3m3 3l3-3M3 12h18M3 12l3-3m-3 3l3 3m15-3l-3-3m3 3l-3 3" />
       </svg>
     ),
     Paleti: (
@@ -300,18 +353,17 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
     ),
     Fragil: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M8 2h8l-1 9H9L8 2z" />
-        <path d="M12 11v6" />
-        <path d="M8 21h8" />
-        <path d="M12 17v4" />
-        <path d="M10 4l2 3 2-3" />
+        <path d="M11 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5" />
+        <path d="M18 2v6" />
+        <path d="M15 5h6" />
+        <path d="M12 11v5" />
+        <path d="M9.5 14h5" />
       </svg>
     ),
     Asigurare: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         <path d="M9 12l2 2 4-4" />
-        <circle cx="12" cy="12" r="3" strokeDasharray="2 1" />
       </svg>
     ),
   };
@@ -345,7 +397,8 @@ export default function TarifePracticatePage() {
   
   // Animale specific state
   const [tipAnimal, setTipAnimal] = useState<'caine' | 'pisica' | 'pasare' | 'rozator' | 'reptila' | 'altul'>('caine');
-  const [pretAnimal, setPretAnimal] = useState('');
+  const [pretAnimalMin, setPretAnimalMin] = useState('');
+  const [pretAnimalMax, setPretAnimalMax] = useState('');
   const [areCertificat, setAreCertificat] = useState(false);
   const [areAsigurare, setAreAsigurare] = useState(false);
   
@@ -434,7 +487,8 @@ export default function TarifePracticatePage() {
             coleteOptions: data.coleteOptions,
             // Animale fields
             tipAnimal: data.tipAnimal,
-            pretAnimal: data.pretAnimal,
+            pretAnimalMin: data.pretAnimalMin ?? data.pretAnimal ?? 0,
+            pretAnimalMax: data.pretAnimalMax ?? data.pretAnimal ?? 0,
             areCertificat: data.areCertificat,
             areAsigurare: data.areAsigurare,
             // Platforma fields
@@ -463,7 +517,7 @@ export default function TarifePracticatePage() {
     const isSimplePriceService = tipServiciu === 'Plicuri' || tipServiciu === 'Paleti' || tipServiciu === 'Mobila';
     
     if (!selectedCountry || !tipServiciu || !user) return;
-    if (tipServiciu === 'Animale' && !pretAnimal) return;
+    if (tipServiciu === 'Animale' && (!pretAnimalMin || !pretAnimalMax)) return;
     if (isSimplePriceService && (!pretMin || !pretMax)) return;
     // Pentru toate celelalte servicii (inclusiv Colete), cerem pretMin și pretMax
     if (!isAnimalOrPlatform && !isSimplePriceService && (!pretMin || !pretMax)) return;
@@ -519,7 +573,8 @@ export default function TarifePracticatePage() {
       // Add Animale specific fields
       if (tipServiciu === 'Animale') {
         docData.tipAnimal = tipAnimal;
-        docData.pretAnimal = parseFloat(pretAnimal);
+        docData.pretAnimalMin = parseFloat(pretAnimalMin);
+        docData.pretAnimalMax = parseFloat(pretAnimalMax);
         docData.areCertificat = areCertificat;
         docData.areAsigurare = areAsigurare;
       }
@@ -551,7 +606,8 @@ export default function TarifePracticatePage() {
       
       if (tipServiciu === 'Animale') {
         newTarif.tipAnimal = tipAnimal;
-        newTarif.pretAnimal = parseFloat(pretAnimal);
+        newTarif.pretAnimalMin = parseFloat(pretAnimalMin);
+        newTarif.pretAnimalMax = parseFloat(pretAnimalMax);
         newTarif.areCertificat = areCertificat;
         newTarif.areAsigurare = areAsigurare;
       }
@@ -573,7 +629,8 @@ export default function TarifePracticatePage() {
       setColeteOptions({ standard: false, express: false, frigo: false, fragil: false, door2door: false, asigurare: false });
       // Reset Animale fields
       setTipAnimal('caine');
-      setPretAnimal('');
+      setPretAnimalMin('');
+      setPretAnimalMax('');
       setAreCertificat(false);
       setAreAsigurare(false);
       // Reset Platforma fields
@@ -710,12 +767,12 @@ export default function TarifePracticatePage() {
 
           <form onSubmit={handleSubmit}>
             {/* Main Form Row - Always on one line on desktop */}
-            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 items-end ${
+            <div className={`grid grid-cols-1 sm:grid-cols-2 gap-3 items-end ${
               tipServiciu === 'Animale' 
-                ? 'lg:grid-cols-[1fr_1fr_0.8fr_auto]'
+                ? 'lg:grid-cols-[0.8fr_1.2fr_0.8fr_auto]'
                 : tipServiciu === 'Platforma'
-                  ? 'lg:grid-cols-[1fr_1fr_auto]'
-                  : 'lg:grid-cols-[1fr_1fr_1.5fr_auto]'
+                  ? 'lg:grid-cols-[0.8fr_1.2fr_auto]'
+                  : 'lg:grid-cols-[0.8fr_1.2fr_1.2fr_auto]'
             }`}>
               {/* Country Dropdown */}
               <div ref={countryDropdownRef}>
@@ -724,18 +781,18 @@ export default function TarifePracticatePage() {
                   <button
                     type="button"
                     onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-                    className="w-full flex items-center gap-3 px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left"
+                    className="w-full flex items-center gap-2 px-3 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left"
                   >
                     {selectedCountry ? (
                       <>
                         <Image
                           src={`/img/flag/${selectedCountry.code}.svg`}
                           alt={selectedCountry.name}
-                          width={24}
-                          height={24}
-                          className="w-6 h-6 rounded-full object-cover"
+                          width={22}
+                          height={22}
+                          className="w-5.5 h-5.5 rounded-full object-cover"
                         />
-                        <span className="flex-1 truncate">{selectedCountry.name}</span>
+                        <span className="flex-1 truncate text-sm">{selectedCountry.name}</span>
                       </>
                     ) : (
                       <>
@@ -744,10 +801,10 @@ export default function TarifePracticatePage() {
                           <path d="M2 12h20" />
                           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                         </svg>
-                        <span className="flex-1 text-gray-500">Selectează țara</span>
+                        <span className="flex-1 text-gray-500 text-sm">Selectează țara</span>
                       </>
                     )}
-                    <svg className={`w-5 h-5 text-gray-400 transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${isCountryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
@@ -805,19 +862,28 @@ export default function TarifePracticatePage() {
                   <button
                     type="button"
                     onClick={() => setIsServiceDropdownOpen(!isServiceDropdownOpen)}
-                    className="w-full flex items-center gap-3 px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left"
+                    className="w-full flex items-center gap-2.5 px-3 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left"
                   >
                     {tipServiciu ? (
                       <>
                         <div className={`p-1.5 rounded-lg ${serviceTypes.find(s => s.value === tipServiciu)?.bgColor}`}>
                           <ServiceIcon service={tipServiciu} className={`w-4 h-4 ${serviceTypes.find(s => s.value === tipServiciu)?.color}`} />
                         </div>
-                        <span className="flex-1">{serviceTypes.find(s => s.value === tipServiciu)?.label}</span>
+                        <div className="flex-1 min-w-0">
+                          <span className="block text-sm font-medium truncate">{serviceTypes.find(s => s.value === tipServiciu)?.label}</span>
+                        </div>
                       </>
                     ) : (
-                      <span className="flex-1 text-gray-500">Selectează serviciul</span>
+                      <>
+                        <div className="p-1.5 rounded-lg bg-slate-700/50">
+                          <svg className="w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                          </svg>
+                        </div>
+                        <span className="flex-1 text-gray-500 text-sm">Selectează serviciul</span>
+                      </>
                     )}
-                    <svg className={`w-5 h-5 text-gray-400 transition-transform ${isServiceDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${isServiceDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
@@ -860,29 +926,68 @@ export default function TarifePracticatePage() {
               {/* Animale - Preț per animal pe linia principală */}
               {tipServiciu === 'Animale' && (
                 <>
-                  <div>
+                  <div className="flex flex-col">
                     <label className="block text-sm font-medium text-gray-400 mb-2">
                       Preț / {tipAnimal === 'caine' ? 'câine' : tipAnimal === 'pisica' ? 'pisică' : tipAnimal === 'pasare' ? 'pasăre' : tipAnimal === 'rozator' ? 'rozător' : tipAnimal === 'reptila' ? 'reptilă' : 'animal'} ({selectedCountry?.name === 'Anglia' ? '£' : '€'})
                     </label>
-                    <div className="relative">
-                      <input
-                        type="number"
-                        value={pretAnimal}
-                        onChange={(e) => setPretAnimal(e.target.value)}
-                        step="1"
-                        min="0"
-                        placeholder="ex: 50"
-                        className="w-full px-4 py-3 bg-slate-800/50 border border-pink-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/50 transition-colors pr-12"
-                        required
-                      />
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-pink-400 font-medium">
-                        {selectedCountry?.name === 'Anglia' ? '£' : '€'}
+                    <div className="flex gap-2 h-[46px]">
+                      {/* Min price input */}
+                      <div className="relative flex-1">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                          {selectedCountry?.name === 'Anglia' ? (
+                            <span className="text-pink-400 font-medium text-sm">£</span>
+                          ) : (
+                            <span className="text-xs text-gray-500">Min</span>
+                          )}
+                        </div>
+                        <input
+                          type="number"
+                          value={pretAnimalMin}
+                          onChange={(e) => setPretAnimalMin(e.target.value)}
+                          step="1"
+                          min="0"
+                          placeholder="50"
+                          className={`w-full h-full ${selectedCountry?.name === 'Anglia' ? 'pl-8' : 'pl-10'} pr-8 bg-slate-800/50 border border-pink-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/50 transition-colors`}
+                          required
+                        />
+                        {selectedCountry?.name !== 'Anglia' && (
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-pink-400 font-medium text-sm">
+                            €
+                          </div>
+                        )}
+                      </div>
+                      {/* Separator */}
+                      <div className="flex items-center text-gray-500">-</div>
+                      {/* Max price input */}
+                      <div className="relative flex-1">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                          {selectedCountry?.name === 'Anglia' ? (
+                            <span className="text-pink-400 font-medium text-sm">£</span>
+                          ) : (
+                            <span className="text-xs text-gray-500">Max</span>
+                          )}
+                        </div>
+                        <input
+                          type="number"
+                          value={pretAnimalMax}
+                          onChange={(e) => setPretAnimalMax(e.target.value)}
+                          step="1"
+                          min="0"
+                          placeholder="150"
+                          className={`w-full h-full ${selectedCountry?.name === 'Anglia' ? 'pl-8' : 'pl-10'} pr-8 bg-slate-800/50 border border-pink-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-pink-500/50 transition-colors`}
+                          required
+                        />
+                        {selectedCountry?.name !== 'Anglia' && (
+                          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-pink-400 font-medium text-sm">
+                            €
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
                   <button
                     type="submit"
-                    disabled={saving || !selectedCountry || !pretAnimal}
+                    disabled={saving || !selectedCountry || !pretAnimalMin || !pretAnimalMax}
                     className="h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
                   >
                     {saving ? (
@@ -1187,8 +1292,11 @@ export default function TarifePracticatePage() {
               {tipServiciu && tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && (() => {
                 const currentService = serviceTypes.find(s => s.value === tipServiciu);
                 const currencySymbol = selectedCountry?.name === 'Anglia' ? '£' : '€';
-                const unitLabel = currentService?.unitLabel || (currentService?.defaultUnit === 'm3' ? 'm³' : currentService?.defaultUnit || 'kg');
                 const showKgM3Toggle = currentService?.defaultUnit === 'kg' && !currentService?.unitLabel;
+                // Dynamic unit label - uses current unitType for services with kg/m³ toggle
+                const unitLabel = showKgM3Toggle 
+                  ? (unitType === 'm3' ? 'm³' : 'kg')
+                  : (currentService?.unitLabel || (currentService?.defaultUnit === 'm3' ? 'm³' : currentService?.defaultUnit || 'kg'));
                 
                 // Get icon and color based on unit
                 const getUnitStyle = () => {
@@ -1206,7 +1314,7 @@ export default function TarifePracticatePage() {
                 return (
                   <div className="flex flex-col">
                     <label className="block text-sm font-medium text-gray-400 mb-2">
-                      Preț / {unitLabel} ({currencySymbol})
+                      Preț / {unitLabel} ({selectedCountry?.name === 'Anglia' ? '£' : '€'})
                     </label>
                     <div className="flex gap-2 h-[46px]">
                       {/* Show kg/m³ toggle only for services that support both */}
@@ -1247,7 +1355,11 @@ export default function TarifePracticatePage() {
                       {/* Min price input */}
                       <div className="relative flex-1">
                         <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                          <span className="text-xs text-gray-500">Min</span>
+                          {selectedCountry?.name === 'Anglia' ? (
+                            <span className={`text-sm font-medium ${showKgM3Toggle ? (unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400') : unitStyle.color}`}>£</span>
+                          ) : (
+                            <span className="text-xs text-gray-500">Min</span>
+                          )}
                         </div>
                         <input
                           type="number"
@@ -1256,13 +1368,15 @@ export default function TarifePracticatePage() {
                           step="0.1"
                           min="0"
                           placeholder="1"
-                          className="w-full h-full pl-10 pr-8 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
+                          className={`w-full h-full ${selectedCountry?.name === 'Anglia' ? 'pl-8' : 'pl-10'} pr-8 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors`}
                           required
                         />
                         <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                          <span className={`text-sm font-medium ${showKgM3Toggle ? (unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400') : unitStyle.color}`}>
-                            {currencySymbol}
-                          </span>
+                          {selectedCountry?.name !== 'Anglia' && (
+                            <span className={`text-sm font-medium ${showKgM3Toggle ? (unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400') : unitStyle.color}`}>
+                              €
+                            </span>
+                          )}
                         </div>
                       </div>
                       {/* Separator */}
@@ -1270,7 +1384,11 @@ export default function TarifePracticatePage() {
                       {/* Max price input */}
                       <div className="relative flex-1">
                         <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                          <span className="text-xs text-gray-500">Max</span>
+                          {selectedCountry?.name === 'Anglia' ? (
+                            <span className={`text-sm font-medium ${showKgM3Toggle ? (unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400') : unitStyle.color}`}>£</span>
+                          ) : (
+                            <span className="text-xs text-gray-500">Max</span>
+                          )}
                         </div>
                         <input
                           type="number"
@@ -1279,13 +1397,15 @@ export default function TarifePracticatePage() {
                           step="0.1"
                           min="0"
                           placeholder="10"
-                          className="w-full h-full pl-10 pr-8 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
+                          className={`w-full h-full ${selectedCountry?.name === 'Anglia' ? 'pl-8' : 'pl-10'} pr-8 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 transition-colors`}
                           required
                         />
                         <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                          <span className={`text-sm font-medium ${showKgM3Toggle ? (unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400') : unitStyle.color}`}>
-                            {currencySymbol}
-                          </span>
+                          {selectedCountry?.name !== 'Anglia' && (
+                            <span className={`text-sm font-medium ${showKgM3Toggle ? (unitType === 'kg' ? 'text-emerald-400' : 'text-purple-400') : unitStyle.color}`}>
+                              €
+                            </span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1464,7 +1584,7 @@ export default function TarifePracticatePage() {
                       {/* Tarife List - collapsible */}
                       <div className={`divide-y divide-white/5 transition-all duration-200 overflow-hidden ${expandedCountries[country] ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
                         {countryTarife.map((t) => {
-                          const serviceInfo = serviceTypes.find(s => s.value === t.tipServiciu);
+                          const serviceInfo = serviceTypes.find(s => s.value === t.tipServiciu || s.label === t.tipServiciu);
                           const unitLabel = t.unitType === 'm3' ? 'm³' : t.unitType === 'plic' ? 'plic' : t.unitType === 'nr' ? 'buc' : 'kg';
                           
                           // Get animal label
@@ -1535,9 +1655,13 @@ export default function TarifePracticatePage() {
                                     <ServiceIcon service={t.tipServiciu} className={`w-4 h-4 ${serviceInfo?.color || 'text-gray-400'}`} />
                                   </div>
                                   <div>
-                                    <p className="text-white text-sm font-medium flex items-center gap-1 flex-wrap">
+                                    <p className="text-white text-sm font-medium flex items-center gap-1.5 flex-wrap">
                                       {serviceInfo?.label || t.tipServiciu}
-                                      {t.tipAnimal && <span className="ml-2 text-pink-400 text-xs">{animalLabels[t.tipAnimal]}</span>}
+                                      {t.tipAnimal && (
+                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-pink-500/15 text-pink-400 text-xs font-medium">
+                                          {animalLabels[t.tipAnimal]}
+                                        </span>
+                                      )}
                                       {t.tipVehicul && t.tipVehicul.length > 0 && (
                                         <span className="ml-1 text-sky-400 text-xs flex items-center gap-1">
                                           {t.tipVehicul.map((v, idx) => (
@@ -1551,30 +1675,24 @@ export default function TarifePracticatePage() {
                                       )}
                                     </p>
                                     {/* Nu afișa minUnit pentru Animale sau Platforma */}
-                                    {t.tipServiciu !== 'Animale' && t.tipServiciu !== 'Platforma' && (
-                                      <p className="text-xs text-gray-500 flex items-center gap-1">
-                                        {t.minUnit > 0 && <>{t.minUnit} {unitLabel}</>}
-                                        {t.unitType === 'm3' && <CubeIcon className="w-3 h-3 text-purple-400" />}
-                                        {t.unitType === 'kg' && <WeightIcon className="w-3 h-3 text-emerald-400" />}
-                                        {t.unitType === 'nr' && <span className="text-orange-400 font-bold">#</span>}
+                                    {t.tipServiciu !== 'Animale' && t.tipServiciu !== 'Platforma' && t.minUnit > 0 && (
+                                      <p className="text-xs text-gray-500">
+                                        {t.minUnit} {unitLabel}
                                       </p>
                                     )}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-3">
                                   {/* Preț pentru Animale */}
-                                  {t.tipServiciu === 'Animale' && t.pretAnimal !== undefined && (
-                                    <span className="font-bold text-pink-400">
-                                      {t.pretAnimal}{currencySymbol}
+                                  {t.tipServiciu === 'Animale' && t.pretAnimalMin !== undefined && (
+                                    <span className="font-semibold text-gray-200 text-sm">
+                                      {formatPriceRange(t.pretAnimalMin, t.pretAnimalMax || t.pretAnimalMin, country === 'Anglia')}
                                     </span>
                                   )}
                                   {/* Preț pentru alte servicii (nu Animale, nu Platforma) */}
                                   {t.tipServiciu !== 'Animale' && t.tipServiciu !== 'Platforma' && (
-                                    <span className={`font-bold ${t.unitType === 'm3' ? 'text-purple-400' : t.unitType === 'nr' ? 'text-orange-400' : 'text-emerald-400'}`}>
-                                      {t.pretMin === t.pretMax 
-                                        ? `${t.pretMin}${currencySymbol}/${unitLabel}`
-                                        : `${t.pretMin}-${t.pretMax}${currencySymbol}/${unitLabel}`
-                                      }
+                                    <span className="font-semibold text-gray-200">
+                                      {formatPriceRange(t.pretMin, t.pretMax, country === 'Anglia', unitLabel)}
                                     </span>
                                   )}
                                   <button

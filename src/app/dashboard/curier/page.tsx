@@ -480,7 +480,7 @@ function HelpCard() {
             <span className="text-[11px] sm:text-sm font-medium">Email</span>
           </a>
           <a 
-            href="https://wa.me/40700000000" 
+            href="https://wa.me/407880312621" 
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 active:bg-emerald-500/40 text-emerald-400 rounded-xl transition-all border border-emerald-500/20"
