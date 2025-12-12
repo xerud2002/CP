@@ -52,7 +52,7 @@ const q = query(collection(db, 'zona_acoperire'), where('uid', '==', user.uid));
 const snapshot = await getDocs(q);
 ```
 
-**Firestore Rules**: All collections enforce owner-based access (`resource.data.uid == request.auth.uid`) — see [firestore.rules](firestore.rules). Queries MUST filter by owner field client-side; Firestore rules only verify ownership on write operations.
+**Firestore Rules**: All collections enforce owner-based access (`resource.data.uid == request.auth.uid`) — see [firestore.rules](../firestore.rules). Queries MUST filter by owner field client-side; Firestore rules only verify ownership on write operations.
 
 ## Critical Patterns
 
@@ -152,7 +152,7 @@ Use type-safe `unknown` and check `instanceof Error` before accessing `.message`
 - **Path alias**: `@/*` → `./src/*`
 - **Flags**: `public/img/flag/{code}.svg` (lowercase country code)
 - **Firestore security**: Owner-based rules — `resource.data.uid == request.auth.uid`
-- **Extended regions**: Pages needing full region lists define local `judetByCountry` (see [zona-acoperire/page.tsx](src/app/dashboard/curier/zona-acoperire/page.tsx))
+- **Extended regions**: Pages needing full region lists define local `judetByCountry` (see [zona-acoperire/page.tsx](../src/app/dashboard/curier/zona-acoperire/page.tsx))
 - **Firebase init**: Use singleton pattern with `getApps()` check to prevent re-initialization
 - **Client components**: All dashboard pages are `'use client'` due to auth hooks and state management
 - **HelpCard**: Standard help component imported into all dashboard sub-pages — provides WhatsApp/email support links with consistent styling
