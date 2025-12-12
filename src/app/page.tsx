@@ -611,7 +611,7 @@ export default function Home() {
               {/* Step 1 */}
               <div className="relative flex flex-col md:flex-row items-center gap-4 sm:gap-5 md:gap-6">
                 {/* Text pe mobil (order-1), pe desktop stânga */}
-                <div className="md:w-1/2 md:text-right md:pr-8 w-full order-1 md:order-none">
+                <div className="md:w-1/2 md:text-right md:pr-8 w-full order-1 md:order-0">
                   <div className="text-center md:text-right w-full">
                     <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3 px-3 md:px-0">Completezi formularul</h3>
                     <p className="text-gray-400 text-sm sm:text-base leading-relaxed px-3 md:px-0 mb-2 sm:mb-3">
@@ -626,7 +626,7 @@ export default function Home() {
                   </div>
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
-                <div className="relative flex-shrink-0 order-2 md:order-none">
+                <div className="relative shrink-0 order-2 md:order-0">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -640,7 +640,7 @@ export default function Home() {
               <div className="relative flex flex-col md:flex-row items-center gap-4 sm:gap-5 md:gap-6">
                 <div className="md:w-1/2 md:pr-8 hidden md:block"></div>
                 {/* Text pe mobil (order-1), pe desktop dreapta */}
-                <div className="md:w-1/2 md:pl-8 md:text-left w-full text-center md:text-left order-1 md:order-3">
+                <div className="md:w-1/2 md:pl-8 w-full text-center md:text-left order-1 md:order-3">
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3 px-3 md:px-0">Primești oferte</h3>
                   <p className="text-gray-400 text-sm sm:text-base leading-relaxed px-3 md:px-0 mb-2 sm:mb-3">
                     Transportatorii disponibili pe ruta ta văd cererea și îți trimit oferte personalizate cu prețuri competitive.
@@ -653,7 +653,7 @@ export default function Home() {
                   </div>
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
-                <div className="relative flex-shrink-0 order-2 md:order-2">
+                <div className="relative shrink-0 order-2 md:order-2">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -665,7 +665,7 @@ export default function Home() {
               {/* Step 3 */}
               <div className="relative flex flex-col md:flex-row items-center gap-4 sm:gap-5 md:gap-6">
                 {/* Text pe mobil (order-1), pe desktop stânga */}
-                <div className="md:w-1/2 md:text-right md:pr-8 w-full order-1 md:order-none">
+                <div className="md:w-1/2 md:text-right md:pr-8 w-full order-1 md:order-0">
                   <div className="text-center md:text-right w-full">
                     <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3 px-3 md:px-0">Compari și alegi</h3>
                     <p className="text-gray-400 text-sm sm:text-base leading-relaxed px-3 md:px-0 mb-2 sm:mb-3">
@@ -680,7 +680,7 @@ export default function Home() {
                   </div>
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
-                <div className="relative flex-shrink-0 order-2 md:order-none">
+                <div className="relative shrink-0 order-2 md:order-0">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-lg shadow-blue-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
@@ -707,7 +707,7 @@ export default function Home() {
                   </div>
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
-                <div className="relative flex-shrink-0 order-2 md:order-2">
+                <div className="relative shrink-0 order-2 md:order-2">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -719,7 +719,7 @@ export default function Home() {
               {/* Step 5 */}
               <div className="relative flex flex-col md:flex-row items-center gap-4 sm:gap-5 md:gap-6">
                 {/* Text pe mobil (order-1), pe desktop stânga */}
-                <div className="md:w-1/2 md:text-right md:pr-8 w-full order-1 md:order-none">
+                <div className="md:w-1/2 md:text-right md:pr-8 w-full order-1 md:order-0">
                   <div className="text-center md:text-right w-full">
                     <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3 px-3 md:px-0">Transportul e realizat</h3>
                     <p className="text-gray-400 text-sm sm:text-base leading-relaxed px-3 md:px-0 mb-2 sm:mb-3">
@@ -734,7 +734,7 @@ export default function Home() {
                   </div>
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
-                <div className="relative flex-shrink-0 order-2 md:order-none">
+                <div className="relative shrink-0 order-2 md:order-0">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
@@ -761,7 +761,7 @@ export default function Home() {
                   </div>
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
-                <div className="relative flex-shrink-0 order-2 md:order-2">
+                <div className="relative shrink-0 order-2 md:order-2">
                   <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-yellow-500 to-amber-600 flex items-center justify-center shadow-lg shadow-yellow-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -776,7 +776,7 @@ export default function Home() {
           <div className="mt-10 sm:mt-12 md:mt-14 text-center px-3">
             <Link 
               href="/comanda"
-              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-all active:scale-95 md:hover:scale-105 text-sm sm:text-base min-h-[48px] w-full sm:w-auto max-w-xs sm:max-w-none mx-auto"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-all active:scale-95 md:hover:scale-105 text-sm sm:text-base min-h-12 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto"
             >
               <span>Solicită oferte gratuit</span>
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -1056,7 +1056,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center">
                 <Link 
                   href="/register?role=curier" 
-                  className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-[48px]"
+                  className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12"
                 >
                   <span>Înregistrează-te Gratuit</span>
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -1065,7 +1065,7 @@ export default function Home() {
                 </Link>
                 <Link 
                   href="/despre-parteneri" 
-                  className="group inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-transparent hover:bg-green-500/10 text-green-400 font-semibold rounded-xl border-2 border-green-500/30 hover:border-green-500/50 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-[48px]"
+                  className="group inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-transparent hover:bg-green-500/10 text-green-400 font-semibold rounded-xl border-2 border-green-500/30 hover:border-green-500/50 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12"
                 >
                   <span>Află Mai Multe</span>
                   <svg className="w-5 h-5 group-hover:rotate-45 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -1146,7 +1146,7 @@ export default function Home() {
                   
                   <div className="flex items-center gap-2 sm:gap-3 relative z-10">
                     {/* Flag container */}
-                    <div className="relative flex-shrink-0">
+                    <div className="relative shrink-0">
                       <div className="absolute inset-0 bg-blue-500/20 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-md sm:rounded-lg bg-slate-700/50 border border-white/10 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
                         <Image 
@@ -1154,7 +1154,7 @@ export default function Home() {
                           alt={country.name} 
                           width={24} 
                           height={18} 
-                          className="rounded-sm object-cover sm:w-[28px] sm:h-[21px]"
+                          className="rounded-sm object-cover sm:w-7 sm:h-[21px]"
                         />
                       </div>
                     </div>
@@ -1168,7 +1168,7 @@ export default function Home() {
                     </div>
                     
                     {/* Status indicator */}
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       <div className="w-2 h-2 rounded-full bg-green-500 group-hover:shadow-lg group-hover:shadow-green-500/50 transition-shadow"></div>
                     </div>
                   </div>
@@ -1214,7 +1214,7 @@ export default function Home() {
                   {/* Button */}
                   <Link 
                     href="#top" 
-                    className="group/btn inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-[48px]"
+                    className="group/btn inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12"
                   >
                     <span>Începe acum</span>
                     <div className="flex items-center gap-2">

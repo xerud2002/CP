@@ -813,7 +813,7 @@ export default function ComenziCurierPage() {
                     </div>
                     
                     {/* Route Section - Stacked */}
-                    <div className="p-3 bg-gradient-to-br from-slate-800/40 to-slate-800/20 rounded-xl border border-white/10 space-y-2">
+                    <div className="p-3 bg-linear-to-br from-slate-800/40 to-slate-800/20 rounded-xl border border-white/10 space-y-2">
                       <div className="flex items-center gap-1.5 mb-2">
                         <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
@@ -878,7 +878,7 @@ export default function ComenziCurierPage() {
 
                     {/* Value Insurance - if exists */}
                     {order.valoare_marfa && (
-                      <div className="p-3 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border border-yellow-500/30 rounded-xl">
+                      <div className="p-3 bg-linear-to-br from-yellow-500/10 to-amber-500/10 border border-yellow-500/30 rounded-xl">
                         <div className="flex items-center gap-2.5">
                           <div className="w-9 h-9 rounded-lg bg-yellow-500/20 flex items-center justify-center shrink-0">
                             <svg className="w-4.5 h-4.5 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -956,7 +956,7 @@ export default function ComenziCurierPage() {
                     <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5">
                       <button 
                         onClick={() => setSelectedOrder(order)}
-                        className="px-3 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold text-xs transition-all shadow-lg shadow-orange-500/25 flex items-center justify-center gap-1.5"
+                        className="px-3 py-2.5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold text-xs transition-all shadow-lg shadow-orange-500/25 flex items-center justify-center gap-1.5"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -965,7 +965,7 @@ export default function ComenziCurierPage() {
                       </button>
                       <button 
                         onClick={() => setSelectedOrder(order)}
-                        className="px-3 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-semibold text-xs transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-1.5"
+                        className="px-3 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-semibold text-xs transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-1.5"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -1001,7 +1001,7 @@ export default function ComenziCurierPage() {
                       </div>
 
                       {/* Route Section - Enhanced */}
-                      <div className="p-4 bg-gradient-to-br from-slate-800/40 to-slate-800/20 rounded-xl border border-white/10">
+                      <div className="p-4 bg-linear-to-br from-slate-800/40 to-slate-800/20 rounded-xl border border-white/10">
                         <div className="flex items-center gap-1 mb-3">
                           <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
@@ -1068,7 +1068,7 @@ export default function ComenziCurierPage() {
 
                       {/* Value Insurance - if exists */}
                       {order.valoare_marfa && (
-                        <div className="p-4 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border border-yellow-500/30 rounded-xl">
+                        <div className="p-4 bg-linear-to-br from-yellow-500/10 to-amber-500/10 border border-yellow-500/30 rounded-xl">
                           <div className="flex items-start gap-3">
                             <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center shrink-0">
                               <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -1146,10 +1146,10 @@ export default function ComenziCurierPage() {
                     {/* Right Column - Actions & Quick Info (1/3 width) */}
                     <div className="space-y-4">
                       {/* Action Buttons - Prominent */}
-                      <div className="space-y-3 p-4 bg-gradient-to-br from-slate-800/50 to-slate-800/30 rounded-xl border border-white/10">
+                      <div className="space-y-3 p-4 bg-linear-to-br from-slate-800/50 to-slate-800/30 rounded-xl border border-white/10">
                         <button 
                           onClick={() => setSelectedOrder(order)}
-                          className="w-full px-4 py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 flex items-center justify-center gap-2 group"
+                          className="w-full px-4 py-3.5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 flex items-center justify-center gap-2 group"
                         >
                           <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -1158,7 +1158,7 @@ export default function ComenziCurierPage() {
                         </button>
                         <button 
                           onClick={() => setSelectedOrder(order)}
-                          className="w-full px-4 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2 group"
+                          className="w-full px-4 py-3.5 bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2 group"
                         >
                           <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -1196,7 +1196,7 @@ export default function ComenziCurierPage() {
                       </div>
 
                       {/* Contact Info */}
-                      <div className="p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 rounded-xl border border-emerald-500/20">
+                      <div className="p-4 bg-linear-to-br from-emerald-500/10 to-emerald-500/5 rounded-xl border border-emerald-500/20">
                         <div className="flex items-center gap-2 mb-3">
                           <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>

@@ -17,7 +17,7 @@ interface Review {
   courierName: string;
   rating: number;
   comment: string;
-  createdAt: any;
+  createdAt: Date | { seconds: number; nanoseconds: number } | null;
   serviciu: string;
 }
 
@@ -395,7 +395,11 @@ export default function RecenziiClientPage() {
                   </div>
                   <p className="text-gray-300 text-sm mb-2">{review.comment}</p>
                   <p className="text-xs text-gray-500">
-                    {review.createdAt ? new Date(review.createdAt.seconds * 1000).toLocaleDateString('ro-RO') : 'Recent'}
+                    {review.createdAt ? (
+                      review.createdAt instanceof Date 
+                        ? review.createdAt.toLocaleDateString('ro-RO')
+                        : new Date(review.createdAt.seconds * 1000).toLocaleDateString('ro-RO')
+                    ) : 'Recent'}
                   </p>
                 </div>
               ))}
