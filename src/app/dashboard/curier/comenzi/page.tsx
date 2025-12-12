@@ -24,6 +24,10 @@ interface Order {
   dataColectare: string;
   pret: number;
   createdAt: Date;
+  // Optional fields
+  valoare_marfa?: string;
+  optiuni?: string[];
+  observatii?: string;
 }
 
 const statusLabels: Record<Order['status'], { label: string; color: string; bg: string }> = {
@@ -32,6 +36,16 @@ const statusLabels: Record<Order['status'], { label: string; color: string; bg: 
   in_tranzit: { label: 'În Tranzit', color: 'text-orange-400', bg: 'bg-orange-500/20' },
   livrata: { label: 'Livrată', color: 'text-green-400', bg: 'bg-green-500/20' },
   anulata: { label: 'Anulată', color: 'text-red-400', bg: 'bg-red-500/20' },
+};
+
+// Format client name to show only "FirstName LastInitial."
+const formatClientName = (fullName: string): string => {
+  const parts = fullName.trim().split(' ');
+  if (parts.length === 1) return parts[0]; // Only one name
+  const firstName = parts[0]; // First word is first name
+  const lastName = parts[parts.length - 1]; // Last word is last name
+  const lastInitial = lastName.charAt(0).toUpperCase();
+  return `${firstName} ${lastInitial}.`;
 };
 
 // Countries with codes - sorted alphabetically (16 main European countries)
@@ -202,31 +216,80 @@ export default function ComenziCurierPage() {
       
       setLoadingOrders(true);
       try {
-        const q = query(
+        // Query 1: Get all new orders (not assigned to any courier yet)
+        const qNew = query(
           collection(db, 'comenzi'),
-          where('curierId', '==', user.uid),
+          where('status', '==', 'pending'),
           orderBy('timestamp', 'desc')
         );
-        const snapshot = await getDocs(q);
+        
+        // Query 2: Get orders assigned to or accepted by this courier
+        const qMine = query(
+          collection(db, 'comenzi'),
+          where('courierId', '==', user.uid),
+          orderBy('timestamp', 'desc')
+        );
+        
+        const [snapshotNew, snapshotMine] = await Promise.all([
+          getDocs(qNew),
+          getDocs(qMine)
+        ]);
+        
         const loadedOrders: Order[] = [];
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          loadedOrders.push({
-            id: doc.id,
-            clientName: data.clientName,
-            clientPhone: data.clientPhone,
-            expeditorTara: data.expeditorTara,
-            expeditorJudet: data.expeditorJudet,
-            destinatarTara: data.destinatarTara,
-            destinatarJudet: data.destinatarJudet,
-            tipColet: data.tipColet,
-            greutate: data.greutate,
-            status: data.status,
-            dataColectare: data.dataColectare,
-            pret: data.pret,
-            createdAt: data.createdAt?.toDate(),
-          });
+        const orderIds = new Set<string>();
+        
+        // Add new orders (available for all couriers)
+        snapshotNew.forEach((doc) => {
+          if (!orderIds.has(doc.id)) {
+            orderIds.add(doc.id);
+            const data = doc.data();
+            loadedOrders.push({
+              id: doc.id,
+              clientName: data.nume || data.clientName || 'Client',
+              clientPhone: data.telefon || data.clientPhone || '',
+              expeditorTara: data.tara_ridicare || data.expeditorTara || '',
+              expeditorJudet: data.judet_ridicare || data.expeditorJudet || '',
+              destinatarTara: data.tara_livrare || data.destinatarTara || '',
+              destinatarJudet: data.judet_livrare || data.destinatarJudet || '',
+              tipColet: data.serviciu || data.tipColet || 'Colete',
+              greutate: parseFloat(data.greutate) || 0,
+              status: 'noua',
+              dataColectare: data.data_ridicare || data.dataColectare || '',
+              pret: data.pret || 0,
+              createdAt: data.createdAt?.toDate() || new Date(data.timestamp),
+              valoare_marfa: data.valoare_marfa || '',
+              optiuni: data.optiuni || [],
+              observatii: data.observatii || '',
+            });
+          }
         });
+        
+        // Add courier's own orders
+        snapshotMine.forEach((doc) => {
+          if (!orderIds.has(doc.id)) {
+            orderIds.add(doc.id);
+            const data = doc.data();
+            loadedOrders.push({
+              id: doc.id,
+              clientName: data.nume || data.clientName || 'Client',
+              clientPhone: data.telefon || data.clientPhone || '',
+              expeditorTara: data.tara_ridicare || data.expeditorTara || '',
+              expeditorJudet: data.judet_ridicare || data.expeditorJudet || '',
+              destinatarTara: data.tara_livrare || data.destinatarTara || '',
+              destinatarJudet: data.judet_livrare || data.destinatarJudet || '',
+              tipColet: data.serviciu || data.tipColet || 'Colete',
+              greutate: parseFloat(data.greutate) || 0,
+              status: data.status || 'noua',
+              dataColectare: data.data_ridicare || data.dataColectare || '',
+              pret: data.pret || 0,
+              createdAt: data.createdAt?.toDate() || new Date(data.timestamp),
+              valoare_marfa: data.valoare_marfa || '',
+              optiuni: data.optiuni || [],
+              observatii: data.observatii || '',
+            });
+          }
+        });
+        
         if (loadedOrders.length > 0) {
           setOrders(loadedOrders);
         }
@@ -743,8 +806,7 @@ export default function ComenziCurierPage() {
                     
                     {/* Client Info */}
                     <div>
-                      <h3 className="font-semibold text-white">{order.clientName}</h3>
-                      <p className="text-gray-400 text-sm">{order.clientPhone}</p>
+                      <h3 className="font-semibold text-white">{formatClientName(order.clientName)}</h3>
                     </div>
                     
                     {/* Route */}
@@ -761,47 +823,47 @@ export default function ComenziCurierPage() {
                       <span>📅 {order.dataColectare}</span>
                     </div>
                     
-                    {/* Price & Actions */}
-                    <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                      <p className="text-xl font-bold text-green-400">{order.pret} €</p>
+                    {/* Optional Details */}
+                    {(order.valoare_marfa || (order.optiuni && order.optiuni.length > 0) || order.observatii) && (
+                      <div className="pt-2 border-t border-white/5 space-y-1.5">
+                        {order.valoare_marfa && (
+                          <div className="flex items-center gap-1.5 text-xs">
+                            <span className="text-yellow-400">💶</span>
+                            <span className="text-gray-400">Valoare:</span>
+                            <span className="text-white font-medium">{order.valoare_marfa} EUR</span>
+                          </div>
+                        )}
+                        {order.optiuni && order.optiuni.length > 0 && (
+                          <div className="flex items-center gap-1.5 text-xs">
+                            <span className="text-emerald-400">✔️</span>
+                            <span className="text-gray-400">Opțiuni:</span>
+                            <span className="text-white text-[10px]">{order.optiuni.map(opt => opt === 'asigurare' ? 'Asigurare' : opt === 'tracking' ? 'Tracking GPS' : opt === 'semnatura' ? 'Semnătură' : opt).join(', ')}</span>
+                          </div>
+                        )}
+                        {order.observatii && (
+                          <div className="flex items-start gap-1.5 text-xs">
+                            <span className="text-blue-400">📝</span>
+                            <span className="text-gray-400">Obs:</span>
+                            <span className="text-white text-[10px] line-clamp-1">{order.observatii}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Actions */}
+                    <div className="flex items-center justify-end pt-2 border-t border-white/5">
                       <div className="flex gap-2">
-                        {order.status === 'noua' && (
-                          <>
-                            <button 
-                              onClick={() => handleStatusChange(order.id, 'acceptata')}
-                              className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs rounded-lg font-medium transition-colors"
-                            >
-                              Acceptă
-                            </button>
-                            <button 
-                              onClick={() => handleStatusChange(order.id, 'anulata')}
-                              className="px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-xs rounded-lg font-medium transition-colors"
-                            >
-                              Refuză
-                            </button>
-                          </>
-                        )}
-                        {order.status === 'acceptata' && (
-                          <button 
-                            onClick={() => handleStatusChange(order.id, 'in_tranzit')}
-                            className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs rounded-lg font-medium transition-colors"
-                          >
-                            Marchează ridicat
-                          </button>
-                        )}
-                        {order.status === 'in_tranzit' && (
-                          <button 
-                            onClick={() => handleStatusChange(order.id, 'livrata')}
-                            className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs rounded-lg font-medium transition-colors"
-                          >
-                            Marchează livrat
-                          </button>
-                        )}
                         <button 
                           onClick={() => setSelectedOrder(order)}
-                          className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white text-xs rounded-lg font-medium transition-colors"
+                          className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs rounded-lg font-medium transition-colors"
                         >
-                          Detalii
+                          Fă o Ofertă
+                        </button>
+                        <button 
+                          onClick={() => setSelectedOrder(order)}
+                          className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-lg font-medium transition-colors"
+                        >
+                          Trimite un mesaj
                         </button>
                       </div>
                     </div>
@@ -817,8 +879,7 @@ export default function ComenziCurierPage() {
                         </span>
                         <span className="text-gray-500 text-xs">#{order.id}</span>
                       </div>
-                      <h3 className="font-semibold text-white">{order.clientName}</h3>
-                      <p className="text-gray-400 text-sm">{order.clientPhone}</p>
+                      <h3 className="font-semibold text-white">{formatClientName(order.clientName)}</h3>
                     </div>
 
                     {/* Route */}
@@ -833,49 +894,47 @@ export default function ComenziCurierPage() {
                         <span>{order.greutate} kg</span>
                         <span>📅 {order.dataColectare}</span>
                       </div>
+                      
+                      {/* Optional Details */}
+                      {(order.valoare_marfa || (order.optiuni && order.optiuni.length > 0) || order.observatii) && (
+                        <div className="mt-2 pt-2 border-t border-white/5 space-y-1">
+                          {order.valoare_marfa && (
+                            <div className="flex items-center gap-1.5 text-xs">
+                              <span className="text-yellow-400">💶</span>
+                              <span className="text-gray-400">Valoare:</span>
+                              <span className="text-white font-medium">{order.valoare_marfa} EUR</span>
+                            </div>
+                          )}
+                          {order.optiuni && order.optiuni.length > 0 && (
+                            <div className="flex items-center gap-1.5 text-xs">
+                              <span className="text-emerald-400">✔️</span>
+                              <span className="text-emerald-400 font-medium">{order.optiuni.map(opt => opt === 'asigurare' ? 'Asigurare' : opt === 'tracking' ? 'Tracking GPS' : opt === 'semnatura' ? 'Semnătură' : opt).join(' + ')}</span>
+                            </div>
+                          )}
+                          {order.observatii && (
+                            <div className="flex items-start gap-1.5 text-xs">
+                              <span className="text-blue-400">📝</span>
+                              <span className="text-gray-300 line-clamp-1">{order.observatii}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
 
-                    {/* Price & Actions */}
+                    {/* Actions */}
                     <div className="text-right shrink-0">
-                      <p className="text-2xl font-bold text-green-400 mb-2">{order.pret} €</p>
                       <div className="flex gap-2 justify-end">
-                        {order.status === 'noua' && (
-                          <>
-                            <button 
-                              onClick={() => handleStatusChange(order.id, 'acceptata')}
-                              className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs rounded-lg font-medium transition-colors"
-                            >
-                              Acceptă
-                            </button>
-                            <button 
-                              onClick={() => handleStatusChange(order.id, 'anulata')}
-                              className="px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-xs rounded-lg font-medium transition-colors"
-                            >
-                              Refuză
-                            </button>
-                          </>
-                        )}
-                        {order.status === 'acceptata' && (
-                          <button 
-                            onClick={() => handleStatusChange(order.id, 'in_tranzit')}
-                            className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs rounded-lg font-medium transition-colors"
-                          >
-                            Marchează ridicat
-                          </button>
-                        )}
-                        {order.status === 'in_tranzit' && (
-                          <button 
-                            onClick={() => handleStatusChange(order.id, 'livrata')}
-                            className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs rounded-lg font-medium transition-colors"
-                          >
-                            Marchează livrat
-                          </button>
-                        )}
                         <button 
                           onClick={() => setSelectedOrder(order)}
-                          className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white text-xs rounded-lg font-medium transition-colors"
+                          className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs rounded-lg font-medium transition-colors"
                         >
-                          Detalii
+                          Fă o Ofertă
+                        </button>
+                        <button 
+                          onClick={() => setSelectedOrder(order)}
+                          className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-lg font-medium transition-colors"
+                        >
+                          Trimite un mesaj
                         </button>
                       </div>
                     </div>
@@ -911,8 +970,7 @@ export default function ComenziCurierPage() {
                 <div className="grid grid-cols-2 gap-2 sm:gap-4">
                   <div className="bg-slate-800/50 p-3 sm:p-4 rounded-xl border border-white/5">
                     <p className="text-gray-500 text-xs sm:text-sm mb-1">Client</p>
-                    <p className="text-white font-medium text-sm sm:text-base">{selectedOrder.clientName}</p>
-                    <p className="text-gray-400 text-xs sm:text-sm">{selectedOrder.clientPhone}</p>
+                    <p className="text-white font-medium text-sm sm:text-base">{formatClientName(selectedOrder.clientName)}</p>
                   </div>
                   <div className="bg-slate-800/50 p-3 sm:p-4 rounded-xl border border-white/5">
                     <p className="text-gray-500 text-xs sm:text-sm mb-1">Preț</p>

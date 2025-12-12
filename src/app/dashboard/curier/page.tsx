@@ -305,7 +305,7 @@ function SetupProgress({ setupComplete, completedSteps, totalSteps }: { setupCom
 }
 
 // Main Navigation Grid
-function MainNavigation({ badges }: { badges: Record<string, boolean> }) {
+function MainNavigation({ badges, newOrdersCount }: { badges: Record<string, boolean>; newOrdersCount: number }) {
   // Color mappings for hover gradients
   const gradientMap: Record<string, string> = {
     'text-orange-400': 'from-orange-500/20 to-amber-500/20',
@@ -340,6 +340,8 @@ function MainNavigation({ badges }: { badges: Record<string, boolean> }) {
       <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
         {mainNavTiles.map((tile) => {
           const needsAttention = tile.badgeKey && badges[tile.badgeKey];
+          const isComenziCard = tile.href === '/dashboard/curier/comenzi';
+          const hasNewOrders = isComenziCard && newOrdersCount > 0;
           const gradient = gradientMap[tile.color] || 'from-slate-500/20 to-slate-500/20';
           const borderColor = borderColorMap[tile.color] || 'border-white/10 hover:border-white/20';
           const iconBg = iconBgMap[tile.color] || 'bg-slate-500/20';
@@ -353,8 +355,18 @@ function MainNavigation({ badges }: { badges: Record<string, boolean> }) {
               {/* Hover gradient overlay */}
               <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
               
-              {/* Badge indicator */}
-              {needsAttention && (
+              {/* New Orders Badge - only for Comenzi card */}
+              {hasNewOrders && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 sm:h-6 sm:w-6 z-10">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-5 w-5 sm:h-6 sm:w-6 bg-orange-500 items-center justify-center border-2 border-slate-900">
+                    <span className="text-[10px] sm:text-xs font-bold text-white">{newOrdersCount}</span>
+                  </span>
+                </span>
+              )}
+              
+              {/* Setup Badge indicator - for other cards */}
+              {!isComenziCard && needsAttention && (
                 <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 sm:h-5 sm:w-5 z-10">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3.5 w-3.5 sm:h-5 sm:w-5 bg-orange-500 items-center justify-center">
@@ -465,6 +477,7 @@ export default function CurierDashboard() {
   const [hasNoCalendar, setHasNoCalendar] = useState(false);
   const [hasNoProfile, setHasNoProfile] = useState(false);
   const [userNume, setUserNume] = useState<string | null>(null);
+  const [newOrdersCount, setNewOrdersCount] = useState(0);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -529,6 +542,28 @@ export default function CurierDashboard() {
       fetchUserData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  // Fetch new orders count
+  useEffect(() => {
+    const fetchNewOrdersCount = async () => {
+      if (!user) return;
+      
+      try {
+        const q = query(
+          collection(db, 'comenzi'),
+          where('status', '==', 'pending')
+        );
+        const snapshot = await getDocs(q);
+        setNewOrdersCount(snapshot.size);
+      } catch (error) {
+        console.error('❌ Eroare la încărcarea comenzilor noi:', error);
+      }
+    };
+
+    if (user) {
+      fetchNewOrdersCount();
+    }
   }, [user]);
 
   const handleLogout = async () => {
@@ -597,7 +632,7 @@ export default function CurierDashboard() {
         <SetupProgress setupComplete={!isNewUser} completedSteps={isNewUser ? 1 : 4} totalSteps={4} />
 
         {/* Main Navigation - Quick access to all sections */}
-        <MainNavigation badges={menuBadges} />
+        <MainNavigation badges={menuBadges} newOrdersCount={newOrdersCount} />
 
         {/* Stats and Activity Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-6">

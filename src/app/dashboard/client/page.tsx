@@ -128,28 +128,20 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
   onLogout: () => void;
 }) {
   return (
-    <header className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
+    <header className="bg-slate-900/60 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
-          {/* Left - Dashboard Title */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link 
-              href="/" 
-              className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
-              title="Înapoi la pagina principală"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-            </Link>
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-500/20 flex items-center justify-center">
-              <BoxIcon className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
+          {/* Logo/Brand - Mobile */}
+          <Link href="/" className="flex items-center gap-1.5">
+            <span className="text-base sm:text-lg font-bold hidden sm:inline">
+              <span className="text-emerald-500">Curierul</span>
+              <span className="text-orange-500">Perfect</span>
+            </span>
+            {/* Mobile: Show only icon */}
+            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600 flex items-center justify-center sm:hidden">
+              <BoxIcon className="w-6 h-6 text-white" />
             </div>
-            <div className="hidden sm:block">
-              <h1 className="text-base sm:text-lg font-bold text-white">Dashboard Client</h1>
-              <p className="text-xs text-gray-500">Bine ai revenit, {userName}!</p>
-            </div>
-          </div>
+          </Link>
 
           {/* Right Side */}
           <div className="flex items-center gap-2 sm:gap-4">
@@ -224,11 +216,11 @@ function WelcomeSection({ userName }: { userName: string }) {
 }
 
 // Stats Section Component
-function StatsSection() {
+function StatsSection({ totalOrders, statusCounts }: { totalOrders: number; statusCounts: { pending: number; inTransit: number; delivered: number } }) {
   const stats = [
-    { icon: PackageIcon, label: 'Colete trimise', value: '0', color: 'text-orange-400', bgColor: 'bg-orange-500/20', borderColor: 'border-orange-500/20' },
-    { icon: TruckIcon, label: 'În tranzit', value: '0', color: 'text-blue-400', bgColor: 'bg-blue-500/20', borderColor: 'border-blue-500/20' },
-    { icon: CheckCircleIcon, label: 'Livrate', value: '0', color: 'text-emerald-400', bgColor: 'bg-emerald-500/20', borderColor: 'border-emerald-500/20' },
+    { icon: PackageIcon, label: 'Colete trimise', value: totalOrders.toString(), color: 'text-orange-400', bgColor: 'bg-orange-500/20', borderColor: 'border-orange-500/20' },
+    { icon: TruckIcon, label: 'În tranzit', value: statusCounts.inTransit.toString(), color: 'text-blue-400', bgColor: 'bg-blue-500/20', borderColor: 'border-blue-500/20' },
+    { icon: CheckCircleIcon, label: 'Livrate', value: statusCounts.delivered.toString(), color: 'text-emerald-400', bgColor: 'bg-emerald-500/20', borderColor: 'border-emerald-500/20' },
   ];
 
   return (
@@ -336,7 +328,7 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
 }
 
 // Orders Summary Component
-function OrdersSummary() {
+function OrdersSummary({ totalOrders, statusCounts }: { totalOrders: number; statusCounts: { pending: number; inTransit: number; delivered: number } }) {
   return (
     <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full">
       <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -351,19 +343,42 @@ function OrdersSummary() {
         </Link>
       </div>
       
-      <div className="text-center py-6 sm:py-8">
-        <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-xl bg-blue-500/10 flex items-center justify-center">
-          <PackageIcon className="w-7 h-7 sm:w-8 sm:h-8 text-blue-400/50" />
+      {totalOrders === 0 ? (
+        <div className="text-center py-6 sm:py-8">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-xl bg-blue-500/10 flex items-center justify-center">
+            <PackageIcon className="w-7 h-7 sm:w-8 sm:h-8 text-blue-400/50" />
+          </div>
+          <p className="text-gray-400 text-xs sm:text-sm mb-3">Nu ai nicio comandă încă</p>
+          <Link 
+            href="/comanda"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-medium rounded-xl transition-colors text-xs sm:text-sm"
+          >
+            <BoxIcon className="w-4 h-4" />
+            Trimite primul colet
+          </Link>
         </div>
-        <p className="text-gray-400 text-xs sm:text-sm mb-3">Nu ai nicio comandă încă</p>
-        <Link 
-          href="/comanda"
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-medium rounded-xl transition-colors text-xs sm:text-sm"
-        >
-          <BoxIcon className="w-4 h-4" />
-          Trimite primul colet
-        </Link>
-      </div>
+      ) : (
+        <div className="space-y-3 sm:space-y-4">
+          <div className="text-center py-3 sm:py-4">
+            <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{totalOrders}</div>
+            <p className="text-xs sm:text-sm text-gray-400">{totalOrders === 1 ? 'Comandă activă' : 'Comenzi active'}</p>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="text-center p-2 bg-orange-500/10 rounded-lg border border-orange-500/20">
+              <div className="text-lg sm:text-xl font-bold text-orange-400">{statusCounts.pending}</div>
+              <div className="text-[10px] sm:text-xs text-gray-400">Noi</div>
+            </div>
+            <div className="text-center p-2 bg-blue-500/10 rounded-lg border border-blue-500/20">
+              <div className="text-lg sm:text-xl font-bold text-blue-400">{statusCounts.inTransit}</div>
+              <div className="text-[10px] sm:text-xs text-gray-400">În curs</div>
+            </div>
+            <div className="text-center p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+              <div className="text-lg sm:text-xl font-bold text-emerald-400">{statusCounts.delivered}</div>
+              <div className="text-[10px] sm:text-xs text-gray-400">Livrate</div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -410,6 +425,8 @@ export default function ClientDashboard() {
   const router = useRouter();
   const [userNume, setUserNume] = useState<string | null>(null);
   const [totalNotifications, setTotalNotifications] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [statusCounts, setStatusCounts] = useState({ pending: 0, inTransit: 0, delivered: 0 });
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {
@@ -457,15 +474,33 @@ export default function ClientDashboard() {
         
         const snapshot = await getDocs(q);
         let total = 0;
+        let orderCount = 0;
+        let pending = 0;
+        let inTransit = 0;
+        let delivered = 0;
         
         snapshot.forEach((doc) => {
           const data = doc.data();
           const nrOferte = data.nrOferte || 0;
           const nrMesajeNoi = data.nrMesajeNoi || 0;
           total += nrOferte + nrMesajeNoi;
+          
+          orderCount++;
+          
+          // Count by status
+          const status = data.status || 'pending';
+          if (status === 'pending' || status === 'noua') {
+            pending++;
+          } else if (status === 'in_tranzit' || status === 'acceptata' || status === 'colectata') {
+            inTransit++;
+          } else if (status === 'livrata' || status === 'finalizata') {
+            delivered++;
+          }
         });
         
         setTotalNotifications(total);
+        setTotalOrders(orderCount);
+        setStatusCounts({ pending, inTransit, delivered });
       } catch (error) {
         console.error('❌ Eroare la încărcarea notificărilor:', error);
       }
@@ -527,7 +562,7 @@ export default function ClientDashboard() {
         <WelcomeSection userName={userName} />
 
         {/* Stats */}
-        <StatsSection />
+        <StatsSection totalOrders={totalOrders} statusCounts={statusCounts} />
 
         {/* Main Navigation - Quick access to all sections */}
         <MainNavigation totalNotifications={totalNotifications} />
@@ -536,7 +571,7 @@ export default function ClientDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-6">
           {/* Orders Summary - Takes 3 columns on large screens */}
           <div className="lg:col-span-3">
-            <OrdersSummary />
+            <OrdersSummary totalOrders={totalOrders} statusCounts={statusCounts} />
           </div>
           
           {/* Recent Activity - Takes 2 columns */}
