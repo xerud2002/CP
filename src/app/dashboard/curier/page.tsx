@@ -154,9 +154,9 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
             {/* Logo Image */}
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/15 via-amber-500/10 to-emerald-500/10 rounded-xl blur-2xl opacity-70 group-hover:opacity-90 transition-opacity"></div>
-              <div className="relative w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-slate-800/95 via-slate-850/95 to-slate-900/95 backdrop-blur-md rounded-xl flex items-center justify-center shadow-2xl border border-orange-500/20 group-hover:border-orange-500/40 group-hover:scale-105 transition-all overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-emerald-500/5"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-orange-500/15 via-amber-500/10 to-emerald-500/10 rounded-xl blur-2xl opacity-70 group-hover:opacity-90 transition-opacity"></div>
+              <div className="relative w-9 h-9 sm:w-10 sm:h-10 bg-linear-to-br from-slate-800/95 via-slate-850/95 to-slate-900/95 backdrop-blur-md rounded-xl flex items-center justify-center shadow-xl border border-orange-500/20 group-hover:border-orange-500/40 transition-all duration-300">
+                <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 to-emerald-500/5"></div>
                 <Image 
                   src="/img/logo.png" 
                   alt="Curierul Perfect Logo" 
@@ -221,10 +221,10 @@ function WelcomeSection({ userName, hasNewOrders }: { userName: string; hasNewOr
   const greeting = getGreeting();
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/70 via-slate-800/50 to-slate-900/70 backdrop-blur-sm border border-orange-500/10 p-4 sm:p-6">
+    <section className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-900/70 via-slate-800/50 to-slate-900/70 backdrop-blur-sm border border-orange-500/10 p-4 sm:p-6">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-orange-500/8 to-amber-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-linear-to-br from-orange-500/8 to-amber-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-linear-to-tr from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
 
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2">
@@ -362,7 +362,7 @@ function MainNavigation({ badges, newOrdersCount }: { badges: Record<string, boo
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative bg-gradient-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
+              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
             >
               {/* Hover gradient overlay */}
               <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>

@@ -160,6 +160,9 @@ export default function ComenziCurierPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | Order['status']>('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   
+  // Expanded orders state
+  const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
+  
   // Advanced filters
   const [countryFilter, setCountryFilter] = useState<string>('all');
   const [serviceFilter, setServiceFilter] = useState<string>('all');
@@ -333,6 +336,19 @@ export default function ComenziCurierPage() {
       console.error('Error updating status:', error);
       alert('Eroare la actualizare. Încearcă din nou.');
     }
+  };
+
+  // Toggle expand/collapse for order card
+  const toggleOrderExpand = (orderId: string) => {
+    setExpandedOrders(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(orderId)) {
+        newSet.delete(orderId);
+      } else {
+        newSet.add(orderId);
+      }
+      return newSet;
+    });
   };
 
   // Apply all filters
@@ -921,25 +937,10 @@ export default function ComenziCurierPage() {
                       </div>
                     </div>
 
-                    {/* Value Insurance - if exists */}
-                    {order.valoare_marfa && (
-                      <div className="p-3 bg-linear-to-br from-yellow-500/10 to-amber-500/10 border border-yellow-500/30 rounded-xl">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-9 h-9 rounded-lg bg-yellow-500/20 flex items-center justify-center shrink-0">
-                            <svg className="w-4.5 h-4.5 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-yellow-400 text-[9px] font-semibold uppercase tracking-wide mb-0.5">Valoare Declarată</p>
-                            <p className="text-yellow-300 text-xl font-bold">{order.valoare_marfa} <span className="text-sm">EUR</span></p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+
 
                     {/* Extra Services & Instructions */}
-                    {((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
+                    {expandedOrders.has(order.id) && ((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
                       <div className="space-y-2.5">
                         {order.optiuni && order.optiuni.length > 0 && (
                           <div className="p-3 bg-slate-800/20 rounded-xl border border-white/5">
@@ -997,6 +998,28 @@ export default function ComenziCurierPage() {
                       </div>
                     )}
                     
+                    {/* Expand/Collapse Button */}
+                    <button
+                      onClick={() => toggleOrderExpand(order.id)}
+                      className="w-full py-2.5 px-3 bg-slate-800/30 hover:bg-slate-800/50 border border-white/5 rounded-lg text-gray-300 hover:text-white text-xs font-medium transition-all flex items-center justify-center gap-2"
+                    >
+                      {expandedOrders.has(order.id) ? (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M5 15l7-7 7 7"/>
+                          </svg>
+                          Ascunde Detalii
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M19 9l-7 7-7-7"/>
+                          </svg>
+                          Vezi Mai Multe Detalii
+                        </>
+                      )}
+                    </button>
+
                     {/* Action Buttons - Full Width */}
                     <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5">
                       <button 
@@ -1006,7 +1029,7 @@ export default function ComenziCurierPage() {
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        Ofertă
+                        Trimite Ofertă
                       </button>
                       <button 
                         onClick={() => setSelectedOrder(order)}
@@ -1111,25 +1134,8 @@ export default function ComenziCurierPage() {
                         </div>
                       </div>
 
-                      {/* Value Insurance - if exists */}
-                      {order.valoare_marfa && (
-                        <div className="p-4 bg-linear-to-br from-yellow-500/10 to-amber-500/10 border border-yellow-500/30 rounded-xl">
-                          <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center shrink-0">
-                              <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                              </svg>
-                            </div>
-                            <div className="flex-1">
-                              <p className="text-yellow-400 text-xs font-semibold uppercase tracking-wide mb-1">Valoare Declarată (Asigurare)</p>
-                              <p className="text-yellow-300 text-2xl font-bold">{order.valoare_marfa} <span className="text-base">EUR</span></p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
                       {/* Extra Services & Instructions */}
-                      {((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
+                      {expandedOrders.has(order.id) && ((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
                         <div className="space-y-3">
                           {order.optiuni && order.optiuni.length > 0 && (
                             <div className="p-4 bg-slate-800/20 rounded-xl border border-white/5">
@@ -1199,7 +1205,7 @@ export default function ComenziCurierPage() {
                           <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                           </svg>
-                          Fă o Ofertă
+                          Trimite Ofertă
                         </button>
                         <button 
                           onClick={() => setSelectedOrder(order)}
@@ -1228,6 +1234,10 @@ export default function ComenziCurierPage() {
                           <div className="flex items-center justify-between py-2 border-b border-white/5">
                             <span className="text-xs text-gray-400">Client</span>
                             <span className="text-xs font-semibold text-white">{formatClientName(order.clientName)}</span>
+                          </div>
+                          <div className="flex items-center justify-between py-2 border-b border-white/5">
+                            <span className="text-xs text-gray-400">Transport</span>
+                            <span className="text-xs font-semibold text-white">{order.tipColet}</span>
                           </div>
                           <div className="flex items-center justify-between py-2 border-b border-white/5">
                             <span className="text-xs text-gray-400">Greutate</span>
