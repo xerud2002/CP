@@ -878,7 +878,7 @@ export default function CalendarColectiiPage() {
                                         alt={entry.tara}
                                         width={12}
                                         height={9}
-                                        className="rounded-[2px] shadow-sm border border-white/10 sm:w-4 sm:h-3"
+                                        className="rounded-xs shadow-sm border border-white/10 sm:w-4 sm:h-3"
                                         title={entry.tara}
                                       />
                                     </div>

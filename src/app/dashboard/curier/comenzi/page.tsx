@@ -257,24 +257,6 @@ export default function ComenziCurierPage() {
     }
   };
 
-  // Get unique countries and services for filter dropdowns
-  const uniqueCountries = useMemo(() => {
-    const countries = new Set<string>();
-    orders.forEach(o => {
-      if (o.expeditorTara) countries.add(o.expeditorTara);
-      if (o.destinatarTara) countries.add(o.destinatarTara);
-    });
-    return Array.from(countries).sort();
-  }, [orders]);
-
-  const uniqueServices = useMemo(() => {
-    const services = new Set<string>();
-    orders.forEach(o => {
-      if (o.tipColet) services.add(o.tipColet);
-    });
-    return Array.from(services).sort();
-  }, [orders]);
-
   // Apply all filters
   const filteredOrders = useMemo(() => {
     return orders.filter(order => {
@@ -471,10 +453,10 @@ export default function ComenziCurierPage() {
           
           {/* Advanced filters panel */}
           {showAdvancedFilters && (
-            <div className="pt-3 border-t border-white/5 relative z-[60]">
+            <div className="pt-3 border-t border-white/5 relative z-60">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {/* Country filter with flags */}
-                <div ref={countryDropdownRef} className="relative z-[70]">
+                <div ref={countryDropdownRef} className="relative z-70">
                   <label className="block text-xs text-gray-400 mb-1.5">Țară</label>
                   <div className="relative">
                     <button
@@ -509,7 +491,7 @@ export default function ComenziCurierPage() {
                     </button>
                     
                     {isCountryDropdownOpen && (
-                      <div className="absolute z-[200] w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                      <div className="absolute z-200 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
                         <div className="p-2 border-b border-white/10">
                           <input
                             type="text"
@@ -577,7 +559,7 @@ export default function ComenziCurierPage() {
                 </div>
                 
                 {/* Service filter with icons */}
-                <div ref={serviceDropdownRef} className="relative z-[70]">
+                <div ref={serviceDropdownRef} className="relative z-70">
                   <label className="block text-xs text-gray-400 mb-1.5">Tip serviciu</label>
                   <div className="relative">
                     <button
@@ -606,7 +588,7 @@ export default function ComenziCurierPage() {
                     </button>
                     
                     {isServiceDropdownOpen && (
-                      <div className="absolute z-[200] w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                      <div className="absolute z-200 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
                         <div className="max-h-72 overflow-y-auto">
                           <button
                             type="button"
