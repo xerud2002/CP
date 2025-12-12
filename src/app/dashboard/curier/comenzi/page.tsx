@@ -917,132 +917,235 @@ export default function ComenziCurierPage() {
                     </div>
                   </div>
 
-                  {/* Desktop Layout */}
-                  <div className="hidden sm:block space-y-3">
-                    {/* Status & ID */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 mb-1">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusLabels[order.status].bg} ${statusLabels[order.status].color}`}>
-                          {statusLabels[order.status].label}
-                        </span>
-                        <span className="text-gray-500 text-xs">#{formatOrderNumber(order.orderNumber || order.id)}</span>
-                      </div>
-                      <h3 className="font-semibold text-white mb-1.5">{formatClientName(order.clientName)}</h3>
-                      {/* Route */}
-                      <div className="flex items-center gap-2 text-xs mb-1.5">
-                        <span className="flex items-center gap-1 text-green-400">
-                          <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                  {/* Desktop Layout - Optimized 2-Column Grid */}
+                  <div className="hidden sm:grid sm:grid-cols-3 sm:gap-6">
+                    {/* Left Column - Main Info (2/3 width) */}
+                    <div className="col-span-2 space-y-4">
+                      {/* Header: Status, ID & Client */}
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${statusLabels[order.status].bg} ${statusLabels[order.status].color} border ${statusLabels[order.status].bg.replace('/20', '/30')}`}>
+                            {statusLabels[order.status].label}
+                          </span>
+                          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-700/30 rounded-lg border border-white/5">
+                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            <span className="text-gray-400 text-sm font-mono">#{formatOrderNumber(order.orderNumber || order.id)}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                          <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                           </svg>
-                          {order.expeditorJudet}, {order.expeditorTara}
-                        </span>
-                        <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                        </svg>
-                        <span className="flex items-center gap-1 text-orange-400">
-                          <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
-                          </svg>
-                          {order.destinatarJudet}, {order.destinatarTara}
-                        </span>
+                          <span className="text-emerald-300 font-semibold text-sm">{formatClientName(order.clientName)}</span>
+                        </div>
                       </div>
-                      {/* Details */}
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-3 text-xs text-gray-400">
-                          <span>Colet : {order.greutate} kg</span>
-                          <span className="flex items-center gap-1">
-                            Data Colectie :
-                            <svg className="w-3.5 h-3.5 shrink-0 ml-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+
+                      {/* Route Section - Enhanced */}
+                      <div className="p-4 bg-gradient-to-br from-slate-800/40 to-slate-800/20 rounded-xl border border-white/10">
+                        <div className="flex items-center gap-1 mb-3">
+                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                          </svg>
+                          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Traseu Transport</span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <div className="flex-1 flex items-center gap-3 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                            <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                              <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-[10px] text-green-400/70 font-medium uppercase">Ridicare din</p>
+                              <p className="text-green-300 font-semibold text-sm">{order.expeditorJudet}, {order.expeditorTara}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-center px-2">
+                            <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                          </div>
+                          <div className="flex-1 flex items-center gap-3 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                            <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                              <svg className="w-5 h-5 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="text-[10px] text-orange-400/70 font-medium uppercase">Livrare în</p>
+                              <p className="text-orange-300 font-semibold text-sm">{order.destinatarJudet}, {order.destinatarTara}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Package Details */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
+                          <div className="flex items-center gap-2 mb-2">
+                            <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                            <span className="text-xs font-semibold text-gray-400 uppercase">Greutate Colet</span>
+                          </div>
+                          <p className="text-xl font-bold text-white">{order.greutate} <span className="text-sm text-gray-400">kg</span></p>
+                        </div>
+                        <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
+                          <div className="flex items-center gap-2 mb-2">
+                            <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                               <line x1="16" y1="2" x2="16" y2="6"/>
                               <line x1="8" y1="2" x2="8" y2="6"/>
                               <line x1="3" y1="10" x2="21" y2="10"/>
                             </svg>
+                            <span className="text-xs font-semibold text-gray-400 uppercase">Data Colectare</span>
+                          </div>
+                          <p className="text-base font-semibold text-white">
                             {order.dataColectare ? order.dataColectare : <span className="text-blue-400">Flexibil</span>}
-                          </span>
+                          </p>
                         </div>
-                        {order.valoare_marfa && (
-                          <div className="flex items-start gap-2">
-                            <div className="flex flex-col gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-                              <div className="flex items-center gap-1.5">
-                                <svg className="w-3.5 h-3.5 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <circle cx="12" cy="12" r="10"/>
-                                  <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                </svg>
-                                <span className="text-yellow-400 text-xs font-semibold">Valoare declară mărfii pentru asigurare:</span>
-                              </div>
-                              <span className="text-yellow-300 text-xs font-bold ml-5">{order.valoare_marfa} EUR</span>
+                      </div>
+
+                      {/* Value Insurance - if exists */}
+                      {order.valoare_marfa && (
+                        <div className="p-4 bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border border-yellow-500/30 rounded-xl">
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center shrink-0">
+                              <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-yellow-400 text-xs font-semibold uppercase tracking-wide mb-1">Valoare Declarată (Asigurare)</p>
+                              <p className="text-yellow-300 text-2xl font-bold">{order.valoare_marfa} <span className="text-base">EUR</span></p>
                             </div>
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
+
+                      {/* Extra Services & Instructions */}
+                      {((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
+                        <div className="space-y-3">
+                          {order.optiuni && order.optiuni.length > 0 && (
+                            <div className="p-4 bg-slate-800/20 rounded-xl border border-white/5">
+                              <div className="flex items-center gap-2 mb-3">
+                                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                                </svg>
+                                <span className="text-xs font-semibold text-gray-300 uppercase tracking-wide">Servicii Suplimentare Solicitate</span>
+                              </div>
+                              <div className="flex flex-wrap gap-2">
+                                {order.optiuni.map((opt, idx) => {
+                                  const optionConfig = {
+                                    asigurare: { 
+                                      label: 'Asigurare completă transport', 
+                                      color: 'emerald',
+                                      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                    },
+                                    tracking: { 
+                                      label: 'Tracking GPS în timp real', 
+                                      color: 'blue',
+                                      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    },
+                                    semnatura: { 
+                                      label: 'Semnătură și confirmare la livrare', 
+                                      color: 'purple',
+                                      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                                    }
+                                  };
+                                  const config = optionConfig[opt as keyof typeof optionConfig] || { label: opt, color: 'gray', icon: null };
+                                  return (
+                                    <span key={idx} className={`inline-flex items-center gap-2 px-3 py-2 bg-${config.color}-500/10 border border-${config.color}-500/30 rounded-lg text-sm text-${config.color}-300 font-medium`}>
+                                      {config.icon}
+                                      {config.label}
+                                    </span>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+                          {order.observatii && (
+                            <div className="p-4 bg-blue-500/10 rounded-xl border border-blue-500/20">
+                              <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
+                                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                    <path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                                  </svg>
+                                </div>
+                                <div className="flex-1">
+                                  <p className="text-blue-400 text-xs font-semibold uppercase tracking-wide mb-2">Instrucțiuni Speciale de la Client</p>
+                                  <p className="text-gray-200 text-sm leading-relaxed">{order.observatii}</p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
 
-                    {/* Optional Details */}
-                    {((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
-                      <div className="pt-2 mt-2 border-t border-white/5 space-y-2">
-                        {order.optiuni && order.optiuni.length > 0 && (
-                          <div className="space-y-1.5">
-                            <p className="text-gray-400 text-[10px] font-medium uppercase tracking-wide">Servicii suplimentare solicitate de client:</p>
-                            <div className="flex flex-wrap gap-1.5">
-                              {order.optiuni.map((opt, idx) => {
-                                const optionConfig = {
-                                  asigurare: { 
-                                    label: 'Asigurare completă transport', 
-                                    color: 'emerald',
-                                    icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                                  },
-                                  tracking: { 
-                                    label: 'Tracking GPS în timp real', 
-                                    color: 'blue',
-                                    icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                  },
-                                  semnatura: { 
-                                    label: 'Semnătură și confirmare la livrare', 
-                                    color: 'purple',
-                                    icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
-                                  }
-                                };
-                                const config = optionConfig[opt as keyof typeof optionConfig] || { label: opt, color: 'gray', icon: null };
-                                return (
-                                  <span key={idx} className={`inline-flex items-center gap-1.5 px-2 py-1 bg-${config.color}-500/10 border border-${config.color}-500/30 rounded-md text-xs text-${config.color}-400 font-medium`}>
-                                    {config.icon}
-                                    {config.label}
-                                  </span>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-                        {order.observatii && (
-                          <div className="flex items-start gap-2 p-2 bg-blue-500/5 border border-blue-500/10 rounded-lg">
-                            <svg className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                            </svg>
-                            <div className="flex-1">
-                              <p className="text-blue-400 text-[10px] font-medium uppercase tracking-wide mb-1">Instrucțiuni speciale de la client:</p>
-                              <p className="text-gray-300 text-xs leading-relaxed line-clamp-2">{order.observatii}</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    
-                    {/* Actions */}
-                    <div className="flex items-center justify-end pt-2 border-t border-white/5">
-                      <div className="flex gap-2">
+                    {/* Right Column - Actions & Quick Info (1/3 width) */}
+                    <div className="space-y-4">
+                      {/* Action Buttons - Prominent */}
+                      <div className="space-y-3 p-4 bg-gradient-to-br from-slate-800/50 to-slate-800/30 rounded-xl border border-white/10">
                         <button 
                           onClick={() => setSelectedOrder(order)}
-                          className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs rounded-lg font-medium transition-colors"
+                          className="w-full px-4 py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 flex items-center justify-center gap-2 group"
                         >
+                          <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                          </svg>
                           Fă o Ofertă
                         </button>
                         <button 
                           onClick={() => setSelectedOrder(order)}
-                          className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded-lg font-medium transition-colors"
+                          className="w-full px-4 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2 group"
                         >
-                          Trimite un mesaj
+                          <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                          </svg>
+                          Trimite Mesaj
                         </button>
+                      </div>
+
+                      {/* Quick Stats */}
+                      <div className="p-4 bg-slate-800/30 rounded-xl border border-white/5 space-y-3">
+                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                          </svg>
+                          Rezumat Rapid
+                        </h4>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between py-2 border-b border-white/5">
+                            <span className="text-xs text-gray-400">Status</span>
+                            <span className={`text-xs font-semibold ${statusLabels[order.status].color}`}>{statusLabels[order.status].label}</span>
+                          </div>
+                          <div className="flex items-center justify-between py-2 border-b border-white/5">
+                            <span className="text-xs text-gray-400">Client</span>
+                            <span className="text-xs font-semibold text-white">{formatClientName(order.clientName)}</span>
+                          </div>
+                          <div className="flex items-center justify-between py-2 border-b border-white/5">
+                            <span className="text-xs text-gray-400">Greutate</span>
+                            <span className="text-xs font-semibold text-white">{order.greutate} kg</span>
+                          </div>
+                          <div className="flex items-center justify-between py-2">
+                            <span className="text-xs text-gray-400">Comandă</span>
+                            <span className="text-xs font-mono font-semibold text-emerald-400">#{formatOrderNumber(order.orderNumber || order.id)}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Contact Info */}
+                      <div className="p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 rounded-xl border border-emerald-500/20">
+                        <div className="flex items-center gap-2 mb-3">
+                          <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                          </svg>
+                          <span className="text-xs font-semibold text-emerald-300 uppercase tracking-wide">Contact Client</span>
+                        </div>
+                        <p className="text-sm text-emerald-200 font-medium">{order.clientPhone}</p>
                       </div>
                     </div>
                   </div>
