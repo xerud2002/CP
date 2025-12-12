@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
+import HelpCard from '@/components/HelpCard';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -989,6 +990,11 @@ export default function ComenziCurierPage() {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Help Card */}
+      <div className="mt-6 sm:mt-8">
+        <HelpCard />
       </div>
     </div>
   );

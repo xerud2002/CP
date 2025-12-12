@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { ArrowLeftIcon, CheckIcon } from '@/components/icons/DashboardIcons';
+import HelpCard from '@/components/HelpCard';
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
@@ -1614,6 +1615,11 @@ function ProfilCurierContent() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Help Card */}
+        <div className="mt-6 sm:mt-8">
+          <HelpCard />
         </div>
       </div>
     </div>

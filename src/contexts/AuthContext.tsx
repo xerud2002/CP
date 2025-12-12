@@ -82,28 +82,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loginWithGoogle = async (role: UserRole): Promise<User> => {
     const provider = new GoogleAuthProvider();
-    const userCredential = await signInWithPopup(auth, provider);
+    // Configure provider to avoid popup blockers
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    });
     
-    // Check if user already exists in Firestore
-    const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
-    
-    if (userDoc.exists()) {
-      // User exists, return existing data
-      const userData = { uid: userCredential.user.uid, ...userDoc.data() } as User;
-      setUser(userData);
-      return userData;
-    } else {
-      // New user, create record with the specified role
-      const userData: User = {
-        uid: userCredential.user.uid,
-        email: userCredential.user.email || '',
-        role,
-        createdAt: new Date(),
-      };
+    try {
+      const userCredential = await signInWithPopup(auth, provider);
       
-      await setDoc(doc(db, 'users', userCredential.user.uid), userData);
-      setUser(userData);
-      return userData;
+      // Check if user already exists in Firestore
+      const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
+      
+      if (userDoc.exists()) {
+        // User exists, return existing data
+        const userData = { uid: userCredential.user.uid, ...userDoc.data() } as User;
+        setUser(userData);
+        return userData;
+      } else {
+        // New user, create record with the specified role
+        const userData: User = {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email || '',
+          role,
+          createdAt: new Date(),
+        };
+        
+        await setDoc(doc(db, 'users', userCredential.user.uid), userData);
+        setUser(userData);
+        return userData;
+      }
+    } catch (error: unknown) {
+      // If popup is blocked, provide helpful error
+      if (error instanceof Error && error.message.includes('popup')) {
+        throw new Error('Pop-up blocat de browser. Vă rugăm să permiteți pop-up-uri pentru acest site.');
+      }
+      throw error;
     }
   };
 

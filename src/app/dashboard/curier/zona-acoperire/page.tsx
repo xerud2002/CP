@@ -17,6 +17,7 @@ import {
   CheckIcon, 
   ChevronDownIcon 
 } from '@/components/icons/DashboardIcons';
+import HelpCard from '@/components/HelpCard';
 
 // Extended regions data (full list needed for this page)
 const countries = [
@@ -586,6 +587,11 @@ export default function ZonaAcoperiirePage() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Help Card */}
+        <div className="mt-6 sm:mt-8">
+          <HelpCard />
         </div>
       </main>
     </div>

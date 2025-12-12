@@ -9,7 +9,7 @@ Romanian courier marketplace connecting clients with couriers for European packa
 | Role | Path | Pattern |
 |------|------|---------|
 | `client` | `/dashboard/client` | Single-page with tab switching |
-| `curier` | `/dashboard/curier` | Card grid → sub-pages: `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati` |
+| `curier` | `/dashboard/curier` | Card grid → sub-pages: `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati`, `/servicii`, `/transport-aeroport`, `/transport-persoane` |
 | `admin` | `/dashboard/admin` | Admin panel |
 
 **Auth flow**: `?role=client|curier` on login/register → stores role in Firestore `users/{uid}` → redirects to `/dashboard/{role}`
@@ -19,8 +19,9 @@ Romanian courier marketplace connecting clients with couriers for European packa
 RootLayout (AuthProvider) → LayoutWrapper → /dashboard/* uses DashboardLayout (no Header/Footer)
                                           → other routes get Header + Footer
 ```
-- `LayoutWrapper` checks `pathname.startsWith('/dashboard')` to exclude global Header/Footer
+- `LayoutWrapper` (client component) checks `pathname.startsWith('/dashboard')` to conditionally exclude global Header/Footer
 - Dashboard pages render their own headers with back navigation
+- `(auth)` route group for login/register/forgot-password pages (no auth required)
 
 ### Key Files
 | Purpose | File |
@@ -35,12 +36,18 @@ RootLayout (AuthProvider) → LayoutWrapper → /dashboard/* uses DashboardLayou
 ### Firestore Collections
 | Collection | Document ID | Owner Field | Purpose |
 |------------|-------------|-------------|---------|
-| `users` | `{uid}` | `uid` | User profiles & roles |
-| `zona_acoperire` | auto | `uid` | Courier coverage zones |
-| `tarife_curier` | auto | `uid` | Courier pricing |
-| `calendar_colectii` | auto | `courierId` | Courier availability |
-| `profil_curier` | `{uid}` | — | Extended courier profile |
-| `comenzi` | auto | `uid_client` | Orders |
+| `users` | `{uid}` | `uid` | User profiles & roles (created on register) |
+| `zona_acoperire` | auto | `uid` | Courier coverage zones (multi-record) |
+| `tarife_curier` | auto | `uid` | Courier pricing (multi-record) |
+| `calendar_colectii` | auto | `courierId` | Courier availability dates |
+| `profil_curier` | `{uid}` | — | Extended courier profile (single doc per courier) |
+| `comenzi` | auto | `uid_client` | Orders from clients |
+
+**Data Fetching Pattern**: Use `where()` filters + owner field for multi-tenant security:
+```tsx
+const q = query(collection(db, 'zona_acoperire'), where('uid', '==', user.uid));
+const snapshot = await getDocs(q);
+```
 
 ## Critical Patterns
 
@@ -73,6 +80,7 @@ export default function Page() {
   return <Suspense fallback={<div className="spinner"></div>}><LoginForm /></Suspense>;
 }
 ```
+**Why**: Next.js requires Suspense for dynamic params (`searchParams`) when using client components
 
 ### Firestore Writes — Always use serverTimestamp()
 ```tsx
@@ -83,9 +91,20 @@ await addDoc(collection(db, 'zona_acoperire'), {
   uid: user.uid, 
   tara, 
   judet, 
-  addedAt: serverTimestamp() 
+  addedAt: serverTimestamp() // Server-side timestamp (not Date.now())
 });
 ```
+
+### Error Handling Pattern
+```tsx
+try {
+  await someFirebaseOperation();
+} catch (err: unknown) {
+  const errorMessage = err instanceof Error ? err.message : 'Generic error message';
+  setError(errorMessage);
+}
+```
+Use type-safe `unknown` and check `instanceof Error` before accessing `.message`
 
 ### Sub-page Header Pattern (curier sub-pages)
 ```tsx
@@ -129,6 +148,8 @@ await addDoc(collection(db, 'zona_acoperire'), {
 - **Flags**: `public/img/flag/{code}.svg` (lowercase country code)
 - **Firestore security**: Owner-based rules — `resource.data.uid == request.auth.uid`
 - **Extended regions**: Pages needing full region lists define local `judetByCountry` (see `zona-acoperire/page.tsx`)
+- **Firebase init**: Use singleton pattern with `getApps()` check to prevent re-initialization
+- **Client components**: All dashboard pages are `'use client'` due to auth hooks and state management
 
 ## Commands
 ```bash
