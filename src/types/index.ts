@@ -20,6 +20,7 @@ export interface CoverageZone {
 
 export interface Order {
   id?: string;
+  orderNumber?: number;
   uid_client: string;
   nume: string;
   email: string;

@@ -71,6 +71,14 @@ service cloud.firestore {
       allow delete: if isAuthenticated() && resource.data.uid_client == request.auth.uid;
     }
     
+    // Counters collection for sequential order numbering
+    match /counters/{counterId} {
+      // Anyone authenticated can read counters
+      allow read: if isAuthenticated();
+      // Only allow writes from authenticated users (server will use transactions)
+      allow write: if isAuthenticated();
+    }
+    
     // Transport aeroport collection
     match /transport_aeroport/{docId} {
       // Couriers can manage their airport transport routes

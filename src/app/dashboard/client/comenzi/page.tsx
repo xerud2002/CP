@@ -13,6 +13,7 @@ import HelpCard from '@/components/HelpCard';
 
 interface Order {
   id: string;
+  orderNumber?: number;
   serviciu: string;
   status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
   tara_ridicare: string;
@@ -291,7 +292,7 @@ export default function ComenziClientPage() {
                             )}
                           </div>
                           <p className="text-xs text-gray-500">
-                            Comandă #{formatOrderNumber(order.id)}
+                            Comandă #{formatOrderNumber(order.orderNumber || order.id)}
                           </p>
                         </div>
                         <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${statusConfig[order.status].bg} ${statusConfig[order.status].border} border`}>

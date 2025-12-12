@@ -13,6 +13,7 @@ import { formatOrderNumber, formatClientName } from '@/utils/orderHelpers';
 
 interface Order {
   id: string;
+  orderNumber?: number;
   clientName: string;
   clientPhone: string;
   expeditorTara: string;
@@ -792,7 +793,7 @@ export default function ComenziCurierPage() {
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusLabels[order.status].bg} ${statusLabels[order.status].color}`}>
                         {statusLabels[order.status].label}
                       </span>
-                      <span className="text-gray-500 text-xs">#{formatOrderNumber(order.id)}</span>
+                      <span className="text-gray-500 text-xs">#{formatOrderNumber(order.orderNumber || order.id)}</span>
                     </div>
                     
                     {/* Client Info */}
@@ -924,7 +925,7 @@ export default function ComenziCurierPage() {
                         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusLabels[order.status].bg} ${statusLabels[order.status].color}`}>
                           {statusLabels[order.status].label}
                         </span>
-                        <span className="text-gray-500 text-xs">#{formatOrderNumber(order.id)}</span>
+                        <span className="text-gray-500 text-xs">#{formatOrderNumber(order.orderNumber || order.id)}</span>
                       </div>
                       <h3 className="font-semibold text-white mb-1.5">{formatClientName(order.clientName)}</h3>
                       {/* Route */}
@@ -1057,7 +1058,7 @@ export default function ComenziCurierPage() {
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
             <div className="bg-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 max-w-lg w-full border border-white/10 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <h2 className="text-lg sm:text-xl font-bold text-white">Detalii Comandă #{formatOrderNumber(selectedOrder.id)}</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-white">Detalii Comandă #{formatOrderNumber(selectedOrder.orderNumber || selectedOrder.id)}</h2>
                 <button 
                   onClick={() => setSelectedOrder(null)}
                   className="text-gray-400 hover:text-white p-1.5 sm:p-2 hover:bg-white/5 rounded-lg transition-colors"

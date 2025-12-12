@@ -23,6 +23,7 @@ interface Review {
 
 interface Order {
   id: string;
+  orderNumber?: number;
   serviciu: string;
   status: string;
   courierName?: string;
@@ -241,7 +242,7 @@ export default function RecenziiClientPage() {
                 >
                   <div>
                     <p className="text-white text-sm font-medium">{order.serviciu}</p>
-                    <p className="text-xs text-gray-500">Comandă #{formatOrderNumber(order.id)}</p>
+                    <p className="text-xs text-gray-500">Comandă #{formatOrderNumber(order.orderNumber || order.id)}</p>
                   </div>
                   <button
                     onClick={() => {

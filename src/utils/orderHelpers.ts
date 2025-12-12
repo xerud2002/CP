@@ -2,23 +2,68 @@
  * Utility functions for order display and formatting
  */
 
+import { doc, getDoc, setDoc, updateDoc, runTransaction } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+
 /**
- * Converts a Firebase document ID into a friendly order number format
- * Example: "SjS9dL3owdxH8Cwz7tEG" → "CP1411"
+ * Gets the next sequential order number and increments the counter
+ * Starting from 141121 and incrementing by 1 for each new order
  * 
- * @param firebaseId - The Firebase document ID
- * @returns A formatted order number in CP#### format
+ * @returns The next order number to use
  */
-export const formatOrderNumber = (firebaseId: string): string => {
-  // Generate deterministic hash from Firebase ID
-  const hashCode = firebaseId.split('').reduce((acc, char) => {
+export const getNextOrderNumber = async (): Promise<number> => {
+  const counterRef = doc(db, 'counters', 'orderNumber');
+  
+  try {
+    // Use a transaction to ensure atomic increment
+    const nextNumber = await runTransaction(db, async (transaction) => {
+      const counterDoc = await transaction.get(counterRef);
+      
+      let currentNumber = 141121; // Starting number
+      
+      if (counterDoc.exists()) {
+        currentNumber = counterDoc.data().current || 141121;
+      } else {
+        // Initialize counter if it doesn't exist
+        transaction.set(counterRef, { current: 141121 });
+        return 141121;
+      }
+      
+      // Increment for next order
+      const nextNum = currentNumber + 1;
+      transaction.update(counterRef, { current: nextNum });
+      
+      return currentNumber;
+    });
+    
+    return nextNumber;
+  } catch (error) {
+    console.error('Error getting next order number:', error);
+    // Fallback to timestamp-based number if transaction fails
+    return 141121 + Math.floor(Date.now() / 1000) % 100000;
+  }
+};
+
+/**
+ * Converts an order into a friendly order number format
+ * Example: orderNumber 141121 → "CP141121"
+ * If no orderNumber exists, generates from Firebase ID for backwards compatibility
+ * 
+ * @param orderIdOrNumber - Either the order's sequential number or Firebase ID (for old orders)
+ * @returns A formatted order number in CP###### format
+ */
+export const formatOrderNumber = (orderIdOrNumber: number | string): string => {
+  // If it's a number (new system with sequential orderNumber)
+  if (typeof orderIdOrNumber === 'number') {
+    return `CP${orderIdOrNumber}`;
+  }
+  
+  // Fallback for old orders without orderNumber - generate from Firebase ID
+  const hashCode = orderIdOrNumber.split('').reduce((acc, char) => {
     return char.charCodeAt(0) + ((acc << 5) - acc);
   }, 0);
   
-  // Convert to 4-digit number (0000-9999)
   const orderNum = Math.abs(hashCode) % 10000;
-  
-  // Return formatted order number with CP prefix
   return `CP${String(orderNum).padStart(4, '0')}`;
 };
 

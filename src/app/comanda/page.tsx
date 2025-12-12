@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { countries, judetByCountry } from '@/lib/constants';
+import { getNextOrderNumber } from '@/utils/orderHelpers';
 
 // Servicii disponibile cu iconițe SVG (identice cu homepage)
 const servicii = [
@@ -369,9 +370,13 @@ function ComandaForm() {
     setMessage('');
 
     try {
+      // Get next sequential order number
+      const orderNumber = await getNextOrderNumber();
+      
       const orderData = {
         uid_client: user?.uid || 'guest',
         serviciu: selectedService,
+        orderNumber, // Add sequential order number
         ...formData,
         status: 'pending',
         createdAt: serverTimestamp(),
