@@ -9,6 +9,7 @@ import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { formatOrderNumber, formatClientName } from '@/utils/orderHelpers';
 
 interface Order {
   id: string;
@@ -36,16 +37,6 @@ const statusLabels: Record<Order['status'], { label: string; color: string; bg: 
   in_tranzit: { label: 'În Tranzit', color: 'text-orange-400', bg: 'bg-orange-500/20' },
   livrata: { label: 'Livrată', color: 'text-green-400', bg: 'bg-green-500/20' },
   anulata: { label: 'Anulată', color: 'text-red-400', bg: 'bg-red-500/20' },
-};
-
-// Format client name to show only "FirstName LastInitial."
-const formatClientName = (fullName: string): string => {
-  const parts = fullName.trim().split(' ');
-  if (parts.length === 1) return parts[0]; // Only one name
-  const firstName = parts[0]; // First word is first name
-  const lastName = parts[parts.length - 1]; // Last word is last name
-  const lastInitial = lastName.charAt(0).toUpperCase();
-  return `${firstName} ${lastInitial}.`;
 };
 
 // Countries with codes - sorted alphabetically (16 main European countries)
@@ -801,50 +792,106 @@ export default function ComenziCurierPage() {
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusLabels[order.status].bg} ${statusLabels[order.status].color}`}>
                         {statusLabels[order.status].label}
                       </span>
-                      <span className="text-gray-500 text-xs">#{order.id}</span>
+                      <span className="text-gray-500 text-xs">#{formatOrderNumber(order.id)}</span>
                     </div>
                     
                     {/* Client Info */}
                     <div>
-                      <h3 className="font-semibold text-white">{formatClientName(order.clientName)}</h3>
-                    </div>
-                    
-                    {/* Route */}
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="text-green-400 truncate">📍 {order.expeditorJudet}</span>
-                      <span className="text-gray-500">→</span>
-                      <span className="text-orange-400 truncate">📍 {order.destinatarJudet}</span>
-                    </div>
-                    
-                    {/* Details Row */}
-                    <div className="flex items-center justify-between text-xs text-gray-400">
-                      <span>{order.tipColet}</span>
-                      <span>{order.greutate} kg</span>
-                      <span>📅 {order.dataColectare}</span>
+                      <h3 className="font-semibold text-white mb-1.5">{formatClientName(order.clientName)}</h3>
+                      {/* Route */}
+                      <div className="flex items-center gap-2 text-xs mb-1.5">
+                        <span className="flex items-center gap-1 text-green-400 truncate">
+                          <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                          </svg>
+                          {order.expeditorJudet}, {order.expeditorTara}
+                        </span>
+                        <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                        <span className="flex items-center gap-1 text-orange-400 truncate">
+                          <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                          </svg>
+                          {order.destinatarJudet}, {order.destinatarTara}
+                        </span>
+                      </div>
+                      {/* Details */}
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-3 text-xs text-gray-400">
+                          <span>Colet : {order.greutate} kg</span>
+                          <span className="flex items-center gap-1">
+                            Data Colectie :
+                            <svg className="w-3.5 h-3.5 shrink-0 ml-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                              <line x1="16" y1="2" x2="16" y2="6"/>
+                              <line x1="8" y1="2" x2="8" y2="6"/>
+                              <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            {order.dataColectare ? order.dataColectare : <span className="text-blue-400">Flexibil</span>}
+                          </span>
+                        </div>
+                        {order.valoare_marfa && (
+                          <div className="flex items-start gap-2">
+                            <div className="flex flex-col gap-1 px-2 py-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                              <div className="flex items-center gap-1.5">
+                                <svg className="w-3.5 h-3.5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span className="text-yellow-400 text-[10px] font-semibold">Valoare declară mărfii pentru asigurare:</span>
+                              </div>
+                              <span className="text-yellow-300 text-xs font-bold ml-5">{order.valoare_marfa} EUR</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     {/* Optional Details */}
-                    {(order.valoare_marfa || (order.optiuni && order.optiuni.length > 0) || order.observatii) && (
-                      <div className="pt-2 border-t border-white/5 space-y-1.5">
-                        {order.valoare_marfa && (
-                          <div className="flex items-center gap-1.5 text-xs">
-                            <span className="text-yellow-400">💶</span>
-                            <span className="text-gray-400">Valoare:</span>
-                            <span className="text-white font-medium">{order.valoare_marfa} EUR</span>
-                          </div>
-                        )}
+                    {((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
+                      <div className="pt-2 mt-2 border-t border-white/5 space-y-2">
                         {order.optiuni && order.optiuni.length > 0 && (
-                          <div className="flex items-center gap-1.5 text-xs">
-                            <span className="text-emerald-400">✔️</span>
-                            <span className="text-gray-400">Opțiuni:</span>
-                            <span className="text-white text-[10px]">{order.optiuni.map(opt => opt === 'asigurare' ? 'Asigurare' : opt === 'tracking' ? 'Tracking GPS' : opt === 'semnatura' ? 'Semnătură' : opt).join(', ')}</span>
+                          <div className="space-y-1">
+                            <p className="text-emerald-400 text-[9px] font-semibold uppercase tracking-wide">Servicii suplimentare solicitate de client:</p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {order.optiuni.map((opt, idx) => {
+                                const optionConfig = {
+                                  asigurare: { 
+                                    label: 'Asigurare completă transport', 
+                                    color: 'emerald',
+                                    icon: <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+                                  },
+                                  tracking: { 
+                                    label: 'Tracking GPS în timp real', 
+                                    color: 'blue',
+                                    icon: <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/></svg>
+                                  },
+                                  semnatura: { 
+                                    label: 'Semnătură și confirmare la livrare', 
+                                    color: 'purple',
+                                    icon: <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+                                  }
+                                };
+                                const config = optionConfig[opt as keyof typeof optionConfig] || { label: opt, color: 'gray', icon: null };
+                                return (
+                                  <span key={idx} className={`inline-flex items-center gap-1 px-2 py-0.5 bg-${config.color}-500/10 border border-${config.color}-500/30 rounded-md text-[10px] text-${config.color}-400 font-medium`}>
+                                    {config.icon}
+                                    {config.label}
+                                  </span>
+                                );
+                              })}
+                            </div>
                           </div>
                         )}
                         {order.observatii && (
-                          <div className="flex items-start gap-1.5 text-xs">
-                            <span className="text-blue-400">📝</span>
-                            <span className="text-gray-400">Obs:</span>
-                            <span className="text-white text-[10px] line-clamp-1">{order.observatii}</span>
+                          <div className="flex items-start gap-2 p-2 bg-blue-500/5 border border-blue-500/10 rounded-lg">
+                            <svg className="w-3.5 h-3.5 text-blue-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                            </svg>
+                            <div className="flex-1">
+                              <p className="text-blue-400 text-[9px] font-medium uppercase tracking-wide mb-0.5">Instrucțiuni speciale de la client:</p>
+                              <p className="text-gray-300 text-[10px] leading-relaxed line-clamp-2">{order.observatii}</p>
+                            </div>
                           </div>
                         )}
                       </div>
@@ -870,60 +917,119 @@ export default function ComenziCurierPage() {
                   </div>
 
                   {/* Desktop Layout */}
-                  <div className="hidden sm:flex items-center justify-between gap-4">
-                    {/* Order Info */}
-                    <div className="flex-1 min-w-[180px]">
+                  <div className="hidden sm:block space-y-3">
+                    {/* Status & ID */}
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3 mb-1">
                         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusLabels[order.status].bg} ${statusLabels[order.status].color}`}>
                           {statusLabels[order.status].label}
                         </span>
-                        <span className="text-gray-500 text-xs">#{order.id}</span>
+                        <span className="text-gray-500 text-xs">#{formatOrderNumber(order.id)}</span>
                       </div>
-                      <h3 className="font-semibold text-white">{formatClientName(order.clientName)}</h3>
-                    </div>
-
-                    {/* Route */}
-                    <div className="flex-1 min-w-[200px]">
-                      <div className="flex items-center gap-2 text-sm">
-                        <span className="text-green-400">📍 {order.expeditorJudet}, {order.expeditorTara}</span>
-                        <span className="text-gray-500">→</span>
-                        <span className="text-orange-400">📍 {order.destinatarJudet}, {order.destinatarTara}</span>
+                      <h3 className="font-semibold text-white mb-1.5">{formatClientName(order.clientName)}</h3>
+                      {/* Route */}
+                      <div className="flex items-center gap-2 text-xs mb-1.5">
+                        <span className="flex items-center gap-1 text-green-400">
+                          <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                          </svg>
+                          {order.expeditorJudet}, {order.expeditorTara}
+                        </span>
+                        <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                        <span className="flex items-center gap-1 text-orange-400">
+                          <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+                          </svg>
+                          {order.destinatarJudet}, {order.destinatarTara}
+                        </span>
                       </div>
-                      <div className="flex items-center gap-4 mt-1 text-xs text-gray-400">
-                        <span>{order.tipColet}</span>
-                        <span>{order.greutate} kg</span>
-                        <span>📅 {order.dataColectare}</span>
-                      </div>
-                      
-                      {/* Optional Details */}
-                      {(order.valoare_marfa || (order.optiuni && order.optiuni.length > 0) || order.observatii) && (
-                        <div className="mt-2 pt-2 border-t border-white/5 space-y-1">
-                          {order.valoare_marfa && (
-                            <div className="flex items-center gap-1.5 text-xs">
-                              <span className="text-yellow-400">💶</span>
-                              <span className="text-gray-400">Valoare:</span>
-                              <span className="text-white font-medium">{order.valoare_marfa} EUR</span>
-                            </div>
-                          )}
-                          {order.optiuni && order.optiuni.length > 0 && (
-                            <div className="flex items-center gap-1.5 text-xs">
-                              <span className="text-emerald-400">✔️</span>
-                              <span className="text-emerald-400 font-medium">{order.optiuni.map(opt => opt === 'asigurare' ? 'Asigurare' : opt === 'tracking' ? 'Tracking GPS' : opt === 'semnatura' ? 'Semnătură' : opt).join(' + ')}</span>
-                            </div>
-                          )}
-                          {order.observatii && (
-                            <div className="flex items-start gap-1.5 text-xs">
-                              <span className="text-blue-400">📝</span>
-                              <span className="text-gray-300 line-clamp-1">{order.observatii}</span>
-                            </div>
-                          )}
+                      {/* Details */}
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-3 text-xs text-gray-400">
+                          <span>Colet : {order.greutate} kg</span>
+                          <span className="flex items-center gap-1">
+                            Data Colectie :
+                            <svg className="w-3.5 h-3.5 shrink-0 ml-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                              <line x1="16" y1="2" x2="16" y2="6"/>
+                              <line x1="8" y1="2" x2="8" y2="6"/>
+                              <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            {order.dataColectare ? order.dataColectare : <span className="text-blue-400">Flexibil</span>}
+                          </span>
                         </div>
-                      )}
+                        {order.valoare_marfa && (
+                          <div className="flex items-start gap-2">
+                            <div className="flex flex-col gap-1 px-2.5 py-1.5 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                              <div className="flex items-center gap-1.5">
+                                <svg className="w-3.5 h-3.5 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <circle cx="12" cy="12" r="10"/>
+                                  <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                                <span className="text-yellow-400 text-xs font-semibold">Valoare declară mărfii pentru asigurare:</span>
+                              </div>
+                              <span className="text-yellow-300 text-xs font-bold ml-5">{order.valoare_marfa} EUR</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
+                    {/* Optional Details */}
+                    {((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
+                      <div className="pt-2 mt-2 border-t border-white/5 space-y-2">
+                        {order.optiuni && order.optiuni.length > 0 && (
+                          <div className="space-y-1.5">
+                            <p className="text-gray-400 text-[10px] font-medium uppercase tracking-wide">Servicii suplimentare solicitate de client:</p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {order.optiuni.map((opt, idx) => {
+                                const optionConfig = {
+                                  asigurare: { 
+                                    label: 'Asigurare completă transport', 
+                                    color: 'emerald',
+                                    icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                  },
+                                  tracking: { 
+                                    label: 'Tracking GPS în timp real', 
+                                    color: 'blue',
+                                    icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                  },
+                                  semnatura: { 
+                                    label: 'Semnătură și confirmare la livrare', 
+                                    color: 'purple',
+                                    icon: <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                                  }
+                                };
+                                const config = optionConfig[opt as keyof typeof optionConfig] || { label: opt, color: 'gray', icon: null };
+                                return (
+                                  <span key={idx} className={`inline-flex items-center gap-1.5 px-2 py-1 bg-${config.color}-500/10 border border-${config.color}-500/30 rounded-md text-xs text-${config.color}-400 font-medium`}>
+                                    {config.icon}
+                                    {config.label}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                        {order.observatii && (
+                          <div className="flex items-start gap-2 p-2 bg-blue-500/5 border border-blue-500/10 rounded-lg">
+                            <svg className="w-4 h-4 text-blue-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            <div className="flex-1">
+                              <p className="text-blue-400 text-[10px] font-medium uppercase tracking-wide mb-1">Instrucțiuni speciale de la client:</p>
+                              <p className="text-gray-300 text-xs leading-relaxed line-clamp-2">{order.observatii}</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
                     {/* Actions */}
-                    <div className="text-right shrink-0">
-                      <div className="flex gap-2 justify-end">
+                    <div className="flex items-center justify-end pt-2 border-t border-white/5">
+                      <div className="flex gap-2">
                         <button 
                           onClick={() => setSelectedOrder(order)}
                           className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs rounded-lg font-medium transition-colors"
@@ -951,7 +1057,7 @@ export default function ComenziCurierPage() {
           <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
             <div className="bg-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 max-w-lg w-full border border-white/10 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <h2 className="text-lg sm:text-xl font-bold text-white">Detalii Comandă #{selectedOrder.id}</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-white">Detalii Comandă #{formatOrderNumber(selectedOrder.id)}</h2>
                 <button 
                   onClick={() => setSelectedOrder(null)}
                   className="text-gray-400 hover:text-white p-1.5 sm:p-2 hover:bg-white/5 rounded-lg transition-colors"

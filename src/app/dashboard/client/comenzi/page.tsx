@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { collection, query, where, getDocs, orderBy, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { formatOrderNumber } from '@/utils/orderHelpers';
 import { ArrowLeftIcon, PackageIcon, ClockIcon, CheckCircleIcon, XCircleIcon, TruckIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 
@@ -290,7 +291,7 @@ export default function ComenziClientPage() {
                             )}
                           </div>
                           <p className="text-xs text-gray-500">
-                            Comandă #{order.id.substring(0, 8)}
+                            Comandă #{formatOrderNumber(order.id)}
                           </p>
                         </div>
                         <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${statusConfig[order.status].bg} ${statusConfig[order.status].border} border`}>

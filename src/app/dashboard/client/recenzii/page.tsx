@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { formatOrderNumber } from '@/utils/orderHelpers';
 import { ArrowLeftIcon, StarIcon, CheckCircleIcon, UserIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 
@@ -240,7 +241,7 @@ export default function RecenziiClientPage() {
                 >
                   <div>
                     <p className="text-white text-sm font-medium">{order.serviciu}</p>
-                    <p className="text-xs text-gray-500">Comandă #{order.id.substring(0, 8)}</p>
+                    <p className="text-xs text-gray-500">Comandă #{formatOrderNumber(order.id)}</p>
                   </div>
                   <button
                     onClick={() => {
