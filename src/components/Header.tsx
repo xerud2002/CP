@@ -37,7 +37,7 @@ export default function Header() {
       
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4 lg:px-8 h-16">
         {/* Logo */}
-        <Link href="/" className="flex items-center group">
+        <Link href="/" className="flex items-center gap-3 group">
           {/* Logo Image */}
           <div className="relative">
             <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-green-500 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity"></div>
@@ -51,6 +51,13 @@ export default function Header() {
                 priority
               />
             </div>
+          </div>
+          {/* Text */}
+          <div className="flex flex-col">
+            <span className="text-xl lg:text-2xl font-black tracking-tight leading-none">
+              <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
+            </span>
+            <span className="text-[10px] lg:text-xs text-gray-500 font-medium tracking-wider uppercase">Transport Europa</span>
           </div>
         </Link>
 

@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center mb-6 group">
+            <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
               {/* Logo Image */}
               <div className="relative">
                 <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-green-500 rounded-xl blur-md opacity-30 group-hover:opacity-50 transition-opacity"></div>
@@ -24,6 +24,13 @@ export default function Footer() {
                     className="w-9 h-9 object-contain"
                   />
                 </div>
+              </div>
+              {/* Text */}
+              <div className="flex flex-col">
+                <span className="text-xl font-black leading-none">
+                  <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
+                </span>
+                <span className="text-[10px] text-gray-600 font-medium tracking-wider uppercase mt-0.5">Transport Europa</span>
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
