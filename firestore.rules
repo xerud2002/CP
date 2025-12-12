@@ -62,13 +62,34 @@ service cloud.firestore {
     
     // Comenzi collection
     match /comenzi/{docId} {
-      // Clients can read/write their own orders
-      // Couriers can read all orders to see available work
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.uid_client == request.auth.uid;
+      // Clients can read their own orders
+      // Couriers can read all pending orders and their assigned orders
+      allow read: if isAuthenticated() && 
+        (resource.data.uid_client == request.auth.uid || 
+         resource.data.courierId == request.auth.uid ||
+         resource.data.status == 'pending');
+      allow create: if isAuthenticated() && 
+        request.resource.data.uid_client == request.auth.uid &&
+        request.resource.data.status == 'pending';
       allow update: if isAuthenticated() && 
-        (resource.data.uid_client == request.auth.uid || resource.data.courierId == request.auth.uid);
-      allow delete: if isAuthenticated() && resource.data.uid_client == request.auth.uid;
+        (resource.data.uid_client == request.auth.uid || 
+         resource.data.courierId == request.auth.uid);
+      allow delete: if isAuthenticated() && 
+        resource.data.uid_client == request.auth.uid &&
+        resource.data.status == 'pending';
+    }
+    
+    // Recenzii collection
+    match /recenzii/{docId} {
+      // Clients can create and read their own reviews
+      // Couriers can read reviews about them
+      allow read: if isAuthenticated() && 
+        (resource.data.clientId == request.auth.uid || 
+         resource.data.courierId == request.auth.uid);
+      allow create: if isAuthenticated() && 
+        request.resource.data.clientId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && 
+        resource.data.clientId == request.auth.uid;
     }
     
     // Counters collection for sequential order numbering

@@ -75,6 +75,13 @@ const servicii = [
     color: 'from-amber-500 to-orange-500',
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" /><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" /></svg>
   },
+  { 
+    id: 'paleti', 
+    name: 'Transport Paleți', 
+    description: 'Transport paleți și marfă paletizată',
+    color: 'from-orange-500 to-amber-500',
+    icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M3 6h18" strokeLinecap="round" strokeLinejoin="round" /><path d="M3 12h18" strokeLinecap="round" strokeLinejoin="round" /><path d="M3 18h18" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 6v12" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round" /><path d="M20 6v12" strokeLinecap="round" strokeLinejoin="round" /></svg>
+  },
 ];
 
 // Opțiuni suplimentare

@@ -47,6 +47,30 @@
         { "fieldPath": "courierId", "order": "ASCENDING" },
         { "fieldPath": "dataTimestamp", "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "recenzii",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "clientId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "recenzii",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "courierId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "zona_acoperire",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid", "order": "ASCENDING" },
+        { "fieldPath": "addedAt", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

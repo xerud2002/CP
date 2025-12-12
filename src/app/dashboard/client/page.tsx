@@ -131,15 +131,27 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
     <header className="bg-slate-900/60 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
-          {/* Logo/Brand - Mobile */}
-          <Link href="/" className="flex items-center gap-1.5">
-            <span className="text-base sm:text-lg font-bold hidden sm:inline">
-              <span className="text-emerald-500">Curierul</span>
-              <span className="text-orange-500">Perfect</span>
-            </span>
-            {/* Mobile: Show only icon */}
-            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600 flex items-center justify-center sm:hidden">
-              <BoxIcon className="w-6 h-6 text-white" />
+          {/* Logo/Brand */}
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+            {/* Logo Image */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-green-500 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity"></div>
+              <div className="relative w-9 h-9 sm:w-10 sm:h-10 bg-slate-900/50 rounded-xl flex items-center justify-center shadow-xl border border-white/10 group-hover:border-orange-500/30 group-hover:scale-105 transition-all overflow-hidden">
+                <Image 
+                  src="/img/logo.png" 
+                  alt="Curierul Perfect Logo" 
+                  width={36} 
+                  height={36} 
+                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain"
+                />
+              </div>
+            </div>
+            {/* Text - Hidden on mobile */}
+            <div className="hidden sm:flex flex-col">
+              <span className="text-base sm:text-lg font-black tracking-tight leading-none">
+                <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
+              </span>
+              <span className="text-[9px] sm:text-[10px] text-gray-500 font-medium tracking-wider uppercase">Transport Europa</span>
             </div>
           </Link>
 

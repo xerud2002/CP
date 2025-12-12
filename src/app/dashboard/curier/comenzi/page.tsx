@@ -208,6 +208,19 @@ export default function ComenziCurierPage() {
       
       setLoadingOrders(true);
       try {
+        // First, load courier's active services
+        const userQuery = query(
+          collection(db, 'users'),
+          where('uid', '==', user.uid)
+        );
+        const userSnapshot = await getDocs(userQuery);
+        let activeServices: string[] = [];
+        
+        if (!userSnapshot.empty) {
+          const userData = userSnapshot.docs[0].data();
+          activeServices = userData.serviciiOferite || [];
+        }
+        
         // Query 1: Get all new orders (not assigned to any courier yet)
         const qNew = query(
           collection(db, 'comenzi'),
@@ -230,29 +243,38 @@ export default function ComenziCurierPage() {
         const loadedOrders: Order[] = [];
         const orderIds = new Set<string>();
         
-        // Add new orders (available for all couriers)
+        // Add new orders (filter by active services)
         snapshotNew.forEach((doc) => {
           if (!orderIds.has(doc.id)) {
-            orderIds.add(doc.id);
             const data = doc.data();
-            loadedOrders.push({
-              id: doc.id,
-              clientName: data.nume || data.clientName || 'Client',
-              clientPhone: data.telefon || data.clientPhone || '',
-              expeditorTara: data.tara_ridicare || data.expeditorTara || '',
-              expeditorJudet: data.judet_ridicare || data.expeditorJudet || '',
-              destinatarTara: data.tara_livrare || data.destinatarTara || '',
-              destinatarJudet: data.judet_livrare || data.destinatarJudet || '',
-              tipColet: data.serviciu || data.tipColet || 'Colete',
-              greutate: parseFloat(data.greutate) || 0,
-              status: 'noua',
-              dataColectare: data.data_ridicare || data.dataColectare || '',
-              pret: data.pret || 0,
-              createdAt: data.createdAt?.toDate() || new Date(data.timestamp),
-              valoare_marfa: data.valoare_marfa || '',
-              optiuni: data.optiuni || [],
-              observatii: data.observatii || '',
-            });
+            const orderService = data.serviciu || data.tipColet || 'Colete';
+            
+            // Normalize service names for comparison (case-insensitive)
+            const normalizedOrderService = orderService.toLowerCase().trim();
+            const normalizedActiveServices = activeServices.map(s => s.toLowerCase().trim());
+            
+            // Only show orders for services the courier has activated
+            if (activeServices.length === 0 || normalizedActiveServices.includes(normalizedOrderService)) {
+              orderIds.add(doc.id);
+              loadedOrders.push({
+                id: doc.id,
+                clientName: data.nume || data.clientName || 'Client',
+                clientPhone: data.telefon || data.clientPhone || '',
+                expeditorTara: data.tara_ridicare || data.expeditorTara || '',
+                expeditorJudet: data.judet_ridicare || data.expeditorJudet || '',
+                destinatarTara: data.tara_livrare || data.destinatarTara || '',
+                destinatarJudet: data.judet_livrare || data.destinatarJudet || '',
+                tipColet: orderService,
+                greutate: parseFloat(data.greutate) || 0,
+                status: 'noua',
+                dataColectare: data.data_ridicare || data.dataColectare || '',
+                pret: data.pret || 0,
+                createdAt: data.createdAt?.toDate() || new Date(data.timestamp),
+                valoare_marfa: data.valoare_marfa || '',
+                optiuni: data.optiuni || [],
+                observatii: data.observatii || '',
+              });
+            }
           }
         });
         
@@ -319,17 +341,40 @@ export default function ComenziCurierPage() {
       // Status filter
       if (statusFilter !== 'all' && order.status !== statusFilter) return false;
       
-      // Country filter (checks both expeditor and destinatar)
+      // Country filter (checks both expeditor and destinatar) - case insensitive comparison
       if (countryFilter !== 'all') {
-        if (order.expeditorTara !== countryFilter && order.destinatarTara !== countryFilter) return false;
+        const normalizedFilter = countryFilter.toLowerCase().trim();
+        const normalizedExpeditor = (order.expeditorTara || '').toLowerCase().trim();
+        const normalizedDestinatar = (order.destinatarTara || '').toLowerCase().trim();
+        
+        if (normalizedExpeditor !== normalizedFilter && normalizedDestinatar !== normalizedFilter) {
+          return false;
+        }
       }
       
-      // Service filter
-      if (serviceFilter !== 'all' && order.tipColet !== serviceFilter) return false;
+      // Service filter - case insensitive comparison
+      if (serviceFilter !== 'all') {
+        const normalizedServiceFilter = serviceFilter.toLowerCase().trim();
+        const normalizedOrderService = (order.tipColet || '').toLowerCase().trim();
+        
+        if (normalizedOrderService !== normalizedServiceFilter) {
+          return false;
+        }
+      }
       
-      // Date filter
+      // Date filter - flexible format matching
       if (dateFilter) {
-        if (order.dataColectare !== dateFilter) return false;
+        // Convert input date (YYYY-MM-DD) to various possible formats
+        const inputDate = new Date(dateFilter);
+        const orderDate = new Date(order.dataColectare);
+        
+        // Compare only dates (ignore time)
+        if (inputDate.toDateString() !== orderDate.toDateString()) {
+          // Also try direct string comparison
+          if (order.dataColectare !== dateFilter) {
+            return false;
+          }
+        }
       }
       
       return true;

@@ -8,8 +8,8 @@ Romanian courier marketplace connecting clients with couriers for European packa
 ### Role-Based Dashboards
 | Role | Path | Pattern |
 |------|------|---------|
-| `client` | `/dashboard/client` | Single-page with tab switching (no sub-routes) |
-| `curier` | `/dashboard/curier` | Card grid → sub-pages: `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati`, `/servicii`, `/transport-aeroport`, `/transport-persoane` |
+| `client` | `/dashboard/client` | Single-page dashboard with stats + navigation grid |
+| `curier` | `/dashboard/curier` | Card grid dashboard → sub-pages: `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati`, `/servicii`, `/transport-aeroport`, `/transport-persoane` |
 | `admin` | `/dashboard/admin` | Admin panel |
 
 **Auth flow**: `?role=client|curier` on login/register → stores role in Firestore `users/{uid}` → redirects to `/dashboard/{role}`
@@ -17,12 +17,14 @@ Romanian courier marketplace connecting clients with couriers for European packa
 ### Layout Hierarchy
 ```
 RootLayout (AuthProvider) → LayoutWrapper → /dashboard/* uses DashboardLayout (no Header/Footer)
+                                          → /comanda uses no Header/Footer
+                                          → /(auth)/* uses no Header/Footer
                                           → other routes get Header + Footer
 ```
-- `LayoutWrapper` (client component) checks `pathname.startsWith('/dashboard')` to conditionally exclude global Header/Footer
-- Dashboard pages render their own headers with back navigation
-- `(auth)` route group for login/register/forgot-password pages (no auth required)
-- `DashboardLayout` provides dark theme background with decorative gradients (orange/green)
+- `LayoutWrapper` excludes global Header/Footer when `pathname.startsWith('/dashboard')` OR `/comanda` OR auth routes
+- Dashboard pages render their own page-specific headers with back navigation
+- `(auth)` route group for login/register/forgot-password pages (Suspense required for `useSearchParams`)
+- `DashboardLayout` provides dark theme (`bg-slate-900`) with decorative gradients (orange/green circles)
 
 ### Key Files
 | Purpose | File |
@@ -30,19 +32,23 @@ RootLayout (AuthProvider) → LayoutWrapper → /dashboard/* uses DashboardLayou
 | Auth hook | `src/contexts/AuthContext.tsx` — `useAuth()` with `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
 | Types | `src/types/index.ts` — `User`, `UserRole`, `Order`, `CoverageZone`, `CourierProfile` |
 | Firebase | `src/lib/firebase.ts` — singleton with `getApps()` pattern |
-| Styling | `src/app/globals.css` — custom component classes |
-| Icons | `src/components/icons/DashboardIcons.tsx` — all SVG icons |
-| Data | `src/lib/constants.ts` — `countries`, `judetByCountry` (extend locally for full regions) |
+| Styling | `src/app/globals.css` — custom component classes (`btn-primary`, `card`, `form-input`, `tab-menu`, `spinner`) |
+| Icons | `src/components/icons/DashboardIcons.tsx` — all SVG dashboard icons |
+| Data | `src/lib/constants.ts` — `countries`, `judetByCountry` (extend locally if full regions needed) |
+| Helpers | `src/utils/orderHelpers.ts` — `getNextOrderNumber()`, `formatOrderNumber()`, `formatClientName()` |
+| Help | `src/components/HelpCard.tsx` — reusable support card (email + WhatsApp) for all sub-pages |
 
 ### Firestore Collections
 | Collection | Document ID | Owner Field | Purpose |
 |------------|-------------|-------------|---------|
-| `users` | `{uid}` | `uid` | User profiles & roles (created on register) |
+| `users` | `{uid}` | `uid` | User profiles & roles + `serviciiOferite` array for couriers |
 | `zona_acoperire` | auto | `uid` | Courier coverage zones (multi-record) |
 | `tarife_curier` | auto | `uid` | Courier pricing (multi-record) |
-| `calendar_colectii` | auto | `courierId` | Courier availability dates |
+| `profil_client` | `{uid}` | — | Extended client profile (single doc per client) |
 | `profil_curier` | `{uid}` | — | Extended courier profile (single doc per courier) |
-| `comenzi` | auto | `uid_client` | Orders from clients |
+| `comenzi` | auto | `uid_client` | Orders (`orderNumber` field, `courierId` when accepted) |
+| `recenzii` | auto | `clientId` | Reviews from clients about couriers |
+| `counters` | `orderNumber` | — | Sequential order number counter (uses `runTransaction`) |
 | `transport_aeroport` | auto | `uid` | Airport transfer routes (courier-specific) |
 | `transport_persoane` | auto | `uid` | Person transport routes (courier-specific) |
 
@@ -52,7 +58,14 @@ const q = query(collection(db, 'zona_acoperire'), where('uid', '==', user.uid));
 const snapshot = await getDocs(q);
 ```
 
-**Firestore Rules**: All collections enforce owner-based access (`resource.data.uid == request.auth.uid`) — see [firestore.rules](../firestore.rules). Queries MUST filter by owner field client-side; Firestore rules only verify ownership on write operations.
+**Firestore Rules**: All collections enforce owner-based access. Couriers can read pending orders + their assigned orders. See FIRESTORE_STRUCTURE.md for complete security documentation. Queries MUST filter by owner field client-side.
+
+**Order Numbering**: Orders use sequential numbers starting at `141121` via `getNextOrderNumber()` (stored in `counters/orderNumber`). Display with `formatOrderNumber()` → `"CP141121"`. Fallback handles old orders without `orderNumber` field.
+
+**Service Name Normalization**: CRITICAL - Always compare service names case-insensitive (`.toLowerCase().trim()`):
+- Orders save as lowercase: `'colete'`, `'plicuri'`, `'persoane'`
+- Courier services save as capitalized: `'Colete'`, `'Plicuri'`, `'Persoane'`
+- All service matching MUST normalize both sides to lowercase
 
 ## Critical Patterns
 
@@ -144,18 +157,19 @@ Use type-safe `unknown` and check `instanceof Error` before accessing `.message`
 ### Color Palette
 - **Orange** (primary): `#f97316` — buttons, CTAs, courier accent
 - **Green** (secondary): `#34d399` — success, client accent
-- **Blue** (background): `#0f172a` → `slate-950` — dark theme base
-- Gradients: `bg-linear-to-br from-{color}-500/20 to-{color}-500/20`
 
 ## Conventions
-- **UI text**: Romanian | **Code/variables**: English
+- **UI text**: Romanian | **Code/variables**: English | **Comments**: English
 - **Path alias**: `@/*` → `./src/*`
 - **Flags**: `public/img/flag/{code}.svg` (lowercase country code)
 - **Firestore security**: Owner-based rules — `resource.data.uid == request.auth.uid`
-- **Extended regions**: Pages needing full region lists define local `judetByCountry` (see [zona-acoperire/page.tsx](../src/app/dashboard/curier/zona-acoperire/page.tsx))
-- **Firebase init**: Use singleton pattern with `getApps()` check to prevent re-initialization
+- **Extended regions**: Pages needing full region lists define local `judetByCountry` (see src/app/dashboard/curier/zona-acoperire/page.tsx line 39)
+- **Firebase init**: Singleton pattern with `getApps()` check to prevent re-initialization
 - **Client components**: All dashboard pages are `'use client'` due to auth hooks and state management
-- **HelpCard**: Standard help component imported into all dashboard sub-pages — provides WhatsApp/email support links with consistent styling
+- **HelpCard**: Standard help component imported into all dashboard sub-pages — provides WhatsApp/email support links with consistent styling (see `src/components/HelpCard.tsx`)
+- **Navigation pattern**: Client dashboard = single page with tiles | Courier dashboard = hub page with tile grid linking to dedicated sub-pages
+- **Images**: Use `next/image` with explicit width/height; flags are 24x18px typically
+- **Loading states**: Centered spinner with `animate-spin` + text feedback (see protected page template)
 
 ## Commands
 ```bash
