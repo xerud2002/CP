@@ -12,10 +12,12 @@ interface LayoutWrapperProps {
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const pathname = usePathname();
   
-  // Hide global Header/Footer on dashboard pages (they have their own headers)
+  // Hide global Header/Footer on dashboard pages, comanda page and auth pages (they have their own headers)
   const isDashboard = pathname?.startsWith('/dashboard');
+  const isComanda = pathname === '/comanda';
+  const isAuth = pathname?.startsWith('/login') || pathname?.startsWith('/register') || pathname?.startsWith('/forgot-password');
   
-  if (isDashboard) {
+  if (isDashboard || isComanda || isAuth) {
     return <>{children}</>;
   }
   

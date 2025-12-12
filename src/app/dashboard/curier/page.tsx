@@ -153,10 +153,14 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo/Brand - Mobile */}
           <Link href="/" className="flex items-center gap-1.5">
-            <span className="text-base sm:text-lg font-bold">
+            <span className="text-base sm:text-lg font-bold hidden sm:inline">
               <span className="text-orange-500">Partenerul</span>
               <span className="text-emerald-500">Perfect</span>
             </span>
+            {/* Mobile: Show only icon */}
+            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center sm:hidden">
+              <BoxIcon className="w-6 h-6 text-white" />
+            </div>
           </Link>
 
           {/* Right Side */}

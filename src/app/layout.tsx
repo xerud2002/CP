@@ -15,8 +15,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Curierul Perfect - Marketplace Curierat European",
-  description: "Platforma care conectează românii cu curieri de încredere din Europa. Trimite sau primește colete rapid și în siguranță.",
+  title: "Curierul Perfect - Transport Complet în Europa | Colete, Plicuri, Persoane, Mobilă",
+  description: "Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, transfer aeroport, platformă auto și tractări. Servicii rapide și sigure în 16+ țări.",
+  keywords: [
+    "transport colete Europa",
+    "curier România Europa",
+    "transport persoane",
+    "transport mobilă",
+    "transport electronice",
+    "transport animale",
+    "transfer aeroport",
+    "platformă auto",
+    "tractări auto",
+    "transport plicuri",
+    "curierat european",
+    "trimite colete Europa",
+    "marketplace curierat",
+  ],
+  openGraph: {
+    title: "Curierul Perfect - Transport Complet în Europa",
+    description: "Conectează-te cu curieri de încredere pentru transport: colete, plicuri, persoane, mobilă, electronice, animale și mai mult.",
+    type: "website",
+    locale: "ro_RO",
+  },
 };
 
 export default function RootLayout({

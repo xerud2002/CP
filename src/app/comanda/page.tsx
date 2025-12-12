@@ -26,11 +26,11 @@ const servicii = [
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
   },
   { 
-    id: 'mobila', 
-    name: 'Transport Mobilă', 
-    description: 'Mobilier și obiecte voluminoase',
-    color: 'from-amber-500 to-orange-500',
-    icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" /><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" /></svg>
+    id: 'persoane', 
+    name: 'Transport Persoane', 
+    description: 'Pasageri - călătorii în Europa',
+    color: 'from-rose-500 to-pink-500',
+    icon: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
   },
   { 
     id: 'electronice', 
@@ -47,20 +47,6 @@ const servicii = [
     icon: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
   },
   { 
-    id: 'persoane', 
-    name: 'Transport Persoane', 
-    description: 'Pasageri - călătorii în Europa',
-    color: 'from-rose-500 to-pink-500',
-    icon: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-  },
-  { 
-    id: 'aeroport', 
-    name: 'Transport Aeroport', 
-    description: 'Transfer la/de la aeroport',
-    color: 'from-cyan-500 to-blue-500',
-    icon: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
-  },
-  { 
     id: 'platforma', 
     name: 'Transport cu Platformă', 
     description: 'Vehicule și echipamente grele',
@@ -73,6 +59,20 @@ const servicii = [
     description: 'Tractări și asistență rutieră',
     color: 'from-orange-500 to-red-500',
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M5 17h-2a1 1 0 0 1-1-1v-5l3-3h14l3 3v5a1 1 0 0 1-1 1h-2" strokeLinecap="round" strokeLinejoin="round" /><circle cx="7" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" /><path d="m9 17 6-6" strokeLinecap="round" strokeLinejoin="round" /><path d="m15 11 4 4" strokeLinecap="round" strokeLinejoin="round" /><circle cx="17" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+  },
+  { 
+    id: 'aeroport', 
+    name: 'Transport Aeroport', 
+    description: 'Transfer la/de la aeroport',
+    color: 'from-cyan-500 to-blue-500',
+    icon: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+  },
+  { 
+    id: 'mobila', 
+    name: 'Transport Mobilă', 
+    description: 'Mobilier și obiecte voluminoase',
+    color: 'from-amber-500 to-orange-500',
+    icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" /><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" /></svg>
   },
 ];
 
@@ -382,36 +382,6 @@ function ComandaForm() {
       
       setMessage('✅ Comanda a fost trimisă cu succes! Vei primi oferte de la parteneri în 24-48 ore.');
       
-      // Resetează formularul și localStorage
-      setStep(1);
-      setSelectedService('');
-      setFormData({
-        nume: '',
-        email: '',
-        telefon: '',
-        tara_ridicare: 'RO',
-        judet_ridicare: '',
-        oras_ridicare: '',
-        adresa_ridicare: '',
-        tara_livrare: 'GB',
-        judet_livrare: '',
-        oras_livrare: '',
-        adresa_livrare: '',
-        greutate: '',
-        lungime: '',
-        latime: '',
-        inaltime: '',
-        cantitate: '1',
-        valoare_marfa: '',
-        descriere: '',
-        tip_programare: 'data_specifica',
-        data_ridicare: '',
-        data_ridicare_end: '',
-        optiuni: [],
-        tip_ofertanti: [],
-        observatii: '',
-      });
-      
       // Curăță localStorage
       try {
         localStorage.removeItem('comanda_step');
@@ -421,14 +391,14 @@ function ComandaForm() {
         console.error('Error clearing localStorage:', error);
       }
       
-      // Redirect după 3 secunde
+      // Redirect imediat la dashboard
       setTimeout(() => {
         if (user) {
           router.push('/dashboard/client');
         } else {
           router.push('/');
         }
-      }, 3000);
+      }, 1000);
     } catch (error) {
       console.error('❌ Error submitting order:', error);
       setMessage('❌ Eroare la trimiterea comenzii. Te rugăm să încerci din nou.');

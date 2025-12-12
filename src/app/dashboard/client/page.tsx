@@ -50,7 +50,7 @@ const mainNavTiles: NavTile[] = [
   {
     href: '/comanda',
     icon: BoxIcon,
-    title: 'Trimite Colet',
+    title: 'Comandă Transport',
     description: 'Găsește parteneri',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/10 hover:bg-orange-500/20',
@@ -76,10 +76,10 @@ const mainNavTiles: NavTile[] = [
     borderColor: 'border-emerald-500/20 hover:border-emerald-500/40',
   },
   {
-    href: '/dashboard/client/facturi',
-    icon: CreditCardIcon,
-    title: 'Facturi',
-    description: 'Plăți & istoricul',
+    href: '/dashboard/client/recenzii',
+    icon: StarIcon,
+    title: 'Recenzii',
+    description: 'Evaluează serviciile',
     color: 'text-violet-400',
     bgColor: 'bg-violet-500/10 hover:bg-violet-500/20',
     borderColor: 'border-violet-500/20 hover:border-violet-500/40',
@@ -128,16 +128,28 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
   onLogout: () => void;
 }) {
   return (
-    <header className="bg-slate-900/60 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
+    <header className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
-          {/* Logo/Brand - Mobile */}
-          <Link href="/" className="flex items-center gap-1.5">
-            <span className="text-base sm:text-lg font-bold">
-              <span className="text-orange-500">Curierul</span>
-              <span className="text-emerald-500">Perfect</span>
-            </span>
-          </Link>
+          {/* Left - Dashboard Title */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link 
+              href="/" 
+              className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+              title="Înapoi la pagina principală"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+            </Link>
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-500/20 flex items-center justify-center">
+              <BoxIcon className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
+            </div>
+            <div className="hidden sm:block">
+              <h1 className="text-base sm:text-lg font-bold text-white">Dashboard Client</h1>
+              <p className="text-xs text-gray-500">Bine ai revenit, {userName}!</p>
+            </div>
+          </div>
 
           {/* Right Side */}
           <div className="flex items-center gap-2 sm:gap-4">
@@ -152,7 +164,7 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
             </button>
 
             {/* User Avatar */}
-            <Link href="/dashboard/client/profil" className="flex items-center gap-2 sm:gap-3">
+            <Link href="/dashboard/client/profil" className="flex items-center gap-2 sm:gap-3 hover:bg-white/5 rounded-xl p-1.5 transition-all">
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center overflow-hidden shadow-lg shadow-emerald-500/25">
                 <Image src="/img/default-avatar.png" alt="Avatar" width={36} height={36} className="w-full h-full object-cover" />
               </div>
@@ -196,7 +208,7 @@ function WelcomeSection({ userName }: { userName: string }) {
             <h1 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">
               {greeting}, <span className="text-emerald-400">{userName}</span>!
             </h1>
-            <p className="text-gray-400 text-xs sm:text-base">Trimite colete în toată Europa cu parteneri verificați</p>
+            <p className="text-gray-400 text-xs sm:text-base">Transport în toată Europa cu parteneri verificați</p>
           </div>
 
           {/* Status Badges */}
@@ -242,7 +254,7 @@ function StatsSection() {
 }
 
 // Main Navigation Grid
-function MainNavigation() {
+function MainNavigation({ totalNotifications }: { totalNotifications: number }) {
   // Color mappings for hover gradients
   const gradientMap: Record<string, string> = {
     'text-orange-400': 'from-orange-500/20 to-amber-500/20',
@@ -279,6 +291,8 @@ function MainNavigation() {
           const gradient = gradientMap[tile.color] || 'from-slate-500/20 to-slate-500/20';
           const borderColor = borderColorMap[tile.color] || 'border-white/10 hover:border-white/20';
           const iconBg = iconBgMap[tile.color] || 'bg-slate-500/20';
+          const isComenziCard = tile.href === '/dashboard/client/comenzi';
+          const hasNotifications = isComenziCard && totalNotifications > 0;
           
           return (
             <Link
@@ -293,6 +307,16 @@ function MainNavigation() {
               {tile.badge && (
                 <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 bg-orange-500 text-white text-[8px] sm:text-[10px] font-bold rounded-full z-10">
                   {tile.badge}
+                </span>
+              )}
+              
+              {/* Notification Badge with Beam Effect */}
+              {hasNotifications && (
+                <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 z-10">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-5 w-5 bg-orange-500 items-center justify-center text-[9px] sm:text-[10px] font-bold text-white shadow-lg shadow-orange-500/50">
+                    {totalNotifications}
+                  </span>
                 </span>
               )}
               
@@ -385,6 +409,7 @@ export default function ClientDashboard() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [userNume, setUserNume] = useState<string | null>(null);
+  const [totalNotifications, setTotalNotifications] = useState(0);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {
@@ -415,6 +440,39 @@ export default function ClientDashboard() {
 
     if (user) {
       fetchUserData();
+    }
+  }, [user]);
+
+  // Fetch notifications from orders
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (!user) return;
+      
+      try {
+        const { collection, query, where, getDocs } = await import('firebase/firestore');
+        const q = query(
+          collection(db, 'comenzi'),
+          where('uid_client', '==', user.uid)
+        );
+        
+        const snapshot = await getDocs(q);
+        let total = 0;
+        
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const nrOferte = data.nrOferte || 0;
+          const nrMesajeNoi = data.nrMesajeNoi || 0;
+          total += nrOferte + nrMesajeNoi;
+        });
+        
+        setTotalNotifications(total);
+      } catch (error) {
+        console.error('❌ Eroare la încărcarea notificărilor:', error);
+      }
+    };
+
+    if (user) {
+      fetchNotifications();
     }
   }, [user]);
 
@@ -472,7 +530,7 @@ export default function ClientDashboard() {
         <StatsSection />
 
         {/* Main Navigation - Quick access to all sections */}
-        <MainNavigation />
+        <MainNavigation totalNotifications={totalNotifications} />
 
         {/* Orders and Activity Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-6">

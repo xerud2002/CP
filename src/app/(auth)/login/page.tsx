@@ -92,8 +92,8 @@ function LoginForm() {
           
           <p className="text-gray-400 text-lg mb-10 max-w-md">
             {isCurier 
-              ? 'Accesează dashboard-ul tău pentru a vedea comenzile disponibile pe rutele tale.'
-              : 'Verifică statusul coletelor tale și trimite noi pachete în toată Europa.'}
+              ? 'Accesează dashboard-ul și gestionează transporturi de colete, plicuri, persoane, mobilă, electronice, animale și servicii de platformă pe rutele tale europene.'
+              : 'Transport sigur în toată Europa: colete, plicuri, persoane, mobilă, electronice, animale, transfer aeroport, platformă și tractări auto.'}
           </p>
 
           {/* Stats */}
@@ -104,7 +104,7 @@ function LoginForm() {
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-white mb-1">50k+</div>
-              <div className="text-gray-500 text-sm">Colete livrate</div>
+              <div className="text-gray-500 text-sm">Transporturi finalizate</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-white mb-1">4.9★</div>

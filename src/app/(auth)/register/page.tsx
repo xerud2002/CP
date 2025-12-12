@@ -84,7 +84,7 @@ function RegisterForm() {
               </>
             ) : (
               <>
-                Trimite colete în<br />
+                Transporturi în<br />
                 <span className="text-gradient">toată Europa</span>
               </>
             )}
@@ -92,8 +92,8 @@ function RegisterForm() {
           
           <p className="text-gray-400 text-lg mb-10 max-w-md">
             {isCurier 
-              ? 'Alătură-te platformei și câștigă bani transportând colete pe rutele pe care le faci deja.'
-              : 'Conectează-te cu curieri de încredere și trimite pachete rapid și sigur în peste 16 țări.'}
+              ? 'Alătură-te platformei și câștigă bani transportând colete, plicuri, persoane, mobilă, electronice, animale și oferind servicii de platformă și tractări auto pe rutele pe care le faci deja.'
+              : 'Conectează-te cu curieri de încredere pentru transport complet: colete, plicuri, persoane, mobilă, electronice, animale, transfer aeroport, platformă și tractări auto în peste 16 țări europene.'}
           </p>
 
           {/* Features */}
@@ -141,7 +141,7 @@ function RegisterForm() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <span className="text-gray-300">Tracking în timp real al coletului</span>
+                  <span className="text-gray-300">Tracking în timp real al transporturilor</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center">
