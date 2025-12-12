@@ -8,7 +8,7 @@ Romanian courier marketplace connecting clients with couriers for European packa
 ### Role-Based Dashboards
 | Role | Path | Pattern |
 |------|------|---------|
-| `client` | `/dashboard/client` | Single-page with tab switching |
+| `client` | `/dashboard/client` | Single-page with tab switching (no sub-routes) |
 | `curier` | `/dashboard/curier` | Card grid → sub-pages: `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati`, `/servicii`, `/transport-aeroport`, `/transport-persoane` |
 | `admin` | `/dashboard/admin` | Admin panel |
 
@@ -22,6 +22,7 @@ RootLayout (AuthProvider) → LayoutWrapper → /dashboard/* uses DashboardLayou
 - `LayoutWrapper` (client component) checks `pathname.startsWith('/dashboard')` to conditionally exclude global Header/Footer
 - Dashboard pages render their own headers with back navigation
 - `(auth)` route group for login/register/forgot-password pages (no auth required)
+- `DashboardLayout` provides dark theme background with decorative gradients (orange/green)
 
 ### Key Files
 | Purpose | File |
@@ -42,12 +43,16 @@ RootLayout (AuthProvider) → LayoutWrapper → /dashboard/* uses DashboardLayou
 | `calendar_colectii` | auto | `courierId` | Courier availability dates |
 | `profil_curier` | `{uid}` | — | Extended courier profile (single doc per courier) |
 | `comenzi` | auto | `uid_client` | Orders from clients |
+| `transport_aeroport` | auto | `uid` | Airport transfer routes (courier-specific) |
+| `transport_persoane` | auto | `uid` | Person transport routes (courier-specific) |
 
 **Data Fetching Pattern**: Use `where()` filters + owner field for multi-tenant security:
 ```tsx
 const q = query(collection(db, 'zona_acoperire'), where('uid', '==', user.uid));
 const snapshot = await getDocs(q);
 ```
+
+**Firestore Rules**: All collections enforce owner-based access (`resource.data.uid == request.auth.uid`) — see [firestore.rules](../firestore.rules). Queries MUST filter by owner field client-side; Firestore rules only verify ownership on write operations.
 
 ## Critical Patterns
 
@@ -147,9 +152,10 @@ Use type-safe `unknown` and check `instanceof Error` before accessing `.message`
 - **Path alias**: `@/*` → `./src/*`
 - **Flags**: `public/img/flag/{code}.svg` (lowercase country code)
 - **Firestore security**: Owner-based rules — `resource.data.uid == request.auth.uid`
-- **Extended regions**: Pages needing full region lists define local `judetByCountry` (see `zona-acoperire/page.tsx`)
+- **Extended regions**: Pages needing full region lists define local `judetByCountry` (see [zona-acoperire/page.tsx](../src/app/dashboard/curier/zona-acoperire/page.tsx))
 - **Firebase init**: Use singleton pattern with `getApps()` check to prevent re-initialization
 - **Client components**: All dashboard pages are `'use client'` due to auth hooks and state management
+- **HelpCard**: Standard help component imported into all dashboard sub-pages — provides WhatsApp/email support links with consistent styling
 
 ## Commands
 ```bash

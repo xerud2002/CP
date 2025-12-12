@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,14 +11,23 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center mb-6">
-              <span className="text-xl font-bold">
-                <span className="text-orange-500">CurierulPerfect</span>
-                <span className="text-emerald-500">.ro</span>
-              </span>
+            <Link href="/" className="inline-flex items-center mb-6 group">
+              {/* Logo Image */}
+              <div className="relative">
+                <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-green-500 rounded-xl blur-md opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                <div className="relative w-11 h-11 bg-slate-900/50 rounded-xl flex items-center justify-center shadow-xl border border-white/10 group-hover:border-orange-500/30 group-hover:scale-105 transition-all overflow-hidden">
+                  <Image 
+                    src="/img/logo.png" 
+                    alt="Curierul Perfect Logo" 
+                    width={40} 
+                    height={40} 
+                    className="w-9 h-9 object-contain"
+                  />
+                </div>
+              </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
-              Platforma #1 care conectează românii din diaspora cu curieri verificați pentru transport sigur și rapid de colete în toată Europa.
+              Platforma #1 care conectează românii din diaspora cu transportatori verificați pentru colete, mobilă, persoane, animale și mutări complete în toată Europa.
             </p>
             
             {/* Social Media */}
@@ -90,7 +100,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/devino-curier" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/devino-partener" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -129,11 +139,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/urmarire-colet" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/servicii" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                  Urmărire colet
+                  Servicii transport
                 </Link>
               </li>
               <li>
@@ -192,7 +202,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h4 className="text-white font-semibold mb-1">Abonează-te la newsletter</h4>
-              <p className="text-gray-400 text-sm">Primește oferte exclusive și noutăți despre serviciile noastre.</p>
+              <p className="text-gray-400 text-sm">Primește oferte exclusive pentru transport colete, mobilă, persoane și multe altele.</p>
             </div>
             <form className="flex w-full md:w-auto gap-2">
               <input

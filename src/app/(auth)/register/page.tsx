@@ -133,7 +133,7 @@ function RegisterForm() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <span className="text-gray-300">Compară oferte de la mai mulți curieri</span>
+                  <span className="text-gray-300">Compară oferte de la mai mulți parteneri</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center">
@@ -184,7 +184,7 @@ function RegisterForm() {
               )}
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">
-              {isCurier ? 'Cont nou Curier' : 'Cont nou Client'}
+              {isCurier ? 'Cont nou Partener' : 'Cont nou Client'}
             </h2>
             <p className="text-gray-400">
               Creează-ți contul gratuit în câteva secunde
@@ -309,12 +309,12 @@ function RegisterForm() {
           {/* Switch Role */}
           <div className="mt-4 text-center">
             <p className="text-gray-500 text-sm">
-              {isCurier ? 'Vrei să trimiți colete?' : 'Ești curier?'}{' '}
+              {isCurier ? 'Vrei să trimiți colete?' : 'Ești partener de transport?'}{' '}
               <Link 
                 href={`/register?role=${isCurier ? 'client' : 'curier'}`}
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                {isCurier ? 'Înregistrează-te ca client' : 'Înregistrează-te ca curier'}
+                {isCurier ? 'Înregistrează-te ca client' : 'Înregistrează-te ca partener'}
               </Link>
             </p>
           </div>

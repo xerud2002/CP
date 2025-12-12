@@ -51,13 +51,24 @@ service cloud.firestore {
       allow delete: if isAuthenticated() && userId == request.auth.uid;
     }
     
+    // Profil client collection
+    match /profil_client/{userId} {
+      // Clients can read/write their own profile
+      allow read: if isAuthenticated() && userId == request.auth.uid;
+      allow create: if isAuthenticated() && userId == request.auth.uid;
+      allow update: if isAuthenticated() && userId == request.auth.uid;
+      allow delete: if isAuthenticated() && userId == request.auth.uid;
+    }
+    
     // Comenzi collection
     match /comenzi/{docId} {
-      // Allow authenticated users to read orders (query filtering done client-side)
+      // Clients can read/write their own orders
+      // Couriers can read all orders to see available work
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAuthenticated();
-      allow delete: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.uid_client == request.auth.uid;
+      allow update: if isAuthenticated() && 
+        (resource.data.uid_client == request.auth.uid || resource.data.courierId == request.auth.uid);
+      allow delete: if isAuthenticated() && resource.data.uid_client == request.auth.uid;
     }
     
     // Transport aeroport collection

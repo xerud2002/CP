@@ -80,7 +80,7 @@ function LoginForm() {
             {isCurier ? (
               <>
                 Bine ai revenit,<br />
-                <span className="text-gradient">Curier!</span>
+                <span className="text-gradient">Partener!</span>
               </>
             ) : (
               <>
@@ -141,7 +141,7 @@ function LoginForm() {
               )}
             </div>
             <h2 className="text-2xl font-bold text-white mb-2">
-              {isCurier ? 'Autentificare Curier' : 'Autentificare Client'}
+              {isCurier ? 'Autentificare Partener' : 'Autentificare Client'}
             </h2>
             <p className="text-gray-400">
               Introdu datele tale pentru a continua
@@ -261,12 +261,12 @@ function LoginForm() {
           {/* Switch Role */}
           <div className="mt-4 text-center">
             <p className="text-gray-500 text-sm">
-              {isCurier ? 'Ești client?' : 'Ești curier?'}{' '}
+              {isCurier ? 'Ești client?' : 'Ești partener de transport?'}{' '}
               <Link 
                 href={`/login?role=${isCurier ? 'client' : 'curier'}`}
                 className="text-gray-400 hover:text-white transition-colors"
               >
-                {isCurier ? 'Autentifică-te ca client' : 'Autentifică-te ca curier'}
+                {isCurier ? 'Autentifică-te ca client' : 'Autentifică-te ca partener'}
               </Link>
             </p>
           </div>

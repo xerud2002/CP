@@ -51,7 +51,7 @@ const mainNavTiles: NavTile[] = [
     href: '/comanda',
     icon: BoxIcon,
     title: 'Trimite Colet',
-    description: 'Găsește curieri',
+    description: 'Găsește parteneri',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/10 hover:bg-orange-500/20',
     borderColor: 'border-orange-500/20 hover:border-orange-500/40',
@@ -196,7 +196,7 @@ function WelcomeSection({ userName }: { userName: string }) {
             <h1 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">
               {greeting}, <span className="text-emerald-400">{userName}</span>!
             </h1>
-            <p className="text-gray-400 text-xs sm:text-base">Trimite colete în toată Europa cu curieri verificați</p>
+            <p className="text-gray-400 text-xs sm:text-base">Trimite colete în toată Europa cu parteneri verificați</p>
           </div>
 
           {/* Status Badges */}

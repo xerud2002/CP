@@ -154,7 +154,7 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
           {/* Logo/Brand - Mobile */}
           <Link href="/" className="flex items-center gap-1.5">
             <span className="text-base sm:text-lg font-bold">
-              <span className="text-orange-500">Curierul</span>
+              <span className="text-orange-500">Partenerul</span>
               <span className="text-emerald-500">Perfect</span>
             </span>
           </Link>
@@ -178,7 +178,7 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
               </div>
               <div className="hidden sm:block">
                 <p className="text-sm font-medium text-white">{userName}</p>
-                <p className="text-xs text-emerald-400">Curier verificat ✓</p>
+                <p className="text-xs text-emerald-400">Partener verificat ✓</p>
               </div>
             </Link>
 

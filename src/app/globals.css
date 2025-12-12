@@ -333,3 +333,82 @@ body {
 .animate-scroll-left {
   animation: scroll-left 30s linear infinite;
 }
+/* Country cards fade in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   DATE PICKER STYLING
+   ======================================== */
+/* Modern date input styling with dark theme */
+input[type="date"] {
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  filter: invert(0.7);
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  filter: invert(0.9);
+}
+
+/* Calendar popup dark theme styling */
+input[type="date"]::-webkit-datetime-edit {
+  padding-left: 0;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: white;
+  padding: 0 2px;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field:focus,
+input[type="date"]::-webkit-datetime-edit-day-field:focus,
+input[type="date"]::-webkit-datetime-edit-year-field:focus {
+  background: rgba(249, 115, 22, 0.2);
+  color: #fb923c;
+  outline: none;
+  border-radius: 4px;
+}
+
+/* Ensure dark calendar popup in supported browsers */
+input[type="date"]::-webkit-calendar-picker {
+  color-scheme: dark;
+  background-color: #1e293b;
+}
+
+/* Hide native date picker when using custom calendar */
+input[type="date"].hidden-native::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
