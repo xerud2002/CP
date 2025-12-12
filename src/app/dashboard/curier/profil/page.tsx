@@ -81,6 +81,87 @@ const countryTaxInfo: Record<string, {
   ie: { taxLabel: 'VAT Number', taxPlaceholder: 'IE1234567T', regLabel: 'CRO Number', regPlaceholder: '123456', bankType: 'iban', ibanPlaceholder: 'IE29 AIBK 9311 5212 3456 78' },
 };
 
+// Tax info for individuals (Persoană Fizică / Sole Trader)
+const countryTaxInfoPF: Record<string, { 
+  taxLabel: string; 
+  taxPlaceholder: string; 
+  regLabel: string; 
+  regPlaceholder: string; 
+  bankType: 'iban' | 'uk'; 
+  ibanPlaceholder?: string;
+  sortCodePlaceholder?: string;
+  accountNumberPlaceholder?: string;
+}> = {
+  ro: { taxLabel: 'CNP', taxPlaceholder: '1234567890123', regLabel: 'CIF (opțional)', regPlaceholder: 'RO12345678', bankType: 'iban', ibanPlaceholder: 'RO49AAAA1B31007593840000' },
+  gb: { taxLabel: 'UTR (Unique Taxpayer Reference)', taxPlaceholder: '1234567890', regLabel: 'National Insurance Number', regPlaceholder: 'QQ123456C', bankType: 'uk', sortCodePlaceholder: '12-34-56', accountNumberPlaceholder: '12345678' },
+  de: { taxLabel: 'Steuernummer', taxPlaceholder: '12/345/67890', regLabel: 'Steuer-ID', regPlaceholder: '12 345 678 901', bankType: 'iban', ibanPlaceholder: 'DE89 3704 0044 0532 0130 00' },
+  it: { taxLabel: 'Codice Fiscale', taxPlaceholder: 'RSSMRA80A01H501U', regLabel: 'Partita IVA (opțional)', regPlaceholder: 'IT12345678901', bankType: 'iban', ibanPlaceholder: 'IT60 X054 2811 1010 0000 0123 456' },
+  es: { taxLabel: 'NIF Personal', taxPlaceholder: '12345678Z', regLabel: 'N° Seguridad Social', regPlaceholder: '123456789012', bankType: 'iban', ibanPlaceholder: 'ES91 2100 0418 4502 0005 1332' },
+  fr: { taxLabel: 'N° SIRET', taxPlaceholder: '123 456 789 00012', regLabel: 'N° SIREN', regPlaceholder: '123 456 789', bankType: 'iban', ibanPlaceholder: 'FR76 3000 6000 0112 3456 7890 189' },
+  at: { taxLabel: 'Steuernummer', taxPlaceholder: '12-345/6789', regLabel: 'Sozialversicherungsnummer', regPlaceholder: '1234 010180', bankType: 'iban', ibanPlaceholder: 'AT61 1904 3002 3457 3201' },
+  be: { taxLabel: 'N° National / Rijksregisternummer', taxPlaceholder: '12.34.56-789.01', regLabel: 'N° TVA (opțional)', regPlaceholder: 'BE0123456789', bankType: 'iban', ibanPlaceholder: 'BE68 5390 0754 7034' },
+  nl: { taxLabel: 'BSN (Burgerservicenummer)', taxPlaceholder: '123456789', regLabel: 'KVK-nummer (opțional)', regPlaceholder: '12345678', bankType: 'iban', ibanPlaceholder: 'NL91 ABNA 0417 1643 00' },
+  gr: { taxLabel: 'ΑΦΜ (AFM) Προσωπικό', taxPlaceholder: '123456789', regLabel: 'ΑΜΚΑ', regPlaceholder: '12345678901', bankType: 'iban', ibanPlaceholder: 'GR16 0110 1250 0000 0001 2300 695' },
+  pt: { taxLabel: 'NIF Pessoal', taxPlaceholder: '123456789', regLabel: 'NISS', regPlaceholder: '12345678901', bankType: 'iban', ibanPlaceholder: 'PT50 0002 0123 1234 5678 9015 4' },
+  ie: { taxLabel: 'PPS Number', taxPlaceholder: '1234567T', regLabel: 'Tax Reference Number (opțional)', regPlaceholder: '1234567T', bankType: 'iban', ibanPlaceholder: 'IE29 AIBK 9311 5212 3456 78' },
+};
+
+// Business type labels per country
+const getBusinessTypeLabels = (countryCode: string) => {
+  const labels: Record<string, { firma: { title: string; subtitle: string }; pf: { title: string; subtitle: string } }> = {
+    ro: { 
+      firma: { title: 'Firmă', subtitle: 'SRL, SA, PFA, II, IF' },
+      pf: { title: 'Persoană Fizică', subtitle: 'Fără firmă înregistrată' }
+    },
+    gb: { 
+      firma: { title: 'Limited Company', subtitle: 'Ltd, PLC, LLP' },
+      pf: { title: 'Sole Trader', subtitle: 'Self-employed individual' }
+    },
+    de: { 
+      firma: { title: 'Unternehmen', subtitle: 'GmbH, AG, UG' },
+      pf: { title: 'Einzelunternehmer', subtitle: 'Freiberufler/Selbstständig' }
+    },
+    it: { 
+      firma: { title: 'Società', subtitle: 'SRL, SPA, SRLS' },
+      pf: { title: 'Ditta Individuale', subtitle: 'Imprenditore individuale' }
+    },
+    es: { 
+      firma: { title: 'Sociedad', subtitle: 'SL, SA, SLU' },
+      pf: { title: 'Autónomo', subtitle: 'Trabajador autónomo' }
+    },
+    fr: { 
+      firma: { title: 'Société', subtitle: 'SARL, SAS, EURL' },
+      pf: { title: 'Auto-entrepreneur', subtitle: 'Micro-entreprise' }
+    },
+    at: { 
+      firma: { title: 'Gesellschaft', subtitle: 'GmbH, AG, OG' },
+      pf: { title: 'Einzelunternehmer', subtitle: 'EPU/Freiberufler' }
+    },
+    be: { 
+      firma: { title: 'Vennootschap', subtitle: 'BV, NV, CV' },
+      pf: { title: 'Zelfstandige', subtitle: 'Eenmanszaak' }
+    },
+    nl: { 
+      firma: { title: 'Bedrijf', subtitle: 'BV, NV, VOF' },
+      pf: { title: 'ZZP\'er', subtitle: 'Eenmanszaak' }
+    },
+    gr: { 
+      firma: { title: 'Εταιρεία', subtitle: 'ΕΠΕ, ΑΕ, ΙΚΕ' },
+      pf: { title: 'Ατομική Επιχείρηση', subtitle: 'Ελεύθερος επαγγελματίας' }
+    },
+    pt: { 
+      firma: { title: 'Sociedade', subtitle: 'Lda, SA, Unipessoal' },
+      pf: { title: 'Empresário Individual', subtitle: 'Trabalhador independente' }
+    },
+    ie: { 
+      firma: { title: 'Limited Company', subtitle: 'Ltd, PLC, DAC' },
+      pf: { title: 'Sole Trader', subtitle: 'Self-employed' }
+    },
+  };
+  
+  return labels[countryCode] || labels.ro;
+};
+
 const phonePrefixes = [
   { code: 'ro', name: '+40', flag: '/img/flag/ro.svg' },
   { code: 'gb', name: '+44', flag: '/img/flag/gb.svg' },
@@ -1014,9 +1095,9 @@ function ProfilCurierContent() {
                       <div className="flex flex-col items-center gap-1 sm:gap-2">
                         <span className="text-2xl sm:text-3xl">🏢</span>
                         <span className={`font-medium text-xs sm:text-base ${profile.tipBusiness === 'firma' ? 'text-purple-400' : 'text-gray-300'}`}>
-                          Firmă
+                          {getBusinessTypeLabels(profile.taraSediu).firma.title}
                         </span>
-                        <span className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">SRL, SA, PFA, II, IF</span>
+                        <span className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">{getBusinessTypeLabels(profile.taraSediu).firma.subtitle}</span>
                       </div>
                     </button>
                     <button
@@ -1031,9 +1112,9 @@ function ProfilCurierContent() {
                       <div className="flex flex-col items-center gap-1 sm:gap-2">
                         <span className="text-2xl sm:text-3xl">👤</span>
                         <span className={`font-medium text-xs sm:text-base ${profile.tipBusiness === 'pf' ? 'text-blue-400' : 'text-gray-300'}`}>
-                          Persoană Fizică
+                          {getBusinessTypeLabels(profile.taraSediu).pf.title}
                         </span>
-                        <span className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">Fără firmă înregistrată</span>
+                        <span className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">{getBusinessTypeLabels(profile.taraSediu).pf.subtitle}</span>
                       </div>
                     </button>
                   </div>
@@ -1119,32 +1200,44 @@ function ProfilCurierContent() {
                   {/* CUI/VAT and Registration */}
                   <div>
                     <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
-                      {countryTaxInfo[profile.taraSediu]?.taxLabel || 'CUI / CIF'} *
+                      {profile.tipBusiness === 'firma' 
+                        ? (countryTaxInfo[profile.taraSediu]?.taxLabel || 'CUI / CIF')
+                        : (countryTaxInfoPF[profile.taraSediu]?.taxLabel || 'CNP')
+                      } *
                     </label>
                     <input
                       type="text"
                       value={profile.cui}
                       onChange={(e) => setProfile({ ...profile, cui: e.target.value })}
                       className="form-input text-sm sm:text-base"
-                      placeholder={countryTaxInfo[profile.taraSediu]?.taxPlaceholder || 'RO12345678'}
+                      placeholder={profile.tipBusiness === 'firma'
+                        ? (countryTaxInfo[profile.taraSediu]?.taxPlaceholder || 'RO12345678')
+                        : (countryTaxInfoPF[profile.taraSediu]?.taxPlaceholder || '1234567890123')
+                      }
                     />
                   </div>
 
                   <div>
                     <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
-                      {countryTaxInfo[profile.taraSediu]?.regLabel || 'Nr. înregistrare'}
+                      {profile.tipBusiness === 'firma'
+                        ? (countryTaxInfo[profile.taraSediu]?.regLabel || 'Nr. înregistrare')
+                        : (countryTaxInfoPF[profile.taraSediu]?.regLabel || 'CIF (opțional)')
+                      }
                     </label>
                     <input
                       type="text"
                       value={profile.nrInmatriculare}
                       onChange={(e) => setProfile({ ...profile, nrInmatriculare: e.target.value })}
                       className="form-input text-sm sm:text-base"
-                      placeholder={countryTaxInfo[profile.taraSediu]?.regPlaceholder || 'J40/1234/2024'}
+                      placeholder={profile.tipBusiness === 'firma'
+                        ? (countryTaxInfo[profile.taraSediu]?.regPlaceholder || 'J40/1234/2024')
+                        : (countryTaxInfoPF[profile.taraSediu]?.regPlaceholder || 'RO12345678')
+                      }
                     />
                   </div>
 
                   {/* Banking Section - Improved Mobile */}
-                  {countryTaxInfo[profile.taraSediu]?.bankType === 'uk' ? (
+                  {(profile.tipBusiness === 'firma' ? countryTaxInfo[profile.taraSediu]?.bankType : countryTaxInfoPF[profile.taraSediu]?.bankType) === 'uk' ? (
                     // UK: Sort Code + Account Number
                     <>
                       <div>
@@ -1154,7 +1247,10 @@ function ProfilCurierContent() {
                           value={profile.sortCode}
                           onChange={(e) => setProfile({ ...profile, sortCode: e.target.value })}
                           className="form-input text-sm sm:text-base font-mono"
-                          placeholder={countryTaxInfo[profile.taraSediu]?.sortCodePlaceholder || '12-34-56'}
+                          placeholder={profile.tipBusiness === 'firma' 
+                            ? (countryTaxInfo[profile.taraSediu]?.sortCodePlaceholder || '12-34-56')
+                            : (countryTaxInfoPF[profile.taraSediu]?.sortCodePlaceholder || '12-34-56')
+                          }
                         />
                       </div>
                       <div>
@@ -1164,7 +1260,10 @@ function ProfilCurierContent() {
                           value={profile.accountNumber}
                           onChange={(e) => setProfile({ ...profile, accountNumber: e.target.value })}
                           className="form-input text-sm sm:text-base font-mono"
-                          placeholder={countryTaxInfo[profile.taraSediu]?.accountNumberPlaceholder || '12345678'}
+                          placeholder={profile.tipBusiness === 'firma'
+                            ? (countryTaxInfo[profile.taraSediu]?.accountNumberPlaceholder || '12345678')
+                            : (countryTaxInfoPF[profile.taraSediu]?.accountNumberPlaceholder || '12345678')
+                          }
                         />
                       </div>
                     </>
@@ -1177,7 +1276,10 @@ function ProfilCurierContent() {
                         value={profile.iban}
                         onChange={(e) => setProfile({ ...profile, iban: e.target.value })}
                         className="form-input text-sm sm:text-base font-mono"
-                        placeholder={countryTaxInfo[profile.taraSediu]?.ibanPlaceholder || 'RO49 AAAA 1B31 0075 9384 0000'}
+                        placeholder={profile.tipBusiness === 'firma'
+                          ? (countryTaxInfo[profile.taraSediu]?.ibanPlaceholder || 'RO49 AAAA 1B31 0075 9384 0000')
+                          : (countryTaxInfoPF[profile.taraSediu]?.ibanPlaceholder || 'RO49 AAAA 1B31 0075 9384 0000')
+                        }
                       />
                     </div>
                   )}
