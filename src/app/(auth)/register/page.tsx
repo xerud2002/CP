@@ -3,6 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types';
 
@@ -160,14 +161,29 @@ function RegisterForm() {
       {/* Right Side - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-slate-950">
         <div className="w-full max-w-md">
-          {/* Mobile Logo */}
-          <Link href="/" className="flex lg:hidden items-center justify-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
+          {/* Logo - Mobile & Desktop */}
+          <Link href="/" className="flex items-center justify-center gap-3 sm:gap-4 mb-8 group">
+            {/* Logo Image */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-green-500 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity"></div>
+              <div className="relative w-12 h-12 sm:w-14 sm:h-14 bg-slate-900/50 rounded-xl flex items-center justify-center shadow-xl border border-white/10 group-hover:border-orange-500/30 group-hover:scale-105 transition-all overflow-hidden">
+                <Image 
+                  src="/img/logo.png" 
+                  alt="Curierul Perfect Logo" 
+                  width={50} 
+                  height={50} 
+                  className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+                  priority
+                />
+              </div>
             </div>
-            <span className="text-xl font-bold text-white">Curierul Perfect</span>
+            {/* Text */}
+            <div className="flex flex-col">
+              <span className="text-xl sm:text-2xl font-black tracking-tight leading-none">
+                <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
+              </span>
+              <span className="text-[10px] sm:text-xs text-gray-500 font-medium tracking-wider uppercase">Transport Europa</span>
+            </div>
           </Link>
 
           {/* Header */}
