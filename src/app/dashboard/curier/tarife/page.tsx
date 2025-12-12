@@ -923,6 +923,30 @@ export default function TarifePracticatePage() {
                 </div>
               </div>
 
+              {/* Platforma - Submit Button inline */}
+              {tipServiciu === 'Platforma' && (
+                <button
+                  type="submit"
+                  disabled={saving || !selectedCountry}
+                  className="h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  {saving ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <span>Se salvează...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 5v14" />
+                        <path d="M5 12h14" />
+                      </svg>
+                      <span>Adaugă</span>
+                    </>
+                  )}
+                </button>
+              )}
+
               {/* Animale - Preț per animal pe linia principală */}
               {tipServiciu === 'Animale' && (
                 <>
@@ -1264,27 +1288,6 @@ export default function TarifePracticatePage() {
                     </div>
                   </div>
                   
-                  {/* Submit Button for Platforma */}
-                  <button
-                    type="submit"
-                    disabled={saving || !selectedCountry}
-                    className="w-full mt-4 h-12 px-5 bg-linear-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    {saving ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        <span>Se salvează...</span>
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M12 5v14" />
-                          <path d="M5 12h14" />
-                        </svg>
-                        <span>Adaugă</span>
-                      </>
-                    )}
-                  </button>
                 </div>
               )}
 
