@@ -2,7 +2,7 @@
  * Utility functions for order display and formatting
  */
 
-import { doc, getDoc, setDoc, updateDoc, runTransaction } from 'firebase/firestore';
+import { doc, runTransaction } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 /**

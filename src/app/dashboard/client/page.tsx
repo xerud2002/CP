@@ -11,7 +11,6 @@ import HelpCard from '@/components/HelpCard';
 import {
   UserIcon,
   BoxIcon,
-  CreditCardIcon,
   ChatIcon,
   PackageIcon,
   TruckIcon,
@@ -135,14 +134,15 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
             {/* Logo Image */}
             <div className="relative">
-              <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-green-500 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity"></div>
-              <div className="relative w-9 h-9 sm:w-10 sm:h-10 bg-slate-900/50 rounded-xl flex items-center justify-center shadow-xl border border-white/10 group-hover:border-orange-500/30 group-hover:scale-105 transition-all overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/15 via-amber-500/10 to-emerald-500/10 rounded-xl blur-2xl opacity-70 group-hover:opacity-90 transition-opacity"></div>
+              <div className="relative w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-slate-800/95 via-slate-850/95 to-slate-900/95 backdrop-blur-md rounded-xl flex items-center justify-center shadow-2xl border border-orange-500/20 group-hover:border-orange-500/40 group-hover:scale-105 transition-all overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-emerald-500/5"></div>
                 <Image 
                   src="/img/logo.png" 
                   alt="Curierul Perfect Logo" 
                   width={36} 
                   height={36} 
-                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain"
+                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain relative z-10"
                 />
               </div>
             </div>
@@ -201,10 +201,10 @@ function WelcomeSection({ userName }: { userName: string }) {
   const greeting = getGreeting();
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-white/10 p-4 sm:p-6">
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/70 via-slate-800/50 to-slate-900/70 backdrop-blur-sm border border-orange-500/10 p-4 sm:p-6">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-emerald-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-orange-500/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-orange-500/8 to-amber-500/5 rounded-full blur-3xl" />
 
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2">
@@ -240,7 +240,7 @@ function StatsSection({ totalOrders, statusCounts }: { totalOrders: number; stat
       {stats.map((stat, index) => {
         const IconComponent = stat.icon;
         return (
-          <div key={index} className={`bg-slate-900/40 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-5 border ${stat.borderColor}`}>
+          <div key={index} className={`bg-gradient-to-br from-slate-900/50 via-slate-800/40 to-slate-900/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-5 border ${stat.borderColor} hover:border-opacity-50 transition-all`}>
             <div className="flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-4 text-center sm:text-left">
               <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${stat.bgColor} flex items-center justify-center shrink-0`}>
                 <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 ${stat.color}`} />
@@ -302,7 +302,7 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
+              className={`group relative bg-gradient-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
             >
               {/* Hover gradient overlay */}
               <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>

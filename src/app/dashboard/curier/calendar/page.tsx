@@ -6,7 +6,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { ArrowLeftIcon, CloseIcon, CalendarIcon, TrashIcon } from '@/components/icons/DashboardIcons';
-import HelpCard from '@/components/HelpCard';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp, orderBy, writeBatch } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 

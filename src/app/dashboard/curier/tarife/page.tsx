@@ -1295,7 +1295,6 @@ export default function TarifePracticatePage() {
               {/* Price Input - Dynamic based on service type */}
               {tipServiciu && tipServiciu !== 'Animale' && tipServiciu !== 'Platforma' && (() => {
                 const currentService = serviceTypes.find(s => s.value === tipServiciu);
-                const currencySymbol = selectedCountry?.name === 'Anglia' ? '£' : '€';
                 const showKgM3Toggle = currentService?.defaultUnit === 'kg' && !currentService?.unitLabel;
                 // Dynamic unit label - uses current unitType for services with kg/m³ toggle
                 const unitLabel = showKgM3Toggle 
@@ -1647,9 +1646,6 @@ export default function TarifePracticatePage() {
                             camion: 'Camion',
                             tractor: 'Tractor',
                           };
-                          
-                          // Currency based on country
-                          const currencySymbol = country === 'Anglia' ? '£' : '€';
                           
                           return (
                             <div key={t.id} className="p-3 hover:bg-slate-700/30 transition-colors">

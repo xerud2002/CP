@@ -5,45 +5,6 @@ import Link from 'next/link';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
 import { countries } from '@/lib/constants';
 
-const features = [
-  {
-    image: '/img/curieriinostri.png',
-    title: 'Curieri Verificați',
-    description: 'Toți curierii noștri trec printr-un proces riguros de verificare. Sunt profesioniști cu experiență în transport internațional.',
-    gradient: 'from-blue-500/20 to-cyan-500/20',
-  },
-  {
-    image: '/img/asigurare.png',
-    title: 'Prețuri Competitive',
-    description: 'Compară ofertele de la transportatori și alege cea mai bună opțiune. Plătești doar prețul negociat direct.',
-    gradient: 'from-green-500/20 to-emerald-500/20',
-  },
-  {
-    image: '/img/door2door.png',
-    title: 'Door to Door',
-    description: 'Ridicăm coletul de la ușa ta și îl livrăm direct la destinație. Fără cozi, fără așteptări.',
-    gradient: 'from-orange-500/20 to-amber-500/20',
-  },
-  {
-    image: '/img/track.png',
-    title: 'Comunicare Directă',
-    description: 'Contactează direct transportatorul tău. Primești confirmări și actualizări în fiecare etapă.',
-    gradient: 'from-purple-500/20 to-pink-500/20',
-  },
-  {
-    image: '/img/heretohelp.png',
-    title: 'Suport Non-Stop',
-    description: 'Echipa noastră de suport îți răspunde 24/7 pe WhatsApp, telefon sau email.',
-    gradient: 'from-red-500/20 to-rose-500/20',
-  },
-  {
-    image: '/img/pets.png',
-    title: 'Transport Special',
-    description: 'Transportăm și animale de companie, obiecte fragile sau colete voluminoase cu grijă maximă.',
-    gradient: 'from-teal-500/20 to-cyan-500/20',
-  },
-];
-
 const testimonials = [
   {
     company: 'Express Curier SRL',
@@ -100,13 +61,6 @@ const testimonials = [
     reviewCount: 3,
     date: '20 noiembrie 2025',
   },
-];
-
-const popularRoutes = [
-  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Anglia', toFlag: '/img/flag/gb.svg', toCode: 'GB', price: 'de la £25', time: '3-5 zile' },
-  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Germania', toFlag: '/img/flag/de.svg', toCode: 'DE', price: 'de la 20€', time: '2-4 zile' },
-  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Italia', toFlag: '/img/flag/it.svg', toCode: 'IT', price: 'de la 22€', time: '2-4 zile' },
-  { from: 'România', fromFlag: '/img/flag/ro.svg', to: 'Spania', toFlag: '/img/flag/es.svg', toCode: 'ES', price: 'de la 28€', time: '3-5 zile' },
 ];
 
 export default function Home() {
