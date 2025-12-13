@@ -884,11 +884,25 @@ export default function ComenziCurierPage() {
                           <span className="text-emerald-300 font-semibold text-xs">{formatClientName(order.clientName)}</span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-700/40 rounded-lg border border-white/10">
-                        <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        <span className="text-gray-400 text-[10px] font-mono">#{formatOrderNumber(order.orderNumber || order.id)}</span>
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-700/40 rounded-lg border border-white/10">
+                          <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                          </svg>
+                          <span className="text-gray-400 text-[10px] font-mono">#{formatOrderNumber(order.orderNumber || order.id)}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                            <ServiceIcon service={order.tipColet} className="w-3 h-3 text-emerald-400" />
+                            <span className="text-emerald-300 text-[9px] font-semibold capitalize">{order.tipColet}</span>
+                          </div>
+                          <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                            <svg className="w-3 h-3 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                            <span className="text-blue-300 text-[9px] font-semibold">{order.greutate} kg</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     
@@ -1112,11 +1126,25 @@ export default function ComenziCurierPage() {
                           <span className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${statusLabels[order.status].bg} ${statusLabels[order.status].color} border ${statusLabels[order.status].bg.replace('/20', '/30')}`}>
                             {statusLabels[order.status].label}
                           </span>
-                          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-700/30 rounded-lg border border-white/5">
-                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                            <span className="text-gray-400 text-sm font-mono">#{formatOrderNumber(order.orderNumber || order.id)}</span>
+                          <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-700/30 rounded-lg border border-white/5">
+                              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                              </svg>
+                              <span className="text-gray-400 text-sm font-mono">#{formatOrderNumber(order.orderNumber || order.id)}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                                <ServiceIcon service={order.tipColet} className="w-3.5 h-3.5 text-emerald-400" />
+                                <span className="text-emerald-300 text-xs font-semibold capitalize">{order.tipColet}</span>
+                              </div>
+                              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                                <svg className="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                                </svg>
+                                <span className="text-blue-300 text-xs font-semibold">{order.greutate} kg</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
