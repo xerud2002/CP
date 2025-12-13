@@ -894,8 +894,8 @@ export default function ComenziCurierPage() {
                           className="rounded shrink-0"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-[9px] text-green-400/70 font-medium uppercase">Ridicare din</p>
-                          <p className="text-green-300 font-semibold text-xs truncate">{order.expeditorJudet}, {order.expeditorTara}</p>
+                          <p className="text-[9px] text-green-400/70 font-medium uppercase">Oraș/localitate</p>
+                          <p className="text-green-300 font-semibold text-xs truncate">{order.oras_ridicare || order.expeditorJudet}</p>
                         </div>
                       </div>
                       <div className="flex justify-center">
@@ -919,8 +919,8 @@ export default function ComenziCurierPage() {
                           className="rounded shrink-0"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-[9px] text-orange-400/70 font-medium uppercase">Livrare în</p>
-                          <p className="text-orange-300 font-semibold text-xs truncate">{order.destinatarJudet}, {order.destinatarTara}</p>
+                          <p className="text-[9px] text-orange-400/70 font-medium uppercase">Oraș/localitate</p>
+                          <p className="text-orange-300 font-semibold text-xs truncate">{order.oras_livrare || order.destinatarJudet}</p>
                         </div>
                       </div>
                     </div>
@@ -932,9 +932,8 @@ export default function ComenziCurierPage() {
                         <span className="text-emerald-300 text-[9px] font-semibold capitalize">{order.tipColet}</span>
                       </div>
                       <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                        <svg className="w-3 h-3 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m1 0v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M10 11v6m4-6v6"/>
+                        <svg className="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M7 4V2h10v2h3c.55 0 1 .45 1 1v3c0 .55-.45 1-1 1h-.88l-1.62 12.16c-.07.54-.52.92-1.06.92H7.56c-.54 0-.99-.38-1.06-.92L4.88 9H4c-.55 0-1-.45-1-1V5c0-.55.45-1 1-1h3zm2 0h6V2H9v2zm-3.5 5h13l-1.5 11h-10l-1.5-11z"/>
                         </svg>
                         <span className="text-blue-300 text-[9px] font-semibold">{order.greutate} kg</span>
                       </div>
@@ -1138,9 +1137,8 @@ export default function ComenziCurierPage() {
                             <span className="text-emerald-300 text-xs font-semibold capitalize">{order.tipColet}</span>
                           </div>
                           <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                            <svg className="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m1 0v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M10 11v6m4-6v6"/>
+                            <svg className="w-3.5 h-3.5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M7 4V2h10v2h3c.55 0 1 .45 1 1v3c0 .55-.45 1-1 1h-.88l-1.62 12.16c-.07.54-.52.92-1.06.92H7.56c-.54 0-.99-.38-1.06-.92L4.88 9H4c-.55 0-1-.45-1-1V5c0-.55.45-1 1-1h3zm2 0h6V2H9v2zm-3.5 5h13l-1.5 11h-10l-1.5-11z"/>
                             </svg>
                             <span className="text-blue-300 text-xs font-semibold">{order.greutate} kg</span>
                           </div>
@@ -1171,8 +1169,8 @@ export default function ComenziCurierPage() {
                             className="rounded shrink-0"
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="text-[10px] text-green-400/70 font-medium uppercase">Ridicare din</p>
-                            <p className="text-green-300 font-semibold text-sm truncate">{order.expeditorJudet}, {order.expeditorTara}</p>
+                            <p className="text-[10px] text-green-400/70 font-medium uppercase">Oraș/localitate</p>
+                            <p className="text-green-300 font-semibold text-sm truncate">{order.oras_ridicare || order.expeditorJudet}</p>
                           </div>
                         </div>
                         <div className="flex justify-center">
@@ -1196,8 +1194,8 @@ export default function ComenziCurierPage() {
                             className="rounded shrink-0"
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="text-[10px] text-orange-400/70 font-medium uppercase">Livrare în</p>
-                            <p className="text-orange-300 font-semibold text-sm truncate">{order.destinatarJudet}, {order.destinatarTara}</p>
+                            <p className="text-[10px] text-orange-400/70 font-medium uppercase">Oraș/localitate</p>
+                            <p className="text-orange-300 font-semibold text-sm truncate">{order.oras_livrare || order.destinatarJudet}</p>
                           </div>
                         </div>
                       </div>
