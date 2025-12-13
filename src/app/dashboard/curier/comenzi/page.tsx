@@ -891,6 +891,13 @@ export default function ComenziCurierPage() {
                           <p className="text-[9px] text-green-400/70 font-medium uppercase">Ridicare din</p>
                           <p className="text-green-300 font-semibold text-xs truncate">{order.expeditorJudet}, {order.expeditorTara}</p>
                         </div>
+                        <Image 
+                          src={`/img/flag/${countriesWithCodes.find(c => c.name.toLowerCase() === order.expeditorTara.toLowerCase())?.code || 'ro'}.svg`}
+                          alt={order.expeditorTara}
+                          width={24}
+                          height={18}
+                          className="rounded shrink-0"
+                        />
                       </div>
                       <div className="flex justify-center">
                         <svg className="w-5 h-5 text-gray-500 rotate-90" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -907,11 +914,25 @@ export default function ComenziCurierPage() {
                           <p className="text-[9px] text-orange-400/70 font-medium uppercase">Livrare în</p>
                           <p className="text-orange-300 font-semibold text-xs truncate">{order.destinatarJudet}, {order.destinatarTara}</p>
                         </div>
+                        <Image 
+                          src={`/img/flag/${countriesWithCodes.find(c => c.name.toLowerCase() === order.destinatarTara.toLowerCase())?.code || 'ro'}.svg`}
+                          alt={order.destinatarTara}
+                          width={24}
+                          height={18}
+                          className="rounded shrink-0"
+                        />
                       </div>
                     </div>
 
                     {/* Package Details */}
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-2">
+                      <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                          <ServiceIcon service={order.tipColet} className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-[9px] font-semibold text-gray-400 uppercase">Serviciu</span>
+                        </div>
+                        <p className="text-xs font-bold text-white capitalize">{order.tipColet}</p>
+                      </div>
                       <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
                         <div className="flex items-center gap-1.5 mb-1.5">
                           <svg className="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -1083,10 +1104,17 @@ export default function ComenziCurierPage() {
                                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
                               </svg>
                             </div>
-                            <div>
+                            <div className="flex-1 min-w-0">
                               <p className="text-[10px] text-green-400/70 font-medium uppercase">Ridicare din</p>
                               <p className="text-green-300 font-semibold text-sm">{order.expeditorJudet}, {order.expeditorTara}</p>
                             </div>
+                            <Image 
+                              src={`/img/flag/${countriesWithCodes.find(c => c.name.toLowerCase() === order.expeditorTara.toLowerCase())?.code || 'ro'}.svg`}
+                              alt={order.expeditorTara}
+                              width={32}
+                              height={24}
+                              className="rounded shrink-0"
+                            />
                           </div>
                           <div className="flex items-center justify-center px-2">
                             <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -1099,16 +1127,30 @@ export default function ComenziCurierPage() {
                                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
                               </svg>
                             </div>
-                            <div>
+                            <div className="flex-1 min-w-0">
                               <p className="text-[10px] text-orange-400/70 font-medium uppercase">Livrare în</p>
                               <p className="text-orange-300 font-semibold text-sm">{order.destinatarJudet}, {order.destinatarTara}</p>
                             </div>
+                            <Image 
+                              src={`/img/flag/${countriesWithCodes.find(c => c.name.toLowerCase() === order.destinatarTara.toLowerCase())?.code || 'ro'}.svg`}
+                              alt={order.destinatarTara}
+                              width={32}
+                              height={24}
+                              className="rounded shrink-0"
+                            />
                           </div>
                         </div>
                       </div>
 
                       {/* Package Details */}
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
+                          <div className="flex items-center gap-2 mb-2">
+                            <ServiceIcon service={order.tipColet} className="w-4 h-4 text-emerald-400" />
+                            <span className="text-xs font-semibold text-gray-400 uppercase">Serviciu</span>
+                          </div>
+                          <p className="text-base font-bold text-white capitalize">{order.tipColet}</p>
+                        </div>
                         <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
                           <div className="flex items-center gap-2 mb-2">
                             <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -1248,17 +1290,6 @@ export default function ComenziCurierPage() {
                             <span className="text-xs font-mono font-semibold text-emerald-400">#{formatOrderNumber(order.orderNumber || order.id)}</span>
                           </div>
                         </div>
-                      </div>
-
-                      {/* Contact Info */}
-                      <div className="p-4 bg-linear-to-br from-emerald-500/10 to-emerald-500/5 rounded-xl border border-emerald-500/20">
-                        <div className="flex items-center gap-2 mb-3">
-                          <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                          </svg>
-                          <span className="text-xs font-semibold text-emerald-300 uppercase tracking-wide">Contact Client</span>
-                        </div>
-                        <p className="text-sm text-emerald-200 font-medium">{order.clientPhone}</p>
                       </div>
                     </div>
                   </div>
