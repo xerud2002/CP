@@ -849,6 +849,25 @@ export default function ComenziCurierPage() {
                 >
                   {/* Mobile Layout - Optimized */}
                   <div className="sm:hidden space-y-3">
+                    {/* Expand/Collapse Button */}
+                    <button
+                      onClick={() => toggleOrderExpand(order.id)}
+                      className="w-full flex items-center justify-between p-2 bg-slate-800/40 hover:bg-slate-800/60 rounded-lg border border-white/5 hover:border-white/10 transition-all group"
+                    >
+                      <span className="text-xs font-semibold text-gray-400 group-hover:text-gray-300">
+                        {expandedOrders.has(order.id) ? 'Ascunde detalii' : 'Vezi toate detaliile'}
+                      </span>
+                      <svg 
+                        className={`w-4 h-4 text-gray-400 group-hover:text-gray-300 transition-transform ${expandedOrders.has(order.id) ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2.5" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </button>
+
                     {/* Header: Status, ID & Client */}
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex flex-col gap-2">
@@ -924,41 +943,41 @@ export default function ComenziCurierPage() {
                       </div>
                     </div>
 
-                    {/* Package Details */}
-                    <div className="grid grid-cols-3 gap-2">
-                      <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
-                        <div className="flex items-center gap-1.5 mb-1.5">
-                          <ServiceIcon service={order.tipColet} className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-[9px] font-semibold text-gray-400 uppercase">Serviciu</span>
+                    {/* Package Details - Only show when expanded */}
+                    {expandedOrders.has(order.id) && (
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <ServiceIcon service={order.tipColet} className="w-3.5 h-3.5 text-emerald-400" />
+                            <span className="text-[9px] font-semibold text-gray-400 uppercase">Serviciu</span>
+                          </div>
+                          <p className="text-xs font-bold text-white capitalize">{order.tipColet}</p>
                         </div>
-                        <p className="text-xs font-bold text-white capitalize">{order.tipColet}</p>
-                      </div>
-                      <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
-                        <div className="flex items-center gap-1.5 mb-1.5">
-                          <svg className="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                          </svg>
-                          <span className="text-[9px] font-semibold text-gray-400 uppercase">Greutate</span>
+                        <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <svg className="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            </svg>
+                            <span className="text-[9px] font-semibold text-gray-400 uppercase">Greutate</span>
+                          </div>
+                          <p className="text-lg font-bold text-white">{order.greutate} <span className="text-xs text-gray-400">kg</span></p>
                         </div>
-                        <p className="text-lg font-bold text-white">{order.greutate} <span className="text-xs text-gray-400">kg</span></p>
-                      </div>
-                      <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
-                        <div className="flex items-center gap-1.5 mb-1.5">
-                          <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                          </svg>
-                          <span className="text-[9px] font-semibold text-gray-400 uppercase">Data</span>
+                        <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                              <line x1="16" y1="2" x2="16" y2="6"/>
+                              <line x1="8" y1="2" x2="8" y2="6"/>
+                              <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <span className="text-[9px] font-semibold text-gray-400 uppercase">Data</span>
+                          </div>
+                          <p className="text-xs font-semibold text-white truncate">
+                            {order.dataColectare ? order.dataColectare : <span className="text-blue-400">Flexibil</span>}
+                          </p>
                         </div>
-                        <p className="text-xs font-semibold text-white truncate">
-                          {order.dataColectare ? order.dataColectare : <span className="text-blue-400">Flexibil</span>}
-                        </p>
                       </div>
-                    </div>
-
-
+                    )}
 
                     {/* Extra Services & Instructions */}
                     {expandedOrders.has(order.id) && ((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
@@ -1068,6 +1087,25 @@ export default function ComenziCurierPage() {
                   <div className="hidden sm:grid sm:grid-cols-3 sm:gap-6">
                     {/* Left Column - Main Info (2/3 width) */}
                     <div className="col-span-2 space-y-4">
+                      {/* Expand/Collapse Button */}
+                      <button
+                        onClick={() => toggleOrderExpand(order.id)}
+                        className="w-full flex items-center justify-between p-3 bg-slate-800/40 hover:bg-slate-800/60 rounded-lg border border-white/5 hover:border-white/10 transition-all group"
+                      >
+                        <span className="text-sm font-semibold text-gray-400 group-hover:text-gray-300">
+                          {expandedOrders.has(order.id) ? 'Ascunde detalii' : 'Vezi toate detaliile'}
+                        </span>
+                        <svg 
+                          className={`w-5 h-5 text-gray-400 group-hover:text-gray-300 transition-transform ${expandedOrders.has(order.id) ? 'rotate-180' : ''}`} 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2.5" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                      </button>
+
                       {/* Header: Status, ID & Client */}
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
@@ -1142,39 +1180,41 @@ export default function ComenziCurierPage() {
                         </div>
                       </div>
 
-                      {/* Package Details */}
-                      <div className="grid grid-cols-3 gap-3">
-                        <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
-                          <div className="flex items-center gap-2 mb-2">
-                            <ServiceIcon service={order.tipColet} className="w-4 h-4 text-emerald-400" />
-                            <span className="text-xs font-semibold text-gray-400 uppercase">Serviciu</span>
+                      {/* Package Details - Only show when expanded */}
+                      {expandedOrders.has(order.id) && (
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
+                            <div className="flex items-center gap-2 mb-2">
+                              <ServiceIcon service={order.tipColet} className="w-4 h-4 text-emerald-400" />
+                              <span className="text-xs font-semibold text-gray-400 uppercase">Serviciu</span>
+                            </div>
+                            <p className="text-base font-bold text-white capitalize">{order.tipColet}</p>
                           </div>
-                          <p className="text-base font-bold text-white capitalize">{order.tipColet}</p>
-                        </div>
-                        <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
-                          <div className="flex items-center gap-2 mb-2">
-                            <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                            </svg>
-                            <span className="text-xs font-semibold text-gray-400 uppercase">Greutate Colet</span>
+                          <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
+                            <div className="flex items-center gap-2 mb-2">
+                              <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                              </svg>
+                              <span className="text-xs font-semibold text-gray-400 uppercase">Greutate Colet</span>
+                            </div>
+                            <p className="text-xl font-bold text-white">{order.greutate} <span className="text-sm text-gray-400">kg</span></p>
                           </div>
-                          <p className="text-xl font-bold text-white">{order.greutate} <span className="text-sm text-gray-400">kg</span></p>
-                        </div>
-                        <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
-                          <div className="flex items-center gap-2 mb-2">
-                            <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                              <line x1="16" y1="2" x2="16" y2="6"/>
-                              <line x1="8" y1="2" x2="8" y2="6"/>
-                              <line x1="3" y1="10" x2="21" y2="10"/>
-                            </svg>
-                            <span className="text-xs font-semibold text-gray-400 uppercase">Data Colectare</span>
+                          <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
+                            <div className="flex items-center gap-2 mb-2">
+                              <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                              </svg>
+                              <span className="text-xs font-semibold text-gray-400 uppercase">Data Colectare</span>
+                            </div>
+                            <p className="text-base font-semibold text-white">
+                              {order.dataColectare ? order.dataColectare : <span className="text-blue-400">Flexibil</span>}
+                            </p>
                           </div>
-                          <p className="text-base font-semibold text-white">
-                            {order.dataColectare ? order.dataColectare : <span className="text-blue-400">Flexibil</span>}
-                          </p>
                         </div>
-                      </div>
+                      )}
 
                       {/* Extra Services & Instructions */}
                       {expandedOrders.has(order.id) && ((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
