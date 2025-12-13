@@ -848,104 +848,91 @@ export default function ComenziCurierPage() {
                   className="bg-slate-900/50 rounded-xl p-3 sm:p-4 border border-white/5 hover:border-white/10 transition-all"
                 >
                   {/* Mobile Layout - Optimized */}
-                  <div className="sm:hidden space-y-3">
-                    {/* Expand/Collapse Button */}
-                    <button
-                      onClick={() => toggleOrderExpand(order.id)}
-                      className="w-full flex items-center justify-between p-2 bg-slate-800/40 hover:bg-slate-800/60 rounded-lg border border-white/5 hover:border-white/10 transition-all group"
-                    >
-                      <span className="text-xs font-semibold text-gray-400 group-hover:text-gray-300">
-                        {expandedOrders.has(order.id) ? 'Ascunde detalii' : 'Vezi toate detaliile'}
-                      </span>
-                      <svg 
-                        className={`w-4 h-4 text-gray-400 group-hover:text-gray-300 transition-transform ${expandedOrders.has(order.id) ? 'rotate-180' : ''}`} 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="2.5" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
-                      </svg>
-                    </button>
-
-                    {/* Header: Order ID only */}
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-700/40 rounded-lg border border-white/10 w-fit">
-                      <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                      </svg>
-                      <span className="text-gray-400 text-[10px] font-mono">#{formatOrderNumber(order.orderNumber || order.id)}</span>
-                    </div>
-
-                    {/* Route Section - Vertical Stacked */}
-                    <div className="p-3 bg-linear-to-br from-slate-800/40 to-slate-800/20 rounded-xl border border-white/10 space-y-2">
-                      <div className="flex items-center gap-2 p-2.5 bg-green-500/10 border border-green-500/20 rounded-lg">
-                        <Image 
-                          src={`/img/flag/${(() => {
-                            const country = order.expeditorTara.toLowerCase().trim();
-                            const matched = countriesWithCodes.find(c => 
-                              c.name.toLowerCase() === country || 
-                              c.code.toLowerCase() === country
-                            );
-                            return matched?.code || 'ro';
-                          })()}.svg`}
-                          alt={order.expeditorTara}
-                          width={24}
-                          height={18}
-                          className="rounded shrink-0"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[9px] text-green-400/70 font-medium uppercase">Oraș/localitate</p>
-                          <p className="text-green-300 font-semibold text-xs truncate">{order.oras_ridicare || order.expeditorJudet}</p>
-                        </div>
-                      </div>
-                      <div className="flex justify-center">
-                        <svg className="w-5 h-5 text-gray-500 rotate-90" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                  <div className="sm:hidden space-y-2.5">
+                    {/* Header Row: Order ID + Service + Weight */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-700/40 rounded-lg border border-white/10">
+                        <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
+                        <span className="text-gray-400 text-[10px] font-mono">#{formatOrderNumber(order.orderNumber || order.id)}</span>
                       </div>
-                      <div className="flex items-center gap-2 p-2.5 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-                        <Image 
-                          src={`/img/flag/${(() => {
-                            const country = order.destinatarTara.toLowerCase().trim();
-                            const matched = countriesWithCodes.find(c => 
-                              c.name.toLowerCase() === country || 
-                              c.code.toLowerCase() === country
-                            );
-                            return matched?.code || 'ro';
-                          })()}.svg`}
-                          alt={order.destinatarTara}
-                          width={24}
-                          height={18}
-                          className="rounded shrink-0"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[9px] text-orange-400/70 font-medium uppercase">Oraș/localitate</p>
-                          <p className="text-orange-300 font-semibold text-xs truncate">{order.oras_livrare || order.destinatarJudet}</p>
+                      <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                          <ServiceIcon service={order.tipColet} className="w-3 h-3 text-emerald-400" />
+                          <span className="text-emerald-300 text-[9px] font-semibold capitalize">{order.tipColet}</span>
+                        </div>
+                        <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                          <svg className="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M7 4V2h10v2h3c.55 0 1 .45 1 1v3c0 .55-.45 1-1 1h-.88l-1.62 12.16c-.07.54-.52.92-1.06.92H7.56c-.54 0-.99-.38-1.06-.92L4.88 9H4c-.55 0-1-.45-1-1V5c0-.55.45-1 1-1h3zm2 0h6V2H9v2zm-3.5 5h13l-1.5 11h-10l-1.5-11z"/>
+                          </svg>
+                          <span className="text-blue-300 text-[9px] font-semibold">{order.greutate} kg</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Service & Weight badges */}
-                    <div className="flex items-center gap-1.5">
-                      <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                        <ServiceIcon service={order.tipColet} className="w-3 h-3 text-emerald-400" />
-                        <span className="text-emerald-300 text-[9px] font-semibold capitalize">{order.tipColet}</span>
-                      </div>
-                      <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                        <svg className="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M7 4V2h10v2h3c.55 0 1 .45 1 1v3c0 .55-.45 1-1 1h-.88l-1.62 12.16c-.07.54-.52.92-1.06.92H7.56c-.54 0-.99-.38-1.06-.92L4.88 9H4c-.55 0-1-.45-1-1V5c0-.55.45-1 1-1h3zm2 0h6V2H9v2zm-3.5 5h13l-1.5 11h-10l-1.5-11z"/>
+                    {/* Route Section - Compact */}
+                    <div className="p-2.5 bg-linear-to-br from-slate-800/40 to-slate-800/20 rounded-xl border border-white/10">
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
                         </svg>
-                        <span className="text-blue-300 text-[9px] font-semibold">{order.greutate} kg</span>
+                        <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">Traseu Transport</span>
+                      </div>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2 p-2 bg-green-500/10 border border-green-500/20 rounded-lg">
+                          <Image 
+                            src={`/img/flag/${(() => {
+                              const country = order.expeditorTara.toLowerCase().trim();
+                              const matched = countriesWithCodes.find(c => 
+                                c.name.toLowerCase() === country || 
+                                c.code.toLowerCase() === country
+                              );
+                              return matched?.code || 'ro';
+                            })()}.svg`}
+                            alt={order.expeditorTara}
+                            width={20}
+                            height={15}
+                            className="rounded shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-green-300 font-semibold text-xs truncate">{order.oras_ridicare || order.expeditorJudet}</p>
+                          </div>
+                        </div>
+                        <div className="flex justify-center">
+                          <svg className="w-4 h-4 text-gray-500 rotate-90" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                          </svg>
+                        </div>
+                        <div className="flex items-center gap-2 p-2 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                          <Image 
+                            src={`/img/flag/${(() => {
+                              const country = order.destinatarTara.toLowerCase().trim();
+                              const matched = countriesWithCodes.find(c => 
+                                c.name.toLowerCase() === country || 
+                                c.code.toLowerCase() === country
+                              );
+                              return matched?.code || 'ro';
+                            })()}.svg`}
+                            alt={order.destinatarTara}
+                            width={20}
+                            height={15}
+                            className="rounded shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-orange-300 font-semibold text-xs truncate">{order.oras_livrare || order.destinatarJudet}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
                     {/* Client & Date Info */}
                     <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 px-2.5 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                        <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                        <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                         </svg>
-                        <span className="text-emerald-300 font-semibold text-xs">{formatClientName(order.clientName)}</span>
+                        <span className="text-emerald-300 font-semibold text-[10px]">{formatClientName(order.clientName)}</span>
                       </div>
                       <div className="flex items-center gap-1 px-2 py-1 bg-purple-500/10 rounded-lg border border-purple-500/20">
                         <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -959,6 +946,25 @@ export default function ComenziCurierPage() {
                         </span>
                       </div>
                     </div>
+
+                    {/* Expand/Collapse Button */}
+                    <button
+                      onClick={() => toggleOrderExpand(order.id)}
+                      className="w-full flex items-center justify-center gap-2 py-2 bg-slate-800/40 hover:bg-slate-800/60 rounded-lg border border-white/5 hover:border-white/10 transition-all group"
+                    >
+                      <span className="text-xs font-semibold text-gray-400 group-hover:text-gray-300">
+                        {expandedOrders.has(order.id) ? 'Ascunde detalii' : 'Vezi detalii'}
+                      </span>
+                      <svg 
+                        className={`w-4 h-4 text-gray-400 group-hover:text-gray-300 transition-transform ${expandedOrders.has(order.id) ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        strokeWidth="2.5" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </button>
 
                     {/* Package Details - Only show when expanded */}
                     {expandedOrders.has(order.id) && (
