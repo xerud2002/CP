@@ -1327,38 +1327,6 @@ export default function ComenziCurierPage() {
                           Trimite Mesaj
                         </button>
                       </div>
-
-                      {/* Quick Stats */}
-                      <div className="p-4 bg-slate-800/30 rounded-xl border border-white/5 space-y-3">
-                        <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wide flex items-center gap-2">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                          </svg>
-                          Rezumat Rapid
-                        </h4>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between py-2 border-b border-white/5">
-                            <span className="text-xs text-gray-400">Status</span>
-                            <span className={`text-xs font-semibold ${statusLabels[order.status].color}`}>{statusLabels[order.status].label}</span>
-                          </div>
-                          <div className="flex items-center justify-between py-2 border-b border-white/5">
-                            <span className="text-xs text-gray-400">Client</span>
-                            <span className="text-xs font-semibold text-white">{formatClientName(order.clientName)}</span>
-                          </div>
-                          <div className="flex items-center justify-between py-2 border-b border-white/5">
-                            <span className="text-xs text-gray-400">Transport</span>
-                            <span className="text-xs font-semibold text-white">{order.tipColet}</span>
-                          </div>
-                          <div className="flex items-center justify-between py-2 border-b border-white/5">
-                            <span className="text-xs text-gray-400">Greutate</span>
-                            <span className="text-xs font-semibold text-white">{order.greutate} kg</span>
-                          </div>
-                          <div className="flex items-center justify-between py-2">
-                            <span className="text-xs text-gray-400">Comandă</span>
-                            <span className="text-xs font-mono font-semibold text-emerald-400">#{formatOrderNumber(order.orderNumber || order.id)}</span>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
