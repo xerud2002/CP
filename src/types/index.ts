@@ -22,20 +22,36 @@ export interface Order {
   id?: string;
   orderNumber?: number;
   uid_client: string;
+  courierId?: string;
   nume: string;
   email: string;
   telefon: string;
-  adresa_ridicare: string;
-  adresa_livrare: string;
+  serviciu: string;
   tara_ridicare: string;
   judet_ridicare: string;
+  oras_ridicare: string;
+  adresa_ridicare: string;
   tara_livrare: string;
   judet_livrare: string;
+  oras_livrare: string;
+  adresa_livrare: string;
   greutate: string;
+  lungime?: string;
+  latime?: string;
+  inaltime?: string;
+  cantitate: string;
+  valoare_marfa?: string;
+  descriere?: string;
+  tip_programare: 'data_specifica' | 'range' | 'flexibil';
   data_ridicare: string;
+  data_ridicare_end?: string;
   optiuni: string[];
-  status: 'pending' | 'accepted' | 'in_transit' | 'delivered' | 'cancelled';
+  tip_ofertanti?: string[];
+  pret?: number;
+  status: 'pending' | 'accepted' | 'in_transit' | 'completed' | 'cancelled';
+  observatii?: string;
   timestamp: number;
+  createdAt?: Date | { toDate: () => Date };
 }
 
 export interface CourierProfile {

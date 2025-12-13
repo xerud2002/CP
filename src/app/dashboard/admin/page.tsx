@@ -479,7 +479,7 @@ function CouriersGrid({ couriers, onSuspend }: {
 function StatsContent({ users, orders }: { users: User[]; orders: Order[] }) {
   const clientsCount = users.filter(u => u.role === 'client').length;
   const couriersCount = users.filter(u => u.role === 'curier').length;
-  const deliveredOrders = orders.filter(o => o.status === 'delivered').length;
+  const deliveredOrders = orders.filter(o => o.status === 'completed').length;
   const pendingOrders = orders.filter(o => o.status === 'pending').length;
 
   return (

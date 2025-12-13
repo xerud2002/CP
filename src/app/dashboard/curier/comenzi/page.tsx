@@ -18,8 +18,10 @@ interface Order {
   clientPhone: string;
   expeditorTara: string;
   expeditorJudet: string;
+  oras_ridicare?: string;
   destinatarTara: string;
   destinatarJudet: string;
+  oras_livrare?: string;
   tipColet: string;
   greutate: number;
   status: 'noua' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata';
@@ -265,8 +267,10 @@ export default function ComenziCurierPage() {
                 clientPhone: data.telefon || data.clientPhone || '',
                 expeditorTara: data.tara_ridicare || data.expeditorTara || '',
                 expeditorJudet: data.judet_ridicare || data.expeditorJudet || '',
+                oras_ridicare: data.oras_ridicare || '',
                 destinatarTara: data.tara_livrare || data.destinatarTara || '',
                 destinatarJudet: data.judet_livrare || data.destinatarJudet || '',
+                oras_livrare: data.oras_livrare || '',
                 tipColet: orderService,
                 greutate: parseFloat(data.greutate) || 0,
                 status: 'noua',
@@ -292,8 +296,10 @@ export default function ComenziCurierPage() {
               clientPhone: data.telefon || data.clientPhone || '',
               expeditorTara: data.tara_ridicare || data.expeditorTara || '',
               expeditorJudet: data.judet_ridicare || data.expeditorJudet || '',
+              oras_ridicare: data.oras_ridicare || '',
               destinatarTara: data.tara_livrare || data.destinatarTara || '',
               destinatarJudet: data.judet_livrare || data.destinatarJudet || '',
+              oras_livrare: data.oras_livrare || '',
               tipColet: data.serviciu || data.tipColet || 'Colete',
               greutate: parseFloat(data.greutate) || 0,
               status: data.status || 'noua',
