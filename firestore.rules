@@ -9,18 +9,16 @@ service cloud.firestore {
     
     // Users collection - allow authenticated users to read/write their own data
     match /users/{userId} {
-      // Allow read if authenticated and (document ID matches OR uid field matches)
+      // Allow read if authenticated
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update: if isAuthenticated() && 
-        (request.auth.uid == userId || resource.data.uid == request.auth.uid);
-      allow delete: if isAuthenticated() && 
-        (request.auth.uid == userId || resource.data.uid == request.auth.uid);
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isAuthenticated() && request.auth.uid == userId;
+      allow delete: if false; // Never allow deletion
     }
     
     // Profil curier collection
     match /profil_curier/{userId} {
-      // Couriers can read/write their own profile
+      // Public read for all authenticated users (clients need to see courier info)
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && userId == request.auth.uid;
       allow update: if isAuthenticated() && userId == request.auth.uid;
@@ -36,6 +34,51 @@ service cloud.firestore {
       allow delete: if isAuthenticated() && userId == request.auth.uid;
     }
     
+    // Zona acoperire collection (courier coverage zones)
+    match /zona_acoperire/{docId} {
+      // Public read for all authenticated users
+      allow read: if isAuthenticated();
+      // Couriers can manage their own zones
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+    
+    // Tarife curier collection (courier pricing)
+    match /tarife_curier/{docId} {
+      // Public read for all authenticated users
+      allow read: if isAuthenticated();
+      // Couriers can manage their own tariffs
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+    
+    // Calendar colectii (courier availability calendar)
+    match /calendar_colectii/{docId} {
+      // Public read for all authenticated users
+      allow read: if isAuthenticated();
+      // Couriers can manage their own calendar
+      allow create: if isAuthenticated() && request.resource.data.courierId == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.courierId == request.auth.uid;
+    }
+    
+    // Transport aeroport (airport transfer routes)
+    match /transport_aeroport/{docId} {
+      // Public read for all authenticated users
+      allow read: if isAuthenticated();
+      // Couriers can manage their own routes
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+    
+    // Transport persoane (person transport routes)
+    match /transport_persoane/{docId} {
+      // Public read for all authenticated users
+      allow read: if isAuthenticated();
+      // Couriers can manage their own routes
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+    
     // Comenzi collection
     match /comenzi/{docId} {
       // Clients can read their own orders
@@ -44,12 +87,16 @@ service cloud.firestore {
         (resource.data.uid_client == request.auth.uid || 
          resource.data.courierId == request.auth.uid ||
          resource.data.status == 'pending');
+      // Clients can create new orders
       allow create: if isAuthenticated() && 
         request.resource.data.uid_client == request.auth.uid &&
         request.resource.data.status == 'pending';
+      // Both clients and couriers can update orders (status changes, courier acceptance)
       allow update: if isAuthenticated() && 
         (resource.data.uid_client == request.auth.uid || 
-         resource.data.courierId == request.auth.uid);
+         resource.data.courierId == request.auth.uid ||
+         (resource.data.status == 'pending' && request.resource.data.courierId == request.auth.uid));
+      // Only clients can delete their own pending orders
       allow delete: if isAuthenticated() && 
         resource.data.uid_client == request.auth.uid &&
         resource.data.status == 'pending';
@@ -57,13 +104,14 @@ service cloud.firestore {
     
     // Recenzii collection
     match /recenzii/{docId} {
-      // Clients can create and read their own reviews
+      // Clients can read their own reviews
       // Couriers can read reviews about them
-      allow read: if isAuthenticated() && 
-        (resource.data.clientId == request.auth.uid || 
-         resource.data.courierId == request.auth.uid);
+      // All authenticated users can read (for public courier profiles)
+      allow read: if isAuthenticated();
+      // Only clients can create reviews
       allow create: if isAuthenticated() && 
         request.resource.data.clientId == request.auth.uid;
+      // Only review author can update/delete
       allow update, delete: if isAuthenticated() && 
         resource.data.clientId == request.auth.uid;
     }

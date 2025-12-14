@@ -1,17 +1,32 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    // Profile images - users can upload/read their own
+    // Profile images - users can upload/read their own, everyone can read
     match /profile_images/{userId}/{allPaths=**} {
-      allow read: if true;
+      // Public read for all authenticated users (to display courier profiles)
+      allow read: if request.auth != null;
+      // Only owner can write
       allow write: if request.auth != null && request.auth.uid == userId
                    && request.resource.size < 5 * 1024 * 1024
                    && request.resource.contentType.matches('image/.*');
     }
     
-    // Courier documents - users can upload/read their own documents
+    // Courier documents - only owner can upload/read
     match /courier_documents/{userId}/{allPaths=**} {
+      // Only owner can read their documents
       allow read: if request.auth != null && request.auth.uid == userId;
+      // Only owner can write
+      allow write: if request.auth != null && request.auth.uid == userId
+                   && request.resource.size < 10 * 1024 * 1024
+                   && (request.resource.contentType.matches('image/.*') 
+                       || request.resource.contentType == 'application/pdf');
+    }
+    
+    // Courier verification documents (CI, insurance, etc.)
+    match /verification_documents/{userId}/{allPaths=**} {
+      // Only owner and admins can read
+      allow read: if request.auth != null && request.auth.uid == userId;
+      // Only owner can write
       allow write: if request.auth != null && request.auth.uid == userId
                    && request.resource.size < 10 * 1024 * 1024
                    && (request.resource.contentType.matches('image/.*') 
