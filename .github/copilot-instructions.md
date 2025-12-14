@@ -197,7 +197,7 @@ useEffect(() => {
   return () => document.removeEventListener('mousedown', handleClickOutside);
 }, []);
 ```
-See [profil/page.tsx](src/app/dashboard/curier/profil/page.tsx) for full country/phone prefix dropdown implementation.
+See `src/app/dashboard/curier/profil/page.tsx` for full country/phone prefix dropdown implementation.
 
 ## Styling
 

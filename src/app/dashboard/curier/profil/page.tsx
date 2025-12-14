@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef, Suspense, useMemo } from 'react';
 import { ArrowLeftIcon, CheckIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
+import { countries } from '@/lib/constants';
 
 interface CourierProfile {
   // Personal Info
@@ -40,22 +41,6 @@ interface CourierProfile {
   verificationStatus?: 'verified' | 'pending' | 'none';
   insuranceStatus?: 'verified' | 'pending' | 'none';
 }
-
-// Countries with flags for company location
-const countries = [
-  { code: 'ro', name: 'România', flag: '/img/flag/ro.svg' },
-  { code: 'gb', name: 'Anglia', flag: '/img/flag/gb.svg' },
-  { code: 'de', name: 'Germania', flag: '/img/flag/de.svg' },
-  { code: 'it', name: 'Italia', flag: '/img/flag/it.svg' },
-  { code: 'es', name: 'Spania', flag: '/img/flag/es.svg' },
-  { code: 'fr', name: 'Franța', flag: '/img/flag/fr.svg' },
-  { code: 'at', name: 'Austria', flag: '/img/flag/at.svg' },
-  { code: 'be', name: 'Belgia', flag: '/img/flag/be.svg' },
-  { code: 'nl', name: 'Olanda', flag: '/img/flag/nl.svg' },
-  { code: 'gr', name: 'Grecia', flag: '/img/flag/gr.svg' },
-  { code: 'pt', name: 'Portugalia', flag: '/img/flag/pt.svg' },
-  { code: 'ie', name: 'Irlanda', flag: '/img/flag/ie.svg' },
-];
 
 // Tax ID and registration info per country
 // Banking: UK uses Sort Code + Account Number, Ireland can use both IBAN and local format
@@ -251,7 +236,6 @@ function ProfilCurierContent() {
   
   const [prefixDropdownOpen, setPrefixDropdownOpen] = useState(false);
   const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
-  const [activeServices, setActiveServices] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [ordersCount, setOrdersCount] = useState(0);
   const [rating, setRating] = useState(5.0);
@@ -327,32 +311,6 @@ function ProfilCurierContent() {
 
     if (user) {
       loadProfile();
-    }
-  }, [user]);
-
-  // Load active services from user's serviciiOferite (selected in Servicii oferite)
-  useEffect(() => {
-    const loadActiveServices = async () => {
-      if (!user) return;
-      
-      try {
-        // Get services from user document's serviciiOferite field
-        const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
-        const userSnapshot = await getDocs(userQuery);
-        
-        if (!userSnapshot.empty) {
-          const userData = userSnapshot.docs[0].data();
-          if (userData.serviciiOferite && Array.isArray(userData.serviciiOferite)) {
-            setActiveServices(userData.serviciiOferite);
-          }
-        }
-      } catch (error) {
-        console.error('Error loading active services:', error);
-      }
-    };
-
-    if (user) {
-      loadActiveServices();
     }
   }, [user]);
 

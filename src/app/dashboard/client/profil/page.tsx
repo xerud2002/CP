@@ -8,6 +8,7 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { ArrowLeftIcon, UserIcon, CheckIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
+import { countries } from '@/lib/constants';
 
 interface ClientProfile {
   nume: string;
@@ -23,18 +24,6 @@ interface ClientProfile {
   cui?: string;
 }
 
-const countries = [
-  { code: 'RO', name: 'România', flag: '/img/flag/ro.svg' },
-  { code: 'GB', name: 'Anglia', flag: '/img/flag/gb.svg' },
-  { code: 'IT', name: 'Italia', flag: '/img/flag/it.svg' },
-  { code: 'ES', name: 'Spania', flag: '/img/flag/es.svg' },
-  { code: 'DE', name: 'Germania', flag: '/img/flag/de.svg' },
-  { code: 'FR', name: 'Franța', flag: '/img/flag/fr.svg' },
-  { code: 'AT', name: 'Austria', flag: '/img/flag/at.svg' },
-  { code: 'BE', name: 'Belgia', flag: '/img/flag/be.svg' },
-  { code: 'NL', name: 'Olanda', flag: '/img/flag/nl.svg' },
-];
-
 export default function ProfilClientPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -43,7 +32,7 @@ export default function ProfilClientPage() {
     prenume: '',
     telefon: '',
     email: user?.email || '',
-    tara: 'RO',
+    tara: 'ro',
     judet: '',
     oras: '',
     adresa: '',

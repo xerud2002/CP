@@ -10,7 +10,9 @@ import HelpCard from '@/components/HelpCard';
 import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-// Service types with custom SVG icons - Colete is main service with sub-options
+// Service types with custom structure for servicii page
+// NOTE: Not imported from constants due to custom subOptions for Colete service
+// and special flags (kgOnly, plicuriOnly, persoaneOnly, m3Only, nrOnly)
 const serviceTypes = [
   { 
     value: 'Colete', 
