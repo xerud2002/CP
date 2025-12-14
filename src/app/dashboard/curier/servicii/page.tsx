@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { logError } from '@/lib/errorMessages';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
-import { collection, query, where, getDocs, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 // Service types with custom SVG icons - Colete is main service with sub-options
@@ -213,23 +213,6 @@ export default function TarifePracticatePage() {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [savingServices, setSavingServices] = useState(false);
 
-  const countryDropdownRef = useRef<HTMLDivElement>(null);
-  const serviceDropdownRef = useRef<HTMLDivElement>(null);
-  
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
-        // Dropdown handling if needed
-      }
-      if (serviceDropdownRef.current && !serviceDropdownRef.current.contains(event.target as Node)) {
-        // Dropdown handling if needed
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
       router.push('/login?role=curier');
@@ -279,9 +262,7 @@ export default function TarifePracticatePage() {
       
       if (!userSnapshot.empty) {
         const userDocRef = doc(db, 'users', userSnapshot.docs[0].id);
-        await import('firebase/firestore').then(({ updateDoc }) => 
-          updateDoc(userDocRef, { serviciiOferite: newServices })
-        );
+        await updateDoc(userDocRef, { serviciiOferite: newServices });
       }
       
       setSelectedServices(newServices);
