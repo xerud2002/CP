@@ -68,4 +68,6 @@ export interface CourierProfile {
   status: 'active' | 'pending' | 'suspended';
   rating?: number;
   reviewCount?: number;
+  verificationStatus?: 'verified' | 'pending' | 'none';
+  insuranceStatus?: 'verified' | 'pending' | 'none';
 }

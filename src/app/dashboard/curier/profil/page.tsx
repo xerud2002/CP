@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, useRef, Suspense, useMemo, useCallback } from 'react';
+import { useEffect, useState, useRef, Suspense, useMemo } from 'react';
 import { ArrowLeftIcon, CheckIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
@@ -33,6 +33,12 @@ interface CourierProfile {
   descriere: string;
   experienta: string;
   profileImage: string;
+  // Rating & Reviews
+  rating?: number;
+  reviewCount?: number;
+  // Verification Status
+  verificationStatus?: 'verified' | 'pending' | 'none';
+  insuranceStatus?: 'verified' | 'pending' | 'none';
 }
 
 // Countries with flags for company location
@@ -238,7 +244,6 @@ const SaveIcon = () => (
 function ProfilCurierContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [profile, setProfile] = useState<CourierProfile>(defaultProfile);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -248,6 +253,11 @@ function ProfilCurierContent() {
   const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
   const [activeServices, setActiveServices] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [ordersCount, setOrdersCount] = useState(0);
+  const [rating, setRating] = useState(5.0);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [verificationStatus, setVerificationStatus] = useState<'verified' | 'pending' | 'none'>('none');
+  const [insuranceStatus, setInsuranceStatus] = useState<'verified' | 'pending' | 'none'>('none');
   const prefixDropdownRef = useRef<HTMLDivElement>(null);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -289,10 +299,25 @@ function ProfilCurierContent() {
             profileData.reviewCount = 0;
           }
           setProfile(profileData as CourierProfile);
+          
+          // Set rating and review count
+          setRating(profileData.rating || 5.0);
+          setReviewCount(profileData.reviewCount || 0);
+          setVerificationStatus(profileData.verificationStatus || 'none');
+          setInsuranceStatus(profileData.insuranceStatus || 'none');
         } else {
           // Pre-fill email from auth and initialize rating
           setProfile({ ...defaultProfile, email: user.email || '', rating: 5.0, reviewCount: 0 });
+          setRating(5.0);
+          setReviewCount(0);
+          setVerificationStatus('none');
+          setInsuranceStatus('none');
         }
+        
+        // Load orders count (courier's accepted orders)
+        const ordersQuery = query(collection(db, 'comenzi'), where('courierId', '==', user.uid));
+        const ordersSnapshot = await getDocs(ordersQuery);
+        setOrdersCount(ordersSnapshot.size);
       } catch (error) {
         console.error('Error loading profile:', error);
       } finally {
@@ -457,26 +482,26 @@ function ProfilCurierContent() {
 
       <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Profile Header Card */}
-        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6 mb-4 sm:mb-6">
-          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+        <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 mb-6 shadow-2xl">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
             {/* Profile Image */}
-            <div className="relative group">
+            <div className="relative group shrink-0">
               <div 
                 onClick={handleImageClick}
-                className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-linear-to-br from-orange-500/20 to-amber-600/20 flex items-center justify-center cursor-pointer overflow-hidden border-2 border-slate-700/50 group-hover:border-orange-500/50 transition-all shadow-lg"
+                className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-2xl bg-linear-to-br from-orange-500/20 to-amber-600/20 flex items-center justify-center cursor-pointer overflow-hidden border-2 border-slate-700/50 group-hover:border-orange-500/50 transition-all duration-300 shadow-2xl group-hover:shadow-orange-500/20"
               >
                 <Image 
                   src={profile.profileImage || '/img/default-avatar.png'} 
                   alt="Profile" 
                   fill 
-                  sizes="(max-width: 640px) 96px, 112px"
+                  sizes="(max-width: 640px) 128px, 144px"
                   className="object-cover object-center rounded-2xl"
                   style={{ objectFit: 'cover', objectPosition: 'center' }}
                 />
               </div>
               <button 
                 onClick={handleImageClick}
-                className="absolute -bottom-1 -right-1 p-2.5 bg-linear-to-br from-orange-500 to-orange-600 rounded-xl border-2 border-slate-800 hover:from-orange-400 hover:to-orange-500 transition-all shadow-lg hover:scale-110 active:scale-95"
+                className="absolute -bottom-2 -right-2 p-3 bg-linear-to-br from-orange-500 to-orange-600 rounded-xl border-3 border-slate-800 hover:from-orange-400 hover:to-orange-500 transition-all shadow-xl hover:scale-110 active:scale-95"
                 title="Schimbă imaginea"
               >
                 <CameraIcon />
@@ -491,70 +516,191 @@ function ProfilCurierContent() {
             </div>
 
             {/* Profile Info */}
-            <div className="flex-1 text-center sm:text-left">
-              <h1 className="text-xl sm:text-3xl font-bold text-white mb-1">
-                {profile.nume || 'Completează profilul'}
-              </h1>
-              <p className="text-gray-400 text-sm sm:text-base mb-2 sm:mb-3">{profile.firma || 'Adaugă firma ta'}</p>
+            <div className="flex-1 w-full">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">
+                    {profile.nume || 'Completează profilul'}
+                  </h1>
+                  <p className="text-gray-400 text-base sm:text-lg">{profile.firma || 'Adaugă firma ta'}</p>
+                </div>
+
+                {/* Quick Stats - Desktop */}
+                <div className="hidden lg:flex gap-3">
+                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-orange-500/30 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="p-1.5 bg-orange-500/20 rounded-lg">
+                        <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                        </svg>
+                      </div>
+                      <div className="text-2xl font-bold text-white">{ordersCount}</div>
+                    </div>
+                    <div className="text-xs text-gray-400 font-medium">Comenzi</div>
+                  </div>
+                  
+                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-yellow-500/30 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="p-1.5 bg-yellow-500/20 rounded-lg">
+                        <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      </div>
+                      <div className="text-2xl font-bold text-yellow-400">{rating.toFixed(1)}</div>
+                    </div>
+                    <div className="text-xs text-gray-400 font-medium">Rating</div>
+                  </div>
+                  
+                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-green-500/30 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="p-1.5 bg-green-500/20 rounded-lg">
+                        <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                        </svg>
+                      </div>
+                      <div className="text-2xl font-bold text-green-400">{reviewCount}</div>
+                    </div>
+                    <div className="text-xs text-gray-400 font-medium">Recenzii</div>
+                  </div>
+                  
+                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-emerald-500/30 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className={`p-2 rounded-lg ${
+                        verificationStatus === 'verified' ? 'bg-emerald-500/20' :
+                        verificationStatus === 'pending' ? 'bg-yellow-500/20' :
+                        'bg-red-500/20'
+                      }`}>
+                        <svg className={`w-5 h-5 ${
+                          verificationStatus === 'verified' ? 'text-emerald-400' :
+                          verificationStatus === 'pending' ? 'text-yellow-400' :
+                          'text-red-400'
+                        }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="text-xs text-gray-400 font-medium">Verificat</div>
+                  </div>
+                  
+                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-blue-500/30 transition-colors">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className={`p-2 rounded-lg ${
+                        insuranceStatus === 'verified' ? 'bg-emerald-500/20' :
+                        insuranceStatus === 'pending' ? 'bg-yellow-500/20' :
+                        'bg-red-500/20'
+                      }`}>
+                        <svg className={`w-5 h-5 ${
+                          insuranceStatus === 'verified' ? 'text-emerald-400' :
+                          insuranceStatus === 'pending' ? 'text-yellow-400' :
+                          'text-red-400'
+                        }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 3.75H6.912a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M12 3v8.25m0 0l-3-3m3 3l3-3" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div className="text-xs text-gray-400 font-medium">Asigurare</div>
+                  </div>
+                </div>
+              </div>
               
               {/* Completion Progress */}
-              <div className="max-w-xs mx-auto sm:mx-0">
-                <div className="flex items-center justify-between text-sm mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className={`p-1 rounded-lg ${completionPercentage >= 80 ? 'bg-green-500/20' : completionPercentage >= 50 ? 'bg-yellow-500/20' : 'bg-orange-500/20'}`}>
-                      <svg className={`w-3.5 h-3.5 ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-xl ${completionPercentage >= 80 ? 'bg-green-500/20' : completionPercentage >= 50 ? 'bg-yellow-500/20' : 'bg-orange-500/20'}`}>
+                      <svg className={`w-5 h-5 ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
-                    <span className="text-gray-300 font-medium">Profil completat</span>
+                    <span className="text-gray-200 font-semibold text-base">Profil completat</span>
                   </div>
-                  <span className={`font-bold text-base ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`}>
+                  <span className={`font-bold text-2xl ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`}>
                     {completionPercentage}%
                   </span>
                 </div>
-                <div className="h-2.5 bg-slate-700/50 rounded-full overflow-hidden border border-slate-600/30">
+                <div className="h-3 bg-slate-700/50 rounded-full overflow-hidden border border-slate-600/30 shadow-inner">
                   <div 
-                    className={`h-full rounded-full transition-all duration-500 ${completionPercentage >= 80 ? 'bg-linear-to-r from-green-500 to-emerald-500' : completionPercentage >= 50 ? 'bg-linear-to-r from-yellow-500 to-amber-500' : 'bg-linear-to-r from-orange-500 to-amber-500'}`}
+                    className={`h-full rounded-full transition-all duration-700 ${completionPercentage >= 80 ? 'bg-linear-to-r from-green-500 to-emerald-500' : completionPercentage >= 50 ? 'bg-linear-to-r from-yellow-500 to-amber-500' : 'bg-linear-to-r from-orange-500 to-amber-500'} shadow-lg`}
                     style={{ width: `${completionPercentage}%` }}
                   />
                 </div>
               </div>
-            </div>
 
-            {/* Quick Stats */}
-            <div className="flex gap-4 sm:gap-6">
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <div className="p-1.5 bg-orange-500/20 rounded-lg">
-                    <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                    </svg>
+              {/* Quick Stats - Mobile */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6 lg:hidden">
+                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="p-1.5 bg-orange-500/20 rounded-lg">
+                      <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                      </svg>
+                    </div>
+                    <div className="text-xl font-bold text-white">{ordersCount}</div>
                   </div>
-                  <div className="text-xl sm:text-2xl font-bold text-white">0</div>
+                  <div className="text-xs text-gray-400 font-medium">Comenzi</div>
                 </div>
-                <div className="text-xs text-gray-400 font-medium">Comenzi</div>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <div className="p-1.5 bg-yellow-500/20 rounded-lg">
-                    <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
+                
+                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="p-1.5 bg-yellow-500/20 rounded-lg">
+                      <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </div>
+                    <div className="text-xl font-bold text-yellow-400">{rating.toFixed(1)}</div>
                   </div>
-                  <div className="text-xl sm:text-2xl font-bold text-yellow-400">0.0</div>
+                  <div className="text-xs text-gray-400 font-medium">Rating</div>
                 </div>
-                <div className="text-xs text-gray-400 font-medium">Rating</div>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <div className="p-1.5 bg-green-500/20 rounded-lg">
-                    <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                    </svg>
+                
+                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="p-1.5 bg-green-500/20 rounded-lg">
+                      <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                      </svg>
+                    </div>
+                    <div className="text-xl font-bold text-green-400">{reviewCount}</div>
                   </div>
-                  <div className="text-xl sm:text-2xl font-bold text-green-400">0</div>
+                  <div className="text-xs text-gray-400 font-medium">Recenzii</div>
                 </div>
-                <div className="text-xs text-gray-400 font-medium">Recenzii</div>
+                
+                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className={`p-2 rounded-lg ${
+                      verificationStatus === 'verified' ? 'bg-emerald-500/20' :
+                      verificationStatus === 'pending' ? 'bg-yellow-500/20' :
+                      'bg-red-500/20'
+                    }`}>
+                      <svg className={`w-4 h-4 ${
+                        verificationStatus === 'verified' ? 'text-emerald-400' :
+                        verificationStatus === 'pending' ? 'text-yellow-400' :
+                        'text-red-400'
+                      }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-400 font-medium">Verificat</div>
+                </div>
+                
+                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className={`p-2 rounded-lg ${
+                      insuranceStatus === 'verified' ? 'bg-emerald-500/20' :
+                      insuranceStatus === 'pending' ? 'bg-yellow-500/20' :
+                      'bg-red-500/20'
+                    }`}>
+                      <svg className={`w-4 h-4 ${
+                        insuranceStatus === 'verified' ? 'text-emerald-400' :
+                        insuranceStatus === 'pending' ? 'text-yellow-400' :
+                        'text-red-400'
+                      }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 3.75H6.912a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M12 3v8.25m0 0l-3-3m3 3l3-3" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-400 font-medium">Asigurare</div>
+                </div>
               </div>
             </div>
           </div>
@@ -611,43 +757,42 @@ function ProfilCurierContent() {
         </div>
 
         {/* Tab Content */}
-        <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Main Form - Combined Personal & Business */}
-          <div className="lg:col-span-2 order-1 space-y-4 sm:space-y-6">
-            
-            {/* Personal Information Section */}
-            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
-              <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
-                <div className="p-2 bg-orange-500/20 rounded-lg">
-                  <UserIcon />
-                </div>
-                Informații Personale
-              </h2>
+        <div className="space-y-6">
+            {/* Personal Information & Business Data - Full Width Cards */}
+            <div className="space-y-6">
+              {/* Personal Information Section */}
+              <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
+                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                  <div className="p-2.5 bg-linear-to-br from-orange-500/30 to-orange-600/30 rounded-xl border border-orange-500/30 shadow-lg shadow-orange-500/20">
+                    <UserIcon />
+                  </div>
+                  Informații Personale
+                </h2>
 
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Nume complet *</label>
-                  <input
-                    type="text"
-                    value={profile.nume}
-                    onChange={(e) => setProfile({ ...profile, nume: e.target.value })}
-                    className="form-input"
-                    placeholder="Ion Popescu"
-                  />
-                </div>
+                <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Nume complet *</label>
+                    <input
+                      type="text"
+                      value={profile.nume}
+                      onChange={(e) => setProfile({ ...profile, nume: e.target.value })}
+                      className="form-input"
+                      placeholder="Ion Popescu"
+                    />
+                  </div>
 
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
-                  <input
-                    type="email"
-                    value={profile.email}
-                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                    className="form-input"
-                    placeholder="email@exemplu.com"
-                  />
-                </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
+                    <input
+                      type="email"
+                      value={profile.email}
+                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                      className="form-input"
+                      placeholder="email@exemplu.com"
+                    />
+                  </div>
 
-                <div className="sm:col-span-2">
+                  <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-2">Număr telefon *</label>
                   <div className="flex gap-2">
                     {/* Custom Prefix Dropdown */}
@@ -706,67 +851,40 @@ function ProfilCurierContent() {
                     />
                   </div>
                 </div>
-
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Descriere (opțional)</label>
-                  <textarea
-                    value={profile.descriere}
-                    onChange={(e) => setProfile({ ...profile, descriere: e.target.value })}
-                    className="form-input min-h-[100px]"
-                    placeholder="Scrie câteva cuvinte despre tine și experiența ta în transport..."
-                  />
-                </div>
-
-                <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Experiență în transport</label>
-                  <select
-                    value={profile.experienta}
-                    onChange={(e) => setProfile({ ...profile, experienta: e.target.value })}
-                    className="form-select"
-                  >
-                    <option value="">Selectează...</option>
-                    <option value="<1">Sub 1 an</option>
-                    <option value="1-3">1-3 ani</option>
-                    <option value="3-5">3-5 ani</option>
-                    <option value="5-10">5-10 ani</option>
-                    <option value="10+">Peste 10 ani</option>
-                  </select>
-                </div>
               </div>
-            </div>
 
-            {/* Business Information Section */}
-            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6">
-                <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
-                  <div className="p-1.5 sm:p-2 bg-blue-500/20 rounded-lg shrink-0">
+              {/* Business Information Section */}
+              <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
+                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                  <div className="p-2.5 bg-linear-to-br from-blue-500/30 to-blue-600/30 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/20">
                     <BuildingIcon />
                   </div>
                   <span>{profile.tipBusiness === 'firma' ? 'Date Firmă' : 'Date Business'}</span>
                 </h2>
 
-                <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4">
-                  {/* Denumire firmă - Full width */}
+                <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                  {/* Denumire firmă */}
                   <div className="sm:col-span-2">
-                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
                       {profile.tipBusiness === 'firma' ? 'Denumire firmă *' : 'Nume complet *'}
                     </label>
                     <input
                       type="text"
                       value={profile.firma}
                       onChange={(e) => setProfile({ ...profile, firma: e.target.value })}
-                      className="form-input text-sm sm:text-base"
+                      className="form-input"
                       placeholder={profile.tipBusiness === 'firma' ? 'SC Exemplu SRL' : 'Ion Popescu'}
                     />
                   </div>
 
-                  {/* Țara și Adresa - Stack on mobile */}
+                  {/* Țara sediu */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Țara sediu</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Țara sediu</label>
                     <div className="relative" ref={countryDropdownRef}>
                       <button
                         type="button"
                         onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
-                        className="form-select w-full flex items-center gap-2 sm:gap-3 cursor-pointer min-h-[42px] sm:min-h-[46px] text-sm sm:text-base"
+                        className="form-select w-full flex items-center gap-3 cursor-pointer"
                       >
                         <Image
                           src={countries.find(c => c.code === profile.taraSediu)?.flag || '/img/flag/ro.svg'}
@@ -810,20 +928,21 @@ function ProfilCurierContent() {
                     </div>
                   </div>
 
+                  {/* Adresă sediu */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Adresă sediu</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Adresă sediu</label>
                     <input
                       type="text"
                       value={profile.sediu}
                       onChange={(e) => setProfile({ ...profile, sediu: e.target.value })}
-                      className="form-input text-sm sm:text-base"
+                      className="form-input"
                       placeholder="Str. Exemplu, Nr. 1, Oraș"
                     />
                   </div>
 
-                  {/* CUI/VAT and Registration */}
+                  {/* CUI/VAT */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
                       {profile.tipBusiness === 'firma' 
                         ? (countryTaxInfo[profile.taraSediu]?.taxLabel || 'CUI / CIF')
                         : (countryTaxInfoPF[profile.taraSediu]?.taxLabel || 'CNP')
@@ -833,7 +952,7 @@ function ProfilCurierContent() {
                       type="text"
                       value={profile.cui}
                       onChange={(e) => setProfile({ ...profile, cui: e.target.value })}
-                      className="form-input text-sm sm:text-base"
+                      className="form-input"
                       placeholder={profile.tipBusiness === 'firma'
                         ? (countryTaxInfo[profile.taraSediu]?.taxPlaceholder || 'RO12345678')
                         : (countryTaxInfoPF[profile.taraSediu]?.taxPlaceholder || '1234567890123')
@@ -841,8 +960,9 @@ function ProfilCurierContent() {
                     />
                   </div>
 
+                  {/* Registration Number */}
                   <div>
-                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
                       {profile.tipBusiness === 'firma'
                         ? (countryTaxInfo[profile.taraSediu]?.regLabel || 'Nr. înregistrare')
                         : (countryTaxInfoPF[profile.taraSediu]?.regLabel || 'CIF (opțional)')
@@ -852,173 +972,24 @@ function ProfilCurierContent() {
                       type="text"
                       value={profile.nrInmatriculare}
                       onChange={(e) => setProfile({ ...profile, nrInmatriculare: e.target.value })}
-                      className="form-input text-sm sm:text-base"
+                      className="form-input"
                       placeholder={profile.tipBusiness === 'firma'
                         ? (countryTaxInfo[profile.taraSediu]?.regPlaceholder || 'J40/1234/2024')
                         : (countryTaxInfoPF[profile.taraSediu]?.regPlaceholder || 'RO12345678')
                       }
                     />
                   </div>
-
-                  {/* Banking Section - Improved Mobile */}
-                  {(profile.tipBusiness === 'firma' ? countryTaxInfo[profile.taraSediu]?.bankType : countryTaxInfoPF[profile.taraSediu]?.bankType) === 'uk' ? (
-                    // UK: Sort Code + Account Number
-                    <>
-                      <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Sort Code *</label>
-                        <input
-                          type="text"
-                          value={profile.sortCode}
-                          onChange={(e) => setProfile({ ...profile, sortCode: e.target.value })}
-                          className="form-input text-sm sm:text-base font-mono"
-                          placeholder={profile.tipBusiness === 'firma' 
-                            ? (countryTaxInfo[profile.taraSediu]?.sortCodePlaceholder || '12-34-56')
-                            : (countryTaxInfoPF[profile.taraSediu]?.sortCodePlaceholder || '12-34-56')
-                          }
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">Account Number *</label>
-                        <input
-                          type="text"
-                          value={profile.accountNumber}
-                          onChange={(e) => setProfile({ ...profile, accountNumber: e.target.value })}
-                          className="form-input text-sm sm:text-base font-mono"
-                          placeholder={profile.tipBusiness === 'firma'
-                            ? (countryTaxInfo[profile.taraSediu]?.accountNumberPlaceholder || '12345678')
-                            : (countryTaxInfoPF[profile.taraSediu]?.accountNumberPlaceholder || '12345678')
-                          }
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    // All other countries: IBAN
-                    <div className="sm:col-span-2">
-                      <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1.5 sm:mb-2">IBAN *</label>
-                      <input
-                        type="text"
-                        value={profile.iban}
-                        onChange={(e) => setProfile({ ...profile, iban: e.target.value })}
-                        className="form-input text-sm sm:text-base font-mono"
-                        placeholder={profile.tipBusiness === 'firma'
-                          ? (countryTaxInfo[profile.taraSediu]?.ibanPlaceholder || 'RO49 AAAA 1B31 0075 9384 0000')
-                          : (countryTaxInfoPF[profile.taraSediu]?.ibanPlaceholder || 'RO49 AAAA 1B31 0075 9384 0000')
-                        }
-                      />
-                    </div>
-                  )}
-                  <div className="sm:col-span-2">
-                    <p className="text-[10px] sm:text-xs text-gray-500 flex items-center gap-1.5">
-                      <svg className="w-3.5 h-3.5 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                      Contul în care vei primi plățile pentru transporturi
-                    </p>
-                  </div>
-                </div>
-              </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-3 sm:space-y-4 order-2">
-            {/* Quick Links */}
-            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-5">
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Acțiuni rapide</h3>
-              <div className="space-y-2">
-                <Link
-                  href="/dashboard/curier/servicii"
-                  className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
-                >
-                  <div className="p-1.5 sm:p-2 bg-amber-500/20 rounded-lg group-hover:bg-amber-500/30 transition-colors">
-                    <svg className="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-white text-sm font-medium">Servicii</p>
-                    <p className="text-gray-500 text-xs">Gestionează serviciile</p>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/dashboard/curier/verificare"
-                  className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
-                >
-                  <div className="p-1.5 sm:p-2 bg-green-500/20 rounded-lg group-hover:bg-green-500/30 transition-colors">
-                    <svg className="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-white text-sm font-medium">Verificare</p>
-                    <p className="text-gray-500 text-xs">Documente contului</p>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/dashboard/curier/comenzi"
-                  className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
-                >
-                  <div className="p-1.5 sm:p-2 bg-orange-500/20 rounded-lg group-hover:bg-orange-500/30 transition-colors">
-                    <svg className="w-4 h-4 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-white text-sm font-medium">Comenzi</p>
-                    <p className="text-gray-500 text-xs">Vezi comenzile tale</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
-            {/* Tips */}
-            <div className="bg-linear-to-br from-orange-500/10 to-amber-500/10 rounded-xl sm:rounded-2xl border border-orange-500/20 p-4 sm:p-5">
-              <h3 className="text-orange-400 font-medium text-sm sm:text-base mb-2 sm:mb-3 flex items-center gap-2">
-                <span>💡</span> Sfaturi
-              </h3>
-              <ul className="text-xs sm:text-sm text-gray-400 space-y-1.5 sm:space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-400 mt-0.5">•</span>
-                  Un profil complet atrage mai mulți clienți
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-400 mt-0.5">•</span>
-                  Adaugă o poză de profil profesională
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-400 mt-0.5">•</span>
-                  Completează datele firmei pentru facturare
-                </li>
-              </ul>
-            </div>
-
-            {/* Status Card */}
-            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-5">
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Status cont</h3>
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-sm">Verificat</span>
-                  <span className="text-yellow-400 text-sm flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-yellow-400"></span>
-                    În așteptare
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-sm">Membru din</span>
-                  <span className="text-gray-300 text-sm">Dec 2025</span>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
         {/* Help Card */}
         <div className="mt-6 sm:mt-8">
           <HelpCard />
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 }
