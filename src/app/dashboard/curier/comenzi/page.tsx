@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
@@ -44,16 +45,84 @@ const statusLabels: Record<Order['status'], { label: string; color: string; bg: 
   anulata: { label: 'Anulată', color: 'text-red-400', bg: 'bg-red-500/20' },
 };
 
-// Service Icon component - Reusable across the app
+// Service Icon component - Reusable with inline icon definitions
 const ServiceIcon = ({ service, className = "w-5 h-5" }: { service: string; className?: string }) => {
-  const serviceType = serviceTypes.find(s => s.value === service);
-  if (!serviceType || !serviceType.icon) {
-    return serviceTypes[0].icon; // Default to first service icon
-  }
-  
-  // Clone the icon element and apply the className
-  const icon = serviceType.icon as React.ReactElement;
-  return <div className={className}>{icon}</div>;
+  const iconMap: Record<string, React.JSX.Element> = {
+    'Colete': (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="m3.3 7 8.7 5 8.7-5M12 22V12" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    'Plicuri': (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    'Persoane': (
+      <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+      </svg>
+    ),
+    'Electronice': (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="8" y1="21" x2="16" y2="21" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="12" y1="17" x2="12" y2="21" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    'Animale': (
+      <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+      </svg>
+    ),
+    'Platforma': (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <rect x="2" y="16" width="20" height="4" rx="1" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="8" cy="20" r="1" />
+        <circle cx="16" cy="20" r="1" />
+        <path d="M12 16V4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M9 7h6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    'Tractari': (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path d="M5 17h-2a1 1 0 0 1-1-1v-5l3-3h14l3 3v5a1 1 0 0 1-1 1h-2" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="7" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="m9 17 6-6" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="m15 11 4 4" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="17" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    'Aeroport': (
+      <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+      </svg>
+    ),
+    'Mobila': (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    'Paleti': (
+      <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+        <path d="M3 6h18" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M3 12h18" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M3 18h18" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M4 6v12" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M20 6v12" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  };
+
+  return iconMap[service] || iconMap['Colete']; // Default to Colete icon
 };
 
 export default function ComenziCurierPage() {

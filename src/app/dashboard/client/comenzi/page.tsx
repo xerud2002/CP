@@ -159,14 +159,14 @@ export default function ComenziClientPage() {
             În așteptare ({orders.filter(o => o.status === 'pending').length})
           </button>
           <button
-            onClick={() => setFilterStatus('in_progress')}
+            onClick={() => setFilterStatus('in_transit')}
             className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
-              filterStatus === 'in_progress'
+              filterStatus === 'in_transit'
                 ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            În progres ({orders.filter(o => o.status === 'in_progress').length})
+            În progres ({orders.filter(o => o.status === 'in_transit').length})
           </button>
           <button
             onClick={() => setFilterStatus('completed')}

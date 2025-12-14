@@ -135,7 +135,7 @@ const orderNumber = await runTransaction(db, async (transaction) => {
 - [x] Client can register and login ✅ (Firebase Auth + role-based registration)
 - [x] Client can create order with all services ✅ (9 service types: colete, plicuri, mobila, electronice, animale, persoane, aeroport, platforma, tractari)
 - [x] Client can view their orders ✅ (Filtered by `uid_client == user.uid`)
-- [x] Client can filter orders by status ✅ (pending, in_progress, completed, cancelled)
+- [x] Client can filter orders by status ✅ (pending, in_transit, completed, cancelled)
 - [x] Client can leave reviews for completed orders ✅ (recenzii collection with rating & comment)
 - [x] Client cannot see other clients' orders ✅ (Firestore rules: `resource.data.uid_client == request.auth.uid`)
 - [x] Client cannot modify courier's data ✅ (Firestore rules enforce owner-based access on profil_curier, zona_acoperire, tarife_curier)

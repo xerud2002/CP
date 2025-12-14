@@ -44,6 +44,7 @@ export const judetByCountry: Record<string, string[]> = {
 };
 
 // Service Types - Unified definition across the app
+// Note: Icons are rendered in components, not stored here
 export const serviceTypes = [
   { 
     id: 'colete', 
@@ -55,11 +56,6 @@ export const serviceTypes = [
     bgColor: 'bg-blue-500/20',
     borderColor: 'border-blue-500/30',
     gradient: 'from-blue-500 to-cyan-500',
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-      </svg>
-    )
   },
   { 
     id: 'plicuri', 
@@ -71,12 +67,6 @@ export const serviceTypes = [
     bgColor: 'bg-yellow-500/20',
     borderColor: 'border-yellow-500/30',
     gradient: 'from-yellow-500 to-orange-500',
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-        <rect x="2" y="4" width="20" height="16" rx="2" />
-        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
   },
   { 
     id: 'persoane', 
@@ -88,11 +78,6 @@ export const serviceTypes = [
     bgColor: 'bg-rose-500/20',
     borderColor: 'border-rose-500/30',
     gradient: 'from-rose-500 to-pink-500',
-    icon: (
-      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-      </svg>
-    )
   },
   { 
     id: 'electronice', 
@@ -104,13 +89,6 @@ export const serviceTypes = [
     bgColor: 'bg-purple-500/20',
     borderColor: 'border-purple-500/30',
     gradient: 'from-purple-500 to-pink-500',
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-        <rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round" />
-        <line x1="8" y1="21" x2="16" y2="21" strokeLinecap="round" strokeLinejoin="round" />
-        <line x1="12" y1="17" x2="12" y2="21" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
   },
   { 
     id: 'animale', 
@@ -122,11 +100,6 @@ export const serviceTypes = [
     bgColor: 'bg-pink-500/20',
     borderColor: 'border-pink-500/30',
     gradient: 'from-pink-500 to-rose-500',
-    icon: (
-      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-      </svg>
-    )
   },
   { 
     id: 'platforma', 
@@ -138,16 +111,6 @@ export const serviceTypes = [
     bgColor: 'bg-red-500/20',
     borderColor: 'border-red-500/30',
     gradient: 'from-red-500 to-orange-500',
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-        <rect x="2" y="16" width="20" height="4" rx="1" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="8" cy="20" r="1" />
-        <circle cx="16" cy="20" r="1" />
-        <path d="M12 16V4" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M9 7h6" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
   },
   { 
     id: 'tractari', 
@@ -159,15 +122,6 @@ export const serviceTypes = [
     bgColor: 'bg-orange-500/20',
     borderColor: 'border-orange-500/30',
     gradient: 'from-orange-500 to-red-500',
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-        <path d="M5 17h-2a1 1 0 0 1-1-1v-5l3-3h14l3 3v5a1 1 0 0 1-1 1h-2" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="7" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="m9 17 6-6" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="m15 11 4 4" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="17" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
   },
   { 
     id: 'aeroport', 
@@ -179,11 +133,6 @@ export const serviceTypes = [
     bgColor: 'bg-cyan-500/20',
     borderColor: 'border-cyan-500/30',
     gradient: 'from-cyan-500 to-blue-500',
-    icon: (
-      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-      </svg>
-    )
   },
   { 
     id: 'mobila', 
@@ -195,15 +144,6 @@ export const serviceTypes = [
     bgColor: 'bg-amber-500/20',
     borderColor: 'border-amber-500/30',
     gradient: 'from-amber-500 to-orange-500',
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-        <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
   },
   { 
     id: 'paleti', 
@@ -215,16 +155,6 @@ export const serviceTypes = [
     bgColor: 'bg-orange-500/20',
     borderColor: 'border-orange-500/30',
     gradient: 'from-orange-500 to-amber-500',
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-        <path d="M3 6h18" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M3 12h18" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M3 18h18" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M4 6v12" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M20 6v12" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    )
   },
 ];
 

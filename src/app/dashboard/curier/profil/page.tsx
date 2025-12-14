@@ -760,99 +760,6 @@ function ProfilCurierContent() {
         <div className="space-y-6">
             {/* Personal Information & Business Data - Full Width Cards */}
             <div className="space-y-6">
-              {/* Personal Information Section */}
-              <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
-                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                  <div className="p-2.5 bg-linear-to-br from-orange-500/30 to-orange-600/30 rounded-xl border border-orange-500/30 shadow-lg shadow-orange-500/20">
-                    <UserIcon />
-                  </div>
-                  Informații Personale
-                </h2>
-
-                <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Nume complet *</label>
-                    <input
-                      type="text"
-                      value={profile.nume}
-                      onChange={(e) => setProfile({ ...profile, nume: e.target.value })}
-                      className="form-input"
-                      placeholder="Ion Popescu"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
-                    <input
-                      type="email"
-                      value={profile.email}
-                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                      className="form-input"
-                      placeholder="email@exemplu.com"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Număr telefon *</label>
-                  <div className="flex gap-2">
-                    {/* Custom Prefix Dropdown */}
-                    <div className="relative" ref={prefixDropdownRef}>
-                      <button
-                        type="button"
-                        onClick={() => setPrefixDropdownOpen(!prefixDropdownOpen)}
-                        className="form-select w-32 flex items-center gap-2 cursor-pointer"
-                      >
-                        <Image
-                          src={phonePrefixes.find(p => p.code === profile.telefonPrefix)?.flag || '/img/flag/ro.svg'}
-                          alt={`Steag ${phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || 'România'}`}
-                          width={20}
-                          height={14}
-                          className="rounded-sm shrink-0"
-                        />
-                        <span>{phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || '+40'}</span>
-                        <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-                      
-                      {prefixDropdownOpen && (
-                        <div className="absolute z-50 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
-                          {phonePrefixes.map((p) => (
-                            <button
-                              key={p.code}
-                              type="button"
-                              onClick={() => {
-                                setProfile({ ...profile, telefonPrefix: p.code });
-                                setPrefixDropdownOpen(false);
-                              }}
-                              className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-700 transition-colors ${
-                                profile.telefonPrefix === p.code ? 'bg-slate-700/50' : ''
-                              }`}
-                            >
-                              <Image
-                                src={p.flag}
-                                alt=""
-                                width={20}
-                                height={14}
-                                className="rounded-sm shrink-0"
-                              />
-                              <span className="text-white text-sm">{p.name}</span>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <input
-                      type="text"
-                      value={profile.telefon}
-                      onChange={(e) => setProfile({ ...profile, telefon: e.target.value })}
-                      className="form-input flex-1"
-                      placeholder="7xx xxx xxx"
-                    />
-                  </div>
-                </div>
-              </div>
-
               {/* Business Information Section */}
               <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
@@ -977,6 +884,99 @@ function ProfilCurierContent() {
                         ? (countryTaxInfo[profile.taraSediu]?.regPlaceholder || 'J40/1234/2024')
                         : (countryTaxInfoPF[profile.taraSediu]?.regPlaceholder || 'RO12345678')
                       }
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Personal Information Section */}
+              <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
+                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                  <div className="p-2.5 bg-linear-to-br from-orange-500/30 to-orange-600/30 rounded-xl border border-orange-500/30 shadow-lg shadow-orange-500/20">
+                    <UserIcon />
+                  </div>
+                  Informații Personale
+                </h2>
+
+                <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Nume complet *</label>
+                    <input
+                      type="text"
+                      value={profile.nume}
+                      onChange={(e) => setProfile({ ...profile, nume: e.target.value })}
+                      className="form-input"
+                      placeholder="Ion Popescu"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
+                    <input
+                      type="email"
+                      value={profile.email}
+                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                      className="form-input"
+                      placeholder="email@exemplu.com"
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Număr telefon *</label>
+                  <div className="flex gap-2">
+                    {/* Custom Prefix Dropdown */}
+                    <div className="relative" ref={prefixDropdownRef}>
+                      <button
+                        type="button"
+                        onClick={() => setPrefixDropdownOpen(!prefixDropdownOpen)}
+                        className="form-select w-32 flex items-center gap-2 cursor-pointer"
+                      >
+                        <Image
+                          src={phonePrefixes.find(p => p.code === profile.telefonPrefix)?.flag || '/img/flag/ro.svg'}
+                          alt={`Steag ${phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || 'România'}`}
+                          width={20}
+                          height={14}
+                          className="rounded-sm shrink-0"
+                        />
+                        <span>{phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || '+40'}</span>
+                        <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      
+                      {prefixDropdownOpen && (
+                        <div className="absolute z-50 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                          {phonePrefixes.map((p) => (
+                            <button
+                              key={p.code}
+                              type="button"
+                              onClick={() => {
+                                setProfile({ ...profile, telefonPrefix: p.code });
+                                setPrefixDropdownOpen(false);
+                              }}
+                              className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-700 transition-colors ${
+                                profile.telefonPrefix === p.code ? 'bg-slate-700/50' : ''
+                              }`}
+                            >
+                              <Image
+                                src={p.flag}
+                                alt=""
+                                width={20}
+                                height={14}
+                                className="rounded-sm shrink-0"
+                              />
+                              <span className="text-white text-sm">{p.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <input
+                      type="text"
+                      value={profile.telefon}
+                      onChange={(e) => setProfile({ ...profile, telefon: e.target.value })}
+                      className="form-input flex-1"
+                      placeholder="7xx xxx xxx"
                     />
                   </div>
                 </div>
