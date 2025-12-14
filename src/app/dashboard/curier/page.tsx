@@ -201,7 +201,7 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
 }
 
 // Welcome Section Component - Simplified
-function WelcomeSection({ userName, hasNewOrders }: { userName: string; hasNewOrders: boolean }) {
+function WelcomeSection({ userName, hasNewOrders, rating, reviewCount }: { userName: string; hasNewOrders: boolean; rating: number; reviewCount: number }) {
   const greeting = getGreeting();
 
   return (
@@ -255,7 +255,7 @@ function WelcomeSection({ userName, hasNewOrders }: { userName: string; hasNewOr
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               </div>
-              <span className="text-lg sm:text-2xl font-bold text-white">4.9</span>
+              <span className="text-lg sm:text-2xl font-bold text-white">{rating.toFixed(1)}</span>
             </div>
             <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Rating</span>
           </div>
@@ -267,7 +267,7 @@ function WelcomeSection({ userName, hasNewOrders }: { userName: string; hasNewOr
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </div>
-              <span className="text-lg sm:text-2xl font-bold text-white">0</span>
+              <span className="text-lg sm:text-2xl font-bold text-white">{reviewCount}</span>
             </div>
             <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Recenzii</span>
           </div>
@@ -524,6 +524,8 @@ export default function CurierDashboard() {
   const [hasNoProfile, setHasNoProfile] = useState(false);
   const [userNume, setUserNume] = useState<string | null>(null);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
+  const [rating, setRating] = useState(5.0);
+  const [reviewCount, setReviewCount] = useState(0);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -546,10 +548,16 @@ export default function CurierDashboard() {
           if (profilData.nume) {
             setUserNume(profilData.nume);
           }
+          // Set rating and reviewCount (default 5.0 for new couriers)
+          setRating(profilData.rating !== undefined ? profilData.rating : 5.0);
+          setReviewCount(profilData.reviewCount !== undefined ? profilData.reviewCount : 0);
           // Check if profile is complete (has name and phone at minimum)
           setHasNoProfile(!profilData.nume || !profilData.telefon);
         } else {
           setHasNoProfile(true);
+          // Set default rating for new couriers
+          setRating(5.0);
+          setReviewCount(0);
         }
         
         // Check services from users collection
@@ -663,7 +671,7 @@ export default function CurierDashboard() {
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Welcome Section */}
-        <WelcomeSection userName={userName} hasNewOrders={false} />
+        <WelcomeSection userName={userName} hasNewOrders={false} rating={rating} reviewCount={reviewCount} />
 
         {/* Setup Progress - Only 2 steps: Profile and Services (Zones/Calendar disabled) */}
         <SetupProgress setupComplete={setupComplete} completedSteps={completedStepsCount} totalSteps={2} />

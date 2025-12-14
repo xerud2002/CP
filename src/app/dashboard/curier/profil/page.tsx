@@ -192,6 +192,8 @@ const defaultProfile: CourierProfile = {
   descriere: '',
   experienta: '',
   profileImage: '',
+  rating: 5.0,
+  reviewCount: 0,
 };
 
 // Icons
@@ -280,10 +282,16 @@ function ProfilCurierContent() {
         
         if (docSnap.exists()) {
           const data = docSnap.data();
-          setProfile({ ...defaultProfile, ...data } as CourierProfile);
+          // Ensure rating is set to 5.0 if not present
+          const profileData = { ...defaultProfile, ...data };
+          if (profileData.rating === undefined || profileData.rating === null) {
+            profileData.rating = 5.0;
+            profileData.reviewCount = 0;
+          }
+          setProfile(profileData as CourierProfile);
         } else {
-          // Pre-fill email from auth
-          setProfile({ ...defaultProfile, email: user.email || '' });
+          // Pre-fill email from auth and initialize rating
+          setProfile({ ...defaultProfile, email: user.email || '', rating: 5.0, reviewCount: 0 });
         }
       } catch (error) {
         console.error('Error loading profile:', error);
