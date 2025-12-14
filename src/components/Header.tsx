@@ -42,7 +42,7 @@ export default function Header() {
           {/* Logo Image */}
           <div className="relative w-11 h-11 lg:w-12 lg:h-12 group-hover:scale-105 transition-all">
             <Image 
-              src="/img/logo.webp" 
+              src="/img/logo.png" 
               alt="Curierul Perfect Logo" 
               width={48} 
               height={48} 
