@@ -95,7 +95,7 @@ function ForgotPasswordForm() {
           <Link href="/" className="flex lg:hidden items-center justify-center gap-3 mb-8 group">
             <div className="w-10 h-10 group-hover:scale-105 transition-all">
               <Image 
-                src="/img/logo.webp" 
+                src="/img/logo2.png" 
                 alt="Curierul Perfect Logo" 
                 width={40} 
                 height={40} 

@@ -166,7 +166,7 @@ function RegisterForm() {
             {/* Logo Image */}
             <div className="relative w-12 h-12 sm:w-14 sm:h-14 group-hover:scale-105 transition-all">
               <Image 
-                src="/img/logo.webp" 
+                src="/img/logo2.png" 
                 alt="Curierul Perfect Logo" 
                 width={56} 
                 height={56} 
