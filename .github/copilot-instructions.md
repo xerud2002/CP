@@ -8,11 +8,11 @@ Romanian courier marketplace connecting clients with couriers for European packa
 This is a **multi-tenant SaaS** platform with role-based access control. All data isolation uses owner-based security (`uid` fields) enforced at both Firestore rules and client-side query filtering. The app uses **client components** (`'use client'`) throughout dashboards for auth state and real-time updates.
 
 ### Role-Based Dashboards
-| Role | Path | Pattern |
-|------|------|---------|
-| `client` | `/dashboard/client` | Single-page dashboard with stats + navigation grid |
-| `curier` | `/dashboard/curier` | Card grid dashboard → sub-pages: `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati`, `/servicii`, `/transport-aeroport`, `/transport-persoane` |
-| `admin` | `/dashboard/admin` | Admin panel |
+| Role | Path | Pattern | Sub-pages |
+|------|------|---------|-----------|
+| `client` | `/dashboard/client` | Single-page dashboard with stats + navigation grid | `/comenzi`, `/profil`, `/recenzii`, `/fidelitate`, `/suport` |
+| `curier` | `/dashboard/curier` | Card grid dashboard → sub-pages | `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati`, `/servicii`, `/transport-aeroport`, `/transport-persoane` |
+| `admin` | `/dashboard/admin` | Admin panel | — |
 
 **Auth flow**: `?role=client|curier` on login/register → stores role in Firestore `users/{uid}` → redirects to `/dashboard/{role}`
 
@@ -43,9 +43,12 @@ RootLayout (AuthProvider)
 | Icons | `src/components/icons/DashboardIcons.tsx` | All SVG dashboard icons as React components |
 | Data | `src/lib/constants.ts` | `countries` (16 EU countries), `judetByCountry` (full region lists for all countries) |
 | Helpers | `src/utils/orderHelpers.ts` | `getNextOrderNumber()` (atomic counter), `formatOrderNumber()`, `formatClientName()` |
+| Toast | `src/lib/toast.ts` | Sonner wrapper: `showSuccess()`, `showError()`, `showInfo()`, `showWarning()`, `showLoading()` |
+| Errors | `src/lib/errorMessages.ts` | Romanian error messages map for Firebase auth/firestore/storage errors + `getErrorMessage()` helper |
 | Help | `src/components/HelpCard.tsx` | Reusable support card with email/WhatsApp links for all sub-pages |
 | Layout | `src/components/LayoutWrapper.tsx` | Conditional Header/Footer logic based on pathname |
 | Docs | `FIRESTORE_STRUCTURE.md` | Complete schema docs with security, indexes, and query patterns |
+| Security | `SECURITY_CHECKLIST.md` | Security measures, data flow, validation rules, and testing checklist |
 
 ### Firestore Collections
 | Collection | Document ID | Owner Field | Purpose |
@@ -125,14 +128,24 @@ await addDoc(collection(db, 'zona_acoperire'), {
 
 ### Error Handling Pattern
 ```tsx
+import { showError, showSuccess } from '@/lib/toast';
+import { getErrorMessage } from '@/lib/errorMessages';
+
 try {
   await someFirebaseOperation();
+  showSuccess('Operațiune reușită!');
 } catch (err: unknown) {
-  const errorMessage = err instanceof Error ? err.message : 'Eroare necunoscută';
-  setError(errorMessage);
+  showError(err); // Automatically converts to Romanian user-friendly message
 }
 ```
-Use type-safe `unknown` and check `instanceof Error` before accessing `.message`
+**Toast System**: Use Sonner-based helpers from `@/lib/toast.ts`:
+- `showSuccess(message)` — Green toast, 3s duration
+- `showError(error)` — Red toast with auto-translated Romanian error, 5s duration  
+- `showInfo(message)` — Blue toast, 3s
+- `showWarning(message)` — Yellow toast, 4s
+- `showLoading(message)` — Returns toast ID for dismissal
+
+**Error Messages**: `@/lib/errorMessages.ts` maps Firebase error codes to Romanian messages. Use `getErrorMessage(error)` to convert any error to user-friendly text.
 
 ### Sub-page Header Pattern (curier sub-pages)
 ```tsx
@@ -181,6 +194,8 @@ Use type-safe `unknown` and check `instanceof Error` before accessing `.message`
 - **Images**: Use `next/image` with explicit width/height; flags are 24x18px typically
 - **Loading states**: Centered spinner with `animate-spin` + text feedback (see protected page template)
 - **Form validation**: Validate on submit, not on change; show errors below inputs with red text
+- **Toasts**: Always use `showSuccess()`, `showError()`, etc. from `@/lib/toast.ts` — Toaster component auto-included in `RootLayout`
+- **Error handling**: Use `showError(error)` for automatic Romanian translation of Firebase errors
 
 ## Commands
 ```bash

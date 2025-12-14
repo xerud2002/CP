@@ -154,25 +154,21 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
           {/* Logo/Brand */}
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
             {/* Logo Image */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-linear-to-br from-orange-500/15 via-amber-500/10 to-emerald-500/10 rounded-xl blur-2xl opacity-70 group-hover:opacity-90 transition-opacity"></div>
-              <div className="relative w-9 h-9 sm:w-10 sm:h-10 bg-linear-to-br from-slate-800/95 via-slate-850/95 to-slate-900/95 backdrop-blur-md rounded-xl flex items-center justify-center shadow-xl border border-orange-500/20 group-hover:border-orange-500/40 transition-all duration-300">
-                <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 to-emerald-500/5"></div>
-                <Image 
-                  src="/img/logo.png" 
-                  alt="Curierul Perfect Logo" 
-                  width={36} 
-                  height={36} 
-                  className="w-7 h-7 sm:w-8 sm:h-8 object-contain relative z-10"
-                />
-              </div>
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 group-hover:scale-105 transition-all">
+              <Image 
+                src="/img/logo.png" 
+                alt="Curierul Perfect Logo" 
+                width={40} 
+                height={40} 
+                className="w-full h-full object-contain drop-shadow-lg"
+              />
             </div>
             {/* Text - Hidden on mobile */}
             <div className="hidden sm:flex flex-col">
               <span className="text-base sm:text-lg font-black tracking-tight leading-none">
                 <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
               </span>
-              <span className="text-[9px] sm:text-[10px] text-gray-500 font-medium tracking-wider uppercase">Transport Europa</span>
+              <span className="text-[9px] sm:text-[10px] text-gray-500 font-medium tracking-wider uppercase text-center">- TRANSPORT EUROPA -</span>
             </div>
           </Link>
 

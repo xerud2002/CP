@@ -13,24 +13,21 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
               {/* Logo Image */}
-              <div className="relative">
-                <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-green-500 rounded-xl blur-md opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                <div className="relative w-11 h-11 bg-slate-900/50 rounded-xl flex items-center justify-center shadow-xl border border-white/10 group-hover:border-orange-500/30 group-hover:scale-105 transition-all overflow-hidden">
-                  <Image 
-                    src="/img/logo.png" 
-                    alt="Curierul Perfect Logo" 
-                    width={40} 
-                    height={40} 
-                    className="w-9 h-9 object-contain"
-                  />
-                </div>
+              <div className="relative w-11 h-11 group-hover:scale-105 transition-all">
+                <Image 
+                  src="/img/logo.png" 
+                  alt="Curierul Perfect Logo" 
+                  width={44} 
+                  height={44} 
+                  className="w-full h-full object-contain drop-shadow-lg"
+                />
               </div>
               {/* Text */}
               <div className="flex flex-col">
                 <span className="text-xl font-black leading-none">
                   <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
                 </span>
-                <span className="text-[10px] text-gray-600 font-medium tracking-wider uppercase mt-0.5">Transport Europa</span>
+                <span className="text-[10px] text-gray-600 font-medium tracking-wider uppercase mt-0.5 text-center">- TRANSPORT EUROPA -</span>
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">

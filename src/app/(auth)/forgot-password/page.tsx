@@ -3,6 +3,7 @@
 import { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types';
 
@@ -91,11 +92,15 @@ function ForgotPasswordForm() {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-slate-950">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
-          <Link href="/" className="flex lg:hidden items-center justify-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
+          <Link href="/" className="flex lg:hidden items-center justify-center gap-3 mb-8 group">
+            <div className="w-10 h-10 group-hover:scale-105 transition-all">
+              <Image 
+                src="/img/logo.png" 
+                alt="Curierul Perfect Logo" 
+                width={40} 
+                height={40} 
+                className="w-full h-full object-contain drop-shadow-lg"
+              />
             </div>
             <span className="text-xl font-bold text-white">Curierul Perfect</span>
           </Link>

@@ -164,25 +164,22 @@ function RegisterForm() {
           {/* Logo - Mobile & Desktop */}
           <Link href="/" className="flex items-center justify-center gap-3 sm:gap-4 mb-8 group">
             {/* Logo Image */}
-            <div className="relative">
-              <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-green-500 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity"></div>
-              <div className="relative w-12 h-12 sm:w-14 sm:h-14 bg-slate-900/50 rounded-xl flex items-center justify-center shadow-xl border border-white/10 group-hover:border-orange-500/30 group-hover:scale-105 transition-all overflow-hidden">
-                <Image 
-                  src="/img/logo.png" 
-                  alt="Curierul Perfect Logo" 
-                  width={50} 
-                  height={50} 
-                  className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
-                  priority
-                />
-              </div>
+            <div className="relative w-12 h-12 sm:w-14 sm:h-14 group-hover:scale-105 transition-all">
+              <Image 
+                src="/img/logo.png" 
+                alt="Curierul Perfect Logo" 
+                width={56} 
+                height={56} 
+                className="w-full h-full object-contain drop-shadow-lg"
+                priority
+              />
             </div>
             {/* Text */}
             <div className="flex flex-col">
               <span className="text-xl sm:text-2xl font-black tracking-tight leading-none">
                 <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
               </span>
-              <span className="text-[10px] sm:text-xs text-gray-500 font-medium tracking-wider uppercase">Transport Europa</span>
+              <span className="text-[10px] sm:text-xs text-gray-500 font-medium tracking-wider uppercase text-center">- TRANSPORT EUROPA -</span>
             </div>
           </Link>
 

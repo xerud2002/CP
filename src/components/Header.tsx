@@ -40,25 +40,22 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           {/* Logo Image */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-green-500 rounded-xl blur-md opacity-40 group-hover:opacity-60 transition-opacity"></div>
-            <div className="relative w-11 h-11 lg:w-12 lg:h-12 bg-slate-900/50 rounded-xl flex items-center justify-center shadow-xl border border-white/10 group-hover:border-orange-500/30 group-hover:scale-105 transition-all overflow-hidden">
-              <Image 
-                src="/img/logo.png" 
-                alt="Curierul Perfect Logo" 
-                width={40} 
-                height={40} 
-                className="w-9 h-9 lg:w-10 lg:h-10 object-contain"
-                priority
-              />
-            </div>
+          <div className="relative w-11 h-11 lg:w-12 lg:h-12 group-hover:scale-105 transition-all">
+            <Image 
+              src="/img/logo.png" 
+              alt="Curierul Perfect Logo" 
+              width={48} 
+              height={48} 
+              className="w-full h-full object-contain drop-shadow-lg"
+              priority
+            />
           </div>
           {/* Text */}
           <div className="flex flex-col">
             <span className="text-xl lg:text-2xl font-black tracking-tight leading-none">
               <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
             </span>
-            <span className="text-[10px] lg:text-xs text-gray-500 font-medium tracking-wider uppercase">Transport Europa</span>
+            <span className="text-[10px] lg:text-xs text-gray-500 font-medium tracking-wider uppercase text-center">- TRANSPORT EUROPA -</span>
           </div>
         </Link>
 
