@@ -1382,7 +1382,10 @@ function ProfilCurierContent() {
             <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-5">
               <h3 className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Acțiuni rapide</h3>
               <div className="space-y-2">
-                  <div className="flex items-center gap-2">
+                <Link
+                  href="/dashboard/curier/zona-acoperire"
+                  className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl bg-slate-700/30 hover:bg-slate-700/50 transition-colors group"
+                >
                     <span className="text-gray-400 text-xs">Tip activitate:</span>
                     <span className={`text-xs px-2 py-1 rounded-full ${
                       profile.tipBusiness === 'firma' 
