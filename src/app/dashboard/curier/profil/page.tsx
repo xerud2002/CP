@@ -989,8 +989,58 @@ function ProfilCurierContent() {
             }`}
           >
             <BuildingIcon />
-            Date Firmă
+            Date Business
           </button>
+        </div>
+
+        {/* Business Type Selector - First Priority */}
+        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6 mb-4 sm:mb-6">
+          <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
+            Activezi ca persoană fizică sau firmă? *
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-400 mb-4">
+            Selectează tipul de activitate pentru a completa documentele corespunzătoare
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <button
+              type="button"
+              onClick={() => setProfile({ ...profile, tipBusiness: 'firma' })}
+              className={`p-4 sm:p-6 rounded-xl border-2 transition-all active:scale-[0.98] ${
+                profile.tipBusiness === 'firma'
+                  ? 'border-purple-500 bg-purple-500/10 shadow-lg shadow-purple-500/20'
+                  : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-2 sm:gap-3">
+                <span className="text-3xl sm:text-4xl">🏢</span>
+                <span className={`font-semibold text-sm sm:text-lg ${profile.tipBusiness === 'firma' ? 'text-purple-400' : 'text-gray-300'}`}>
+                  {getBusinessTypeLabels(profile.taraSediu).firma.title}
+                </span>
+                <span className="text-xs sm:text-sm text-gray-400 text-center leading-tight">
+                  {getBusinessTypeLabels(profile.taraSediu).firma.subtitle}
+                </span>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setProfile({ ...profile, tipBusiness: 'pf' })}
+              className={`p-4 sm:p-6 rounded-xl border-2 transition-all active:scale-[0.98] ${
+                profile.tipBusiness === 'pf'
+                  ? 'border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20'
+                  : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-2 sm:gap-3">
+                <span className="text-3xl sm:text-4xl">👤</span>
+                <span className={`font-semibold text-sm sm:text-lg ${profile.tipBusiness === 'pf' ? 'text-blue-400' : 'text-gray-300'}`}>
+                  {getBusinessTypeLabels(profile.taraSediu).pf.title}
+                </span>
+                <span className="text-xs sm:text-sm text-gray-400 text-center leading-tight">
+                  {getBusinessTypeLabels(profile.taraSediu).pf.subtitle}
+                </span>
+              </div>
+            </button>
+          </div>
         </div>
 
         {/* Tab Content */}
@@ -1124,49 +1174,8 @@ function ProfilCurierContent() {
                   <div className="p-1.5 sm:p-2 bg-blue-500/20 rounded-lg shrink-0">
                     <BuildingIcon />
                   </div>
-                  <span>Date Firmă</span>
+                  <span>{profile.tipBusiness === 'firma' ? 'Date Firmă' : 'Date Business'}</span>
                 </h2>
-
-                {/* Business Type Selector - Improved Mobile */}
-                <div className="mb-4 sm:mb-6">
-                  <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-2 sm:mb-3">Tip activitate *</label>
-                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setProfile({ ...profile, tipBusiness: 'firma' })}
-                      className={`p-2.5 sm:p-4 rounded-xl border-2 transition-all active:scale-[0.98] ${
-                        profile.tipBusiness === 'firma'
-                          ? 'border-purple-500 bg-purple-500/10'
-                          : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
-                      }`}
-                    >
-                      <div className="flex flex-col items-center gap-1 sm:gap-2">
-                        <span className="text-2xl sm:text-3xl">🏢</span>
-                        <span className={`font-medium text-xs sm:text-base ${profile.tipBusiness === 'firma' ? 'text-purple-400' : 'text-gray-300'}`}>
-                          {getBusinessTypeLabels(profile.taraSediu).firma.title}
-                        </span>
-                        <span className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">{getBusinessTypeLabels(profile.taraSediu).firma.subtitle}</span>
-                      </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setProfile({ ...profile, tipBusiness: 'pf' })}
-                      className={`p-2.5 sm:p-4 rounded-xl border-2 transition-all active:scale-[0.98] ${
-                        profile.tipBusiness === 'pf'
-                          ? 'border-blue-500 bg-blue-500/10'
-                          : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
-                      }`}
-                    >
-                      <div className="flex flex-col items-center gap-1 sm:gap-2">
-                        <span className="text-2xl sm:text-3xl">👤</span>
-                        <span className={`font-medium text-xs sm:text-base ${profile.tipBusiness === 'pf' ? 'text-blue-400' : 'text-gray-300'}`}>
-                          {getBusinessTypeLabels(profile.taraSediu).pf.title}
-                        </span>
-                        <span className="text-[10px] sm:text-xs text-gray-500 text-center leading-tight">{getBusinessTypeLabels(profile.taraSediu).pf.subtitle}</span>
-                      </div>
-                    </button>
-                  </div>
-                </div>
 
                 <div className="space-y-3 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4">
                   {/* Denumire firmă - Full width */}
