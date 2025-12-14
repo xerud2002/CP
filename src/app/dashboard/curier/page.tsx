@@ -171,17 +171,6 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
               )}
             </button>
 
-            {/* User Avatar */}
-            <Link href="/dashboard/curier/profil" className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-linear-to-br from-orange-400 to-orange-600 flex items-center justify-center overflow-hidden shadow-lg shadow-orange-500/25">
-                <Image src="/img/default-avatar.png" alt="Avatar" width={36} height={36} className="w-full h-full object-cover" />
-              </div>
-              <div className="hidden sm:block">
-                <p className="text-sm font-medium text-white">{userName}</p>
-                <p className="text-xs text-emerald-400">Partener verificat ✓</p>
-              </div>
-            </Link>
-
             {/* Logout */}
             <button 
               onClick={onLogout}
