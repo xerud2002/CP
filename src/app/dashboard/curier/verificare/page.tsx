@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, Suspense } from 'react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -305,7 +305,7 @@ const getDocIcon = (iconType: string) => {
   }
 };
 
-export default function VerificarePage() {
+function VerificarePageContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [profile, setProfile] = useState<CourierProfile | null>(null);
@@ -451,6 +451,14 @@ export default function VerificarePage() {
     }
   }, [user]);
 
+  // Memoize documents calculation BEFORE any early returns
+  const documents = useMemo(
+    () => profile ? getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness) : [],
+    [profile, activeServices]
+  );
+  const requiredDocs = useMemo(() => documents.filter(d => d.required), [documents]);
+  const optionalDocs = useMemo(() => documents.filter(d => !d.required), [documents]);
+
   if (loading || !profile) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -460,13 +468,6 @@ export default function VerificarePage() {
   }
 
   if (!user) return null;
-
-  const documents = useMemo(
-    () => getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness),
-    [profile.taraSediu, activeServices, profile.tipBusiness]
-  );
-  const requiredDocs = useMemo(() => documents.filter(d => d.required), [documents]);
-  const optionalDocs = useMemo(() => documents.filter(d => !d.required), [documents]);
 
   return (
     <div className="min-h-screen">
@@ -688,5 +689,20 @@ export default function VerificarePage() {
         <HelpCard />
       </div>
     </div>
+  );
+}
+
+export default function VerificarePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="spinner mb-4" />
+          <p className="text-gray-400">Se încarcă...</p>
+        </div>
+      </div>
+    }>
+      <VerificarePageContent />
+    </Suspense>
   );
 }

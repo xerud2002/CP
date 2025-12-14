@@ -18,30 +18,6 @@ service cloud.firestore {
         (request.auth.uid == userId || resource.data.uid == request.auth.uid);
     }
     
-    // Tarife curier collection
-    match /tarife_curier/{docId} {
-      // Couriers can read/write their own tariffs
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
-    }
-    
-    // Zona acoperire collection
-    match /zona_acoperire/{docId} {
-      // Couriers can read/write their own coverage zones
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
-    }
-    
-    // Calendar colectii collection
-    match /calendar_colectii/{docId} {
-      // Couriers can manage their calendar
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.courierId == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.courierId == request.auth.uid;
-    }
-    
     // Profil curier collection
     match /profil_curier/{userId} {
       // Couriers can read/write their own profile
@@ -98,22 +74,6 @@ service cloud.firestore {
       allow read: if isAuthenticated();
       // Only allow writes from authenticated users (server will use transactions)
       allow write: if isAuthenticated();
-    }
-    
-    // Transport aeroport collection
-    match /transport_aeroport/{docId} {
-      // Couriers can manage their airport transport routes
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
-    }
-    
-    // Transport persoane collection
-    match /transport_persoane/{docId} {
-      // Couriers can manage their person transport routes
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
     }
   }
 }
