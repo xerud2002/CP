@@ -967,32 +967,6 @@ function ProfilCurierContent() {
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex gap-1.5 sm:gap-2 mb-4 sm:mb-6 overflow-x-auto pb-2">
-          <button
-            onClick={() => handleTabChange('personal')}
-            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-medium text-sm transition-all whitespace-nowrap ${
-              activeTab === 'personal'
-                ? 'bg-orange-500 text-white'
-                : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-700/50'
-            }`}
-          >
-            <UserIcon />
-            Date Personale
-          </button>
-          <button
-            onClick={() => handleTabChange('company')}
-            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-medium text-sm transition-all whitespace-nowrap ${
-              activeTab === 'company'
-                ? 'bg-orange-500 text-white'
-                : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-700/50'
-            }`}
-          >
-            <BuildingIcon />
-            Date Business
-          </button>
-        </div>
-
         {/* Business Type Selector - First Priority */}
         <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6 mb-4 sm:mb-6">
           <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
@@ -1045,131 +1019,131 @@ function ProfilCurierContent() {
 
         {/* Tab Content */}
         <div className="grid lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Main Form */}
-          <div className="lg:col-span-2 order-1">
-            {activeTab === 'personal' && (
-              <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
-                <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
-                  <div className="p-2 bg-orange-500/20 rounded-lg">
-                    <UserIcon />
-                  </div>
-                  Informații Personale
-                </h2>
+          {/* Main Form - Combined Personal & Business */}
+          <div className="lg:col-span-2 order-1 space-y-4 sm:space-y-6">
+            
+            {/* Personal Information Section */}
+            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                <div className="p-2 bg-orange-500/20 rounded-lg">
+                  <UserIcon />
+                </div>
+                Informații Personale
+              </h2>
 
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Nume complet *</label>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Nume complet *</label>
+                  <input
+                    type="text"
+                    value={profile.nume}
+                    onChange={(e) => setProfile({ ...profile, nume: e.target.value })}
+                    className="form-input"
+                    placeholder="Ion Popescu"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
+                  <input
+                    type="email"
+                    value={profile.email}
+                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                    className="form-input"
+                    placeholder="email@exemplu.com"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Număr telefon *</label>
+                  <div className="flex gap-2">
+                    {/* Custom Prefix Dropdown */}
+                    <div className="relative" ref={prefixDropdownRef}>
+                      <button
+                        type="button"
+                        onClick={() => setPrefixDropdownOpen(!prefixDropdownOpen)}
+                        className="form-select w-32 flex items-center gap-2 cursor-pointer"
+                      >
+                        <Image
+                          src={phonePrefixes.find(p => p.code === profile.telefonPrefix)?.flag || '/img/flag/ro.svg'}
+                          alt={`Steag ${phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || 'România'}`}
+                          width={20}
+                          height={14}
+                          className="rounded-sm shrink-0"
+                        />
+                        <span>{phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || '+40'}</span>
+                        <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      
+                      {prefixDropdownOpen && (
+                        <div className="absolute z-50 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                          {phonePrefixes.map((p) => (
+                            <button
+                              key={p.code}
+                              type="button"
+                              onClick={() => {
+                                setProfile({ ...profile, telefonPrefix: p.code });
+                                setPrefixDropdownOpen(false);
+                              }}
+                              className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-700 transition-colors ${
+                                profile.telefonPrefix === p.code ? 'bg-slate-700/50' : ''
+                              }`}
+                            >
+                              <Image
+                                src={p.flag}
+                                alt=""
+                                width={20}
+                                height={14}
+                                className="rounded-sm shrink-0"
+                              />
+                              <span className="text-white text-sm">{p.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                     <input
                       type="text"
-                      value={profile.nume}
-                      onChange={(e) => setProfile({ ...profile, nume: e.target.value })}
-                      className="form-input"
-                      placeholder="Ion Popescu"
+                      value={profile.telefon}
+                      onChange={(e) => setProfile({ ...profile, telefon: e.target.value })}
+                      className="form-input flex-1"
+                      placeholder="7xx xxx xxx"
                     />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
-                    <input
-                      type="email"
-                      value={profile.email}
-                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                      className="form-input"
-                      placeholder="email@exemplu.com"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Număr telefon *</label>
-                    <div className="flex gap-2">
-                      {/* Custom Prefix Dropdown */}
-                      <div className="relative" ref={prefixDropdownRef}>
-                        <button
-                          type="button"
-                          onClick={() => setPrefixDropdownOpen(!prefixDropdownOpen)}
-                          className="form-select w-32 flex items-center gap-2 cursor-pointer"
-                        >
-                          <Image
-                            src={phonePrefixes.find(p => p.code === profile.telefonPrefix)?.flag || '/img/flag/ro.svg'}
-                            alt={`Steag ${phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || 'România'}`}
-                            width={20}
-                            height={14}
-                            className="rounded-sm shrink-0"
-                          />
-                          <span>{phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || '+40'}</span>
-                          <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                        
-                        {prefixDropdownOpen && (
-                          <div className="absolute z-50 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
-                            {phonePrefixes.map((p) => (
-                              <button
-                                key={p.code}
-                                type="button"
-                                onClick={() => {
-                                  setProfile({ ...profile, telefonPrefix: p.code });
-                                  setPrefixDropdownOpen(false);
-                                }}
-                                className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-700 transition-colors ${
-                                  profile.telefonPrefix === p.code ? 'bg-slate-700/50' : ''
-                                }`}
-                              >
-                                <Image
-                                  src={p.flag}
-                                  alt=""
-                                  width={20}
-                                  height={14}
-                                  className="rounded-sm shrink-0"
-                                />
-                                <span className="text-white text-sm">{p.name}</span>
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      <input
-                        type="text"
-                        value={profile.telefon}
-                        onChange={(e) => setProfile({ ...profile, telefon: e.target.value })}
-                        className="form-input flex-1"
-                        placeholder="7xx xxx xxx"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Descriere (opțional)</label>
-                    <textarea
-                      value={profile.descriere}
-                      onChange={(e) => setProfile({ ...profile, descriere: e.target.value })}
-                      className="form-input min-h-[100px]"
-                      placeholder="Scrie câteva cuvinte despre tine și experiența ta în transport..."
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Experiență în transport</label>
-                    <select
-                      value={profile.experienta}
-                      onChange={(e) => setProfile({ ...profile, experienta: e.target.value })}
-                      className="form-select"
-                    >
-                      <option value="">Selectează...</option>
-                      <option value="<1">Sub 1 an</option>
-                      <option value="1-3">1-3 ani</option>
-                      <option value="3-5">3-5 ani</option>
-                      <option value="5-10">5-10 ani</option>
-                      <option value="10+">Peste 10 ani</option>
-                    </select>
                   </div>
                 </div>
-              </div>
-            )}
 
-            {activeTab === 'company' && (
-              <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6">
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Descriere (opțional)</label>
+                  <textarea
+                    value={profile.descriere}
+                    onChange={(e) => setProfile({ ...profile, descriere: e.target.value })}
+                    className="form-input min-h-[100px]"
+                    placeholder="Scrie câteva cuvinte despre tine și experiența ta în transport..."
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Experiență în transport</label>
+                  <select
+                    value={profile.experienta}
+                    onChange={(e) => setProfile({ ...profile, experienta: e.target.value })}
+                    className="form-select"
+                  >
+                    <option value="">Selectează...</option>
+                    <option value="<1">Sub 1 an</option>
+                    <option value="1-3">1-3 ani</option>
+                    <option value="3-5">3-5 ani</option>
+                    <option value="5-10">5-10 ani</option>
+                    <option value="10+">Peste 10 ani</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Business Information Section */}
+            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-6">
                 <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
                   <div className="p-1.5 sm:p-2 bg-blue-500/20 rounded-lg shrink-0">
                     <BuildingIcon />
@@ -1350,19 +1324,64 @@ function ProfilCurierContent() {
                   </div>
                 </div>
               </div>
-            )}
 
-            {activeTab === 'documents' && (
-              <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
-                <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
-                  <div className="p-1.5 sm:p-2 bg-green-500/20 rounded-lg">
-                    <DocumentIcon />
-                  </div>
-                  Documente Necesare
-                </h2>
+            {/* Vehicle Information Section */}
+            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                <div className="p-2 bg-green-500/20 rounded-lg">
+                  <TruckIcon />
+                </div>
+                Vehicul
+              </h2>
 
-                {/* Business type & Services info */}
-                <div className="mb-3 sm:mb-4 p-2.5 sm:p-3 bg-slate-700/30 rounded-lg sm:rounded-xl space-y-2 sm:space-y-3">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Tip vehicul</label>
+                  <select
+                    value={profile.vehiculTip}
+                    onChange={(e) => setProfile({ ...profile, vehiculTip: e.target.value })}
+                    className="form-select"
+                  >
+                    <option value="">Selectează...</option>
+                    <option value="micro">Micro (furgoneta mică)</option>
+                    <option value="van">Van (2.5-3.5 tone)</option>
+                    <option value="camion">Camion (3.5+ tone)</option>
+                    <option value="tir">TIR</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Marcă vehicul</label>
+                  <input
+                    type="text"
+                    value={profile.vehiculMarca}
+                    onChange={(e) => setProfile({ ...profile, vehiculMarca: e.target.value })}
+                    className="form-input"
+                    placeholder="Mercedes, Ford, Iveco..."
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Capacitate aproximativă</label>
+                  <input
+                    type="text"
+                    value={profile.vehiculCapacitate}
+                    onChange={(e) => setProfile({ ...profile, vehiculCapacitate: e.target.value })}
+                    className="form-input"
+                    placeholder="1000 kg, 15 m³..."
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-3 sm:space-y-4 order-2">
+            {/* Quick Links */}
+            <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-5">
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 sm:mb-4">Acțiuni rapide</h3>
+              <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <span className="text-gray-400 text-xs">Tip activitate:</span>
                     <span className={`text-xs px-2 py-1 rounded-full ${
