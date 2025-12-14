@@ -318,11 +318,9 @@ function ComandaForm() {
     if (currentStep === 3) {
       if (!formData.judet_ridicare) newErrors.judet_ridicare = 'Selectează județul/regiunea';
       if (!formData.oras_ridicare) newErrors.oras_ridicare = 'Orașul este obligatoriu';
-      if (!formData.adresa_ridicare) newErrors.adresa_ridicare = 'Adresa este obligatorie';
       
       if (!formData.judet_livrare) newErrors.judet_livrare = 'Selectează județul/regiunea';
       if (!formData.oras_livrare) newErrors.oras_livrare = 'Orașul este obligatoriu';
-      if (!formData.adresa_livrare) newErrors.adresa_livrare = 'Adresa este obligatorie';
     }
 
     if (currentStep === 4) {
@@ -681,7 +679,7 @@ function ComandaForm() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Adresa completă *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Adresa completă</label>
                     <input
                       type="text"
                       name="adresa_ridicare"
@@ -780,7 +778,7 @@ function ComandaForm() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Adresa completă *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Adresa completă</label>
                     <input
                       type="text"
                       name="adresa_livrare"
