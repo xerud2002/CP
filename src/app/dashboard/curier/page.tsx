@@ -10,9 +10,6 @@ import { db } from '@/lib/firebase';
 import HelpCard from '@/components/HelpCard';
 import { logError } from '@/lib/errorMessages';
 import {
-  MapIcon,
-  CalendarIcon,
-  CurrencyIcon,
   UserIcon,
   BoxIcon,
   CheckCircleIcon,
@@ -44,11 +41,11 @@ interface SetupStep {
   completed: boolean;
 }
 
-const getSetupSteps = (profileComplete: boolean, zonesComplete: boolean, servicesComplete: boolean, calendarComplete: boolean): SetupStep[] => [
-  { id: 'profile', title: 'Completează profilul', description: 'Adaugă informațiile tale', href: '/dashboard/curier/profil', icon: UserIcon, completed: profileComplete },
-  { id: 'zones', title: 'Setează zonele', description: 'Unde livrezi?', href: '/dashboard/curier/zona-acoperire', icon: MapIcon, completed: zonesComplete },
-  { id: 'services', title: 'Adaugă servicii', description: 'Ce oferi clienților?', href: '/dashboard/curier/servicii', icon: CurrencyIcon, completed: servicesComplete },
-  { id: 'calendar', title: 'Configurează calendarul', description: 'Când ești disponibil?', href: '/dashboard/curier/calendar', icon: CalendarIcon, completed: calendarComplete },
+// Setup steps - Only active features: Profile and Services
+// Zone and Calendar are disabled and removed from setup flow
+const getSetupSteps = (profileComplete: boolean, servicesComplete: boolean): SetupStep[] => [
+  { id: 'profile', title: 'Completează profilul', description: 'Date personale și business', href: '/dashboard/curier/profil', icon: UserIcon, completed: profileComplete },
+  { id: 'services', title: 'Adaugă servicii', description: 'Ce oferi clienților?', href: '/dashboard/curier/servicii', icon: StarIcon, completed: servicesComplete },
 ];
 
 // Activities will be loaded from Firebase
@@ -63,7 +60,7 @@ interface NavTile {
   color: string;
   bgColor: string;
   borderColor: string;
-  badgeKey?: 'zones' | 'services' | 'calendar' | 'profile';
+  badgeKey?: 'services' | 'profile';
 }
 
 const mainNavTiles: NavTile[] = [
@@ -95,35 +92,6 @@ const mainNavTiles: NavTile[] = [
     bgColor: 'bg-green-500/10 hover:bg-green-500/20',
     borderColor: 'border-green-500/20 hover:border-green-500/40',
   },
-  // {
-  //   href: '/dashboard/curier/zona-acoperire',
-  //   icon: MapIcon,
-  //   title: 'Zone',
-  //   description: 'Zonele tale de livrare',
-  //   color: 'text-purple-400',
-  //   bgColor: 'bg-purple-500/10 hover:bg-purple-500/20',
-  //   borderColor: 'border-purple-500/20 hover:border-purple-500/40',
-  //   badgeKey: 'zones',
-  // },
-  // {
-  //   href: '/dashboard/curier/calendar',
-  //   icon: CalendarIcon,
-  //   title: 'Calendar',
-  //   description: 'Program de lucru',
-  //   color: 'text-blue-400',
-  //   bgColor: 'bg-blue-500/10 hover:bg-blue-500/20',
-  //   borderColor: 'border-blue-500/20 hover:border-blue-500/40',
-  //   badgeKey: 'calendar',
-  // },
-  // {
-  //   href: '/dashboard/curier/tarife',
-  //   icon: CurrencyIcon,
-  //   title: 'Tarife',
-  //   description: 'Configurează prețuri',
-  //   color: 'text-emerald-400',
-  //   bgColor: 'bg-emerald-500/10 hover:bg-emerald-500/20',
-  //   borderColor: 'border-emerald-500/20 hover:border-emerald-500/40',
-  // },
   {
     href: '/dashboard/curier/profil',
     icon: UserIcon,
@@ -264,11 +232,12 @@ function WelcomeSection({ userName, hasNewOrders }: { userName: string; hasNewOr
 }
 
 // Setup Progress Component for new couriers
+// Shows only 2 active steps: Profile and Services (Zones and Calendar are disabled)
 function SetupProgress({ setupComplete, completedSteps, totalSteps }: { setupComplete: boolean; completedSteps: number; totalSteps: number }) {
   if (setupComplete) return null;
   
   const percentage = Math.round((completedSteps / totalSteps) * 100);
-  const steps = getSetupSteps(completedSteps >= 1, completedSteps >= 2, completedSteps >= 3, completedSteps >= 4);
+  const steps = getSetupSteps(completedSteps >= 1, completedSteps >= 2);
   
   return (
     <section className="bg-linear-to-br from-amber-500/10 to-orange-500/10 rounded-xl sm:rounded-2xl border border-amber-500/20 p-4 sm:p-6">
@@ -296,7 +265,7 @@ function SetupProgress({ setupComplete, completedSteps, totalSteps }: { setupCom
       </div>
       
       {/* Steps */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 gap-2">
         {steps.map((step) => (
           <Link
             key={step.id}
@@ -491,8 +460,6 @@ export default function CurierDashboard() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const [hasNoServices, setHasNoServices] = useState(false);
-  const [hasNoZones, setHasNoZones] = useState(false);
-  const [hasNoCalendar, setHasNoCalendar] = useState(false);
   const [hasNoProfile, setHasNoProfile] = useState(false);
   const [userNume, setUserNume] = useState<string | null>(null);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
@@ -540,16 +507,6 @@ export default function CurierDashboard() {
         } else {
           setHasNoServices(true);
         }
-
-        // Check zones
-        const zonesQuery = query(collection(db, 'zona_acoperire'), where('uid', '==', user.uid));
-        const zonesSnapshot = await getDocs(zonesQuery);
-        setHasNoZones(zonesSnapshot.empty);
-
-        // Check calendar
-        const calendarQuery = query(collection(db, 'calendar_colectii'), where('courierId', '==', user.uid));
-        const calendarSnapshot = await getDocs(calendarQuery);
-        setHasNoCalendar(calendarSnapshot.empty);
 
       } catch (error) {
         logError(error, 'Error fetching curier user data');
@@ -622,13 +579,14 @@ export default function CurierDashboard() {
     return 'Curier';
   };
   const userName = getFirstName();
-  const isNewUser = hasNoServices; // Use this to show setup progress
 
-  // Badges for quick menu
+  // Calculate setup progress based on actual completion state (only 2 active steps: Profile & Services)
+  const completedStepsCount = [!hasNoProfile, !hasNoServices].filter(Boolean).length;
+  const setupComplete = completedStepsCount === 2;
+
+  // Badges for quick menu (only active features)
   const menuBadges = {
-    zones: hasNoZones,
     services: hasNoServices,
-    calendar: hasNoCalendar,
     profile: hasNoProfile,
   };
 
@@ -646,8 +604,8 @@ export default function CurierDashboard() {
         {/* Welcome Section */}
         <WelcomeSection userName={userName} hasNewOrders={false} />
 
-        {/* Setup Progress - Only for new users */}
-        <SetupProgress setupComplete={!isNewUser} completedSteps={isNewUser ? 1 : 4} totalSteps={4} />
+        {/* Setup Progress - Only 2 steps: Profile and Services (Zones/Calendar disabled) */}
+        <SetupProgress setupComplete={setupComplete} completedSteps={completedStepsCount} totalSteps={2} />
 
         {/* Main Navigation - Quick access to all sections */}
         <MainNavigation badges={menuBadges} newOrdersCount={newOrdersCount} />

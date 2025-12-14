@@ -165,7 +165,7 @@ function DashboardHeader({ userName, notificationCount, onLogout }: {
 
             {/* User Avatar */}
             <Link href="/dashboard/client/profil" className="flex items-center gap-2 sm:gap-3 hover:bg-white/5 rounded-xl p-1.5 transition-all">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center overflow-hidden shadow-lg shadow-emerald-500/25">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center overflow-hidden">
                 <Image src="/img/default-avatar.png" alt="Avatar" width={36} height={36} className="w-full h-full object-cover" />
               </div>
               <div className="hidden sm:block">
@@ -224,6 +224,11 @@ function WelcomeSection({ userName }: { userName: string }) {
 }
 
 // Stats Section Component
+// Afișează 3 carduri statistice în grid responsive:
+// 1. Colete trimise (orange) - total comenzi plasate de client
+// 2. În tranzit (blue) - comenzi cu status: in_tranzit, acceptata, colectata
+// 3. Livrate (emerald) - comenzi cu status: livrata, finalizata
+// Date extrase din colecția 'comenzi' filtrată după uid_client
 function StatsSection({ totalOrders, statusCounts }: { totalOrders: number; statusCounts: { pending: number; inTransit: number; delivered: number } }) {
   const stats = [
     { icon: PackageIcon, label: 'Colete trimise', value: totalOrders.toString(), color: 'text-orange-400', bgColor: 'bg-orange-500/20', borderColor: 'border-orange-500/20' },
@@ -254,6 +259,15 @@ function StatsSection({ totalOrders, statusCounts }: { totalOrders: number; stat
 }
 
 // Main Navigation Grid
+// Secțiune cu 6 carduri de navigare rapidă:
+// 1. Comandă Transport (orange) - badge "Popular" - link către /comanda pentru crearea comenzilor noi
+// 2. Comenzi (blue) - afișează notificări (oferte noi + mesaje noi) dacă există
+// 3. Profil (emerald) - gestionare date personale
+// 4. Recenzii (violet) - evaluare servicii curieri
+// 5. Fidelitate (yellow) - puncte & reduceri (sistem nedeveltat încă)
+// 6. Suport (pink) - ajutor 24/7
+// Fiecare card are: iconă colorată, titlu, descriere scurtă, hover gradient overlay
+// Notificările apar DOAR pe cardul "Comenzi" când există oferte sau mesaje noi
 function MainNavigation({ totalNotifications }: { totalNotifications: number }) {
   // Color mappings for hover gradients
   const gradientMap: Record<string, string> = {
@@ -298,7 +312,7 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
+              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] active:scale-95`}
             >
               {/* Hover gradient overlay */}
               <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
@@ -310,11 +324,10 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
                 </span>
               )}
               
-              {/* Notification Badge with Beam Effect */}
+              {/* Notification Badge - Simple style without beam effect */}
               {hasNotifications && (
                 <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 z-10">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-5 w-5 bg-orange-500 items-center justify-center text-[9px] sm:text-[10px] font-bold text-white shadow-lg shadow-orange-500/50">
+                  <span className="relative inline-flex rounded-full h-5 w-5 bg-orange-500 items-center justify-center text-[9px] sm:text-[10px] font-bold text-white">
                     {totalNotifications}
                   </span>
                 </span>
@@ -336,6 +349,10 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
 }
 
 // Orders Summary Component
+// Afișează rezumat comenzi client:
+// - Dacă totalOrders = 0: ecran gol cu CTA "Trimite primul colet"
+// - Altfel: statistici detaliate + grafic status-uri (în funcție de implementare viitoare)
+// Status-uri posibile: pending/noua, in_tranzit/acceptata/colectata, livrata/finalizata
 function OrdersSummary({ totalOrders, statusCounts }: { totalOrders: number; statusCounts: { pending: number; inTransit: number; delivered: number } }) {
   return (
     <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full">
