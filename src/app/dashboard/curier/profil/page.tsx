@@ -455,20 +455,21 @@ function ProfilCurierContent() {
             <div className="relative group">
               <div 
                 onClick={handleImageClick}
-                className="relative w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center cursor-pointer overflow-hidden border-4 border-slate-700 group-hover:border-orange-500/50 transition-all"
+                className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-linear-to-br from-orange-500/20 to-amber-600/20 flex items-center justify-center cursor-pointer overflow-hidden border-2 border-slate-700/50 group-hover:border-orange-500/50 transition-all shadow-lg"
               >
                 <Image 
                   src={profile.profileImage || '/img/default-avatar.png'} 
                   alt="Profile" 
                   fill 
                   sizes="(max-width: 640px) 96px, 112px"
-                  className="object-cover object-center"
+                  className="object-cover object-center rounded-2xl"
                   style={{ objectFit: 'cover', objectPosition: 'center' }}
                 />
               </div>
               <button 
                 onClick={handleImageClick}
-                className="absolute bottom-0 right-0 p-2 bg-slate-700 rounded-full border-2 border-slate-600 hover:bg-slate-600 transition-colors"
+                className="absolute -bottom-1 -right-1 p-2.5 bg-linear-to-br from-orange-500 to-orange-600 rounded-xl border-2 border-slate-800 hover:from-orange-400 hover:to-orange-500 transition-all shadow-lg hover:scale-110 active:scale-95"
+                title="Schimbă imaginea"
               >
                 <CameraIcon />
               </button>
@@ -490,15 +491,22 @@ function ProfilCurierContent() {
               
               {/* Completion Progress */}
               <div className="max-w-xs mx-auto sm:mx-0">
-                <div className="flex items-center justify-between text-sm mb-1">
-                  <span className="text-gray-400">Profil completat</span>
-                  <span className={`font-medium ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`}>
+                <div className="flex items-center justify-between text-sm mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className={`p-1 rounded-lg ${completionPercentage >= 80 ? 'bg-green-500/20' : completionPercentage >= 50 ? 'bg-yellow-500/20' : 'bg-orange-500/20'}`}>
+                      <svg className={`w-3.5 h-3.5 ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <span className="text-gray-300 font-medium">Profil completat</span>
+                  </div>
+                  <span className={`font-bold text-base ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`}>
                     {completionPercentage}%
                   </span>
                 </div>
-                <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                <div className="h-2.5 bg-slate-700/50 rounded-full overflow-hidden border border-slate-600/30">
                   <div 
-                    className={`h-full rounded-full transition-all duration-500 ${completionPercentage >= 80 ? 'bg-green-500' : completionPercentage >= 50 ? 'bg-yellow-500' : 'bg-orange-500'}`}
+                    className={`h-full rounded-full transition-all duration-500 ${completionPercentage >= 80 ? 'bg-linear-to-r from-green-500 to-emerald-500' : completionPercentage >= 50 ? 'bg-linear-to-r from-yellow-500 to-amber-500' : 'bg-linear-to-r from-orange-500 to-amber-500'}`}
                     style={{ width: `${completionPercentage}%` }}
                   />
                 </div>
@@ -506,18 +514,39 @@ function ProfilCurierContent() {
             </div>
 
             {/* Quick Stats */}
-            <div className="flex gap-3 sm:gap-6">
-              <div className="text-center">
-                <div className="text-lg sm:text-2xl font-bold text-white">0</div>
-                <div className="text-xs text-gray-500">Comenzi</div>
+            <div className="flex gap-4 sm:gap-6">
+              <div className="flex flex-col items-center">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <div className="p-1.5 bg-orange-500/20 rounded-lg">
+                    <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                    </svg>
+                  </div>
+                  <div className="text-xl sm:text-2xl font-bold text-white">0</div>
+                </div>
+                <div className="text-xs text-gray-400 font-medium">Comenzi</div>
               </div>
-              <div className="text-center">
-                <div className="text-lg sm:text-2xl font-bold text-yellow-400">⭐ 0.0</div>
-                <div className="text-xs text-gray-500">Rating</div>
+              <div className="flex flex-col items-center">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <div className="p-1.5 bg-yellow-500/20 rounded-lg">
+                    <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  </div>
+                  <div className="text-xl sm:text-2xl font-bold text-yellow-400">0.0</div>
+                </div>
+                <div className="text-xs text-gray-400 font-medium">Rating</div>
               </div>
-              <div className="text-center">
-                <div className="text-lg sm:text-2xl font-bold text-green-400">0</div>
-                <div className="text-xs text-gray-500">Recenzii</div>
+              <div className="flex flex-col items-center">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <div className="p-1.5 bg-green-500/20 rounded-lg">
+                    <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                    </svg>
+                  </div>
+                  <div className="text-xl sm:text-2xl font-bold text-green-400">0</div>
+                </div>
+                <div className="text-xs text-gray-400 font-medium">Recenzii</div>
               </div>
             </div>
           </div>

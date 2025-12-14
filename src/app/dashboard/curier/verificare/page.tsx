@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback, useMemo, Suspense } from 'react';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, deleteField } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ArrowLeftIcon, CheckCircleIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { showSuccess, showError } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
+import { countries } from '@/lib/constants';
 
 // Constants
 const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
@@ -102,7 +103,7 @@ const getDocumentRequirements = (
              countryCode === 'de' ? 'Gewerbeanmeldung' :
              'Autorizație Persoană Fizică',
       description: 'Document care atestă activitatea ca persoană fizică autorizată',
-      required: true,
+      required: false,
       icon: 'company',
       category: 'company',
     });
@@ -120,7 +121,7 @@ const getDocumentRequirements = (
              countryCode === 'fr' ? 'Agrément Transporteur' :
              'Certificat Transport Animale',
       description: 'Autorizație obligatorie pentru transportul animalelor',
-      required: true,
+      required: false,
       icon: 'pet',
       category: 'special',
       forServices: ['Animale'],
@@ -133,7 +134,7 @@ const getDocumentRequirements = (
       id: 'platform_license',
       title: 'Atestat Platformă Auto',
       description: 'Atestat pentru operare platformă/trailer',
-      required: true,
+      required: false,
       icon: 'vehicle',
       category: 'transport',
       forServices: ['Platformă'],
@@ -146,7 +147,7 @@ const getDocumentRequirements = (
       id: 'heavy_transport_cert',
       title: 'Certificat Transport Marfă',
       description: 'Atestat profesional pentru transport marfă',
-      required: true,
+      required: false,
       icon: 'transport',
       category: 'transport',
       forServices: ['Paleți'],
@@ -163,7 +164,7 @@ const getDocumentRequirements = (
              countryCode === 'fr' ? 'Licence VTC / Taxi' :
              'Licență Transport Persoane',
       description: 'Autorizație obligatorie pentru transport persoane cu plată',
-      required: true,
+      required: false,
       icon: 'license',
       category: 'transport',
       forServices: ['Persoane'],
@@ -179,7 +180,7 @@ const getDocumentRequirements = (
              countryCode === 'de' ? 'Flughafentransfer-Lizenz' :
              'Licență Transfer Aeroport',
       description: 'Autorizație pentru servicii transfer aeroport',
-      required: true,
+      required: false,
       icon: 'license',
       category: 'transport',
       forServices: ['Aeroport'],
@@ -196,7 +197,7 @@ const getDocumentRequirements = (
              countryCode === 'fr' ? 'Agrément Dépannage' :
              'Atestat Tractare Auto',
       description: 'Autorizație pentru servicii tractare și asistență rutieră',
-      required: true,
+      required: false,
       icon: 'vehicle',
       category: 'transport',
       forServices: ['Tractari'],
@@ -227,7 +228,7 @@ const getDocumentRequirements = (
       id: 'gb_goods_insurance',
       title: 'Goods in Transit Insurance',
       description: 'Asigurare obligatorie pentru bunuri în tranzit (UK)',
-      required: true,
+      required: false,
       icon: 'insurance',
       category: 'insurance',
     });
@@ -490,34 +491,90 @@ function VerificarePageContent() {
       </div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
+        {/* Why Verification is Important */}
+        <div className="bg-linear-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl rounded-2xl border border-green-500/30 p-6 mb-6">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-green-500/20 rounded-xl border border-green-500/30 shrink-0">
+              <svg className="w-6 h-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-white font-semibold text-lg mb-2">De ce este important să îți verifici contul?</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Contul verificat îți oferă <span className="text-green-400 font-semibold">acces prioritar la comenzi</span> și crește încrederea clienților din toată Europa. 
+                Curierii verificați sunt afișați primii în căutări și primesc <span className="text-green-400 font-semibold">mai multe solicitări de transport</span>. 
+                Cu cât documentele tale sunt la zi, cu atât mai rapid vei putea accepta comenzi și dezvolta afacerea ta pe platformă.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Info Section */}
-        <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-white/5 p-6 mb-6">
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-blue-500/20 p-6 mb-6">
           <div className="flex items-start gap-4 mb-4">
-            <div className="p-3 bg-blue-500/20 rounded-xl">
+            <div className="p-3 bg-blue-500/20 rounded-xl border border-blue-500/30">
               <svg className="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-white font-semibold mb-2">Informații importante</h3>
-              <div className="space-y-2 text-sm text-gray-400">
-                <p>• Țara înregistrată: <span className="text-white">{profile.taraSediu}</span></p>
-                <p>• Tip activitate: <span className="text-white">
-                  {profile.tipBusiness === 'firma' ? '🏢 Firmă' : '👤 Persoană Fizică'}
-                </span></p>
-                {activeServices.length > 0 && (
-                  <div>
-                    <p className="mb-1">• Servicii active:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {activeServices.map(service => (
-                        <span key={service} className="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-full">
-                          {service}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+              <h3 className="text-white font-semibold text-lg mb-3">Informații importante</h3>
+              
+              {/* Country Info */}
+              <div className="flex items-center gap-3 p-3 bg-slate-700/30 rounded-xl mb-3 border border-white/5">
+                <div className="p-2 bg-orange-500/20 rounded-lg">
+                  <svg className="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs text-gray-500 mb-0.5">Țara înregistrată</p>
+                  <p className="text-white font-semibold">{countries.find(c => c.code.toLowerCase() === profile.taraSediu.toLowerCase())?.name || profile.taraSediu}</p>
+                </div>
               </div>
+
+              {/* Business Type */}
+              <div className="flex items-center gap-3 p-3 bg-slate-700/30 rounded-xl mb-3 border border-white/5">
+                <div className={`p-2 rounded-lg ${profile.tipBusiness === 'firma' ? 'bg-purple-500/20' : 'bg-blue-500/20'}`}>
+                  {profile.tipBusiness === 'firma' ? (
+                    <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p className="text-xs text-gray-500 mb-0.5">Tip activitate</p>
+                  <p className="text-white font-semibold">
+                    {profile.tipBusiness === 'firma' ? 'Firmă' : 'Persoană Fizică'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Active Services */}
+              {activeServices.length > 0 && (
+                <div className="p-3 bg-slate-700/30 rounded-xl border border-white/5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="p-1.5 bg-green-500/20 rounded-lg">
+                      <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                      </svg>
+                    </div>
+                    <p className="text-xs text-gray-500 font-medium">Servicii active ({activeServices.length})</p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {activeServices.map(service => (
+                      <span key={service} className="text-xs px-3 py-1.5 bg-emerald-500/20 text-emerald-400 rounded-lg border border-emerald-500/30 font-medium">
+                        {service}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -539,29 +596,29 @@ function VerificarePageContent() {
               Documente Obligatorii ({requiredDocs.length})
             </h3>
             <div className="space-y-3">
-              {requiredDocs.map((doc) => {
-                const uploaded = uploadedDocuments[doc.id];
-                const isUploading = uploadingDoc === doc.id;
+              {requiredDocs.map((docReq) => {
+                const uploaded = uploadedDocuments[docReq.id];
+                const isUploading = uploadingDoc === docReq.id;
                 
                 return (
-                  <div key={doc.id} className={`bg-slate-800/40 backdrop-blur-xl rounded-xl border p-4 transition-colors ${
+                  <div key={docReq.id} className={`bg-slate-800/40 backdrop-blur-xl rounded-xl border p-4 transition-colors ${
                     uploaded ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-white/5 hover:border-orange-500/50'
                   }`}>
                     <div className="flex items-start gap-4">
-                      <div className={`p-3 rounded-lg ${getCategoryColors(doc.category)}`}>
-                        {getDocIcon(doc.icon)}
+                      <div className={`p-3 rounded-lg ${getCategoryColors(docReq.category)}`}>
+                        {getDocIcon(docReq.icon)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="text-white font-medium mb-1 flex items-center gap-2">
-                          {doc.title}
+                          {docReq.title}
                           <span className="text-red-400 text-xs">*</span>
-                          {doc.forServices && (
+                          {docReq.forServices && (
                             <span className="text-xs px-2 py-0.5 bg-slate-700 text-gray-400 rounded-full">
-                              {doc.forServices.join(', ')}
+                              {docReq.forServices.join(', ')}
                             </span>
                           )}
                         </h4>
-                        <p className="text-gray-500 text-sm mb-3">{doc.description}</p>
+                        <p className="text-gray-500 text-sm mb-3">{docReq.description}</p>
                         
                         {isUploading && (
                           <div className="mb-3">
@@ -579,28 +636,68 @@ function VerificarePageContent() {
                         )}
                         
                         {uploaded ? (
-                          <div className="flex items-center gap-3">
-                            <a
-                              href={uploaded.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-sm text-green-400 hover:text-green-300 flex items-center gap-1"
+                          <div>
+                            <div className="flex items-center gap-3">
+                              <a
+                                href={uploaded.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-green-400 hover:text-green-300 flex items-center gap-1"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                Vezi
+                              </a>
+                              <button
+                              onClick={async () => {
+                                if (!user) return;
+                                if (window.confirm('Ștergi acest document? Va trebui re-încărcat.')) {
+                                  try {
+                                    const docRef = doc(db, 'profil_curier', user.uid);
+                                    await setDoc(docRef, {
+                                      documents: {
+                                        [docReq.id]: deleteField()
+                                      }
+                                    }, { merge: true });
+                                    
+                                    setUploadedDocuments(prev => {
+                                      const newDocs = { ...prev };
+                                      delete newDocs[docReq.id];
+                                      return newDocs;
+                                    });
+                                    
+                                    showSuccess('Document șters cu succes!');
+                                  } catch (error) {
+                                    logError(error);
+                                    showError('Eroare la ștergerea documentului.');
+                                  }
+                                }
+                              }}
+                              className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                               </svg>
-                              Vezi
-                            </a>
-                            <div className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
-                              uploaded.status === 'approved' ? 'bg-emerald-500/20 text-emerald-400' :
-                              uploaded.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
-                              'bg-yellow-500/20 text-yellow-400'
-                            }`}>
-                              {uploaded.status === 'approved' ? '✓ Aprobat' :
-                               uploaded.status === 'rejected' ? '✗ Respins' :
-                               '⏱ În verificare'}
+                              Șterge
+                            </button>
+                              <div className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
+                                uploaded.status === 'approved' ? 'bg-emerald-500/20 text-emerald-400' :
+                                uploaded.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
+                                'bg-yellow-500/20 text-yellow-400'
+                              }`}>
+                                {uploaded.status === 'approved' ? '✓ Aprobat' :
+                                 uploaded.status === 'rejected' ? '✗ Respins' :
+                                 '⏱ În verificare'}
+                              </div>
                             </div>
+                            <p className="text-xs text-gray-500 mt-2">
+                              📎 {uploaded.name} • {uploaded.uploadedAt.toLocaleDateString('ro-RO')}
+                            </p>
+                            <p className="text-xs text-yellow-500/80 mt-1">
+                              💡 Dacă link-ul nu funcționează, apasă &quot;Șterge&quot; și re-încarcă documentul
+                            </p>
                           </div>
                         ) : (
                           <label className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg cursor-pointer transition-colors text-sm">
@@ -614,7 +711,7 @@ function VerificarePageContent() {
                               className="hidden"
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
-                                if (file) handleFileUpload(doc.id, file);
+                                if (file) handleFileUpload(docReq.id, file);
                               }}
                             />
                           </label>
@@ -636,23 +733,78 @@ function VerificarePageContent() {
               Documente Opționale ({optionalDocs.length})
             </h3>
             <div className="space-y-3">
-              {optionalDocs.map((doc) => {
-                const uploaded = uploadedDocuments[doc.id];
+              {optionalDocs.map((docReq) => {
+                const uploaded = uploadedDocuments[docReq.id];
                 
                 return (
-                  <div key={doc.id} className={`bg-slate-800/40 backdrop-blur-xl rounded-xl border p-4 ${
+                  <div key={docReq.id} className={`bg-slate-800/40 backdrop-blur-xl rounded-xl border p-4 ${
                     uploaded ? 'border-emerald-500/50' : 'border-white/5'
                   }`}>
                     {/* Similar structure as required docs */}
                     <div className="flex items-start gap-4">
                       <div className="p-3 rounded-lg bg-slate-700/50 text-gray-400">
-                        {getDocIcon(doc.icon)}
+                        {getDocIcon(docReq.icon)}
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-white font-medium mb-1">{doc.title}</h4>
-                        <p className="text-gray-500 text-sm mb-3">{doc.description}</p>
+                        <h4 className="text-white font-medium mb-1">{docReq.title}</h4>
+                        <p className="text-gray-500 text-sm mb-3">{docReq.description}</p>
                         
-                        {!uploaded && (
+                        {uploaded ? (
+                          <div>
+                            <div className="flex items-center gap-3">
+                              <a
+                                href={uploaded.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-green-400 hover:text-green-300 flex items-center gap-1"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                Vezi
+                              </a>
+                              <button
+                                onClick={async () => {
+                                if (!user) return;
+                                if (window.confirm('Ștergi acest document? Va trebui re-încărcat.')) {
+                                  try {
+                                    const docRef = doc(db, 'profil_curier', user.uid);
+                                    await setDoc(docRef, {
+                                      documents: {
+                                        [docReq.id]: deleteField()
+                                      }
+                                    }, { merge: true });
+                                    
+                                    setUploadedDocuments(prev => {
+                                      const newDocs = { ...prev };
+                                      delete newDocs[docReq.id];
+                                      return newDocs;
+                                    });
+                                    
+                                    showSuccess('Document șters cu succes!');
+                                  } catch (error) {
+                                    logError(error);
+                                    showError('Eroare la ștergerea documentului.');
+                                  }
+                                }
+                              }}
+                              className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                              Șterge
+                            </button>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-2">
+                              📎 Document încărcat • {uploaded.uploadedAt.toLocaleDateString('ro-RO')}
+                            </p>
+                            <p className="text-xs text-yellow-500/80 mt-1">
+                              💡 Dacă link-ul nu funcționează, apasă &quot;Șterge&quot; și re-încarcă documentul
+                            </p>
+                          </div>
+                        ) : (
                           <label className="inline-flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg cursor-pointer transition-colors text-sm">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
@@ -664,7 +816,7 @@ function VerificarePageContent() {
                               className="hidden"
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
-                                if (file) handleFileUpload(doc.id, file);
+                                if (file) handleFileUpload(docReq.id, file);
                               }}
                             />
                           </label>

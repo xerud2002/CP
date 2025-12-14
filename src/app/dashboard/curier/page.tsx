@@ -15,6 +15,7 @@ import {
   CheckCircleIcon,
   BellIcon,
   StarIcon,
+  ChatIcon,
 } from '@/components/icons/DashboardIcons';
 
 // ============================================
@@ -91,6 +92,15 @@ const mainNavTiles: NavTile[] = [
     color: 'text-green-400',
     bgColor: 'bg-green-500/10 hover:bg-green-500/20',
     borderColor: 'border-green-500/20 hover:border-green-500/40',
+  },
+  {
+    href: '/dashboard/curier/recenzii',
+    icon: ChatIcon,
+    title: 'Recenzii',
+    description: 'Feedback clienți',
+    color: 'text-blue-400',
+    bgColor: 'bg-blue-500/10 hover:bg-blue-500/20',
+    borderColor: 'border-blue-500/20 hover:border-blue-500/40',
   },
   {
     href: '/dashboard/curier/profil',
@@ -201,7 +211,7 @@ function WelcomeSection({ userName, hasNewOrders }: { userName: string; hasNewOr
       <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-linear-to-tr from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
 
       <div className="relative z-10">
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 mb-4">
           <div className="flex-1 min-w-0">
             <h1 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">
               {greeting}, <span className="text-emerald-400">{userName}</span>!
@@ -221,9 +231,45 @@ function WelcomeSection({ userName, hasNewOrders }: { userName: string; hasNewOr
             <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] sm:text-sm font-medium border border-emerald-500/30">
               ● Online
             </span>
-            <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-amber-500/20 text-amber-400 text-[10px] sm:text-sm font-medium border border-amber-500/30 flex items-center gap-0.5 sm:gap-1">
-              ⭐ 4.9
-            </span>
+          </div>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          <div className="flex flex-col items-center p-2 sm:p-3 bg-slate-800/40 backdrop-blur-sm rounded-xl border border-orange-500/20">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <div className="p-1.5 bg-orange-500/20 rounded-lg">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+              </div>
+              <span className="text-lg sm:text-2xl font-bold text-white">0</span>
+            </div>
+            <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Comenzi</span>
+          </div>
+
+          <div className="flex flex-col items-center p-2 sm:p-3 bg-slate-800/40 backdrop-blur-sm rounded-xl border border-yellow-500/20">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <div className="p-1.5 bg-yellow-500/20 rounded-lg">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              </div>
+              <span className="text-lg sm:text-2xl font-bold text-white">4.9</span>
+            </div>
+            <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Rating</span>
+          </div>
+
+          <div className="flex flex-col items-center p-2 sm:p-3 bg-slate-800/40 backdrop-blur-sm rounded-xl border border-green-500/20">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <div className="p-1.5 bg-green-500/20 rounded-lg">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <span className="text-lg sm:text-2xl font-bold text-white">0</span>
+            </div>
+            <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Recenzii</span>
           </div>
         </div>
       </div>
@@ -395,15 +441,30 @@ function OrdersSummary() {
       
       <div className="grid grid-cols-3 gap-1.5 sm:gap-4 mb-3 sm:mb-4">
         <div className="text-center p-2 sm:p-3 bg-orange-500/10 rounded-xl border border-orange-500/20">
-          <p className="text-base sm:text-2xl font-bold text-orange-400">0</p>
+          <div className="flex items-center justify-center gap-1 mb-0.5">
+            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <p className="text-base sm:text-2xl font-bold text-orange-400">0</p>
+          </div>
           <p className="text-[9px] sm:text-xs text-gray-400">Noi</p>
         </div>
         <div className="text-center p-2 sm:p-3 bg-blue-500/10 rounded-xl border border-blue-500/20">
-          <p className="text-base sm:text-2xl font-bold text-blue-400">0</p>
+          <div className="flex items-center justify-center gap-1 mb-0.5">
+            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+            </svg>
+            <p className="text-base sm:text-2xl font-bold text-blue-400">0</p>
+          </div>
           <p className="text-[9px] sm:text-xs text-gray-400">În tranzit</p>
         </div>
         <div className="text-center p-2 sm:p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
-          <p className="text-base sm:text-2xl font-bold text-emerald-400">0</p>
+          <div className="flex items-center justify-center gap-1 mb-0.5">
+            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-base sm:text-2xl font-bold text-emerald-400">0</p>
+          </div>
           <p className="text-[9px] sm:text-xs text-gray-400">Livrate</p>
         </div>
       </div>
