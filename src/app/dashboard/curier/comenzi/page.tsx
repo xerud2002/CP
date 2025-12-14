@@ -152,25 +152,20 @@ const ServiceIcon = ({ service, className = "w-5 h-5" }: { service: string; clas
   return icons[service] || icons.Colete;
 };
 
-// Initial empty orders - data loaded from Firestore
-const initialOrders: Order[] = [];
-
 export default function ComenziCurierPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<'all' | Order['status']>('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   
   // Expanded orders state
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
   
-  // Advanced filters
+  // Filters
   const [countryFilter, setCountryFilter] = useState<string>('all');
   const [serviceFilter, setServiceFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<string>('');
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   
   // Custom dropdown states
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
@@ -358,13 +353,10 @@ export default function ComenziCurierPage() {
     });
   };
 
-  // Apply all filters
+  // Apply all filters (optimized)
   const filteredOrders = useMemo(() => {
     return orders.filter(order => {
-      // Status filter
-      if (statusFilter !== 'all' && order.status !== statusFilter) return false;
-      
-      // Country filter (checks both expeditor and destinatar) - case insensitive comparison
+      // Country filter (checks both expeditor and destinatar)
       if (countryFilter !== 'all') {
         const normalizedFilter = countryFilter.toLowerCase().trim();
         const normalizedExpeditor = (order.expeditorTara || '').toLowerCase().trim();
@@ -375,7 +367,7 @@ export default function ComenziCurierPage() {
         }
       }
       
-      // Service filter - case insensitive comparison
+      // Service filter
       if (serviceFilter !== 'all') {
         const normalizedServiceFilter = serviceFilter.toLowerCase().trim();
         const normalizedOrderService = (order.tipColet || '').toLowerCase().trim();
@@ -385,15 +377,12 @@ export default function ComenziCurierPage() {
         }
       }
       
-      // Date filter - flexible format matching
+      // Date filter
       if (dateFilter) {
-        // Convert input date (YYYY-MM-DD) to various possible formats
         const inputDate = new Date(dateFilter);
         const orderDate = new Date(order.dataColectare);
         
-        // Compare only dates (ignore time)
         if (inputDate.toDateString() !== orderDate.toDateString()) {
-          // Also try direct string comparison
           if (order.dataColectare !== dateFilter) {
             return false;
           }
@@ -402,23 +391,15 @@ export default function ComenziCurierPage() {
       
       return true;
     });
-  }, [orders, statusFilter, countryFilter, serviceFilter, dateFilter]);
+  }, [orders, countryFilter, serviceFilter, dateFilter]);
 
-  // Check if any advanced filter is active
-  const hasActiveAdvancedFilters = countryFilter !== 'all' || serviceFilter !== 'all' || dateFilter !== '';
+  // Check if any filter is active
+  const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all' || dateFilter !== '';
 
   const clearAllFilters = () => {
-    setStatusFilter('all');
     setCountryFilter('all');
     setServiceFilter('all');
     setDateFilter('');
-  };
-
-  const stats = {
-    total: orders.length,
-    noi: orders.filter(o => o.status === 'noua').length,
-    inTranzit: orders.filter(o => o.status === 'in_tranzit').length,
-    livrate: orders.filter(o => o.status === 'livrata').length,
   };
 
   if (loading) {
@@ -460,104 +441,9 @@ export default function ComenziCurierPage() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
-        {/* Stats Cards - Improved design */}
-        {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
-          <div className="bg-slate-800/60 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-emerald-500/20 relative overflow-hidden group hover:border-emerald-500/40 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20">
-            <div className="absolute inset-0 bg-linear-to-br from-emerald-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
-            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
-              <div className="p-1.5 sm:p-2.5 bg-emerald-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 6v6l4 2" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-xl sm:text-2xl font-bold text-white leading-none">{stats.total}</p>
-                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Total comenzi</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-slate-800/60 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-blue-500/20 relative overflow-hidden group hover:border-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20">
-            <div className="absolute inset-0 bg-linear-to-br from-blue-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute top-0 right-0 w-20 h-20 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
-            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
-              <div className="p-1.5 sm:p-2.5 bg-blue-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-xl sm:text-2xl font-bold text-blue-400 leading-none">{stats.noi}</p>
-                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Comenzi noi</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-slate-800/60 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-orange-500/20 relative overflow-hidden group hover:border-orange-500/40 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20">
-            <div className="absolute inset-0 bg-linear-to-br from-orange-500/10 to-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute top-0 right-0 w-20 h-20 bg-orange-500/10 rounded-full blur-2xl group-hover:bg-orange-500/20 transition-all"></div>
-            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
-              <div className="p-1.5 sm:p-2.5 bg-orange-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-xl sm:text-2xl font-bold text-orange-400 leading-none">{stats.inTranzit}</p>
-                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">În tranzit</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-slate-800/60 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-green-500/20 relative overflow-hidden group hover:border-green-500/40 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20">
-            <div className="absolute inset-0 bg-linear-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute top-0 right-0 w-20 h-20 bg-green-500/10 rounded-full blur-2xl group-hover:bg-green-500/20 transition-all"></div>
-            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-1.5 sm:gap-3">
-              <div className="p-1.5 sm:p-2.5 bg-green-500/20 rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 6 9 17l-5-5" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-xl sm:text-2xl font-bold text-green-400 leading-none">{stats.livrate}</p>
-                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Livrate</p>
-              </div>
-            </div>
-          </div>
-        </div> */}
-
-        {/* Filters - Improved pill design */}
+        {/* Filters */}
         <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6 relative z-50">
-          {/* Status filters */}
-          {/* <div className="flex gap-1.5 sm:gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
-            <button
-              onClick={() => setStatusFilter('all')}
-              className={`px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
-                statusFilter === 'all' 
-                  ? 'bg-linear-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-500/25' 
-                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
-              }`}
-            >
-              Toate ({orders.length})
-            </button>
-            {Object.entries(statusLabels).map(([status, { label, bg, color }]) => {
-              const count = orders.filter(o => o.status === status).length;
-              return (
-                <button
-                  key={status}
-                  onClick={() => setStatusFilter(status as Order['status'])}
-                  className={`px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
-                    statusFilter === status 
-                      ? `${bg} ${color} shadow-lg ring-1 ring-current/20` 
-                      : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
-                  }`}
-                >
-                  {label} ({count})
-                </button>
-              );
-            })}
-            
-          
-          {/* Filters panel - Always visible */}
+          {/* Filters panel */}
           <div className="relative z-60">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {/* Country filter with flags */}
@@ -757,7 +643,7 @@ export default function ComenziCurierPage() {
               </div>
               
               {/* Clear filters button */}
-              {hasActiveAdvancedFilters && (
+              {hasActiveFilters && (
                 <button
                   onClick={clearAllFilters}
                   className="mt-3 px-4 py-2 text-xs sm:text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors flex items-center gap-1.5"
@@ -786,7 +672,7 @@ export default function ComenziCurierPage() {
                 Lista Comenzilor
               </h2>
               <div className="flex items-center gap-2">
-                {hasActiveAdvancedFilters && (
+                {hasActiveFilters && (
                   <span className="text-xs text-purple-400 bg-purple-500/10 px-2 py-1 rounded-lg">
                     Filtrate
                   </span>
@@ -811,14 +697,14 @@ export default function ComenziCurierPage() {
                 </svg>
               </div>
               <p className="text-gray-300 text-base sm:text-lg font-semibold mb-1">
-                {hasActiveAdvancedFilters || statusFilter !== 'all' ? 'Nicio comandă găsită' : 'Nu ai nicio comandă'}
+                {hasActiveFilters ? 'Nicio comandă găsită' : 'Nu ai nicio comandă'}
               </p>
               <p className="text-gray-500 text-sm max-w-xs mx-auto">
-                {hasActiveAdvancedFilters || statusFilter !== 'all' 
+                {hasActiveFilters
                   ? 'Încearcă să modifici filtrele pentru a vedea mai multe comenzi.' 
                   : 'Comenzile vor apărea aici când clienții plasează comenzi.'}
               </p>
-              {(hasActiveAdvancedFilters || statusFilter !== 'all') && (
+              {hasActiveFilters && (
                 <button
                   onClick={clearAllFilters}
                   className="mt-4 px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-lg transition-colors"
