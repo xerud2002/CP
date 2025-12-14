@@ -1,0 +1,10 @@
+# robots.txt for Curierul Perfect
+# Allow search engines to crawl public pages
+
+User-agent: *
+Allow: /
+Disallow: /dashboard/
+Disallow: /comanda
+
+# Sitemap
+Sitemap: https://curierulperfect.ro/sitemap.xml

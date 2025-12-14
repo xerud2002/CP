@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import HelpCard from '@/components/HelpCard';
+import { logError } from '@/lib/errorMessages';
 import {
   MapIcon,
   CalendarIcon,
@@ -546,7 +547,7 @@ export default function CurierDashboard() {
         setHasNoCalendar(calendarSnapshot.empty);
 
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        logError(error, 'Error fetching curier user data');
       }
     };
 
@@ -569,7 +570,7 @@ export default function CurierDashboard() {
         const snapshot = await getDocs(q);
         setNewOrdersCount(snapshot.size);
       } catch (error) {
-        console.error('❌ Eroare la încărcarea comenzilor noi:', error);
+        logError(error, 'Error loading new orders count for courier');
       }
     };
 

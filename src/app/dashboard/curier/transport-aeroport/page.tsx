@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { logError } from '@/lib/errorMessages';
 import { useEffect, useState } from 'react';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
@@ -79,7 +80,7 @@ export default function TransportAeroportPage() {
         })) as AeroportRoute[];
         setRoutes(routesData);
       } catch (error) {
-        console.error('Error fetching routes:', error);
+        logError(error, 'Error fetching airport transport routes');
       } finally {
         setLoadingRoutes(false);
       }
@@ -130,7 +131,7 @@ export default function TransportAeroportPage() {
       setDisponibil24h(false);
       setTimpAsteptare('30');
     } catch (error) {
-      console.error('Error adding route:', error);
+      logError(error, 'Error adding airport transport route');
       alert('Eroare la salvare. Încearcă din nou.');
     } finally {
       setSaving(false);
@@ -144,7 +145,7 @@ export default function TransportAeroportPage() {
       await deleteDoc(doc(db, 'transport_aeroport', routeId));
       setRoutes(routes.filter(r => r.id !== routeId));
     } catch (error) {
-      console.error('Error deleting route:', error);
+      logError(error, 'Error deleting airport transport route');
       alert('Eroare la ștergere. Încearcă din nou.');
     }
   };

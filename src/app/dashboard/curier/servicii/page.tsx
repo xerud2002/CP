@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { logError } from '@/lib/errorMessages';
 import { useEffect, useState, useRef } from 'react';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
@@ -253,7 +254,7 @@ export default function TarifePracticatePage() {
           setSelectedServices(userData.serviciiOferite || []);
         }
       } catch (error) {
-        console.error('Error loading data:', error);
+        logError(error, 'Error loading servicii data');
       }
     };
 
@@ -285,7 +286,7 @@ export default function TarifePracticatePage() {
       
       setSelectedServices(newServices);
     } catch (error) {
-      console.error('Error saving services:', error);
+      logError(error, 'Error saving servicii');
     } finally {
       setSavingServices(false);
     }

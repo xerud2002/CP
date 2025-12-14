@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { logError } from '@/lib/errorMessages';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { ArrowLeftIcon, CloseIcon, CalendarIcon, TrashIcon } from '@/components/icons/DashboardIcons';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp, orderBy, writeBatch } from 'firebase/firestore';
@@ -126,13 +127,11 @@ export default function CalendarColectiiPage() {
             batch.delete(doc(db, 'calendar_colectii', entryId));
           });
           await batch.commit();
-          console.log(`Auto-deleted ${entriesToDelete.length} past entries`);
         }
         
         setEntries(loadedEntries);
-        console.log('📅 Loaded calendar entries:', loadedEntries);
       } catch (error) {
-        console.error('Error loading entries:', error);
+        logError(error, 'Error loading calendar entries');
       } finally {
         setLoadingEntries(false);
       }
@@ -267,7 +266,7 @@ export default function CalendarColectiiPage() {
 
       setSelectedDate('');
     } catch (error) {
-      console.error('Error adding entry:', error);
+      logError(error, 'Error adding calendar entry');
       alert('Eroare la salvare. Încearcă din nou.');
     } finally {
       setSaving(false);
@@ -281,7 +280,7 @@ export default function CalendarColectiiPage() {
       await deleteDoc(doc(db, 'calendar_colectii', entryId));
       setEntries(entries.filter(e => e.id !== entryId));
     } catch (error) {
-      console.error('Error deleting entry:', error);
+      logError(error, 'Error deleting calendar entry');
       alert('Eroare la ștergere. Încearcă din nou.');
     }
   };
@@ -303,7 +302,7 @@ export default function CalendarColectiiPage() {
 
       setEntries((prev) => prev.filter((e) => e.tara !== countryName));
     } catch (error) {
-      console.error('Error deleting country entries:', error);
+      logError(error, 'Error deleting country calendar entries');
       alert('Eroare la ștergere. Încercați din nou.');
     }
   };

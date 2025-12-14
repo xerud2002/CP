@@ -8,6 +8,7 @@ import { useEffect, useState, useRef } from 'react';
 import { ArrowLeftIcon, TrashIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp, orderBy, writeBatch } from 'firebase/firestore';
+import { logError } from '@/lib/errorMessages';
 import { db } from '@/lib/firebase';
 
 interface Tarif {
@@ -499,7 +500,7 @@ export default function TarifePracticatePage() {
         });
         setTarife(loadedTarife);
       } catch (error) {
-        console.error('Error loading data:', error);
+        logError(error, 'Error loading tarife data');
       } finally {
         setLoadingTarife(false);
       }
@@ -638,7 +639,7 @@ export default function TarifePracticatePage() {
       setTipVehicul([]);
       setAcceptaAvariat(true);
     } catch (error) {
-      console.error('Error adding tarif:', error);
+      logError(error, 'Error adding tarif');
       alert('Eroare la salvare. Încearcă din nou.');
     } finally {
       setSaving(false);
@@ -652,7 +653,7 @@ export default function TarifePracticatePage() {
       await deleteDoc(doc(db, 'tarife_curier', tarifId));
       setTarife(tarife.filter(t => t.id !== tarifId));
     } catch (error) {
-      console.error('Error deleting tarif:', error);
+      logError(error, 'Error deleting tarif');
       alert('Eroare la ștergere. Încearcă din nou.');
     }
   };
@@ -669,7 +670,7 @@ export default function TarifePracticatePage() {
       await batch.commit();
       setTarife(tarife.filter(t => t.tara !== country));
     } catch (error) {
-      console.error('Error deleting tarife:', error);
+      logError(error, 'Error deleting tarife for country');
       alert('Eroare la ștergere. Încearcă din nou.');
     }
   };

@@ -425,7 +425,7 @@ export default function ZonaAcoperiirePage() {
                           >
                             <Image 
                               src={getFlagPath(tara)} 
-                              alt="" 
+                              alt={`Steag ${countries.find(c => c.code === tara)?.name || tara}`} 
                               width={16} 
                               height={12} 
                               className="rounded-sm shadow-sm opacity-40"
@@ -544,7 +544,7 @@ export default function ZonaAcoperiirePage() {
                               <div className="flex items-center gap-3">
                                 <Image 
                                   src={getFlagPath(countryCode)} 
-                                  alt="" 
+                                  alt={`Steag ${country?.name || countryCode}`} 
                                   width={18} 
                                   height={14} 
                                   className="rounded-sm opacity-50"

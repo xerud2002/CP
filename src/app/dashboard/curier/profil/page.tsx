@@ -993,7 +993,7 @@ function ProfilCurierContent() {
                         >
                           <Image
                             src={phonePrefixes.find(p => p.code === profile.telefonPrefix)?.flag || '/img/flag/ro.svg'}
-                            alt=""
+                            alt={`Steag ${phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || 'România'}`}
                             width={20}
                             height={14}
                             className="rounded-sm shrink-0"

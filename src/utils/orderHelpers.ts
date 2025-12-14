@@ -4,6 +4,7 @@
 
 import { doc, runTransaction } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { logError } from '@/lib/errorMessages';
 
 /**
  * Gets the next sequential order number and increments the counter
@@ -38,7 +39,7 @@ export const getNextOrderNumber = async (): Promise<number> => {
     
     return nextNumber;
   } catch (error) {
-    console.error('Error getting next order number:', error);
+    logError(error, 'getNextOrderNumber');
     // Fallback to timestamp-based number if transaction fails
     return 141121 + Math.floor(Date.now() / 1000) % 100000;
   }

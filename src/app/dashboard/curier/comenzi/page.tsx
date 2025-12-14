@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { logError } from '@/lib/errorMessages';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
@@ -317,7 +318,7 @@ export default function ComenziCurierPage() {
           setOrders(loadedOrders);
         }
       } catch (error) {
-        console.error('Error loading orders:', error);
+        logError(error, 'Error loading orders for courier');
       } finally {
         setLoadingOrders(false);
       }
@@ -339,7 +340,7 @@ export default function ComenziCurierPage() {
       ));
       setSelectedOrder(null);
     } catch (error) {
-      console.error('Error updating status:', error);
+      logError(error, 'Error updating order status');
       alert('Eroare la actualizare. Încearcă din nou.');
     }
   };

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import { logError } from '@/lib/errorMessages';
 import { useEffect, useState } from 'react';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
@@ -83,7 +84,7 @@ export default function TransportPersoanePage() {
         })) as PersonRoute[];
         setRoutes(routesData);
       } catch (error) {
-        console.error('Error fetching routes:', error);
+        logError(error, 'Error fetching person transport routes');
       } finally {
         setLoadingRoutes(false);
       }
@@ -154,7 +155,7 @@ export default function TransportPersoanePage() {
       setOrasPlecare('');
       setOrasDestinatie('');
     } catch (error) {
-      console.error('Error adding route:', error);
+      logError(error, 'Error adding person transport route');
       alert('Eroare la salvare. Încearcă din nou.');
     } finally {
       setSaving(false);
@@ -168,7 +169,7 @@ export default function TransportPersoanePage() {
       await deleteDoc(doc(db, 'transport_persoane', routeId));
       setRoutes(routes.filter(r => r.id !== routeId));
     } catch (error) {
-      console.error('Error deleting route:', error);
+      logError(error, 'Error deleting person transport route');
       alert('Eroare la ștergere. Încearcă din nou.');
     }
   };
