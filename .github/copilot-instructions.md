@@ -41,7 +41,7 @@ RootLayout (AuthProvider)
 | Firebase | `src/lib/firebase.ts` | Singleton init with `getApps()` pattern (prevents re-init); exports `auth`, `db`, `storage` |
 | Styling | `src/app/globals.css` | Custom CSS classes: `btn-primary`, `card`, `form-input`, `tab-menu`, `spinner`, `text-gradient` |
 | Icons | `src/components/icons/DashboardIcons.tsx` | All SVG dashboard icons as React components |
-| Data | `src/lib/constants.ts` | `countries` (16 EU countries), `judetByCountry` (full region lists for all countries) |
+| Data | `src/lib/constants.ts` | `countries` (16 EU countries), `judetByCountry` (full region lists), `serviceTypes` (unified service definitions with icons), `serviceNames` (map), `orderStatusConfig` (unified status display) |
 | Helpers | `src/utils/orderHelpers.ts` | `getNextOrderNumber()` (atomic counter), `formatOrderNumber()`, `formatClientName()` |
 | Toast | `src/lib/toast.ts` | Sonner wrapper: `showSuccess()`, `showError()`, `showInfo()`, `showWarning()`, `showLoading()` |
 | Errors | `src/lib/errorMessages.ts` | Romanian error messages map for Firebase auth/firestore/storage errors + `getErrorMessage()` helper |
@@ -78,6 +78,12 @@ const snapshot = await getDocs(q);
 - Orders: saved as lowercase (`'colete'`, `'plicuri'`, `'persoane'`)
 - Courier services: saved as capitalized in `users.serviciiOferite` (`'Colete'`, `'Plicuri'`, `'Persoane'`)
 - **All service matching MUST normalize both sides to lowercase before comparison**
+
+**Order Lifecycle & Status Flow**:
+```
+pending → accepted (courierId set) → in_transit → completed
+```
+Only `pending` orders can be deleted. Status transitions enforced client-side. See `SECURITY_CHECKLIST.md` for full flow.
 
 ## Critical Patterns
 
@@ -126,9 +132,9 @@ await addDoc(collection(db, 'zona_acoperire'), {
 ```
 **Why**: Server timestamps prevent client clock skew issues and ensure consistent ordering
 
-### Error Handling Pattern
+### Toast System & Error Handling
 ```tsx
-import { showError, showSuccess } from '@/lib/toast';
+import { showError, showSuccess, showPromise } from '@/lib/toast';
 import { getErrorMessage } from '@/lib/errorMessages';
 
 try {
@@ -137,13 +143,24 @@ try {
 } catch (err: unknown) {
   showError(err); // Automatically converts to Romanian user-friendly message
 }
+
+// For async operations with automatic loading/success/error states
+await showPromise(
+  someAsyncOperation(),
+  {
+    loading: 'Se procesează...',
+    success: 'Operațiune finalizată!',
+    error: 'Eroare la procesare'
+  }
+);
 ```
 **Toast System**: Use Sonner-based helpers from `@/lib/toast.ts`:
 - `showSuccess(message)` — Green toast, 3s duration
 - `showError(error)` — Red toast with auto-translated Romanian error, 5s duration  
 - `showInfo(message)` — Blue toast, 3s
 - `showWarning(message)` — Yellow toast, 4s
-- `showLoading(message)` — Returns toast ID for dismissal
+- `showLoading(message)` — Returns toast ID for dismissal (`dismissToast(id)`)
+- `showPromise(promise, messages)` — Auto-handles loading/success/error states
 
 **Error Messages**: `@/lib/errorMessages.ts` maps Firebase error codes to Romanian messages. Use `getErrorMessage(error)` to convert any error to user-friendly text.
 
@@ -164,6 +181,24 @@ try {
 </div>
 ```
 
+### Custom Dropdown Pattern (avoid browser defaults)
+Use custom dropdowns with `useRef` + click-outside handling for country/prefix selectors:
+```tsx
+const dropdownRef = useRef<HTMLDivElement>(null);
+const [isOpen, setIsOpen] = useState(false);
+
+useEffect(() => {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  };
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => document.removeEventListener('mousedown', handleClickOutside);
+}, []);
+```
+See [profil/page.tsx](src/app/dashboard/curier/profil/page.tsx) for full country/phone prefix dropdown implementation.
+
 ## Styling
 
 ### CSS Classes (from globals.css)
@@ -180,6 +215,12 @@ try {
 ### Color Palette
 - **Orange** (primary): `#f97316` — buttons, CTAs, courier accent
 - **Green** (secondary): `#34d399` — success, client accent
+- **Dark theme**: `bg-slate-900` (dashboard base), `bg-slate-800/50` (cards with glassmorphism)
+
+### Responsive Breakpoints
+- Mobile-first design with `sm:` breakpoint (640px+)
+- Stack vertically on mobile, grid layouts on desktop
+- Touch-friendly targets (min 44x44px) with `active:scale-[0.98]` for tactile feedback
 
 ## Conventions
 - **UI text**: Romanian | **Code/variables**: English | **Comments**: English
@@ -196,6 +237,7 @@ try {
 - **Form validation**: Validate on submit, not on change; show errors below inputs with red text
 - **Toasts**: Always use `showSuccess()`, `showError()`, etc. from `@/lib/toast.ts` — Toaster component auto-included in `RootLayout`
 - **Error handling**: Use `showError(error)` for automatic Romanian translation of Firebase errors
+- **🆕 Centralized Constants**: **ALWAYS** import services, countries, and status configs from `@/lib/constants.ts` — never duplicate these definitions in components
 
 ## Commands
 ```bash

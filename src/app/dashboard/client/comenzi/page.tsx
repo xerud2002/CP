@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { collection, query, where, getDocs, orderBy, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { formatOrderNumber } from '@/utils/orderHelpers';
+import { serviceNames, orderStatusConfig } from '@/lib/constants';
 import { ArrowLeftIcon, PackageIcon, ClockIcon, CheckCircleIcon, XCircleIcon, TruckIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 
@@ -15,7 +16,7 @@ interface Order {
   id: string;
   orderNumber?: number;
   serviciu: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
+  status: 'pending' | 'accepted' | 'in_transit' | 'completed' | 'cancelled';
   tara_ridicare: string;
   judet_ridicare: string;
   oras_ridicare: string;
@@ -31,47 +32,13 @@ interface Order {
   hasNewNotifications?: boolean;
 }
 
-const serviceNames: Record<string, string> = {
-  colete: 'Transport Colete',
-  plicuri: 'Transport Plicuri',
-  mobila: 'Transport Mobilă',
-  electronice: 'Transport Electronice',
-  animale: 'Transport Animale',
-  persoane: 'Transport Persoane',
-  aeroport: 'Transfer Aeroport',
-  platforma: 'Transport Platformă',
-  tractari: 'Tractări Auto',
-};
-
-const statusConfig = {
-  pending: {
-    label: 'În așteptare',
-    color: 'text-yellow-400',
-    bg: 'bg-yellow-500/10',
-    border: 'border-yellow-500/20',
-    icon: ClockIcon,
-  },
-  in_progress: {
-    label: 'În progres',
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/20',
-    icon: TruckIcon,
-  },
-  completed: {
-    label: 'Finalizat',
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/10',
-    border: 'border-emerald-500/20',
-    icon: CheckCircleIcon,
-  },
-  cancelled: {
-    label: 'Anulat',
-    color: 'text-red-400',
-    bg: 'bg-red-500/10',
-    border: 'border-red-500/20',
-    icon: XCircleIcon,
-  },
+// Status icon mapping
+const statusIcons = {
+  pending: ClockIcon,
+  accepted: TruckIcon,
+  in_transit: TruckIcon,
+  completed: CheckCircleIcon,
+  cancelled: XCircleIcon,
 };
 
 const getFlagPath = (code: string) => `/img/flag/${code.toLowerCase()}.svg`;
@@ -229,7 +196,7 @@ export default function ComenziClientPage() {
             <p className="text-gray-400 mb-2">
               {filterStatus === 'all' 
                 ? 'Nu ai nicio comandă încă' 
-                : `Nu ai comenzi cu statusul "${statusConfig[filterStatus as keyof typeof statusConfig]?.label}"`
+                : `Nu ai comenzi cu statusul "${orderStatusConfig[filterStatus as keyof typeof orderStatusConfig]?.label}"`
               }
             </p>
             <p className="text-gray-500 text-sm mb-4">Creează prima ta comandă pentru transport</p>
@@ -244,7 +211,7 @@ export default function ComenziClientPage() {
         ) : (
           <div className="space-y-4">
             {filteredOrders.map((order) => {
-              const StatusIcon = statusConfig[order.status].icon;
+              const StatusIcon = statusIcons[order.status] || ClockIcon;
               return (
                 <div 
                   key={order.id} 
@@ -295,10 +262,10 @@ export default function ComenziClientPage() {
                             Comandă #{formatOrderNumber(order.orderNumber || order.id)}
                           </p>
                         </div>
-                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${statusConfig[order.status].bg} ${statusConfig[order.status].border} border`}>
-                          <StatusIcon className={`w-4 h-4 ${statusConfig[order.status].color}`} />
-                          <span className={`text-xs font-medium ${statusConfig[order.status].color}`}>
-                            {statusConfig[order.status].label}
+                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${orderStatusConfig[order.status].bg} ${orderStatusConfig[order.status].border} border`}>
+                          <StatusIcon className={`w-4 h-4 ${orderStatusConfig[order.status].color}`} />
+                          <span className={`text-xs font-medium ${orderStatusConfig[order.status].color}`}>
+                            {orderStatusConfig[order.status].label}
                           </span>
                         </div>
                       </div>
