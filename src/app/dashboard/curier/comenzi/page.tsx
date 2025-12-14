@@ -461,7 +461,7 @@ export default function ComenziCurierPage() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Stats Cards - Improved design */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
+        {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
           <div className="bg-slate-800/60 backdrop-blur-xl rounded-xl sm:rounded-2xl p-2.5 sm:p-5 border border-emerald-500/20 relative overflow-hidden group hover:border-emerald-500/40 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20">
             <div className="absolute inset-0 bg-linear-to-br from-emerald-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
@@ -523,12 +523,12 @@ export default function ComenziCurierPage() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Filters - Improved pill design */}
         <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6 relative z-50">
           {/* Status filters */}
-          <div className="flex gap-1.5 sm:gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
+          {/* <div className="flex gap-1.5 sm:gap-2 mb-3 overflow-x-auto pb-2 scrollbar-hide">
             <button
               onClick={() => setStatusFilter('all')}
               className={`px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
@@ -556,28 +556,9 @@ export default function ComenziCurierPage() {
               );
             })}
             
-            {/* Toggle advanced filters button */}
-            <button
-              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-              className={`ml-auto px-2.5 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5 shrink-0 ${
-                showAdvancedFilters || hasActiveAdvancedFilters
-                  ? 'bg-purple-500/20 text-purple-400 ring-1 ring-purple-500/30' 
-                  : 'bg-slate-700/50 text-gray-300 hover:bg-slate-700 hover:text-white'
-              }`}
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              <span className="hidden sm:inline">Filtre</span>
-              {hasActiveAdvancedFilters && (
-                <span className="w-2 h-2 rounded-full bg-purple-400"></span>
-              )}
-            </button>
-          </div>
           
-          {/* Advanced filters panel */}
-          {showAdvancedFilters && (
-            <div className="pt-3 border-t border-white/5 relative z-60">
+          {/* Filters panel - Always visible */}
+          <div className="relative z-60">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {/* Country filter with flags */}
                 <div ref={countryDropdownRef} className="relative z-70">
@@ -788,7 +769,6 @@ export default function ComenziCurierPage() {
                 </button>
               )}
             </div>
-          )}
         </div>
 
         {/* Orders List - Improved */}
@@ -1466,8 +1446,8 @@ export default function ComenziCurierPage() {
         )}
       </div>
 
-      {/* Help Card */}
-      <div className="mt-6 sm:mt-8">
+      {/* Help Card - Same width as other sections */}
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pb-4 sm:pb-8">
         <HelpCard />
       </div>
     </div>

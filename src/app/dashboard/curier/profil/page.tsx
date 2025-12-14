@@ -243,18 +243,6 @@ const getDocumentRequirements = (
     });
   }
 
-  // === DRIVING LICENSE - Required for all transport services ===
-  if (activeServices.length > 0) {
-    documents.push({
-      id: 'driving_license',
-      title: 'Permis de Conducere',
-      description: 'Categoria B sau superioară, în funcție de vehicul',
-      required: true,
-      icon: 'license',
-      category: 'transport',
-    });
-  }
-
   // === SERVICE-SPECIFIC DOCUMENTS ===
 
   // Animale - Pet transport certificate
@@ -310,6 +298,72 @@ const getDocumentRequirements = (
       icon: 'transport',
       category: 'transport',
       forServices: ['Paleți'],
+    });
+  }
+
+  // Transport Persoane - Taxi/passenger transport license
+  if (activeServices.includes('Persoane')) {
+    documents.push({
+      id: 'passenger_transport_license',
+      title: countryCode === 'ro' ? 'Licență Transport Persoane' :
+             countryCode === 'gb' ? 'Private Hire / Taxi Licence' :
+             countryCode === 'de' ? 'Personenbeförderungsschein' :
+             countryCode === 'fr' ? 'Licence VTC / Taxi' :
+             'Licență Transport Persoane',
+      description: 'Autorizație obligatorie pentru transport persoane cu plată',
+      required: true,
+      icon: 'license',
+      category: 'transport',
+      forServices: ['Persoane'],
+    });
+  }
+
+  // Transfer Aeroport - Airport transfer license (similar to passenger transport)
+  if (activeServices.includes('Aeroport')) {
+    documents.push({
+      id: 'airport_transfer_license',
+      title: countryCode === 'ro' ? 'Licență Transfer Aeroport' :
+             countryCode === 'gb' ? 'Airport Transfer Licence' :
+             countryCode === 'de' ? 'Flughafentransfer-Lizenz' :
+             'Licență Transfer Aeroport',
+      description: 'Autorizație pentru servicii transfer aeroport',
+      required: true,
+      icon: 'license',
+      category: 'transport',
+      forServices: ['Aeroport'],
+    });
+  }
+
+  // Tractări Auto - Towing service license
+  if (activeServices.includes('Tractari')) {
+    documents.push({
+      id: 'towing_license',
+      title: countryCode === 'ro' ? 'Atestat Tractare Auto' :
+             countryCode === 'gb' ? 'Vehicle Recovery Licence' :
+             countryCode === 'de' ? 'Abschleppgenehmigung' :
+             countryCode === 'fr' ? 'Agrément Dépannage' :
+             'Atestat Tractare Auto',
+      description: 'Autorizație pentru servicii tractare și asistență rutieră',
+      required: true,
+      icon: 'vehicle',
+      category: 'transport',
+      forServices: ['Tractari'],
+    });
+  }
+
+  // Mutări Mobilă - Furniture transport certification (optional but recommended)
+  if (activeServices.includes('Mobila')) {
+    documents.push({
+      id: 'furniture_transport_cert',
+      title: countryCode === 'ro' ? 'Atestat Transport Mobilier' :
+             countryCode === 'gb' ? 'Removal Services Licence' :
+             countryCode === 'de' ? 'Umzugslizenz' :
+             'Atestat Transport Mobilier',
+      description: 'Certificat pentru servicii de mutări și transport mobilier',
+      required: false,
+      icon: 'transport',
+      category: 'transport',
+      forServices: ['Mobila'],
     });
   }
 
@@ -527,6 +581,11 @@ function ProfilCurierContent() {
 
   // Function to change tab and update URL
   const handleTabChange = (tab: 'personal' | 'company' | 'documents') => {
+    // Redirect to Verificare page for documents
+    if (tab === 'documents') {
+      router.push('/dashboard/curier/verificare');
+      return;
+    }
     setActiveTab(tab);
     const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tab);
@@ -931,17 +990,6 @@ function ProfilCurierContent() {
           >
             <BuildingIcon />
             Date Firmă
-          </button>
-          <button
-            onClick={() => handleTabChange('documents')}
-            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-medium text-sm transition-all whitespace-nowrap ${
-              activeTab === 'documents'
-                ? 'bg-orange-500 text-white'
-                : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-700/50'
-            }`}
-          >
-            <DocumentIcon />
-            Documente
           </button>
         </div>
 

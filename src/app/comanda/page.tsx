@@ -883,7 +883,7 @@ function ComandaForm() {
                       </div>
                       
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Valoare marfă (EUR)</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Valoare Continut Colet (EUR)</label>
                         <input
                           type="number"
                           name="valoare_marfa"
