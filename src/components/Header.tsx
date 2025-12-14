@@ -40,7 +40,7 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           {/* Logo Image */}
-          <div className="relative w-11 h-11 lg:w-12 lg:h-12 group-hover:scale-105 transition-all">
+          <div className="relative w-11 h-11 lg:w-12 lg:h-12 group-hover:scale-105 transition-all bg-slate-900 rounded-lg p-1.5">
             <Image 
               src="/img/logo.png" 
               alt="Curierul Perfect Logo" 
