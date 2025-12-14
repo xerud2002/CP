@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -11,6 +11,23 @@ import { ArrowLeftIcon, CheckCircleIcon } from '@/components/icons/DashboardIcon
 import HelpCard from '@/components/HelpCard';
 import { showSuccess, showError } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
+
+// Constants
+const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+// Helper function for category colors
+const getCategoryColors = (category: string): string => {
+  const colors: Record<string, string> = {
+    identity: 'bg-blue-500/20 text-blue-400',
+    company: 'bg-purple-500/20 text-purple-400',
+    transport: 'bg-green-500/20 text-green-400',
+    special: 'bg-pink-500/20 text-pink-400',
+    cold: 'bg-cyan-500/20 text-cyan-400',
+    insurance: 'bg-yellow-500/20 text-yellow-400',
+  };
+  return colors[category] || 'bg-slate-700/50 text-gray-400';
+};
 
 // Types
 interface UploadedDocument {
@@ -364,18 +381,17 @@ export default function VerificarePage() {
     }
   }, [user, loadProfile, loadDocuments]);
 
-  const handleFileUpload = async (docId: string, file: File) => {
+  const handleFileUpload = useCallback(async (docId: string, file: File) => {
     if (!user) return;
 
     // Validate file type
-    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
-    if (!allowedTypes.includes(file.type)) {
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
       showError('Format invalid. Doar PDF, JPG, JPEG sau PNG sunt permise.');
       return;
     }
 
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
       showError('Fișierul este prea mare. Dimensiunea maximă este 10MB.');
       return;
     }
@@ -433,7 +449,7 @@ export default function VerificarePage() {
       setUploadingDoc(null);
       setUploadProgress(0);
     }
-  };
+  }, [user]);
 
   if (loading || !profile) {
     return (
@@ -445,9 +461,12 @@ export default function VerificarePage() {
 
   if (!user) return null;
 
-  const documents = getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness);
-  const requiredDocs = documents.filter(d => d.required);
-  const optionalDocs = documents.filter(d => !d.required);
+  const documents = useMemo(
+    () => getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness),
+    [profile.taraSediu, activeServices, profile.tipBusiness]
+  );
+  const requiredDocs = useMemo(() => documents.filter(d => d.required), [documents]);
+  const optionalDocs = useMemo(() => documents.filter(d => !d.required), [documents]);
 
   return (
     <div className="min-h-screen">
@@ -528,14 +547,7 @@ export default function VerificarePage() {
                     uploaded ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-white/5 hover:border-orange-500/50'
                   }`}>
                     <div className="flex items-start gap-4">
-                      <div className={`p-3 rounded-lg ${
-                        doc.category === 'identity' ? 'bg-blue-500/20 text-blue-400' :
-                        doc.category === 'company' ? 'bg-purple-500/20 text-purple-400' :
-                        doc.category === 'transport' ? 'bg-green-500/20 text-green-400' :
-                        doc.category === 'special' ? 'bg-pink-500/20 text-pink-400' :
-                        doc.category === 'insurance' ? 'bg-yellow-500/20 text-yellow-400' :
-                        'bg-slate-700/50 text-gray-400'
-                      }`}>
+                      <div className={`p-3 rounded-lg ${getCategoryColors(doc.category)}`}>
                         {getDocIcon(doc.icon)}
                       </div>
                       <div className="flex-1 min-w-0">
