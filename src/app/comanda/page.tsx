@@ -158,6 +158,20 @@ function ComandaForm() {
   const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
   const calendarRef = useRef<HTMLDivElement>(null);
 
+  // Custom dropdown states for country selectors
+  const [isRidicareCountryOpen, setIsRidicareCountryOpen] = useState(false);
+  const [isLivrareCountryOpen, setIsLivrareCountryOpen] = useState(false);
+  const ridicareCountryRef = useRef<HTMLDivElement>(null);
+  const livrareCountryRef = useRef<HTMLDivElement>(null);
+
+  // Custom dropdown states for judet/region selectors
+  const [isRidicareJudetOpen, setIsRidicareJudetOpen] = useState(false);
+  const [isLivrareJudetOpen, setIsLivrareJudetOpen] = useState(false);
+  const [ridicareJudetSearch, setRidicareJudetSearch] = useState('');
+  const [livrareJudetSearch, setLivrareJudetSearch] = useState('');
+  const ridicareJudetRef = useRef<HTMLDivElement>(null);
+  const livrareJudetRef = useRef<HTMLDivElement>(null);
+
   // Calendar state pentru range start
   const [isCalendarStartOpen, setIsCalendarStartOpen] = useState(false);
   const [calendarStartMonth, setCalendarStartMonth] = useState(new Date().getMonth());
@@ -173,7 +187,7 @@ function ComandaForm() {
   const monthNames = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
   const dayNames = ['Lu', 'Ma', 'Mi', 'Jo', 'Vi', 'Sâ', 'Du'];
 
-  // Close calendar on outside click
+  // Close calendar and dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
@@ -184,6 +198,20 @@ function ComandaForm() {
       }
       if (calendarEndRef.current && !calendarEndRef.current.contains(event.target as Node)) {
         setIsCalendarEndOpen(false);
+      }
+      if (ridicareCountryRef.current && !ridicareCountryRef.current.contains(event.target as Node)) {
+        setIsRidicareCountryOpen(false);
+      }
+      if (livrareCountryRef.current && !livrareCountryRef.current.contains(event.target as Node)) {
+        setIsLivrareCountryOpen(false);
+      }
+      if (ridicareJudetRef.current && !ridicareJudetRef.current.contains(event.target as Node)) {
+        setIsRidicareJudetOpen(false);
+        setRidicareJudetSearch('');
+      }
+      if (livrareJudetRef.current && !livrareJudetRef.current.contains(event.target as Node)) {
+        setIsLivrareJudetOpen(false);
+        setLivrareJudetSearch('');
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -612,54 +640,105 @@ function ComandaForm() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Țara *</label>
-                      <div className="relative">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10">
+                      <div className="relative" ref={ridicareCountryRef}>
+                        <button
+                          type="button"
+                          onClick={() => setIsRidicareCountryOpen(!isRidicareCountryOpen)}
+                          className="form-select w-full flex items-center gap-3 cursor-pointer"
+                        >
                           <Image 
                             src={`/img/flag/${formData.tara_ridicare.toLowerCase()}.svg`} 
                             alt={countries.find(c => c.code === formData.tara_ridicare)?.name || ''} 
                             width={24} 
                             height={18} 
-                            className="rounded-sm shadow-sm"
+                            className="rounded-sm shadow-sm shrink-0"
                           />
-                        </div>
-                        <select
-                          name="tara_ridicare"
-                          value={formData.tara_ridicare}
-                          onChange={handleInputChange}
-                          className="form-select w-full pl-14"
-                          style={{ paddingLeft: '3.5rem' }}
-                        >
-                          {countries.map((c) => (
-                            <option key={c.code} value={c.code}>{c.name}</option>
-                          ))}
-                        </select>
+                          <span className="flex-1 text-left">{countries.find(c => c.code === formData.tara_ridicare)?.name || 'Selectează...'}</span>
+                          <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isRidicareCountryOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        {isRidicareCountryOpen && (
+                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                            {countries.map((c) => (
+                              <button
+                                key={c.code}
+                                type="button"
+                                onClick={() => {
+                                  setFormData({ ...formData, tara_ridicare: c.code, judet_ridicare: '' });
+                                  setIsRidicareCountryOpen(false);
+                                }}
+                                className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                                  formData.tara_ridicare === c.code ? 'bg-slate-700/50' : ''
+                                }`}
+                              >
+                                <Image
+                                  src={c.flag}
+                                  alt={c.name}
+                                  width={24}
+                                  height={18}
+                                  className="rounded-sm shrink-0"
+                                />
+                                <span className="text-white text-sm">{c.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Județ/Regiune *</label>
-                      <div className="relative">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10">
+                      <div className="relative" ref={ridicareJudetRef}>
+                        <button
+                          type="button"
+                          onClick={() => setIsRidicareJudetOpen(!isRidicareJudetOpen)}
+                          className="form-select w-full flex items-center gap-3 cursor-pointer"
+                        >
                           <Image 
                             src={`/img/flag/${formData.tara_ridicare.toLowerCase()}.svg`} 
                             alt={countries.find(c => c.code === formData.tara_ridicare)?.name || ''} 
                             width={24} 
                             height={18} 
-                            className="rounded-sm shadow-sm opacity-60"
+                            className="rounded-sm shadow-sm opacity-60 shrink-0"
                           />
-                        </div>
-                        <select
-                          name="judet_ridicare"
-                          value={formData.judet_ridicare}
-                          onChange={handleInputChange}
-                          className="form-select w-full pl-14"
-                          style={{ paddingLeft: '3.5rem' }}
-                        >
-                          <option value="">Selectează...</option>
-                          {judetRidicareList.map((j) => (
-                            <option key={j} value={j}>{j}</option>
-                          ))}
-                        </select>
+                          <span className="flex-1 text-left">{formData.judet_ridicare || 'Selectează...'}</span>
+                          <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isRidicareJudetOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        {isRidicareJudetOpen && (
+                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
+                            <div className="p-2 border-b border-white/10">
+                              <input
+                                type="text"
+                                value={ridicareJudetSearch}
+                                onChange={(e) => setRidicareJudetSearch(e.target.value)}
+                                placeholder="Caută..."
+                                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </div>
+                            <div className="overflow-y-auto max-h-48">
+                              {judetRidicareList.filter(j => j.toLowerCase().includes(ridicareJudetSearch.toLowerCase())).map((j) => (
+                                <button
+                                  key={j}
+                                  type="button"
+                                  onClick={() => {
+                                    setFormData({ ...formData, judet_ridicare: j });
+                                    setIsRidicareJudetOpen(false);
+                                    setRidicareJudetSearch('');
+                                  }}
+                                  className={`w-full text-left px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                                    formData.judet_ridicare === j ? 'bg-slate-700/50' : ''
+                                  }`}
+                                >
+                                  <span className="text-white text-sm">{j}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                       {errors.judet_ridicare && <p className="text-red-400 text-sm mt-1">{errors.judet_ridicare}</p>}
                     </div>
@@ -711,54 +790,105 @@ function ComandaForm() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Țara *</label>
-                      <div className="relative">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10">
+                      <div className="relative" ref={livrareCountryRef}>
+                        <button
+                          type="button"
+                          onClick={() => setIsLivrareCountryOpen(!isLivrareCountryOpen)}
+                          className="form-select w-full flex items-center gap-3 cursor-pointer"
+                        >
                           <Image 
                             src={`/img/flag/${formData.tara_livrare.toLowerCase()}.svg`} 
                             alt={countries.find(c => c.code === formData.tara_livrare)?.name || ''} 
                             width={24} 
                             height={18} 
-                            className="rounded-sm shadow-sm"
+                            className="rounded-sm shadow-sm shrink-0"
                           />
-                        </div>
-                        <select
-                          name="tara_livrare"
-                          value={formData.tara_livrare}
-                          onChange={handleInputChange}
-                          className="form-select w-full pl-14"
-                          style={{ paddingLeft: '3.5rem' }}
-                        >
-                          {countries.map((c) => (
-                            <option key={c.code} value={c.code}>{c.name}</option>
-                          ))}
-                        </select>
+                          <span className="flex-1 text-left">{countries.find(c => c.code === formData.tara_livrare)?.name || 'Selectează...'}</span>
+                          <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isLivrareCountryOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        {isLivrareCountryOpen && (
+                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                            {countries.map((c) => (
+                              <button
+                                key={c.code}
+                                type="button"
+                                onClick={() => {
+                                  setFormData({ ...formData, tara_livrare: c.code, judet_livrare: '' });
+                                  setIsLivrareCountryOpen(false);
+                                }}
+                                className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                                  formData.tara_livrare === c.code ? 'bg-slate-700/50' : ''
+                                }`}
+                              >
+                                <Image
+                                  src={c.flag}
+                                  alt={c.name}
+                                  width={24}
+                                  height={18}
+                                  className="rounded-sm shrink-0"
+                                />
+                                <span className="text-white text-sm">{c.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">Județ/Regiune *</label>
-                      <div className="relative">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10">
+                      <div className="relative" ref={livrareJudetRef}>
+                        <button
+                          type="button"
+                          onClick={() => setIsLivrareJudetOpen(!isLivrareJudetOpen)}
+                          className="form-select w-full flex items-center gap-3 cursor-pointer"
+                        >
                           <Image 
                             src={`/img/flag/${formData.tara_livrare.toLowerCase()}.svg`} 
                             alt={countries.find(c => c.code === formData.tara_livrare)?.name || ''} 
                             width={24} 
                             height={18} 
-                            className="rounded-sm shadow-sm opacity-60"
+                            className="rounded-sm shadow-sm opacity-60 shrink-0"
                           />
-                        </div>
-                        <select
-                          name="judet_livrare"
-                          value={formData.judet_livrare}
-                          onChange={handleInputChange}
-                          className="form-select w-full pl-14"
-                          style={{ paddingLeft: '3.5rem' }}
-                        >
-                          <option value="">Selectează...</option>
-                          {judetLivrareList.map((j) => (
-                            <option key={j} value={j}>{j}</option>
-                          ))}
-                        </select>
+                          <span className="flex-1 text-left">{formData.judet_livrare || 'Selectează...'}</span>
+                          <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isLivrareJudetOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        {isLivrareJudetOpen && (
+                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
+                            <div className="p-2 border-b border-white/10">
+                              <input
+                                type="text"
+                                value={livrareJudetSearch}
+                                onChange={(e) => setLivrareJudetSearch(e.target.value)}
+                                placeholder="Caută..."
+                                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </div>
+                            <div className="overflow-y-auto max-h-48">
+                              {judetLivrareList.filter(j => j.toLowerCase().includes(livrareJudetSearch.toLowerCase())).map((j) => (
+                                <button
+                                  key={j}
+                                  type="button"
+                                  onClick={() => {
+                                    setFormData({ ...formData, judet_livrare: j });
+                                    setIsLivrareJudetOpen(false);
+                                    setLivrareJudetSearch('');
+                                  }}
+                                  className={`w-full text-left px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                                    formData.judet_livrare === j ? 'bg-slate-700/50' : ''
+                                  }`}
+                                >
+                                  <span className="text-white text-sm">{j}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                       {errors.judet_livrare && <p className="text-red-400 text-sm mt-1">{errors.judet_livrare}</p>}
                     </div>
