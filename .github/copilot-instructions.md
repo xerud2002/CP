@@ -253,13 +253,73 @@ See `src/app/dashboard/curier/profil/page.tsx` for full country/phone prefix dro
 - **Error handling**: Use `showError(error)` for automatic Romanian translation of Firebase errors
 - **🆕 Centralized Constants**: **ALWAYS** import services, countries, and status configs from `@/lib/constants.ts` — never duplicate these definitions in components
 
+## File Organization
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── (auth)/            # Route group: login, register, forgot-password (no Header/Footer)
+│   ├── dashboard/         # Protected dashboards (client/curier/admin)
+│   │   ├── client/        # Client dashboard + sub-pages (comenzi, profil, etc.)
+│   │   └── curier/        # Courier dashboard + sub-pages (comenzi, profil, etc.)
+│   ├── comanda/           # Public order creation page
+│   ├── globals.css        # Tailwind + custom classes (btn-primary, card, spinner, etc.)
+│   └── layout.tsx         # Root layout with AuthProvider + Toaster
+├── components/            # Reusable UI components
+│   ├── icons/             # SVG icon components
+│   ├── orders/            # Order-specific helpers
+│   └── ui/                # Generic UI components (CountUp, SearchableSelect, etc.)
+├── contexts/              # React contexts (AuthContext for user state)
+├── lib/                   # Core utilities
+│   ├── constants.ts       # **CRITICAL**: Single source of truth for countries, services, status configs
+│   ├── errorMessages.ts   # Romanian translations of Firebase errors
+│   ├── firebase.ts        # Firebase initialization (auth, db, storage)
+│   └── toast.ts           # Sonner wrapper helpers
+├── types/                 # TypeScript type definitions
+│   └── index.ts           # User, Order, CoverageZone, CourierProfile types
+└── utils/                 # Helper functions
+    ├── orderHelpers.ts    # Order number generation & formatting
+    └── orderStatusHelpers.ts  # Status transition logic & validation
+```
+
+**Documentation Files** (root):
+- `FIRESTORE_STRUCTURE.md`: Complete Firestore schema, security rules, and query patterns
+- `STATUS_TRANSITIONS.md`: Order status lifecycle with rules and UI implementations
+- `SECURITY_CHECKLIST.md`: Security measures, validation, and testing guidelines
+- `firestore.rules`: Firestore security rules (deploy with `firebase deploy --only firestore:rules`)
+- `firestore.indexes.json`: Composite indexes for efficient queries
+- `scripts/`: Database migration scripts with documentation
+
 ## Commands
 ```bash
-npm run dev    # localhost:3000
-npm run build  # Production build
-npm run lint   # ESLint
-firebase deploy --only firestore  # Deploy Firestore rules & indexes
+npm run dev    # Development server on localhost:3000
+npm run build  # Production build (check for build errors)
+npm run start  # Start production server (requires build first)
+npm run lint   # ESLint (check code style)
+firebase deploy --only firestore         # Deploy rules & indexes
+firebase deploy --only firestore:rules   # Deploy only rules
+firebase deploy --only firestore:indexes # Deploy only indexes
 ```
+
+## Key Implementation Notes
+
+### Future Features (Not Yet Implemented)
+- **Messaging System**: `mesaje` collection for courier-client chat (referenced in `STATUS_TRANSITIONS.md`)
+- **Offers System**: `oferte` collection for courier price proposals
+- **Automatic Transitions**: Currently `noua` → `in_lucru` requires manual helper call; will be automatic when messaging/offers are built
+- **Firebase Emulators**: Local dev environment not configured (connects directly to production)
+- **CI/CD Pipeline**: No automated testing or deployment pipeline yet
+
+### Performance Considerations
+- All dashboard queries use composite indexes (defined in `firestore.indexes.json`)
+- Order queries filter by `uid_client` or `courierId` + `timestamp` DESC for pagination readiness
+- Use `limit()` queries when displaying large lists (e.g., `limit(20)` for initial load)
+- Images use Next.js Image optimization — always specify width/height
+- Firestore real-time listeners not yet implemented (currently using one-time fetches)
+
+### Data Migration
+- Script `scripts/migrateOrderStatuses.js` available for batch order status updates
+- See `scripts/README.md` for migration documentation
+- Always backup Firestore data before running migration scripts
 
 ## Development Workflows
 
@@ -267,8 +327,25 @@ firebase deploy --only firestore  # Deploy Firestore rules & indexes
 1. Create test accounts for both roles: `?role=client` and `?role=curier` during registration
 2. Verify owner-based filtering: client should only see their orders, courier sees pending + assigned
 3. Test service matching: courier's `serviciiOferite` must match order's `serviciu` (case-insensitive)
-4. Check order lifecycle: pending → accepted (courierId assigned) → in_transit → completed
-5. Verify deletion rules: only `pending` orders can be deleted by owner
+4. Check order lifecycle: `noua` → `in_lucru` (auto) → `livrata` (manual) → reviews enabled
+5. Verify deletion rules: only `noua` orders can be deleted by owner
+6. Test status transitions: use helpers from `orderStatusHelpers.ts` for `transitionToInLucru()` and `transitionToFinalizata()`
+
+### Firebase Deployment
+```bash
+# Deploy Firestore rules and indexes
+firebase deploy --only firestore
+
+# Deploy only rules
+firebase deploy --only firestore:rules
+
+# Deploy only indexes
+firebase deploy --only firestore:indexes
+
+# Check rules syntax before deploying
+firebase firestore:rules:validate
+```
+**Note**: Always test rule changes in console before deploying. Use Firestore Rules Playground at [Firebase Console](https://console.firebase.google.com).
 
 ### Firebase Local Development
 ```bash
@@ -279,10 +356,18 @@ firebase deploy --only firestore  # Deploy Firestore rules & indexes
 Currently, the app connects directly to production Firebase (no emulator support yet).
 
 ### Debugging Auth Issues
-- Check `AuthContext.tsx` state in React DevTools
-- Verify Firebase `users/{uid}` document has correct `role` field
+- Check `AuthContext.tsx` state in React DevTools (user object should have `role`, `uid`, `email`)
+- Verify Firebase `users/{uid}` document has correct `role` field using Firestore console
 - Confirm Firestore rules are deployed: `firebase deploy --only firestore:rules`
 - Test role redirects: login should redirect to `/dashboard/{role}` based on `?role` param
+- Check browser console for Firebase auth errors (translated to Romanian via `errorMessages.ts`)
+
+### Order Status Testing
+1. **Create order**: Client creates new order → status = `noua`
+2. **Transition to in_lucru**: Manually call `transitionToInLucru(orderId, 'noua')` (simulates courier interaction)
+3. **Finalize order**: Use "Finalizează" button → calls `transitionToFinalizata(orderId, 'in_lucru')` → status = `livrata`
+4. **Review flow**: Once `livrata`, client can leave review via `/dashboard/client/recenzii?orderId={id}`
+5. **Validation**: Test `canEditOrder()`, `canDeleteOrder()`, `canFinalizeOrder()` helpers for proper status checks
 
 ## Environment Variables
 Required in `.env.local`:
