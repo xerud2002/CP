@@ -43,11 +43,13 @@ RootLayout (AuthProvider)
 | Icons | `src/components/icons/DashboardIcons.tsx` | All SVG dashboard icons as React components |
 | Data | `src/lib/constants.ts` | `countries` (16 EU countries), `judetByCountry` (full region lists), `serviceTypes` (unified service definitions with icons), `serviceNames` (map), `orderStatusConfig` (unified status display) |
 | Helpers | `src/utils/orderHelpers.ts` | `getNextOrderNumber()` (atomic counter), `formatOrderNumber()`, `formatClientName()` |
+| Status Helpers | `src/utils/orderStatusHelpers.ts` | `transitionToInLucru()`, `transitionToFinalizata()`, `canEditOrder()`, `canDeleteOrder()`, `canFinalizeOrder()`, `canLeaveReview()` |
 | Toast | `src/lib/toast.ts` | Sonner wrapper: `showSuccess()`, `showError()`, `showInfo()`, `showWarning()`, `showLoading()` |
 | Errors | `src/lib/errorMessages.ts` | Romanian error messages map for Firebase auth/firestore/storage errors + `getErrorMessage()` helper + `logError()` for console logging |
 | Help | `src/components/HelpCard.tsx` | Reusable support card with email/WhatsApp links for all sub-pages |
 | Layout | `src/components/LayoutWrapper.tsx` | Conditional Header/Footer logic based on pathname |
 | Docs | `FIRESTORE_STRUCTURE.md` | Complete schema docs with security, indexes, and query patterns |
+| Status Flow | `STATUS_TRANSITIONS.md` | Order status lifecycle, transition rules, validation, and UI patterns |
 | Security | `SECURITY_CHECKLIST.md` | Security measures, data flow, validation rules, and testing checklist |
 
 ### Firestore Collections
@@ -86,9 +88,16 @@ const matchesService = userServices.includes(order.serviciu.toLowerCase().trim()
 
 **Order Lifecycle & Status Flow**:
 ```
-pending → accepted (courierId set) → in_transit → completed
+noua → in_lucru (auto) → livrata (manual)
+  ↓         ↓
+anulata   anulata
 ```
-Only `pending` orders can be deleted. Status transitions enforced client-side. See `SECURITY_CHECKLIST.md` for full flow.
+**Status Transitions**:
+- `noua` → `in_lucru`: Automatic when courier sends first message or offer (uses `transitionToInLucru()`)
+- `in_lucru` → `livrata`: Manual via "Finalizează" button by client or courier (uses `transitionToFinalizata()`)
+- **CRITICAL**: Only `noua` orders can be edited/deleted. Only `in_lucru` orders can be finalized.
+- **Reviews**: Only `livrata` orders allow reviews - client can leave review anytime, courier can request review from client
+- See `STATUS_TRANSITIONS.md` for complete flow documentation
 
 ## Critical Patterns
 

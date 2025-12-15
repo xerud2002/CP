@@ -66,17 +66,22 @@ Această aplicație folosește Firebase Firestore pentru gestionarea datelor în
   pret?: number,
   
   // Status & Metadata
-  status: 'pending' | 'accepted' | 'in_transit' | 'completed' | 'cancelled',
+  status: 'noua' | 'in_lucru' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata',
+  statusUpdatedAt?: Timestamp,  // When status last changed
+  inLucruAt?: Timestamp,        // When transitioned to 'in_lucru'
+  finalizataAt?: Timestamp,     // When marked as 'livrata'
   observatii?: string,
+  orderNumber?: number,         // Sequential order number (e.g., 141121)
   timestamp: number,
   createdAt: Timestamp
 }
 ```
 **Security**:
 - Read: Own orders (client), assigned orders (curier), all pending orders (curier)
-- Create: Clients only, status must be 'pending'
+- Create: Clients only, status must be 'noua'
 - Update: Owner or assigned courier
-- Delete: Owner only, status must be 'pending'
+- Delete: Owner only, status must be 'noua'
+- Status Transitions: See `STATUS_TRANSITIONS.md` for rules
 
 **Indexes**:
 - `uid_client` + `timestamp` DESC

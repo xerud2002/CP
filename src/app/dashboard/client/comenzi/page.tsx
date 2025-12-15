@@ -10,14 +10,15 @@ import { db } from '@/lib/firebase';
 import { showSuccess, showError, showWarning } from '@/lib/toast';
 import { formatOrderNumber } from '@/utils/orderHelpers';
 import { serviceNames, orderStatusConfig } from '@/lib/constants';
-import { ArrowLeftIcon, PackageIcon, ClockIcon, CheckCircleIcon, XCircleIcon, TruckIcon } from '@/components/icons/DashboardIcons';
+import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
+import { ArrowLeftIcon, PackageIcon, ClockIcon, CheckCircleIcon, XCircleIcon, TruckIcon, StarIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 
 interface Order {
   id: string;
   orderNumber?: number;
   serviciu: string;
-  status: 'noua' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata';
+  status: 'noua' | 'in_lucru' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata' | 'pending' | 'accepted' | 'in_transit' | 'completed' | 'cancelled';
   tara_ridicare: string;
   judet_ridicare: string;
   oras_ridicare: string;
@@ -33,13 +34,32 @@ interface Order {
   hasNewNotifications?: boolean;
 }
 
+// Map old English statuses to new Romanian statuses
+const normalizeStatus = (status: string): string => {
+  const statusMap: Record<string, string> = {
+    'pending': 'noua',
+    'accepted': 'acceptata',
+    'in_transit': 'in_tranzit',
+    'completed': 'livrata',
+    'cancelled': 'anulata',
+  };
+  return statusMap[status] || status;
+};
+
 // Status icon mapping
 const statusIcons = {
   noua: ClockIcon,
+  in_lucru: TruckIcon,
   acceptata: TruckIcon,
   in_tranzit: TruckIcon,
   livrata: CheckCircleIcon,
   anulata: XCircleIcon,
+  // Old English statuses (for backwards compatibility)
+  pending: ClockIcon,
+  accepted: TruckIcon,
+  in_transit: TruckIcon,
+  completed: CheckCircleIcon,
+  cancelled: XCircleIcon,
 };
 
 const getFlagPath = (code: string) => `/img/flag/${code.toLowerCase()}.svg`;
@@ -80,6 +100,8 @@ export default function ComenziClientPage() {
       snapshot.forEach((doc) => {
         ordersData.push({ id: doc.id, ...doc.data() } as Order);
       });
+      console.log('Orders loaded:', ordersData.length, ordersData);
+      console.log('Order statuses:', ordersData.map(o => ({ id: o.id, status: o.status, statusType: typeof o.status })));
       setOrders(ordersData);
     } catch (error) {
       console.error('Error loading orders:', error);
@@ -90,7 +112,7 @@ export default function ComenziClientPage() {
 
   const handleDeleteOrder = async (orderId: string, orderStatus: string) => {
     if (orderStatus !== 'noua') {
-      showWarning('Poți șterge doar comenzile care sunt în așteptare!');
+      showWarning('Poți șterge doar comenzile cu statusul "Nouă"!');
       return;
     }
 
@@ -109,11 +131,27 @@ export default function ComenziClientPage() {
 
   const handleEditOrder = (orderId: string, orderStatus: string) => {
     if (orderStatus !== 'noua') {
-      showWarning('Poți edita doar comenzile care sunt în așteptare!');
+      showWarning('Poți edita doar comenzile cu statusul "Nouă"!');
       return;
     }
-    // TODO: Redirect to edit page or open edit modal
-    showWarning('Funcționalitatea de editare va fi disponibilă în curând!');
+    // Redirect to order page with edit mode
+    router.push(`/comanda?edit=${orderId}`);
+  };
+
+  const handleFinalizeOrder = async (orderId: string, status: string) => {
+    if (!canFinalizeOrder(status)) {
+      showWarning('Poți finaliza doar comenzile cu statusul "În Lucru"!');
+      return;
+    }
+    
+    const success = await transitionToFinalizata(orderId, status);
+    if (success) {
+      loadOrders();
+    }
+  };
+
+  const handleLeaveReview = (orderId: string) => {
+    router.push(`/dashboard/client/recenzii?orderId=${orderId}`);
   };
 
   if (loading || !user) {
@@ -129,7 +167,15 @@ export default function ComenziClientPage() {
 
   const filteredOrders = filterStatus === 'all' 
     ? orders 
-    : orders.filter(o => o.status === filterStatus);
+    : orders.filter(o => {
+        const normalizedOrderStatus = normalizeStatus((o.status || '').toString().trim().toLowerCase());
+        const filter = filterStatus.toString().trim().toLowerCase();
+        const match = normalizedOrderStatus === filter;
+        console.log(`Filtering: order.id='${o.id}', order.status='${o.status}' (normalized='${normalizedOrderStatus}'), filterStatus='${filterStatus}' (lower='${filter}'), match=${match}`);
+        return match;
+      });
+
+  console.log(`Total orders: ${orders.length}, Filtered orders: ${filteredOrders.length}, Filter: ${filterStatus}`);
 
   return (
     <div className="min-h-screen">
@@ -175,27 +221,27 @@ export default function ComenziClientPage() {
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            Toate ({orders.length})
+            Toate
           </button>
           <button
             onClick={() => setFilterStatus('noua')}
             className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
               filterStatus === 'noua'
-                ? 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/25'
+                ? 'bg-white text-slate-900 shadow-lg shadow-white/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            În așteptare ({orders.filter(o => o.status === 'noua').length})
+            Nouă
           </button>
           <button
-            onClick={() => setFilterStatus('in_tranzit')}
+            onClick={() => setFilterStatus('in_lucru')}
             className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
-              filterStatus === 'in_tranzit'
-                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
+              filterStatus === 'in_lucru'
+                ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            În progres ({orders.filter(o => o.status === 'in_tranzit').length})
+            În Lucru
           </button>
           <button
             onClick={() => setFilterStatus('livrata')}
@@ -205,7 +251,17 @@ export default function ComenziClientPage() {
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            Finalizate ({orders.filter(o => o.status === 'livrata').length})
+            Finalizată
+          </button>
+          <button
+            onClick={() => setFilterStatus('anulata')}
+            className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
+              filterStatus === 'anulata'
+                ? 'bg-gray-500 text-white shadow-lg shadow-gray-500/25'
+                : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            Arhivată
           </button>
         </div>
 
@@ -240,8 +296,9 @@ export default function ComenziClientPage() {
         ) : (
           <div className="space-y-4">
             {filteredOrders.map((order) => {
-              const StatusIcon = statusIcons[order.status] || ClockIcon;
-              const statusConfig = orderStatusConfig[order.status] || orderStatusConfig.noua;
+              const normalizedStatus = normalizeStatus(order.status) as keyof typeof orderStatusConfig;
+              const StatusIcon = statusIcons[normalizedStatus] || ClockIcon;
+              const statusConfig = orderStatusConfig[normalizedStatus] || orderStatusConfig.noua;
               return (
                 <div 
                   key={order.id} 
@@ -300,39 +357,95 @@ export default function ComenziClientPage() {
                         </div>
                       </div>
                       
-                      {/* Route */}
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="flex items-center gap-2">
-                          <Image 
-                            src={getFlagPath(order.tara_ridicare)} 
-                            alt="" 
-                            width={20} 
-                            height={15} 
-                            className="rounded-sm"
-                          />
-                          <span className="text-sm text-gray-300">
-                            {order.oras_ridicare}, {order.judet_ridicare}
-                          </span>
+                      {/* Route + Action Buttons */}
+                      <div className="flex items-center justify-between gap-3 mb-3">
+                        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <Image 
+                              src={getFlagPath(order.tara_ridicare)} 
+                              alt="" 
+                              width={20} 
+                              height={15} 
+                              className="rounded-sm shrink-0"
+                            />
+                            <span className="text-xs sm:text-sm text-gray-300 truncate">
+                              {order.oras_ridicare}, {order.judet_ridicare}
+                            </span>
+                          </div>
+                          <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          </svg>
+                          <div className="flex items-center gap-2">
+                            <Image 
+                              src={getFlagPath(order.tara_livrare)} 
+                              alt="" 
+                              width={20} 
+                              height={15} 
+                              className="rounded-sm shrink-0"
+                            />
+                            <span className="text-xs sm:text-sm text-gray-300 truncate">
+                              {order.oras_livrare}, {order.judet_livrare}
+                            </span>
+                          </div>
                         </div>
-                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                        <div className="flex items-center gap-2">
-                          <Image 
-                            src={getFlagPath(order.tara_livrare)} 
-                            alt="" 
-                            width={20} 
-                            height={15} 
-                            className="rounded-sm"
-                          />
-                          <span className="text-sm text-gray-300">
-                            {order.oras_livrare}, {order.judet_livrare}
-                          </span>
+
+                        {/* Action Buttons */}
+                        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                          {/* Review Button - only for 'livrata' status */}
+                          {order.status === 'livrata' && (
+                            <button
+                              onClick={() => handleLeaveReview(order.id)}
+                              className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/20 hover:border-yellow-500/40 text-yellow-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                              title="Lasă recenzie"
+                            >
+                              <StarIcon className="w-3.5 h-3.5" />
+                              <span className="hidden sm:inline">Recenzie</span>
+                            </button>
+                          )}
+                          {/* Finalizare Button - only for 'in_lucru' status */}
+                          {order.status === 'in_lucru' && (
+                            <button
+                              onClick={() => handleFinalizeOrder(order.id, order.status)}
+                              className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                              title="Finalizează comanda"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              <span className="hidden sm:inline">Finalizează</span>
+                            </button>
+                          )}
+                          {/* Edit Button - only for 'noua' status */}
+                          {normalizedStatus === 'noua' && (
+                            <button
+                              onClick={() => handleEditOrder(order.id, order.status)}
+                              className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                              title="Modifică comanda"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                              <span className="hidden sm:inline">Modifică</span>
+                            </button>
+                          )}
+                          {/* Delete Button - only for 'noua' status */}
+                          {normalizedStatus === 'noua' && (
+                            <button
+                              onClick={() => handleDeleteOrder(order.id, order.status)}
+                              className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                              title="Șterge comanda"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                              <span className="hidden sm:inline">Șterge</span>
+                            </button>
+                          )}
                         </div>
                       </div>
                       
                       {/* Meta Info */}
-                      <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                      <div className="flex items-center gap-4 text-xs text-gray-500">
                         <span>Greutate: {order.greutate} kg</span>
                         <span>•</span>
                         <span>Data ridicare: {order.data_ridicare}</span>
@@ -340,30 +453,6 @@ export default function ComenziClientPage() {
                         <span>
                           Creat: {order.createdAt ? new Date(order.createdAt.seconds * 1000).toLocaleDateString('ro-RO') : 'N/A'}
                         </span>
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => handleEditOrder(order.id, order.status)}
-                          className="px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
-                          title="Modifică comanda"
-                        >
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                          Modifică
-                        </button>
-                        <button
-                          onClick={() => handleDeleteOrder(order.id, order.status)}
-                          className="px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 text-xs font-medium transition-all flex items-center gap-1.5"
-                          title="Șterge comanda"
-                        >
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                          Șterge
-                        </button>
                       </div>
                     </div>
                   </div>

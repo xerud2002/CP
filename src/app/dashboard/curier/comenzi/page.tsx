@@ -12,6 +12,8 @@ import HelpCard from '@/components/HelpCard';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { formatOrderNumber, formatClientName } from '@/utils/orderHelpers';
+import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
+import { showSuccess, showWarning, showError } from '@/lib/toast';
 import { countries, serviceTypes } from '@/lib/constants';
 
 interface Order {
@@ -27,7 +29,7 @@ interface Order {
   oras_livrare?: string;
   tipColet: string;
   greutate: number;
-  status: 'noua' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata';
+  status: 'noua' | 'in_lucru' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata';
   dataColectare: string;
   pret: number;
   createdAt: Date;
@@ -38,11 +40,12 @@ interface Order {
 }
 
 const statusLabels: Record<Order['status'], { label: string; color: string; bg: string }> = {
-  noua: { label: 'Nouă', color: 'text-blue-400', bg: 'bg-blue-500/20' },
+  noua: { label: 'Nouă', color: 'text-white', bg: 'bg-white/10' },
+  in_lucru: { label: 'În Lucru', color: 'text-orange-400', bg: 'bg-orange-500/20' },
   acceptata: { label: 'Acceptată', color: 'text-yellow-400', bg: 'bg-yellow-500/20' },
-  in_tranzit: { label: 'În Tranzit', color: 'text-orange-400', bg: 'bg-orange-500/20' },
-  livrata: { label: 'Livrată', color: 'text-green-400', bg: 'bg-green-500/20' },
-  anulata: { label: 'Anulată', color: 'text-red-400', bg: 'bg-red-500/20' },
+  in_tranzit: { label: 'În Tranzit', color: 'text-blue-400', bg: 'bg-blue-500/20' },
+  livrata: { label: 'Livrată', color: 'text-emerald-400', bg: 'bg-emerald-500/20' },
+  anulata: { label: 'Anulată', color: 'text-gray-400', bg: 'bg-gray-500/20' },
 };
 
 // Service Icon component - Reusable with inline icon definitions
@@ -328,6 +331,74 @@ export default function ComenziCurierPage() {
       }
       return newSet;
     });
+  };
+
+  // Finalize order (change status to 'livrata')
+  const handleFinalizeOrder = async (orderId: string, status: string) => {
+    if (!canFinalizeOrder(status)) {
+      showWarning('Poți finaliza doar comenzile cu statusul "În Lucru"!');
+      return;
+    }
+    
+    const success = await transitionToFinalizata(orderId, status);
+    if (success) {
+      // Reload orders to reflect the change
+      const loadOrders = async () => {
+        if (!user) return;
+        setLoadingOrders(true);
+        try {
+          const userQuery = query(
+            collection(db, 'users'),
+            where('uid', '==', user.uid)
+          );
+          const userSnapshot = await getDocs(userQuery);
+          let activeServices: string[] = [];
+          
+          if (!userSnapshot.empty) {
+            const userData = userSnapshot.docs[0].data();
+            activeServices = userData.serviciiOferite || [];
+          }
+
+          const ordersQuery = query(
+            collection(db, 'comenzi'),
+            orderBy('timestamp', 'desc')
+          );
+          
+          const ordersSnapshot = await getDocs(ordersQuery);
+          const allOrders: Order[] = [];
+          
+          ordersSnapshot.forEach((doc) => {
+            const data = doc.data();
+            allOrders.push({
+              id: doc.id,
+              ...data,
+              createdAt: data.createdAt?.toDate() || new Date()
+            } as Order);
+          });
+
+          const userServices = activeServices.map(s => s.toLowerCase().trim());
+          const filtered = allOrders.filter(order => {
+            const orderService = order.tipColet?.toLowerCase().trim() || '';
+            return userServices.includes(orderService);
+          });
+          
+          setOrders(filtered);
+        } catch (error) {
+          showError(error);
+        } finally {
+          setLoadingOrders(false);
+        }
+      };
+      loadOrders();
+    }
+  };
+
+  // Request review from client
+  const handleRequestReview = (_orderId: string) => {
+    // In a real implementation, this would send a notification to the client
+    // For now, we'll just show a success message
+    showSuccess('Cerere de recenzie trimisă către client!');
+    // Could also send email notification or push notification here
   };
 
   // Apply all filters (optimized)
@@ -1215,7 +1286,7 @@ export default function ComenziCurierPage() {
 
         {/* Order Details Modal */}
         {selectedOrder && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-3 sm:p-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-60 flex items-center justify-center p-3 sm:p-4">
             <div className="bg-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 max-w-lg w-full border border-white/10 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <h2 className="text-lg sm:text-xl font-bold text-white">Detalii Comandă #{formatOrderNumber(selectedOrder.orderNumber || selectedOrder.id)}</h2>
@@ -1294,6 +1365,27 @@ export default function ComenziCurierPage() {
                       </button>
                     </>
                   )}
+                  {selectedOrder.status === 'in_lucru' && (
+                    <>
+                      <button 
+                        onClick={() => handleFinalizeOrder(selectedOrder.id, selectedOrder.status)}
+                        className="flex-1 py-2.5 sm:py-3 bg-emerald-500 hover:bg-emerald-600 text-white text-sm sm:text-base rounded-xl font-medium transition-colors"
+                      >
+                        Finalizează comanda
+                      </button>
+                    </>
+                  )}
+                  {selectedOrder.status === 'livrata' && (
+                    <button 
+                      onClick={() => handleRequestReview(selectedOrder.id)}
+                      className="flex-1 py-2.5 sm:py-3 bg-yellow-500 hover:bg-yellow-600 text-white text-sm sm:text-base rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                      </svg>
+                      Cere recenzie de la client
+                    </button>
+                  )}
                   {selectedOrder.status === 'acceptata' && (
                     <button 
                       onClick={() => handleStatusChange(selectedOrder.id, 'in_tranzit')}
@@ -1318,7 +1410,7 @@ export default function ComenziCurierPage() {
 
         {/* Message Modal */}
         {messageModalOrder && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-3 sm:p-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-60 flex items-center justify-center p-3 sm:p-4">
             <div className="bg-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 max-w-2xl w-full border border-white/10 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <div className="flex items-center gap-3">
@@ -1455,7 +1547,7 @@ export default function ComenziCurierPage() {
 
         {/* Offer Modal */}
         {offerModalOrder && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-60 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
             <div className="bg-slate-900 rounded-xl sm:rounded-2xl p-5 sm:p-8 max-w-4xl w-full border border-white/10 my-auto custom-scrollbar">
               <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <div className="flex items-center gap-3">

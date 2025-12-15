@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { countries, judetByCountry } from '@/lib/constants';
 import { getNextOrderNumber } from '@/utils/orderHelpers';
@@ -133,6 +133,9 @@ function ComandaForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const serviciu = searchParams?.get('serviciu');
+  const editOrderId = searchParams?.get('edit');
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [loadingOrder, setLoadingOrder] = useState(false);
 
   // Protecție - redirectează dacă nu este autentificat sau nu este client
   useEffect(() => {
@@ -140,6 +143,77 @@ function ComandaForm() {
       router.push('/login?role=client');
     }
   }, [user, loading, router]);
+
+  // Load order data if in edit mode
+  useEffect(() => {
+    const loadOrderData = async () => {
+      if (!editOrderId || !user) return;
+
+      setLoadingOrder(true);
+      try {
+        const orderDoc = await getDoc(doc(db, 'comenzi', editOrderId));
+        
+        if (!orderDoc.exists()) {
+          setMessage('❌ Comanda nu a fost găsită.');
+          setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
+          return;
+        }
+
+        const orderData = orderDoc.data();
+        
+        // Verify ownership
+        if (orderData.uid_client !== user.uid) {
+          setMessage('❌ Nu ai permisiunea să editezi această comandă.');
+          setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
+          return;
+        }
+
+        // Verify status is 'noua'
+        if (orderData.status !== 'noua') {
+          setMessage('❌ Poți edita doar comenzile cu statusul "Nouă".');
+          setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
+          return;
+        }
+
+        // Populate form with existing data
+        setIsEditMode(true);
+        setSelectedService(orderData.serviciu);
+        setFormData({
+          nume: orderData.nume || '',
+          email: orderData.email || '',
+          telefon: orderData.telefon || '',
+          tara_ridicare: orderData.tara_ridicare || 'RO',
+          judet_ridicare: orderData.judet_ridicare || '',
+          oras_ridicare: orderData.oras_ridicare || '',
+          adresa_ridicare: orderData.adresa_ridicare || '',
+          tara_livrare: orderData.tara_livrare || 'GB',
+          judet_livrare: orderData.judet_livrare || '',
+          oras_livrare: orderData.oras_livrare || '',
+          adresa_livrare: orderData.adresa_livrare || '',
+          greutate: orderData.greutate || '',
+          lungime: orderData.lungime || '',
+          latime: orderData.latime || '',
+          inaltime: orderData.inaltime || '',
+          cantitate: orderData.cantitate || '1',
+          valoare_marfa: orderData.valoare_marfa || '',
+          descriere: orderData.descriere || '',
+          tip_programare: orderData.tip_programare || 'data_specifica',
+          data_ridicare: orderData.data_ridicare || '',
+          data_ridicare_end: orderData.data_ridicare_end || '',
+          optiuni: orderData.optiuni || [],
+          tip_ofertanti: orderData.tip_ofertanti || [],
+          observatii: orderData.observatii || '',
+        });
+      } catch (error) {
+        console.error('Error loading order:', error);
+        setMessage('❌ Eroare la încărcarea comenzii.');
+      } finally {
+        setLoadingOrder(false);
+      }
+    };
+
+    loadOrderData();
+  }, [editOrderId, user, router]);
 
   // Form state
   const [step, setStep] = useState(1);
@@ -438,22 +512,34 @@ function ComandaForm() {
     setMessage('');
 
     try {
-      // Get next sequential order number
-      const orderNumber = await getNextOrderNumber();
-      
-      const orderData = {
-        uid_client: user?.uid || 'guest',
-        serviciu: selectedService,
-        orderNumber, // Add sequential order number
-        ...formData,
-        status: 'pending',
-        createdAt: serverTimestamp(),
-        timestamp: Date.now(),
-      };
+      if (isEditMode && editOrderId) {
+        // UPDATE existing order
+        const orderRef = doc(db, 'comenzi', editOrderId);
+        const updateData = {
+          serviciu: selectedService,
+          ...formData,
+          updatedAt: serverTimestamp(),
+        };
+        
+        await updateDoc(orderRef, updateData);
+        setMessage('✅ Comanda a fost actualizată cu succes!');
+      } else {
+        // CREATE new order
+        const orderNumber = await getNextOrderNumber();
+        
+        const orderData = {
+          uid_client: user?.uid || 'guest',
+          serviciu: selectedService,
+          orderNumber,
+          ...formData,
+          status: 'noua',
+          createdAt: serverTimestamp(),
+          timestamp: Date.now(),
+        };
 
-      await addDoc(collection(db, 'comenzi'), orderData);
-      
-      setMessage('✅ Comanda a fost trimisă cu succes! Vei primi oferte de la parteneri în 24-48 ore.');
+        await addDoc(collection(db, 'comenzi'), orderData);
+        setMessage('✅ Comanda a fost trimisă cu succes! Vei primi oferte de la parteneri în 24-48 ore.');
+      }
       
       // Curăță localStorage
       try {
@@ -467,7 +553,7 @@ function ComandaForm() {
       // Redirect imediat la dashboard
       setTimeout(() => {
         if (user) {
-          router.push('/dashboard/client');
+          router.push('/dashboard/client/comenzi');
         } else {
           router.push('/');
         }
@@ -484,12 +570,12 @@ function ComandaForm() {
   const judetLivrareList = judetByCountry[formData.tara_livrare] || [];
 
   // Loading state
-  if (loading || !user) {
+  if (loading || !user || loadingOrder) {
     return (
       <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-400">Se încarcă...</p>
+          <p className="text-gray-400">{loadingOrder ? 'Se încarcă comanda...' : 'Se încarcă...'}</p>
         </div>
       </div>
     );
@@ -517,8 +603,12 @@ function ComandaForm() {
                   </svg>
                 </div>
                 <div>
-                  <h1 className="text-lg sm:text-xl font-bold text-white">Comandă Transport</h1>
-                  <p className="text-xs text-gray-500 hidden sm:block">Completează detaliile comenzii tale</p>
+                  <h1 className="text-lg sm:text-xl font-bold text-white">
+                    {isEditMode ? 'Editează Comanda' : 'Comandă Transport'}
+                  </h1>
+                  <p className="text-xs text-gray-500 hidden sm:block">
+                    {isEditMode ? 'Modifică detaliile comenzii tale' : 'Completează detaliile comenzii tale'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -1696,14 +1786,14 @@ function ComandaForm() {
                 {submitting ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Se trimite...</span>
+                    <span>{isEditMode ? 'Se actualizează...' : 'Se trimite...'}</span>
                   </>
                 ) : (
                   <>
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>Trimite comanda</span>
+                    <span>{isEditMode ? 'Salvează modificările' : 'Trimite comanda'}</span>
                   </>
                 )}
               </button>

@@ -41,13 +41,19 @@
 
 ### Order Lifecycle
 ```
-1. Client creates order → status='pending', uid_client set
-2. Curier filters by active services (case-insensitive)
-3. Curier accepts → courierId set, status='accepted'
-4. In transit → status='in_transit'
-5. Completed → status='completed'
-6. Client can review → create in 'recenzii'
+1. Client creates order → status='noua', uid_client set
+2. Courier filters by active services (case-insensitive)
+3. Courier sends message/offer → status auto-changes to 'in_lucru'
+4. Client or Courier finalizes → status='livrata' (manual)
+5. Client can review → create in 'recenzii'
 ```
+
+**Status Transition Rules**:
+- `noua`: Can be edited/deleted (only by owner)
+- `noua` → `in_lucru`: Automatic (first courier message/offer)
+- `in_lucru`: Can only be finalized to 'livrata' (by client or courier)
+- `livrata`: Final status, no further changes
+- `anulata`: Can be set from any status except 'livrata'
 
 ### Service Matching (CRITICAL)
 ```typescript

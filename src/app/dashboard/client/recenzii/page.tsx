@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
@@ -30,9 +30,11 @@ interface Order {
   courierId?: string;
 }
 
-export default function RecenziiClientPage() {
+function RecenziiClientContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const orderIdFromUrl = searchParams.get('orderId');
   const [reviews, setReviews] = useState<Review[]>([]);
   const [completedOrders, setCompletedOrders] = useState<Order[]>([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
@@ -56,6 +58,28 @@ export default function RecenziiClientPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  // Auto-select order from URL param and open review form
+  useEffect(() => {
+    if (orderIdFromUrl && completedOrders.length > 0 && !showReviewForm) {
+      const order = completedOrders.find(o => o.id === orderIdFromUrl);
+      if (order) {
+        setSelectedOrder(order);
+        setShowReviewForm(true);
+      }
+    }
+  }, [orderIdFromUrl, completedOrders, showReviewForm]);
+
+  // Auto-select order from URL param
+  useEffect(() => {
+    if (orderIdFromUrl && completedOrders.length > 0 && !showReviewForm) {
+      const order = completedOrders.find(o => o.id === orderIdFromUrl);
+      if (order) {
+        setSelectedOrder(order);
+        setShowReviewForm(true);
+      }
+    }
+  }, [orderIdFromUrl, completedOrders, showReviewForm]);
 
   const loadReviews = async () => {
     if (!user) return;
@@ -412,5 +436,20 @@ export default function RecenziiClientPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function RecenziiClientPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-400">Se încarcă...</p>
+        </div>
+      </div>
+    }>
+      <RecenziiClientContent />
+    </Suspense>
   );
 }
