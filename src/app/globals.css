@@ -100,6 +100,39 @@ body {
   background-clip: padding-box;
 }
 
+/* Dropdown scrollbar - blends with slate-800 background */
+.dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.4) rgba(30, 41, 59, 0.3);
+}
+
+.dropdown-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 3px;
+  margin: 4px 0;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.5);
+  border-radius: 3px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-thumb:active {
+  background: rgba(148, 163, 184, 0.8);
+}
+
 /* ========================================
    BUTTONS
    ======================================== */

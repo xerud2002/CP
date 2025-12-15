@@ -765,7 +765,7 @@ function ProfilCurierContent() {
                       </button>
                       
                       {countryDropdownOpen && (
-                        <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                        <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
                           {countries.map((c) => (
                             <button
                               key={c.code}
@@ -903,7 +903,7 @@ function ProfilCurierContent() {
                       </button>
                       
                       {prefixDropdownOpen && (
-                        <div className="absolute z-50 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                        <div className="absolute z-50 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
                           {phonePrefixes.map((p) => (
                             <button
                               key={p.code}

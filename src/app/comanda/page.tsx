@@ -87,6 +87,7 @@ const optiuniSuplimentareByService: Record<string, Array<{id: string, name: stri
     { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii documentelor' },
   ],
   'persoane': [
+    { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare pasageri' },
     { id: 'bagaje_extra', name: 'Bagaje Extra', price: 'variabil', description: 'Transport bagaje suplimentare' },
     { id: 'animale', name: 'Transport Animale', price: 'variabil', description: 'Transport animale de companie în timpul călătoriei' },
   ],
@@ -712,7 +713,7 @@ function ComandaForm() {
                           </svg>
                         </button>
                         {isRidicareCountryOpen && (
-                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
                             {countries.map((c) => (
                               <button
                                 key={c.code}
@@ -772,7 +773,7 @@ function ComandaForm() {
                                 onClick={(e) => e.stopPropagation()}
                               />
                             </div>
-                            <div className="overflow-y-auto max-h-48">
+                            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
                               {judetRidicareList.filter(j => j.toLowerCase().includes(ridicareJudetSearch.toLowerCase())).map((j) => (
                                 <button
                                   key={j}
@@ -862,7 +863,7 @@ function ComandaForm() {
                           </svg>
                         </button>
                         {isLivrareCountryOpen && (
-                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
                             {countries.map((c) => (
                               <button
                                 key={c.code}
@@ -922,7 +923,7 @@ function ComandaForm() {
                                 onClick={(e) => e.stopPropagation()}
                               />
                             </div>
-                            <div className="overflow-y-auto max-h-48">
+                            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
                               {judetLivrareList.filter(j => j.toLowerCase().includes(livrareJudetSearch.toLowerCase())).map((j) => (
                                 <button
                                   key={j}

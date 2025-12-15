@@ -480,7 +480,7 @@ export default function ComenziCurierPage() {
                             className="w-full px-3 py-2 bg-slate-700/50 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-purple-500/50"
                           />
                         </div>
-                        <div className="max-h-60 overflow-y-auto">
+                        <div className="max-h-60 overflow-y-auto dropdown-scrollbar">
                           <button
                             type="button"
                             onClick={() => {
@@ -568,7 +568,7 @@ export default function ComenziCurierPage() {
                     
                     {isServiceDropdownOpen && (
                       <div className="absolute z-200 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-                        <div className="max-h-72 overflow-y-auto">
+                        <div className="max-h-72 overflow-y-auto dropdown-scrollbar">
                           <button
                             type="button"
                             onClick={() => {
