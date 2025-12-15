@@ -84,14 +84,49 @@ const servicii = [
   },
 ];
 
-// Opțiuni suplimentare
-const optiuniSuplimentare = [
-  { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii mărfii' },
-  { id: 'standard', name: 'Serviciu Standard', price: '', description: 'Deplasare pe ruta curierului pentru predare/ridicare colet' },
-  { id: 'door_to_door', name: 'Serviciu Door to Door', price: '100+ RON', description: 'Ridicare și livrare la ușă' },
-  { id: 'urgenta', name: 'Livrare Urgentă', price: '+30%', description: 'Livrare în max 24-48h' },
-  { id: 'weekend', name: 'Livrare Weekend', price: '+20%', description: 'Ridicare/livrare sâmbătă-duminică' },
-];
+// Opțiuni suplimentare specifice pentru fiecare serviciu
+const optiuniSuplimentareByService: Record<string, Array<{id: string, name: string, price: string, description: string}>> = {
+  'colete': [
+    { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii mărfii' },
+    { id: 'frigo', name: 'Frigo', price: 'variabil', description: 'Transport frigorific pentru produse care necesită temperatură controlată' },
+  ],
+  'plicuri': [
+    { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii documentelor' },
+  ],
+  'persoane': [
+    { id: 'bagaje_extra', name: 'Bagaje Extra', price: 'variabil', description: 'Transport bagaje suplimentare' },
+    { id: 'animale', name: 'Transport Animale', price: 'variabil', description: 'Transport animale de companie în timpul călătoriei' },
+  ],
+  'electronice': [
+    { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii mărfii' },
+    { id: 'ambalare_speciala', name: 'Ambalare Specială', price: 'variabil', description: 'Ambalare profesională pentru echipamente fragile' },
+  ],
+  'animale': [
+    { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare pentru animale de companie' },
+    { id: 'cusca_transport', name: 'Cușcă Transport', price: 'variabil', description: 'Cușcă profesională de transport' },
+  ],
+  'platforma': [
+    { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii vehiculului/echipamentului' },
+    { id: 'incarcare_descarcare', name: 'Încărcare/Descărcare', price: 'variabil', description: 'Servicii de încărcare și descărcare cu echipament specializat' },
+  ],
+  'tractari': [
+    { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii vehiculului' },
+  ],
+  'aeroport': [
+    { id: 'bagaje_extra', name: 'Bagaje Extra', price: 'variabil', description: 'Transport bagaje suplimentare' },
+    { id: 'meet_greet', name: 'Meet & Greet', price: 'variabil', description: 'Întâmpinare cu nume la aeroport' },
+  ],
+  'mobila': [
+    { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii mobilierului' },
+    { id: 'montaj_demontaj', name: 'Montaj/Demontaj', price: 'variabil', description: 'Servicii de demontaj și montaj mobilier' },
+    { id: 'ambalare', name: 'Ambalare Mobilier', price: 'variabil', description: 'Ambalare profesională pentru protecție maximă' },
+  ],
+  'paleti': [
+    { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii mărfii' },
+    { id: 'frigo', name: 'Frigo', price: 'variabil', description: 'Transport frigorific pentru produse care necesită temperatură controlată' },
+    { id: 'incarcare_descarcare', name: 'Încărcare/Descărcare', price: 'variabil', description: 'Servicii de încărcare și descărcare cu motostivuitor' },
+  ],
+};
 
 function ComandaForm() {
   const { user, loading } = useAuth();
@@ -998,32 +1033,17 @@ function ComandaForm() {
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Cantitate (bucăți)</label>
-                        <input
-                          type="number"
-                          name="cantitate"
-                          value={formData.cantitate}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="1"
-                          min="1"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Valoare Continut Colet (EUR)</label>
-                        <input
-                          type="number"
-                          name="valoare_marfa"
-                          value={formData.valoare_marfa}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="100"
-                          min="0"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Cantitate (bucăți)</label>
+                      <input
+                        type="number"
+                        name="cantitate"
+                        value={formData.cantitate}
+                        onChange={handleInputChange}
+                        className="form-input w-full"
+                        placeholder="1"
+                        min="1"
+                      />
                     </div>
                   </>
                 )}
@@ -1059,178 +1079,113 @@ function ComandaForm() {
                   {errors.descriere && <p className="text-red-400 text-sm mt-1">{errors.descriere}</p>}
                 </div>
                 
-                {/* Program de ridicare/livrare - Simplificat */}
+                {/* Data aproximativă de colectare */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-3">Program de ridicare *</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Data aproximativă de colectare *</label>
+                  <div className="relative" ref={calendarRef}>
                     <button
                       type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, tip_programare: 'data_specifica' }))}
-                      className={`p-4 rounded-xl border-2 text-left transition-all duration-300 hover:scale-[1.02] ${
-                        formData.tip_programare === 'data_specifica'
-                          ? 'border-orange-500 bg-linear-to-br from-orange-500/20 to-amber-500/10 shadow-lg shadow-orange-500/20'
-                          : 'border-white/10 hover:border-white/20 bg-slate-700/40 hover:bg-slate-700/60'
-                      }`}
+                      onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                      className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-left text-white hover:border-orange-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-orange-500/50"
                     >
-                      <div className="flex items-center gap-3 mb-2">
-                        <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <svg className="w-5 h-5 text-orange-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                           <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                           <line x1="16" y1="2" x2="16" y2="6" />
                           <line x1="8" y1="2" x2="8" y2="6" />
                           <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
-                        <h4 className="font-semibold text-white">Dată specifică</h4>
+                        {formData.data_ridicare ? (
+                          <span className="text-sm truncate">{formatDateDisplay(formData.data_ridicare)}</span>
+                        ) : (
+                          <span className="text-gray-400 text-sm">Alege o dată</span>
+                        )}
                       </div>
-                      <p className="text-xs text-gray-400">Alege o dată exactă</p>
+                      <svg className={`w-5 h-5 text-gray-400 transition-transform ${isCalendarOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
                     </button>
 
-                    <button
-                      type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, tip_programare: 'range' }))}
-                      className={`p-4 rounded-xl border-2 text-left transition-all duration-300 hover:scale-[1.02] ${
-                        formData.tip_programare === 'range'
-                          ? 'border-orange-500 bg-linear-to-br from-orange-500/20 to-amber-500/10 shadow-lg shadow-orange-500/20'
-                          : 'border-white/10 hover:border-white/20 bg-slate-700/40 hover:bg-slate-700/60'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3 mb-2">
-                        <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        <h4 className="font-semibold text-white">Interval de date</h4>
-                      </div>
-                      <p className="text-xs text-gray-400">Între două date</p>
-                    </button>
+                    {isCalendarOpen && (
+                      <div className="absolute z-50 mt-2 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-white/5">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (calendarMonth === 0) {
+                                setCalendarMonth(11);
+                                setCalendarYear(calendarYear - 1);
+                              } else {
+                                setCalendarMonth(calendarMonth - 1);
+                              }
+                            }}
+                            className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
+                          </button>
+                          <span className="font-semibold text-white">{monthNames[calendarMonth]} {calendarYear}</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (calendarMonth === 11) {
+                                setCalendarMonth(0);
+                                setCalendarYear(calendarYear + 1);
+                              } else {
+                                setCalendarMonth(calendarMonth + 1);
+                              }
+                            }}
+                            className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </button>
+                        </div>
 
-                    <button
-                      type="button"
-                      onClick={() => setFormData(prev => ({ ...prev, tip_programare: 'flexibil' }))}
-                      className={`p-4 rounded-xl border-2 text-left transition-all duration-300 hover:scale-[1.02] ${
-                        formData.tip_programare === 'flexibil'
-                          ? 'border-orange-500 bg-linear-to-br from-orange-500/20 to-amber-500/10 shadow-lg shadow-orange-500/20'
-                          : 'border-white/10 hover:border-white/20 bg-slate-700/40 hover:bg-slate-700/60'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3 mb-2">
-                        <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <h4 className="font-semibold text-white">Flexibil</h4>
+                        <div className="grid grid-cols-7 gap-1 px-3 pt-3">
+                          {dayNames.map(day => (
+                            <div key={day} className="text-center text-xs font-medium text-gray-400 py-2">{day}</div>
+                          ))}
+                        </div>
+
+                        <div className="grid grid-cols-7 gap-1 p-3">
+                          {Array.from({ length: getFirstDayOfMonth(calendarMonth, calendarYear) }).map((_, i) => (
+                            <div key={`empty-${i}`} className="h-10" />
+                          ))}
+                          {Array.from({ length: getDaysInMonth(calendarMonth, calendarYear) }).map((_, i) => {
+                            const day = i + 1;
+                            const isDisabled = isDateDisabled(day, calendarMonth, calendarYear);
+                            const isSelected = formData.data_ridicare && 
+                              new Date(formData.data_ridicare).getDate() === day &&
+                              new Date(formData.data_ridicare).getMonth() === calendarMonth &&
+                              new Date(formData.data_ridicare).getFullYear() === calendarYear;
+                            
+                            return (
+                              <button
+                                key={day}
+                                type="button"
+                                onClick={() => !isDisabled && handleDateSelect(day)}
+                                disabled={isDisabled}
+                                className={`h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                  isDisabled 
+                                    ? 'text-gray-600 cursor-not-allowed' 
+                                    : isSelected
+                                      ? 'bg-linear-to-br from-orange-600 to-amber-600 text-white shadow-lg'
+                                      : 'text-white hover:bg-slate-700/50'
+                                }`}
+                              >
+                                {day}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
-                      <p className="text-xs text-gray-400">Oricând în următoarele zile</p>
-                    </button>
+                    )}
                   </div>
+                  {errors.data_ridicare && <p className="text-red-400 text-sm mt-1">{errors.data_ridicare}</p>}
                 </div>
-
-                {/* Date specifice - Afișare condițională */}
-                {formData.tip_programare === 'data_specifica' && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Selectează data *</label>
-                    <div className="relative" ref={calendarRef}>
-                      <button
-                        type="button"
-                        onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                        className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-left text-white hover:border-orange-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <svg className="w-5 h-5 text-orange-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                            <line x1="16" y1="2" x2="16" y2="6" />
-                            <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
-                          </svg>
-                          {formData.data_ridicare ? (
-                            <span className="text-sm truncate">{formatDateDisplay(formData.data_ridicare)}</span>
-                          ) : (
-                            <span className="text-gray-400 text-sm">Alege o dată</span>
-                          )}
-                        </div>
-                        <svg className={`w-5 h-5 text-gray-400 transition-transform ${isCalendarOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-
-                      {isCalendarOpen && (
-                        <div className="absolute z-50 mt-2 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-                          <div className="flex items-center justify-between p-4 border-b border-white/5">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                if (calendarMonth === 0) {
-                                  setCalendarMonth(11);
-                                  setCalendarYear(calendarYear - 1);
-                                } else {
-                                  setCalendarMonth(calendarMonth - 1);
-                                }
-                              }}
-                              className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-                            >
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                              </svg>
-                            </button>
-                            <span className="font-semibold text-white">{monthNames[calendarMonth]} {calendarYear}</span>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                if (calendarMonth === 11) {
-                                  setCalendarMonth(0);
-                                  setCalendarYear(calendarYear + 1);
-                                } else {
-                                  setCalendarMonth(calendarMonth + 1);
-                                }
-                              }}
-                              className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-                            >
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                              </svg>
-                            </button>
-                          </div>
-
-                          <div className="grid grid-cols-7 gap-1 px-3 pt-3">
-                            {dayNames.map(day => (
-                              <div key={day} className="text-center text-xs font-medium text-gray-400 py-2">{day}</div>
-                            ))}
-                          </div>
-
-                          <div className="grid grid-cols-7 gap-1 p-3">
-                            {Array.from({ length: getFirstDayOfMonth(calendarMonth, calendarYear) }).map((_, i) => (
-                              <div key={`empty-${i}`} className="h-10" />
-                            ))}
-                            {Array.from({ length: getDaysInMonth(calendarMonth, calendarYear) }).map((_, i) => {
-                              const day = i + 1;
-                              const isDisabled = isDateDisabled(day, calendarMonth, calendarYear);
-                              const isSelected = formData.data_ridicare && 
-                                new Date(formData.data_ridicare).getDate() === day &&
-                                new Date(formData.data_ridicare).getMonth() === calendarMonth &&
-                                new Date(formData.data_ridicare).getFullYear() === calendarYear;
-                              
-                              return (
-                                <button
-                                  key={day}
-                                  type="button"
-                                  onClick={() => !isDisabled && handleDateSelect(day)}
-                                  disabled={isDisabled}
-                                  className={`h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
-                                    isDisabled 
-                                      ? 'text-gray-600 cursor-not-allowed' 
-                                      : isSelected
-                                        ? 'bg-linear-to-br from-orange-600 to-amber-600 text-white shadow-lg'
-                                        : 'text-white hover:bg-slate-700/50'
-                                  }`}
-                                >
-                                  {day}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    {errors.data_ridicare && <p className="text-red-400 text-sm mt-1">{errors.data_ridicare}</p>}
-                  </div>
-                )}
 
                 {formData.tip_programare === 'range' && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1559,7 +1514,7 @@ function ComandaForm() {
                 </div>
                 
                 <div className="space-y-3">
-                  {optiuniSuplimentare.map((opt) => (
+                  {(optiuniSuplimentareByService[selectedService] || []).map((opt) => (
                     <label
                       key={opt.id}
                       className="flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all hover:border-white/20"
@@ -1580,6 +1535,9 @@ function ComandaForm() {
                       </div>
                     </label>
                   ))}
+                  {(!optiuniSuplimentareByService[selectedService] || optiuniSuplimentareByService[selectedService].length === 0) && (
+                    <p className="text-gray-400 text-center py-4">Nu există opțiuni suplimentare pentru acest serviciu</p>
+                  )}
                 </div>
               </div>
 
@@ -1644,11 +1602,15 @@ function ComandaForm() {
                     <div className="pt-2 border-t border-white/10">
                       <span className="text-gray-400 block mb-2">Opțiuni suplimentare:</span>
                       <div className="flex flex-wrap gap-2">
-                        {formData.optiuni.map(optId => (
-                          <span key={optId} className="px-2 py-1 bg-green-500/20 text-green-400 rounded-lg text-xs">
-                            {optiuniSuplimentare.find(o => o.id === optId)?.name}
-                          </span>
-                        ))}
+                        {formData.optiuni.map(optId => {
+                          const allOptions = optiuniSuplimentareByService[selectedService] || [];
+                          const option = allOptions.find(o => o.id === optId);
+                          return option ? (
+                            <span key={optId} className="px-2 py-1 bg-green-500/20 text-green-400 rounded-lg text-xs">
+                              {option.name}
+                            </span>
+                          ) : null;
+                        })}
                       </div>
                     </div>
                   )}
