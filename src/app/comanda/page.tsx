@@ -137,6 +137,7 @@ function ComandaForm() {
   const editOrderId = searchParams?.get('edit');
   const [isEditMode, setIsEditMode] = useState(false);
   const [loadingOrder, setLoadingOrder] = useState(false);
+  const hasLoadedOrder = useRef(false); // Track if order has been loaded
 
   // Protecție - redirectează dacă nu este autentificat sau nu este client
   useEffect(() => {
@@ -155,6 +156,7 @@ function ComandaForm() {
         const orderDoc = await getDoc(doc(db, 'comenzi', editOrderId));
         
         if (!orderDoc.exists()) {
+          console.error('❌ Order not found - redirecting');
           setMessage('❌ Comanda nu a fost găsită.');
           setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
           return;
@@ -165,6 +167,7 @@ function ComandaForm() {
         
         // Verify ownership
         if (orderData.uid_client !== user.uid) {
+          console.error('❌ Permission denied - redirecting');
           setMessage('❌ Nu ai permisiunea să editezi această comandă.');
           setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
           return;
@@ -175,10 +178,13 @@ function ComandaForm() {
         console.log('Order status check:', { original: orderData.status, normalized: normalizedStatus });
         
         if (normalizedStatus !== 'noua') {
+          console.error(`❌ Status validation failed: ${orderData.status} -> ${normalizedStatus} - redirecting`);
           setMessage('❌ Poți edita doar comenzile cu statusul "Nouă".');
           setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
           return;
         }
+
+        console.log('✅ All validations passed - loading form data');
 
         // Populate form with existing data
         setIsEditMode(true);
@@ -189,32 +195,33 @@ function ComandaForm() {
           greutate: orderData.greutate,
           data_ridicare: orderData.data_ridicare
         });
-        setFormData({
-          nume: orderData.nume || '',
-          email: orderData.email || '',
-          telefon: orderData.telefon || '',
-          tara_ridicare: orderData.tara_ridicare || 'RO',
-          judet_ridicare: orderData.judet_ridicare || '',
-          oras_ridicare: orderData.oras_ridicare || '',
-          adresa_ridicare: orderData.adresa_ridicare || '',
-          tara_livrare: orderData.tara_livrare || 'GB',
-          judet_livrare: orderData.judet_livrare || '',
-          oras_livrare: orderData.oras_livrare || '',
-          adresa_livrare: orderData.adresa_livrare || '',
-          greutate: orderData.greutate || '',
-          lungime: orderData.lungime || '',
-          latime: orderData.latime || '',
-          inaltime: orderData.inaltime || '',
-          cantitate: orderData.cantitate || '1',
-          valoare_marfa: orderData.valoare_marfa || '',
-          descriere: orderData.descriere || '',
-          tip_programare: orderData.tip_programare || 'data_specifica',
-          data_ridicare: orderData.data_ridicare || '',
-          data_ridicare_end: orderData.data_ridicare_end || '',
-          optiuni: orderData.optiuni || [],
-          tip_ofertanti: orderData.tip_ofertanti || [],
-          observatii: orderData.observatii || '',
-        });
+        setFormData(prev => ({
+          ...prev, // Keep existing formData (like tip_ofertanti if user already selected)
+          nume: orderData.nume || prev.nume,
+          email: orderData.email || prev.email,
+          telefon: orderData.telefon || prev.telefon,
+          tara_ridicare: orderData.tara_ridicare || prev.tara_ridicare,
+          judet_ridicare: orderData.judet_ridicare || prev.judet_ridicare,
+          oras_ridicare: orderData.oras_ridicare || prev.oras_ridicare,
+          adresa_ridicare: orderData.adresa_ridicare || prev.adresa_ridicare,
+          tara_livrare: orderData.tara_livrare || prev.tara_livrare,
+          judet_livrare: orderData.judet_livrare || prev.judet_livrare,
+          oras_livrare: orderData.oras_livrare || prev.oras_livrare,
+          adresa_livrare: orderData.adresa_livrare || prev.adresa_livrare,
+          greutate: orderData.greutate || prev.greutate,
+          lungime: orderData.lungime || prev.lungime,
+          latime: orderData.latime || prev.latime,
+          inaltime: orderData.inaltime || prev.inaltime,
+          cantitate: orderData.cantitate || prev.cantitate,
+          valoare_marfa: orderData.valoare_marfa || prev.valoare_marfa,
+          descriere: orderData.descriere || prev.descriere,
+          tip_programare: orderData.tip_programare || prev.tip_programare,
+          data_ridicare: orderData.data_ridicare || prev.data_ridicare,
+          data_ridicare_end: orderData.data_ridicare_end || prev.data_ridicare_end,
+          optiuni: orderData.optiuni || prev.optiuni,
+          tip_ofertanti: orderData.tip_ofertanti || prev.tip_ofertanti,
+          observatii: orderData.observatii || prev.observatii,
+        }));
       } catch (error) {
         console.error('Error loading order:', error);
         setMessage('❌ Eroare la încărcarea comenzii.');
@@ -223,7 +230,11 @@ function ComandaForm() {
       }
     };
 
-    loadOrderData();
+    // Only load once - check ref to prevent multiple loads
+    if (editOrderId && user && !hasLoadedOrder.current) {
+      hasLoadedOrder.current = true;
+      loadOrderData();
+    }
   }, [editOrderId, user, router]);
 
   // Form state
@@ -309,38 +320,42 @@ function ComandaForm() {
 
   // Close calendar and dropdowns on outside click
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      // Ignore if the click is from a scroll interaction
-      if (event.button !== 0) return; // Only handle left mouse button
+    const handleClickOutside = (event: Event) => {
+      const mouseEvent = event as MouseEvent;
       
-      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+      // Only handle left mouse button clicks
+      if (mouseEvent.button !== undefined && mouseEvent.button !== 0) return;
+      
+      const target = event.target as Node;
+      
+      if (calendarRef.current && !calendarRef.current.contains(target)) {
         setIsCalendarOpen(false);
       }
-      if (calendarStartRef.current && !calendarStartRef.current.contains(event.target as Node)) {
+      if (calendarStartRef.current && !calendarStartRef.current.contains(target)) {
         setIsCalendarStartOpen(false);
       }
-      if (calendarEndRef.current && !calendarEndRef.current.contains(event.target as Node)) {
+      if (calendarEndRef.current && !calendarEndRef.current.contains(target)) {
         setIsCalendarEndOpen(false);
       }
-      if (ridicareCountryRef.current && !ridicareCountryRef.current.contains(event.target as Node)) {
+      if (ridicareCountryRef.current && !ridicareCountryRef.current.contains(target)) {
         setIsRidicareCountryOpen(false);
       }
-      if (livrareCountryRef.current && !livrareCountryRef.current.contains(event.target as Node)) {
+      if (livrareCountryRef.current && !livrareCountryRef.current.contains(target)) {
         setIsLivrareCountryOpen(false);
       }
-      if (ridicareJudetRef.current && !ridicareJudetRef.current.contains(event.target as Node)) {
+      if (ridicareJudetRef.current && !ridicareJudetRef.current.contains(target)) {
         setIsRidicareJudetOpen(false);
         setRidicareJudetSearch('');
       }
-      if (livrareJudetRef.current && !livrareJudetRef.current.contains(event.target as Node)) {
+      if (livrareJudetRef.current && !livrareJudetRef.current.contains(target)) {
         setIsLivrareJudetOpen(false);
         setLivrareJudetSearch('');
       }
     };
     
-    // Use 'click' instead of 'mousedown' to avoid scroll interference
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    // Use 'click' event which doesn't fire on scroll
+    document.addEventListener('click', handleClickOutside, true);
+    return () => document.removeEventListener('click', handleClickOutside, true);
   }, []);
 
   // Încarcă datele din localStorage la mount
@@ -361,16 +376,28 @@ function ComandaForm() {
     }
   }, [serviciu]);
 
-  // Salvează datele în localStorage la fiecare modificare
+  // Salvează step și service în localStorage
   useEffect(() => {
     try {
       localStorage.setItem('comanda_step', step.toString());
       localStorage.setItem('comanda_service', selectedService);
-      localStorage.setItem('comanda_formData', JSON.stringify(formData));
     } catch (error) {
-      console.error('Error saving to localStorage:', error);
+      console.error('Error saving step/service to localStorage:', error);
     }
-  }, [step, selectedService, formData]);
+  }, [step, selectedService]);
+
+  // Salvează formData în localStorage (debounced)
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      try {
+        localStorage.setItem('comanda_formData', JSON.stringify(formData));
+      } catch (error) {
+        console.error('Error saving formData to localStorage:', error);
+      }
+    }, 500); // 500ms debounce
+    
+    return () => clearTimeout(timeoutId);
+  }, [formData]);
 
   // Auto-fill pentru utilizatori autentificați
   useEffect(() => {
