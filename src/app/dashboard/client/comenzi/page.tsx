@@ -416,18 +416,20 @@ export default function ComenziClientPage() {
 
       {/* Order Details Modal */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 print-modal-container">
-          {/* Backdrop */}
+        <>
+          {/* Backdrop - only visible on screen */}
           <div 
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm print-hide"
+            className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm print:hidden"
             onClick={() => setSelectedOrder(null)}
           />
           
-          {/* Modal */}
-          <div className="relative bg-slate-800 rounded-2xl border border-white/10 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden print-modal">
-            {/* Header */}
-            <div className="sticky top-0 bg-slate-800 border-b border-white/10 px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
+          {/* Modal Container */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 print:hidden" onClick={() => setSelectedOrder(null)}>
+            {/* Modal */}
+            <div className="relative bg-slate-800 rounded-2xl border border-white/10 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+              {/* Header */}
+              <div className="sticky top-0 bg-slate-800 border-b border-white/10 px-6 py-4 flex items-center justify-between print:static print:bg-gray-100 print:border-gray-300">
+                <div className="flex items-center gap-3">
                 {(() => {
                   const config = getServiceIcon(selectedOrder.serviciu);
                   return (
@@ -445,7 +447,7 @@ export default function ComenziClientPage() {
                   )}
                 </div>
               </div>
-              <div className="flex items-center gap-2 print-hide">
+              <div className="flex items-center gap-2 print:hidden">
                 <button
                   onClick={() => window.print()}
                   className="p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -467,23 +469,23 @@ export default function ComenziClientPage() {
             </div>
             
             {/* Content */}
-            <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6 space-y-6">
+            <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6 space-y-6 print:overflow-visible print:max-h-none print:p-4">
               {/* Route Section */}
-              <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Rută Transport</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5 print:bg-gray-50 print:border-gray-300">
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3 print:text-gray-700">Rută Transport</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 print:grid-cols-2">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-green-400 text-xs font-medium uppercase">
+                    <div className="flex items-center gap-2 text-green-400 text-xs font-medium uppercase print:text-green-700">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                       </svg>
                       Ridicare
                     </div>
                     <div className="flex items-center gap-2">
-                      <Image src={getFlagPath(selectedOrder.tara_ridicare)} alt="" width={20} height={15} className="rounded" />
-                      <span className="text-white font-medium">{getCountryName(selectedOrder.tara_ridicare)}</span>
+                      <Image src={getFlagPath(selectedOrder.tara_ridicare)} alt="" width={20} height={15} className="rounded print:border print:border-gray-300" />
+                      <span className="text-white font-medium print:text-gray-900">{getCountryName(selectedOrder.tara_ridicare)}</span>
                     </div>
-                    <p className="text-gray-300 text-sm">{selectedOrder.judet_ridicare}, {selectedOrder.oras_ridicare}</p>
+                    <p className="text-gray-300 text-sm print:text-gray-700">{selectedOrder.judet_ridicare}, {selectedOrder.oras_ridicare}</p>
                     {selectedOrder.adresa_ridicare && (
                       <p className="text-gray-400 text-sm">{selectedOrder.adresa_ridicare}</p>
                     )}
@@ -668,7 +670,7 @@ export default function ComenziClientPage() {
               )}
 
               {/* Created Date */}
-              <div className="text-center text-xs text-gray-500 pt-2">
+              <div className="text-center text-xs text-gray-500 pt-2 print:text-gray-600 print:border-t print:border-gray-300 print:mt-4 print:pt-4">
                 Comandă creată la {selectedOrder.createdAt?.toDate?.()?.toLocaleDateString('ro-RO', {
                   day: '2-digit',
                   month: '2-digit', 
@@ -683,9 +685,136 @@ export default function ComenziClientPage() {
                   minute: '2-digit'
                 })}
               </div>
+              
+              {/* Print footer */}
+              <div className="hidden print:block text-center text-xs text-gray-500 mt-4 pt-4 border-t border-gray-300">
+                <p>© {new Date().getFullYear()} Curierul Perfect - www.curierulperfect.ro</p>
+              </div>
             </div>
           </div>
         </div>
+        
+        {/* Print-only version - separate container for printing */}
+        <div className="hidden print:block" id="print-modal-container">
+          <div id="print-modal" className="p-4">
+            {/* Print Header */}
+            <div className="text-center border-b-2 border-gray-300 pb-4 mb-4">
+              <h1 className="text-2xl font-bold text-gray-800">Curierul Perfect</h1>
+              <p className="text-sm text-gray-600">Detalii Comandă - #{selectedOrder.orderNumber ? formatOrderNumber(selectedOrder.orderNumber) : ''}</p>
+            </div>
+            
+            {/* Service & Status */}
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-gray-800">{serviceNames[selectedOrder.serviciu] || selectedOrder.serviciu}</span>
+              </div>
+            </div>
+            
+            {/* Route */}
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">Rută Transport</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-green-700 font-medium uppercase mb-1">Ridicare</p>
+                  <p className="text-gray-900 font-medium">{getCountryName(selectedOrder.tara_ridicare)}</p>
+                  <p className="text-gray-700 text-sm">{selectedOrder.judet_ridicare}, {selectedOrder.oras_ridicare}</p>
+                  {selectedOrder.adresa_ridicare && <p className="text-gray-600 text-sm">{selectedOrder.adresa_ridicare}</p>}
+                </div>
+                <div>
+                  <p className="text-xs text-orange-700 font-medium uppercase mb-1">Livrare</p>
+                  <p className="text-gray-900 font-medium">{getCountryName(selectedOrder.tara_livrare)}</p>
+                  <p className="text-gray-700 text-sm">{selectedOrder.judet_livrare}, {selectedOrder.oras_livrare}</p>
+                  {selectedOrder.adresa_livrare && <p className="text-gray-600 text-sm">{selectedOrder.adresa_livrare}</p>}
+                </div>
+              </div>
+            </div>
+            
+            {/* Details */}
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">Detalii Transport</h3>
+              <div className="grid grid-cols-3 gap-3 text-sm">
+                {selectedOrder.greutate && (
+                  <div>
+                    <p className="text-gray-500 text-xs">Greutate</p>
+                    <p className="text-gray-900 font-medium">{selectedOrder.greutate}{!selectedOrder.greutate.includes('kg') ? ' kg' : ''}</p>
+                  </div>
+                )}
+                {(selectedOrder.lungime || selectedOrder.latime || selectedOrder.inaltime) && (
+                  <div>
+                    <p className="text-gray-500 text-xs">Dimensiuni</p>
+                    <p className="text-gray-900 font-medium">{selectedOrder.lungime || '-'} × {selectedOrder.latime || '-'} × {selectedOrder.inaltime || '-'} cm</p>
+                  </div>
+                )}
+                {selectedOrder.cantitate && (
+                  <div>
+                    <p className="text-gray-500 text-xs">Cantitate</p>
+                    <p className="text-gray-900 font-medium">{selectedOrder.cantitate}</p>
+                  </div>
+                )}
+                {selectedOrder.valoare_marfa && (
+                  <div>
+                    <p className="text-gray-500 text-xs">Valoare marfă</p>
+                    <p className="text-gray-900 font-medium">{selectedOrder.valoare_marfa} €</p>
+                  </div>
+                )}
+              </div>
+              {selectedOrder.descriere && (
+                <div className="mt-2 pt-2 border-t border-gray-200">
+                  <p className="text-gray-500 text-xs">Descriere</p>
+                  <p className="text-gray-700 text-sm">{selectedOrder.descriere}</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Options */}
+            {selectedOrder.optiuni && selectedOrder.optiuni.length > 0 && (
+              <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">Opțiuni</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedOrder.optiuni.map((opt: string) => (
+                    <span key={opt} className="px-2 py-1 bg-gray-100 rounded text-sm text-gray-700 border border-gray-300">{opt}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Contact */}
+            {(selectedOrder.nume || selectedOrder.email || selectedOrder.telefon) && (
+              <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">Date Contact</h3>
+                <div className="grid grid-cols-3 gap-3 text-sm">
+                  {selectedOrder.nume && (
+                    <div>
+                      <p className="text-gray-500 text-xs">Nume</p>
+                      <p className="text-gray-900 font-medium">{selectedOrder.nume}</p>
+                    </div>
+                  )}
+                  {selectedOrder.email && (
+                    <div>
+                      <p className="text-gray-500 text-xs">Email</p>
+                      <p className="text-gray-900">{selectedOrder.email}</p>
+                    </div>
+                  )}
+                  {selectedOrder.telefon && (
+                    <div>
+                      <p className="text-gray-500 text-xs">Telefon</p>
+                      <p className="text-gray-900 font-medium">{selectedOrder.telefon}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            {/* Footer */}
+            <div className="text-center text-xs text-gray-500 pt-4 mt-4 border-t border-gray-300">
+              <p>Comandă creată la {selectedOrder.createdAt?.toDate?.()?.toLocaleDateString('ro-RO', {
+                day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+              }) || ''}</p>
+              <p className="mt-2">© {new Date().getFullYear()} Curierul Perfect - www.curierulperfect.ro</p>
+            </div>
+          </div>
+        </div>
+        </>
       )}
     </div>
   );
