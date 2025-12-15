@@ -129,8 +129,7 @@ function getGreeting(): string {
 // ============================================
 
 // Header Component
-function DashboardHeader({ userName, notificationCount, onLogout }: { 
-  userName: string; 
+function DashboardHeader({ notificationCount, onLogout }: { 
   notificationCount: number;
   onLogout: () => void;
 }) {
@@ -652,7 +651,6 @@ export default function CurierDashboard() {
     <div className="min-h-screen">
       {/* Header */}
       <DashboardHeader 
-        userName={userName} 
         notificationCount={0} 
         onLogout={handleLogout}
       />

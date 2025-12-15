@@ -765,325 +765,55 @@ export default function ComenziCurierPage() {
               )}
             </div>
           ) : (
-            <div className="space-y-3">
-              {filteredOrders.map((order) => (
+            <div className="space-y-4">
+              {filteredOrders.map((order) => {
+                const serviceTypeConfig = serviceTypes.find(s => s.value.toLowerCase() === order.tipColet.toLowerCase());
+                
+                return (
                 <div 
                   key={order.id} 
-                  className="bg-slate-900/50 rounded-xl p-3 sm:p-4 border border-white/5 hover:border-white/10 transition-all"
+                  className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-4 sm:p-5 hover:border-white/10 transition-all"
                 >
-                  {/* Mobile Layout - Optimized */}
-                  <div className="sm:hidden space-y-2.5">
-                    {/* Header Row: Order ID + Service + Weight */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-700/40 rounded-lg border border-white/10">
-                        <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        <span className="text-gray-400 text-[10px] font-mono">#{formatOrderNumber(order.orderNumber || order.id)}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                          <ServiceIcon service={order.tipColet} className="w-3 h-3 text-emerald-400" />
-                          <span className="text-emerald-300 text-[9px] font-semibold capitalize">{order.tipColet}</span>
-                        </div>
-                        <div className="flex items-center gap-1 px-2 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                          <svg className="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M7 4V2h10v2h3c.55 0 1 .45 1 1v3c0 .55-.45 1-1 1h-.88l-1.62 12.16c-.07.54-.52.92-1.06.92H7.56c-.54 0-.99-.38-1.06-.92L4.88 9H4c-.55 0-1-.45-1-1V5c0-.55.45-1 1-1h3zm2 0h6V2H9v2zm-3.5 5h13l-1.5 11h-10l-1.5-11z"/>
-                          </svg>
-                          <span className="text-blue-300 text-[9px] font-semibold">{order.greutate} kg</span>
-                        </div>
-                      </div>
+                  <div className="flex gap-3 sm:gap-4">
+                    {/* Service Icon Badge */}
+                    <div className={`${serviceTypeConfig?.bg || 'bg-gray-500/20'} rounded-xl p-3 h-fit shrink-0`}>
+                      <ServiceIcon service={order.tipColet} className={`w-6 h-6 sm:w-7 sm:h-7 ${serviceTypeConfig?.color || 'text-gray-400'}`} />
                     </div>
-
-                    {/* Route Section - Compact */}
-                    <div className="p-2.5 bg-linear-to-br from-slate-800/40 to-slate-800/20 rounded-xl border border-white/10">
-                      <div className="flex items-center gap-1.5 mb-1.5">
-                        <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-                        </svg>
-                        <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide">Traseu Transport</span>
-                      </div>
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-2 p-2 bg-green-500/10 border border-green-500/20 rounded-lg">
-                          <Image 
-                            src={`/img/flag/${(() => {
-                              const country = order.expeditorTara.toLowerCase().trim();
-                              const matched = countries.find(c => 
-                                c.name.toLowerCase() === country || 
-                                c.code.toLowerCase() === country
-                              );
-                              return matched?.code || 'ro';
-                            })()}.svg`}
-                            alt={order.expeditorTara}
-                            width={20}
-                            height={15}
-                            className="rounded shrink-0"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-green-300 font-semibold text-xs truncate">{order.oras_ridicare || order.expeditorJudet}</p>
+                    
+                    {/* Order Details */}
+                    <div className="flex-1 min-w-0">
+                      {/* Header */}
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <h3 className="text-white font-semibold capitalize">
+                              {order.tipColet}
+                            </h3>
                           </div>
-                        </div>
-                        <div className="flex justify-center">
-                          <svg className="w-4 h-4 text-gray-500 rotate-90" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                          </svg>
-                        </div>
-                        <div className="flex items-center gap-2 p-2 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-                          <Image 
-                            src={`/img/flag/${(() => {
-                              const country = order.destinatarTara.toLowerCase().trim();
-                              const matched = countries.find(c => 
-                                c.name.toLowerCase() === country || 
-                                c.code.toLowerCase() === country
-                              );
-                              return matched?.code || 'ro';
-                            })()}.svg`}
-                            alt={order.destinatarTara}
-                            width={20}
-                            height={15}
-                            className="rounded shrink-0"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-orange-300 font-semibold text-xs truncate">{order.oras_livrare || order.destinatarJudet}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Client & Date Info */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                        <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        <span className="text-emerald-300 font-semibold text-[10px]">{formatClientName(order.clientName)}</span>
-                      </div>
-                      <div className="flex items-center gap-1 px-2 py-1 bg-purple-500/10 rounded-lg border border-purple-500/20">
-                        <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                          <line x1="16" y1="2" x2="16" y2="6"/>
-                          <line x1="8" y1="2" x2="8" y2="6"/>
-                          <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                        <span className="text-purple-300 text-[9px] font-semibold">
-                          {order.createdAt ? order.createdAt.toLocaleDateString('ro-RO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'N/A'}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Expand/Collapse Button */}
-                    <button
-                      onClick={() => toggleOrderExpand(order.id)}
-                      className="w-full flex items-center justify-center gap-2 py-2 bg-slate-800/40 hover:bg-slate-800/60 rounded-lg border border-white/5 hover:border-white/10 transition-all group"
-                    >
-                      <span className="text-xs font-semibold text-gray-400 group-hover:text-gray-300">
-                        {expandedOrders.has(order.id) ? 'Ascunde detalii' : 'Vezi detalii'}
-                      </span>
-                      <svg 
-                        className={`w-4 h-4 text-gray-400 group-hover:text-gray-300 transition-transform ${expandedOrders.has(order.id) ? 'rotate-180' : ''}`} 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="2.5" 
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
-                      </svg>
-                    </button>
-
-                    {/* Package Details - Only show when expanded */}
-                    {expandedOrders.has(order.id) && (
-                      <div className="grid grid-cols-3 gap-2">
-                        <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
-                          <div className="flex items-center gap-1.5 mb-1.5">
-                            <ServiceIcon service={order.tipColet} className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-[9px] font-semibold text-gray-400 uppercase">Serviciu</span>
-                          </div>
-                          <p className="text-xs font-bold text-white capitalize">{order.tipColet}</p>
-                        </div>
-                        <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
-                          <div className="flex items-center gap-1.5 mb-1.5">
-                            <svg className="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                            </svg>
-                            <span className="text-[9px] font-semibold text-gray-400 uppercase">Greutate</span>
-                          </div>
-                          <p className="text-lg font-bold text-white">{order.greutate} <span className="text-xs text-gray-400">kg</span></p>
-                        </div>
-                        <div className="p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
-                          <div className="flex items-center gap-1.5 mb-1.5">
-                            <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                              <line x1="16" y1="2" x2="16" y2="6"/>
-                              <line x1="8" y1="2" x2="8" y2="6"/>
-                              <line x1="3" y1="10" x2="21" y2="10"/>
-                            </svg>
-                            <span className="text-[9px] font-semibold text-gray-400 uppercase">Data</span>
-                          </div>
-                          <p className="text-xs font-semibold text-white truncate">
-                            {order.dataColectare ? order.dataColectare : <span className="text-blue-400">Flexibil</span>}
+                          <p className="text-xs text-gray-400">
+                            #{formatOrderNumber(order.orderNumber || order.id)}
                           </p>
                         </div>
-                      </div>
-                    )}
-
-                    {/* Extra Services & Instructions */}
-                    {expandedOrders.has(order.id) && ((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
-                      <div className="space-y-2.5">
-                        {order.optiuni && order.optiuni.length > 0 && (
-                          <div className="p-3 bg-slate-800/20 rounded-xl border border-white/5">
-                            <div className="flex items-center gap-1.5 mb-2">
-                              <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-                              </svg>
-                              <span className="text-[9px] font-semibold text-gray-300 uppercase tracking-wide">Servicii Extra</span>
-                            </div>
-                            <div className="flex flex-wrap gap-1.5">
-                              {order.optiuni.map((opt, idx) => {
-                                const optionConfig = {
-                                  asigurare: { 
-                                    label: 'Asigurare completă', 
-                                    color: 'emerald',
-                                    icon: <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
-                                  },
-                                  tracking: { 
-                                    label: 'Tracking GPS', 
-                                    color: 'blue',
-                                    icon: <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/></svg>
-                                  },
-                                  semnatura: { 
-                                    label: 'Semnătură livrare', 
-                                    color: 'purple',
-                                    icon: <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
-                                  }
-                                };
-                                const config = optionConfig[opt as keyof typeof optionConfig] || { label: opt, color: 'gray', icon: null };
-                                return (
-                                  <span key={idx} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-${config.color}-500/10 border border-${config.color}-500/30 rounded-lg text-[10px] text-${config.color}-300 font-medium`}>
-                                    {config.icon}
-                                    {config.label}
-                                  </span>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-                        {order.observatii && (
-                          <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-500/20">
-                            <div className="flex items-start gap-2.5">
-                              <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
-                                <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
-                                </svg>
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-blue-400 text-[9px] font-semibold uppercase tracking-wide mb-1">Instrucțiuni Speciale</p>
-                                <p className="text-gray-200 text-xs leading-relaxed">{order.observatii}</p>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    
-                    {/* Expand/Collapse Button */}
-                    <button
-                      onClick={() => toggleOrderExpand(order.id)}
-                      className="w-full py-2.5 px-3 bg-slate-800/30 hover:bg-slate-800/50 border border-white/5 rounded-lg text-gray-300 hover:text-white text-xs font-medium transition-all flex items-center justify-center gap-2"
-                    >
-                      {expandedOrders.has(order.id) ? (
-                        <>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M5 15l7-7 7 7"/>
-                          </svg>
-                          Ascunde Detalii
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M19 9l-7 7-7-7"/>
-                          </svg>
-                          Vezi Mai Multe Detalii
-                        </>
-                      )}
-                    </button>
-
-                    {/* Action Buttons - Full Width */}
-                    <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5">
-                      <button 
-                        onClick={() => setSelectedOrder(order)}
-                        className="px-3 py-2.5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold text-xs transition-all shadow-lg shadow-orange-500/25 flex items-center justify-center gap-1.5"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        Trimite Ofertă
-                      </button>
-                      <button 
-                        onClick={() => setSelectedOrder(order)}
-                        className="px-3 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-semibold text-xs transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-1.5"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                        </svg>
-                        Mesaj
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Desktop Layout - Optimized 2-Column Grid */}
-                  <div className="hidden sm:grid sm:grid-cols-3 sm:gap-6">
-                    {/* Left Column - Main Info (2/3 width) */}
-                    <div className="col-span-2 space-y-4">
-                      {/* Expand/Collapse Button */}
-                      <button
-                        onClick={() => toggleOrderExpand(order.id)}
-                        className="w-full flex items-center justify-between p-3 bg-slate-800/40 hover:bg-slate-800/60 rounded-lg border border-white/5 hover:border-white/10 transition-all group"
-                      >
-                        <span className="text-sm font-semibold text-gray-400 group-hover:text-gray-300">
-                          {expandedOrders.has(order.id) ? 'Ascunde detalii' : 'Vezi toate detaliile'}
-                        </span>
-                        <svg 
-                          className={`w-5 h-5 text-gray-400 group-hover:text-gray-300 transition-transform ${expandedOrders.has(order.id) ? 'rotate-180' : ''}`} 
-                          fill="none" 
-                          stroke="currentColor" 
-                          strokeWidth="2.5" 
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                      </button>
-
-                      {/* Header: Order ID, Service & Weight */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-700/30 rounded-lg border border-white/5">
-                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                          </svg>
-                          <span className="text-gray-400 text-sm font-mono">#{formatOrderNumber(order.orderNumber || order.id)}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                            <ServiceIcon service={order.tipColet} className="w-3.5 h-3.5 text-emerald-400" />
-                            <span className="text-emerald-300 text-xs font-semibold capitalize">{order.tipColet}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                            <svg className="w-3.5 h-3.5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M7 4V2h10v2h3c.55 0 1 .45 1 1v3c0 .55-.45 1-1 1h-.88l-1.62 12.16c-.07.54-.52.92-1.06.92H7.56c-.54 0-.99-.38-1.06-.92L4.88 9H4c-.55 0-1-.45-1-1V5c0-.55.45-1 1-1h3zm2 0h6V2H9v2zm-3.5 5h13l-1.5 11h-10l-1.5-11z"/>
+                        
+                        {/* Action Buttons */}
+                        <div className="flex items-center gap-2 ml-4">
+                          <button
+                            onClick={() => setSelectedOrder(order)}
+                            className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                            title="Vezi detalii"
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                             </svg>
-                            <span className="text-blue-300 text-xs font-semibold">{order.greutate} kg</span>
-                          </div>
+                            <span className="hidden sm:inline">Vezi</span>
+                          </button>
                         </div>
                       </div>
-
-                      {/* Route Section - Vertical Stacked */}
-                      <div className="p-4 bg-linear-to-br from-slate-800/40 to-slate-800/20 rounded-xl border border-white/10 space-y-3">
-                        <div className="flex items-center gap-2">
-                          <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-                          </svg>
-                          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Traseu Transport</span>
-                        </div>
-                        <div className="flex items-center gap-3 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                      
+                      {/* Route */}
+                      <div className="flex items-center gap-2 mb-3 text-sm flex-wrap">
+                        <div className="flex items-center gap-1.5">
                           <Image 
                             src={`/img/flag/${(() => {
                               const country = order.expeditorTara.toLowerCase().trim();
@@ -1094,21 +824,16 @@ export default function ComenziCurierPage() {
                               return matched?.code || 'ro';
                             })()}.svg`}
                             alt={order.expeditorTara}
-                            width={24}
-                            height={18}
-                            className="rounded shrink-0"
+                            width={20}
+                            height={15}
+                            className="rounded"
                           />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[10px] text-green-400/70 font-medium uppercase">Oraș/localitate</p>
-                            <p className="text-green-300 font-semibold text-sm truncate">{order.oras_ridicare || order.expeditorJudet}</p>
-                          </div>
+                          <span className="text-gray-300">{order.expeditorJudet}, {order.oras_ridicare || order.expeditorJudet}</span>
                         </div>
-                        <div className="flex justify-center">
-                          <svg className="w-6 h-6 text-gray-500 rotate-90" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                          </svg>
-                        </div>
-                        <div className="flex items-center gap-3 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
+                        <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                        <div className="flex items-center gap-1.5">
                           <Image 
                             src={`/img/flag/${(() => {
                               const country = order.destinatarTara.toLowerCase().trim();
@@ -1119,156 +844,73 @@ export default function ComenziCurierPage() {
                               return matched?.code || 'ro';
                             })()}.svg`}
                             alt={order.destinatarTara}
-                            width={24}
-                            height={18}
-                            className="rounded shrink-0"
+                            width={20}
+                            height={15}
+                            className="rounded"
                           />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[10px] text-orange-400/70 font-medium uppercase">Oraș/localitate</p>
-                            <p className="text-orange-300 font-semibold text-sm truncate">{order.oras_livrare || order.destinatarJudet}</p>
-                          </div>
+                          <span className="text-gray-300">{order.destinatarJudet}, {order.oras_livrare || order.destinatarJudet}</span>
                         </div>
                       </div>
-
-                      {/* Client & Date Info */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                          <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                      
+                      {/* Meta Info */}
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-400">
+                        <span className="flex items-center gap-1">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
-                          <span className="text-emerald-300 font-semibold text-sm">{formatClientName(order.clientName)}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 px-2.5 py-1 bg-purple-500/10 rounded-lg border border-purple-500/20">
-                          <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                          </svg>
-                          <span className="text-purple-300 text-xs font-semibold">
-                            {order.createdAt ? order.createdAt.toLocaleDateString('ro-RO', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'N/A'}
-                          </span>
-                        </div>
+                          {formatClientName(order.clientName)}
+                        </span>
+                        <span>Greutate: {order.greutate} kg</span>
+                        <span>Data: {order.dataColectare || 'Flexibil'}</span>
+                        <span>{order.createdAt ? order.createdAt.toLocaleDateString('ro-RO', { day: '2-digit', month: 'short' }) : 'N/A'}</span>
                       </div>
 
-                      {/* Package Details - Only show when expanded */}
-                      {expandedOrders.has(order.id) && (
-                        <div className="grid grid-cols-3 gap-3">
-                          <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
-                            <div className="flex items-center gap-2 mb-2">
-                              <ServiceIcon service={order.tipColet} className="w-4 h-4 text-emerald-400" />
-                              <span className="text-xs font-semibold text-gray-400 uppercase">Serviciu</span>
-                            </div>
-                            <p className="text-base font-bold text-white capitalize">{order.tipColet}</p>
-                          </div>
-                          <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
-                            <div className="flex items-center gap-2 mb-2">
-                              <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                              </svg>
-                              <span className="text-xs font-semibold text-gray-400 uppercase">Greutate Colet</span>
-                            </div>
-                            <p className="text-xl font-bold text-white">{order.greutate} <span className="text-sm text-gray-400">kg</span></p>
-                          </div>
-                          <div className="p-3 bg-slate-800/30 rounded-lg border border-white/5">
-                            <div className="flex items-center gap-2 mb-2">
-                              <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                <line x1="16" y1="2" x2="16" y2="6"/>
-                                <line x1="8" y1="2" x2="8" y2="6"/>
-                                <line x1="3" y1="10" x2="21" y2="10"/>
-                              </svg>
-                              <span className="text-xs font-semibold text-gray-400 uppercase">Data Colectare</span>
-                            </div>
-                            <p className="text-base font-semibold text-white">
-                              {order.dataColectare ? order.dataColectare : <span className="text-blue-400">Flexibil</span>}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Extra Services & Instructions */}
-                      {expandedOrders.has(order.id) && ((order.optiuni && order.optiuni.length > 0) || order.observatii) && (
-                        <div className="space-y-3">
-                          {order.optiuni && order.optiuni.length > 0 && (
-                            <div className="p-4 bg-slate-800/20 rounded-xl border border-white/5">
-                              <div className="flex items-center gap-2 mb-3">
-                                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-                                </svg>
-                                <span className="text-xs font-semibold text-gray-300 uppercase tracking-wide">Servicii Suplimentare Solicitate</span>
-                              </div>
-                              <div className="flex flex-wrap gap-2">
-                                {order.optiuni.map((opt, idx) => {
-                                  const optionConfig = {
-                                    asigurare: { 
-                                      label: 'Asigurare completă transport', 
-                                      color: 'emerald',
-                                      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                                    },
-                                    tracking: { 
-                                      label: 'Tracking GPS în timp real', 
-                                      color: 'blue',
-                                      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                    },
-                                    semnatura: { 
-                                      label: 'Semnătură și confirmare la livrare', 
-                                      color: 'purple',
-                                      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
-                                    }
-                                  };
-                                  const config = optionConfig[opt as keyof typeof optionConfig] || { label: opt, color: 'gray', icon: null };
-                                  return (
-                                    <span key={idx} className={`inline-flex items-center gap-2 px-3 py-2 bg-${config.color}-500/10 border border-${config.color}-500/30 rounded-lg text-sm text-${config.color}-300 font-medium`}>
-                                      {config.icon}
-                                      {config.label}
-                                    </span>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          )}
-                          {order.observatii && (
-                            <div className="p-4 bg-blue-500/10 rounded-xl border border-blue-500/20">
-                              <div className="flex items-start gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
-                                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
-                                  </svg>
-                                </div>
-                                <div className="flex-1">
-                                  <p className="text-blue-400 text-xs font-semibold uppercase tracking-wide mb-2">Instrucțiuni Speciale de la Client</p>
-                                  <p className="text-gray-200 text-sm leading-relaxed">{order.observatii}</p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Right Column - Actions & Quick Info (1/3 width) */}
-                    <div className="space-y-4">
-                      {/* Action Buttons - Prominent */}
-                      <div className="space-y-3 p-4 bg-linear-to-br from-slate-800/50 to-slate-800/30 rounded-xl border border-white/10">
+                      {/* Action Buttons - Mobile */}
+                      <div className="grid grid-cols-2 gap-2 mt-3 sm:hidden">
                         <button 
                           onClick={() => {
                             setOfferModalOrder(order);
                             setOfferPrice(order.pret.toString());
                             setOfferNotes('');
                           }}
-                          className="w-full px-4 py-3.5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 flex items-center justify-center gap-2 group"
+                          className="px-3 py-2 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold text-xs transition-all shadow-lg shadow-orange-500/25 flex items-center justify-center gap-1.5"
                         >
-                          <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                          </svg>
+                          Ofertă
+                        </button>
+                        <button 
+                          onClick={() => setMessageModalOrder(order)}
+                          className="px-3 py-2 bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-semibold text-xs transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-1.5"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                          </svg>
+                          Mesaj
+                        </button>
+                      </div>
+
+                      {/* Action Buttons - Desktop */}
+                      <div className="hidden sm:grid sm:grid-cols-2 gap-2 mt-3">
+                        <button 
+                          onClick={() => {
+                            setOfferModalOrder(order);
+                            setOfferPrice(order.pret.toString());
+                            setOfferNotes('');
+                          }}
+                          className="px-4 py-2.5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg font-semibold text-sm transition-all shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 flex items-center justify-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                           </svg>
                           Trimite Ofertă
                         </button>
                         <button 
                           onClick={() => setMessageModalOrder(order)}
-                          className="w-full px-4 py-3.5 bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2 group"
+                          className="px-4 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-semibold text-sm transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2"
                         >
-                          <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                           </svg>
                           Trimite Mesaj

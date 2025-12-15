@@ -45,33 +45,16 @@
       "collectionGroup": "comenzi",
       "queryScope": "COLLECTION",
       "fields": [
+        { "fieldPath": "uid_client", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "comenzi",
+      "queryScope": "COLLECTION",
+      "fields": [
         { "fieldPath": "status", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "tarife_curier",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "uid", "order": "ASCENDING" },
-        { "fieldPath": "addedAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "tarife_curier",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "uid", "order": "ASCENDING" },
-        { "fieldPath": "tara_origine", "order": "ASCENDING" },
-        { "fieldPath": "tara_destinatie", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "calendar_colectii",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "courierId", "order": "ASCENDING" },
-        { "fieldPath": "dataTimestamp", "order": "ASCENDING" }
       ]
     },
     {
@@ -88,38 +71,6 @@
       "fields": [
         { "fieldPath": "courierId", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "zona_acoperire",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "uid", "order": "ASCENDING" },
-        { "fieldPath": "addedAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "zona_acoperire",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "uid", "order": "ASCENDING" },
-        { "fieldPath": "tara", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "transport_aeroport",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "uid", "order": "ASCENDING" },
-        { "fieldPath": "addedAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "transport_persoane",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "uid", "order": "ASCENDING" },
-        { "fieldPath": "addedAt", "order": "DESCENDING" }
       ]
     }
   ],

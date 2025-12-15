@@ -82,21 +82,3 @@ export const formatClientName = (name: string): string => {
   const lastInitial = parts[parts.length - 1].charAt(0).toUpperCase();
   return `${firstName} ${lastInitial}.`;
 };
-
-/**
- * Normalizes old English status names to new Romanian status names
- * Provides backwards compatibility for orders created before status migration
- * 
- * @param status - The order status (can be old English or new Romanian)
- * @returns Normalized Romanian status
- */
-export const normalizeStatus = (status: string): string => {
-  const statusMap: Record<string, string> = {
-    'pending': 'noua',
-    'accepted': 'in_lucru',
-    'in_transit': 'in_lucru',
-    'completed': 'livrata',
-    'cancelled': 'anulata',
-  };
-  return statusMap[status] || status;
-};
