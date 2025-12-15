@@ -138,6 +138,7 @@ function ComandaForm() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [loadingOrder, setLoadingOrder] = useState(false);
   const hasLoadedOrder = useRef(false); // Track if order has been loaded
+  const isLoadingEditData = useRef(false); // Track if currently loading edit data to prevent localStorage saves
 
   // Protecție - redirectează dacă nu este autentificat sau nu este client
   useEffect(() => {
@@ -151,6 +152,7 @@ function ComandaForm() {
     const loadOrderData = async () => {
       if (!editOrderId || !user) return;
 
+      isLoadingEditData.current = true; // Prevent localStorage saves
       setLoadingOrder(true);
       try {
         const orderDoc = await getDoc(doc(db, 'comenzi', editOrderId));
@@ -222,9 +224,13 @@ function ComandaForm() {
           tip_ofertanti: orderData.tip_ofertanti || prev.tip_ofertanti,
           observatii: orderData.observatii || prev.observatii,
         }));
+        
+        // Don't reset ref in edit mode - keep localStorage blocked permanently
+        // isLoadingEditData.current stays true throughout edit mode
       } catch (error) {
         console.error('Error loading order:', error);
         setMessage('❌ Eroare la încărcarea comenzii.');
+        isLoadingEditData.current = false;
       } finally {
         setLoadingOrder(false);
       }
@@ -235,7 +241,8 @@ function ComandaForm() {
       hasLoadedOrder.current = true;
       loadOrderData();
     }
-  }, [editOrderId, user, router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty deps - run once on mount, loadOrderData captures editOrderId and user from closure
 
   // Form state
   const [step, setStep] = useState(1);
@@ -376,18 +383,22 @@ function ComandaForm() {
     }
   }, [serviciu]);
 
-  // Salvează step și service în localStorage
+  // Salvează step și service în localStorage (skip in edit mode)
   useEffect(() => {
+    if (isEditMode || isLoadingEditData.current) return; // Don't save to localStorage in edit mode or during load
+    
     try {
       localStorage.setItem('comanda_step', step.toString());
       localStorage.setItem('comanda_service', selectedService);
     } catch (error) {
       console.error('Error saving step/service to localStorage:', error);
     }
-  }, [step, selectedService]);
+  }, [step, selectedService, isEditMode]);
 
-  // Salvează formData în localStorage (debounced)
+  // Salvează formData în localStorage (debounced, skip in edit mode)
   useEffect(() => {
+    if (isEditMode || isLoadingEditData.current) return; // Don't save to localStorage in edit mode or during load
+    
     const timeoutId = setTimeout(() => {
       try {
         localStorage.setItem('comanda_formData', JSON.stringify(formData));
@@ -397,7 +408,7 @@ function ComandaForm() {
     }, 500); // 500ms debounce
     
     return () => clearTimeout(timeoutId);
-  }, [formData]);
+  }, [formData, isEditMode]);
 
   // Auto-fill pentru utilizatori autentificați
   useEffect(() => {
@@ -1561,10 +1572,14 @@ function ComandaForm() {
               {/* Tip ofertanți */}
               <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center shadow-lg">
-                    <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${servicii.find(s => s.id === selectedService)?.color || 'from-blue-500 to-cyan-500'} bg-opacity-20 border ${selectedService === 'plicuri' ? 'border-yellow-500/30' : selectedService === 'persoane' ? 'border-rose-500/30' : 'border-blue-500/30'} flex items-center justify-center shadow-lg`}>
+                    <div className={selectedService === 'plicuri' ? 'text-yellow-400' : selectedService === 'persoane' ? 'text-rose-400' : 'text-blue-400'}>
+                      {servicii.find(s => s.id === selectedService)?.icon || (
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                        </svg>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <h2 className="text-2xl sm:text-3xl font-bold text-white">De la cine dorești oferte?</h2>

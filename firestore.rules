@@ -7,121 +7,86 @@ service cloud.firestore {
       return request.auth != null;
     }
     
-    // Users collection - allow authenticated users to read/write their own data
+    // Users collection - base profiles with role
     match /users/{userId} {
-      // Allow read if authenticated
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.auth.uid == userId;
       allow update: if isAuthenticated() && request.auth.uid == userId;
-      allow delete: if false; // Never allow deletion
+      allow delete: if false; // Never allow user deletion
     }
     
-    // Profil curier collection
+    // Extended courier profiles
     match /profil_curier/{userId} {
-      // Public read for all authenticated users (clients need to see courier info)
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && userId == request.auth.uid;
-      allow update: if isAuthenticated() && userId == request.auth.uid;
-      allow delete: if isAuthenticated() && userId == request.auth.uid;
+      allow read: if isAuthenticated(); // Public read (clients need to see)
+      allow write: if isAuthenticated() && userId == request.auth.uid;
     }
     
-    // Profil client collection
+    // Extended client profiles
     match /profil_client/{userId} {
-      // Clients can read/write their own profile
       allow read: if isAuthenticated() && userId == request.auth.uid;
-      allow create: if isAuthenticated() && userId == request.auth.uid;
-      allow update: if isAuthenticated() && userId == request.auth.uid;
-      allow delete: if isAuthenticated() && userId == request.auth.uid;
+      allow write: if isAuthenticated() && userId == request.auth.uid;
     }
     
-    // Zona acoperire collection (courier coverage zones)
+    // Courier coverage zones
     match /zona_acoperire/{docId} {
-      // Public read for all authenticated users
       allow read: if isAuthenticated();
-      // Couriers can manage their own zones
       allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
       allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
     }
     
-    // Tarife curier collection (courier pricing)
+    // Courier pricing
     match /tarife_curier/{docId} {
-      // Public read for all authenticated users
       allow read: if isAuthenticated();
-      // Couriers can manage their own tariffs
       allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
       allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
     }
     
-    // Calendar colectii (courier availability calendar)
-    match /calendar_colectii/{docId} {
-      // Public read for all authenticated users
-      allow read: if isAuthenticated();
-      // Couriers can manage their own calendar
-      allow create: if isAuthenticated() && request.resource.data.courierId == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.courierId == request.auth.uid;
-    }
-    
-    // Transport aeroport (airport transfer routes)
+    // Airport transfer routes
     match /transport_aeroport/{docId} {
-      // Public read for all authenticated users
       allow read: if isAuthenticated();
-      // Couriers can manage their own routes
       allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
       allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
     }
     
-    // Transport persoane (person transport routes)
+    // Person transport routes
     match /transport_persoane/{docId} {
-      // Public read for all authenticated users
       allow read: if isAuthenticated();
-      // Couriers can manage their own routes
       allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
       allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
     }
     
-    // Comenzi collection
+    // Orders - simplified without status checks
     match /comenzi/{docId} {
-      // Clients can read their own orders
-      // Couriers can read all new orders and their assigned orders
+      // Clients read own orders, couriers read all orders
       allow read: if isAuthenticated() && 
         (resource.data.uid_client == request.auth.uid || 
-         resource.data.courierId == request.auth.uid ||
-         resource.data.status == 'noua');
-      // Clients can create new orders
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'curier');
+      // Clients create orders
       allow create: if isAuthenticated() && 
-        request.resource.data.uid_client == request.auth.uid &&
-        request.resource.data.status == 'noua';
-      // Both clients and couriers can update orders (status changes, courier acceptance)
+        request.resource.data.uid_client == request.auth.uid;
+      // Both clients and couriers can update
       allow update: if isAuthenticated() && 
         (resource.data.uid_client == request.auth.uid || 
          resource.data.courierId == request.auth.uid ||
-         (resource.data.status == 'noua' && request.resource.data.courierId == request.auth.uid));
-      // Only clients can delete their own new orders
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'curier');
+      // Clients can delete own orders anytime
       allow delete: if isAuthenticated() && 
-        resource.data.uid_client == request.auth.uid &&
-        resource.data.status == 'noua';
+        resource.data.uid_client == request.auth.uid;
     }
     
-    // Recenzii collection
+    // Reviews
     match /recenzii/{docId} {
-      // Clients can read their own reviews
-      // Couriers can read reviews about them
-      // All authenticated users can read (for public courier profiles)
-      allow read: if isAuthenticated();
-      // Only clients can create reviews
+      allow read: if isAuthenticated(); // Public read
       allow create: if isAuthenticated() && 
         request.resource.data.clientId == request.auth.uid;
-      // Only review author can update/delete
       allow update, delete: if isAuthenticated() && 
         resource.data.clientId == request.auth.uid;
     }
     
-    // Counters collection for sequential order numbering
+    // Order number counter
     match /counters/{counterId} {
-      // Anyone authenticated can read counters
       allow read: if isAuthenticated();
-      // Only allow writes from authenticated users (server will use transactions)
-      allow write: if isAuthenticated();
+      allow write: if isAuthenticated(); // Needed for transactions
     }
   }
 }
