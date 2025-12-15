@@ -138,7 +138,7 @@ function ComandaForm() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [loadingOrder, setLoadingOrder] = useState(false);
   const hasLoadedOrder = useRef(false); // Track if order has been loaded
-  const isLoadingEditData = useRef(false); // Track if currently loading edit data to prevent localStorage saves
+  const isLoadingEditData = useRef(!!editOrderId); // Set to true immediately if in edit mode
 
   // Protecție - redirectează dacă nu este autentificat sau nu este client
   useEffect(() => {
@@ -152,7 +152,6 @@ function ComandaForm() {
     const loadOrderData = async () => {
       if (!editOrderId || !user) return;
 
-      isLoadingEditData.current = true; // Prevent localStorage saves
       setLoadingOrder(true);
       try {
         const orderDoc = await getDoc(doc(db, 'comenzi', editOrderId));
@@ -191,6 +190,7 @@ function ComandaForm() {
         // Populate form with existing data
         setIsEditMode(true);
         setSelectedService(orderData.serviciu);
+        setStep(5); // Jump directly to step 5 in edit mode
         console.log('Form data populated:', {
           serviciu: orderData.serviciu,
           nume: orderData.nume,
@@ -225,12 +225,11 @@ function ComandaForm() {
           observatii: orderData.observatii || prev.observatii,
         }));
         
-        // Don't reset ref in edit mode - keep localStorage blocked permanently
-        // isLoadingEditData.current stays true throughout edit mode
+        // Ref stays true - set at initialization for edit mode
       } catch (error) {
         console.error('Error loading order:', error);
         setMessage('❌ Eroare la încărcarea comenzii.');
-        isLoadingEditData.current = false;
+        // Don't reset ref even on error - we're still in edit mode
       } finally {
         setLoadingOrder(false);
       }
