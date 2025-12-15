@@ -752,8 +752,13 @@ export default function ComenziClientPage() {
                 )}
                 {selectedOrder.cantitate && (
                   <div>
-                    <p className="text-gray-500 text-xs">Cantitate</p>
-                    <p className="text-gray-900 font-medium">{selectedOrder.cantitate}</p>
+                    <p className="text-gray-500 text-xs">
+                      {selectedOrder.serviciu?.toLowerCase().trim() === 'persoane' ? 'Număr pasageri' : 'Cantitate'}
+                    </p>
+                    <p className="text-gray-900 font-medium">
+                      {selectedOrder.cantitate}
+                      {selectedOrder.serviciu?.toLowerCase().trim() === 'persoane' ? ' persoane' : ''}
+                    </p>
                   </div>
                 )}
               </div>

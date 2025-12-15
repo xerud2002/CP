@@ -403,7 +403,7 @@ export default function ComenziCurierPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-[60] backdrop-blur-xl">
+      <div className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-[70] backdrop-blur-xl shadow-lg">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <Link 
@@ -793,6 +793,27 @@ export default function ComenziCurierPage() {
                       
                       {/* Meta Info */}
                       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-400">
+                        {/* Order creation date/time */}
+                        {(order.timestamp || order.createdAt) && (
+                          <span className="flex items-center gap-1.5">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {(() => {
+                              const date = order.timestamp 
+                                ? new Date(order.timestamp) 
+                                : order.createdAt?.toDate 
+                                  ? order.createdAt.toDate() 
+                                  : new Date(order.createdAt as any);
+                              const day = String(date.getDate()).padStart(2, '0');
+                              const month = String(date.getMonth() + 1).padStart(2, '0');
+                              const year = date.getFullYear();
+                              const hours = String(date.getHours()).padStart(2, '0');
+                              const minutes = String(date.getMinutes()).padStart(2, '0');
+                              return `${day}/${month}/${year} • ${hours}:${minutes}`;
+                            })()}
+                          </span>
+                        )}
                         {/* Show different info based on service type */}
                         {order.tipColet === 'plicuri' ? (
                           <span>Plicuri: {order.cantitate || 1} buc</span>
@@ -827,13 +848,13 @@ export default function ComenziCurierPage() {
           <>
             {/* Backdrop */}
             <div 
-              className="fixed inset-0 z-30 bg-black/70 backdrop-blur-sm print:hidden"
+              className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm print:hidden"
               style={{ top: '72px' }}
               onClick={() => setSelectedOrder(null)}
             />
             
             {/* Modal Container */}
-            <div id="print-modal-container" className="fixed inset-0 z-40 flex items-center justify-center p-4 print:p-0 print:static print:flex print:items-start" style={{ top: '72px' }} onClick={() => setSelectedOrder(null)}>
+            <div id="print-modal-container" className="fixed inset-0 z-[65] flex items-center justify-center p-4 print:p-0 print:static print:flex print:items-start" style={{ top: '72px' }} onClick={() => setSelectedOrder(null)}>
               {/* Modal */}
               <div id="print-modal" className="relative bg-slate-800 rounded-2xl border border-white/10 shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden print:max-w-full print:max-h-full print:rounded-none print:border-0 print:shadow-none print:bg-white" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}
@@ -992,8 +1013,13 @@ export default function ComenziCurierPage() {
                       )}
                       {selectedOrder.cantitate && (
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Cantitate</p>
-                          <p className="text-white font-medium">{selectedOrder.cantitate}</p>
+                          <p className="text-xs text-gray-500 mb-1">
+                            {selectedOrder.serviciu?.toLowerCase().trim() === 'persoane' ? 'Număr pasageri' : 'Cantitate'}
+                          </p>
+                          <p className="text-white font-medium">
+                            {selectedOrder.cantitate}
+                            {selectedOrder.serviciu?.toLowerCase().trim() === 'persoane' ? ' persoane' : ''}
+                          </p>
                         </div>
                       )}
 
