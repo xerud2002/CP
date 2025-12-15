@@ -403,7 +403,7 @@ export default function ComenziCurierPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-slate-900/60 border-b border-white/5 sticky top-0 z-50 backdrop-blur-xl">
+      <div className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-[60] backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <Link 
@@ -876,7 +876,7 @@ export default function ComenziCurierPage() {
                 </div>
                 
                 {/* Content */}
-                <div className="overflow-y-auto max-h-[calc(90vh-80px)] p-6 space-y-6">
+                <div className="overflow-y-auto max-h-[calc(85vh-80px)] p-6 space-y-6 custom-scrollbar">
                   {/* Route Section */}
                   <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
                     <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Rută Transport</h3>
