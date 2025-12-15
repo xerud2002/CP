@@ -14,7 +14,7 @@ import { db } from '@/lib/firebase';
 import { formatOrderNumber, formatClientName } from '@/utils/orderHelpers';
 import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
 import { showSuccess, showWarning, showError } from '@/lib/toast';
-import { countries, serviceTypes } from '@/lib/constants';
+import { countries, serviceTypes, orderStatusConfig } from '@/lib/constants';
 
 interface Order {
   id: string;
@@ -767,79 +767,134 @@ export default function ComenziCurierPage() {
               )}
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {filteredOrders.map((order) => {
                 const serviceTypeConfig = serviceTypes.find(s => s.value.toLowerCase() === order.tipColet.toLowerCase()) || serviceTypes[0];
-                const orderTitle = order.titlu || `${order.tipColet} - ${order.expeditorTara} → ${order.destinatarTara}`;
 
                 return (
-                <div key={order.id} className="bg-slate-900/50 rounded-xl p-3 sm:p-4 border border-white/5 hover:border-white/10 transition-all">
-                  {/* Service Icon Badge */}
-                  <div className="flex items-center gap-2.5 sm:gap-3 mb-3 sm:mb-4">
-                    <div className={`p-2 sm:p-2.5 ${serviceTypeConfig.bgColor} rounded-xl border ${serviceTypeConfig.borderColor}`}>
-                      <ServiceIcon service={order.tipColet} className="w-5 h-5" />
+                <div 
+                  key={order.id} 
+                  className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-4 sm:p-6 hover:border-white/10 transition-all"
+                >
+                  <div className="flex items-start gap-4">
+                    {/* Service Icon */}
+                    <div className={`relative w-12 h-12 rounded-xl ${serviceTypeConfig.bgColor} flex items-center justify-center shrink-0`}>
+                      <ServiceIcon service={order.tipColet} className={`w-6 h-6 ${serviceTypeConfig.color}`} />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-white font-semibold text-sm sm:text-base">{orderTitle}</h3>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className={`${serviceTypeConfig.color} text-xs font-medium`}>{order.tipColet}</span>
-                        <span className="text-gray-500 text-xs">•</span>
-                        <span className="text-gray-400 text-xs">#{formatOrderNumber(order.orderNumber || order.id)}</span>
+                    
+                    {/* Order Details */}
+                    <div className="flex-1 min-w-0">
+                      {/* Header */}
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-white font-semibold">
+                              {order.tipColet}
+                            </h3>
+                            <span className={`px-2 py-0.5 ${orderStatusConfig[order.status as keyof typeof orderStatusConfig]?.bg || 'bg-gray-500/20'} ${orderStatusConfig[order.status as keyof typeof orderStatusConfig]?.border || 'border-gray-500/30'} border ${orderStatusConfig[order.status as keyof typeof orderStatusConfig]?.color || 'text-gray-400'} text-xs font-medium rounded-full`}>
+                              {orderStatusConfig[order.status as keyof typeof orderStatusConfig]?.label || order.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-400">
+                            #{formatOrderNumber(order.orderNumber || order.id)}
+                          </p>
+                        </div>
+                        
+                        {/* Action Buttons */}
+                        <div className="flex items-center gap-2 ml-4">
+                          <button
+                            onClick={() => setSelectedOrder(order)}
+                            className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                            title="Vezi detalii"
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <span className="hidden sm:inline">Detalii</span>
+                          </button>
+                          {order.status === 'in_lucru' && (
+                            <button
+                              onClick={() => handleFinalizeOrder(order.id, order.status)}
+                              className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 text-emerald-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                              title="Finalizează"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                              <span className="hidden sm:inline">Finalizează</span>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Route */}
+                      <div className="flex items-center gap-2 mb-3 text-sm">
+                        <div className="flex items-center gap-1.5">
+                          <Image 
+                            src={`/img/flag/${(() => {
+                              const country = order.expeditorTara?.toLowerCase().trim();
+                              const matched = countries.find(c => 
+                                c.name.toLowerCase() === country || 
+                                c.code.toLowerCase() === country
+                              );
+                              return matched?.code || 'ro';
+                            })()}.svg`}
+                            alt={order.expeditorTara || 'RO'}
+                            width={20} 
+                            height={15} 
+                            className="rounded"
+                          />
+                          <span className="text-gray-300">{order.expeditorJudet}</span>
+                        </div>
+                        <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                        <div className="flex items-center gap-1.5">
+                          <Image 
+                            src={`/img/flag/${(() => {
+                              const country = order.destinatarTara?.toLowerCase().trim();
+                              const matched = countries.find(c => 
+                                c.name.toLowerCase() === country || 
+                                c.code.toLowerCase() === country
+                              );
+                              return matched?.code || 'ro';
+                            })()}.svg`}
+                            alt={order.destinatarTara || 'RO'}
+                            width={20} 
+                            height={15} 
+                            className="rounded"
+                          />
+                          <span className="text-gray-300">{order.destinatarJudet}</span>
+                        </div>
+                      </div>
+                      
+                      {/* Meta Info */}
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-400">
+                        {order.greutate && (
+                          <span className="flex items-center gap-1">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                            </svg>
+                            {order.greutate} kg
+                          </span>
+                        )}
+                        <span className="flex items-center gap-1">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                          </svg>
+                          {order.dataColectare}
+                        </span>
+                        {order.ora && (
+                          <span className="flex items-center gap-1">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            {order.ora}
+                          </span>
+                        )}
                       </div>
                     </div>
-                  </div>
-
-                  {/* Route Display */}
-                  <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 p-2.5 sm:p-3 bg-slate-800/40 rounded-xl border border-white/5">
-                    <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                      <div className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0"></div>
-                      <span className="text-gray-300 text-xs sm:text-sm truncate">{order.expeditorTara}</span>
-                    </div>
-                    <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                    </svg>
-                    <div className="flex items-center gap-1.5 flex-1 min-w-0 justify-end">
-                      <span className="text-gray-300 text-xs sm:text-sm truncate">{order.destinatarTara}</span>
-                      <div className="w-2 h-2 rounded-full bg-orange-400 flex-shrink-0"></div>
-                    </div>
-                  </div>
-
-                  {/* Meta Info Grid */}
-                  <div className="grid grid-cols-2 gap-2 sm:gap-2.5 mb-3 sm:mb-4">
-                    <div className="flex items-center gap-2 p-2 sm:p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
-                      <svg className="w-4 h-4 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                      </svg>
-                      <span className="text-gray-300 text-xs sm:text-sm">{order.dataColectare}</span>
-                    </div>
-                    <div className="flex items-center gap-2 p-2 sm:p-2.5 bg-slate-800/30 rounded-lg border border-white/5">
-                      <svg className="w-4 h-4 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                      </svg>
-                      <span className="text-gray-300 text-xs sm:text-sm">{order.ora || 'Flexibil'}</span>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-2 sm:gap-2.5 pt-1">
-                    <button
-                      onClick={() => setSelectedOrder(order)}
-                      className="flex-1 py-2 sm:py-2.5 bg-slate-800/60 hover:bg-slate-700/60 border border-white/10 text-gray-300 text-xs sm:text-sm font-medium rounded-xl transition-all active:scale-[0.98]"
-                    >
-                      Detalii
-                    </button>
-                    {order.status === 'in_lucru' && (
-                      <button
-                        onClick={() => handleFinalizeOrder(order.id, order.status)}
-                        className="px-3 sm:px-4 py-2 sm:py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-400 rounded-xl transition-all active:scale-[0.98] flex items-center gap-1.5"
-                        title="Finalizează comandă"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path d="M5 13l4 4L19 7"/>
-                        </svg>
-                        <span className="hidden sm:inline">Finalizează</span>
-                      </button>
-                    )}
                   </div>
                 </div>
                 );
