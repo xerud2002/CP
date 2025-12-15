@@ -11,7 +11,7 @@ This is a **multi-tenant SaaS** platform with role-based access control. All dat
 | Role | Path | Pattern | Sub-pages |
 |------|------|---------|-----------|
 | `client` | `/dashboard/client` | Single-page dashboard with stats + navigation grid | `/comenzi`, `/profil`, `/recenzii`, `/fidelitate`, `/suport` |
-| `curier` | `/dashboard/curier` | Card grid dashboard → sub-pages | `/zona-acoperire`, `/calendar`, `/tarife`, `/profil`, `/comenzi`, `/plati`, `/servicii`, `/transport-aeroport`, `/transport-persoane` |
+| `curier` | `/dashboard/curier` | Card grid dashboard → sub-pages | `/comenzi`, `/profil`, `/recenzii`, `/servicii`, `/verificare` |
 | `admin` | `/dashboard/admin` | Admin panel | — |
 
 **Auth flow**: `?role=client|curier` on login/register → stores role in Firestore `users/{uid}` → redirects to `/dashboard/{role}`
@@ -44,7 +44,7 @@ RootLayout (AuthProvider)
 | Data | `src/lib/constants.ts` | `countries` (16 EU countries), `judetByCountry` (full region lists), `serviceTypes` (unified service definitions with icons), `serviceNames` (map), `orderStatusConfig` (unified status display) |
 | Helpers | `src/utils/orderHelpers.ts` | `getNextOrderNumber()` (atomic counter), `formatOrderNumber()`, `formatClientName()` |
 | Toast | `src/lib/toast.ts` | Sonner wrapper: `showSuccess()`, `showError()`, `showInfo()`, `showWarning()`, `showLoading()` |
-| Errors | `src/lib/errorMessages.ts` | Romanian error messages map for Firebase auth/firestore/storage errors + `getErrorMessage()` helper |
+| Errors | `src/lib/errorMessages.ts` | Romanian error messages map for Firebase auth/firestore/storage errors + `getErrorMessage()` helper + `logError()` for console logging |
 | Help | `src/components/HelpCard.tsx` | Reusable support card with email/WhatsApp links for all sub-pages |
 | Layout | `src/components/LayoutWrapper.tsx` | Conditional Header/Footer logic based on pathname |
 | Docs | `FIRESTORE_STRUCTURE.md` | Complete schema docs with security, indexes, and query patterns |
@@ -78,6 +78,11 @@ const snapshot = await getDocs(q);
 - Orders: saved as lowercase (`'colete'`, `'plicuri'`, `'persoane'`)
 - Courier services: saved as capitalized in `users.serviciiOferite` (`'Colete'`, `'Plicuri'`, `'Persoane'`)
 - **All service matching MUST normalize both sides to lowercase before comparison**
+- Example in courier order filtering:
+```tsx
+const userServices = user.serviciiOferite?.map(s => s.toLowerCase().trim()) || [];
+const matchesService = userServices.includes(order.serviciu.toLowerCase().trim());
+```
 
 **Order Lifecycle & Status Flow**:
 ```
@@ -246,6 +251,29 @@ npm run build  # Production build
 npm run lint   # ESLint
 firebase deploy --only firestore  # Deploy Firestore rules & indexes
 ```
+
+## Development Workflows
+
+### Testing Multi-Tenant Security
+1. Create test accounts for both roles: `?role=client` and `?role=curier` during registration
+2. Verify owner-based filtering: client should only see their orders, courier sees pending + assigned
+3. Test service matching: courier's `serviciiOferite` must match order's `serviciu` (case-insensitive)
+4. Check order lifecycle: pending → accepted (courierId assigned) → in_transit → completed
+5. Verify deletion rules: only `pending` orders can be deleted by owner
+
+### Firebase Local Development
+```bash
+# NOT IMPLEMENTED - Requires firebase-tools and local emulator setup
+# firebase emulators:start
+# Set NEXT_PUBLIC_USE_FIREBASE_EMULATOR=true in .env.local
+```
+Currently, the app connects directly to production Firebase (no emulator support yet).
+
+### Debugging Auth Issues
+- Check `AuthContext.tsx` state in React DevTools
+- Verify Firebase `users/{uid}` document has correct `role` field
+- Confirm Firestore rules are deployed: `firebase deploy --only firestore:rules`
+- Test role redirects: login should redirect to `/dashboard/{role}` based on `?role` param
 
 ## Environment Variables
 Required in `.env.local`:

@@ -212,6 +212,7 @@ export default function ComenziClientPage() {
           <div className="space-y-4">
             {filteredOrders.map((order) => {
               const StatusIcon = statusIcons[order.status] || ClockIcon;
+              const statusConfig = orderStatusConfig[order.status] || orderStatusConfig.noua;
               return (
                 <div 
                   key={order.id} 
@@ -262,10 +263,10 @@ export default function ComenziClientPage() {
                             Comandă #{formatOrderNumber(order.orderNumber || order.id)}
                           </p>
                         </div>
-                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${orderStatusConfig[order.status].bg} ${orderStatusConfig[order.status].border} border`}>
-                          <StatusIcon className={`w-4 h-4 ${orderStatusConfig[order.status].color}`} />
-                          <span className={`text-xs font-medium ${orderStatusConfig[order.status].color}`}>
-                            {orderStatusConfig[order.status].label}
+                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${statusConfig.bg} ${statusConfig.border} border`}>
+                          <StatusIcon className={`w-4 h-4 ${statusConfig.color}`} />
+                          <span className={`text-xs font-medium ${statusConfig.color}`}>
+                            {statusConfig.label}
                           </span>
                         </div>
                       </div>
