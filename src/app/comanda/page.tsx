@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,6 +9,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { countries, judetByCountry } from '@/lib/constants';
 import { getNextOrderNumber } from '@/utils/orderHelpers';
+import { showSuccess, showError } from '@/lib/toast';
 
 // Servicii disponibile cu iconițe SVG (identice cu homepage)
 const servicii = [
@@ -173,7 +174,6 @@ function ComandaForm() {
   });
 
   const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Calendar state pentru data_specifica
@@ -445,13 +445,12 @@ function ComandaForm() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateStep(step)) return;
 
     setSubmitting(true);
-    setMessage('');
 
     try {
       // CREATE new order
@@ -468,7 +467,7 @@ function ComandaForm() {
       };
 
       await addDoc(collection(db, 'comenzi'), orderData);
-      setMessage('✅ Comanda a fost trimisă cu succes! Vei primi oferte de la parteneri în 24-48 ore.');
+      showSuccess('Comanda a fost trimisă cu succes! Vei primi oferte de la parteneri în 24-48 ore.');
       
       // Curăță localStorage
       try {
@@ -488,15 +487,66 @@ function ComandaForm() {
         }
       }, 1000);
     } catch (error) {
-      console.error('❌ Error submitting order:', error);
-      setMessage('❌ Eroare la trimiterea comenzii. Te rugăm să încerci din nou.');
+      console.error('Error submitting order:', error);
+      showError(error);
     } finally {
       setSubmitting(false);
     }
-  };
+  }, [step, user, selectedService, formData, router]);
 
-  const judetRidicareList = judetByCountry[formData.tara_ridicare] || [];
-  const judetLivrareList = judetByCountry[formData.tara_livrare] || [];
+  // Memoized judet lists
+  const judetRidicareList = useMemo(
+    () => judetByCountry[formData.tara_ridicare] || [],
+    [formData.tara_ridicare]
+  );
+  
+  const judetLivrareList = useMemo(
+    () => judetByCountry[formData.tara_livrare] || [],
+    [formData.tara_livrare]
+  );
+
+  // Memoized country data for pickup location
+  const ridicareCountry = useMemo(
+    () => countries.find(c => c.code === formData.tara_ridicare),
+    [formData.tara_ridicare]
+  );
+
+  const ridicareCountryName = useMemo(
+    () => ridicareCountry?.name || 'Selectează...',
+    [ridicareCountry]
+  );
+
+  const ridicareCountryFlag = useMemo(
+    () => ridicareCountry?.flag || '/img/flag/ro.svg',
+    [ridicareCountry]
+  );
+
+  // Memoized country data for delivery location
+  const livrareCountry = useMemo(
+    () => countries.find(c => c.code === formData.tara_livrare),
+    [formData.tara_livrare]
+  );
+
+  const livrareCountryName = useMemo(
+    () => livrareCountry?.name || 'Selectează...',
+    [livrareCountry]
+  );
+
+  const livrareCountryFlag = useMemo(
+    () => livrareCountry?.flag || '/img/flag/gb.svg',
+    [livrareCountry]
+  );
+
+  // Memoized filtered judet lists for search
+  const filteredJudetRidicareList = useMemo(
+    () => judetRidicareList.filter(j => j.toLowerCase().includes(ridicareJudetSearch.toLowerCase())),
+    [judetRidicareList, ridicareJudetSearch]
+  );
+
+  const filteredJudetLivrareList = useMemo(
+    () => judetLivrareList.filter(j => j.toLowerCase().includes(livrareJudetSearch.toLowerCase())),
+    [judetLivrareList, livrareJudetSearch]
+  );
 
   // Loading state
   if (loading || !user) {
@@ -699,15 +749,16 @@ function ComandaForm() {
                           type="button"
                           onClick={() => setIsRidicareCountryOpen(!isRidicareCountryOpen)}
                           className="form-select w-full flex items-center gap-3 cursor-pointer"
+                          aria-label="Selectează țara de ridicare"
                         >
                           <Image 
                             src={`/img/flag/${formData.tara_ridicare.toLowerCase()}.svg`} 
-                            alt={countries.find(c => c.code === formData.tara_ridicare)?.name || ''} 
+                            alt={`Steagul ${ridicareCountryName}`}
                             width={24} 
                             height={18} 
                             className="rounded-sm shadow-sm shrink-0"
                           />
-                          <span className="flex-1 text-left">{countries.find(c => c.code === formData.tara_ridicare)?.name || 'Selectează...'}</span>
+                          <span className="flex-1 text-left">{ridicareCountryName}</span>
                           <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isRidicareCountryOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                           </svg>
@@ -748,10 +799,11 @@ function ComandaForm() {
                           type="button"
                           onClick={() => setIsRidicareJudetOpen(!isRidicareJudetOpen)}
                           className="form-select w-full flex items-center gap-3 cursor-pointer"
+                          aria-label="Selectează județul sau regiunea de ridicare"
                         >
                           <Image 
                             src={`/img/flag/${formData.tara_ridicare.toLowerCase()}.svg`} 
-                            alt={countries.find(c => c.code === formData.tara_ridicare)?.name || ''} 
+                            alt={`Steagul ${ridicareCountryName}`}
                             width={24} 
                             height={18} 
                             className="rounded-sm shadow-sm opacity-60 shrink-0"
@@ -771,10 +823,12 @@ function ComandaForm() {
                                 placeholder="Caută..."
                                 className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                                 onClick={(e) => e.stopPropagation()}
+                                aria-label="Caută județul sau regiunea de ridicare"
                               />
                             </div>
                             <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
-                              {judetRidicareList.filter(j => j.toLowerCase().includes(ridicareJudetSearch.toLowerCase())).map((j) => (
+                              {filteredJudetRidicareList.length > 0 ? (
+                                filteredJudetRidicareList.map((j) => (
                                 <button
                                   key={j}
                                   type="button"
@@ -789,7 +843,12 @@ function ComandaForm() {
                                 >
                                   <span className="text-white text-sm">{j}</span>
                                 </button>
-                              ))}
+                              ))
+                            ) : (
+                              <div className="px-3 py-4 text-center text-gray-400 text-sm">
+                                Nu s-au găsit rezultate
+                              </div>
+                            )}
                             </div>
                           </div>
                         )}
@@ -849,15 +908,16 @@ function ComandaForm() {
                           type="button"
                           onClick={() => setIsLivrareCountryOpen(!isLivrareCountryOpen)}
                           className="form-select w-full flex items-center gap-3 cursor-pointer"
+                          aria-label="Selectează țara de livrare"
                         >
                           <Image 
                             src={`/img/flag/${formData.tara_livrare.toLowerCase()}.svg`} 
-                            alt={countries.find(c => c.code === formData.tara_livrare)?.name || ''} 
+                            alt={`Steagul ${livrareCountryName}`}
                             width={24} 
                             height={18} 
                             className="rounded-sm shadow-sm shrink-0"
                           />
-                          <span className="flex-1 text-left">{countries.find(c => c.code === formData.tara_livrare)?.name || 'Selectează...'}</span>
+                          <span className="flex-1 text-left">{livrareCountryName}</span>
                           <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isLivrareCountryOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                           </svg>
@@ -898,10 +958,11 @@ function ComandaForm() {
                           type="button"
                           onClick={() => setIsLivrareJudetOpen(!isLivrareJudetOpen)}
                           className="form-select w-full flex items-center gap-3 cursor-pointer"
+                          aria-label="Selectează județul sau regiunea de livrare"
                         >
                           <Image 
                             src={`/img/flag/${formData.tara_livrare.toLowerCase()}.svg`} 
-                            alt={countries.find(c => c.code === formData.tara_livrare)?.name || ''} 
+                            alt={`Steagul ${livrareCountryName}`}
                             width={24} 
                             height={18} 
                             className="rounded-sm shadow-sm opacity-60 shrink-0"
@@ -921,10 +982,12 @@ function ComandaForm() {
                                 placeholder="Caută..."
                                 className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                                 onClick={(e) => e.stopPropagation()}
+                                aria-label="Caută județul sau regiunea de livrare"
                               />
                             </div>
                             <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
-                              {judetLivrareList.filter(j => j.toLowerCase().includes(livrareJudetSearch.toLowerCase())).map((j) => (
+                              {filteredJudetLivrareList.length > 0 ? (
+                                filteredJudetLivrareList.map((j) => (
                                 <button
                                   key={j}
                                   type="button"
@@ -1814,7 +1877,7 @@ function ComandaForm() {
                   <div className="flex justify-between">
                     <span className="text-gray-400">Ruta:</span>
                     <span className="text-white font-semibold">
-                      {countries.find(c => c.code === formData.tara_ridicare)?.name} → {countries.find(c => c.code === formData.tara_livrare)?.name}
+                      {ridicareCountryName} → {livrareCountryName}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -1875,17 +1938,6 @@ function ComandaForm() {
                   </ul>
                 </div>
               </div>
-
-              {/* Message */}
-              {message && (
-                <div className={`p-4 rounded-xl ${
-                  message.includes('✅') 
-                    ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                    : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                }`}>
-                  {message}
-                </div>
-              )}
             </div>
           )}
 

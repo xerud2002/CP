@@ -12,13 +12,6 @@ import HelpCard from '@/components/HelpCard';
 import { countries, judetByCountry } from '@/lib/constants';
 import { showSuccess, showError } from '@/lib/toast';
 
-// SEO metadata
-export const metadata = {
-  title: 'Profil Client | Curierul Perfect',
-  description: 'Gestionează profilul tău de client. Actualizează datele personale, adresa și informațiile companiei pentru o experiență optimizată de transport.',
-  keywords: 'profil client, date personale, actualizare profil, transport colete'
-};
-
 // Country-specific company tax information
 const countryTaxInfo: Record<string, { 
   taxLabel: string; 
@@ -75,7 +68,6 @@ export default function ProfilClientPage() {
     cui: '',
   });
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState('');
   const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
   const [judetDropdownOpen, setJudetDropdownOpen] = useState(false);
   const [countrySearch, setCountrySearch] = useState('');
@@ -103,14 +95,8 @@ export default function ProfilClientPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      loadProfile();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const loadProfile = async () => {
+  // Load profile data
+  const loadProfile = useCallback(async () => {
     if (!user) return;
     
     try {
@@ -119,26 +105,31 @@ export default function ProfilClientPage() {
       
       if (docSnap.exists()) {
         const data = docSnap.data() as ClientProfile;
-        // Normalize country code to uppercase
         const normalizedData = {
           ...data,
           tara: data.tara?.toUpperCase() || 'RO',
         };
-        setProfile({ ...profile, ...normalizedData, email: user.email || '' });
+        setProfile(prev => ({ ...prev, ...normalizedData, email: user.email || '' }));
       } else {
-        setProfile({ ...profile, email: user.email || '' });
+        setProfile(prev => ({ ...prev, email: user.email || '' }));
       }
     } catch (error) {
       console.error('Error loading profile:', error);
+      showError('Eroare la încărcarea profilului');
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      loadProfile();
+    }
+  }, [user, loadProfile]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
     setSaving(true);
-    setMessage('');
 
     try {
       await setDoc(doc(db, 'profil_client', user.uid), {
@@ -146,15 +137,40 @@ export default function ProfilClientPage() {
         updatedAt: serverTimestamp(),
       });
       
-      setMessage('✅ Profil salvat cu succes!');
-      setTimeout(() => setMessage(''), 3000);
+      showSuccess('Profil salvat cu succes!');
     } catch (error) {
       console.error('Error saving profile:', error);
-      setMessage('❌ Eroare la salvare. Încearcă din nou.');
+      showError(error);
     } finally {
       setSaving(false);
     }
   };
+
+  // Memoized filtered countries for search
+  const filteredCountries = useMemo(() => 
+    countries.filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase())),
+    [countrySearch]
+  );
+
+  // Memoized filtered judete for search
+  const filteredJudete = useMemo(() => 
+    (judetByCountry[profile.tara] || []).filter(j => 
+      j.toLowerCase().includes(judetSearch.toLowerCase())
+    ),
+    [profile.tara, judetSearch]
+  );
+
+  // Get current country flag
+  const currentCountryFlag = useMemo(() => 
+    countries.find(c => c.code === profile.tara)?.flag || '/img/flag/ro.svg',
+    [profile.tara]
+  );
+
+  // Get current country name
+  const currentCountryName = useMemo(() => 
+    countries.find(c => c.code === profile.tara)?.name || 'România',
+    [profile.tara]
+  );
 
   if (loading || !user) {
     return (
@@ -262,15 +278,16 @@ export default function ProfilClientPage() {
                     type="button"
                     onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
                     className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-white hover:bg-slate-700/70 transition-colors flex items-center gap-3 cursor-pointer focus:outline-none"
+                    aria-label="Selectează țară"
                   >
                     <Image
-                      src={countries.find(c => c.code === profile.tara)?.flag || '/img/flag/ro.svg'}
-                      alt=""
+                      src={currentCountryFlag}
+                      alt={`Flag of ${currentCountryName}`}
                       width={24}
                       height={16}
                       className="rounded-sm shrink-0"
                     />
-                    <span className="flex-1 text-left truncate">{countries.find(c => c.code === profile.tara)?.name || 'România'}</span>
+                    <span className="flex-1 text-left truncate">{currentCountryName}</span>
                     <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${countryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
@@ -291,29 +308,36 @@ export default function ProfilClientPage() {
                       </div>
                       {/* Scrollable list */}
                       <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
-                        {countries.filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase())).map((c) => (
-                          <button
-                            key={c.code}
-                            type="button"
-                            onClick={() => {
-                              setProfile({ ...profile, tara: c.code, judet: '' });
-                              setCountryDropdownOpen(false);
-                              setCountrySearch('');
-                            }}
-                            className={`w-full flex items-center gap-3 px-3 py-3 hover:bg-slate-700 transition-colors ${
-                              profile.tara === c.code ? 'bg-slate-700/50' : ''
-                            }`}
-                          >
-                            <Image
-                              src={c.flag}
-                              alt=""
-                              width={24}
-                              height={16}
-                              className="rounded-sm shrink-0"
-                            />
-                            <span className="text-white text-sm">{c.name}</span>
-                          </button>
-                        ))}
+                        {filteredCountries.length > 0 ? (
+                          filteredCountries.map((c) => (
+                            <button
+                              key={c.code}
+                              type="button"
+                              onClick={() => {
+                                setProfile(prev => ({ ...prev, tara: c.code, judet: '' }));
+                                setCountryDropdownOpen(false);
+                                setCountrySearch('');
+                              }}
+                              className={`w-full flex items-center gap-3 px-3 py-3 hover:bg-slate-700 transition-colors ${
+                                profile.tara === c.code ? 'bg-slate-700/50' : ''
+                              }`}
+                              aria-label={`Selectează ${c.name}`}
+                            >
+                              <Image
+                                src={c.flag}
+                                alt={`Flag of ${c.name}`}
+                                width={24}
+                                height={16}
+                                className="rounded-sm shrink-0"
+                              />
+                              <span className="text-white text-sm">{c.name}</span>
+                            </button>
+                          ))
+                        ) : (
+                          <div className="px-3 py-4 text-center text-gray-400 text-sm">
+                            Nu s-au găsit rezultate
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -327,10 +351,11 @@ export default function ProfilClientPage() {
                     type="button"
                     onClick={() => setJudetDropdownOpen(!judetDropdownOpen)}
                     className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-white hover:bg-slate-700/70 transition-colors flex items-center gap-3 cursor-pointer focus:outline-none"
+                    aria-label="Selectează județ sau regiune"
                   >
                     <Image
-                      src={countries.find(c => c.code === profile.tara)?.flag || '/img/flag/ro.svg'}
-                      alt=""
+                      src={currentCountryFlag}
+                      alt={`Steagul ${currentCountryName}`}
                       width={20}
                       height={14}
                       className="rounded-sm shrink-0"
@@ -352,33 +377,41 @@ export default function ProfilClientPage() {
                           placeholder="Caută județ/regiune..."
                           className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                           onClick={(e) => e.stopPropagation()}
+                          aria-label="Caută județ sau regiune"
                         />
                       </div>
                       {/* Scrollable list */}
                       <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
-                        {(judetByCountry[profile.tara] || []).filter(j => j.toLowerCase().includes(judetSearch.toLowerCase())).map((judet) => (
-                          <button
-                            key={judet}
-                            type="button"
-                            onClick={() => {
-                              setProfile({ ...profile, judet });
-                              setJudetDropdownOpen(false);
-                              setJudetSearch('');
-                            }}
-                            className={`w-full flex items-center gap-3 px-3 py-3 hover:bg-slate-700 transition-colors ${
-                              profile.judet === judet ? 'bg-slate-700/50' : ''
-                            }`}
-                          >
-                            <Image
-                              src={countries.find(c => c.code === profile.tara)?.flag || '/img/flag/ro.svg'}
-                              alt=""
-                              width={20}
-                              height={14}
-                              className="rounded-sm shrink-0"
-                            />
-                            <span className="text-white text-sm">{judet}</span>
-                          </button>
-                        ))}
+                        {filteredJudete.length > 0 ? (
+                          filteredJudete.map((judet) => (
+                            <button
+                              key={judet}
+                              type="button"
+                              onClick={() => {
+                                setProfile(prev => ({ ...prev, judet }));
+                                setJudetDropdownOpen(false);
+                                setJudetSearch('');
+                              }}
+                              className={`w-full flex items-center gap-3 px-3 py-3 hover:bg-slate-700 transition-colors ${
+                                profile.judet === judet ? 'bg-slate-700/50' : ''
+                              }`}
+                              aria-label={`Selectează ${judet}`}
+                            >
+                              <Image
+                                src={currentCountryFlag}
+                                alt={`Steagul ${currentCountryName}`}
+                                width={20}
+                                height={14}
+                                className="rounded-sm shrink-0"
+                              />
+                              <span className="text-white text-sm">{judet}</span>
+                            </button>
+                          ))
+                        ) : (
+                          <div className="px-3 py-4 text-center text-gray-400 text-sm">
+                            Nu s-au găsit rezultate
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -473,16 +506,6 @@ export default function ProfilClientPage() {
               </>
             )}
           </button>
-
-          {message && (
-            <div className={`p-4 rounded-xl text-center font-medium ${
-              message.includes('✅')
-                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                : 'bg-red-500/20 text-red-400 border border-red-500/30'
-            }`}>
-              {message}
-            </div>
-          )}
         </form>
 
         <div className="mt-6 sm:mt-8">
