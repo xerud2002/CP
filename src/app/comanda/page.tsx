@@ -5,11 +5,10 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import { collection, addDoc, serverTimestamp, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { countries, judetByCountry } from '@/lib/constants';
 import { getNextOrderNumber } from '@/utils/orderHelpers';
-import { normalizeStatus } from '@/utils/orderHelpers';
 
 // Servicii disponibile cu iconițe SVG (identice cu homepage)
 const servicii = [
@@ -134,11 +133,6 @@ function ComandaForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const serviciu = searchParams?.get('serviciu');
-  const editOrderId = searchParams?.get('edit');
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [loadingOrder, setLoadingOrder] = useState(false);
-  const hasLoadedOrder = useRef(false); // Track if order has been loaded
-  const isLoadingEditData = useRef(!!editOrderId); // Set to true immediately if in edit mode
 
   // Protecție - redirectează dacă nu este autentificat sau nu este client
   useEffect(() => {
@@ -146,102 +140,6 @@ function ComandaForm() {
       router.push('/login?role=client');
     }
   }, [user, loading, router]);
-
-  // Load order data if in edit mode
-  useEffect(() => {
-    const loadOrderData = async () => {
-      if (!editOrderId || !user) return;
-
-      setLoadingOrder(true);
-      try {
-        const orderDoc = await getDoc(doc(db, 'comenzi', editOrderId));
-        
-        if (!orderDoc.exists()) {
-          console.error('❌ Order not found - redirecting');
-          setMessage('❌ Comanda nu a fost găsită.');
-          setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
-          return;
-        }
-
-        const orderData = orderDoc.data();
-        console.log('Loading order for edit:', orderData);
-        
-        // Verify ownership
-        if (orderData.uid_client !== user.uid) {
-          console.error('❌ Permission denied - redirecting');
-          setMessage('❌ Nu ai permisiunea să editezi această comandă.');
-          setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
-          return;
-        }
-
-        // Verify status is 'noua' (with normalization)
-        const normalizedStatus = normalizeStatus(orderData.status);
-        console.log('Order status check:', { original: orderData.status, normalized: normalizedStatus });
-        
-        if (normalizedStatus !== 'noua') {
-          console.error(`❌ Status validation failed: ${orderData.status} -> ${normalizedStatus} - redirecting`);
-          setMessage('❌ Poți edita doar comenzile cu statusul "Nouă".');
-          setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
-          return;
-        }
-
-        console.log('✅ All validations passed - loading form data');
-
-        // Populate form with existing data
-        setIsEditMode(true);
-        setSelectedService(orderData.serviciu);
-        setStep(5); // Jump directly to step 5 in edit mode
-        console.log('Form data populated:', {
-          serviciu: orderData.serviciu,
-          nume: orderData.nume,
-          greutate: orderData.greutate,
-          data_ridicare: orderData.data_ridicare
-        });
-        setFormData(prev => ({
-          ...prev, // Keep existing formData (like tip_ofertanti if user already selected)
-          nume: orderData.nume || prev.nume,
-          email: orderData.email || prev.email,
-          telefon: orderData.telefon || prev.telefon,
-          tara_ridicare: orderData.tara_ridicare || prev.tara_ridicare,
-          judet_ridicare: orderData.judet_ridicare || prev.judet_ridicare,
-          oras_ridicare: orderData.oras_ridicare || prev.oras_ridicare,
-          adresa_ridicare: orderData.adresa_ridicare || prev.adresa_ridicare,
-          tara_livrare: orderData.tara_livrare || prev.tara_livrare,
-          judet_livrare: orderData.judet_livrare || prev.judet_livrare,
-          oras_livrare: orderData.oras_livrare || prev.oras_livrare,
-          adresa_livrare: orderData.adresa_livrare || prev.adresa_livrare,
-          greutate: orderData.greutate || prev.greutate,
-          lungime: orderData.lungime || prev.lungime,
-          latime: orderData.latime || prev.latime,
-          inaltime: orderData.inaltime || prev.inaltime,
-          cantitate: orderData.cantitate || prev.cantitate,
-          valoare_marfa: orderData.valoare_marfa || prev.valoare_marfa,
-          descriere: orderData.descriere || prev.descriere,
-          tip_programare: orderData.tip_programare || prev.tip_programare,
-          data_ridicare: orderData.data_ridicare || prev.data_ridicare,
-          data_ridicare_end: orderData.data_ridicare_end || prev.data_ridicare_end,
-          optiuni: orderData.optiuni || prev.optiuni,
-          tip_ofertanti: orderData.tip_ofertanti || prev.tip_ofertanti,
-          observatii: orderData.observatii || prev.observatii,
-        }));
-        
-        // Ref stays true - set at initialization for edit mode
-      } catch (error) {
-        console.error('Error loading order:', error);
-        setMessage('❌ Eroare la încărcarea comenzii.');
-        // Don't reset ref even on error - we're still in edit mode
-      } finally {
-        setLoadingOrder(false);
-      }
-    };
-
-    // Only load once - check ref to prevent multiple loads
-    if (editOrderId && user && !hasLoadedOrder.current) {
-      hasLoadedOrder.current = true;
-      loadOrderData();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Empty deps - run once on mount, loadOrderData captures editOrderId and user from closure
 
   // Form state
   const [step, setStep] = useState(1);
@@ -382,22 +280,18 @@ function ComandaForm() {
     }
   }, [serviciu]);
 
-  // Salvează step și service în localStorage (skip in edit mode)
+  // Salvează step și service în localStorage
   useEffect(() => {
-    if (isEditMode || isLoadingEditData.current) return; // Don't save to localStorage in edit mode or during load
-    
     try {
       localStorage.setItem('comanda_step', step.toString());
       localStorage.setItem('comanda_service', selectedService);
     } catch (error) {
       console.error('Error saving step/service to localStorage:', error);
     }
-  }, [step, selectedService, isEditMode]);
+  }, [step, selectedService]);
 
-  // Salvează formData în localStorage (debounced, skip in edit mode)
+  // Salvează formData în localStorage (debounced)
   useEffect(() => {
-    if (isEditMode || isLoadingEditData.current) return; // Don't save to localStorage in edit mode or during load
-    
     const timeoutId = setTimeout(() => {
       try {
         localStorage.setItem('comanda_formData', JSON.stringify(formData));
@@ -407,7 +301,7 @@ function ComandaForm() {
     }, 500); // 500ms debounce
     
     return () => clearTimeout(timeoutId);
-  }, [formData, isEditMode]);
+  }, [formData]);
 
   // Auto-fill pentru utilizatori autentificați
   useEffect(() => {
@@ -514,9 +408,15 @@ function ComandaForm() {
     }
 
     if (currentStep === 4) {
-      if (selectedService !== 'persoane' && selectedService !== 'aeroport') {
+      // Validare greutate doar pentru colete și paleți
+      if (selectedService === 'colete' || selectedService === 'paleti') {
         if (!formData.greutate) newErrors.greutate = 'Greutatea este obligatorie';
         if (!formData.descriere) newErrors.descriere = 'Descrierea este obligatorie';
+      }
+      
+      // Validare descriere obligatorie pentru mașini (detalii vehicul)
+      if (selectedService === 'masini') {
+        if (!formData.descriere) newErrors.descriere = 'Detaliile vehiculului sunt obligatorii';
       }
       
       // Validare în funcție de tipul de programare
@@ -565,34 +465,21 @@ function ComandaForm() {
     setMessage('');
 
     try {
-      if (isEditMode && editOrderId) {
-        // UPDATE existing order
-        const orderRef = doc(db, 'comenzi', editOrderId);
-        const updateData = {
-          serviciu: selectedService,
-          ...formData,
-          updatedAt: serverTimestamp(),
-        };
-        
-        await updateDoc(orderRef, updateData);
-        setMessage('✅ Comanda a fost actualizată cu succes!');
-      } else {
-        // CREATE new order
-        const orderNumber = await getNextOrderNumber();
-        
-        const orderData = {
-          uid_client: user?.uid || 'guest',
-          serviciu: selectedService,
-          orderNumber,
-          ...formData,
-          status: 'noua',
-          createdAt: serverTimestamp(),
-          timestamp: Date.now(),
-        };
+      // CREATE new order
+      const orderNumber = await getNextOrderNumber();
+      
+      const orderData = {
+        uid_client: user?.uid || 'guest',
+        serviciu: selectedService,
+        orderNumber,
+        ...formData,
+        status: 'noua',
+        createdAt: serverTimestamp(),
+        timestamp: Date.now(),
+      };
 
-        await addDoc(collection(db, 'comenzi'), orderData);
-        setMessage('✅ Comanda a fost trimisă cu succes! Vei primi oferte de la parteneri în 24-48 ore.');
-      }
+      await addDoc(collection(db, 'comenzi'), orderData);
+      setMessage('✅ Comanda a fost trimisă cu succes! Vei primi oferte de la parteneri în 24-48 ore.');
       
       // Curăță localStorage
       try {
@@ -623,12 +510,12 @@ function ComandaForm() {
   const judetLivrareList = judetByCountry[formData.tara_livrare] || [];
 
   // Loading state
-  if (loading || !user || loadingOrder) {
+  if (loading || !user) {
     return (
       <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-400">{loadingOrder ? 'Se încarcă comanda...' : 'Se încarcă...'}</p>
+          <p className="text-gray-400">Se încarcă...</p>
         </div>
       </div>
     );
@@ -657,10 +544,10 @@ function ComandaForm() {
                 </div>
                 <div>
                   <h1 className="text-lg sm:text-xl font-bold text-white">
-                    {isEditMode ? 'Editează Comanda' : 'Comandă Transport'}
+                    Comandă Transport
                   </h1>
                   <p className="text-xs text-gray-500 hidden sm:block">
-                    {isEditMode ? 'Modifică detaliile comenzii tale' : 'Completează detaliile comenzii tale'}
+                    Completează detaliile comenzii tale
                   </p>
                 </div>
               </div>
@@ -1118,7 +1005,8 @@ function ComandaForm() {
               </div>
               
               <div className="grid grid-cols-1 gap-4">
-                {selectedService !== 'persoane' && selectedService !== 'aeroport' && (
+                {/* Colete și Paleți - greutate, dimensiuni, cantitate */}
+                {(selectedService === 'colete' || selectedService === 'paleti') && (
                   <>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                       <div>
@@ -1177,7 +1065,187 @@ function ComandaForm() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Cantitate (bucăți)</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Cantitate ({selectedService === 'paleti' ? 'paleți' : 'colete'})
+                      </label>
+                      <input
+                        type="number"
+                        name="cantitate"
+                        value={formData.cantitate}
+                        onChange={handleInputChange}
+                        className="form-input w-full"
+                        placeholder="1"
+                        min="1"
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* Plicuri/Documente - doar cantitate */}
+                {selectedService === 'plicuri' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Număr plicuri/documente</label>
+                    <input
+                      type="number"
+                      name="cantitate"
+                      value={formData.cantitate}
+                      onChange={handleInputChange}
+                      className="form-input w-full"
+                      placeholder="1"
+                      min="1"
+                    />
+                  </div>
+                )}
+
+                {/* Electronice - greutate, dimensiuni, cantitate */}
+                {selectedService === 'electronice' && (
+                  <>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Greutate (kg)</label>
+                        <input
+                          type="number"
+                          name="greutate"
+                          value={formData.greutate}
+                          onChange={handleInputChange}
+                          className="form-input w-full"
+                          placeholder="5"
+                          min="0"
+                          step="0.1"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Lungime (cm)</label>
+                        <input
+                          type="number"
+                          name="lungime"
+                          value={formData.lungime}
+                          onChange={handleInputChange}
+                          className="form-input w-full"
+                          placeholder="40"
+                          min="0"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Lățime (cm)</label>
+                        <input
+                          type="number"
+                          name="latime"
+                          value={formData.latime}
+                          onChange={handleInputChange}
+                          className="form-input w-full"
+                          placeholder="30"
+                          min="0"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Înălțime (cm)</label>
+                        <input
+                          type="number"
+                          name="inaltime"
+                          value={formData.inaltime}
+                          onChange={handleInputChange}
+                          className="form-input w-full"
+                          placeholder="20"
+                          min="0"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Număr produse</label>
+                      <input
+                        type="number"
+                        name="cantitate"
+                        value={formData.cantitate}
+                        onChange={handleInputChange}
+                        className="form-input w-full"
+                        placeholder="1"
+                        min="1"
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* Animale - doar info card */}
+                {selectedService === 'animale' && (
+                  <div className="p-4 rounded-xl bg-pink-500/10 border border-pink-500/30">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-5 h-5 text-pink-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      <div>
+                        <p className="text-pink-400 font-medium mb-1">Transport animale de companie</p>
+                        <p className="text-sm text-gray-400">Completează tipul de animal, rasa și greutatea aproximativă în câmpul de mai jos.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Mașini - info card */}
+                {selectedService === 'masini' && (
+                  <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-5 h-5 text-blue-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <div>
+                        <p className="text-blue-400 font-medium mb-1">Transport auto</p>
+                        <p className="text-sm text-gray-400">Completează marca, modelul, anul și starea vehiculului în câmpul de mai jos.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Platformă - info card */}
+                {selectedService === 'platforma' && (
+                  <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-5 h-5 text-red-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <div>
+                        <p className="text-red-400 font-medium mb-1">Transport cu platformă</p>
+                        <p className="text-sm text-gray-400">Completează detaliile vehiculului sau echipamentului (tip, greutate, dimensiuni) în câmpul de mai jos.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tractări - info card */}
+                {selectedService === 'tractari' && (
+                  <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/30">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-5 h-5 text-orange-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      <div>
+                        <p className="text-orange-400 font-medium mb-1">Tractări auto</p>
+                        <p className="text-sm text-gray-400">Completează marca, modelul mașinii și motivul tractării (pană, accident, etc.) în câmpul de mai jos.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Mobilă - info + dimensiuni */}
+                {selectedService === 'mobila' && (
+                  <>
+                    <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
+                      <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                          <p className="text-amber-400 font-medium mb-1">Transport mobilier</p>
+                          <p className="text-sm text-gray-400">Adaugă detalii despre piesele de mobilier (tip, dimensiuni, cantitate) în câmpul de mai jos.</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Număr piese mobilier</label>
                       <input
                         type="number"
                         name="cantitate"
@@ -1191,6 +1259,7 @@ function ComandaForm() {
                   </>
                 )}
                 
+                {/* Persoane și Aeroport - număr pasageri */}
                 {(selectedService === 'persoane' || selectedService === 'aeroport') && (
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Număr pasageri</label>
@@ -1207,9 +1276,21 @@ function ComandaForm() {
                   </div>
                 )}
                 
+                {/* Descriere - adaptată în funcție de serviciu */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Descriere {selectedService !== 'persoane' && selectedService !== 'aeroport' && '*'}
+                    {selectedService === 'plicuri' ? 'Descriere documente' : 
+                     selectedService === 'masini' ? 'Detalii vehicul *' :
+                     selectedService === 'persoane' ? 'Observații călătorie' :
+                     selectedService === 'aeroport' ? 'Detalii zbor (nr. zbor, ora)' :
+                     selectedService === 'animale' ? 'Tip animal și detalii *' :
+                     selectedService === 'electronice' ? 'Tip echipament *' :
+                     selectedService === 'platforma' ? 'Detalii vehicul/echipament *' :
+                     selectedService === 'tractari' ? 'Detalii vehicul și situație *' :
+                     selectedService === 'mobila' ? 'Descriere mobilier *' :
+                     selectedService === 'paleti' ? 'Descriere marfă' :
+                     'Descriere colet'} 
+                    {(selectedService === 'colete' || selectedService === 'paleti') && '*'}
                   </label>
                   <textarea
                     name="descriere"
@@ -1217,7 +1298,19 @@ function ComandaForm() {
                     onChange={handleInputChange}
                     className="form-input w-full"
                     rows={3}
-                    placeholder="Descrie ce vrei să trimiți (ex: colet fragil, electronice, mobilă, etc.)"
+                    placeholder={
+                      selectedService === 'plicuri' ? 'Descrie documentele (ex: contracte, acte notariale, corespondență oficială)' :
+                      selectedService === 'masini' ? 'Ex: BMW X5, 2020, negru, funcțional/nefuncțional' :
+                      selectedService === 'persoane' ? 'Ex: bagaje, copii mici, nevoi speciale...' :
+                      selectedService === 'aeroport' ? 'Ex: Zbor RO1234, ora 14:30, Terminal 1, 2 bagaje mari' :
+                      selectedService === 'animale' ? 'Ex: Câine Labrador, 25kg, are cușcă proprie, vaccinuri la zi' :
+                      selectedService === 'electronice' ? 'Ex: Laptop MacBook Pro, TV 55", PlayStation 5, toate în cutii originale' :
+                      selectedService === 'platforma' ? 'Ex: BMW Seria 3, 2018, 1.5 tone, funcțional dar fără roți' :
+                      selectedService === 'tractari' ? 'Ex: Dacia Logan, 2019, pană de motor pe autostradă A1 km 45' :
+                      selectedService === 'mobila' ? 'Ex: Canapea 3 locuri, dulap 2m, masă dining + 6 scaune, pat matrimonial' :
+                      selectedService === 'paleti' ? 'Ex: 2 paleți cu produse alimentare ambalate, fiecare 500kg' :
+                      'Descrie ce vrei să trimiți (ex: colet fragil, electronice, haine)'
+                    }
                   />
                   {errors.descriere && <p className="text-red-400 text-sm mt-1">{errors.descriere}</p>}
                 </div>
@@ -1571,7 +1664,7 @@ function ComandaForm() {
               {/* Tip ofertanți */}
               <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${servicii.find(s => s.id === selectedService)?.color || 'from-blue-500 to-cyan-500'} bg-opacity-20 border ${selectedService === 'plicuri' ? 'border-yellow-500/30' : selectedService === 'persoane' ? 'border-rose-500/30' : 'border-blue-500/30'} flex items-center justify-center shadow-lg`}>
+                  <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${servicii.find(s => s.id === selectedService)?.color || 'from-blue-500 to-cyan-500'} bg-opacity-20 border ${selectedService === 'plicuri' ? 'border-yellow-500/30' : selectedService === 'persoane' ? 'border-rose-500/30' : 'border-blue-500/30'} flex items-center justify-center shadow-lg`}>
                     <div className={selectedService === 'plicuri' ? 'text-yellow-400' : selectedService === 'persoane' ? 'text-rose-400' : 'text-blue-400'}>
                       {servicii.find(s => s.id === selectedService)?.icon || (
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -1843,14 +1936,14 @@ function ComandaForm() {
                 {submitting ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>{isEditMode ? 'Se actualizează...' : 'Se trimite...'}</span>
+                    <span>Se trimite...</span>
                   </>
                 ) : (
                   <>
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span>{isEditMode ? 'Salvează modificările' : 'Trimite comanda'}</span>
+                    <span>Trimite comanda</span>
                   </>
                 )}
               </button>

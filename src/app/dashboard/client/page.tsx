@@ -49,12 +49,11 @@ const mainNavTiles: NavTile[] = [
   {
     href: '/comanda',
     icon: BoxIcon,
-    title: 'Comandă Transport',
+    title: 'Comandă nouă',
     description: 'Găsește parteneri',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/10 hover:bg-orange-500/20',
     borderColor: 'border-orange-500/20 hover:border-orange-500/40',
-    badge: 'Popular',
   },
   {
     href: '/dashboard/client/comenzi',

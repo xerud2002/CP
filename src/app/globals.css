@@ -412,3 +412,169 @@ input[type="date"].hidden-native::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
 }
+
+/* Print styles for order modal - A4 optimized */
+@media print {
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+  
+  /* Hide everything except the modal */
+  body > *:not(.print-modal-container) {
+    display: none !important;
+  }
+  
+  /* Reset background for printing */
+  html, body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* Style the modal container for print */
+  .print-modal-container {
+    position: static !important;
+    background: white !important;
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    overflow: visible !important;
+    inset: auto !important;
+  }
+  
+  /* All text and backgrounds */
+  .print-modal-container * {
+    color: #1f2937 !important;
+    background: white !important;
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
+  }
+  
+  /* Hide backdrop and close buttons */
+  .print-hide {
+    display: none !important;
+  }
+  
+  /* Make modal full width and remove scrolling */
+  .print-modal {
+    position: static !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+  
+  /* Content area - remove scroll */
+  .print-modal > div {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  /* Header styling */
+  .print-modal [class*="sticky"] {
+    position: static !important;
+    border-bottom: 2px solid #d1d5db !important;
+    padding: 12px 16px !important;
+  }
+  
+  /* Section headers */
+  .print-modal h3 {
+    font-size: 11pt !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    padding-bottom: 4px !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  
+  /* Grid layouts */
+  .print-modal [class*="grid"] {
+    display: grid !important;
+    gap: 8px !important;
+  }
+  
+  /* Badges styling for print */
+  .print-modal span[class*="bg-"] {
+    border: 1px solid #9ca3af !important;
+    padding: 2px 8px !important;
+    border-radius: 4px !important;
+    font-size: 10pt !important;
+  }
+  
+  /* Icons in print - make them visible */
+  .print-modal svg {
+    color: #4b5563 !important;
+    stroke: #4b5563 !important;
+    fill: none !important;
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  /* Filled icons */
+  .print-modal svg[fill="currentColor"] {
+    fill: #4b5563 !important;
+    stroke: none !important;
+  }
+  
+  /* Flag images */
+  .print-modal img {
+    max-width: 20px !important;
+    max-height: 14px !important;
+  }
+  
+  /* Spacing adjustments */
+  .print-modal [class*="p-6"],
+  .print-modal [class*="p-8"] {
+    padding: 12px !important;
+  }
+  
+  .print-modal [class*="mb-6"],
+  .print-modal [class*="mb-8"] {
+    margin-bottom: 12px !important;
+  }
+  
+  .print-modal [class*="gap-6"],
+  .print-modal [class*="gap-8"] {
+    gap: 12px !important;
+  }
+  
+  /* Text sizes */
+  .print-modal [class*="text-lg"],
+  .print-modal [class*="text-xl"] {
+    font-size: 13pt !important;
+  }
+  
+  .print-modal [class*="text-sm"] {
+    font-size: 10pt !important;
+  }
+  
+  .print-modal [class*="text-xs"] {
+    font-size: 9pt !important;
+  }
+  
+  /* Ensure page breaks are handled well */
+  .print-modal [class*="rounded-xl"] {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  /* Section cards */
+  .print-modal [class*="bg-slate"] {
+    border: 1px solid #e5e7eb !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+    margin-bottom: 10px !important;
+  }
+}
