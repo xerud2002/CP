@@ -1,2 +1,0 @@
-# Ignore migration scripts (they use different module system)
-scripts/
