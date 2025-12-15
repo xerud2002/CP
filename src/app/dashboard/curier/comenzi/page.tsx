@@ -826,12 +826,6 @@ export default function ComenziCurierPage() {
                         ) : order.cantitate ? (
                           <span>Cantitate: {order.cantitate}</span>
                         ) : null}
-                        {order.dataColectare && (
-                          <span>Data aprox: {(() => {
-                            const [year, month, day] = order.dataColectare.split('-');
-                            return `${day}/${month}/${year}`;
-                          })()}</span>
-                        )}
                       </div>
                     </div>
                   </div>

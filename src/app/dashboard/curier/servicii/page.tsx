@@ -101,6 +101,7 @@ const optiuniSuplimentareByService: Record<string, Array<{id: string, name: stri
     { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare documente' },
   ],
   'Persoane': [
+    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare pasageri' },
     { id: 'bagaje_extra', name: 'Bagaje Extra', description: 'Transport bagaje suplimentare' },
     { id: 'animale', name: 'Transport Animale', description: 'Animale de companie' },
   ],
