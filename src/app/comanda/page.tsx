@@ -9,6 +9,7 @@ import { collection, addDoc, serverTimestamp, doc, getDoc, updateDoc } from 'fir
 import { db } from '@/lib/firebase';
 import { countries, judetByCountry } from '@/lib/constants';
 import { getNextOrderNumber } from '@/utils/orderHelpers';
+import { normalizeStatus } from '@/utils/orderHelpers';
 
 // Servicii disponibile cu iconițe SVG (identice cu homepage)
 const servicii = [
@@ -160,6 +161,7 @@ function ComandaForm() {
         }
 
         const orderData = orderDoc.data();
+        console.log('Loading order for edit:', orderData);
         
         // Verify ownership
         if (orderData.uid_client !== user.uid) {
@@ -168,8 +170,11 @@ function ComandaForm() {
           return;
         }
 
-        // Verify status is 'noua'
-        if (orderData.status !== 'noua') {
+        // Verify status is 'noua' (with normalization)
+        const normalizedStatus = normalizeStatus(orderData.status);
+        console.log('Order status check:', { original: orderData.status, normalized: normalizedStatus });
+        
+        if (normalizedStatus !== 'noua') {
           setMessage('❌ Poți edita doar comenzile cu statusul "Nouă".');
           setTimeout(() => router.push('/dashboard/client/comenzi'), 2000);
           return;
@@ -178,6 +183,12 @@ function ComandaForm() {
         // Populate form with existing data
         setIsEditMode(true);
         setSelectedService(orderData.serviciu);
+        console.log('Form data populated:', {
+          serviciu: orderData.serviciu,
+          nume: orderData.nume,
+          greutate: orderData.greutate,
+          data_ridicare: orderData.data_ridicare
+        });
         setFormData({
           nume: orderData.nume || '',
           email: orderData.email || '',
@@ -299,6 +310,9 @@ function ComandaForm() {
   // Close calendar and dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Ignore if the click is from a scroll interaction
+      if (event.button !== 0) return; // Only handle left mouse button
+      
       if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
         setIsCalendarOpen(false);
       }
@@ -323,8 +337,10 @@ function ComandaForm() {
         setLivrareJudetSearch('');
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    
+    // Use 'click' instead of 'mousedown' to avoid scroll interference
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   // Încarcă datele din localStorage la mount

@@ -29,7 +29,7 @@ interface Order {
   oras_livrare?: string;
   tipColet: string;
   greutate: number;
-  status: 'noua' | 'in_lucru' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata';
+  status: 'noua' | 'in_lucru' | 'livrata' | 'anulata';
   dataColectare: string;
   pret: number;
   createdAt: Date;
@@ -42,8 +42,6 @@ interface Order {
 const statusLabels: Record<Order['status'], { label: string; color: string; bg: string }> = {
   noua: { label: 'Nouă', color: 'text-white', bg: 'bg-white/10' },
   in_lucru: { label: 'În Lucru', color: 'text-orange-400', bg: 'bg-orange-500/20' },
-  acceptata: { label: 'Acceptată', color: 'text-yellow-400', bg: 'bg-yellow-500/20' },
-  in_tranzit: { label: 'În Tranzit', color: 'text-blue-400', bg: 'bg-blue-500/20' },
   livrata: { label: 'Livrată', color: 'text-emerald-400', bg: 'bg-emerald-500/20' },
   anulata: { label: 'Anulată', color: 'text-gray-400', bg: 'bg-gray-500/20' },
 };
@@ -395,6 +393,7 @@ export default function ComenziCurierPage() {
 
   // Request review from client
   const handleRequestReview = (_orderId: string) => {
+    void _orderId; // Parameter reserved for future use (email/push notification)
     // In a real implementation, this would send a notification to the client
     // For now, we'll just show a success message
     showSuccess('Cerere de recenzie trimisă către client!');
@@ -1352,12 +1351,6 @@ export default function ComenziCurierPage() {
                   {selectedOrder.status === 'noua' && (
                     <>
                       <button 
-                        onClick={() => handleStatusChange(selectedOrder.id, 'acceptata')}
-                        className="flex-1 py-2.5 sm:py-3 bg-emerald-500 hover:bg-emerald-600 text-white text-sm sm:text-base rounded-xl font-medium transition-colors"
-                      >
-                        Acceptă comanda
-                      </button>
-                      <button 
                         onClick={() => handleStatusChange(selectedOrder.id, 'anulata')}
                         className="flex-1 py-2.5 sm:py-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm sm:text-base rounded-xl font-medium transition-colors"
                       >
@@ -1384,22 +1377,6 @@ export default function ComenziCurierPage() {
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                       </svg>
                       Cere recenzie de la client
-                    </button>
-                  )}
-                  {selectedOrder.status === 'acceptata' && (
-                    <button 
-                      onClick={() => handleStatusChange(selectedOrder.id, 'in_tranzit')}
-                      className="flex-1 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm sm:text-base rounded-xl font-medium transition-colors"
-                    >
-                      Marchează ca ridicat
-                    </button>
-                  )}
-                  {selectedOrder.status === 'in_tranzit' && (
-                    <button 
-                      onClick={() => handleStatusChange(selectedOrder.id, 'livrata')}
-                      className="flex-1 py-2.5 sm:py-3 bg-emerald-500 hover:bg-emerald-600 text-white text-sm sm:text-base rounded-xl font-medium transition-colors"
-                    >
-                      Marchează ca livrat
                     </button>
                   )}
                 </div>

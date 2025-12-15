@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { collection, query, where, getDocs, orderBy, Timestamp, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { showSuccess, showError, showWarning } from '@/lib/toast';
-import { formatOrderNumber } from '@/utils/orderHelpers';
+import { formatOrderNumber, normalizeStatus } from '@/utils/orderHelpers';
 import { serviceNames, orderStatusConfig } from '@/lib/constants';
 import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
 import { ArrowLeftIcon, PackageIcon, ClockIcon, CheckCircleIcon, XCircleIcon, TruckIcon, StarIcon } from '@/components/icons/DashboardIcons';
@@ -18,7 +18,7 @@ interface Order {
   id: string;
   orderNumber?: number;
   serviciu: string;
-  status: 'noua' | 'in_lucru' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata' | 'pending' | 'accepted' | 'in_transit' | 'completed' | 'cancelled';
+  status: 'noua' | 'in_lucru' | 'livrata' | 'anulata' | 'pending' | 'accepted' | 'in_transit' | 'completed' | 'cancelled';
   tara_ridicare: string;
   judet_ridicare: string;
   oras_ridicare: string;
@@ -34,24 +34,10 @@ interface Order {
   hasNewNotifications?: boolean;
 }
 
-// Map old English statuses to new Romanian statuses
-const normalizeStatus = (status: string): string => {
-  const statusMap: Record<string, string> = {
-    'pending': 'noua',
-    'accepted': 'acceptata',
-    'in_transit': 'in_tranzit',
-    'completed': 'livrata',
-    'cancelled': 'anulata',
-  };
-  return statusMap[status] || status;
-};
-
-// Status icon mapping
-const statusIcons = {
+// Status icon mapping (with proper typing)
+const statusIcons: Record<string, typeof ClockIcon> = {
   noua: ClockIcon,
   in_lucru: TruckIcon,
-  acceptata: TruckIcon,
-  in_tranzit: TruckIcon,
   livrata: CheckCircleIcon,
   anulata: XCircleIcon,
   // Old English statuses (for backwards compatibility)
@@ -111,7 +97,10 @@ export default function ComenziClientPage() {
   };
 
   const handleDeleteOrder = async (orderId: string, orderStatus: string) => {
-    if (orderStatus !== 'noua') {
+    const normalizedStatus = normalizeStatus(orderStatus);
+    console.log('Delete attempt:', { orderId, orderStatus, normalizedStatus });
+    
+    if (normalizedStatus !== 'noua') {
       showWarning('Poți șterge doar comenzile cu statusul "Nouă"!');
       return;
     }
@@ -130,7 +119,10 @@ export default function ComenziClientPage() {
   };
 
   const handleEditOrder = (orderId: string, orderStatus: string) => {
-    if (orderStatus !== 'noua') {
+    const normalizedStatus = normalizeStatus(orderStatus);
+    console.log('Edit attempt:', { orderId, orderStatus, normalizedStatus });
+    
+    if (normalizedStatus !== 'noua') {
       showWarning('Poți edita doar comenzile cu statusul "Nouă"!');
       return;
     }
@@ -139,12 +131,15 @@ export default function ComenziClientPage() {
   };
 
   const handleFinalizeOrder = async (orderId: string, status: string) => {
-    if (!canFinalizeOrder(status)) {
+    const normalizedStatus = normalizeStatus(status);
+    console.log('Finalize attempt:', { orderId, status, normalizedStatus });
+    
+    if (!canFinalizeOrder(normalizedStatus)) {
       showWarning('Poți finaliza doar comenzile cu statusul "În Lucru"!');
       return;
     }
     
-    const success = await transitionToFinalizata(orderId, status);
+    const success = await transitionToFinalizata(orderId, normalizedStatus);
     if (success) {
       loadOrders();
     }
@@ -176,6 +171,15 @@ export default function ComenziClientPage() {
       });
 
   console.log(`Total orders: ${orders.length}, Filtered orders: ${filteredOrders.length}, Filter: ${filterStatus}`);
+
+  // Calculate order counts by status
+  const orderCounts = {
+    all: orders.length,
+    noua: orders.filter(o => normalizeStatus(o.status) === 'noua').length,
+    in_lucru: orders.filter(o => normalizeStatus(o.status) === 'in_lucru').length,
+    livrata: orders.filter(o => normalizeStatus(o.status) === 'livrata').length,
+    anulata: orders.filter(o => normalizeStatus(o.status) === 'anulata').length,
+  };
 
   return (
     <div className="min-h-screen">
@@ -215,52 +219,67 @@ export default function ComenziClientPage() {
         <div className="mb-6 flex gap-2 overflow-x-auto pb-2">
           <button
             onClick={() => setFilterStatus('all')}
-            className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
+            className={`relative pl-4 pr-7 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
               filterStatus === 'all'
                 ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
+            <span className="absolute top-1 -right-1.5 flex items-center justify-center min-w-5 h-5 px-1.5 text-[10px] font-bold bg-blue-600 text-white rounded-full border-2 border-slate-900">
+              {orderCounts.all}
+            </span>
             Toate
           </button>
           <button
             onClick={() => setFilterStatus('noua')}
-            className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
+            className={`relative pl-4 pr-7 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
               filterStatus === 'noua'
                 ? 'bg-white text-slate-900 shadow-lg shadow-white/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
+            <span className="absolute top-1 -right-1.5 flex items-center justify-center min-w-5 h-5 px-1.5 text-[10px] font-bold bg-white text-slate-900 rounded-full border-2 border-slate-900">
+              {orderCounts.noua}
+            </span>
             Nouă
           </button>
           <button
             onClick={() => setFilterStatus('in_lucru')}
-            className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
+            className={`relative pl-4 pr-7 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
               filterStatus === 'in_lucru'
                 ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
+            <span className="absolute top-1 -right-1.5 flex items-center justify-center min-w-5 h-5 px-1.5 text-[10px] font-bold bg-orange-600 text-white rounded-full border-2 border-slate-900">
+              {orderCounts.in_lucru}
+            </span>
             În Lucru
           </button>
           <button
             onClick={() => setFilterStatus('livrata')}
-            className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
+            className={`relative pl-4 pr-7 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
               filterStatus === 'livrata'
                 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
+            <span className="absolute top-1 -right-1.5 flex items-center justify-center min-w-5 h-5 px-1.5 text-[10px] font-bold bg-emerald-600 text-white rounded-full border-2 border-slate-900">
+              {orderCounts.livrata}
+            </span>
             Finalizată
           </button>
           <button
             onClick={() => setFilterStatus('anulata')}
-            className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
+            className={`relative pl-4 pr-7 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
               filterStatus === 'anulata'
                 ? 'bg-gray-500 text-white shadow-lg shadow-gray-500/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
+            <span className="absolute top-1 -right-1.5 flex items-center justify-center min-w-5 h-5 px-1.5 text-[10px] font-bold bg-gray-600 text-white rounded-full border-2 border-slate-900">
+              {orderCounts.anulata}
+            </span>
             Arhivată
           </button>
         </div>
