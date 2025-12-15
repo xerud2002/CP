@@ -585,7 +585,7 @@ export default function CurierDashboard() {
       try {
         const q = query(
           collection(db, 'comenzi'),
-          where('status', '==', 'pending')
+          where('status', '==', 'noua')
         );
         const snapshot = await getDocs(q);
         setNewOrdersCount(snapshot.size);

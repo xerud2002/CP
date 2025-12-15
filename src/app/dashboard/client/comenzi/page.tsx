@@ -16,7 +16,7 @@ interface Order {
   id: string;
   orderNumber?: number;
   serviciu: string;
-  status: 'pending' | 'accepted' | 'in_transit' | 'completed' | 'cancelled';
+  status: 'noua' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata';
   tara_ridicare: string;
   judet_ridicare: string;
   oras_ridicare: string;
@@ -34,11 +34,11 @@ interface Order {
 
 // Status icon mapping
 const statusIcons = {
-  pending: ClockIcon,
-  accepted: TruckIcon,
-  in_transit: TruckIcon,
-  completed: CheckCircleIcon,
-  cancelled: XCircleIcon,
+  noua: ClockIcon,
+  acceptata: TruckIcon,
+  in_tranzit: TruckIcon,
+  livrata: CheckCircleIcon,
+  anulata: XCircleIcon,
 };
 
 const getFlagPath = (code: string) => `/img/flag/${code.toLowerCase()}.svg`;
@@ -149,34 +149,34 @@ export default function ComenziClientPage() {
             Toate ({orders.length})
           </button>
           <button
-            onClick={() => setFilterStatus('pending')}
+            onClick={() => setFilterStatus('noua')}
             className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
-              filterStatus === 'pending'
+              filterStatus === 'noua'
                 ? 'bg-yellow-500 text-white shadow-lg shadow-yellow-500/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            În așteptare ({orders.filter(o => o.status === 'pending').length})
+            În așteptare ({orders.filter(o => o.status === 'noua').length})
           </button>
           <button
-            onClick={() => setFilterStatus('in_transit')}
+            onClick={() => setFilterStatus('in_tranzit')}
             className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
-              filterStatus === 'in_transit'
+              filterStatus === 'in_tranzit'
                 ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            În progres ({orders.filter(o => o.status === 'in_transit').length})
+            În progres ({orders.filter(o => o.status === 'in_tranzit').length})
           </button>
           <button
-            onClick={() => setFilterStatus('completed')}
+            onClick={() => setFilterStatus('livrata')}
             className={`px-4 py-2 rounded-xl font-medium text-sm whitespace-nowrap transition-all ${
-              filterStatus === 'completed'
+              filterStatus === 'livrata'
                 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/25'
                 : 'bg-slate-800/50 text-gray-400 hover:text-white hover:bg-slate-800'
             }`}
           >
-            Finalizate ({orders.filter(o => o.status === 'completed').length})
+            Finalizate ({orders.filter(o => o.status === 'livrata').length})
           </button>
         </div>
 

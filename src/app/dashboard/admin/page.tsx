@@ -479,8 +479,8 @@ function CouriersGrid({ couriers, onSuspend }: {
 function StatsContent({ users, orders }: { users: User[]; orders: Order[] }) {
   const clientsCount = users.filter(u => u.role === 'client').length;
   const couriersCount = users.filter(u => u.role === 'curier').length;
-  const deliveredOrders = orders.filter(o => o.status === 'completed').length;
-  const pendingOrders = orders.filter(o => o.status === 'pending').length;
+  const deliveredOrders = orders.filter(o => o.status === 'livrata').length;
+  const pendingOrders = orders.filter(o => o.status === 'noua').length;
 
   return (
     <div className="space-y-6">
@@ -688,7 +688,7 @@ export default function AdminDashboard() {
   // Calculate stats
   const clientsCount = users.filter(u => u.role === 'client').length;
   const couriersCount = users.filter(u => u.role === 'curier').length;
-  const pendingOrders = orders.filter(o => o.status === 'pending').length;
+  const pendingOrders = orders.filter(o => o.status === 'noua').length;
 
   const stats: StatItem[] = [
     { icon: UsersIcon, label: 'Total utilizatori', value: users.length, trend: '+5 săptămâna aceasta', trendUp: true, color: 'text-blue-400', bgColor: 'bg-blue-500/20' },

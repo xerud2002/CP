@@ -48,7 +48,7 @@ export interface Order {
   optiuni: string[];
   tip_ofertanti?: string[];
   pret?: number;
-  status: 'pending' | 'accepted' | 'in_transit' | 'completed' | 'cancelled';
+  status: 'noua' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata';
   observatii?: string;
   timestamp: number;
   createdAt?: Date | { toDate: () => Date };

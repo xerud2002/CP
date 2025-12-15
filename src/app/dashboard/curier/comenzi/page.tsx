@@ -131,6 +131,10 @@ export default function ComenziCurierPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [messageModalOrder, setMessageModalOrder] = useState<Order | null>(null);
+  const [offerModalOrder, setOfferModalOrder] = useState<Order | null>(null);
+  const [offerPrice, setOfferPrice] = useState<string>('');
+  const [offerNotes, setOfferNotes] = useState<string>('');
   
   // Expanded orders state
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
@@ -198,15 +202,15 @@ export default function ComenziCurierPage() {
         // Query 1: Get all new orders (not assigned to any courier yet)
         const qNew = query(
           collection(db, 'comenzi'),
-          where('status', '==', 'pending'),
-          orderBy('timestamp', 'desc')
+          where('status', '==', 'noua'),
+          orderBy('createdAt', 'desc')
         );
         
         // Query 2: Get orders assigned to or accepted by this courier
         const qMine = query(
           collection(db, 'comenzi'),
           where('courierId', '==', user.uid),
-          orderBy('timestamp', 'desc')
+          orderBy('createdAt', 'desc')
         );
         
         const [snapshotNew, snapshotMine] = await Promise.all([
@@ -245,7 +249,7 @@ export default function ComenziCurierPage() {
                 status: 'noua',
                 dataColectare: data.data_ridicare || data.dataColectare || '',
                 pret: data.pret || 0,
-                createdAt: data.createdAt?.toDate() || new Date(data.timestamp),
+                createdAt: data.createdAt?.toDate() || new Date(),
                 valoare_marfa: data.valoare_marfa || '',
                 optiuni: data.optiuni || [],
                 observatii: data.observatii || '',
@@ -274,7 +278,7 @@ export default function ComenziCurierPage() {
               status: data.status || 'noua',
               dataColectare: data.data_ridicare || data.dataColectare || '',
               pret: data.pret || 0,
-              createdAt: data.createdAt?.toDate() || new Date(data.timestamp),
+              createdAt: data.createdAt?.toDate() || new Date(),
               valoare_marfa: data.valoare_marfa || '',
               optiuni: data.optiuni || [],
               observatii: data.observatii || '',
@@ -331,11 +335,15 @@ export default function ComenziCurierPage() {
     return orders.filter(order => {
       // Country filter (checks both expeditor and destinatar)
       if (countryFilter !== 'all') {
-        const normalizedFilter = countryFilter.toLowerCase().trim();
-        const normalizedExpeditor = (order.expeditorTara || '').toLowerCase().trim();
-        const normalizedDestinatar = (order.destinatarTara || '').toLowerCase().trim();
+        // Find the country code from the selected country name
+        const selectedCountry = countries.find(c => c.name === countryFilter);
+        const selectedCountryCode = selectedCountry?.code.toLowerCase();
         
-        if (normalizedExpeditor !== normalizedFilter && normalizedDestinatar !== normalizedFilter) {
+        const orderExpeditorCode = (order.expeditorTara || '').toLowerCase().trim();
+        const orderDestinatarCode = (order.destinatarTara || '').toLowerCase().trim();
+        
+        // Check if either expeditor or destinatar country matches
+        if (selectedCountryCode && orderExpeditorCode !== selectedCountryCode && orderDestinatarCode !== selectedCountryCode) {
           return false;
         }
       }
@@ -388,7 +396,7 @@ export default function ComenziCurierPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-slate-900/60 border-b border-white/5 sticky top-0 z-30 backdrop-blur-xl">
+      <div className="bg-slate-900/60 border-b border-white/5 sticky top-0 z-50 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <Link 
@@ -415,12 +423,12 @@ export default function ComenziCurierPage() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Filters */}
-        <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6 relative z-50">
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6 relative z-40">
           {/* Filters panel */}
-          <div className="relative z-60">
+          <div className="relative z-40">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                 {/* Country filter with flags */}
-                <div ref={countryDropdownRef} className="relative z-70">
+                <div ref={countryDropdownRef} className="relative z-40">
                   <label className="block text-xs text-gray-400 mb-1.5">Țară</label>
                   <div className="relative">
                     <button
@@ -1174,7 +1182,11 @@ export default function ComenziCurierPage() {
                       {/* Action Buttons - Prominent */}
                       <div className="space-y-3 p-4 bg-linear-to-br from-slate-800/50 to-slate-800/30 rounded-xl border border-white/10">
                         <button 
-                          onClick={() => setSelectedOrder(order)}
+                          onClick={() => {
+                            setOfferModalOrder(order);
+                            setOfferPrice(order.pret.toString());
+                            setOfferNotes('');
+                          }}
                           className="w-full px-4 py-3.5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 flex items-center justify-center gap-2 group"
                         >
                           <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -1183,7 +1195,7 @@ export default function ComenziCurierPage() {
                           Trimite Ofertă
                         </button>
                         <button 
-                          onClick={() => setSelectedOrder(order)}
+                          onClick={() => setMessageModalOrder(order)}
                           className="w-full px-4 py-3.5 bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl font-semibold transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2 group"
                         >
                           <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -1203,7 +1215,7 @@ export default function ComenziCurierPage() {
 
         {/* Order Details Modal */}
         {selectedOrder && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-3 sm:p-4">
             <div className="bg-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 max-w-lg w-full border border-white/10 max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <h2 className="text-lg sm:text-xl font-bold text-white">Detalii Comandă #{formatOrderNumber(selectedOrder.orderNumber || selectedOrder.id)}</h2>
@@ -1298,6 +1310,339 @@ export default function ComenziCurierPage() {
                       Marchează ca livrat
                     </button>
                   )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Message Modal */}
+        {messageModalOrder && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 max-w-2xl w-full border border-white/10 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-blue-500/20 to-blue-600/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-bold text-white">Trimite Mesaj Client</h2>
+                    <p className="text-gray-400 text-xs sm:text-sm">Comandă #{formatOrderNumber(messageModalOrder.orderNumber || messageModalOrder.id)}</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setMessageModalOrder(null)}
+                  className="text-gray-400 hover:text-white p-1.5 sm:p-2 hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  <CloseIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
+              </div>
+
+              {/* Order Info Summary */}
+              <div className="bg-linear-to-br from-slate-800/50 to-slate-800/30 rounded-xl p-4 sm:p-5 border border-white/10 mb-4 sm:mb-6">
+                <h3 className="text-white font-semibold text-sm sm:text-base mb-3 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Informații Comandă
+                </h3>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                    <p className="text-gray-500 text-xs mb-1">Client</p>
+                    <p className="text-white font-medium text-sm">{formatClientName(messageModalOrder.clientName)}</p>
+                    <p className="text-blue-400 text-xs mt-1">{messageModalOrder.clientPhone}</p>
+                  </div>
+                  
+                  <div className="bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                    <p className="text-gray-500 text-xs mb-1">Traseu</p>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-green-400">📍 {messageModalOrder.expeditorJudet}</span>
+                      <span className="text-gray-500">→</span>
+                      <span className="text-orange-400">📍 {messageModalOrder.destinatarJudet}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-gray-400 mt-1">
+                      <span>{messageModalOrder.expeditorTara.toUpperCase()}</span>
+                      <span>→</span>
+                      <span>{messageModalOrder.destinatarTara.toUpperCase()}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                    <p className="text-gray-500 text-xs mb-1">Serviciu</p>
+                    <div className="flex items-center gap-2">
+                      <ServiceIcon service={messageModalOrder.tipColet} className="w-4 h-4 text-blue-400" />
+                      <p className="text-white font-medium text-sm">{messageModalOrder.tipColet}</p>
+                    </div>
+                    <p className="text-gray-400 text-xs mt-1">{messageModalOrder.greutate} kg</p>
+                  </div>
+                  
+                  <div className="bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                    <p className="text-gray-500 text-xs mb-1">Data Colectare</p>
+                    <p className="text-white font-medium text-sm">{messageModalOrder.dataColectare}</p>
+                    <p className="text-green-400 text-xs mt-1 font-semibold">{messageModalOrder.pret} €</p>
+                  </div>
+                </div>
+
+                {messageModalOrder.optiuni && messageModalOrder.optiuni.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-white/10">
+                    <p className="text-gray-500 text-xs mb-2">Opțiuni suplimentare:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {messageModalOrder.optiuni.map((opt, idx) => (
+                        <span key={idx} className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs">
+                          {opt}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {messageModalOrder.observatii && (
+                  <div className="mt-3 pt-3 border-t border-white/10">
+                    <p className="text-gray-500 text-xs mb-1">Observații client:</p>
+                    <p className="text-gray-300 text-xs italic">{messageModalOrder.observatii}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Contact Methods */}
+              <div className="space-y-3">
+                <h3 className="text-white font-semibold text-sm sm:text-base mb-3">Alege metoda de contact:</h3>
+                
+                <a
+                  href={`https://wa.me/${messageModalOrder.clientPhone.replace(/[^0-9+]/g, '')}?text=Bună ziua! Sunt curier de la Curierul Perfect. Am văzut comanda dumneavoastră #${formatOrderNumber(messageModalOrder.orderNumber || messageModalOrder.id)} și aș dori să discut detaliile transportului.`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 p-4 bg-linear-to-r from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 border-2 border-green-500/30 hover:border-green-500/50 rounded-xl transition-all group"
+                >
+                  <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg className="w-7 h-7 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white font-semibold text-sm sm:text-base">WhatsApp</p>
+                    <p className="text-gray-400 text-xs sm:text-sm">Trimite mesaj direct pe WhatsApp</p>
+                  </div>
+                  <svg className="w-5 h-5 text-gray-400 group-hover:text-green-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+
+                <a
+                  href={`tel:${messageModalOrder.clientPhone}`}
+                  className="flex items-center gap-3 p-4 bg-linear-to-r from-blue-500/20 to-cyan-500/20 hover:from-blue-500/30 hover:to-cyan-500/30 border-2 border-blue-500/30 hover:border-blue-500/50 rounded-xl transition-all group"
+                >
+                  <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg className="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white font-semibold text-sm sm:text-base">Apel Telefonic</p>
+                    <p className="text-gray-400 text-xs sm:text-sm">{messageModalOrder.clientPhone}</p>
+                  </div>
+                  <svg className="w-5 h-5 text-gray-400 group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Offer Modal */}
+        {offerModalOrder && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+            <div className="bg-slate-900 rounded-xl sm:rounded-2xl p-5 sm:p-8 max-w-4xl w-full border border-white/10 my-auto custom-scrollbar">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-orange-500/20 to-amber-500/20 rounded-xl flex items-center justify-center">
+                    <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-bold text-white">Trimite Ofertă Transport</h2>
+                    <p className="text-gray-400 text-xs sm:text-sm">Comandă #{formatOrderNumber(offerModalOrder.orderNumber || offerModalOrder.id)}</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => {
+                    setOfferModalOrder(null);
+                    setOfferPrice('');
+                    setOfferNotes('');
+                  }}
+                  className="text-gray-400 hover:text-white p-1.5 sm:p-2 hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  <CloseIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
+              </div>
+
+              {/* Order Info Summary */}
+              <div className="bg-linear-to-br from-slate-800/50 to-slate-800/30 rounded-xl p-4 sm:p-5 border border-white/10 mb-4 sm:mb-6">
+                <h3 className="text-white font-semibold text-sm sm:text-base mb-3 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Detalii Comandă
+                </h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="bg-slate-900/50 p-3 sm:p-4 rounded-lg border border-white/5">
+                    <p className="text-gray-500 text-xs mb-1">Client</p>
+                    <p className="text-white font-medium text-sm">{formatClientName(offerModalOrder.clientName)}</p>
+                    <p className="text-orange-400 text-xs mt-1">{offerModalOrder.clientPhone}</p>
+                  </div>
+                  
+                  <div className="bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                    <p className="text-gray-500 text-xs mb-1">Traseu</p>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-green-400">📍 {offerModalOrder.expeditorJudet}</span>
+                      <span className="text-gray-500">→</span>
+                      <span className="text-orange-400">📍 {offerModalOrder.destinatarJudet}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-gray-400 mt-1">
+                      <span>{offerModalOrder.expeditorTara.toUpperCase()}</span>
+                      <span>→</span>
+                      <span>{offerModalOrder.destinatarTara.toUpperCase()}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                    <p className="text-gray-500 text-xs mb-1">Serviciu</p>
+                    <div className="flex items-center gap-2">
+                      <ServiceIcon service={offerModalOrder.tipColet} className="w-4 h-4 text-orange-400" />
+                      <p className="text-white font-medium text-sm">{offerModalOrder.tipColet}</p>
+                    </div>
+                    <p className="text-gray-400 text-xs mt-1">{offerModalOrder.greutate} kg</p>
+                  </div>
+                  
+                  <div className="bg-slate-900/50 p-3 rounded-lg border border-white/5">
+                    <p className="text-gray-500 text-xs mb-1">Data Colectare</p>
+                    <p className="text-white font-medium text-sm">{offerModalOrder.dataColectare}</p>
+                    <p className="text-gray-400 text-xs mt-1">Preț inițial: {offerModalOrder.pret} €</p>
+                  </div>
+                </div>
+
+                {offerModalOrder.optiuni && offerModalOrder.optiuni.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-white/10">
+                    <p className="text-gray-500 text-xs mb-2">Opțiuni suplimentare solicitate:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {offerModalOrder.optiuni.map((opt, idx) => (
+                        <span key={idx} className="px-2 py-1 bg-orange-500/20 text-orange-400 rounded-lg text-xs">
+                          {opt}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {offerModalOrder.observatii && (
+                  <div className="mt-3 pt-3 border-t border-white/10">
+                    <p className="text-gray-500 text-xs mb-1">Observații client:</p>
+                    <p className="text-gray-300 text-xs italic">{offerModalOrder.observatii}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Offer Form */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-white font-semibold text-sm mb-2">
+                    Prețul Tău (EUR) *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={offerPrice}
+                      onChange={(e) => setOfferPrice(e.target.value)}
+                      placeholder="Introdu prețul"
+                      className="w-full px-4 py-3 pr-12 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20"
+                      min="0"
+                      step="0.01"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">€</span>
+                  </div>
+                  <p className="text-gray-500 text-xs mt-1">Propune un preț competitiv pentru a atrage clientul</p>
+                </div>
+
+                <div>
+                  <label className="block text-white font-semibold text-sm mb-2">
+                    Notițe / Detalii ofertă (opțional)
+                  </label>
+                  <textarea
+                    value={offerNotes}
+                    onChange={(e) => setOfferNotes(e.target.value)}
+                    placeholder="Ex: Pot ridica în următoarele 2 zile, am experiență cu transporturi fragile, asigurare inclusă..."
+                    className="w-full px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:ring-2 focus:ring-orange-500/20 resize-none"
+                    rows={4}
+                  />
+                  <p className="text-gray-500 text-xs mt-1">Adaugă detalii care îți fac oferta mai atractivă</p>
+                </div>
+
+                {/* Send Offer Actions */}
+                <div className="space-y-3 pt-4">
+                  <h3 className="text-white font-semibold text-sm mb-3">Trimite oferta prin:</h3>
+                  
+                  <a
+                    href={`https://wa.me/${offerModalOrder.clientPhone.replace(/[^0-9+]/g, '')}?text=Bună ziua! Sunt curier de la Curierul Perfect.%0A%0A✅ Ofertă pentru comanda %23${formatOrderNumber(offerModalOrder.orderNumber || offerModalOrder.id)}%0A%0A📦 Traseu: ${offerModalOrder.expeditorJudet} (${offerModalOrder.expeditorTara.toUpperCase()}) → ${offerModalOrder.destinatarJudet} (${offerModalOrder.destinatarTara.toUpperCase()})%0A%0A💰 Prețul meu: ${offerPrice} EUR%0A%0A${offerNotes ? `📝 Detalii: ${offerNotes}%0A%0A` : ''}Vă rog să-mi confirmați dacă sunteți interesat. Mulțumesc!`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      if (!offerPrice || parseFloat(offerPrice) <= 0) {
+                        alert('Te rog introdu un preț valid pentru ofertă!');
+                        return;
+                      }
+                    }}
+                    className="flex items-center gap-3 p-4 bg-linear-to-r from-green-500/20 to-emerald-500/20 hover:from-green-500/30 hover:to-emerald-500/30 border-2 border-green-500/30 hover:border-green-500/50 rounded-xl transition-all group"
+                  >
+                    <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <svg className="w-7 h-7 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-white font-semibold text-sm sm:text-base">WhatsApp</p>
+                      <p className="text-gray-400 text-xs sm:text-sm">Trimite oferta pe WhatsApp</p>
+                    </div>
+                    <svg className="w-5 h-5 text-gray-400 group-hover:text-green-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+
+                  <button
+                    onClick={() => {
+                      if (!offerPrice || parseFloat(offerPrice) <= 0) {
+                        alert('Te rog introdu un preț valid pentru ofertă!');
+                        return;
+                      }
+                      const phoneNumber = offerModalOrder.clientPhone;
+                      const message = `Bună ziua! Sunt curier de la Curierul Perfect.\n\n✅ Ofertă pentru comanda #${formatOrderNumber(offerModalOrder.orderNumber || offerModalOrder.id)}\n\n📦 Traseu: ${offerModalOrder.expeditorJudet} (${offerModalOrder.expeditorTara.toUpperCase()}) → ${offerModalOrder.destinatarJudet} (${offerModalOrder.destinatarTara.toUpperCase()})\n\n💰 Prețul meu: ${offerPrice} EUR\n\n${offerNotes ? `📝 Detalii: ${offerNotes}\n\n` : ''}Vă rog să-mi confirmați dacă sunteți interesat. Mulțumesc!`;
+                      
+                      // Copy to clipboard and show call option
+                      navigator.clipboard.writeText(message).then(() => {
+                        alert('Oferta a fost copiată în clipboard! Poți să suni clientul și să citești oferta.');
+                        window.location.href = `tel:${phoneNumber}`;
+                      });
+                    }}
+                    className="w-full flex items-center gap-3 p-4 bg-linear-to-r from-orange-500/20 to-amber-500/20 hover:from-orange-500/30 hover:to-amber-500/30 border-2 border-orange-500/30 hover:border-orange-500/50 rounded-xl transition-all group"
+                  >
+                    <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <svg className="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 text-left">
+                      <p className="text-white font-semibold text-sm sm:text-base">Apel Telefonic</p>
+                      <p className="text-gray-400 text-xs sm:text-sm">Copiază oferta și sună clientul</p>
+                    </div>
+                    <svg className="w-5 h-5 text-gray-400 group-hover:text-orange-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>

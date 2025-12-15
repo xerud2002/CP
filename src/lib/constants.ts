@@ -174,41 +174,41 @@ export const serviceNames: Record<string, string> = {
 
 // Order Status Configurations - Unified across client and courier dashboards
 export const orderStatusConfig = {
-  pending: {
+  noua: {
     label: 'În așteptare',
-    shortLabel: 'Pending',
+    shortLabel: 'Nouă',
     color: 'text-yellow-400',
     bg: 'bg-yellow-500/10',
     border: 'border-yellow-500/20',
     dotColor: 'bg-yellow-400',
   },
-  accepted: {
+  acceptata: {
     label: 'Acceptată',
-    shortLabel: 'Accepted',
+    shortLabel: 'Acceptată',
     color: 'text-blue-400',
     bg: 'bg-blue-500/10',
     border: 'border-blue-500/20',
     dotColor: 'bg-blue-400',
   },
-  in_transit: {
+  in_tranzit: {
     label: 'În tranzit',
-    shortLabel: 'In Transit',
+    shortLabel: 'În Tranzit',
     color: 'text-orange-400',
     bg: 'bg-orange-500/10',
     border: 'border-orange-500/20',
     dotColor: 'bg-orange-400',
   },
-  completed: {
+  livrata: {
     label: 'Finalizată',
-    shortLabel: 'Completed',
+    shortLabel: 'Livrată',
     color: 'text-emerald-400',
     bg: 'bg-emerald-500/10',
     border: 'border-emerald-500/20',
     dotColor: 'bg-emerald-400',
   },
-  cancelled: {
+  anulata: {
     label: 'Anulată',
-    shortLabel: 'Cancelled',
+    shortLabel: 'Anulată',
     color: 'text-red-400',
     bg: 'bg-red-500/10',
     border: 'border-red-500/20',

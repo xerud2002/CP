@@ -42,6 +42,14 @@
       ]
     },
     {
+      "collectionGroup": "comenzi",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "tarife_curier",
       "queryScope": "COLLECTION",
       "fields": [
