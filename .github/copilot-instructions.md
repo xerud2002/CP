@@ -1,7 +1,7 @@
 # Curierul Perfect - AI Coding Instructions
 
 Romanian courier marketplace connecting clients with couriers for European package delivery.  
-**Stack**: Next.js 16 (App Router), React 19, Firebase Auth/Firestore, Tailwind CSS 4
+**Stack**: Next.js 15.1.3 (App Router), React 19, Firebase 11.1, Tailwind CSS 4, Sonner (toast notifications)
 
 ## Architecture Overview
 
