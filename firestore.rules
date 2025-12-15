@@ -41,13 +41,6 @@ service cloud.firestore {
       allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
     }
     
-    // Airport transfer routes
-    match /transport_aeroport/{docId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
-    }
-    
     // Person transport routes
     match /transport_persoane/{docId} {
       allow read: if isAuthenticated();

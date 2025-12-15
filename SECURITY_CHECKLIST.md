@@ -139,7 +139,7 @@ const orderNumber = await runTransaction(db, async (transaction) => {
 
 ### Client Flow
 - [x] Client can register and login ✅ (Firebase Auth + role-based registration)
-- [x] Client can create order with all services ✅ (9 service types: colete, plicuri, mobila, electronice, animale, persoane, aeroport, platforma, tractari)
+- [x] Client can create order with all services ✅ (8 service types: colete, plicuri, mobila, electronice, animale, persoane, platforma, tractari)
 - [x] Client can view their orders ✅ (Filtered by `uid_client == user.uid`)
 - [x] Client can filter orders by status ✅ (pending, in_transit, completed, cancelled)
 - [x] Client can leave reviews for completed orders ✅ (recenzii collection with rating & comment)

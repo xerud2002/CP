@@ -270,23 +270,6 @@ export default function Home() {
                     </div>
                   </Link>
 
-                  {/* Transfer Aeroport */}
-                  <Link 
-                    href="/comanda?serviciu=aeroport"
-                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-cyan-500/30 hover:border-cyan-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
-                  >
-                    <div className="absolute inset-0 bg-linear-to-br from-cyan-500/20 to-blue-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
-                    <div className="relative">
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-                        </svg>
-                      </div>
-                      <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Transfer Aeroport</h3>
-                      <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">La/de la aeroport</p>
-                    </div>
-                  </Link>
-
                   {/* Mutări Mobilă */}
                   <Link 
                     href="/comanda?serviciu=mobila"

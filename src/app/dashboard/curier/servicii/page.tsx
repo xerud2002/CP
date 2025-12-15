@@ -74,14 +74,6 @@ const serviceTypes = [
     bgColor: 'bg-orange-500/20',
   },
   { 
-    value: 'Aeroport', 
-    label: 'Transfer Aeroport', 
-    description: 'Transfer persoane la/de la aeroport',
-    color: 'text-cyan-400',
-    bgColor: 'bg-cyan-500/20',
-    persoaneOnly: true,
-  },
-  { 
     value: 'Mobila', 
     label: 'Mutări Mobilă', 
     description: 'Transport mobilier',
@@ -126,10 +118,6 @@ const optiuniSuplimentareByService: Record<string, Array<{id: string, name: stri
   ],
   'Tractari': [
     { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare vehicul' },
-  ],
-  'Aeroport': [
-    { id: 'bagaje_extra', name: 'Bagaje Extra', description: 'Transport bagaje suplimentare' },
-    { id: 'meet_greet', name: 'Meet & Greet', description: 'Întâmpinare cu nume' },
   ],
   'Mobila': [
     { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare mobilier' },
@@ -209,11 +197,6 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <circle cx="17" cy="17" r="2" />
         <path d="M14 2l-3 3 3 3" />
         <path d="M11 5h7" />
-      </svg>
-    ),
-    Aeroport: (
-      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
       </svg>
     ),
     Persoane: (

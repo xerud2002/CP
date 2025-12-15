@@ -62,13 +62,6 @@ const servicii = [
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M5 17h-2a1 1 0 0 1-1-1v-5l3-3h14l3 3v5a1 1 0 0 1-1 1h-2" strokeLinecap="round" strokeLinejoin="round" /><circle cx="7" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" /><path d="m9 17 6-6" strokeLinecap="round" strokeLinejoin="round" /><path d="m15 11 4 4" strokeLinecap="round" strokeLinejoin="round" /><circle cx="17" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
   },
   { 
-    id: 'aeroport', 
-    name: 'Transport Aeroport', 
-    description: 'Transfer la/de la aeroport',
-    color: 'from-cyan-500 to-blue-500',
-    icon: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
-  },
-  { 
     id: 'mobila', 
     name: 'Transport Mobilă', 
     description: 'Mobilier și obiecte voluminoase',
@@ -111,10 +104,6 @@ const optiuniSuplimentareByService: Record<string, Array<{id: string, name: stri
   ],
   'tractari': [
     { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii vehiculului' },
-  ],
-  'aeroport': [
-    { id: 'bagaje_extra', name: 'Bagaje Extra', price: 'variabil', description: 'Transport bagaje suplimentare' },
-    { id: 'meet_greet', name: 'Meet & Greet', price: 'variabil', description: 'Întâmpinare cu nume la aeroport' },
   ],
   'mobila': [
     { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii mobilierului' },
@@ -1258,8 +1247,8 @@ function ComandaForm() {
                   </>
                 )}
                 
-                {/* Persoane și Aeroport - număr pasageri */}
-                {(selectedService === 'persoane' || selectedService === 'aeroport') && (
+                {/* Persoane - număr pasageri */}
+                {selectedService === 'persoane' && (
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">Număr pasageri</label>
                     <input
@@ -1281,7 +1270,6 @@ function ComandaForm() {
                     {selectedService === 'plicuri' ? 'Descriere documente' : 
                      selectedService === 'masini' ? 'Detalii vehicul *' :
                      selectedService === 'persoane' ? 'Observații călătorie' :
-                     selectedService === 'aeroport' ? 'Detalii zbor (nr. zbor, ora)' :
                      selectedService === 'animale' ? 'Tip animal și detalii *' :
                      selectedService === 'electronice' ? 'Tip echipament *' :
                      selectedService === 'platforma' ? 'Detalii vehicul/echipament *' :

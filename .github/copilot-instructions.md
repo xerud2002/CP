@@ -63,7 +63,6 @@ RootLayout (AuthProvider)
 | `comenzi` | auto | `uid_client` | Orders (`orderNumber` field, `courierId` when accepted) |
 | `recenzii` | auto | `clientId` | Reviews from clients about couriers |
 | `counters` | `orderNumber` | — | Sequential order number counter (uses `runTransaction`) |
-| `transport_aeroport` | auto | `uid` | Airport transfer routes (courier-specific) |
 | `transport_persoane` | auto | `uid` | Person transport routes (courier-specific) |
 
 **Data Fetching Pattern**: Use `where()` filters + owner field for multi-tenant security:

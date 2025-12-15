@@ -171,22 +171,6 @@ const getDocumentRequirements = (
     });
   }
 
-  // Transfer Aeroport - Airport transfer license
-  if (activeServices.includes('Aeroport')) {
-    documents.push({
-      id: 'airport_transfer_license',
-      title: countryCode === 'ro' ? 'Licență Transfer Aeroport' :
-             countryCode === 'gb' ? 'Airport Transfer Licence' :
-             countryCode === 'de' ? 'Flughafentransfer-Lizenz' :
-             'Licență Transfer Aeroport',
-      description: 'Autorizație pentru servicii transfer aeroport',
-      required: false,
-      icon: 'license',
-      category: 'transport',
-      forServices: ['Aeroport'],
-    });
-  }
-
   // Tractări Auto - Towing service license
   if (activeServices.includes('Tractari')) {
     documents.push({

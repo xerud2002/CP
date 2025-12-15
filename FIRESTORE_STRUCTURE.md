@@ -197,23 +197,7 @@ Această aplicație folosește Firebase Firestore pentru gestionarea datelor în
 
 ---
 
-### 9. **transport_aeroport** (Airport transfer routes)
-```typescript
-{
-  uid: string,              // Curier UID
-  aeroport_origine: string,
-  aeroport_destinatie: string,
-  pret: number,
-  tip_vehicul?: string,
-  nr_locuri?: number
-}
-```
-**Security**: Courier owns their routes  
-**Indexes**: None needed
-
----
-
-### 10. **transport_persoane** (Person transport routes)
+### 9. **transport_persoane** (Person transport routes)
 ```typescript
 {
   uid: string,              // Curier UID

@@ -89,11 +89,6 @@ const serviceIcons: Record<string, { icon: React.ReactNode; color: string; bg: s
     color: 'text-orange-400',
     bg: 'bg-orange-500/20'
   },
-  aeroport: {
-    icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>,
-    color: 'text-cyan-400',
-    bg: 'bg-cyan-500/20'
-  },
   mobila: {
     icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" /><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" /></svg>,
     color: 'text-amber-400',
@@ -385,7 +380,7 @@ export default function ComenziClientPage() {
                         {/* Show different info based on service type */}
                         {order.serviciu === 'plicuri' ? (
                           <span>Plicuri: {order.cantitate || 1} buc</span>
-                        ) : order.serviciu === 'persoane' || order.serviciu === 'aeroport' ? (
+                        ) : order.serviciu === 'persoane' ? (
                           <span>Pasageri: {order.cantitate || 1}</span>
                         ) : order.serviciu === 'masini' ? (
                           <span>Transport auto</span>
@@ -606,7 +601,6 @@ export default function ComenziClientPage() {
                             'bagaje_extra': 'Bagaje suplimentare',
                             'animale': 'Transport animale de companie',
                             'cusca_transport': 'Cușcă transport profesională',
-                            'meet_greet': 'Meet & Greet aeroport',
                             'fragil': 'Manipulare fragil',
                             'express': 'Livrare express',
                             'temperatura_controlata': 'Temperatură controlată'
@@ -787,7 +781,6 @@ export default function ComenziClientPage() {
                       'bagaje_extra': 'Bagaje suplimentare',
                       'animale': 'Transport animale de companie',
                       'cusca_transport': 'Cușcă transport profesională',
-                      'meet_greet': 'Meet & Greet aeroport',
                       'fragil': 'Manipulare fragil',
                       'express': 'Livrare express',
                       'temperatura_controlata': 'Temperatură controlată'

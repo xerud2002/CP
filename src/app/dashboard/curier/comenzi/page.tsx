@@ -74,11 +74,6 @@ const ServiceIcon = ({ service, className = "w-5 h-5" }: { service: string; clas
         <circle cx="17" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
-    'Aeroport': (
-      <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-      </svg>
-    ),
     'Mobila': (
       <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
         <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" />
@@ -801,7 +796,7 @@ export default function ComenziCurierPage() {
                         {/* Show different info based on service type */}
                         {order.tipColet === 'plicuri' ? (
                           <span>Plicuri: {order.cantitate || 1} buc</span>
-                        ) : order.tipColet === 'persoane' || order.tipColet === 'aeroport' ? (
+                        ) : order.tipColet === 'persoane' ? (
                           <span>Pasageri: {order.cantitate || 1}</span>
                         ) : order.tipColet === 'masini' ? (
                           <span>Transport auto</span>
@@ -832,17 +827,17 @@ export default function ComenziCurierPage() {
           <>
             {/* Backdrop */}
             <div 
-              className="fixed inset-0 z-30 bg-black/70 backdrop-blur-sm"
+              className="fixed inset-0 z-30 bg-black/70 backdrop-blur-sm print:hidden"
               style={{ top: '72px' }}
               onClick={() => setSelectedOrder(null)}
             />
             
             {/* Modal Container */}
-            <div className="fixed inset-0 z-40 flex items-center justify-center p-4" style={{ top: '72px' }} onClick={() => setSelectedOrder(null)}>
+            <div id="print-modal-container" className="fixed inset-0 z-40 flex items-center justify-center p-4 print:p-0 print:static print:flex print:items-start" style={{ top: '72px' }} onClick={() => setSelectedOrder(null)}>
               {/* Modal */}
-              <div className="relative bg-slate-800 rounded-2xl border border-white/10 shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+              <div id="print-modal" className="relative bg-slate-800 rounded-2xl border border-white/10 shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden print:max-w-full print:max-h-full print:rounded-none print:border-0 print:shadow-none print:bg-white" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}
-                <div className="sticky top-0 bg-slate-800 border-b border-white/10 px-6 py-4 flex items-center justify-between">
+                <div className="sticky top-0 bg-slate-800 border-b border-white/10 px-6 py-4 flex items-center justify-between print:bg-white print:border-gray-300 print:static">
                   <div className="flex items-center gap-3">
                     {(() => {
                       const serviceTypeConfig = serviceTypes.find(s => s.value.toLowerCase() === (selectedOrder.tipColet || 'colete').toLowerCase()) || serviceTypes[0];
@@ -861,12 +856,23 @@ export default function ComenziCurierPage() {
                       )}
                     </div>
                   </div>
-                  <button
-                    onClick={() => setSelectedOrder(null)}
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                  >
-                    <CloseIcon className="w-5 h-5 text-gray-400" />
-                  </button>
+                  <div className="flex items-center gap-2 print:hidden">
+                    <button
+                      onClick={() => window.print()}
+                      className="p-2 hover:bg-white/10 rounded-lg transition-colors group"
+                      title="Printează detalii comandă"
+                    >
+                      <svg className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => setSelectedOrder(null)}
+                      className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                    >
+                      <CloseIcon className="w-5 h-5 text-gray-400" />
+                    </button>
+                  </div>
                 </div>
                 
                 {/* Content */}
@@ -1040,7 +1046,6 @@ export default function ComenziCurierPage() {
                             'bagaje_extra': 'Bagaje suplimentare',
                             'animale': 'Transport animale de companie',
                             'cusca_transport': 'Cușcă transport profesională',
-                            'meet_greet': 'Meet & Greet aeroport',
                             'fragil': 'Manipulare fragil',
                             'express': 'Livrare express',
                             'temperatura_controlata': 'Temperatură controlată'
@@ -1057,12 +1062,10 @@ export default function ComenziCurierPage() {
                   )}
 
                   {/* Observations */}
-                  {selectedOrder.observatii && (
-                    <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Observații</h3>
-                      <p className="text-gray-300 text-sm">{selectedOrder.observatii}</p>
-                    </div>
-                  )}
+                  <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
+                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Observații</h3>
+                    <p className="text-gray-300 text-sm">{selectedOrder.observatii || 'Fără observații'}</p>
+                  </div>
 
                   {/* Contact Info */}
                   {(selectedOrder.clientName || selectedOrder.clientPhone) && (
@@ -1102,7 +1105,7 @@ export default function ComenziCurierPage() {
 
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 pt-2">
+                  <div className="flex gap-3 pt-2 print:hidden">
                     {selectedOrder.status === 'in_lucru' && (
                       <button 
                         onClick={() => {

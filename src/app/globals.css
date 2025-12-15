@@ -408,8 +408,8 @@ input[type="date"].hidden-native::-webkit-calendar-picker-indicator {
 /* Print styles for order modal - A4 optimized */
 @media print {
   @page {
-    size: A4;
-    margin: 15mm;
+    size: A4 portrait;
+    margin: 12mm 10mm;
   }
   
   /* Hide everything by default */
@@ -425,10 +425,12 @@ input[type="date"].hidden-native::-webkit-calendar-picker-indicator {
   
   /* Position the container for print */
   #print-modal-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   
   /* General print resets */
@@ -436,65 +438,159 @@ input[type="date"].hidden-native::-webkit-calendar-picker-indicator {
     background: white !important;
   }
   
-  #print-modal,
-  #print-modal * {
-    background: white !important;
-    color: #1f2937 !important;
-    box-shadow: none !important;
-  }
-  
   #print-modal {
     max-width: 100% !important;
     max-height: none !important;
     overflow: visible !important;
-    border: 2px solid #374151 !important;
-    border-radius: 8px !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: white !important;
+    padding: 0 !important;
   }
   
-  /* Fix colors for labels */
-  #print-modal [class*="text-gray-400"],
-  #print-modal [class*="text-gray-300"] {
-    color: #4b5563 !important;
+  /* Header section */
+  #print-modal > div:first-child {
+    background: white !important;
+    border-bottom: 2px solid #d1d5db !important;
+    padding: 12px 0 !important;
+    margin-bottom: 16px !important;
   }
   
+  /* Content area */
+  #print-modal > div:last-child {
+    padding: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  
+  /* Section boxes */
+  #print-modal [class*="bg-slate"] {
+    background: #fafafa !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 6px !important;
+    padding: 12px !important;
+    margin-bottom: 12px !important;
+    page-break-inside: avoid !important;
+  }
+  
+  /* Section headers */
+  #print-modal h3 {
+    color: #374151 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  /* Text colors */
   #print-modal [class*="text-white"] {
     color: #111827 !important;
   }
   
-  /* Fix section backgrounds */
-  #print-modal [class*="bg-slate"] {
-    background: #f9fafb !important;
-    border: 1px solid #d1d5db !important;
+  #print-modal [class*="text-gray-300"],
+  #print-modal [class*="text-gray-400"] {
+    color: #6b7280 !important;
   }
   
-  /* Accent colors */
+  /* Accent colors for pickup/delivery */
   #print-modal [class*="text-green"] {
-    color: #047857 !important;
+    color: #059669 !important;
   }
   
   #print-modal [class*="text-orange"],
   #print-modal [class*="text-amber"] {
-    color: #b45309 !important;
+    color: #d97706 !important;
   }
   
   #print-modal [class*="text-blue"],
   #print-modal [class*="text-cyan"] {
-    color: #1d4ed8 !important;
+    color: #2563eb !important;
   }
   
   /* Icons */
   #print-modal svg {
+    color: #6b7280 !important;
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  #print-modal svg[class*="text-green"] {
+    color: #059669 !important;
+  }
+  
+  #print-modal svg[class*="text-orange"] {
+    color: #d97706 !important;
+  }
+  
+  /* Service icon in header */
+  #print-modal > div:first-child svg {
     color: #374151 !important;
   }
   
-  #print-modal svg[fill="currentColor"] {
-    fill: #374151 !important;
+  /* Badges/pills for options */
+  #print-modal span[class*="bg-green"] {
+    background: #d1fae5 !important;
+    border: 1px solid #6ee7b7 !important;
+    color: #065f46 !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    font-size: 11px !important;
   }
   
-  /* Badges */
-  #print-modal span[class*="bg-"] {
+  /* Grid layouts */
+  #print-modal .grid {
+    gap: 12px !important;
+  }
+  
+  /* Spacing adjustments */
+  #print-modal [class*="space-y"] > * + * {
+    margin-top: 8px !important;
+  }
+  
+  /* Service type badge in header */
+  #print-modal > div:first-child > div:first-child > div[class*="bg-"] {
     background: #f3f4f6 !important;
-    border: 1px solid #9ca3af !important;
-    color: #374151 !important;
+    border: 1px solid #d1d5db !important;
+  }
+  
+  /* Hide action buttons and empty sections */
+  #print-modal button,
+  #print-modal [class*="print:hidden"] {
+    display: none !important;
+  }
+  
+  /* Order number styling */
+  #print-modal > div:first-child p {
+    color: #6b7280 !important;
+    font-size: 11px !important;
+  }
+  
+  /* Ensure no page breaks in important sections */
+  #print-modal > div:first-child,
+  #print-modal [class*="bg-slate"] {
+    page-break-inside: avoid !important;
+  }
+  
+  /* Typography fine-tuning */
+  #print-modal {
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+  
+  #print-modal h2 {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+  }
+  
+  /* Contact info and details */
+  #print-modal [class*="text-sm"] {
+    font-size: 11px !important;
+  }
+  
+  #print-modal [class*="text-xs"] {
+    font-size: 10px !important;
   }
 }

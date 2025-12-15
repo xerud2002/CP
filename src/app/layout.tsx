@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Curierul Perfect - Transport Complet în Europa | Colete, Plicuri, Persoane, Mobilă",
-  description: "Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, transfer aeroport, platformă auto și tractări. Servicii rapide și sigure în 16+ țări.",
+  description: "Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în 16+ țări.",
   keywords: [
     "transport colete Europa",
     "curier România Europa",
@@ -25,7 +25,6 @@ export const metadata: Metadata = {
     "transport mobilă",
     "transport electronice",
     "transport animale",
-    "transfer aeroport",
     "platformă auto",
     "tractări auto",
     "transport plicuri",
