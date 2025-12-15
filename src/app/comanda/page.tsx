@@ -167,7 +167,6 @@ function ComandaForm() {
     latime: '',
     inaltime: '',
     cantitate: '1',
-    valoare_marfa: '',
     descriere: '',
     
     // Date ridicare/livrare - sistem simplificat

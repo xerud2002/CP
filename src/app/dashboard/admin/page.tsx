@@ -386,9 +386,9 @@ function OrdersTable({ orders, onStatusChange }: {
               <td className="py-4 px-4 text-gray-400 text-sm">{order.data_ridicare || '-'}</td>
               <td className="py-4 px-4">
                 <select
-                  value={order.status}
+                  value={order.status || 'pending'}
                   onChange={(e) => onStatusChange(order.id!, e.target.value)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer ${statusColors[order.status] || 'bg-gray-500/20 text-gray-400'}`}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer ${statusColors[order.status || 'pending'] || 'bg-gray-500/20 text-gray-400'}`}
                 >
                   <option value="pending">{statusLabels.pending}</option>
                   <option value="accepted">{statusLabels.accepted}</option>

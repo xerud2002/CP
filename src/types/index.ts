@@ -21,37 +21,45 @@ export interface CoverageZone {
 export interface Order {
   id?: string;
   orderNumber?: number;
-  uid_client: string;
+  uid_client?: string;
   courierId?: string;
-  nume: string;
-  email: string;
-  telefon: string;
-  serviciu: string;
-  tara_ridicare: string;
-  judet_ridicare: string;
-  oras_ridicare: string;
-  adresa_ridicare: string;
-  tara_livrare: string;
-  judet_livrare: string;
-  oras_livrare: string;
-  adresa_livrare: string;
-  greutate: string;
+  nume?: string;
+  email?: string;
+  telefon?: string;
+  serviciu?: string;
+  tara_ridicare?: string;
+  judet_ridicare?: string;
+  oras_ridicare?: string;
+  adresa_ridicare?: string;
+  tara_livrare?: string;
+  judet_livrare?: string;
+  oras_livrare?: string;
+  adresa_livrare?: string;
+  greutate?: string;
   lungime?: string;
   latime?: string;
   inaltime?: string;
-  cantitate: string;
-  valoare_marfa?: string;
+  cantitate?: string;
   descriere?: string;
-  tip_programare: 'data_specifica' | 'range' | 'flexibil';
-  data_ridicare: string;
+  tip_programare?: 'data_specifica' | 'range' | 'flexibil';
+  data_ridicare?: string;
   data_ridicare_end?: string;
-  optiuni: string[];
+  optiuni?: string[];
   tip_ofertanti?: string[];
-  pret?: number;
-  status: 'noua' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata';
+  status?: 'noua' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata' | 'in_lucru';
   observatii?: string;
-  timestamp: number;
+  timestamp?: number;
   createdAt?: Date | { toDate: () => Date };
+  // Curier-specific fields (legacy naming)
+  tipColet?: string;
+  expeditorTara?: string;
+  expeditorJudet?: string;
+  destinatarTara?: string;
+  destinatarJudet?: string;
+  dataColectare?: string;
+  ora?: string;
+  clientName?: string;
+  clientPhone?: string;
 }
 
 export interface CourierProfile {

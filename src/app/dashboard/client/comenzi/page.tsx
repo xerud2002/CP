@@ -39,7 +39,6 @@ interface Order {
   latime?: string;
   inaltime?: string;
   cantitate?: string;
-  valoare_marfa?: string;
   descriere?: string;
   observatii?: string;
   optiuni?: string[];
@@ -533,12 +532,6 @@ export default function ComenziClientPage() {
                       <p className="text-white font-medium">{selectedOrder.cantitate}</p>
                     </div>
                   )}
-                  {selectedOrder.valoare_marfa && (
-                    <div>
-                      <p className="text-xs text-gray-500 mb-1">Valoare marfă</p>
-                      <p className="text-white font-medium">{selectedOrder.valoare_marfa} €</p>
-                    </div>
-                  )}
                 </div>
                 {selectedOrder.descriere && (
                   <div className="mt-4 pt-4 border-t border-white/5">
@@ -602,11 +595,29 @@ export default function ComenziClientPage() {
                     <div>
                       <p className="text-xs text-gray-500 mb-2">Opțiuni suplimentare</p>
                       <div className="flex flex-wrap gap-2">
-                        {selectedOrder.optiuni.map((opt) => (
-                          <span key={opt} className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-medium">
-                            {opt}
-                          </span>
-                        ))}
+                        {selectedOrder.optiuni.map((opt) => {
+                          const optionLabels: Record<string, string> = {
+                            'asigurare': 'Asigurare transport',
+                            'incarcare_descarcare': 'Încărcare/Descărcare inclusă',
+                            'montaj_demontaj': 'Montaj/Demontaj mobilier',
+                            'ambalare': 'Ambalare profesională',
+                            'ambalare_speciala': 'Ambalare specială electronice',
+                            'frigo': 'Transport frigorific',
+                            'bagaje_extra': 'Bagaje suplimentare',
+                            'animale': 'Transport animale de companie',
+                            'cusca_transport': 'Cușcă transport profesională',
+                            'meet_greet': 'Meet & Greet aeroport',
+                            'fragil': 'Manipulare fragil',
+                            'express': 'Livrare express',
+                            'temperatura_controlata': 'Temperatură controlată'
+                          };
+                          const label = optionLabels[opt] || opt;
+                          return (
+                            <span key={opt} className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-xs font-medium">
+                              {label}
+                            </span>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -751,12 +762,6 @@ export default function ComenziClientPage() {
                     <p className="text-gray-900 font-medium">{selectedOrder.cantitate}</p>
                   </div>
                 )}
-                {selectedOrder.valoare_marfa && (
-                  <div>
-                    <p className="text-gray-500 text-xs">Valoare marfă</p>
-                    <p className="text-gray-900 font-medium">{selectedOrder.valoare_marfa} €</p>
-                  </div>
-                )}
               </div>
               {selectedOrder.descriere && (
                 <div className="mt-2 pt-2 border-t border-gray-200">
@@ -771,9 +776,27 @@ export default function ComenziClientPage() {
               <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">Opțiuni</h3>
                 <div className="flex flex-wrap gap-2">
-                  {selectedOrder.optiuni.map((opt: string) => (
-                    <span key={opt} className="px-2 py-1 bg-gray-100 rounded text-sm text-gray-700 border border-gray-300">{opt}</span>
-                  ))}
+                  {selectedOrder.optiuni.map((opt: string) => {
+                    const optionLabels: Record<string, string> = {
+                      'asigurare': 'Asigurare transport',
+                      'incarcare_descarcare': 'Încărcare/Descărcare inclusă',
+                      'montaj_demontaj': 'Montaj/Demontaj mobilier',
+                      'ambalare': 'Ambalare profesională',
+                      'ambalare_speciala': 'Ambalare specială electronice',
+                      'frigo': 'Transport frigorific',
+                      'bagaje_extra': 'Bagaje suplimentare',
+                      'animale': 'Transport animale de companie',
+                      'cusca_transport': 'Cușcă transport profesională',
+                      'meet_greet': 'Meet & Greet aeroport',
+                      'fragil': 'Manipulare fragil',
+                      'express': 'Livrare express',
+                      'temperatura_controlata': 'Temperatură controlată'
+                    };
+                    const label = optionLabels[opt] || opt;
+                    return (
+                      <span key={opt} className="px-2 py-1 bg-gray-100 rounded text-sm text-gray-700 border border-gray-300">{label}</span>
+                    );
+                  })}
                 </div>
               </div>
             )}
