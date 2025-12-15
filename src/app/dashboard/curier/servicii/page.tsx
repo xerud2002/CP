@@ -99,6 +99,50 @@ const serviceTypes = [
   },
 ];
 
+// Supplementary options by service type
+const optiuniSuplimentareByService: Record<string, Array<{id: string, name: string, description: string}>> = {
+  'Colete': [
+    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare conform valorii mărfii' },
+    { id: 'frigo', name: 'Frigo', description: 'Transport frigorific' },
+  ],
+  'Plicuri': [
+    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare documente' },
+  ],
+  'Persoane': [
+    { id: 'bagaje_extra', name: 'Bagaje Extra', description: 'Transport bagaje suplimentare' },
+    { id: 'animale', name: 'Transport Animale', description: 'Animale de companie' },
+  ],
+  'Electronice': [
+    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare echipamente' },
+    { id: 'ambalare_speciala', name: 'Ambalare Specială', description: 'Ambalare profesională' },
+  ],
+  'Animale': [
+    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare animale' },
+    { id: 'cusca_transport', name: 'Cușcă Transport', description: 'Cușcă profesională' },
+  ],
+  'Platforma': [
+    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare vehicul/echipament' },
+    { id: 'incarcare_descarcare', name: 'Încărcare/Descărcare', description: 'Cu echipament specializat' },
+  ],
+  'Tractari': [
+    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare vehicul' },
+  ],
+  'Aeroport': [
+    { id: 'bagaje_extra', name: 'Bagaje Extra', description: 'Transport bagaje suplimentare' },
+    { id: 'meet_greet', name: 'Meet & Greet', description: 'Întâmpinare cu nume' },
+  ],
+  'Mobila': [
+    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare mobilier' },
+    { id: 'montaj_demontaj', name: 'Montaj/Demontaj', description: 'Servicii montaj/demontaj' },
+    { id: 'ambalare', name: 'Ambalare Mobilier', description: 'Ambalare profesională' },
+  ],
+  'Paleti': [
+    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare marfă' },
+    { id: 'frigo', name: 'Frigo', description: 'Transport frigorific' },
+    { id: 'incarcare_descarcare', name: 'Încărcare/Descărcare', description: 'Cu motostivuitor' },
+  ],
+};
+
 // Service icons as components
 const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; className?: string }) => {
   const icons: Record<string, React.ReactElement> = {
@@ -213,6 +257,7 @@ export default function TarifePracticatePage() {
   
   // Selected services state (services the courier offers)
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({});
   const [savingServices, setSavingServices] = useState(false);
 
   useEffect(() => {
@@ -237,6 +282,7 @@ export default function TarifePracticatePage() {
         if (!userSnapshot.empty) {
           const userData = userSnapshot.docs[0].data();
           setSelectedServices(userData.serviciiOferite || []);
+          setSelectedOptions(userData.optiuniSuplimentare || {});
         }
       } catch (error) {
         logError(error, 'Error loading servicii data');
@@ -272,6 +318,32 @@ export default function TarifePracticatePage() {
       logError(error, 'Error saving servicii');
     } finally {
       setSavingServices(false);
+    }
+  };
+
+  // Toggle supplementary option for a service
+  const toggleOption = async (serviceValue: string, optionId: string) => {
+    if (!user) return;
+    
+    const serviceOptions = selectedOptions[serviceValue] || [];
+    const newServiceOptions = serviceOptions.includes(optionId)
+      ? serviceOptions.filter(o => o !== optionId)
+      : [...serviceOptions, optionId];
+    
+    const newOptions = { ...selectedOptions, [serviceValue]: newServiceOptions };
+    
+    try {
+      const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
+      const userSnapshot = await getDocs(userQuery);
+      
+      if (!userSnapshot.empty) {
+        const userDocRef = doc(db, 'users', userSnapshot.docs[0].id);
+        await updateDoc(userDocRef, { optiuniSuplimentare: newOptions });
+      }
+      
+      setSelectedOptions(newOptions);
+    } catch (error) {
+      logError(error, 'Error saving options');
     }
   };
 
@@ -437,6 +509,76 @@ export default function TarifePracticatePage() {
             </div>
           )}
         </div>
+
+        {/* Supplementary Options per Service */}
+        {selectedServices.length > 0 && (
+          <div className="bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-emerald-500/20 to-green-500/20 rounded-xl flex items-center justify-center">
+                <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold text-white">Opțiuni Suplimentare</h2>
+                <p className="text-gray-400 text-xs sm:text-sm">Selectează opțiunile pe care le oferi pentru fiecare serviciu</p>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              {selectedServices.map(serviceValue => {
+                const service = serviceTypes.find(s => s.value === serviceValue);
+                const options = optiuniSuplimentareByService[serviceValue] || [];
+                
+                if (options.length === 0) return null;
+                
+                return (
+                  <div key={serviceValue} className="bg-slate-700/30 rounded-xl p-4 sm:p-5 border border-white/5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className={`w-8 h-8 ${service?.bgColor} rounded-lg flex items-center justify-center`}>
+                        <ServiceIcon service={serviceValue} className={`w-5 h-5 ${service?.color}`} />
+                      </div>
+                      <h3 className="text-white font-semibold">{service?.label}</h3>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+                      {options.map(option => {
+                        const isSelected = (selectedOptions[serviceValue] || []).includes(option.id);
+                        
+                        return (
+                          <button
+                            key={option.id}
+                            type="button"
+                            onClick={() => toggleOption(serviceValue, option.id)}
+                            className={`group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95 text-left ${
+                              isSelected 
+                                ? 'border-emerald-500/50 ring-2 ring-emerald-500/50' 
+                                : 'border-white/10 hover:border-white/20'
+                            }`}
+                          >
+                            {/* Selected checkmark */}
+                            {isSelected && (
+                              <div className="absolute top-2 right-2 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center z-10 shadow-lg shadow-emerald-500/50">
+                                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                              </div>
+                            )}
+                            
+                            <div className="relative">
+                              <span className="font-semibold text-white text-xs sm:text-sm block mb-1">{option.name}</span>
+                              <p className="text-gray-400 text-[10px] sm:text-xs line-clamp-2">{option.description}</p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Help Card */}
         <div className="mt-6 sm:mt-8">
