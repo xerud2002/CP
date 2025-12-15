@@ -239,6 +239,7 @@ export default function ComenziCurierPage() {
               orderIds.add(doc.id);
               loadedOrders.push({
                 id: doc.id,
+                orderNumber: data.orderNumber,
                 clientName: data.nume || data.clientName || 'Client',
                 clientPhone: data.telefon || data.clientPhone || '',
                 expeditorTara: data.tara_ridicare || data.expeditorTara || '',
@@ -251,6 +252,7 @@ export default function ComenziCurierPage() {
                 greutate: parseFloat(data.greutate) || 0,
                 status: 'noua',
                 dataColectare: data.data_ridicare || data.dataColectare || '',
+                ora: data.ora_ridicare || data.ora || '',
                 pret: data.pret || 0,
                 createdAt: data.createdAt?.toDate() || new Date(),
                 valoare_marfa: data.valoare_marfa || '',
@@ -268,6 +270,7 @@ export default function ComenziCurierPage() {
             const data = doc.data();
             loadedOrders.push({
               id: doc.id,
+              orderNumber: data.orderNumber,
               clientName: data.nume || data.clientName || 'Client',
               clientPhone: data.telefon || data.clientPhone || '',
               expeditorTara: data.tara_ridicare || data.expeditorTara || '',
@@ -280,6 +283,7 @@ export default function ComenziCurierPage() {
               greutate: parseFloat(data.greutate) || 0,
               status: data.status || 'noua',
               dataColectare: data.data_ridicare || data.dataColectare || '',
+              ora: data.ora_ridicare || data.ora || '',
               pret: data.pret || 0,
               createdAt: data.createdAt?.toDate() || new Date(),
               valoare_marfa: data.valoare_marfa || '',
