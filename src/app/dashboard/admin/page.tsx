@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { User, Order } from '@/types';
+import { showSuccess, showError, showWarning } from '@/lib/toast';
 import {
   UsersIcon,
   TruckIcon,
@@ -335,24 +336,31 @@ function UsersTable({ users, onRoleChange, onDelete, filter }: {
 }
 
 // Orders Table Component
-function OrdersTable({ orders, onStatusChange }: {
+function OrdersTable({ orders, onStatusChange, onViewDetails }: {
   orders: Order[];
   onStatusChange: (orderId: string, status: string) => void;
+  onViewDetails: (order: Order) => void;
 }) {
   const statusColors: Record<string, string> = {
-    pending: 'bg-yellow-500/20 text-yellow-400',
-    accepted: 'bg-blue-500/20 text-blue-400',
-    in_transit: 'bg-purple-500/20 text-purple-400',
-    delivered: 'bg-emerald-500/20 text-emerald-400',
-    cancelled: 'bg-red-500/20 text-red-400',
+    noua: 'bg-white/10 text-white',
+    in_lucru: 'bg-orange-500/20 text-orange-400',
+    acceptata: 'bg-blue-500/20 text-blue-400',
+    in_tranzit: 'bg-purple-500/20 text-purple-400',
+    livrata: 'bg-emerald-500/20 text-emerald-400',
+    anulata: 'bg-red-500/20 text-red-400',
   };
 
   const statusLabels: Record<string, string> = {
-    pending: 'În așteptare',
-    accepted: 'Acceptată',
-    in_transit: 'În tranzit',
-    delivered: 'Livrată',
-    cancelled: 'Anulată',
+    noua: 'Nouă',
+    in_lucru: 'În Lucru',
+    acceptata: 'Acceptată',
+    in_tranzit: 'În tranzit',
+    livrata: 'Livrată',
+    anulata: 'Anulată',
+  };
+
+  const formatOrderNumber = (orderNumber?: number) => {
+    return orderNumber ? `CP${orderNumber}` : '-';
   };
 
   return (
@@ -360,7 +368,9 @@ function OrdersTable({ orders, onStatusChange }: {
       <table className="w-full">
         <thead>
           <tr className="border-b border-white/10">
+            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Comandă</th>
             <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Client</th>
+            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Serviciu</th>
             <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Rută</th>
             <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Data ridicare</th>
             <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Status</th>
@@ -371,35 +381,47 @@ function OrdersTable({ orders, onStatusChange }: {
           {orders.map((order) => (
             <tr key={order.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
               <td className="py-4 px-4">
+                <span className="text-white font-mono font-medium">
+                  {formatOrderNumber(order.orderNumber)}
+                </span>
+              </td>
+              <td className="py-4 px-4">
                 <div>
-                  <p className="text-white font-medium">{order.nume}</p>
-                  <p className="text-gray-400 text-sm">{order.email}</p>
+                  <p className="text-white font-medium">{order.nume || '-'}</p>
+                  <p className="text-gray-400 text-sm">{order.email || '-'}</p>
                 </div>
+              </td>
+              <td className="py-4 px-4">
+                <span className="text-gray-300 capitalize">{order.serviciu || '-'}</span>
               </td>
               <td className="py-4 px-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-300">{order.tara_ridicare}</span>
+                  <span className="text-gray-300">{order.tara_ridicare || '-'}</span>
                   <span className="text-gray-500">→</span>
-                  <span className="text-gray-300">{order.tara_livrare}</span>
+                  <span className="text-gray-300">{order.tara_livrare || '-'}</span>
                 </div>
               </td>
-              <td className="py-4 px-4 text-gray-400 text-sm">{order.data_ridicare || '-'}</td>
+              <td className="py-4 px-4 text-gray-400 text-sm">
+                {order.data_ridicare ? new Date(order.data_ridicare).toLocaleDateString('ro-RO') : '-'}
+              </td>
               <td className="py-4 px-4">
                 <select
-                  value={order.status || 'pending'}
+                  value={order.status || 'noua'}
                   onChange={(e) => onStatusChange(order.id!, e.target.value)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer ${statusColors[order.status || 'pending'] || 'bg-gray-500/20 text-gray-400'}`}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer transition-all ${statusColors[order.status || 'noua'] || 'bg-gray-500/20 text-gray-400'}`}
                 >
-                  <option value="pending">{statusLabels.pending}</option>
-                  <option value="accepted">{statusLabels.accepted}</option>
-                  <option value="in_transit">{statusLabels.in_transit}</option>
-                  <option value="delivered">{statusLabels.delivered}</option>
-                  <option value="cancelled">{statusLabels.cancelled}</option>
+                  <option value="noua">{statusLabels.noua}</option>
+                  <option value="in_lucru">{statusLabels.in_lucru}</option>
+                  <option value="acceptata">{statusLabels.acceptata}</option>
+                  <option value="in_tranzit">{statusLabels.in_tranzit}</option>
+                  <option value="livrata">{statusLabels.livrata}</option>
+                  <option value="anulata">{statusLabels.anulata}</option>
                 </select>
               </td>
               <td className="py-4 px-4">
                 <div className="flex items-center justify-end gap-2">
                   <button 
+                    onClick={() => onViewDetails(order)}
                     className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
                     title="Vezi detalii"
                   >
@@ -448,6 +470,12 @@ function CouriersGrid({ couriers, onSuspend }: {
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Telefon:</span>
               <span className="text-gray-300">{courier.telefon || '-'}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-400">Servicii active:</span>
+              <span className="text-gray-300">
+                {(courier as any).serviciiOferite?.length || 0}
+              </span>
             </div>
           </div>
 
@@ -581,6 +609,128 @@ function SettingsContent() {
   );
 }
 
+// Order Details Modal Component
+function OrderDetailsModal({ order, onClose }: { order: Order | null; onClose: () => void }) {
+  if (!order) return null;
+
+  return (
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-slate-800 rounded-2xl p-6 max-w-2xl w-full border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-bold text-white">
+            Detalii Comandă {order.orderNumber ? `CP${order.orderNumber}` : ''}
+          </h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="space-y-6">
+          {/* Client Info */}
+          <div className="bg-slate-900/50 rounded-xl p-4">
+            <h4 className="text-emerald-400 font-semibold mb-3">Informații Client</h4>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <span className="text-gray-400">Nume:</span>
+                <p className="text-white font-medium">{order.nume || '-'}</p>
+              </div>
+              <div>
+                <span className="text-gray-400">Email:</span>
+                <p className="text-white">{order.email || '-'}</p>
+              </div>
+              <div>
+                <span className="text-gray-400">Telefon:</span>
+                <p className="text-white">{order.telefon || '-'}</p>
+              </div>
+              <div>
+                <span className="text-gray-400">Serviciu:</span>
+                <p className="text-white capitalize">{order.serviciu || '-'}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pickup Location */}
+          <div className="bg-slate-900/50 rounded-xl p-4">
+            <h4 className="text-blue-400 font-semibold mb-3">Adresa Ridicare</h4>
+            <div className="space-y-2 text-sm">
+              <p className="text-white">{order.adresa_ridicare || '-'}</p>
+              <p className="text-gray-400">
+                {order.oras_ridicare}, {order.judet_ridicare}, {order.tara_ridicare}
+              </p>
+            </div>
+          </div>
+
+          {/* Delivery Location */}
+          <div className="bg-slate-900/50 rounded-xl p-4">
+            <h4 className="text-orange-400 font-semibold mb-3">Adresa Livrare</h4>
+            <div className="space-y-2 text-sm">
+              <p className="text-white">{order.adresa_livrare || '-'}</p>
+              <p className="text-gray-400">
+                {order.oras_livrare}, {order.judet_livrare}, {order.tara_livrare}
+              </p>
+            </div>
+          </div>
+
+          {/* Package Details */}
+          <div className="bg-slate-900/50 rounded-xl p-4">
+            <h4 className="text-purple-400 font-semibold mb-3">Detalii Colet</h4>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              {order.greutate && (
+                <div>
+                  <span className="text-gray-400">Greutate:</span>
+                  <p className="text-white">{order.greutate}</p>
+                </div>
+              )}
+              {order.cantitate && (
+                <div>
+                  <span className="text-gray-400">Cantitate:</span>
+                  <p className="text-white">{order.cantitate}</p>
+                </div>
+              )}
+              {order.lungime && (
+                <div>
+                  <span className="text-gray-400">Dimensiuni (L×W×H):</span>
+                  <p className="text-white">{order.lungime} × {order.latime} × {order.inaltime}</p>
+                </div>
+              )}
+            </div>
+            {order.descriere && (
+              <div className="mt-3">
+                <span className="text-gray-400">Descriere:</span>
+                <p className="text-white mt-1">{order.descriere}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Additional Info */}
+          {order.observatii && (
+            <div className="bg-slate-900/50 rounded-xl p-4">
+              <h4 className="text-yellow-400 font-semibold mb-3">Observații</h4>
+              <p className="text-white text-sm">{order.observatii}</p>
+            </div>
+          )}
+
+          {/* Options */}
+          {order.optiuni && order.optiuni.length > 0 && (
+            <div className="bg-slate-900/50 rounded-xl p-4">
+              <h4 className="text-pink-400 font-semibold mb-3">Opțiuni Suplimentare</h4>
+              <div className="flex flex-wrap gap-2">
+                {order.optiuni.map((opt, idx) => (
+                  <span key={idx} className="px-3 py-1 bg-white/10 text-white rounded-lg text-sm capitalize">
+                    {opt}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ============================================
 // MAIN COMPONENT
 // ============================================
@@ -594,6 +744,8 @@ export default function AdminDashboard() {
   const [loadingData, setLoadingData] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [userFilter, setUserFilter] = useState<'all' | 'client' | 'curier'>('all');
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Auth guard
   useEffect(() => {
@@ -629,8 +781,15 @@ export default function AdminDashboard() {
         ordersData.push({ id: doc.id, ...doc.data() } as Order);
       });
       setOrders(ordersData);
+      
+      // Only show success message if not initial load
+      if (!isInitialLoad) {
+        showSuccess('Date încărcate cu succes!');
+      }
+      setIsInitialLoad(false);
     } catch (error) {
       console.error('Error loading data:', error);
+      showError('Eroare la încărcarea datelor.');
     } finally {
       setLoadingData(false);
     }
@@ -638,45 +797,64 @@ export default function AdminDashboard() {
 
   const handleRoleChange = async (uid: string, newRole: string) => {
     try {
-      await updateDoc(doc(db, 'users', uid), { role: newRole });
+      await updateDoc(doc(db, 'users', uid), { 
+        role: newRole,
+        updatedAt: serverTimestamp()
+      });
+      showSuccess(`Rol actualizat cu succes la ${newRole}!`);
       loadData();
     } catch (error) {
       console.error('Error updating role:', error);
+      showError('Eroare la actualizarea rolului.');
     }
   };
 
   const handleDeleteUser = async (uid: string) => {
     if (uid === user?.uid) {
-      alert('Nu poți șterge propriul cont!');
+      showWarning('Nu poți șterge propriul cont!');
       return;
     }
-    if (confirm('Ești sigur că vrei să ștergi acest utilizator?')) {
-      try {
-        await deleteDoc(doc(db, 'users', uid));
-        loadData();
-      } catch (error) {
-        console.error('Error deleting user:', error);
-      }
+    if (!confirm('Ești sigur că vrei să ștergi acest utilizator? Această acțiune este permanentă!')) {
+      return;
+    }
+    try {
+      await deleteDoc(doc(db, 'users', uid));
+      showSuccess('Utilizator șters cu succes!');
+      loadData();
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      showError('Eroare la ștergerea utilizatorului.');
     }
   };
 
   const handleStatusChange = async (orderId: string, newStatus: string) => {
     try {
-      await updateDoc(doc(db, 'comenzi', orderId), { status: newStatus });
+      await updateDoc(doc(db, 'comenzi', orderId), { 
+        status: newStatus,
+        statusUpdatedAt: serverTimestamp()
+      });
+      showSuccess(`Status actualizat la ${newStatus}!`);
       loadData();
     } catch (error) {
       console.error('Error updating order status:', error);
+      showError('Eroare la actualizarea statusului comenzii.');
     }
   };
 
   const handleSuspendCourier = async (uid: string) => {
-    if (confirm('Ești sigur că vrei să suspendi acest curier?')) {
-      try {
-        await updateDoc(doc(db, 'users', uid), { role: 'client' });
-        loadData();
-      } catch (error) {
-        console.error('Error suspending courier:', error);
-      }
+    if (!confirm('Ești sigur că vrei să suspendi acest curier? Acesta va fi retrogradat la client.')) {
+      return;
+    }
+    try {
+      await updateDoc(doc(db, 'users', uid), { 
+        role: 'client',
+        suspendedAt: serverTimestamp()
+      });
+      showSuccess('Curier suspendat cu succes!');
+      loadData();
+    } catch (error) {
+      console.error('Error suspending courier:', error);
+      showError('Eroare la suspendarea curierului.');
     }
   };
 
@@ -739,7 +917,10 @@ export default function AdminDashboard() {
   const userName = getFirstName();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-slate-900">
+      {/* Order Details Modal */}
+      <OrderDetailsModal order={selectedOrder} onClose={() => setSelectedOrder(null)} />
+
       {/* Header */}
       <AdminHeader 
         userName={userName}
@@ -809,7 +990,11 @@ export default function AdminDashboard() {
 
           {/* Orders Tab */}
           {activeTab === 'orders' && (
-            <OrdersTable orders={orders} onStatusChange={handleStatusChange} />
+            <OrdersTable 
+              orders={orders} 
+              onStatusChange={handleStatusChange}
+              onViewDetails={setSelectedOrder}
+            />
           )}
 
           {/* Couriers Tab */}

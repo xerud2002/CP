@@ -10,15 +10,16 @@
 - [x] Protected routes with auth guards
 
 ### Firestore Security Rules
-- [x] **users**: Users can only read/write their own profile
+- [x] **users**: Users can read all, update own profile, admin can update/delete any
 - [x] **comenzi**: 
   - Clients read own orders
-  - Couriers read pending orders + their assigned orders
-  - Only pending orders can be deleted
-- [x] **recenzii**: Clients write, both parties read
-- [x] **zona_acoperire**: Couriers manage own zones
-- [x] **tarife_curier**: Couriers manage own tariffs
-- [x] **profil_curier/profil_client**: Self-managed profiles
+  - Couriers read all pending orders + their assigned orders
+  - Admin reads/updates/deletes all orders
+  - Only pending orders can be deleted by owners
+- [x] **recenzii**: Clients write, both parties read, admin can moderate
+- [x] **zona_acoperire**: Couriers manage own zones, admin can manage all
+- [x] **tarife_curier**: Couriers manage own tariffs, admin can manage all
+- [x] **profil_curier/profil_client**: Self-managed profiles, admin has full access
 - [x] **counters**: Authenticated read/write with transactions
 
 ### Data Validation

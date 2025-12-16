@@ -94,7 +94,7 @@ function RegisterForm() {
           <p className="text-gray-400 text-lg mb-10 max-w-md">
             {isCurier 
               ? 'Alătură-te platformei și câștigă bani transportând colete, plicuri, persoane, mobilă, electronice, animale și oferind servicii de platformă și tractări auto pe rutele pe care le faci deja.'
-              : 'Conectează-te cu curieri de încredere pentru transport complet: colete, plicuri, persoane, mobilă, electronice, animale, transfer aeroport, platformă și tractări auto în peste 16 țări europene.'}
+              : 'Conectează-te cu curieri de încredere pentru transport complet: colete, plicuri, persoane, mobilă, electronice, animale, platformă și tractări auto în peste 16 țări europene.'}
           </p>
 
           {/* Features */}

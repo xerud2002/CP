@@ -94,7 +94,7 @@ function LoginForm() {
           <p className="text-gray-400 text-lg mb-10 max-w-md">
             {isCurier 
               ? 'Accesează dashboard-ul și gestionează transporturi de colete, plicuri, persoane, mobilă, electronice, animale și servicii de platformă pe rutele tale europene.'
-              : 'Transport sigur în toată Europa: colete, plicuri, persoane, mobilă, electronice, animale, transfer aeroport, platformă și tractări auto.'}
+              : 'Transport sigur în toată Europa: colete, plicuri, persoane, mobilă, electronice, animale, platformă și tractări auto.'}
           </p>
 
           {/* Stats */}

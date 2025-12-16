@@ -1,7 +1,7 @@
 # Curierul Perfect - AI Coding Instructions
 
 Romanian courier marketplace connecting clients with couriers for European package delivery.  
-**Stack**: Next.js 16 (App Router), React 19, Firebase 11.1, Tailwind CSS 4, Sonner
+**Stack**: Next.js 16.0 (App Router), React 19, Firebase 11.1, Tailwind CSS 4, Sonner
 
 ## Architecture
 
@@ -21,7 +21,7 @@ Romanian courier marketplace connecting clients with couriers for European packa
 | File | Purpose |
 |------|---------|
 | `src/contexts/AuthContext.tsx` | `useAuth()` hook: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
-| `src/lib/constants.ts` | **SINGLE SOURCE**: `countries`, `countriesSimple`, `judetByCountry`, `serviceTypes` |
+| `src/lib/constants.ts` | **SINGLE SOURCE**: `countries`, `countriesSimple`, `judetByCountry`, `serviceTypes`, `serviceNames`, `orderStatusConfig` |
 | `src/lib/toast.ts` | `showSuccess()`, `showError()`, `showWarning()`, `showInfo()`, `showPromise()` — auto-translates Firebase errors to Romanian |
 | `src/lib/errorMessages.ts` | `getErrorMessage()`, `logError()` — maps Firebase error codes to Romanian messages |
 | `src/utils/orderStatusHelpers.ts` | `transitionToInLucru()`, `transitionToFinalizata()`, `canEditOrder()`, `canDeleteOrder()`, `canFinalizeOrder()`, `canLeaveReview()` |
@@ -108,7 +108,10 @@ formatOrderNumber(order.orderNumber);  // Returns: "CP141122"
 ```
 
 ### 7. Service Icon Rendering
-Each dashboard page that displays service types uses a local `ServiceIcon` component that maps service names to inline SVG icons. The component normalizes service names (e.g., `'colete'` → `'Colete'`) before icon lookup. See `src/app/dashboard/curier/comenzi/page.tsx` for the pattern.
+Each dashboard page that displays service types uses a local `ServiceIcon` component that maps service names to inline SVG icons. The component normalizes service names (e.g., `'colete'` → `'Colete'`) before icon lookup. See [src/app/dashboard/curier/comenzi/page.tsx](src/app/dashboard/curier/comenzi/page.tsx) for the pattern.
+
+### 8. Order Status Display
+Use `orderStatusConfig` from `@/lib/constants.ts` for consistent status styling (colors, labels, badges). Supports both new Romanian statuses (`noua`, `in_lucru`, `livrata`, `anulata`) and legacy English statuses for backwards compatibility.
 
 ## Order Status Flow
 ```

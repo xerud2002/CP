@@ -7,64 +7,72 @@ service cloud.firestore {
       return request.auth != null;
     }
     
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return isAuthenticated() && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
     // Users collection - base profiles with role
     match /users/{userId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.auth.uid == userId;
-      allow update: if isAuthenticated() && request.auth.uid == userId;
-      allow delete: if false; // Never allow user deletion
+      allow update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin(); // Only admin can delete users
     }
     
     // Extended courier profiles
     match /profil_curier/{userId} {
       allow read: if isAuthenticated(); // Public read (clients need to see)
-      allow write: if isAuthenticated() && userId == request.auth.uid;
+      allow write: if isAuthenticated() && (userId == request.auth.uid || isAdmin());
     }
     
     // Extended client profiles
     match /profil_client/{userId} {
-      allow read: if isAuthenticated() && userId == request.auth.uid;
-      allow write: if isAuthenticated() && userId == request.auth.uid;
+      allow read: if isAuthenticated() && (userId == request.auth.uid || isAdmin());
+      allow write: if isAuthenticated() && (userId == request.auth.uid || isAdmin());
     }
     
     // Courier coverage zones
     match /zona_acoperire/{docId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
     }
     
     // Courier pricing
     match /tarife_curier/{docId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
     }
     
     // Person transport routes
     match /transport_persoane/{docId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      allow update, delete: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
     }
     
     // Orders - simplified without status checks
     match /comenzi/{docId} {
-      // Clients read own orders, couriers read all orders
+      // Clients read own orders, couriers read all orders, admin reads everything
       allow read: if isAuthenticated() && 
         (resource.data.uid_client == request.auth.uid || 
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'curier');
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'curier' ||
+         isAdmin());
       // Clients create orders
       allow create: if isAuthenticated() && 
         request.resource.data.uid_client == request.auth.uid;
-      // Both clients and couriers can update
+      // Clients, couriers, and admin can update
       allow update: if isAuthenticated() && 
         (resource.data.uid_client == request.auth.uid || 
          resource.data.courierId == request.auth.uid ||
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'curier');
-      // Clients can delete own orders anytime
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'curier' ||
+         isAdmin());
+      // Clients can delete own orders, admin can delete any order
       allow delete: if isAuthenticated() && 
-        resource.data.uid_client == request.auth.uid;
+        (resource.data.uid_client == request.auth.uid || isAdmin());
     }
     
     // Reviews
@@ -73,7 +81,7 @@ service cloud.firestore {
       allow create: if isAuthenticated() && 
         request.resource.data.clientId == request.auth.uid;
       allow update, delete: if isAuthenticated() && 
-        resource.data.clientId == request.auth.uid;
+        (resource.data.clientId == request.auth.uid || isAdmin());
     }
     
     // Order number counter

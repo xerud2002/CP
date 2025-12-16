@@ -1348,7 +1348,6 @@ function ComandaForm() {
                       selectedService === 'plicuri' ? 'Descrie documentele (ex: contracte, acte notariale, corespondență oficială)' :
                       selectedService === 'masini' ? 'Ex: BMW X5, 2020, negru, funcțional/nefuncțional' :
                       selectedService === 'persoane' ? 'Ex: bagaje, copii mici, nevoi speciale...' :
-                      selectedService === 'aeroport' ? 'Ex: Zbor RO1234, ora 14:30, Terminal 1, 2 bagaje mari' :
                       selectedService === 'animale' ? 'Ex: Câine Labrador, 25kg, are cușcă proprie, vaccinuri la zi' :
                       selectedService === 'electronice' ? 'Ex: Laptop MacBook Pro, TV 55", PlayStation 5, toate în cutii originale' :
                       selectedService === 'platforma' ? 'Ex: BMW Seria 3, 2018, 1.5 tone, funcțional dar fără roți' :
