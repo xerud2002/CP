@@ -108,7 +108,7 @@ formatOrderNumber(order.orderNumber);  // Returns: "CP141122"
 ```
 
 ### 7. Service Icon Rendering
-Each dashboard page that displays service types uses a local `ServiceIcon` component that maps service names to inline SVG icons. The component normalizes service names (e.g., `'colete'` → `'Colete'`) before icon lookup. See [src/app/dashboard/curier/comenzi/page.tsx](src/app/dashboard/curier/comenzi/page.tsx) for the pattern.
+Each dashboard page that displays service types uses a local `ServiceIcon` component that maps service names to inline SVG icons. The component normalizes service names (e.g., `'colete'` → `'Colete'`) before icon lookup. See `src/app/dashboard/curier/comenzi/page.tsx` for the pattern.
 
 ## Order Status Flow
 ```
