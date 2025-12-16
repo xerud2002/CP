@@ -125,7 +125,7 @@ function DashboardHeader({ notificationCount, onLogout }: {
   onLogout: () => void;
 }) {
   return (
-    <header className="bg-slate-900/90 backdrop-blur-xl border-b border-white/5 sticky top-0 z-[60]">
+    <header className="bg-slate-900/90 backdrop-blur-xl border-b border-white/5 sticky top-0 z-60">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo/Brand */}

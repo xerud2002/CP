@@ -403,7 +403,7 @@ export default function ComenziCurierPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-[70] backdrop-blur-xl shadow-lg">
+      <div className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-70 backdrop-blur-xl shadow-lg">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <Link 
@@ -800,11 +800,12 @@ export default function ComenziCurierPage() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             {(() => {
+                              const createdAt = order.createdAt as Date | { toDate: () => Date } | string | number | undefined;
                               const date = order.timestamp 
                                 ? new Date(order.timestamp) 
-                                : order.createdAt?.toDate 
-                                  ? order.createdAt.toDate() 
-                                  : new Date(order.createdAt as string | number | Date);
+                                : createdAt && typeof createdAt === 'object' && 'toDate' in createdAt
+                                  ? createdAt.toDate() 
+                                  : new Date(createdAt as string | number | Date);
                               const day = String(date.getDate()).padStart(2, '0');
                               const month = String(date.getMonth() + 1).padStart(2, '0');
                               const year = date.getFullYear();
@@ -842,13 +843,13 @@ export default function ComenziCurierPage() {
           <>
             {/* Backdrop */}
             <div 
-              className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm print:hidden"
+              className="fixed inset-0 z-60 bg-black/70 backdrop-blur-sm print:hidden"
               style={{ top: '72px' }}
               onClick={() => setSelectedOrder(null)}
             />
             
             {/* Modal Container */}
-            <div id="print-modal-container" className="fixed inset-0 z-[65] flex items-center justify-center p-4 print:p-0 print:static print:flex print:items-start" style={{ top: '72px' }} onClick={() => setSelectedOrder(null)}>
+            <div id="print-modal-container" className="fixed inset-0 z-65 flex items-center justify-center p-4 print:p-0 print:static print:flex print:items-start" style={{ top: '72px' }} onClick={() => setSelectedOrder(null)}>
               {/* Modal */}
               <div id="print-modal" className="relative bg-slate-800 rounded-2xl border border-white/10 shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden print:max-w-full print:max-h-full print:rounded-none print:border-0 print:shadow-none print:bg-white" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}

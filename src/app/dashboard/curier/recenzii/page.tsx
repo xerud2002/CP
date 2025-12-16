@@ -162,7 +162,7 @@ export default function RecenziiPage() {
         <div className="bg-linear-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl rounded-2xl border border-blue-500/30 p-6 mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
             {/* Overall Rating */}
-            <div className="flex flex-col items-center bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 border border-blue-500/20 min-w-[200px]">
+            <div className="flex flex-col items-center bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 border border-blue-500/20 min-w-50">
               <div className="text-5xl font-bold text-white mb-2">{rating.toFixed(1)}</div>
               <div className="flex gap-1 mb-3">
                 {renderStars(Math.round(rating))}

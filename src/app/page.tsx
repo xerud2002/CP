@@ -390,7 +390,7 @@ export default function Home() {
       <section className="py-12 sm:py-16 md:py-24 px-3 sm:px-4 relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-orange-500/5 rounded-full blur-3xl"></div>
         </div>
         
         <div className="max-w-6xl mx-auto relative z-10">
@@ -826,7 +826,7 @@ export default function Home() {
                 {duplicatedTestimonials.map((testimonial, index) => (
                   <div 
                     key={index} 
-                    className="shrink-0 w-[calc(33.333%-1rem)] min-w-[280px] sm:min-w-[320px] md:min-w-[340px] group relative"
+                    className="shrink-0 w-[calc(33.333%-1rem)] min-w-70 sm:min-w-80 md:min-w-85 group relative"
                   >
                     {/* Card */}
                     <div className="relative h-full bg-linear-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-xl rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-white/10 hover:border-yellow-500/30 transition-all duration-500 active:scale-95 md:hover:transform md:hover:-translate-y-2 hover:shadow-2xl hover:shadow-yellow-500/20">
@@ -971,8 +971,8 @@ export default function Home() {
         {/* Background effects */}
         <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-900/95 to-slate-900 pointer-events-none"></div>
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] bg-green-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-orange-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/4 right-1/4 w-100 h-100 bg-green-500/5 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-5xl mx-auto relative z-10">
@@ -1159,7 +1159,7 @@ export default function Home() {
                           alt={country.name} 
                           width={24} 
                           height={18} 
-                          className="rounded-sm object-cover sm:w-7 sm:h-[21px]"
+                          className="rounded-sm object-cover sm:w-7 sm:h-5"
                         />
                       </div>
                     </div>
