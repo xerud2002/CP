@@ -14,7 +14,7 @@ import { db } from '@/lib/firebase';
 import { formatOrderNumber, formatClientName } from '@/utils/orderHelpers';
 import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
 import { showSuccess, showWarning, showError } from '@/lib/toast';
-import { countries, serviceTypes, orderStatusConfig } from '@/lib/constants';
+import { countries, serviceTypes } from '@/lib/constants';
 import type { Order } from '@/types';
 
 // Service Icon component - Reusable with inline icon definitions
@@ -804,7 +804,7 @@ export default function ComenziCurierPage() {
                                 ? new Date(order.timestamp) 
                                 : order.createdAt?.toDate 
                                   ? order.createdAt.toDate() 
-                                  : new Date(order.createdAt as any);
+                                  : new Date(order.createdAt as string | number | Date);
                               const day = String(date.getDate()).padStart(2, '0');
                               const month = String(date.getMonth() + 1).padStart(2, '0');
                               const year = date.getFullYear();

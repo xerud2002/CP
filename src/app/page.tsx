@@ -63,10 +63,56 @@ const testimonials = [
   },
 ];
 
+// Duplicate testimonials for infinite scroll carousel
+const duplicatedTestimonials = [...testimonials, ...testimonials];
+
+// Structured data for SEO (static - defined outside component)
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Curierul Perfect",
+  "url": "https://curierulperfect.ro",
+  "logo": "https://curierulperfect.ro/logo.png",
+  "description": "Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări.",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+40-XXX-XXX-XXX",
+    "contactType": "customer service",
+    "availableLanguage": ["Romanian", "English"]
+  },
+  "sameAs": [
+    "https://www.facebook.com/curierulperfect",
+    "https://www.instagram.com/curierulperfect"
+  ],
+  "serviceArea": {
+    "@type": "Place",
+    "name": "Europa"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicii de Transport",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transport colete" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transport plicuri" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transport persoane" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transport mobilă" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transport electronice" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transport animale" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Transport cu platformă" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Tractări auto" } }
+    ]
+  }
+};
+
 export default function Home() {
 
   return (
-    <div className="min-h-screen relative bg-slate-900">
+    <>
+      <script 
+        type="application/ld+json" 
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <main className="min-h-screen relative bg-slate-900">
       {/* Hero Section - Optimized for Mobile */}
       <section id="top" className="relative min-h-dvh lg:min-h-[90vh] flex items-center px-3 sm:px-4 py-8 sm:py-12 overflow-hidden">
         <div className="max-w-7xl mx-auto w-full relative z-10">
@@ -159,47 +205,47 @@ export default function Home() {
                   {/* Plicuri */}
                   <Link 
                     href="/comanda?serviciu=plicuri"
-                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-yellow-500/30 hover:border-yellow-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
+                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-yellow-500/30 hover:border-yellow-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-linear-to-br from-yellow-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-yellow-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-2">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                           <rect x="2" y="4" width="20" height="16" rx="2" />
                           <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </div>
-                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Plicuri</h3>
-                      <p className="text-gray-400 text-[10px] sm:text-xs">Documente, acte</p>
+                      <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Plicuri</h3>
+                      <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Documente, acte</p>
                     </div>
                   </Link>
 
                   {/* Transport Persoane */}
                   <Link 
                     href="/comanda?serviciu=persoane"
-                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-rose-500/30 hover:border-rose-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
+                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-rose-500/30 hover:border-rose-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-linear-to-br from-rose-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-rose-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-rose-500/20 rounded-lg flex items-center justify-center mb-2">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-rose-400" fill="currentColor" viewBox="0 0 24 24">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-rose-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-rose-400" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
                         </svg>
                       </div>
-                      <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5">Transport Persoane</h3>
-                      <p className="text-gray-400 text-[10px] sm:text-xs">În Europa</p>
+                      <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Persoane</h3>
+                      <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Transport în Europa</p>
                     </div>
                   </Link>
 
                   {/* Electronice */}
                   <Link 
                     href="/comanda?serviciu=electronice"
-                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border border-purple-500/30 hover:border-purple-400/50 p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
+                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-purple-500/30 hover:border-purple-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mb-2">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                           <rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round" />
                           <line x1="8" y1="21" x2="16" y2="21" strokeLinecap="round" strokeLinejoin="round" />
                           <line x1="12" y1="17" x2="12" y2="21" strokeLinecap="round" strokeLinejoin="round" />
@@ -290,6 +336,28 @@ export default function Home() {
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Transport mobilier</p>
                     </div>
                   </Link>
+
+                  {/* Transport Paleți */}
+                  <Link 
+                    href="/comanda?serviciu=paleti"
+                    className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-orange-500/30 hover:border-orange-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
+                  >
+                    <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="relative">
+                      <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-orange-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                          <path d="M3 6h18" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M3 12h18" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M3 18h18" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M4 6v12" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M20 6v12" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                      <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Transport Paleți</h3>
+                      <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Marfă paletizată</p>
+                    </div>
+                  </Link>
                 </div>
                 
                 {/* More services link */}
@@ -361,14 +429,14 @@ export default function Home() {
             <div className="relative group">
               <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-linear-to-r from-green-500/50 to-transparent"></div>
               <div className="text-center">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-green-500/20 to-green-600/10 border border-green-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-green-500/40 transition-all duration-300">
-                  <svg className="w-9 h-9 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-linear-to-br from-green-500/20 to-green-600/10 border border-green-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-green-500/40 transition-all duration-300">
+                  <svg className="w-7 h-7 sm:w-9 sm:h-9 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                   </svg>
                 </div>
-                <div className="inline-block px-3 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-bold mb-3">PASUL 02</div>
-                <h3 className="text-xl font-semibold text-white mb-2">Primește oferte</h3>
-                <p className="text-gray-400 text-sm">Transportatorii disponibili îți trimit oferte personalizate și competitive.</p>
+                <div className="inline-block px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-green-500/10 text-green-400 text-[10px] sm:text-xs font-bold mb-2 sm:mb-3">PASUL 02</div>
+                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-white mb-1.5 sm:mb-2 px-2">Primește oferte</h3>
+                <p className="text-gray-400 text-xs sm:text-sm px-2">Transportatorii disponibili îți trimit oferte personalizate și competitive.</p>
               </div>
             </div>
 
@@ -376,28 +444,28 @@ export default function Home() {
             <div className="relative group">
               <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-linear-to-r from-blue-500/50 to-transparent"></div>
               <div className="text-center">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-blue-500/40 transition-all duration-300">
-                  <svg className="w-9 h-9 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-linear-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-blue-500/40 transition-all duration-300">
+                  <svg className="w-7 h-7 sm:w-9 sm:h-9 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
-                <div className="inline-block px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-bold mb-3">PASUL 03</div>
-                <h3 className="text-xl font-semibold text-white mb-2">Alege transportatorul</h3>
-                <p className="text-gray-400 text-sm">Compară prețurile, recenziile și alege transportatorul potrivit pentru tine.</p>
+                <div className="inline-block px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-blue-500/10 text-blue-400 text-[10px] sm:text-xs font-bold mb-2 sm:mb-3">PASUL 03</div>
+                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-white mb-1.5 sm:mb-2 px-2">Alege transportatorul</h3>
+                <p className="text-gray-400 text-xs sm:text-sm px-2">Compară prețurile, recenziile și alege transportatorul potrivit pentru tine.</p>
               </div>
             </div>
 
             {/* Step 4 */}
             <div className="relative group">
               <div className="text-center">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-purple-500/40 transition-all duration-300">
-                  <svg className="w-9 h-9 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-linear-to-br from-yellow-500/20 to-amber-600/10 border border-yellow-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-yellow-500/40 transition-all duration-300">
+                  <svg className="w-7 h-7 sm:w-9 sm:h-9 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
                 </div>
-                <div className="inline-block px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-bold mb-3">PASUL 04</div>
-                <h3 className="text-xl font-semibold text-white mb-2">Relaxează-te</h3>
-                <p className="text-gray-400 text-sm">Transportul tău este ridicat și livrat în siguranță la destinație.</p>
+                <div className="inline-block px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-yellow-500/10 text-yellow-400 text-[10px] sm:text-xs font-bold mb-2 sm:mb-3">PASUL 04</div>
+                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-white mb-1.5 sm:mb-2 px-2">Lasă o recenzie</h3>
+                <p className="text-gray-400 text-xs sm:text-sm px-2">Ajută comunitatea lăsând feedback despre experiența ta cu transportatorul.</p>
               </div>
             </div>
           </div>
@@ -755,7 +823,7 @@ export default function Home() {
             <div className="overflow-hidden py-4">
               <div className="flex animate-scroll-left gap-3 sm:gap-4 md:gap-6 hover:[animation-play-state:paused]">
                 {/* Duplicate testimonials for infinite scroll effect */}
-                {[...testimonials, ...testimonials].map((testimonial, index) => (
+                {duplicatedTestimonials.map((testimonial, index) => (
                   <div 
                     key={index} 
                     className="shrink-0 w-[calc(33.333%-1rem)] min-w-[280px] sm:min-w-[320px] md:min-w-[340px] group relative"
@@ -1193,7 +1261,8 @@ export default function Home() {
       {/* Floating Elements */}
       <WhatsAppButton />
       {/* <SocialProof /> */}
-    </div>
+    </main>
+    </>
   );
 }
 

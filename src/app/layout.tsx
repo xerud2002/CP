@@ -16,28 +16,75 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Curierul Perfect - Transport Complet în Europa | Colete, Plicuri, Persoane, Mobilă",
-  description: "Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în 16+ țări.",
+  metadataBase: new URL('https://curierulperfect.ro'),
+  title: {
+    default: "Curierul Perfect - Transport Complet în Europa | Colete, Persoane, Mobilă",
+    template: "%s | Curierul Perfect"
+  },
+  description: "Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în 16+ țări europene. Conectează-te cu curieri verificați.",
   keywords: [
     "transport colete Europa",
     "curier România Europa",
-    "transport persoane",
-    "transport mobilă",
+    "transport persoane Europa",
+    "transport mobilă Europa",
     "transport electronice",
-    "transport animale",
-    "platformă auto",
-    "tractări auto",
-    "transport plicuri",
+    "transport animale de companie",
+    "platformă auto Europa",
+    "tractări auto internaționale",
+    "transport plicuri documente",
     "curierat european",
-    "trimite colete Europa",
+    "trimite colete Germania",
+    "trimite colete Anglia",
+    "trimite colete Italia",
+    "trimite colete Spania",
     "marketplace curierat",
+    "transport diaspora",
   ],
+  authors: [{ name: "Curierul Perfect" }],
+  creator: "Curierul Perfect",
+  publisher: "Curierul Perfect",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
     title: "Curierul Perfect - Transport Complet în Europa",
-    description: "Conectează-te cu curieri de încredere pentru transport: colete, plicuri, persoane, mobilă, electronice, animale și mai mult.",
+    description: "Conectează-te cu curieri de încredere pentru transport: colete, plicuri, persoane, mobilă, electronice, animale și mai mult. Servicii în 16+ țări europene.",
     type: "website",
     locale: "ro_RO",
+    url: "https://curierulperfect.ro",
+    siteName: "Curierul Perfect",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Curierul Perfect - Transport European",
+      },
+    ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Curierul Perfect - Transport Complet în Europa",
+    description: "Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale și mai mult.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: "https://curierulperfect.ro",
+  },
+  category: "transport",
 };
 
 export default function RootLayout({

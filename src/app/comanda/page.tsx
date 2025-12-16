@@ -375,7 +375,7 @@ function ComandaForm() {
     }));
   };
 
-  const validateStep = (currentStep: number): boolean => {
+  const validateStep = useCallback((currentStep: number): boolean => {
     const newErrors: Record<string, string> = {};
 
     if (currentStep === 1) {
@@ -431,7 +431,7 @@ function ComandaForm() {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [selectedService, formData]);
 
   const handleNextStep = () => {
     if (validateStep(step)) {
@@ -492,7 +492,7 @@ function ComandaForm() {
     } finally {
       setSubmitting(false);
     }
-  }, [step, user, selectedService, formData, router]);
+  }, [step, user, selectedService, formData, router, validateStep]);
 
   // Memoized judet lists
   const judetRidicareList = useMemo(
@@ -516,11 +516,6 @@ function ComandaForm() {
     [ridicareCountry]
   );
 
-  const ridicareCountryFlag = useMemo(
-    () => ridicareCountry?.flag || '/img/flag/ro.svg',
-    [ridicareCountry]
-  );
-
   // Memoized country data for delivery location
   const livrareCountry = useMemo(
     () => countries.find(c => c.code === formData.tara_livrare),
@@ -529,11 +524,6 @@ function ComandaForm() {
 
   const livrareCountryName = useMemo(
     () => livrareCountry?.name || 'Selectează...',
-    [livrareCountry]
-  );
-
-  const livrareCountryFlag = useMemo(
-    () => livrareCountry?.flag || '/img/flag/gb.svg',
     [livrareCountry]
   );
 
@@ -1002,7 +992,12 @@ function ComandaForm() {
                                 >
                                   <span className="text-white text-sm">{j}</span>
                                 </button>
-                              ))}
+                              ))
+                            ) : (
+                              <div className="px-3 py-4 text-center text-gray-400 text-sm">
+                                Nu s-au găsit rezultate
+                              </div>
+                            )}
                             </div>
                           </div>
                         )}
