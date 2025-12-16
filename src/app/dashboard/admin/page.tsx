@@ -778,8 +778,11 @@ export default function AdminDashboard() {
       );
       const ordersData: Order[] = [];
       ordersSnapshot.forEach((doc) => {
-        ordersData.push({ id: doc.id, ...doc.data() } as Order);
+        const orderData = doc.data();
+        console.log('🔍 Order', doc.id, 'has status:', orderData.status, '| Full data:', orderData);
+        ordersData.push({ id: doc.id, ...orderData } as Order);
       });
+      console.log(`📊 Total orders loaded: ${ordersData.length} | Orders with status: ${ordersData.filter(o => o.status).length} | Orders WITHOUT status: ${ordersData.filter(o => !o.status).length}`);
       setOrders(ordersData);
       
       // Only show success message if not initial load
