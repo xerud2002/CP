@@ -408,14 +408,15 @@ function OrdersTable({ orders, onStatusChange, onViewDetails }: {
                 <select
                   value={order.status || 'noua'}
                   onChange={(e) => onStatusChange(order.id!, e.target.value)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer transition-all ${statusColors[order.status || 'noua'] || 'bg-gray-500/20 text-gray-400'}`}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer transition-all bg-slate-700 text-white [&>option]:bg-slate-800 [&>option]:text-white ${statusColors[order.status || 'noua'] || 'bg-gray-500/20 text-gray-400'}`}
+                  style={{ colorScheme: 'dark' }}
                 >
-                  <option value="noua">{statusLabels.noua}</option>
-                  <option value="in_lucru">{statusLabels.in_lucru}</option>
-                  <option value="acceptata">{statusLabels.acceptata}</option>
-                  <option value="in_tranzit">{statusLabels.in_tranzit}</option>
-                  <option value="livrata">{statusLabels.livrata}</option>
-                  <option value="anulata">{statusLabels.anulata}</option>
+                  <option value="noua" className="bg-slate-800 text-white">{statusLabels.noua}</option>
+                  <option value="in_lucru" className="bg-slate-800 text-white">{statusLabels.in_lucru}</option>
+                  <option value="acceptata" className="bg-slate-800 text-white">{statusLabels.acceptata}</option>
+                  <option value="in_tranzit" className="bg-slate-800 text-white">{statusLabels.in_tranzit}</option>
+                  <option value="livrata" className="bg-slate-800 text-white">{statusLabels.livrata}</option>
+                  <option value="anulata" className="bg-slate-800 text-white">{statusLabels.anulata}</option>
                 </select>
               </td>
               <td className="py-4 px-4">
