@@ -21,9 +21,11 @@ Romanian courier marketplace connecting clients with couriers for European packa
 | File | Purpose |
 |------|---------|
 | `src/contexts/AuthContext.tsx` | `useAuth()` hook: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()` |
-| `src/lib/constants.ts` | **SINGLE SOURCE**: `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
+| `src/lib/constants.ts` | **SINGLE SOURCE**: `countries`, `judetByCountry`, `serviceTypes` |
 | `src/lib/toast.ts` | `showSuccess()`, `showError()`, `showPromise()` — auto-translates Firebase errors to Romanian |
+| `src/lib/errorMessages.ts` | `getErrorMessage()` — maps Firebase error codes to Romanian messages |
 | `src/utils/orderStatusHelpers.ts` | `transitionToInLucru()`, `transitionToFinalizata()`, `canEditOrder()`, `canDeleteOrder()` |
+| `src/utils/orderHelpers.ts` | `getNextOrderNumber()`, `formatOrderNumber()`, `formatClientName()` |
 | `src/types/index.ts` | `User`, `UserRole`, `Order`, `CoverageZone`, `CourierProfile` |
 
 ### Firestore Collections
@@ -33,6 +35,7 @@ Romanian courier marketplace connecting clients with couriers for European packa
 | `comenzi` | `uid_client` | Orders with `orderNumber`, `courierId` when accepted |
 | `zona_acoperire` | `uid` | Multi-record courier coverage zones |
 | `profil_curier` / `profil_client` | doc ID = `uid` | Extended profiles (single doc per user) |
+| `counters/orderNumber` | — | Sequential order counter (starts 141121) |
 
 ## Critical Patterns
 
@@ -86,8 +89,19 @@ try {
   await firebaseOperation();
   showSuccess('Operațiune reușită!');
 } catch (err) {
-  showError(err);  // Auto-converts to Romanian message
+  showError(err);  // Auto-converts to Romanian via getErrorMessage()
 }
+```
+
+### 6. Order Number Generation
+```tsx
+import { getNextOrderNumber, formatOrderNumber } from '@/utils/orderHelpers';
+
+// Creating new order — get sequential number
+const orderNumber = await getNextOrderNumber();  // Returns: 141122
+
+// Displaying — format with prefix
+formatOrderNumber(order.orderNumber);  // Returns: "CP141122"
 ```
 
 ## Order Status Flow
@@ -99,7 +113,7 @@ anulata   anulata
 - **Edit/Delete**: Only `noua` status (`canEditOrder()`, `canDeleteOrder()`)
 - **Finalize**: Only `in_lucru` status (`canFinalizeOrder()`)
 - **Reviews**: Only `livrata` status (`canLeaveReview()`)
-- Order numbers: Sequential via `getNextOrderNumber()` → display as `"CP141121"` via `formatOrderNumber()`
+- **Auto-transition**: `noua` → `in_lucru` when courier sends first message/offer
 
 ## Styling
 
@@ -113,12 +127,16 @@ anulata   anulata
 - Orange (primary): `#f97316` | Green (secondary): `#34d399`
 - Dashboard: `bg-slate-900` base, `bg-slate-800/50` cards
 
+### Service Types Styling
+Use `serviceTypes` from constants — each has `color`, `bgColor`, `borderColor`, `gradient` properties.
+
 ## Conventions
 - **UI text**: Romanian | **Code**: English
 - **Path alias**: `@/*` → `./src/*`
 - **All dashboard pages**: `'use client'` directive
 - **Constants**: NEVER duplicate — import from `@/lib/constants.ts`
-- **Flags**: `public/img/flag/{code}.svg` (lowercase)
+- **Flags**: `public/img/flag/{code}.svg` (lowercase country codes)
+- **Firestore imports**: Always from `firebase/firestore`, db from `@/lib/firebase`
 
 ## Commands
 ```bash
