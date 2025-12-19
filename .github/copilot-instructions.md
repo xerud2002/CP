@@ -1,9 +1,9 @@
-# Curierul Perfect - AI Coding Instructions
+# Curierul Perfect - AI Agent Instructions
 
 Romanian courier marketplace connecting clients with couriers for European package delivery.  
 **Stack**: Next.js 16.0 (App Router), React 19, Firebase 11.1, Tailwind CSS 4, Sonner
 
-## Architecture Overview
+## 🎯 Architecture At-a-Glance
 
 **Multi-tenant SaaS** with role-based access (`client` | `curier` | `admin`). Security model enforces **owner-based isolation** through `uid` fields in Firestore—rules check ownership, but **client queries MUST also filter by owner** (rules don't auto-filter results).
 
@@ -11,44 +11,47 @@ Romanian courier marketplace connecting clients with couriers for European packa
 1. User logs in with `?role=client|curier` query param
 2. Role stored in `users/{uid}.role` during registration
 3. Redirect to `/dashboard/{role}` after auth
-4. Protected pages check `user.role` in `useEffect` hook
+4. Protected pages check `user.role` in `useEffect` hook (see pattern below)
 
-### Dashboard Structure
+### Dashboard Routes
 ```
 /dashboard/client  → Hub + /comenzi, /profil, /recenzii, /fidelitate, /suport
 /dashboard/curier  → Hub + /comenzi, /profil, /recenzii, /servicii, /verificare
 /dashboard/admin   → Admin panel (future)
 ```
 
-### Layout Logic ([LayoutWrapper.tsx](../src/components/LayoutWrapper.tsx))
+### Layout Logic
+`src/components/LayoutWrapper.tsx` controls Header/Footer visibility:
 - **No Header/Footer**: `/dashboard/*`, `/comanda`, auth pages (`/login`, `/register`, `/forgot-password`)
 - **With Header/Footer**: All other public routes
 - ⚠️ Auth pages using `useSearchParams()` require `<Suspense>` wrapper to avoid hydration errors
 
-### Key Files Reference
+## 📋 Essential Files Reference
+
 | File | Purpose |
 |------|---------|
-| [AuthContext.tsx](../src/contexts/AuthContext.tsx) | `useAuth()` hook with `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
-| [constants.ts](../src/lib/constants.ts) | **SINGLE SOURCE OF TRUTH**: `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` — NEVER duplicate these |
-| [toast.ts](../src/lib/toast.ts) | `showSuccess()`, `showError()`, `showWarning()`, `showInfo()` — auto-translates Firebase errors via `errorMessages.ts` |
-| [orderStatusHelpers.ts](../src/utils/orderStatusHelpers.ts) | Status transition logic: `transitionToInLucru()`, `transitionToFinalizata()`, `canEditOrder()`, `canFinalizeOrder()` |
-| [orderHelpers.ts](../src/utils/orderHelpers.ts) | Order utilities: `getNextOrderNumber()` (sequential counter), `formatOrderNumber()` (adds "CP" prefix) |
-| [types/index.ts](../src/types/index.ts) | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `CourierProfile` |
+| `src/contexts/AuthContext.tsx` | `useAuth()` hook: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
+| `src/lib/constants.ts` | **SINGLE SOURCE OF TRUTH**: `countries`, `judetByCountry`, `serviceTypes` — NEVER duplicate |
+| `src/lib/toast.ts` | `showSuccess()`, `showError()`, `showWarning()`, `showInfo()` — auto-translates Firebase errors to Romanian |
+| `src/utils/orderStatusHelpers.ts` | Status transitions: `transitionToInLucru()`, `transitionToFinalizata()`, `canEditOrder()`, `canFinalizeOrder()` |
+| `src/utils/orderHelpers.ts` | `getNextOrderNumber()` (atomic counter), `formatOrderNumber()` (adds "CP" prefix) |
+| `src/types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole` |
 
-### Firestore Collections
-| Collection | Owner Field | Key Patterns |
-|------------|-------------|--------------|
-| `users` | `uid` (doc ID) | Base profile + `serviciiOferite: string[]` array for couriers |
+## 🔥 Firestore Collections
+
+| Collection | Owner Field | Key Details |
+|------------|-------------|-------------|
+| `users` | `uid` (doc ID) | Base profile + `serviciiOferite: string[]` (couriers only) |
 | `comenzi` | `uid_client` | Orders with sequential `orderNumber`, `courierId` when accepted, status workflow |
-| `profil_curier` / `profil_client` | Doc ID = `uid` | Extended single-doc profiles (one per user) |
-| `zona_acoperire` | `uid` | Multi-record coverage zones (courier can have multiple regions) |
-| `recenzii` | `clientId` | Reviews left by clients for couriers after `livrata` status |
-| `counters/orderNumber` | N/A | Sequential counter (starts at 141121, increments via `runTransaction`) |
+| `profil_curier` / `profil_client` | Doc ID = `uid` | Extended single-doc profiles |
+| `zona_acoperire` | `uid` | Multi-record coverage zones (courier can have many regions) |
+| `recenzii` | `clientId` | Reviews left by clients for couriers (only after `livrata`) |
+| `counters/orderNumber` | N/A | Sequential counter (starts 141121, atomic increment via `runTransaction`) |
 
-## Critical Patterns (READ FIRST)
+## 🚨 Critical Patterns (MUST FOLLOW)
 
 ### 1. Protected Dashboard Page Template
-**COPY THIS PATTERN** for all dashboard pages:
+**COPY THIS** for all `/dashboard/*` pages:
 ```tsx
 'use client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -72,12 +75,12 @@ export default function Page() {
 }
 ```
 
-### 2. Firestore Queries — Owner Filtering is MANDATORY
+### 2. Firestore Queries — ALWAYS Filter by Owner
 ```tsx
-// ❌ WRONG - Security rules will block this, but it's conceptually incorrect
+// ❌ WRONG - Security rules block this, returns wrong data
 const q = query(collection(db, 'zona_acoperire'));
 
-// ✅ CORRECT - Always filter by owner in client queries
+// ✅ CORRECT - Client queries MUST filter by owner
 const q = query(
   collection(db, 'zona_acoperire'), 
   where('uid', '==', user.uid),
@@ -86,7 +89,7 @@ const q = query(
 ```
 
 ### 3. Service Name Normalization
-Orders store lowercase service names (`'colete'`), but courier profiles use capitalized (`'Colete'`). **Always normalize when comparing**:
+Orders store lowercase (`'colete'`), courier profiles use capitalized (`'Colete'`). **Always normalize**:
 ```tsx
 const userServices = user.serviciiOferite?.map(s => s.toLowerCase().trim()) || [];
 const matchesService = userServices.includes(order.serviciu.toLowerCase().trim());
@@ -94,17 +97,17 @@ const matchesService = userServices.includes(order.serviciu.toLowerCase().trim()
 
 ### 4. Timestamps — Use serverTimestamp()
 ```tsx
-// ❌ WRONG
+// ❌ WRONG - Client-side timestamp causes clock skew
 addDoc(collection(db, 'zona_acoperire'), { uid: user.uid, timestamp: Date.now() });
 
-// ✅ CORRECT
+// ✅ CORRECT - Server-side timestamp
 addDoc(collection(db, 'zona_acoperire'), { 
   uid: user.uid, 
-  addedAt: serverTimestamp()  // Server-side timestamp, avoids clock skew
+  addedAt: serverTimestamp()
 });
 ```
 
-### 5. Error Handling — Auto-Translation to Romanian
+### 5. Error Handling — Auto-Translation
 ```tsx
 import { showSuccess, showError } from '@/lib/toast';
 
@@ -112,23 +115,23 @@ try {
   await updateDoc(docRef, data);
   showSuccess('Datele au fost salvate!');
 } catch (err) {
-  showError(err);  // Automatically converts Firebase error codes to Romanian messages
+  showError(err);  // Auto-converts Firebase errors to Romanian
 }
 ```
 
-### 6. Order Numbers — Sequential Generation
+### 6. Order Numbers — Sequential via Transaction
 ```tsx
 import { getNextOrderNumber, formatOrderNumber } from '@/utils/orderHelpers';
 
-// Creating order - get next number using Firestore transaction
-const orderNumber = await getNextOrderNumber();  // e.g., 141122
+// Creating order - atomic counter
+const orderNumber = await getNextOrderNumber();  // 141122
 
-// Displaying order - format with "CP" prefix
-formatOrderNumber(order.orderNumber);  // Returns: "CP141122"
+// Displaying order - format with prefix
+formatOrderNumber(order.orderNumber);  // "CP141122"
 ```
 
-### 7. Service Icons — Inline SVG Components
-Dashboard pages use a local `ServiceIcon` component with inline SVG icon mappings. **Pattern** (see [comenzi/page.tsx](../src/app/dashboard/curier/comenzi/page.tsx)):
+### 7. Service Icons — Inline SVG Pattern
+Dashboard pages use local `ServiceIcon` component (see `src/app/dashboard/curier/comenzi/page.tsx`):
 ```tsx
 const ServiceIcon = ({ service }: { service: string }) => {
   const iconMap: Record<string, JSX.Element> = {
@@ -139,8 +142,8 @@ const ServiceIcon = ({ service }: { service: string }) => {
 };
 ```
 
-### 8. Order Status — Use Helper Functions
-**NEVER hardcode status checks**. Use helpers from [orderStatusHelpers.ts](../src/utils/orderStatusHelpers.ts):
+### 8. Order Status — NEVER Hardcode
+**Use helpers** from `src/utils/orderStatusHelpers.ts`:
 ```tsx
 import { canEditOrder, canFinalizeOrder, transitionToFinalizata } from '@/utils/orderStatusHelpers';
 
@@ -148,141 +151,94 @@ import { canEditOrder, canFinalizeOrder, transitionToFinalizata } from '@/utils/
 if (canEditOrder(order.status)) { /* show edit button */ }
 if (canFinalizeOrder(order.status)) { /* show finalize button */ }
 
-// Transition status (validates automatically)
+// Transition (validates internally)
 await transitionToFinalizata(order.id, order.status);  // Only works if status === 'in_lucru'
 ```
 
-## Order Status Lifecycle
+## 📊 Order Status Lifecycle
 ```
 noua (new) → in_lucru (in progress) → livrata (delivered)
   ↓              ↓
 anulata        anulata
 ```
 - **`noua`**: Editable/deletable by client, auto-transitions to `in_lucru` when courier messages/offers
-- **`in_lucru`**: No edits allowed, can be finalized by client OR courier
-- **`livrata`**: Final status, triggers review eligibility (`canLeaveReview()`)
-- **`anulata`**: Terminal status, no further actions
+- **`in_lucru`**: No edits, can be finalized by client OR courier
+- **`livrata`**: Final, enables review (`canLeaveReview()`)
+- **`anulata`**: Terminal, no further actions
 
-**See [STATUS_TRANSITIONS.md](../STATUS_TRANSITIONS.md) for full state machine**.
+**Full state machine**: `STATUS_TRANSITIONS.md`
 
-## Styling System
+## 🎨 Styling System
 
-### Pre-built CSS Classes ([globals.css](../src/app/globals.css))
+### Pre-built CSS Classes (`src/app/globals.css`)
 ```css
-/* Buttons */
-.btn-primary        /* Orange primary action */
-.btn-secondary      /* Green secondary action */
-.btn-danger         /* Red destructive action */
-.btn-outline-*      /* Outlined variants */
-
-/* Cards */
-.card               /* Glassmorphism card with backdrop-blur */
-.stat-card          /* Dashboard stat card with hover effect */
-
-/* Forms */
-.form-input         /* Input field with focus ring */
-.form-select        /* Select dropdown */
-.form-label         /* Form label */
-
-/* Utilities */
-.spinner            /* Loading spinner animation */
-.custom-scrollbar   /* Styled scrollbar for modals/containers */
+.btn-primary / .btn-secondary / .btn-danger   /* Action buttons */
+.btn-outline-primary / .btn-outline-secondary  /* Outlined variants */
+.card                                          /* Glassmorphism card */
+.stat-card                                     /* Dashboard stat card */
+.form-input / .form-select / .form-label       /* Form elements */
+.spinner                                       /* Loading animation */
+.custom-scrollbar                              /* Styled scrollbar */
 ```
 
-### Color Palette
+### Color System
 - **Primary (Orange)**: `#f97316` / `text-orange-500` / `var(--orange)`
 - **Secondary (Green)**: `#34d399` / `text-emerald-400` / `var(--green)`
 - **Dashboard BG**: `bg-slate-900` (base) / `bg-slate-800/50` (cards)
 
 ### Service Type Styling
-Import `serviceTypes` from [constants.ts](../src/lib/constants.ts) — each object contains `color`, `bgColor`, `borderColor`, `gradient` for consistent theming:
+`src/lib/constants.ts` `serviceTypes` contains `color`, `bgColor`, `borderColor`, `gradient`:
 ```tsx
 import { serviceTypes } from '@/lib/constants';
 const service = serviceTypes.find(s => s.id === 'colete');
 <div className={service.bgColor}>{service.label}</div>
 ```
 
-## Development Conventions
+## 💻 Development Workflow
 
-### Language
-- **User-facing text**: Romanian (`Comandă nouă`, `Finalizează`)
-- **Code**: English (variables, functions, comments)
-- **Commit messages**: English
-
-### Code Style
-- All dashboard pages: `'use client'` directive (uses hooks)
-- Path alias: `@/*` maps to `./src/*`
-- Type imports: `import type { Order } from '@/types'` (type-only)
-- Constants: **NEVER duplicate** — always import from `@/lib/constants.ts`
-- Country flags: `public/img/flag/{code}.svg` (lowercase: `ro.svg`, `gb.svg`)
-
-### Firestore Imports
-```tsx
-// ✅ Correct pattern
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-
-// ❌ Wrong - Don't import db from different path
-import { db } from '../firebase';
-```
-
-## Commands & Workflows
-
-### Development
+### Commands
 ```bash
-npm run dev       # Start dev server at localhost:3000
-npm run build     # Production build (checks types & lints)
-npm run lint      # Run ESLint
+npm run dev       # Dev server → http://localhost:3000
+npm run build     # Production build (type checks + lints)
+npm run lint      # ESLint
 npm start         # Run production build locally
 ```
 
 ### Firebase
 ```bash
-firebase deploy --only firestore:rules   # Deploy security rules only
+firebase deploy --only firestore:rules   # Deploy rules only
 firebase deploy --only hosting           # Deploy hosting only
 firebase deploy                          # Full deployment
 ```
 
 ### Debugging
 - **Firestore rules**: Test in Firebase Console → Firestore → Rules → Simulator
-- **Auth issues**: Check `user` and `loading` state in `useAuth()` hook
-- **Query errors**: Common cause is missing owner filter (`where('uid', '==', user.uid)`)
+- **Auth issues**: Check `user` and `loading` state in `useAuth()`
+- **Query errors**: Missing owner filter (`where('uid', '==', user.uid)`)
 
-## Documentation Reference
+## 📖 Documentation
 
-- **[FIRESTORE_STRUCTURE.md](../FIRESTORE_STRUCTURE.md)**: Complete schema, security rules, indexes, query patterns
-- **[STATUS_TRANSITIONS.md](../STATUS_TRANSITIONS.md)**: Order status lifecycle, transition rules, validation logic
-- **[SERVICE_FLOW_ARCHITECTURE.md](../SERVICE_FLOW_ARCHITECTURE.md)**: Order flow from client creation to courier fulfillment
-- **[SECURITY_CHECKLIST.md](../SECURITY_CHECKLIST.md)**: Security measures, validation rules, data protection
+- `FIRESTORE_STRUCTURE.md`: Schema, security rules, indexes, query patterns
+- `STATUS_TRANSITIONS.md`: Order status lifecycle, transition rules, validation
+- `SERVICE_FLOW_ARCHITECTURE.md`: Order flow from client to courier
+- `SECURITY_CHECKLIST.md`: Security measures, validation rules
 
-## Common Pitfalls & Solutions
+## 🐛 Common Pitfalls
 
-### ❌ Forgot owner filter in query
-```tsx
-// Missing where('uid', '==', user.uid) - will throw permission error or return wrong data
-```
-**Solution**: Always filter by owner field in client-side queries.
+| ❌ Mistake | ✅ Solution |
+|-----------|----------|
+| Missing owner filter in query | Always add `where('uid', '==', user.uid)` |
+| Hardcoded status checks (`status === 'in_lucru'`) | Use `canEditOrder()`, `canFinalizeOrder()` helpers |
+| Service name case mismatch | Normalize: `.toLowerCase().trim()` before comparison |
+| `alert(error.message)` (English Firebase errors) | Use `showError(error)` for Romanian auto-translation |
+| Manual order numbers (`Math.random()`) | Use `getNextOrderNumber()` (atomic transaction) |
 
-### ❌ Hardcoded status strings
-```tsx
-if (order.status === 'in_lucru') { /* ... */ }  // Brittle
-```
-**Solution**: Use `canEditOrder()`, `canFinalizeOrder()` helpers.
+## 🌍 Conventions
 
-### ❌ Service name case mismatch
-```tsx
-user.serviciiOferite.includes(order.serviciu)  // Fails if case differs
-```
-**Solution**: Normalize both sides: `.toLowerCase().trim()` before comparison.
-
-### ❌ Direct error display
-```tsx
-alert(error.message);  // Shows Firebase error codes in English
-```
-**Solution**: Use `showError(error)` for auto-translated Romanian messages.
-
-### ❌ Manual order number assignment
-```tsx
-orderNumber: Math.random()  // Not sequential, conflicts possible
-```
-**Solution**: Use `getNextOrderNumber()` which uses Firestore transaction for atomic increment.
+- **Language**: Romanian UI text, English code/commits
+- **Client Components**: All dashboard pages use `'use client'` directive
+- **Path Alias**: `@/*` → `./src/*`
+- **Type Imports**: `import type { Order } from '@/types'`
+- **Constants**: **NEVER duplicate** — always import from `@/lib/constants.ts`
+- **Country Flags**: `public/img/flag/{code}.svg` (lowercase: `ro.svg`, `gb.svg`)
+- **Firestore Imports**: Always `import { db } from '@/lib/firebase'` (consistent path)
