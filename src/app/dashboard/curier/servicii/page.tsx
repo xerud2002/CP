@@ -9,6 +9,7 @@ import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { ServiceIcon as BaseServiceIcon } from '@/components/icons/ServiceIcons';
 
 // Service types with custom structure for servicii page
 // NOTE: Not imported from constants due to custom subOptions for Colete service
@@ -132,22 +133,10 @@ const optiuniSuplimentareByService: Record<string, Array<{id: string, name: stri
   ],
 };
 
-// Service icons as components
+// Local ServiceIcon wrapper with additional icons for sub-options
 const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; className?: string }) => {
-  const icons: Record<string, React.ReactElement> = {
-    Colete: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-        <path d="m3.3 7 8.7 5 8.7-5" />
-        <path d="M12 22V12" />
-      </svg>
-    ),
-    Plicuri: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2" />
-        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-      </svg>
-    ),
+  // Additional icons specific to servicii page (sub-options)
+  const additionalIcons: Record<string, React.ReactElement> = {
     Express: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
@@ -159,66 +148,9 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
         <polyline points="9 22 9 12 15 12 15 22" />
       </svg>
     ),
-    Mobila: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" />
-        <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" />
-        <path d="M4 18v2" />
-        <path d="M20 18v2" />
-        <path d="M12 4v9" />
-      </svg>
-    ),
-    Electronice: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2" />
-        <line x1="8" y1="21" x2="16" y2="21" />
-        <line x1="12" y1="17" x2="12" y2="21" />
-      </svg>
-    ),
-    Animale: (
-      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-      </svg>
-    ),
-    Platforma: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="16" width="20" height="4" rx="1" />
-        <path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" />
-        <circle cx="8" cy="20" r="1" />
-        <circle cx="16" cy="20" r="1" />
-        <path d="M12 16V4" />
-        <path d="M9 7h6" />
-      </svg>
-    ),
-    Tractari: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
-        <circle cx="7" cy="17" r="2" />
-        <path d="M9 17h6" />
-        <circle cx="17" cy="17" r="2" />
-        <path d="M14 2l-3 3 3 3" />
-        <path d="M11 5h7" />
-      </svg>
-    ),
-    Persoane: (
-      <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-      </svg>
-    ),
     Frigorific: (
       <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 3v18m0-18l-3 3m3-3l3 3m-3 15l-3-3m3 3l3-3M3 12h18M3 12l3-3m-3 3l3 3m15-3l-3-3m3 3l-3 3" />
-      </svg>
-    ),
-    Paleti: (
-      <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 6h18" />
-        <path d="M3 12h18" />
-        <path d="M3 18h18" />
-        <path d="M4 6v12" />
-        <path d="M12 6v12" />
-        <path d="M20 6v12" />
-        <rect x="5" y="2" width="14" height="4" rx="1" />
       </svg>
     ),
     Fragil: (
@@ -232,7 +164,13 @@ const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; clas
     ),
   };
   
-  return icons[service] || icons.Colete;
+  // Check if it's a sub-option icon
+  if (additionalIcons[service]) {
+    return additionalIcons[service];
+  }
+  
+  // Otherwise use base ServiceIcon component
+  return <BaseServiceIcon service={service} className={className} />;
 };
 
 export default function TarifePracticatePage() {

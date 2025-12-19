@@ -17,6 +17,7 @@ const getCountryName = (code: string): string => {
   return country?.name || code;
 };
 import { ArrowLeftIcon, PackageIcon } from '@/components/icons/DashboardIcons';
+import { ServiceIcon, getServiceIconMetadata } from '@/components/icons/ServiceIcons';
 import HelpCard from '@/components/HelpCard';
 
 interface Order {
@@ -51,75 +52,6 @@ interface Order {
   nrOferte?: number;
   nrMesajeNoi?: number;
 }
-
-// Service icons - identice cu cele din comanda/page.tsx
-const serviceIcons: Record<string, { icon: React.ReactNode; color: string; bg: string }> = {
-  colete: {
-    icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>,
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/20'
-  },
-  plicuri: {
-    icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-    color: 'text-yellow-400',
-    bg: 'bg-yellow-500/20'
-  },
-  persoane: {
-    icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>,
-    color: 'text-rose-400',
-    bg: 'bg-rose-500/20'
-  },
-  electronice: {
-    icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round" /><line x1="8" y1="21" x2="16" y2="21" strokeLinecap="round" strokeLinejoin="round" /><line x1="12" y1="17" x2="12" y2="21" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-    color: 'text-purple-400',
-    bg: 'bg-purple-500/20'
-  },
-  animale: {
-    icon: <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>,
-    color: 'text-pink-400',
-    bg: 'bg-pink-500/20'
-  },
-  platforma: {
-    icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="2" y="16" width="20" height="4" rx="1" strokeLinecap="round" strokeLinejoin="round" /><path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="8" cy="20" r="1" /><circle cx="16" cy="20" r="1" /><path d="M12 16V4" strokeLinecap="round" strokeLinejoin="round" /><path d="M9 7h6" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-    color: 'text-red-400',
-    bg: 'bg-red-500/20'
-  },
-  tractari: {
-    icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M5 17h-2a1 1 0 0 1-1-1v-5l3-3h14l3 3v5a1 1 0 0 1-1 1h-2" strokeLinecap="round" strokeLinejoin="round" /><circle cx="7" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" /><path d="m9 17 6-6" strokeLinecap="round" strokeLinejoin="round" /><path d="m15 11 4 4" strokeLinecap="round" strokeLinejoin="round" /><circle cx="17" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-    color: 'text-orange-400',
-    bg: 'bg-orange-500/20'
-  },
-  mobila: {
-    icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" /><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-    color: 'text-amber-400',
-    bg: 'bg-amber-500/20'
-  },
-  paleti: {
-    icon: <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M3 6h18" strokeLinecap="round" strokeLinejoin="round" /><path d="M3 12h18" strokeLinecap="round" strokeLinejoin="round" /><path d="M3 18h18" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 6v12" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round" /><path d="M20 6v12" strokeLinecap="round" strokeLinejoin="round" /></svg>,
-    color: 'text-orange-400',
-    bg: 'bg-orange-500/20'
-  }
-};
-
-// Service icon mapping
-const getServiceIcon = (serviciu: string) => {
-  const serviceNormalized = serviciu.toLowerCase().trim();
-  
-  // Direct match first
-  if (serviceIcons[serviceNormalized]) {
-    return serviceIcons[serviceNormalized];
-  }
-  
-  // Partial match
-  for (const [key, value] of Object.entries(serviceIcons)) {
-    if (serviceNormalized.includes(key)) {
-      return value;
-    }
-  }
-  
-  // Default to colete
-  return serviceIcons.colete;
-};
 
 const getFlagPath = (code: string) => `/img/flag/${code.toLowerCase()}.svg`;
 
@@ -274,7 +206,7 @@ export default function ComenziClientPage() {
         ) : (
           <div className="space-y-4">
             {orders.map((order) => {
-              const serviceConfig = getServiceIcon(order.serviciu);
+              const serviceConfig = getServiceIconMetadata(order.serviciu);
               
               return (
                 <div 
@@ -284,7 +216,7 @@ export default function ComenziClientPage() {
                   <div className="flex items-start gap-4">
                     {/* Service Icon */}
                     <div className={`relative w-12 h-12 rounded-xl ${serviceConfig.bg} flex items-center justify-center shrink-0 ${serviceConfig.color}`}>
-                      {serviceConfig.icon}
+                      <ServiceIcon service={order.serviciu} />
                       {(order.nrOferte || order.nrMesajeNoi) && (
                         <span className="absolute -top-1 -right-1 flex h-5 w-5">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
@@ -425,10 +357,10 @@ export default function ComenziClientPage() {
               <div className="sticky top-0 bg-slate-800 border-b border-white/10 px-6 py-4 flex items-center justify-between print:static print:bg-gray-100 print:border-gray-300">
                 <div className="flex items-center gap-3">
                 {(() => {
-                  const config = getServiceIcon(selectedOrder.serviciu);
+                  const config = getServiceIconMetadata(selectedOrder.serviciu);
                   return (
                     <div className={`w-10 h-10 rounded-xl ${config.bg} flex items-center justify-center ${config.color}`}>
-                      {config.icon}
+                      <ServiceIcon service={selectedOrder.serviciu} className="w-6 h-6" />
                     </div>
                   );
                 })()}
