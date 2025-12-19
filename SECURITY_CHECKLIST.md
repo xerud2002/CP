@@ -149,9 +149,9 @@ const orderNumber = await runTransaction(db, async (transaction) => {
 
 ### Courier Flow
 - [x] Courier can register and login ✅ (Firebase Auth + role-based registration with `?role=curier`)
-- [x] Courier can activate/deactivate services ✅ ([servicii/page.tsx](src/app/dashboard/curier/servicii/page.tsx) - toggles `serviciiOferite` array in users collection)
+- [x] Courier can activate/deactivate services ✅ (servicii/page.tsx - toggles `serviciiOferite` array in users collection)
 - [x] Courier sees only orders for active services ✅ (Service matching with case-insensitive comparison in dashboard)
-- [x] Courier can accept pending orders ✅ ([comenzi/page.tsx](src/app/dashboard/curier/comenzi/page.tsx) - updates `status` and sets `courierId`)
+- [x] Courier can accept pending orders ✅ (comenzi/page.tsx - updates `status` and sets `courierId`)
 - [x] Courier can update order status ✅ (Status transitions: pending → accepted → in_transit → completed)
 - [x] Courier can view their assigned orders ✅ (Filtered by `courierId == user.uid` OR `status == 'pending'`)
 - [x] Courier cannot see pending orders for inactive services ✅ (Frontend filters orders by active `serviciiOferite`)
@@ -162,14 +162,14 @@ const orderNumber = await runTransaction(db, async (transaction) => {
 - [x] Users cannot access other users' data via API ✅ (All queries use `where('uid_client', '==', user.uid)` or equivalent owner filter)
 - [x] Firestore rules prevent unauthorized reads ✅ (Rules enforce `resource.data.uid_client == request.auth.uid` on comenzi, etc.)
 - [x] Firestore rules prevent unauthorized writes ✅ (Rules enforce `request.resource.data.uid == request.auth.uid` on create/update)
-- [x] Order number counter is atomic (no duplicates) ✅ ([orderHelpers.ts](src/utils/orderHelpers.ts) uses `runTransaction()` for atomic increment)
+- [x] Order number counter is atomic (no duplicates) ✅ (orderHelpers.ts uses `runTransaction()` for atomic increment)
 - [x] Service matching is case-insensitive ✅ (All service comparisons use `.toLowerCase().trim()`)
 - [x] All queries filter by owner field ✅ (Verified: `uid_client`, `uid`, `courierId` filters on all collection queries)
 
 ### Performance Tests
 - [x] Dashboard loads in < 2 seconds ✅ (Static generation + client-side data fetching, minimal bundle size)
 - [x] Orders list handles 100+ items ✅ (Firestore queries with `orderBy` + client-side filtering, no pagination limits)
-- [x] Filters respond instantly ✅ (`useMemo` hooks used in [comenzi](src/app/dashboard/curier/comenzi/page.tsx) and [calendar](src/app/dashboard/curier/calendar/page.tsx) pages)
+- [x] Filters respond instantly ✅ (`useMemo` hooks used in comenzi and calendar pages)
 - [x] Images load with proper lazy loading ✅ (Using Next.js `<Image>` component with automatic optimization in 20+ files)
 - [x] No unnecessary re-renders ✅ (`useMemo` for filtered data, `useRef` for DOM references, minimal state updates)
 
