@@ -1,14 +1,23 @@
-'use client';
-
-import { ReactNode } from 'react';
+import type { Metadata } from 'next';
 import ErrorBoundary from '@/components/ErrorBoundary';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Dashboard',
+    template: '%s | Curierul Perfect'
+  },
+  robots: {
+    index: false,
+    follow: false,
+  }
+};
 
 // Dashboard-specific layout that excludes the global Header and Footer
 // This prevents duplicate headers in dashboard pages
 export default function DashboardLayout({
   children,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <ErrorBoundary>

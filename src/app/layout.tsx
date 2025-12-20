@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -87,6 +87,54 @@ export const metadata: Metadata = {
   category: "transport",
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f97316' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
+  ],
+};
+
+// JSON-LD Structured Data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Curierul Perfect',
+  url: 'https://curierulperfect.ro',
+  logo: 'https://curierulperfect.ro/logo.png',
+  description: 'Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări.',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    availableLanguage: ['Romanian', 'English'],
+  },
+  sameAs: [
+    'https://www.facebook.com/curierulperfect',
+    'https://www.instagram.com/curierulperfect',
+  ],
+  serviceArea: {
+    '@type': 'Place',
+    name: 'Europa',
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicii de Transport',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport colete' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport plicuri' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport persoane' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport mobilă' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport electronice' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport animale' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Platformă auto' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Tractări auto' } },
+    ],
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -94,6 +142,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ro">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
         <AuthProvider>
           <LayoutWrapper>
