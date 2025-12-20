@@ -56,40 +56,38 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
     // Build query based on user role and available IDs
     let q;
     if (user.role === 'client') {
-      // Client sees messages between them and a specific courier (if assigned)
-      if (courierId) {
-        q = query(
-          messagesRef,
-          where('orderId', '==', orderId),
-          where('clientId', '==', user.uid),
-          where('courierId', '==', courierId),
-          orderBy('createdAt', 'asc')
-        );
-      } else {
-        // No courier assigned yet, return empty query
-        console.log('OrderChat - No courier for client');
+      // Client sees messages between them and a specific courier
+      // If no courierId provided, show empty (will be populated when courier sends first message)
+      if (!courierId) {
         setMessages([]);
         return;
       }
+      
+      q = query(
+        messagesRef,
+        where('orderId', '==', orderId),
+        where('clientId', '==', user.uid),
+        where('courierId', '==', courierId),
+        orderBy('createdAt', 'asc')
+      );
     } else {
       // Courier sees messages between them and the client
       // Use provided courierId or fall back to user.uid (current courier)
       const effectiveCourierId = courierId || user.uid;
       
-      if (clientId) {
-        q = query(
-          messagesRef,
-          where('orderId', '==', orderId),
-          where('clientId', '==', clientId),
-          where('courierId', '==', effectiveCourierId),
-          orderBy('createdAt', 'asc')
-        );
-      } else {
-        // No client ID provided
+      if (!clientId) {
         console.error('OrderChat - No clientId for courier!');
         setMessages([]);
         return;
       }
+      
+      q = query(
+        messagesRef,
+        where('orderId', '==', orderId),
+        where('clientId', '==', clientId),
+        where('courierId', '==', effectiveCourierId),
+        orderBy('createdAt', 'asc')
+      );
     }
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -190,17 +188,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
         className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar"
         style={{ maxHeight: '400px' }}
       >
-        {!courierId && user?.role === 'client' ? (
-          <div className="text-center py-8">
-            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-slate-800/50 flex items-center justify-center">
-              <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <p className="text-gray-400 text-sm">Niciun curier asignat</p>
-            <p className="text-gray-500 text-xs mt-1">Chat-ul va fi disponibil după ce un curier acceptă comanda</p>
-          </div>
-        ) : messages.length === 0 ? (
+        {messages.length === 0 ? (
           <div className="text-center py-8">
             <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-slate-800/50 flex items-center justify-center">
               <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -261,13 +249,13 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            placeholder={!courierId && user?.role === 'client' ? 'Așteaptă un curier...' : 'Scrie un mesaj...'}
-            disabled={loading || (!courierId && user?.role === 'client')}
+            placeholder="Scrie un mesaj..."
+            disabled={loading}
             className="flex-1 px-3 py-2 bg-slate-900/50 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50"
           />
           <button
             type="submit"
-            disabled={loading || !newMessage.trim() || (!courierId && user?.role === 'client')}
+            disabled={loading || !newMessage.trim()}
             className="px-4 py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 disabled:bg-slate-700 disabled:text-gray-500 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
           >
             {loading ? (
