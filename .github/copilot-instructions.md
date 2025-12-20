@@ -241,6 +241,8 @@ firebase deploy                          # Full deployment
 |-----------|----------|
 | Missing owner filter in query | Always add `where('uid', '==', user.uid)` |
 | Hardcoded status checks (`status === 'in_lucru'`) | Use `canEditOrder()`, `canFinalizeOrder()` helpers |
+| Hardcoded status display/colors | Use `orderStatusConfig[status]` from constants |
+| Inline ServiceIcon components | Always import `ServiceIcon` from `@/components/icons/ServiceIcons` |
 | Service name case mismatch | Normalize: `.toLowerCase().trim()` before comparison |
 | `alert(error.message)` (English Firebase errors) | Use `showError(error)` for Romanian auto-translation |
 | Manual order numbers (`Math.random()`) | Use `getNextOrderNumber()` (atomic transaction) |
