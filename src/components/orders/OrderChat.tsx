@@ -49,6 +49,14 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
   useEffect(() => {
     if (!orderId || !user) return;
 
+    console.log('OrderChat - Starting listener', { 
+      orderId, 
+      userRole: user.role, 
+      userId: user.uid,
+      courierId, 
+      clientId 
+    });
+
     const messagesRef = collection(db, 'mesaje');
     
     // Build query based on user role and available IDs
@@ -56,6 +64,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
     if (user.role === 'client') {
       // Client sees messages between them and a specific courier (if assigned)
       if (courierId) {
+        console.log('OrderChat - Client query with courierId:', courierId);
         q = query(
           messagesRef,
           where('orderId', '==', orderId),
@@ -65,30 +74,38 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
         );
       } else {
         // No courier assigned yet, return empty query
+        console.log('OrderChat - No courier assigned for client');
         setMessages([]);
         return;
       }
     } else {
       // Courier sees messages between them and the client
+      // Use provided courierId or fall back to user.uid (current courier)
+      const effectiveCourierId = courierId || user.uid;
+      
       if (clientId) {
+        console.log('OrderChat - Courier query', { clientId, effectiveCourierId });
         q = query(
           messagesRef,
           where('orderId', '==', orderId),
           where('clientId', '==', clientId),
-          where('courierId', '==', user.uid),
+          where('courierId', '==', effectiveCourierId),
           orderBy('createdAt', 'asc')
         );
       } else {
         // No client ID provided
+        console.log('OrderChat - No clientId provided for courier');
         setMessages([]);
         return;
       }
     }
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
+      console.log('OrderChat - Snapshot received, docs count:', snapshot.size);
       const loadedMessages: Message[] = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
+        console.log('OrderChat - Message data:', data);
         loadedMessages.push({
           id: doc.id,
           orderId: data.orderId,
@@ -103,8 +120,10 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
           createdAt: data.createdAt?.toDate() || new Date(),
         });
       });
+      console.log('OrderChat - Loaded messages:', loadedMessages.length);
       setMessages(loadedMessages);
     }, (error) => {
+      console.error('OrderChat - Snapshot error:', error);
       logError(error, 'Error loading messages');
     });
 
@@ -122,6 +141,16 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
       const finalCourierId = user.role === 'curier' ? user.uid : (courierId || '');
       const finalClientId = user.role === 'client' ? user.uid : (clientId || '');
       
+      console.log('OrderChat - Sending message:', {
+        orderId,
+        senderId: user.uid,
+        senderRole: user.role,
+        receiverId,
+        clientId: finalClientId,
+        courierId: finalCourierId,
+        messageLength: newMessage.trim().length
+      });
+      
       await addDoc(collection(db, 'mesaje'), {
         orderId,
         senderId: user.uid,
@@ -135,9 +164,11 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
         createdAt: serverTimestamp(),
       });
 
+      console.log('OrderChat - Message sent successfully');
       setNewMessage('');
       showSuccess('Mesaj trimis!');
     } catch (error) {
+      console.error('OrderChat - Error sending message:', error);
       logError(error, 'Error sending message');
       showError('Eroare la trimiterea mesajului');
     } finally {
