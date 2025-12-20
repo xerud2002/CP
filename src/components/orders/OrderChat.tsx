@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where, updateDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { showSuccess, showError } from '@/lib/toast';
@@ -36,10 +36,13 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const shouldScrollRef = useRef(true);
 
   // Scroll to bottom when new messages arrive
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (shouldScrollRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
   };
 
   useEffect(() => {
@@ -125,11 +128,82 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
     return () => unsubscribe();
   }, [orderId, user?.uid, user?.role, courierId, clientId]);
 
+  // Mark messages as read when chat is opened
+  useEffect(() => {
+    const markMessagesAsRead = async () => {
+      if (!orderId || !user) return;
+
+      try {
+        const messagesRef = collection(db, 'mesaje');
+        let q;
+        
+        if (user.role === 'client') {
+          // Client marks messages from courier as read
+          if (courierId) {
+            q = query(
+              messagesRef,
+              where('orderId', '==', orderId),
+              where('clientId', '==', user.uid),
+              where('courierId', '==', courierId),
+              where('read', '==', false)
+            );
+          } else {
+            q = query(
+              messagesRef,
+              where('orderId', '==', orderId),
+              where('clientId', '==', user.uid),
+              where('read', '==', false)
+            );
+          }
+        } else {
+          // Courier marks messages from client as read
+          if (!clientId) return;
+          
+          q = query(
+            messagesRef,
+            where('orderId', '==', orderId),
+            where('clientId', '==', clientId),
+            where('courierId', '==', user.uid),
+            where('read', '==', false)
+          );
+        }
+
+        const snapshot = await getDocs(q);
+        
+        // Filter out own messages and update only received messages
+        const updatePromises = snapshot.docs
+          .filter(docSnap => docSnap.data().senderId !== user.uid)
+          .map(docSnap => 
+            updateDoc(doc(db, 'mesaje', docSnap.id), { read: true })
+          );
+        
+        if (updatePromises.length > 0) {
+          await Promise.all(updatePromises);
+          console.log(`Marked ${updatePromises.length} messages as read`);
+        }
+      } catch (error) {
+        console.error('Error marking messages as read:', error);
+        logError(error, 'Error marking messages as read');
+      }
+    };
+
+    // Mark as read after a short delay to ensure chat is fully loaded
+    const timer = setTimeout(() => {
+      markMessagesAsRead();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [orderId, user, courierId, clientId]);
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     
     if (!newMessage.trim() || !user || !orderId) return;
 
+    // Keep scroll at bottom when sending
+    shouldScrollRef.current = true;
+    
     setLoading(true);
     try {
       const receiverId = user.role === 'client' ? (courierId || '') : (clientId || '');
@@ -150,6 +224,12 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
       });
 
       setNewMessage('');
+      
+      // Force scroll to bottom after sending
+      setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+      
       showSuccess('Mesaj trimis!');
     } catch (error) {
       console.error('OrderChat - Send error:', error);
@@ -196,6 +276,18 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar"
         style={{ maxHeight: compact ? 'none' : '400px' }}
+        onWheel={(e) => {
+          // Prevent parent scroll when scrolling inside chat
+          const element = e.currentTarget;
+          const atTop = element.scrollTop === 0;
+          const atBottom = element.scrollHeight - element.scrollTop === element.clientHeight;
+          
+          if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+            // Allow scroll to propagate when at boundaries
+            return;
+          }
+          e.stopPropagation();
+        }}
       >
         {messages.length === 0 ? (
           <div className="text-center py-8">

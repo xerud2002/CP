@@ -745,20 +745,22 @@ export default function ComenziCurierPage() {
                         </div>
                         
                         {/* Action Buttons */}
-                        <div className="flex items-center gap-2 ml-4">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                           <button
                             onClick={() => setExpandedChatOrderId(expandedChatOrderId === order.id ? null : order.id || null)}
-                            className={`relative p-1.5 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-medium transition-all flex items-center gap-1.5 ${
+                            className={`relative px-3 py-2 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-medium transition-all flex items-center gap-1.5 ${
                               expandedChatOrderId === order.id 
-                                ? 'bg-orange-500/20 border-orange-500/40 text-orange-400' 
-                                : 'bg-blue-500/10 hover:bg-blue-500/20 border-blue-500/20 hover:border-blue-500/40 text-blue-400'
+                                ? 'bg-green-500/30 border-green-500/50 text-green-300 hover:bg-green-500/40' 
+                                : order.id && unreadCounts[order.id] > 0
+                                  ? 'bg-green-500/20 border-green-500/40 text-green-400 hover:bg-green-500/30 animate-pulse'
+                                  : 'bg-green-500/10 hover:bg-green-500/20 border-green-500/20 hover:border-green-500/40 text-green-400'
                             }`}
-                            title="Chat"
+                            title="Mesaje"
                           >
                             {order.id && unreadCounts[order.id] > 0 && (
-                              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center">
+                              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-4 w-4 bg-green-500 items-center justify-center text-[9px] font-bold text-white">
+                                <span className="relative inline-flex rounded-full h-5 w-5 bg-green-500 items-center justify-center text-[10px] font-bold text-white">
                                   {unreadCounts[order.id]}
                                 </span>
                               </span>
@@ -766,11 +768,11 @@ export default function ComenziCurierPage() {
                             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
-                            <span className="hidden sm:inline">Chat</span>
+                            <span className="hidden sm:inline">Mesaje</span>
                           </button>
                           <button
                             onClick={() => handleOpenOrder(order)}
-                            className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                            className="px-3 py-2 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
                             title="Vezi detalii"
                           >
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
