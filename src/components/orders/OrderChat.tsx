@@ -407,7 +407,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                       <img 
                         src={msg.attachmentUrl} 
                         alt={msg.attachmentName || 'Atașament'} 
-                        className="max-w-full max-h-48 rounded-lg object-cover"
+                        className="max-w-[50%] max-h-24 rounded-lg object-cover"
                       />
                     </a>
                   )}
