@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import CountryFilter from './CountryFilter';
-import ServiceTypeFilter from './ServiceTypeFilter';
+import CountryFilter from '../../shared/CountryFilter';
+import ServiceTypeFilter from '../../shared/ServiceTypeFilter';
 
 interface OrderFiltersProps {
   countryFilter: string;

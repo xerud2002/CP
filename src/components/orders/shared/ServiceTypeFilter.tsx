@@ -24,7 +24,7 @@ export default function ServiceTypeFilter({ value, onChange }: ServiceTypeFilter
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const selectedService = serviceTypes.find(s => s.value === value);
+  const selectedService = serviceTypes.find(s => s.id === value || s.value === value);
 
   return (
     <div ref={dropdownRef} className="relative z-70">
@@ -47,7 +47,7 @@ export default function ServiceTypeFilter({ value, onChange }: ServiceTypeFilter
           ) : (
             <>
               <div className={`w-5 h-5 rounded-lg ${selectedService?.bgColor || 'bg-slate-700'} flex items-center justify-center`}>
-                <ServiceIcon service={value} className={`w-3 h-3 ${selectedService?.color || 'text-gray-400'}`} />
+                <ServiceIcon service={selectedService?.id || value} className={`w-3 h-3 ${selectedService?.color || 'text-gray-400'}`} />
               </div>
               <span className="flex-1">{selectedService?.label || value}</span>
             </>
@@ -85,22 +85,22 @@ export default function ServiceTypeFilter({ value, onChange }: ServiceTypeFilter
               </button>
               {serviceTypes.map((service) => (
                 <button
-                  key={service.value}
+                  key={service.id}
                   onClick={() => {
-                    onChange(service.value);
+                    onChange(service.id);
                     setIsOpen(false);
                   }}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm transition-colors ${
-                    value === service.value 
+                    value === service.id || value === service.value
                       ? 'bg-blue-500/20 text-blue-400' 
                       : 'text-gray-300 hover:bg-slate-800'
                   }`}
                 >
                   <div className={`w-5 h-5 rounded-lg ${service.bgColor} flex items-center justify-center`}>
-                    <ServiceIcon service={service.value} className={`w-3 h-3 ${service.color}`} />
+                    <ServiceIcon service={service.id} className={`w-3 h-3 ${service.color}`} />
                   </div>
                   <span className="flex-1 text-left">{service.label}</span>
-                  {value === service.value && (
+                  {(value === service.id || value === service.value) && (
                     <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
