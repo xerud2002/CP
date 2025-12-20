@@ -677,14 +677,6 @@ export default function ComenziClientPage() {
                 </div>
               )}
 
-              {/* Chat Section */}
-              <div className="bg-slate-700/30 rounded-xl border border-white/5 overflow-hidden">
-                <OrderChatMulti 
-                  orderId={selectedOrder.id || ''} 
-                  orderNumber={selectedOrder.orderNumber}
-                />
-              </div>
-
               {/* Created Date */}
               <div className="text-center text-xs text-gray-500 pt-2 print:text-gray-600 print:border-t print:border-gray-300 print:mt-4 print:pt-4">
                 Comandă creată la {selectedOrder.createdAt?.toDate?.()?.toLocaleDateString('ro-RO', {
