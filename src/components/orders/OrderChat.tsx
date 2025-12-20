@@ -144,15 +144,13 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
               messagesRef,
               where('orderId', '==', orderId),
               where('clientId', '==', user.uid),
-              where('courierId', '==', courierId),
-              where('read', '==', false)
+              where('courierId', '==', courierId)
             );
           } else {
             q = query(
               messagesRef,
               where('orderId', '==', orderId),
-              where('clientId', '==', user.uid),
-              where('read', '==', false)
+              where('clientId', '==', user.uid)
             );
           }
         } else {
@@ -163,16 +161,24 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
             messagesRef,
             where('orderId', '==', orderId),
             where('clientId', '==', clientId),
-            where('courierId', '==', user.uid),
-            where('read', '==', false)
+            where('courierId', '==', user.uid)
           );
         }
 
         const snapshot = await getDocs(q);
         
-        // Filter out own messages and update only received messages
+        // Filter out own messages and messages already read, then update
         const updatePromises = snapshot.docs
-          .filter(docSnap => docSnap.data().senderId !== user.uid)
+          .filter(docSnap => {
+            const data = docSnap.data();
+            // Skip own messages
+            if (data.senderId === user.uid) return false;
+            // For client: only update if not already readByClient
+            if (user.role === 'client' && data.readByClient === true) return false;
+            // For courier: only update if not already readByCourier
+            if (user.role !== 'client' && data.readByCourier === true) return false;
+            return true;
+          })
           .map(docSnap => {
             const updateData: Record<string, boolean> = { read: true };
             // Set role-specific read flag
