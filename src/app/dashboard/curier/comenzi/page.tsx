@@ -10,7 +10,7 @@ import { useEffect, useState, useMemo, useRef } from 'react';
 import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import OrderChat from '@/components/orders/OrderChat';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { formatOrderNumber, formatClientName } from '@/utils/orderHelpers';
 import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
@@ -26,6 +26,8 @@ export default function ComenziCurierPage() {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [viewedOrders, setViewedOrders] = useState<Set<string>>(new Set());
+  const [expandedChatOrderId, setExpandedChatOrderId] = useState<string | null>(null);
+  const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
   
   // Filters
   const [countryFilter, setCountryFilter] = useState<string>('all');
@@ -206,6 +208,41 @@ export default function ComenziCurierPage() {
       loadOrders();
     }
   }, [user]);
+
+  // Listen for unread messages count
+  useEffect(() => {
+    if (!user || orders.length === 0) return;
+
+    const unsubscribers: (() => void)[] = [];
+
+    orders.forEach((order) => {
+      if (!order.id || !order.uid_client) return;
+
+      const messagesRef = collection(db, 'mesaje');
+      const q = query(
+        messagesRef,
+        where('orderId', '==', order.id),
+        where('clientId', '==', order.uid_client),
+        where('courierId', '==', user.uid),
+        where('read', '==', false)
+      );
+
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        // Filter out messages sent by current user (client-side filtering)
+        const unreadCount = snapshot.docs.filter(doc => doc.data().senderId !== user.uid).length;
+        setUnreadCounts((prev) => ({
+          ...prev,
+          [order.id!]: unreadCount,
+        }));
+      });
+
+      unsubscribers.push(unsubscribe);
+    });
+
+    return () => {
+      unsubscribers.forEach((unsub) => unsub());
+    };
+  }, [user, orders]);
 
   // Mark order as viewed
   const markOrderAsViewed = (orderId: string) => {
@@ -708,6 +745,28 @@ export default function ComenziCurierPage() {
                         {/* Action Buttons */}
                         <div className="flex items-center gap-2 ml-4">
                           <button
+                            onClick={() => setExpandedChatOrderId(expandedChatOrderId === order.id ? null : order.id || null)}
+                            className={`relative p-1.5 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-medium transition-all flex items-center gap-1.5 ${
+                              expandedChatOrderId === order.id 
+                                ? 'bg-orange-500/20 border-orange-500/40 text-orange-400' 
+                                : 'bg-blue-500/10 hover:bg-blue-500/20 border-blue-500/20 hover:border-blue-500/40 text-blue-400'
+                            }`}
+                            title="Chat"
+                          >
+                            {order.id && unreadCounts[order.id] > 0 && (
+                              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-4 w-4 bg-green-500 items-center justify-center text-[9px] font-bold text-white">
+                                  {unreadCounts[order.id]}
+                                </span>
+                              </span>
+                            )}
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            <span className="hidden sm:inline">Chat</span>
+                          </button>
+                          <button
                             onClick={() => handleOpenOrder(order)}
                             className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
                             title="Vezi detalii"
@@ -801,6 +860,18 @@ export default function ComenziCurierPage() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Expandable Chat Section */}
+                  {expandedChatOrderId === order.id && (
+                    <div className="mt-4 border-t border-white/5 pt-4 animate-in slide-in-from-top-2 duration-200">
+                      <OrderChat 
+                        orderId={order.id || ''} 
+                        orderNumber={order.orderNumber}
+                        courierId={user?.uid}
+                        clientId={order.uid_client}
+                      />
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -1099,6 +1170,8 @@ export default function ComenziCurierPage() {
                     <OrderChat 
                       orderId={selectedOrder.id || ''} 
                       orderNumber={selectedOrder.orderNumber}
+                      courierId={user?.uid}
+                      clientId={selectedOrder.uid_client}
                     />
                   </div>
 
