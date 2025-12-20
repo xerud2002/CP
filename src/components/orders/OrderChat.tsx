@@ -53,7 +53,11 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // Use setTimeout to ensure DOM has fully rendered before scrolling
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 100);
+    return () => clearTimeout(timer);
   }, [messages]);
 
   // Listen to messages in real-time

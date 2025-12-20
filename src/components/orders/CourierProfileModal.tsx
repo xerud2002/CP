@@ -53,7 +53,20 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
         const zones: string[] = [];
         zonesSnapshot.forEach(doc => {
           const data = doc.data();
-          if (data.tara) zones.push(data.tara);
+          // Build zone string: "Oras, Judet" or just "Judet" if no oras
+          const capitalize = (str: string) => str ? str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') : '';
+          const oras = data.oras ? capitalize(data.oras) : '';
+          const judet = data.judet ? capitalize(data.judet) : '';
+          
+          if (oras && judet) {
+            zones.push(`${oras}, ${judet}`);
+          } else if (judet) {
+            zones.push(judet);
+          } else if (oras) {
+            zones.push(oras);
+          } else if (data.tara) {
+            zones.push(capitalize(data.tara));
+          }
         });
         const uniqueZones = [...new Set(zones)];
 

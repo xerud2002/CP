@@ -18,6 +18,12 @@ interface ClientOrderCardProps {
 
 const getFlagPath = (code: string) => `/img/flag/${code.toLowerCase()}.svg`;
 
+// Capitalize first letter of each word
+const capitalize = (str: string | undefined) => {
+  if (!str) return '';
+  return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+};
+
 export default function ClientOrderCard({
   order,
   unreadCount = 0,
@@ -156,7 +162,7 @@ export default function ClientOrderCard({
                 className="rounded shrink-0"
               />
               <span className="text-gray-300 text-sm sm:text-base truncate">
-                {order.expeditorJudet || order.judet_ridicare}, {order.oras_ridicare}
+                {capitalize(order.oras_ridicare)}, {capitalize(order.expeditorJudet || order.judet_ridicare)}
               </span>
             </div>
             <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,7 +177,7 @@ export default function ClientOrderCard({
                 className="rounded shrink-0"
               />
               <span className="text-gray-300 text-sm sm:text-base truncate">
-                {order.destinatarJudet || order.judet_livrare}, {order.oras_livrare}
+                {capitalize(order.oras_livrare)}, {capitalize(order.destinatarJudet || order.judet_livrare)}
               </span>
             </div>
           </div>

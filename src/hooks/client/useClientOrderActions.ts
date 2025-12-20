@@ -5,6 +5,7 @@ import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { showSuccess, showError } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
+import { showConfirm } from '@/components/ui/ConfirmModal';
 import type { Order } from '@/types';
 
 export function useClientOrderActions() {
@@ -14,9 +15,13 @@ export function useClientOrderActions() {
       return;
     }
 
-    const confirmed = window.confirm(
-      `Sigur dorești să ștergi comanda #${order.orderNumber || order.id}?\nAceastă acțiune nu poate fi anulată.`
-    );
+    const confirmed = await showConfirm({
+      title: 'Șterge comanda',
+      message: `Sigur dorești să ștergi comanda #${order.orderNumber || order.id}? Această acțiune nu poate fi anulată.`,
+      confirmText: 'Șterge',
+      cancelText: 'Anulează',
+      variant: 'danger'
+    });
 
     if (!confirmed) return;
 

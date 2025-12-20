@@ -160,6 +160,13 @@ function ComandaForm() {
     cantitate: '1',
     descriere: '',
     
+    // Câmpuri specifice serviciu
+    tip_animal: '',        // Animale
+    tip_vehicul: '',       // Platformă, Tractări
+    stare_vehicul: '',     // Platformă
+    motiv_tractare: '',    // Tractări
+    roti_functionale: '',  // Tractări
+    
     // Date ridicare/livrare - sistem simplificat
     tip_programare: 'data_specifica', // 'data_specifica' | 'range' | 'flexibil'
     data_ridicare: '',
@@ -1217,64 +1224,215 @@ function ComandaForm() {
                   </>
                 )}
 
-                {/* Animale - doar info card */}
+                {/* Animale - câmpuri simple */}
                 {selectedService === 'animale' && (
-                  <div className="p-4 rounded-xl bg-pink-500/10 border border-pink-500/30">
-                    <div className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-pink-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                      </svg>
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <p className="text-pink-400 font-medium mb-1">Transport animale de companie</p>
-                        <p className="text-sm text-gray-400">Completează tipul de animal, rasa și greutatea aproximativă în câmpul de mai jos.</p>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Tip animal *</label>
+                        <select
+                          name="tip_animal"
+                          value={formData.tip_animal || ''}
+                          onChange={handleInputChange}
+                          className="form-select w-full"
+                        >
+                          <option value="">Selectează</option>
+                          <option value="caine">Câine</option>
+                          <option value="pisica">Pisică</option>
+                          <option value="pasare">Pasăre</option>
+                          <option value="rozator">Rozător</option>
+                          <option value="alt">Alt animal</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Greutate (kg)</label>
+                        <input
+                          type="number"
+                          name="greutate"
+                          value={formData.greutate}
+                          onChange={handleInputChange}
+                          className="form-input w-full"
+                          placeholder="ex: 25"
+                          min="0"
+                          step="0.5"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Nr. animale</label>
+                        <input
+                          type="number"
+                          name="cantitate"
+                          value={formData.cantitate}
+                          onChange={handleInputChange}
+                          className="form-input w-full"
+                          placeholder="1"
+                          min="1"
+                          max="10"
+                        />
                       </div>
                     </div>
-                  </div>
+                    <div className="p-3 rounded-xl bg-pink-500/10 border border-pink-500/30">
+                      <p className="text-sm text-gray-400">💡 Menționează în descriere: rasa, dacă are cușcă proprie, vaccinuri la zi, etc.</p>
+                    </div>
+                  </>
                 )}
 
-                {/* Mașini - info card */}
+                {/* Mașini - câmpuri simple */}
                 {selectedService === 'masini' && (
-                  <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/30">
-                    <div className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-blue-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <p className="text-blue-400 font-medium mb-1">Transport auto</p>
-                        <p className="text-sm text-gray-400">Completează marca, modelul, anul și starea vehiculului în câmpul de mai jos.</p>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Tip vehicul *</label>
+                        <select
+                          name="tip_vehicul"
+                          value={formData.tip_vehicul || ''}
+                          onChange={handleInputChange}
+                          className="form-select w-full"
+                        >
+                          <option value="">Selectează</option>
+                          <option value="autoturism">Autoturism</option>
+                          <option value="suv">SUV / Crossover</option>
+                          <option value="camioneta">Camionetă / Van</option>
+                          <option value="motocicleta">Motocicletă</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Greutate (kg)</label>
+                        <input
+                          type="number"
+                          name="greutate"
+                          value={formData.greutate}
+                          onChange={handleInputChange}
+                          className="form-input w-full"
+                          placeholder="ex: 1500"
+                          min="0"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Funcțional?</label>
+                        <select
+                          name="stare_vehicul"
+                          value={formData.stare_vehicul || ''}
+                          onChange={handleInputChange}
+                          className="form-select w-full"
+                        >
+                          <option value="">Selectează</option>
+                          <option value="functional">Da, merge</option>
+                          <option value="nefunctional">Nu, defect</option>
+                        </select>
                       </div>
                     </div>
-                  </div>
+                    <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/30">
+                      <p className="text-sm text-gray-400">💡 Menționează în descriere: marca, modelul, anul fabricației</p>
+                    </div>
+                  </>
                 )}
 
-                {/* Platformă - info card */}
+                {/* Platformă - câmpuri simple */}
                 {selectedService === 'platforma' && (
-                  <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30">
-                    <div className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-red-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <p className="text-red-400 font-medium mb-1">Transport cu platformă</p>
-                        <p className="text-sm text-gray-400">Completează detaliile vehiculului sau echipamentului (tip, greutate, dimensiuni) în câmpul de mai jos.</p>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Tip vehicul *</label>
+                        <select
+                          name="tip_vehicul"
+                          value={formData.tip_vehicul || ''}
+                          onChange={handleInputChange}
+                          className="form-select w-full"
+                        >
+                          <option value="">Selectează</option>
+                          <option value="autoturism">Autoturism</option>
+                          <option value="suv">SUV / Crossover</option>
+                          <option value="camioneta">Camionetă / Van</option>
+                          <option value="motocicleta">Motocicletă</option>
+                          <option value="utilaj">Utilaj / Echipament</option>
+                          <option value="alt">Altul</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Greutate (kg)</label>
+                        <input
+                          type="number"
+                          name="greutate"
+                          value={formData.greutate}
+                          onChange={handleInputChange}
+                          className="form-input w-full"
+                          placeholder="ex: 1500"
+                          min="0"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Funcțional?</label>
+                        <select
+                          name="stare_vehicul"
+                          value={formData.stare_vehicul || ''}
+                          onChange={handleInputChange}
+                          className="form-select w-full"
+                        >
+                          <option value="">Selectează</option>
+                          <option value="functional">Da, merge</option>
+                          <option value="nefunctional">Nu, defect</option>
+                        </select>
                       </div>
                     </div>
-                  </div>
+                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30">
+                      <p className="text-sm text-gray-400">💡 Menționează în descriere: marca, modelul, anul fabricației</p>
+                    </div>
+                  </>
                 )}
 
-                {/* Tractări - info card */}
+                {/* Tractări - câmpuri simple */}
                 {selectedService === 'tractari' && (
-                  <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/30">
-                    <div className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-orange-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                      </svg>
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div>
-                        <p className="text-orange-400 font-medium mb-1">Tractări auto</p>
-                        <p className="text-sm text-gray-400">Completează marca, modelul mașinii și motivul tractării (pană, accident, etc.) în câmpul de mai jos.</p>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Tip vehicul *</label>
+                        <select
+                          name="tip_vehicul"
+                          value={formData.tip_vehicul || ''}
+                          onChange={handleInputChange}
+                          className="form-select w-full"
+                        >
+                          <option value="">Selectează</option>
+                          <option value="autoturism">Autoturism</option>
+                          <option value="suv">SUV / Crossover</option>
+                          <option value="camioneta">Camionetă / Van</option>
+                          <option value="motocicleta">Motocicletă</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Motiv tractare</label>
+                        <select
+                          name="motiv_tractare"
+                          value={formData.motiv_tractare || ''}
+                          onChange={handleInputChange}
+                          className="form-select w-full"
+                        >
+                          <option value="">Selectează</option>
+                          <option value="pana">Pană / Defecțiune</option>
+                          <option value="accident">Accident</option>
+                          <option value="relocare">Relocare</option>
+                          <option value="alt">Alt motiv</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Roțile se rotesc?</label>
+                        <select
+                          name="roti_functionale"
+                          value={formData.roti_functionale || ''}
+                          onChange={handleInputChange}
+                          className="form-select w-full"
+                        >
+                          <option value="">Selectează</option>
+                          <option value="da">Da, se rotesc</option>
+                          <option value="nu">Nu, blocate</option>
+                        </select>
                       </div>
                     </div>
-                  </div>
+                    <div className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/30">
+                      <p className="text-sm text-gray-400">💡 Menționează în descriere: marca, modelul, locația exactă</p>
+                    </div>
+                  </>
                 )}
 
                 {/* Mobilă - info + dimensiuni */}

@@ -12,6 +12,7 @@ import HelpCard from '@/components/HelpCard';
 import { showSuccess, showError } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
 import { countries } from '@/lib/constants';
+import { showConfirm } from '@/components/ui/ConfirmModal';
 
 // Constants
 const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
@@ -637,7 +638,14 @@ function VerificarePageContent() {
                               <button
                               onClick={async () => {
                                 if (!user) return;
-                                if (window.confirm('Ștergi acest document? Va trebui re-încărcat.')) {
+                                const confirmed = await showConfirm({
+                                  title: 'Șterge document',
+                                  message: 'Ești sigur că vrei să ștergi acest document? Va trebui re-încărcat.',
+                                  confirmText: 'Șterge',
+                                  cancelText: 'Anulează',
+                                  variant: 'warning'
+                                });
+                                if (confirmed) {
                                   try {
                                     const docRef = doc(db, 'profil_curier', user.uid);
                                     await setDoc(docRef, {
@@ -751,7 +759,14 @@ function VerificarePageContent() {
                               <button
                                 onClick={async () => {
                                 if (!user) return;
-                                if (window.confirm('Ștergi acest document? Va trebui re-încărcat.')) {
+                                const confirmed = await showConfirm({
+                                  title: 'Șterge document',
+                                  message: 'Ești sigur că vrei să ștergi acest document? Va trebui re-încărcat.',
+                                  confirmText: 'Șterge',
+                                  cancelText: 'Anulează',
+                                  variant: 'warning'
+                                });
+                                if (confirmed) {
                                   try {
                                     const docRef = doc(db, 'profil_curier', user.uid);
                                     await setDoc(docRef, {

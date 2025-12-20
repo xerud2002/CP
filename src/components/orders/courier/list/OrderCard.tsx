@@ -41,6 +41,12 @@ export default function OrderCard({
     return matched?.code || 'ro';
   };
 
+  // Capitalize first letter of each word
+  const capitalize = (str: string | undefined) => {
+    if (!str) return '';
+    return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+  };
+
   const formatDateTime = () => {
     const createdAt = order.createdAt as Date | { toDate: () => Date } | string | number | undefined;
     const date = order.timestamp 
@@ -162,7 +168,7 @@ export default function OrderCard({
                 className="rounded"
               />
               <span className="text-gray-300">
-                {order.expeditorJudet}, {order.oras_ridicare || order.expeditorJudet}
+                {capitalize(order.oras_ridicare || order.expeditorJudet)}, {capitalize(order.expeditorJudet)}
               </span>
             </div>
             <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -177,7 +183,7 @@ export default function OrderCard({
                 className="rounded"
               />
               <span className="text-gray-300">
-                {order.destinatarJudet}, {order.oras_livrare || order.destinatarJudet}
+                {capitalize(order.oras_livrare || order.destinatarJudet)}, {capitalize(order.destinatarJudet)}
               </span>
             </div>
           </div>

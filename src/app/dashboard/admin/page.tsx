@@ -7,6 +7,7 @@ import { collection, getDocs, query, orderBy, doc, updateDoc, deleteDoc, serverT
 import { db } from '@/lib/firebase';
 import { User, Order } from '@/types';
 import { showSuccess, showError, showWarning } from '@/lib/toast';
+import { showConfirm } from '@/components/ui/ConfirmModal';
 import {
   UsersIcon,
   TruckIcon,
@@ -818,7 +819,14 @@ export default function AdminDashboard() {
       showWarning('Nu poți șterge propriul cont!');
       return;
     }
-    if (!confirm('Ești sigur că vrei să ștergi acest utilizator? Această acțiune este permanentă!')) {
+    const confirmed = await showConfirm({
+      title: 'Șterge utilizator',
+      message: 'Ești sigur că vrei să ștergi acest utilizator? Această acțiune este permanentă și nu poate fi anulată.',
+      confirmText: 'Șterge',
+      cancelText: 'Anulează',
+      variant: 'danger'
+    });
+    if (!confirmed) {
       return;
     }
     try {
@@ -846,7 +854,14 @@ export default function AdminDashboard() {
   };
 
   const handleSuspendCourier = async (uid: string) => {
-    if (!confirm('Ești sigur că vrei să suspendi acest curier? Acesta va fi retrogradat la client.')) {
+    const confirmed = await showConfirm({
+      title: 'Suspendă curier',
+      message: 'Ești sigur că vrei să suspendi acest curier? Acesta va fi retrogradat la rol de client.',
+      confirmText: 'Suspendă',
+      cancelText: 'Anulează',
+      variant: 'warning'
+    });
+    if (!confirmed) {
       return;
     }
     try {
