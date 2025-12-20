@@ -118,7 +118,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
     });
 
     return () => unsubscribe();
-  }, [orderId, user, courierId, clientId]);
+  }, [orderId, user?.uid, user?.role, courierId, clientId]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
