@@ -31,8 +31,9 @@ Romanian courier marketplace connecting clients with couriers for European packa
 | File | Purpose |
 |------|---------|
 | `src/contexts/AuthContext.tsx` | `useAuth()` hook: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
-| `src/lib/constants.ts` | **SINGLE SOURCE OF TRUTH**: `countries`, `judetByCountry`, `serviceTypes` — NEVER duplicate |
+| `src/lib/constants.ts` | **SINGLE SOURCE OF TRUTH**: `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` — NEVER duplicate |
 | `src/lib/toast.ts` | `showSuccess()`, `showError()`, `showWarning()`, `showInfo()` — auto-translates Firebase errors to Romanian |
+| `src/components/icons/ServiceIcons.tsx` | **Centralized service icons**: `ServiceIcon` component + `getServiceIconMetadata()` helper |
 | `src/utils/orderStatusHelpers.ts` | Status transitions: `transitionToInLucru()`, `transitionToFinalizata()`, `canEditOrder()`, `canFinalizeOrder()` |
 | `src/utils/orderHelpers.ts` | `getNextOrderNumber()` (atomic counter), `formatOrderNumber()` (adds "CP" prefix) |
 | `src/types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole` |
@@ -130,17 +131,18 @@ const orderNumber = await getNextOrderNumber();  // 141122
 formatOrderNumber(order.orderNumber);  // "CP141122"
 ```
 
-### 7. Service Icons — Inline SVG Pattern
-Dashboard pages use local `ServiceIcon` component (see `src/app/dashboard/curier/comenzi/page.tsx`):
+### 7. Service Icons — Centralized Component
+**ALWAYS** import from `src/components/icons/ServiceIcons.tsx` (single source of truth):
 ```tsx
-const ServiceIcon = ({ service }: { service: string }) => {
-  const iconMap: Record<string, JSX.Element> = {
-    'Colete': <svg>...</svg>,
-    'Persoane': <svg>...</svg>,
-  };
-  return iconMap[service.charAt(0).toUpperCase() + service.slice(1).toLowerCase()] || iconMap['Colete'];
-};
+import { ServiceIcon, getServiceIconMetadata } from '@/components/icons/ServiceIcons';
+
+// Usage - handles both 'Colete' and 'colete', normalizes internally
+<ServiceIcon service={order.serviciu} className="w-5 h-5 text-blue-400" />
+
+// Get full metadata (icon + colors + label)
+const { icon, color, bg } = getServiceIconMetadata('colete');
 ```
+**NEVER** create inline ServiceIcon components - always import from centralized file.
 
 ### 8. Order Status — NEVER Hardcode
 **Use helpers** from `src/utils/orderStatusHelpers.ts`:
@@ -192,6 +194,16 @@ anulata        anulata
 import { serviceTypes } from '@/lib/constants';
 const service = serviceTypes.find(s => s.id === 'colete');
 <div className={service.bgColor}>{service.label}</div>
+```
+
+### Order Status Styling
+`src/lib/constants.ts` `orderStatusConfig` provides unified status display across dashboards:
+```tsx
+import { orderStatusConfig } from '@/lib/constants';
+const statusConfig = orderStatusConfig[order.status];
+<div className={`${statusConfig.bg} ${statusConfig.color} ${statusConfig.border}`}>
+  {statusConfig.label}
+</div>
 ```
 
 ## 💻 Development Workflow
