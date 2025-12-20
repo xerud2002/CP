@@ -1169,16 +1169,6 @@ export default function ComenziCurierPage() {
                     </div>
                   )}
 
-                  {/* Chat Section */}
-                  <div className="bg-slate-700/30 rounded-xl border border-white/5 overflow-hidden">
-                    <OrderChat 
-                      orderId={selectedOrder.id || ''} 
-                      orderNumber={selectedOrder.orderNumber}
-                      courierId={user?.uid}
-                      clientId={selectedOrder.uid_client}
-                    />
-                  </div>
-
                   {/* Action Buttons */}
                   <div className="flex gap-3 pt-2 print:hidden">
                     {selectedOrder.status === 'in_lucru' && (
