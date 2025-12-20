@@ -89,5 +89,19 @@ service cloud.firestore {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated(); // Needed for transactions
     }
+    
+    // Messages - chat between client and couriers for orders
+    match /mesaje/{messageId} {
+      // Read: client who owns order OR courier assigned to order OR any courier (to see all opportunities)
+      allow read: if isAuthenticated();
+      
+      // Create: authenticated users (client or courier)
+      allow create: if isAuthenticated() && 
+        request.resource.data.senderId == request.auth.uid;
+      
+      // Update/Delete: only message sender or admin
+      allow update, delete: if isAuthenticated() && 
+        (resource.data.senderId == request.auth.uid || isAdmin());
+    }
   }
 }

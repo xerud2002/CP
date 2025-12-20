@@ -9,6 +9,7 @@ import { logError } from '@/lib/errorMessages';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
+import OrderChat from '@/components/orders/OrderChat';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { formatOrderNumber, formatClientName } from '@/utils/orderHelpers';
@@ -1093,7 +1094,13 @@ export default function ComenziCurierPage() {
                     </div>
                   )}
 
-
+                  {/* Chat Section */}
+                  <div className="bg-slate-700/30 rounded-xl border border-white/5 overflow-hidden">
+                    <OrderChat 
+                      orderId={selectedOrder.id || ''} 
+                      orderNumber={selectedOrder.orderNumber}
+                    />
+                  </div>
 
                   {/* Action Buttons */}
                   <div className="flex gap-3 pt-2 print:hidden">
