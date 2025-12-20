@@ -26,9 +26,10 @@ interface OrderChatProps {
   orderNumber?: number;
   courierId?: string;
   clientId?: string;
+  compact?: boolean; // If true, hides header (for use in OrderChatMulti)
 }
 
-export default function OrderChat({ orderId, orderNumber, courierId, clientId }: OrderChatProps) {
+export default function OrderChat({ orderId, orderNumber, courierId, clientId, compact = false }: OrderChatProps) {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -175,24 +176,26 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-900/40 rounded-xl border border-white/5">
-      {/* Header */}
-      <div className="px-4 py-3 border-b border-white/5 bg-slate-800/50">
-        <div className="flex items-center gap-2">
-          <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-          <h3 className="text-white font-semibold text-sm">
-            Chat Comandă {orderNumber ? `#CP${orderNumber}` : ''}
-          </h3>
+    <div className={`flex flex-col h-full ${compact ? '' : 'bg-slate-900/40 rounded-xl border border-white/5'}`}>
+      {/* Header - Only show if not compact */}
+      {!compact && (
+        <div className="px-4 py-3 border-b border-white/5 bg-slate-800/50">
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <h3 className="text-white font-semibold text-sm">
+              Chat Comandă {orderNumber ? `#CP${orderNumber}` : ''}
+            </h3>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Messages */}
       <div 
         ref={chatContainerRef}
         className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar"
-        style={{ maxHeight: '400px' }}
+        style={{ maxHeight: compact ? 'none' : '400px' }}
       >
         {messages.length === 0 ? (
           <div className="text-center py-8">

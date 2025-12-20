@@ -19,7 +19,7 @@ const getCountryName = (code: string): string => {
 import { ArrowLeftIcon, PackageIcon } from '@/components/icons/DashboardIcons';
 import { ServiceIcon, getServiceIconMetadata } from '@/components/icons/ServiceIcons';
 import HelpCard from '@/components/HelpCard';
-import OrderChat from '@/components/orders/OrderChat';
+import OrderChatMulti from '@/components/orders/OrderChatMulti';
 
 interface Order {
   id: string;
@@ -393,11 +393,9 @@ export default function ComenziClientPage() {
                   {/* Expandable Chat Section */}
                   {expandedChatOrderId === order.id && (
                     <div className="mt-4 border-t border-white/5 pt-4 animate-in slide-in-from-top-2 duration-200">
-                      <OrderChat 
+                      <OrderChatMulti 
                         orderId={order.id || ''} 
                         orderNumber={order.orderNumber}
-                        courierId={order.courierId}
-                        clientId={user?.uid}
                       />
                     </div>
                   )}
@@ -681,11 +679,9 @@ export default function ComenziClientPage() {
 
               {/* Chat Section */}
               <div className="bg-slate-700/30 rounded-xl border border-white/5 overflow-hidden">
-                <OrderChat 
+                <OrderChatMulti 
                   orderId={selectedOrder.id || ''} 
                   orderNumber={selectedOrder.orderNumber}
-                  courierId={selectedOrder.courierId}
-                  clientId={user?.uid}
                 />
               </div>
 
