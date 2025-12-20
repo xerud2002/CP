@@ -21,9 +21,14 @@ export default function OrderTransportDetails({
   description,
   serviceType
 }: OrderTransportDetailsProps) {
-  const hasWeight = weight !== undefined && weight !== null;
+  // Check if values are meaningful (not empty, not just whitespace, not "0")
+  const cleanWeight = weight?.toString().trim();
+  const hasWeight = cleanWeight && cleanWeight !== '0' && cleanWeight !== '';
+  
   const hasDimensions = length || width || height;
-  const hasQuantity = quantity !== undefined && quantity !== null;
+  
+  const cleanQuantity = quantity?.toString().trim();
+  const hasQuantity = cleanQuantity && cleanQuantity !== '0' && cleanQuantity !== '';
 
   if (!hasWeight && !hasDimensions && !hasQuantity && !description) {
     return null;
@@ -37,7 +42,7 @@ export default function OrderTransportDetails({
           <div>
             <p className="text-xs text-gray-500 mb-1">Greutate</p>
             <p className="text-white font-medium">
-              {weight}{String(weight).includes('kg') ? '' : ' kg'}
+              {cleanWeight}{String(cleanWeight).includes('kg') ? '' : ' kg'}
             </p>
           </div>
         )}
@@ -55,7 +60,7 @@ export default function OrderTransportDetails({
               {serviceType?.toLowerCase().trim() === 'persoane' ? 'Număr pasageri' : 'Cantitate'}
             </p>
             <p className="text-white font-medium">
-              {quantity}
+              {cleanQuantity}
               {serviceType?.toLowerCase().trim() === 'persoane' ? ' persoane' : ''}
             </p>
           </div>

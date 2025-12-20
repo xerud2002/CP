@@ -86,15 +86,14 @@ export default function ComenziCurierPage() {
     return orders.filter(order => {
       // Country filter (checks both expeditor and destinatar)
       if (countryFilter !== 'all') {
-        // Find the country code from the selected country name
-        const selectedCountry = countries.find(c => c.name === countryFilter);
-        const selectedCountryCode = selectedCountry?.code.toLowerCase();
+        // countryFilter is already a country code (GB, RO, IT, etc.)
+        const selectedCountryCode = countryFilter.toLowerCase();
         
         const orderExpeditorCode = (order.expeditorTara || '').toLowerCase().trim();
         const orderDestinatarCode = (order.destinatarTara || '').toLowerCase().trim();
         
         // Check if either expeditor or destinatar country matches
-        if (selectedCountryCode && orderExpeditorCode !== selectedCountryCode && orderDestinatarCode !== selectedCountryCode) {
+        if (orderExpeditorCode !== selectedCountryCode && orderDestinatarCode !== selectedCountryCode) {
           return false;
         }
       }
@@ -134,7 +133,7 @@ export default function ComenziCurierPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <div className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-70 backdrop-blur-xl shadow-lg">
+      <div className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-50 backdrop-blur-xl shadow-lg">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <Link 
@@ -205,7 +204,7 @@ export default function ComenziCurierPage() {
       </div>
 
       {/* Help Card - Same width as other sections */}
-      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 pb-4 sm:pb-8">
+      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-6 pb-4 sm:pb-8">
         <HelpCard />
       </div>
     </div>

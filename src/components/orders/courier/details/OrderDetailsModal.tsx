@@ -62,7 +62,6 @@ export default function OrderDetailsModal({
       {/* Backdrop */}
       <div 
         className="fixed inset-0 z-60 bg-black/70 backdrop-blur-sm print:hidden"
-        style={{ top: '72px' }}
         onClick={onClose}
       />
       
@@ -70,7 +69,6 @@ export default function OrderDetailsModal({
       <div 
         id="print-modal-container" 
         className="fixed inset-0 z-65 flex items-center justify-center p-4 print:p-0 print:static print:flex print:items-start" 
-        style={{ top: '72px' }} 
         onClick={onClose}
       >
         {/* Modal */}
