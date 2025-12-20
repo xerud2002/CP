@@ -4,29 +4,31 @@ import React from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { logError } from '@/lib/errorMessages';
 import { useEffect, useState, useMemo } from 'react';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import OrderFilters from '@/components/orders/courier/filters/OrderFilters';
 import OrderList from '@/components/orders/courier/list/OrderList';
 import OrderDetailsModal from '@/components/orders/courier/details/OrderDetailsModal';
-import { collection, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
-import { showWarning, showError } from '@/lib/toast';
+import { useOrdersLoader } from '@/hooks/courier/useOrdersLoader';
+import { useUnreadMessages } from '@/hooks/courier/useUnreadMessages';
+import { useOrderHandlers } from '@/hooks/courier/useOrderHandlers';
 import { countries } from '@/lib/constants';
 import type { Order } from '@/types';
 
 export default function ComenziCurierPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loadingOrders, setLoadingOrders] = useState(false);
+  
+  // Use custom hooks
+  const { orders, loading: loadingOrders, reload: reloadOrders } = useOrdersLoader(user?.uid);
+  const unreadCounts = useUnreadMessages(user?.uid, orders);
+  const { handleFinalizeOrder, handleRequestReview } = useOrderHandlers(reloadOrders);
+  
+  // Local UI state
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [viewedOrders, setViewedOrders] = useState<Set<string>>(new Set());
   const [expandedChatOrderId, setExpandedChatOrderId] = useState<string | null>(null);
-  const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
   
   // Filters
   const [countryFilter, setCountryFilter] = useState<string>('all');
@@ -56,164 +58,7 @@ export default function ComenziCurierPage() {
     }
   }, [user]);
 
-  // Load orders from Firebase (in production)
-  useEffect(() => {
-    const loadOrders = async () => {
-      if (!user) return;
-      
-      setLoadingOrders(true);
-      try {
-        // First, load courier's active services
-        const userQuery = query(
-          collection(db, 'users'),
-          where('uid', '==', user.uid)
-        );
-        const userSnapshot = await getDocs(userQuery);
-        let activeServices: string[] = [];
-        
-        if (!userSnapshot.empty) {
-          const userData = userSnapshot.docs[0].data();
-          activeServices = userData.serviciiOferite || [];
-        }
-        
-        // Query 1: Get all new orders (not assigned to any courier yet)
-        const qNew = query(
-          collection(db, 'comenzi'),
-          where('status', '==', 'noua'),
-          orderBy('createdAt', 'desc')
-        );
-        
-        // Query 2: Get orders assigned to or accepted by this courier
-        const qMine = query(
-          collection(db, 'comenzi'),
-          where('courierId', '==', user.uid),
-          orderBy('createdAt', 'desc')
-        );
-        
-        const [snapshotNew, snapshotMine] = await Promise.all([
-          getDocs(qNew),
-          getDocs(qMine)
-        ]);
-        
-        const loadedOrders: Order[] = [];
-        const orderIds = new Set<string>();
-        
-        // Add new orders (filter by active services)
-        snapshotNew.forEach((doc) => {
-          if (!orderIds.has(doc.id)) {
-            const data = doc.data();
-            const orderService = data.serviciu || data.tipColet || 'Colete';
-            
-            // Normalize service names for comparison (case-insensitive)
-            const normalizedOrderService = orderService.toLowerCase().trim();
-            const normalizedActiveServices = activeServices.map(s => s.toLowerCase().trim());
-            
-            // Only show orders for services the courier has activated
-            if (activeServices.length === 0 || normalizedActiveServices.includes(normalizedOrderService)) {
-              orderIds.add(doc.id);
-              loadedOrders.push({
-                id: doc.id,
-                orderNumber: data.orderNumber,
-                uid_client: data.uid_client,
-                clientName: data.nume || data.clientName || 'Client',
-                clientPhone: data.telefon || data.clientPhone || '',
-                expeditorTara: data.tara_ridicare || data.expeditorTara || '',
-                expeditorJudet: data.judet_ridicare || data.expeditorJudet || '',
-                oras_ridicare: data.oras_ridicare || '',
-                destinatarTara: data.tara_livrare || data.destinatarTara || '',
-                destinatarJudet: data.judet_livrare || data.destinatarJudet || '',
-                oras_livrare: data.oras_livrare || '',
-                tipColet: orderService,
-                greutate: String(data.greutate || ''),
-                status: 'noua',
-                dataColectare: data.data_ridicare || data.dataColectare || '',
-                ora: data.ora_ridicare || data.ora || '',
-                createdAt: data.createdAt?.toDate() || new Date(),
-                optiuni: data.optiuni || [],
-                observatii: data.observatii || '',
-              });
-            }
-          }
-        });
-        
-        // Add courier's own orders
-        snapshotMine.forEach((doc) => {
-          if (!orderIds.has(doc.id)) {
-            orderIds.add(doc.id);
-            const data = doc.data();
-            loadedOrders.push({
-              id: doc.id,
-              orderNumber: data.orderNumber,
-              uid_client: data.uid_client,
-              clientName: data.nume || data.clientName || 'Client',
-              clientPhone: data.telefon || data.clientPhone || '',
-              expeditorTara: data.tara_ridicare || data.expeditorTara || '',
-              expeditorJudet: data.judet_ridicare || data.expeditorJudet || '',
-              oras_ridicare: data.oras_ridicare || '',
-              destinatarTara: data.tara_livrare || data.destinatarTara || '',
-              destinatarJudet: data.judet_livrare || data.destinatarJudet || '',
-              oras_livrare: data.oras_livrare || '',
-              tipColet: data.serviciu || data.tipColet || 'Colete',
-              greutate: String(data.greutate || ''),
-              status: data.status || 'noua',
-              dataColectare: data.data_ridicare || data.dataColectare || '',
-              ora: data.ora_ridicare || data.ora || '',
-              createdAt: data.createdAt?.toDate() || new Date(),
-              optiuni: data.optiuni || [],
-              observatii: data.observatii || '',
-            });
-          }
-        });
-        
-        if (loadedOrders.length > 0) {
-          setOrders(loadedOrders);
-        }
-      } catch (error) {
-        logError(error, 'Error loading orders for courier');
-      } finally {
-        setLoadingOrders(false);
-      }
-    };
 
-    if (user) {
-      loadOrders();
-    }
-  }, [user]);
-
-  // Listen for unread messages count
-  useEffect(() => {
-    if (!user || orders.length === 0) return;
-
-    const unsubscribers: (() => void)[] = [];
-
-    orders.forEach((order) => {
-      if (!order.id || !order.uid_client) return;
-
-      const messagesRef = collection(db, 'mesaje');
-      const q = query(
-        messagesRef,
-        where('orderId', '==', order.id),
-        where('clientId', '==', order.uid_client),
-        where('courierId', '==', user.uid),
-        where('read', '==', false)
-      );
-
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        // Filter out messages sent by current user (client-side filtering)
-        const unreadCount = snapshot.docs.filter(doc => doc.data().senderId !== user.uid).length;
-        setUnreadCounts((prev) => ({
-          ...prev,
-          [order.id!]: unreadCount,
-        }));
-      });
-
-      unsubscribers.push(unsubscribe);
-    });
-
-    return () => {
-      unsubscribers.forEach((unsub) => unsub());
-    };
-  }, [user, orders]);
 
   // Mark order as viewed
   const markOrderAsViewed = (orderId: string) => {
@@ -233,77 +78,6 @@ export default function ComenziCurierPage() {
     if (order.id) {
       markOrderAsViewed(order.id);
     }
-  };
-
-  // Finalize order (change status to 'livrata')
-  const handleFinalizeOrder = async (orderId: string, status: string) => {
-    if (!canFinalizeOrder(status)) {
-      showWarning('PoÈ›i finaliza doar comenzile cu statusul "ÃŽn Lucru"!');
-      return;
-    }
-    
-    const success = await transitionToFinalizata(orderId, status);
-    if (success) {
-      // Reload orders to reflect the change
-      const loadOrders = async () => {
-        if (!user) return;
-        setLoadingOrders(true);
-        try {
-          const userQuery = query(
-            collection(db, 'users'),
-            where('uid', '==', user.uid)
-          );
-          const userSnapshot = await getDocs(userQuery);
-          let activeServices: string[] = [];
-          
-          if (!userSnapshot.empty) {
-            const userData = userSnapshot.docs[0].data();
-            activeServices = userData.serviciiOferite || [];
-          }
-
-          const ordersQuery = query(
-            collection(db, 'comenzi'),
-            orderBy('timestamp', 'desc')
-          );
-          
-          const ordersSnapshot = await getDocs(ordersQuery);
-          const allOrders: Order[] = [];
-          
-          ordersSnapshot.forEach((doc) => {
-            const data = doc.data();
-            allOrders.push({
-              id: doc.id,
-              ...data,
-              createdAt: data.createdAt?.toDate() || new Date()
-            } as Order);
-          });
-
-          const userServices = activeServices.map(s => s.toLowerCase().trim());
-          const filtered = allOrders.filter(order => {
-            const orderService = order.tipColet?.toLowerCase().trim() || '';
-            return userServices.includes(orderService);
-          });
-          
-          setOrders(filtered);
-        } catch (error) {
-          showError(error);
-        } finally {
-          setLoadingOrders(false);
-        }
-      };
-      loadOrders();
-    }
-  };
-
-  // Request review from client (placeholder - not yet implemented)
-  const handleRequestReview = (_orderId: string) => {
-    void _orderId; // Parameter reserved for future implementation
-    // TODO: Implement actual notification system (email/push/in-app)
-    // This will require:
-    // 1. Email service integration (SendGrid/AWS SES)
-    // 2. In-app notification collection in Firestore
-    // 3. Client-side notification UI
-    showWarning('FuncÈ›ia de cerere recenzie va fi disponibilÄƒ Ã®n curÃ¢nd!');
   };
 
   // Apply all filters (optimized)
