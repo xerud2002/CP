@@ -341,7 +341,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                         : 'bg-orange-500/20 text-orange-100 border border-orange-500/30 rounded-bl-md'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap break-words">{msg.message}</p>
+                    <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.message}</p>
                   </div>
 
                   {/* Timestamp */}

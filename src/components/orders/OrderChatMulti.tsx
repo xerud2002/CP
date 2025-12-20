@@ -153,7 +153,7 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-[500px] md:h-[600px] bg-slate-900 rounded-lg overflow-hidden border border-white/10">
+    <div className="flex flex-col md:flex-row h-125 md:h-150 bg-slate-900 rounded-lg overflow-hidden border border-white/10">
       {/* Sidebar - Lista curieri */}
       <div className={`${selectedCourierId ? 'hidden md:flex' : 'flex'} w-full md:w-80 border-b md:border-b-0 md:border-r border-white/10 bg-slate-900/50 flex-col`}>
         {/* Header */}
@@ -179,7 +179,7 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
             >
               <div className="flex items-start gap-2.5 md:gap-3">
                 {/* Avatar */}
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shrink-0">
                   <span className="text-white font-bold text-base md:text-lg">
                     {conv.companyName.charAt(0).toUpperCase()}
                   </span>
@@ -189,7 +189,7 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <h4 className="text-white font-medium text-sm truncate">{conv.companyName}</h4>
-                    <span className="text-gray-500 text-xs flex-shrink-0 ml-2">
+                    <span className="text-gray-500 text-xs shrink-0 ml-2">
                       {formatTime(conv.lastMessageTime)}
                     </span>
                   </div>
@@ -198,7 +198,7 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
 
                 {/* Unread badge */}
                 {conv.unreadCount > 0 && (
-                  <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
+                  <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
                     <span className="text-white text-xs font-bold">{conv.unreadCount}</span>
                   </div>
                 )}
@@ -224,7 +224,7 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
-                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center">
                   <span className="text-white font-bold text-sm md:text-base">
                     {conversations.find(c => c.courierId === selectedCourierId)?.companyName.charAt(0).toUpperCase()}
                   </span>

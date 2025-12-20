@@ -14,7 +14,6 @@ import OrderDetailsModal from '@/components/orders/shared/OrderDetailsModal';
 import { useOrdersLoader } from '@/hooks/courier/useOrdersLoader';
 import { useUnreadMessages } from '@/hooks/courier/useUnreadMessages';
 import { useOrderHandlers } from '@/hooks/courier/useOrderHandlers';
-import { countries } from '@/lib/constants';
 import type { Order } from '@/types';
 
 export default function ComenziCurierPage() {
