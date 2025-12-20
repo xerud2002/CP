@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -6,17 +6,18 @@ import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { logError } from '@/lib/errorMessages';
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import OrderChat from '@/components/orders/OrderChat';
+import OrderFilters from '@/components/orders/courier/filters/OrderFilters';
 import { collection, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { formatOrderNumber, formatClientName } from '@/utils/orderHelpers';
 import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
-import { showSuccess, showWarning, showError } from '@/lib/toast';
+import { showWarning, showError } from '@/lib/toast';
 import { countries, serviceTypes } from '@/lib/constants';
-import { ServiceIcon, getServiceIconMetadata } from '@/components/icons/ServiceIcons';
+import { ServiceIcon } from '@/components/icons/ServiceIcons';
 import type { Order } from '@/types';
 
 export default function ComenziCurierPage() {
@@ -32,36 +33,6 @@ export default function ComenziCurierPage() {
   // Filters
   const [countryFilter, setCountryFilter] = useState<string>('all');
   const [serviceFilter, setServiceFilter] = useState<string>('all');
-  const [dateFilter, setDateFilter] = useState<string>('');
-  
-  // Custom dropdown states
-  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
-  const [isServiceDropdownOpen, setIsServiceDropdownOpen] = useState(false);
-  const [countrySearch, setCountrySearch] = useState('');
-  const countryDropdownRef = useRef<HTMLDivElement>(null);
-  const serviceDropdownRef = useRef<HTMLDivElement>(null);
-  
-  // Filter countries based on search
-  const filteredCountries = useMemo(() => {
-    if (!countrySearch) return countries;
-    return countries.filter(c => 
-      c.name.toLowerCase().includes(countrySearch.toLowerCase())
-    );
-  }, [countrySearch]);
-  
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
-        setIsCountryDropdownOpen(false);
-      }
-      if (serviceDropdownRef.current && !serviceDropdownRef.current.contains(event.target as Node)) {
-        setIsServiceDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -269,7 +240,7 @@ export default function ComenziCurierPage() {
   // Finalize order (change status to 'livrata')
   const handleFinalizeOrder = async (orderId: string, status: string) => {
     if (!canFinalizeOrder(status)) {
-      showWarning('Poți finaliza doar comenzile cu statusul "În Lucru"!');
+      showWarning('PoÈ›i finaliza doar comenzile cu statusul "ÃŽn Lucru"!');
       return;
     }
     
@@ -334,7 +305,7 @@ export default function ComenziCurierPage() {
     // 1. Email service integration (SendGrid/AWS SES)
     // 2. In-app notification collection in Firestore
     // 3. Client-side notification UI
-    showWarning('Funcția de cerere recenzie va fi disponibilă în curând!');
+    showWarning('FuncÈ›ia de cerere recenzie va fi disponibilÄƒ Ã®n curÃ¢nd!');
   };
 
   // Apply all filters (optimized)
@@ -365,29 +336,16 @@ export default function ComenziCurierPage() {
         }
       }
       
-      // Date filter
-      if (dateFilter && order.dataColectare) {
-        const inputDate = new Date(dateFilter);
-        const orderDate = new Date(order.dataColectare);
-        
-        if (inputDate.toDateString() !== orderDate.toDateString()) {
-          if (order.dataColectare !== dateFilter) {
-            return false;
-          }
-        }
-      }
-      
       return true;
     });
-  }, [orders, countryFilter, serviceFilter, dateFilter]);
+  }, [orders, countryFilter, serviceFilter]);
 
   // Check if any filter is active
-  const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all' || dateFilter !== '';
+  const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all';
 
   const clearAllFilters = () => {
     setCountryFilter('all');
     setServiceFilter('all');
-    setDateFilter('');
   };
 
   if (loading) {
@@ -420,8 +378,8 @@ export default function ComenziCurierPage() {
               </div>
               <div>
                 <h1 className="text-lg sm:text-2xl font-bold text-white">Comenzile Mele</h1>
-                <p className="text-xs text-gray-400 mt-0.5 sm:hidden">Gestionează comenzile tale</p>
-                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Gestionează comenzile și livrările tale</p>
+                <p className="text-xs text-gray-400 mt-0.5 sm:hidden">GestioneazÄƒ comenzile tale</p>
+                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">GestioneazÄƒ comenzile È™i livrÄƒrile tale</p>
               </div>
             </div>
           </div>
@@ -430,220 +388,14 @@ export default function ComenziCurierPage() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Filters */}
-        <div className="bg-slate-800/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-2 sm:p-3 mb-4 sm:mb-6 relative z-40">
-          {/* Filters panel */}
-          <div className="relative z-40">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
-                {/* Country filter with flags */}
-                <div ref={countryDropdownRef} className="relative z-40">
-                  <label className="block text-xs text-gray-400 mb-1.5">Țară</label>
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left text-sm"
-                    >
-                      {countryFilter !== 'all' ? (
-                        <>
-                          <Image
-                            src={`/img/flag/${countries.find(c => c.name === countryFilter)?.code || 'ro'}.svg`}
-                            alt={countryFilter}
-                            width={20}
-                            height={20}
-                            className="w-5 h-5 rounded-full object-cover"
-                          />
-                          <span className="flex-1 truncate">{countryFilter}</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M2 12h20" />
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                          </svg>
-                          <span className="flex-1 text-gray-400">Toate țările</span>
-                        </>
-                      )}
-                      <svg className={`w-4 h-4 text-gray-400 transition-transform ${isCountryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
-                    
-                    {isCountryDropdownOpen && (
-                      <div className="absolute z-200 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-                        <div className="p-2 border-b border-white/10">
-                          <input
-                            type="text"
-                            placeholder="Caută țara..."
-                            value={countrySearch}
-                            onChange={(e) => setCountrySearch(e.target.value)}
-                            className="w-full px-3 py-2 bg-slate-700/50 border border-white/10 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-purple-500/50"
-                          />
-                        </div>
-                        <div className="max-h-60 overflow-y-auto dropdown-scrollbar">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setCountryFilter('all');
-                              setIsCountryDropdownOpen(false);
-                              setCountrySearch('');
-                            }}
-                            className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-700/50 transition-colors ${
-                              countryFilter === 'all' ? 'bg-purple-500/20' : ''
-                            }`}
-                          >
-                            <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                              <circle cx="12" cy="12" r="10" />
-                              <path d="M2 12h20" />
-                            </svg>
-                            <span className="text-white text-sm">Toate țările</span>
-                            {countryFilter === 'all' && (
-                              <svg className="w-4 h-4 text-purple-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                            )}
-                          </button>
-                          {filteredCountries.map((country) => (
-                            <button
-                              key={country.code}
-                              type="button"
-                              onClick={() => {
-                                setCountryFilter(country.name);
-                                setIsCountryDropdownOpen(false);
-                                setCountrySearch('');
-                              }}
-                              className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-700/50 transition-colors ${
-                                countryFilter === country.name ? 'bg-purple-500/20' : ''
-                              }`}
-                            >
-                              <Image
-                                src={`/img/flag/${country.code}.svg`}
-                                alt={country.name}
-                                width={20}
-                                height={20}
-                                className="w-5 h-5 rounded-full object-cover"
-                              />
-                              <span className="text-white text-sm">{country.name}</span>
-                              {countryFilter === country.name && (
-                                <svg className="w-4 h-4 text-purple-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                              )}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Service filter with icons */}
-                <div ref={serviceDropdownRef} className="relative z-70">
-                  <label className="block text-xs text-gray-400 mb-1.5">Tip serviciu</label>
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setIsServiceDropdownOpen(!isServiceDropdownOpen)}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left text-sm"
-                    >
-                      {serviceFilter !== 'all' ? (
-                        <>
-                          <div className={`p-1 rounded-lg ${serviceTypes.find(s => s.value === serviceFilter)?.bgColor}`}>
-                            <ServiceIcon service={serviceFilter} className={`w-4 h-4 ${serviceTypes.find(s => s.value === serviceFilter)?.color}`} />
-                          </div>
-                          <span className="flex-1 truncate">{serviceTypes.find(s => s.value === serviceFilter)?.label}</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                          </svg>
-                          <span className="flex-1 text-gray-400">Toate serviciile</span>
-                        </>
-                      )}
-                      <svg className={`w-4 h-4 text-gray-400 transition-transform ${isServiceDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
-                    
-                    {isServiceDropdownOpen && (
-                      <div className="absolute z-200 w-full mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-                        <div className="max-h-72 overflow-y-auto dropdown-scrollbar">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setServiceFilter('all');
-                              setIsServiceDropdownOpen(false);
-                            }}
-                            className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-700/50 transition-colors border-b border-white/5 ${
-                              serviceFilter === 'all' ? 'bg-purple-500/20' : ''
-                            }`}
-                          >
-                            <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                              <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                            </svg>
-                            <span className="text-white text-sm">Toate serviciile</span>
-                            {serviceFilter === 'all' && (
-                              <svg className="w-4 h-4 text-purple-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                            )}
-                          </button>
-                          {serviceTypes.map((service) => (
-                            <button
-                              key={service.value}
-                              type="button"
-                              onClick={() => {
-                                setServiceFilter(service.value);
-                                setIsServiceDropdownOpen(false);
-                              }}
-                              className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-700/50 transition-colors border-b border-white/5 last:border-b-0 ${
-                                serviceFilter === service.value ? 'bg-purple-500/20' : ''
-                              }`}
-                            >
-                              <div className={`p-1.5 rounded-lg ${service.bgColor}`}>
-                                <ServiceIcon service={service.value} className={`w-4 h-4 ${service.color}`} />
-                              </div>
-                              <span className="text-white text-sm">{service.label}</span>
-                              {serviceFilter === service.value && (
-                                <svg className="w-4 h-4 text-purple-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                              )}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                {/* Date filter */}
-                <div>
-                  <label className="block text-xs text-gray-400 mb-1.5">Data colectare</label>
-                  <input
-                    type="date"
-                    value={dateFilter}
-                    onChange={(e) => setDateFilter(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 scheme-dark"
-                  />
-                </div>
-              </div>
-              
-              {/* Clear filters button */}
-              {hasActiveFilters && (
-                <button
-                  onClick={clearAllFilters}
-                  className="mt-3 px-4 py-2 text-xs sm:text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors flex items-center gap-1.5"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  Resetează filtrele
-                </button>
-              )}
-            </div>
-        </div>
+        <OrderFilters
+          countryFilter={countryFilter}
+          serviceFilter={serviceFilter}
+          onCountryChange={setCountryFilter}
+          onServiceChange={setServiceFilter}
+          hasActiveFilters={hasActiveFilters}
+          onClearFilters={clearAllFilters}
+        />
 
         {/* Orders List - Improved */}
         <div className="bg-slate-800/40 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 overflow-hidden relative z-10">
@@ -685,19 +437,19 @@ export default function ComenziCurierPage() {
                 </svg>
               </div>
               <p className="text-gray-300 text-base sm:text-lg font-semibold mb-1">
-                {hasActiveFilters ? 'Nicio comandă găsită' : 'Nu ai nicio comandă'}
+                {hasActiveFilters ? 'Nicio comandÄƒ gÄƒsitÄƒ' : 'Nu ai nicio comandÄƒ'}
               </p>
               <p className="text-gray-500 text-sm max-w-xs mx-auto">
                 {hasActiveFilters
-                  ? 'Încearcă să modifici filtrele pentru a vedea mai multe comenzi.' 
-                  : 'Comenzile vor apărea aici când clienții plasează comenzi.'}
+                  ? 'ÃŽncearcÄƒ sÄƒ modifici filtrele pentru a vedea mai multe comenzi.' 
+                  : 'Comenzile vor apÄƒrea aici cÃ¢nd clienÈ›ii plaseazÄƒ comenzi.'}
               </p>
               {hasActiveFilters && (
                 <button
                   onClick={clearAllFilters}
                   className="mt-4 px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-lg transition-colors"
                 >
-                  Resetează filtrele
+                  ReseteazÄƒ filtrele
                 </button>
               )}
             </div>
@@ -845,7 +597,7 @@ export default function ComenziCurierPage() {
                               const year = date.getFullYear();
                               const hours = String(date.getHours()).padStart(2, '0');
                               const minutes = String(date.getMinutes()).padStart(2, '0');
-                              return `${day}/${month}/${year} • ${hours}:${minutes}`;
+                              return `${day}/${month}/${year} â€¢ ${hours}:${minutes}`;
                             })()}
                           </span>
                         )}
@@ -922,7 +674,7 @@ export default function ComenziCurierPage() {
                     <button
                       onClick={() => window.print()}
                       className="p-2 hover:bg-white/10 rounded-lg transition-colors group"
-                      title="Printează detalii comandă"
+                      title="PrinteazÄƒ detalii comandÄƒ"
                     >
                       <svg className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -941,7 +693,7 @@ export default function ComenziCurierPage() {
                 <div className="overflow-y-auto max-h-[calc(85vh-80px)] p-6 space-y-6 custom-scrollbar">
                   {/* Route Section */}
                   <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Rută Transport</h3>
+                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">RutÄƒ Transport</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <div className="flex items-center gap-2 text-green-400 text-xs font-medium uppercase">
@@ -972,18 +724,18 @@ export default function ComenziCurierPage() {
                                 c.name.toLowerCase() === country || 
                                 c.code.toLowerCase() === country
                               );
-                              return matched?.name || selectedOrder.expeditorTara || 'România';
+                              return matched?.name || selectedOrder.expeditorTara || 'RomÃ¢nia';
                             })()}
                           </span>
                         </div>
                         {selectedOrder.oras_ridicare && (
                           <div>
-                            <p className="text-xs text-gray-500">Oraș</p>
+                            <p className="text-xs text-gray-500">OraÈ™</p>
                             <p className="text-gray-300 font-medium">{selectedOrder.oras_ridicare}</p>
                           </div>
                         )}
                         <div>
-                          <p className="text-xs text-gray-500">Județ / Regiune</p>
+                          <p className="text-xs text-gray-500">JudeÈ› / Regiune</p>
                           <p className="text-gray-300 font-medium">{selectedOrder.expeditorJudet}</p>
                         </div>
                       </div>
@@ -1016,18 +768,18 @@ export default function ComenziCurierPage() {
                                 c.name.toLowerCase() === country || 
                                 c.code.toLowerCase() === country
                               );
-                              return matched?.name || selectedOrder.destinatarTara || 'România';
+                              return matched?.name || selectedOrder.destinatarTara || 'RomÃ¢nia';
                             })()}
                           </span>
                         </div>
                         {selectedOrder.oras_livrare && (
                           <div>
-                            <p className="text-xs text-gray-500">Oraș</p>
+                            <p className="text-xs text-gray-500">OraÈ™</p>
                             <p className="text-gray-300 font-medium">{selectedOrder.oras_livrare}</p>
                           </div>
                         )}
                         <div>
-                          <p className="text-xs text-gray-500">Județ / Regiune</p>
+                          <p className="text-xs text-gray-500">JudeÈ› / Regiune</p>
                           <p className="text-gray-300 font-medium">{selectedOrder.destinatarJudet}</p>
                         </div>
                       </div>
@@ -1046,16 +798,16 @@ export default function ComenziCurierPage() {
                       )}
                       {(selectedOrder.lungime || selectedOrder.latime || selectedOrder.inaltime) && (
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Dimensiuni (L×l×h)</p>
+                          <p className="text-xs text-gray-500 mb-1">Dimensiuni (LÃ—lÃ—h)</p>
                           <p className="text-white font-medium">
-                            {selectedOrder.lungime || '-'} × {selectedOrder.latime || '-'} × {selectedOrder.inaltime || '-'} cm
+                            {selectedOrder.lungime || '-'} Ã— {selectedOrder.latime || '-'} Ã— {selectedOrder.inaltime || '-'} cm
                           </p>
                         </div>
                       )}
                       {selectedOrder.cantitate && (
                         <div>
                           <p className="text-xs text-gray-500 mb-1">
-                            {selectedOrder.serviciu?.toLowerCase().trim() === 'persoane' ? 'Număr pasageri' : 'Cantitate'}
+                            {selectedOrder.serviciu?.toLowerCase().trim() === 'persoane' ? 'NumÄƒr pasageri' : 'Cantitate'}
                           </p>
                           <p className="text-white font-medium">
                             {selectedOrder.cantitate}
@@ -1090,7 +842,7 @@ export default function ComenziCurierPage() {
                               const [y, m, d] = selectedOrder.dataColectare.split('-');
                               return `${d}/${m}/${y}`;
                             })()}
-                            {selectedOrder.ora && ` • ${selectedOrder.ora}`}
+                            {selectedOrder.ora && ` â€¢ ${selectedOrder.ora}`}
                           </p>
                         </div>
                       </div>
@@ -1100,22 +852,22 @@ export default function ComenziCurierPage() {
                   {/* Options */}
                   {selectedOrder.optiuni && selectedOrder.optiuni.length > 0 && (
                     <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Opțiuni Suplimentare</h3>
+                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">OpÈ›iuni Suplimentare</h3>
                       <div className="flex flex-wrap gap-2">
                         {selectedOrder.optiuni.map((opt, idx) => {
                           const optionLabels: Record<string, string> = {
                             'asigurare': 'Asigurare transport',
-                            'incarcare_descarcare': 'Încărcare/Descărcare inclusă',
+                            'incarcare_descarcare': 'ÃŽncÄƒrcare/DescÄƒrcare inclusÄƒ',
                             'montaj_demontaj': 'Montaj/Demontaj mobilier',
-                            'ambalare': 'Ambalare profesională',
-                            'ambalare_speciala': 'Ambalare specială electronice',
+                            'ambalare': 'Ambalare profesionalÄƒ',
+                            'ambalare_speciala': 'Ambalare specialÄƒ electronice',
                             'frigo': 'Transport frigorific',
                             'bagaje_extra': 'Bagaje suplimentare',
                             'animale': 'Transport animale de companie',
-                            'cusca_transport': 'Cușcă transport profesională',
+                            'cusca_transport': 'CuÈ™cÄƒ transport profesionalÄƒ',
                             'fragil': 'Manipulare fragil',
                             'express': 'Livrare express',
-                            'temperatura_controlata': 'Temperatură controlată'
+                            'temperatura_controlata': 'TemperaturÄƒ controlatÄƒ'
                           };
                           const label = optionLabels[opt] || opt;
                           return (
@@ -1130,8 +882,8 @@ export default function ComenziCurierPage() {
 
                   {/* Observations */}
                   <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Observații</h3>
-                    <p className="text-gray-300 text-sm">{selectedOrder.observatii || 'Fără observații'}</p>
+                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">ObservaÈ›ii</h3>
+                    <p className="text-gray-300 text-sm">{selectedOrder.observatii || 'FÄƒrÄƒ observaÈ›ii'}</p>
                   </div>
 
                   {/* Contact Info */}
@@ -1181,7 +933,7 @@ export default function ComenziCurierPage() {
                         }}
                         className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white text-base rounded-xl font-medium transition-colors"
                       >
-                        Finalizează comanda
+                        FinalizeazÄƒ comanda
                       </button>
                     )}
                     {selectedOrder.status === 'livrata' && (
@@ -1204,7 +956,7 @@ export default function ComenziCurierPage() {
 
                   {/* Created Date */}
                   <div className="text-center text-xs text-gray-500 pt-2">
-                    Comandă creată la {(() => {
+                    ComandÄƒ creatÄƒ la {(() => {
                       const date = selectedOrder.createdAt instanceof Date 
                         ? selectedOrder.createdAt 
                         : selectedOrder.createdAt?.toDate?.() || new Date();
