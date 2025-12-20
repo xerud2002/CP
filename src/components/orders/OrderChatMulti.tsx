@@ -153,7 +153,7 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-125 md:h-150 bg-slate-900 rounded-lg overflow-hidden border border-white/10">
+    <div className="flex flex-col md:flex-row h-72 md:h-96 bg-slate-900 rounded-lg overflow-hidden border border-white/10">
       {/* Sidebar - Lista curieri */}
       <div className={`${selectedCourierId ? 'hidden md:flex' : 'flex'} w-full md:w-80 border-b md:border-b-0 md:border-r border-white/10 bg-slate-900/50 flex-col`}>
         {/* Header */}

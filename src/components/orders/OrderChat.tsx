@@ -287,8 +287,8 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
       {/* Messages */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar"
-        style={{ maxHeight: compact ? 'none' : '400px' }}
+        className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2 sm:space-y-3 custom-scrollbar"
+        style={{ maxHeight: compact ? 'none' : '280px' }}
         onWheel={(e) => {
           // Prevent parent scroll when scrolling inside chat
           const element = e.currentTarget;
