@@ -145,6 +145,7 @@ export default function ComenziCurierPage() {
               loadedOrders.push({
                 id: doc.id,
                 orderNumber: data.orderNumber,
+                uid_client: data.uid_client,
                 clientName: data.nume || data.clientName || 'Client',
                 clientPhone: data.telefon || data.clientPhone || '',
                 expeditorTara: data.tara_ridicare || data.expeditorTara || '',
@@ -174,6 +175,7 @@ export default function ComenziCurierPage() {
             loadedOrders.push({
               id: doc.id,
               orderNumber: data.orderNumber,
+              uid_client: data.uid_client,
               clientName: data.nume || data.clientName || 'Client',
               clientPhone: data.telefon || data.clientPhone || '',
               expeditorTara: data.tara_ridicare || data.expeditorTara || '',
