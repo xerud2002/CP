@@ -10,6 +10,8 @@ import HelpCard from '@/components/HelpCard';
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
+import { logError } from '@/lib/errorMessages';
+import { showError } from '@/lib/toast';
 import { countries } from '@/lib/constants';
 
 interface CourierProfile {
@@ -303,7 +305,7 @@ function ProfilCurierContent() {
         const ordersSnapshot = await getDocs(ordersQuery);
         setOrdersCount(ordersSnapshot.size);
       } catch (error) {
-        console.error('Error loading profile:', error);
+        logError(error, 'Error loading profile');
       } finally {
         setLoadingProfile(false);
       }
@@ -331,8 +333,8 @@ function ProfilCurierContent() {
       }, { merge: true });
       showSavedMessage('Profilul a fost salvat cu succes!');
     } catch (error) {
-      console.error('Error saving profile:', error);
-      alert('Eroare la salvare. Încearcă din nou.');
+      logError(error, 'Error saving profile');
+      showError(error);
     } finally {
       setSaving(false);
     }
@@ -348,13 +350,13 @@ function ProfilCurierContent() {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Te rugăm să selectezi o imagine validă.');
+      showError('Te rugăm să selectezi o imagine validă.');
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('Imaginea este prea mare. Dimensiunea maximă este 5MB.');
+      showError('Imaginea este prea mare. Dimensiunea maximă este 5MB.');
       return;
     }
 
@@ -381,8 +383,8 @@ function ProfilCurierContent() {
       
       showSavedMessage('Imaginea de profil a fost actualizată!');
     } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Eroare la încărcarea imaginii. Încearcă din nou.');
+      logError(error, 'Error uploading image');
+      showError(error);
     } finally {
       setSaving(false);
     }

@@ -8,6 +8,7 @@ import { collection, query, where, getDocs, doc, getDoc, orderBy } from 'firebas
 import { db } from '@/lib/firebase';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
+import { showSuccess, showWarning } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
 
 // Types
@@ -199,7 +200,7 @@ export default function RecenziiPage() {
                 <p className="text-gray-400 text-sm">Trimite invitație de recenzie clienților tăi prin email</p>
               </div>
             </div>
-            <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); alert('Funcție în curs de dezvoltare'); }}>
+            <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); showWarning('Funcție în curs de dezvoltare'); }}>
               <div>
                 <label className="form-label">Email client</label>
                 <input 
@@ -252,7 +253,7 @@ export default function RecenziiPage() {
                   <button 
                     onClick={() => {
                       navigator.clipboard.writeText(`https://curierulperfect.ro/review/${user?.uid || ''}`);
-                      alert('Link copiat în clipboard!');
+                      showSuccess('Link copiat în clipboard!');
                     }}
                     className="btn-outline-orange shrink-0"
                     title="Copiază link"

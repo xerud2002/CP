@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo } from 'react';
+import { logError } from '@/lib/errorMessages';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import OrderFilters from '@/components/orders/courier/filters/OrderFilters';
@@ -52,7 +53,7 @@ export default function ComenziCurierPage() {
           const viewedArray = JSON.parse(storedViewed);
           setViewedOrders(new Set(viewedArray));
         } catch (error) {
-          console.error('Error loading viewed orders:', error);
+          logError(error, 'Error loading viewed orders');
         }
       }
     }
