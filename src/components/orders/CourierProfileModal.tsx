@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
@@ -139,7 +140,7 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
   if (typeof window === 'undefined') return null;
   
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
@@ -162,9 +163,11 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
           <div className="flex items-center gap-4">
             {/* Avatar */}
             {profile?.profileImage ? (
-              <img 
+              <Image 
                 src={profile.profileImage} 
                 alt={profile?.firma || companyName}
+                width={64}
+                height={64}
                 className="w-16 h-16 rounded-xl object-cover shadow-lg border-2 border-orange-500/30"
               />
             ) : (
