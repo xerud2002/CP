@@ -68,7 +68,7 @@ export default function OrderDetailsModal({
       {/* Modal Container */}
       <div 
         id="print-modal-container" 
-        className="fixed inset-0 z-65 flex items-center justify-center p-4 print:p-0 print:static print:flex print:items-start" 
+        className="fixed inset-0 z-65 flex items-center justify-center p-4 pt-20 print:p-0 print:pt-0 print:static print:flex print:items-start" 
         onClick={onClose}
       >
         {/* Modal */}
