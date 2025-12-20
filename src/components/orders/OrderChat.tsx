@@ -56,20 +56,26 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId }:
     // Build query based on user role and available IDs
     let q;
     if (user.role === 'client') {
-      // Client sees messages between them and a specific courier
-      // If no courierId provided, show empty (will be populated when courier sends first message)
-      if (!courierId) {
-        setMessages([]);
-        return;
+      // Client sees messages for this order and clientId
+      // If courierId is provided, filter by it (specific courier chat)
+      // If no courierId, show ALL messages for this order (any courier can message)
+      if (courierId) {
+        q = query(
+          messagesRef,
+          where('orderId', '==', orderId),
+          where('clientId', '==', user.uid),
+          where('courierId', '==', courierId),
+          orderBy('createdAt', 'asc')
+        );
+      } else {
+        // No courier assigned yet - show messages from ANY courier for this order
+        q = query(
+          messagesRef,
+          where('orderId', '==', orderId),
+          where('clientId', '==', user.uid),
+          orderBy('createdAt', 'asc')
+        );
       }
-      
-      q = query(
-        messagesRef,
-        where('orderId', '==', orderId),
-        where('clientId', '==', user.uid),
-        where('courierId', '==', courierId),
-        orderBy('createdAt', 'asc')
-      );
     } else {
       // Courier sees messages between them and the client
       // Use provided courierId or fall back to user.uid (current courier)
