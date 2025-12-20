@@ -158,11 +158,11 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-96 md:h-112 bg-slate-900 rounded-lg overflow-hidden border border-white/10">
+    <div className="flex flex-col md:flex-row h-[70vh] md:h-112 bg-slate-900 rounded-lg overflow-hidden border border-white/10">
       {/* Sidebar - Lista curieri */}
-      <div className={`${selectedCourierId ? 'hidden md:flex' : 'flex'} w-full md:w-80 border-b md:border-b-0 md:border-r border-white/10 bg-slate-900/50 flex-col`}>
+      <div className={`${selectedCourierId ? 'hidden md:flex' : 'flex'} w-full md:w-80 border-b md:border-b-0 md:border-r border-white/10 bg-slate-900/50 flex-col max-h-full`}>
         {/* Header */}
-        <div className="p-3 md:p-4 border-b border-white/10">
+        <div className="p-3 md:p-4 border-b border-white/10 shrink-0">
           <h3 className="text-white font-semibold text-sm flex items-center gap-2">
             <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
@@ -178,21 +178,21 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
             <button
               key={conv.courierId}
               onClick={() => setSelectedCourierId(conv.courierId)}
-              className={`w-full p-3 md:p-4 border-b border-white/5 hover:bg-slate-800/50 transition-colors text-left ${
+              className={`w-full p-3 border-b border-white/5 hover:bg-slate-800/50 transition-colors text-left active:bg-slate-800/70 ${
                 selectedCourierId === conv.courierId ? 'bg-slate-800/70' : ''
               }`}
             >
-              <div className="flex items-start gap-2.5 md:gap-3">
+              <div className="flex items-start gap-2.5">
                 {/* Avatar */}
                 {conv.profileImage ? (
                   <img 
                     src={conv.profileImage} 
                     alt={conv.companyName}
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shrink-0 border-2 border-orange-500/30"
+                    className="w-10 h-10 rounded-full object-cover shrink-0 border-2 border-orange-500/30"
                   />
                 ) : (
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shrink-0">
-                    <span className="text-white font-bold text-base md:text-lg">
+                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shrink-0">
+                    <span className="text-white font-bold text-base">
                       {conv.companyName.charAt(0).toUpperCase()}
                     </span>
                   </div>
@@ -201,8 +201,8 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
-                    <h4 className="text-white font-medium text-sm truncate">{conv.companyName}</h4>
-                    <span className="text-gray-500 text-xs shrink-0 ml-2">
+                    <h4 className="text-white font-medium text-sm truncate pr-2">{conv.companyName}</h4>
+                    <span className="text-gray-500 text-xs shrink-0">
                       {formatTime(conv.lastMessageTime)}
                     </span>
                   </div>
@@ -222,17 +222,17 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
       </div>
 
       {/* Chat area */}
-      <div className={`${!selectedCourierId ? 'hidden md:flex' : 'flex'} flex-1 flex-col bg-slate-800/50`}>
+      <div className={`${!selectedCourierId ? 'hidden md:flex' : 'flex'} flex-1 flex-col bg-slate-800/50 min-h-0`}>
         {selectedCourierId ? (
           <>
             {/* Chat header */}
-            <div className="p-3 md:p-4 border-b border-white/10 bg-slate-800/30">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+            <div className="p-3 border-b border-white/10 bg-slate-800/30 shrink-0">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                   {/* Back button on mobile */}
                   <button
                     onClick={() => setSelectedCourierId(null)}
-                    className="md:hidden p-1.5 hover:bg-slate-700/50 rounded-lg transition-colors"
+                    className="md:hidden p-1.5 hover:bg-slate-700/50 active:bg-slate-700 rounded-lg transition-colors shrink-0"
                   >
                     <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -242,17 +242,17 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
                     <img 
                       src={conversations.find(c => c.courierId === selectedCourierId)?.profileImage} 
                       alt={conversations.find(c => c.courierId === selectedCourierId)?.companyName || 'Logo'}
-                      className="w-9 h-9 md:w-10 md:h-10 rounded-full object-cover border-2 border-orange-500/30"
+                      className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border-2 border-orange-500/30 shrink-0"
                     />
                   ) : (
-                    <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shrink-0">
                       <span className="text-white font-bold text-sm md:text-base">
                         {conversations.find(c => c.courierId === selectedCourierId)?.companyName.charAt(0).toUpperCase()}
                       </span>
                     </div>
                   )}
-                  <div>
-                    <h4 className="text-white font-medium text-sm">
+                  <div className="min-w-0">
+                    <h4 className="text-white font-medium text-sm truncate">
                       {conversations.find(c => c.courierId === selectedCourierId)?.companyName}
                     </h4>
                     <p className="text-gray-500 text-xs">Curier</p>
@@ -262,19 +262,19 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
                 {/* View Profile Button */}
                 <button
                   onClick={() => setShowProfileModal(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 rounded-lg transition-all group"
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 bg-orange-500/10 hover:bg-orange-500/20 active:bg-orange-500/30 border border-orange-500/30 rounded-lg transition-all group shrink-0"
                   title="Vezi profilul companiei"
                 >
                   <svg className="w-4 h-4 text-orange-400 group-hover:text-orange-300 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
-                  <span className="text-xs font-medium text-orange-400 group-hover:text-orange-300 transition-colors">Profil</span>
+                  <span className="text-xs font-medium text-orange-400 group-hover:text-orange-300 transition-colors hidden sm:inline">Profil</span>
                 </button>
               </div>
             </div>
 
             {/* OrderChat component */}
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 overflow-hidden min-h-0">
               <OrderChat
                 orderId={orderId}
                 orderNumber={orderNumber}

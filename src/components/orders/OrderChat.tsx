@@ -397,28 +397,31 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                     </div>
                   )}
                   
-                  {/* Message bubble */}
-                  <div
-                    className={`px-3 py-2 rounded-2xl ${
-                      isOwnMessage
-                        ? 'bg-blue-500 text-white rounded-br-md'
-                        : isClient
-                        ? 'bg-emerald-500/20 text-emerald-100 border border-emerald-500/30 rounded-bl-md'
-                        : 'bg-orange-500/20 text-orange-100 border border-orange-500/30 rounded-bl-md'
-                    }`}
-                  >
-                    {/* Attachment */}
-                    {msg.attachmentUrl && (
-                      <div className="mb-2">
-                        {isImageFile(msg.attachmentType) ? (
-                          <a href={msg.attachmentUrl} target="_blank" rel="noopener noreferrer">
-                            <img 
-                              src={msg.attachmentUrl} 
-                              alt={msg.attachmentName || 'Atașament'} 
-                              className="max-w-full max-h-48 rounded-lg object-cover"
-                            />
-                          </a>
-                        ) : (
+                  {/* Image attachment - displayed outside bubble */}
+                  {msg.attachmentUrl && isImageFile(msg.attachmentType) && (
+                    <a href={msg.attachmentUrl} target="_blank" rel="noopener noreferrer" className="block">
+                      <img 
+                        src={msg.attachmentUrl} 
+                        alt={msg.attachmentName || 'Atașament'} 
+                        className="max-w-full max-h-48 rounded-lg object-cover"
+                      />
+                    </a>
+                  )}
+
+                  {/* Message bubble - only show if there's text or non-image attachment */}
+                  {(msg.message || (msg.attachmentUrl && !isImageFile(msg.attachmentType))) && (
+                    <div
+                      className={`px-3 py-2 rounded-2xl ${
+                        isOwnMessage
+                          ? 'bg-blue-500 text-white rounded-br-md'
+                          : isClient
+                          ? 'bg-emerald-500/20 text-emerald-100 border border-emerald-500/30 rounded-bl-md'
+                          : 'bg-orange-500/20 text-orange-100 border border-orange-500/30 rounded-bl-md'
+                      }`}
+                    >
+                      {/* Non-image attachment */}
+                      {msg.attachmentUrl && !isImageFile(msg.attachmentType) && (
+                        <div className={msg.message ? 'mb-2' : ''}>
                           <a 
                             href={msg.attachmentUrl} 
                             target="_blank" 
@@ -432,13 +435,13 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                             </svg>
                             <span className="text-xs truncate max-w-[150px]">{msg.attachmentName}</span>
                           </a>
-                        )}
-                      </div>
-                    )}
-                    {msg.message && (
-                      <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.message}</p>
-                    )}
-                  </div>
+                        </div>
+                      )}
+                      {msg.message && (
+                        <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.message}</p>
+                      )}
+                    </div>
+                  )}
 
                   {/* Timestamp */}
                   <span className="text-[10px] text-gray-500 px-2">
@@ -453,21 +456,21 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSendMessage} className="p-3 border-t border-white/5 bg-slate-800/50">
+      <form onSubmit={handleSendMessage} className="p-2 sm:p-3 border-t border-white/5 bg-slate-800/50 shrink-0">
         {/* Selected file preview */}
         {selectedFile && (
-          <div className="mb-2 flex items-center gap-2 px-3 py-2 bg-slate-900/50 rounded-lg border border-white/10">
+          <div className="mb-2 flex items-center gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-slate-900/50 rounded-lg border border-white/10">
             <svg className="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
             </svg>
-            <span className="text-sm text-gray-300 truncate flex-1">{selectedFile.name}</span>
+            <span className="text-xs sm:text-sm text-gray-300 truncate flex-1">{selectedFile.name}</span>
             <button
               type="button"
               onClick={() => {
                 setSelectedFile(null);
                 if (fileInputRef.current) fileInputRef.current.value = '';
               }}
-              className="p-1 hover:bg-slate-700 rounded transition-colors"
+              className="p-1 hover:bg-slate-700 active:bg-slate-600 rounded transition-colors shrink-0"
             >
               <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -476,7 +479,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
           </div>
         )}
         
-        <div className="flex gap-2">
+        <div className="flex gap-1.5 sm:gap-2">
           {/* Hidden file input */}
           <input
             ref={fileInputRef}
@@ -491,7 +494,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={loading || uploadingFile}
-            className="p-2 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-gray-600 text-gray-300 rounded-lg transition-colors"
+            className="p-2 bg-slate-700 hover:bg-slate-600 active:bg-slate-500 disabled:bg-slate-800 disabled:text-gray-600 text-gray-300 rounded-lg transition-colors shrink-0"
             title="Atașează fișier"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -503,14 +506,14 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Scrie un mesaj..."
+            placeholder="Mesaj..."
             disabled={loading || uploadingFile}
-            className="flex-1 px-3 py-2 bg-slate-900/50 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50"
+            className="flex-1 min-w-0 px-3 py-2 bg-slate-900/50 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50"
           />
           <button
             type="submit"
             disabled={loading || uploadingFile || (!newMessage.trim() && !selectedFile)}
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 disabled:bg-slate-700 disabled:text-gray-500 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
+            className="px-3 sm:px-4 py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 disabled:bg-slate-700 disabled:text-gray-500 text-white rounded-lg transition-colors flex items-center gap-1.5 sm:gap-2 text-sm font-medium shrink-0"
           >
             {(loading || uploadingFile) ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

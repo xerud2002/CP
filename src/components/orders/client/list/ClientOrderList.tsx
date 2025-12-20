@@ -59,7 +59,7 @@ export default function ClientOrderList({
           
           {/* Expandable Chat */}
           {order.id && expandedChats.has(order.id) && (
-            <div className="mt-4 bg-slate-800/30 backdrop-blur-sm rounded-lg border border-white/5 p-4">
+            <div className="mt-2 sm:mt-4 bg-slate-800/30 backdrop-blur-sm rounded-lg border border-white/5 p-2 sm:p-4">
               <OrderChatMulti orderId={order.id} orderNumber={order.orderNumber} />
             </div>
           )}
