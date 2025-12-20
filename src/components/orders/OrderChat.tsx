@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where, updateDoc, doc, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { showSuccess, showError } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
@@ -17,6 +18,9 @@ interface Message {
   courierId?: string;
   clientId?: string;
   message: string;
+  attachmentUrl?: string;
+  attachmentName?: string;
+  attachmentType?: string;
   createdAt: Date;
   read?: boolean;
 }
@@ -34,8 +38,11 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const shouldScrollRef = useRef(true);
 
   // Scroll to bottom when new messages arrive - use container scroll, not scrollIntoView
@@ -114,6 +121,9 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
           clientId: data.clientId,
           courierId: data.courierId,
           message: data.message,
+          attachmentUrl: data.attachmentUrl,
+          attachmentName: data.attachmentName,
+          attachmentType: data.attachmentType,
           read: data.read || false,
           createdAt: data.createdAt?.toDate() || new Date(),
         });
@@ -212,7 +222,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
     e.preventDefault();
     e.stopPropagation();
     
-    if (!newMessage.trim() || !user || !orderId) return;
+    if ((!newMessage.trim() && !selectedFile) || !user || !orderId) return;
 
     // Keep scroll at bottom when sending
     shouldScrollRef.current = true;
@@ -223,20 +233,40 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
       const finalCourierId = user.role === 'curier' ? user.uid : (courierId || '');
       const finalClientId = user.role === 'client' ? user.uid : (clientId || '');
       
+      // Upload attachment if selected
+      let attachmentUrl = '';
+      let attachmentName = '';
+      let attachmentType = '';
+      
+      if (selectedFile) {
+        setUploadingFile(true);
+        const fileName = `${Date.now()}_${selectedFile.name}`;
+        const storageRef = ref(storage, `chat_attachments/${orderId}/${fileName}`);
+        
+        await uploadBytes(storageRef, selectedFile);
+        attachmentUrl = await getDownloadURL(storageRef);
+        attachmentName = selectedFile.name;
+        attachmentType = selectedFile.type;
+        setUploadingFile(false);
+      }
+      
       await addDoc(collection(db, 'mesaje'), {
         orderId,
         senderId: user.uid,
-        senderName: user.displayName || user.email?.split('@')[0] || 'Utilizator',
+        senderName: formatSenderName(user.nume || user.displayName, user.email),
         senderRole: user.role,
         receiverId,
         clientId: finalClientId,
         courierId: finalCourierId,
         message: newMessage.trim(),
+        ...(attachmentUrl && { attachmentUrl, attachmentName, attachmentType }),
         read: false,
         createdAt: serverTimestamp(),
       });
 
       setNewMessage('');
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
       
       // Force scroll to bottom after sending
       setTimeout(() => {
@@ -266,6 +296,42 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
     if (diffDays < 7) return `${diffDays}z`;
     
     return date.toLocaleDateString('ro-RO', { day: '2-digit', month: '2-digit' });
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      showError('Fișierul este prea mare. Dimensiunea maximă este 10MB.');
+      return;
+    }
+    
+    setSelectedFile(file);
+  };
+
+  const isImageFile = (type?: string) => type?.startsWith('image/');
+
+  // Format sender name: "Prenume N." (first name + last name initial)
+  const formatSenderName = (fullName?: string, email?: string): string => {
+    if (fullName && fullName.trim()) {
+      const parts = fullName.trim().split(/\s+/);
+      if (parts.length >= 2) {
+        // Assume format is "Prenume Nume" - show "Prenume N."
+        const firstName = parts[0];
+        const lastName = parts[parts.length - 1];
+        return `${firstName} ${lastName.charAt(0).toUpperCase()}.`;
+      }
+      return fullName;
+    }
+    // Fallback to email prefix formatted nicely
+    if (email) {
+      const prefix = email.split('@')[0];
+      // Capitalize first letter
+      return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+    }
+    return 'Utilizator';
   };
 
   return (
@@ -341,7 +407,37 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                         : 'bg-orange-500/20 text-orange-100 border border-orange-500/30 rounded-bl-md'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.message}</p>
+                    {/* Attachment */}
+                    {msg.attachmentUrl && (
+                      <div className="mb-2">
+                        {isImageFile(msg.attachmentType) ? (
+                          <a href={msg.attachmentUrl} target="_blank" rel="noopener noreferrer">
+                            <img 
+                              src={msg.attachmentUrl} 
+                              alt={msg.attachmentName || 'Atașament'} 
+                              className="max-w-full max-h-48 rounded-lg object-cover"
+                            />
+                          </a>
+                        ) : (
+                          <a 
+                            href={msg.attachmentUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
+                              isOwnMessage ? 'bg-blue-600/50 hover:bg-blue-600/70' : 'bg-slate-700/50 hover:bg-slate-700/70'
+                            } transition-colors`}
+                          >
+                            <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                            </svg>
+                            <span className="text-xs truncate max-w-[150px]">{msg.attachmentName}</span>
+                          </a>
+                        )}
+                      </div>
+                    )}
+                    {msg.message && (
+                      <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.message}</p>
+                    )}
                   </div>
 
                   {/* Timestamp */}
@@ -358,28 +454,72 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
 
       {/* Input */}
       <form onSubmit={handleSendMessage} className="p-3 border-t border-white/5 bg-slate-800/50">
+        {/* Selected file preview */}
+        {selectedFile && (
+          <div className="mb-2 flex items-center gap-2 px-3 py-2 bg-slate-900/50 rounded-lg border border-white/10">
+            <svg className="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+            </svg>
+            <span className="text-sm text-gray-300 truncate flex-1">{selectedFile.name}</span>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedFile(null);
+                if (fileInputRef.current) fileInputRef.current.value = '';
+              }}
+              className="p-1 hover:bg-slate-700 rounded transition-colors"
+            >
+              <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+        
         <div className="flex gap-2">
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleFileSelect}
+            className="hidden"
+            accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt"
+          />
+          
+          {/* Attachment button */}
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={loading || uploadingFile}
+            className="p-2 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-gray-600 text-gray-300 rounded-lg transition-colors"
+            title="Atașează fișier"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+            </svg>
+          </button>
+          
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Scrie un mesaj..."
-            disabled={loading}
+            disabled={loading || uploadingFile}
             className="flex-1 px-3 py-2 bg-slate-900/50 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 disabled:opacity-50"
           />
           <button
             type="submit"
-            disabled={loading || !newMessage.trim()}
+            disabled={loading || uploadingFile || (!newMessage.trim() && !selectedFile)}
             className="px-4 py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 disabled:bg-slate-700 disabled:text-gray-500 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
           >
-            {loading ? (
+            {(loading || uploadingFile) ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
               </svg>
             )}
-            Trimite
+            <span className="hidden sm:inline">Trimite</span>
           </button>
         </div>
       </form>
