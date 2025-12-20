@@ -7,10 +7,11 @@ import type { Order } from '@/types';
 
 interface UseClientOrdersLoaderProps {
   userId: string;
+  countryFilter?: string;
   serviceFilter?: string;
 }
 
-export function useClientOrdersLoader({ userId, serviceFilter }: UseClientOrdersLoaderProps) {
+export function useClientOrdersLoader({ userId, countryFilter, serviceFilter }: UseClientOrdersLoaderProps) {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedChats, setExpandedChats] = useState<Set<string>>(new Set());
@@ -80,10 +81,32 @@ export function useClientOrdersLoader({ userId, serviceFilter }: UseClientOrders
     };
   }, [userId, orders]);
 
-  // Filter orders
-  const filteredOrders = serviceFilter 
-    ? orders.filter(order => order.serviciu === serviceFilter)
-    : orders;
+  // Filter orders - normalize service names and check country
+  const filteredOrders = orders.filter(order => {
+    // Country filter (checks both expeditor and destinatar)
+    if (countryFilter && countryFilter !== 'all') {
+      const selectedCountryCode = countryFilter.toLowerCase();
+      const orderExpeditorCode = (order.expeditorTara || order.tara_ridicare || '').toLowerCase().trim();
+      const orderDestinatarCode = (order.destinatarTara || order.tara_livrare || '').toLowerCase().trim();
+      
+      // Check if either expeditor or destinatar country matches
+      if (orderExpeditorCode !== selectedCountryCode && orderDestinatarCode !== selectedCountryCode) {
+        return false;
+      }
+    }
+    
+    // Service filter
+    if (serviceFilter && serviceFilter !== 'all') {
+      const normalizedServiceFilter = serviceFilter.toLowerCase().trim();
+      const normalizedOrderService = (order.serviciu || '').toLowerCase().trim();
+      
+      if (normalizedOrderService !== normalizedServiceFilter) {
+        return false;
+      }
+    }
+    
+    return true;
+  });
 
   // Toggle chat expansion
   const toggleChat = useCallback((orderId: string) => {

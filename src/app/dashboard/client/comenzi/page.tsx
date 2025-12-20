@@ -16,7 +16,8 @@ import type { Order } from '@/types';
 export default function ComenziClientPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [serviceFilter, setServiceFilter] = useState('');
+  const [countryFilter, setCountryFilter] = useState('all');
+  const [serviceFilter, setServiceFilter] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Use custom hooks
@@ -26,9 +27,17 @@ export default function ComenziClientPage() {
     expandedChats, 
     unreadCounts, 
     toggleChat 
-  } = useClientOrdersLoader({ userId: user?.uid || '', serviceFilter });
+  } = useClientOrdersLoader({ userId: user?.uid || '', countryFilter, serviceFilter });
   
   const { handleDelete } = useClientOrderActions();
+
+  // Check if any filter is active
+  const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all';
+
+  const clearAllFilters = () => {
+    setCountryFilter('all');
+    setServiceFilter('all');
+  };
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {
@@ -105,8 +114,12 @@ export default function ComenziClientPage() {
 
         {/* Filters */}
         <ClientOrderFilters 
+          countryFilter={countryFilter}
           serviceFilter={serviceFilter}
-          onServiceFilterChange={setServiceFilter}
+          onCountryChange={setCountryFilter}
+          onServiceChange={setServiceFilter}
+          hasActiveFilters={hasActiveFilters}
+          onClearFilters={clearAllFilters}
         />
 
         {/* Orders List */}
@@ -124,7 +137,7 @@ export default function ComenziClientPage() {
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">Nicio comandă</h3>
             <p className="text-gray-400 mb-6">
-              {serviceFilter ? 'Nu există comenzi pentru acest serviciu' : 'Nu ai nici o comandă plasată încă'}
+              {hasActiveFilters ? 'Nu există comenzi cu filtrele selectate' : 'Nu ai nici o comandă plasată încă'}
             </p>
             <Link
               href="/comanda"
