@@ -427,7 +427,7 @@ function OrdersSummary() {
         </Link>
       </div>
       
-      <div className="grid grid-cols-3 gap-1.5 sm:gap-4 mb-3 sm:mb-4">
+      <div className="grid grid-cols-2 gap-1.5 sm:gap-4 mb-3 sm:mb-4">
         <div className="text-center p-2 sm:p-3 bg-orange-500/10 rounded-xl border border-orange-500/20">
           <div className="flex items-center justify-center gap-1 mb-0.5">
             <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -436,15 +436,6 @@ function OrdersSummary() {
             <p className="text-base sm:text-2xl font-bold text-orange-400">0</p>
           </div>
           <p className="text-[9px] sm:text-xs text-gray-400">Noi</p>
-        </div>
-        <div className="text-center p-2 sm:p-3 bg-blue-500/10 rounded-xl border border-blue-500/20">
-          <div className="flex items-center justify-center gap-1 mb-0.5">
-            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-            <p className="text-base sm:text-2xl font-bold text-blue-400">0</p>
-          </div>
-          <p className="text-[9px] sm:text-xs text-gray-400">În tranzit</p>
         </div>
         <div className="text-center p-2 sm:p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
           <div className="flex items-center justify-center gap-1 mb-0.5">
@@ -576,18 +567,55 @@ export default function CurierDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  // Fetch new orders count
+  // Fetch new orders count - only count orders created after last visit
   useEffect(() => {
     const fetchNewOrdersCount = async () => {
       if (!user) return;
       
       try {
+        // Get last visit timestamp
+        const lastVisit = localStorage.getItem('curier_comenzi_last_visit');
+        const lastVisitTimestamp = lastVisit ? parseInt(lastVisit) : 0;
+        
+        // Get courier's active services
+        const userQuery = query(
+          collection(db, 'users'),
+          where('uid', '==', user.uid)
+        );
+        const userSnapshot = await getDocs(userQuery);
+        let activeServices: string[] = [];
+        
+        if (!userSnapshot.empty) {
+          const userData = userSnapshot.docs[0].data();
+          activeServices = userData.serviciiOferite || [];
+        }
+        
+        // Query new orders
         const q = query(
           collection(db, 'comenzi'),
           where('status', '==', 'noua')
         );
         const snapshot = await getDocs(q);
-        setNewOrdersCount(snapshot.size);
+        
+        // Count only new orders that match courier's services and were created after last visit
+        let count = 0;
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const orderService = data.serviciu || data.tipColet || 'Colete';
+          const createdAt = data.createdAt?.toDate().getTime() || 0;
+          
+          // Normalize service names for comparison
+          const normalizedOrderService = orderService.toLowerCase().trim();
+          const normalizedActiveServices = activeServices.map(s => s.toLowerCase().trim());
+          
+          // Count if: matches services AND created after last visit
+          if ((activeServices.length === 0 || normalizedActiveServices.includes(normalizedOrderService)) 
+              && createdAt > lastVisitTimestamp) {
+            count++;
+          }
+        });
+        
+        setNewOrdersCount(count);
       } catch (error) {
         logError(error, 'Error loading new orders count for courier');
       }

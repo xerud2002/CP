@@ -24,6 +24,7 @@ export default function ComenziCurierPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [viewedOrders, setViewedOrders] = useState<Set<string>>(new Set());
   
   // Filters
   const [countryFilter, setCountryFilter] = useState<string>('all');
@@ -64,6 +65,24 @@ export default function ComenziCurierPage() {
       router.push('/login?role=curier');
     }
   }, [user, loading, router]);
+
+  // Mark page as visited when loaded
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('curier_comenzi_last_visit', Date.now().toString());
+      
+      // Load viewed orders from localStorage
+      const storedViewed = localStorage.getItem(`curier_${user.uid}_viewed_orders`);
+      if (storedViewed) {
+        try {
+          const viewedArray = JSON.parse(storedViewed);
+          setViewedOrders(new Set(viewedArray));
+        } catch (error) {
+          console.error('Error loading viewed orders:', error);
+        }
+      }
+    }
+  }, [user]);
 
   // Load orders from Firebase (in production)
   useEffect(() => {
@@ -186,6 +205,26 @@ export default function ComenziCurierPage() {
       loadOrders();
     }
   }, [user]);
+
+  // Mark order as viewed
+  const markOrderAsViewed = (orderId: string) => {
+    if (!user || !orderId) return;
+    
+    const newViewedOrders = new Set(viewedOrders);
+    newViewedOrders.add(orderId);
+    setViewedOrders(newViewedOrders);
+    
+    // Save to localStorage
+    localStorage.setItem(`curier_${user.uid}_viewed_orders`, JSON.stringify(Array.from(newViewedOrders)));
+  };
+
+  // Handle opening order details
+  const handleOpenOrder = (order: Order) => {
+    setSelectedOrder(order);
+    if (order.id) {
+      markOrderAsViewed(order.id);
+    }
+  };
 
   // Finalize order (change status to 'livrata')
   const handleFinalizeOrder = async (orderId: string, status: string) => {
@@ -626,6 +665,7 @@ export default function ComenziCurierPage() {
             <div className="space-y-4">
               {filteredOrders.map((order) => {
                 const serviceTypeConfig = serviceTypes.find(s => s.value.toLowerCase() === (order.tipColet || 'colete').toLowerCase()) || serviceTypes[0];
+                const isNewOrder = order.id && !viewedOrders.has(order.id);
 
                 return (
                 <div 
@@ -636,6 +676,15 @@ export default function ComenziCurierPage() {
                     {/* Service Icon */}
                     <div className={`relative w-12 h-12 rounded-xl ${serviceTypeConfig.bgColor} flex items-center justify-center shrink-0 ${serviceTypeConfig.color}`}>
                       <ServiceIcon service={order.tipColet || 'colete'} className="w-6 h-6" />
+                      {/* New Badge on Icon */}
+                      {isNewOrder && (
+                        <span className="absolute -top-1 -right-1 flex h-5 w-5">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-5 w-5 bg-orange-500 items-center justify-center">
+                            <span className="text-white text-[9px] font-bold">N</span>
+                          </span>
+                        </span>
+                      )}
                     </div>
                     
                     {/* Order Details */}
@@ -658,7 +707,7 @@ export default function ComenziCurierPage() {
                         {/* Action Buttons */}
                         <div className="flex items-center gap-2 ml-4">
                           <button
-                            onClick={() => setSelectedOrder(order)}
+                            onClick={() => handleOpenOrder(order)}
                             className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
                             title="Vezi detalii"
                           >

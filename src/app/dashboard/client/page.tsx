@@ -59,7 +59,7 @@ const mainNavTiles: NavTile[] = [
     href: '/dashboard/client/comenzi',
     icon: PackageIcon,
     title: 'Comenzi',
-    description: 'Coletele tale',
+    description: 'Comenzile tale',
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/10 hover:bg-blue-500/20',
     borderColor: 'border-blue-500/20 hover:border-blue-500/40',
@@ -375,18 +375,14 @@ function OrdersSummary({ totalOrders, statusCounts }: { totalOrders: number; sta
             <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{totalOrders}</div>
             <p className="text-xs sm:text-sm text-gray-400">{totalOrders === 1 ? 'Comandă activă' : 'Comenzi active'}</p>
           </div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             <div className="text-center p-2 bg-orange-500/10 rounded-lg border border-orange-500/20">
               <div className="text-lg sm:text-xl font-bold text-orange-400">{statusCounts.pending}</div>
               <div className="text-[10px] sm:text-xs text-gray-400">Noi</div>
             </div>
-            <div className="text-center p-2 bg-blue-500/10 rounded-lg border border-blue-500/20">
-              <div className="text-lg sm:text-xl font-bold text-blue-400">{statusCounts.inTransit}</div>
-              <div className="text-[10px] sm:text-xs text-gray-400">În curs</div>
-            </div>
             <div className="text-center p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
               <div className="text-lg sm:text-xl font-bold text-emerald-400">{statusCounts.delivered}</div>
-              <div className="text-[10px] sm:text-xs text-gray-400">Livrate</div>
+              <div className="text-[10px] sm:text-xs text-gray-400">Finalizate</div>
             </div>
           </div>
         </div>
@@ -571,9 +567,6 @@ export default function ClientDashboard() {
       <main className="relative z-10 max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Welcome Section */}
         <WelcomeSection userName={userName} />
-
-        {/* Stats */}
-        <StatsSection totalOrders={totalOrders} statusCounts={statusCounts} />
 
         {/* Main Navigation - Quick access to all sections */}
         <MainNavigation totalNotifications={totalNotifications} />
