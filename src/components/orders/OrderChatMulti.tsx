@@ -78,12 +78,12 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
           // Get courier name from users collection
           const userDoc = await getDoc(doc(db, 'users', courierId));
           const userData = userDoc.data();
-          const courierName = userData?.nume || 'Curier';
+          const courierName = userData?.nume || userData?.displayName || 'Curier';
 
-          // Get company name from profil_curier
+          // Get company name from profil_curier - try multiple fields
           const profilDoc = await getDoc(doc(db, 'profil_curier', courierId));
           const profilData = profilDoc.data();
-          const companyName = profilData?.numeCompanie || profilData?.nume || courierName;
+          const companyName = profilData?.firma || profilData?.numeCompanie || profilData?.denumire_firma || profilData?.nume || courierName;
 
           conversationsData.push({
             courierId,
