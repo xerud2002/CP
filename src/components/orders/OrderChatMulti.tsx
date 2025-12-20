@@ -54,13 +54,16 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
         const existing = courierMap.get(courierId);
         const messageTime = data.createdAt?.toDate() || new Date();
         
+        // Use readByClient for client unread count
+        const isUnread = data.readByClient !== true && data.senderId !== user.uid;
+        
         if (!existing || messageTime > existing.lastMessageTime) {
           courierMap.set(courierId, {
             lastMessage: data.message,
             lastMessageTime: messageTime,
-            unreadCount: (existing?.unreadCount || 0) + (data.read === false && data.senderId !== user.uid ? 1 : 0)
+            unreadCount: (existing?.unreadCount || 0) + (isUnread ? 1 : 0)
           });
-        } else if (data.read === false && data.senderId !== user.uid) {
+        } else if (isUnread) {
           courierMap.set(courierId, {
             ...existing,
             unreadCount: existing.unreadCount + 1
