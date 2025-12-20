@@ -151,8 +151,8 @@ export default function ComenziCurierPage() {
               </div>
               <div>
                 <h1 className="text-lg sm:text-2xl font-bold text-white">Comenzile Mele</h1>
-                <p className="text-xs text-gray-400 mt-0.5 sm:hidden">GestioneazÄƒ comenzile tale</p>
-                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">GestioneazÄƒ comenzile È™i livrÄƒrile tale</p>
+                <p className="text-xs text-gray-400 mt-0.5 sm:hidden">Gestionează comenzile tale</p>
+                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Gestionează comenzile și livrările tale</p>
               </div>
             </div>
           </div>
