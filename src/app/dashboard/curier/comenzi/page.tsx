@@ -2,22 +2,20 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { logError } from '@/lib/errorMessages';
 import { useEffect, useState, useMemo } from 'react';
-import { ArrowLeftIcon, CloseIcon } from '@/components/icons/DashboardIcons';
+import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import OrderFilters from '@/components/orders/courier/filters/OrderFilters';
 import OrderList from '@/components/orders/courier/list/OrderList';
+import OrderDetailsModal from '@/components/orders/courier/details/OrderDetailsModal';
 import { collection, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { formatOrderNumber, formatClientName } from '@/utils/orderHelpers';
 import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
 import { showWarning, showError } from '@/lib/toast';
-import { countries, serviceTypes } from '@/lib/constants';
-import { ServiceIcon } from '@/components/icons/ServiceIcons';
+import { countries } from '@/lib/constants';
 import type { Order } from '@/types';
 
 export default function ComenziCurierPage() {
@@ -414,341 +412,20 @@ export default function ComenziCurierPage() {
 
         {/* Order Details Modal */}
         {selectedOrder && (
-          <>
-            {/* Backdrop */}
-            <div 
-              className="fixed inset-0 z-60 bg-black/70 backdrop-blur-sm print:hidden"
-              style={{ top: '72px' }}
-              onClick={() => setSelectedOrder(null)}
-            />
-            
-            {/* Modal Container */}
-            <div id="print-modal-container" className="fixed inset-0 z-65 flex items-center justify-center p-4 print:p-0 print:static print:flex print:items-start" style={{ top: '72px' }} onClick={() => setSelectedOrder(null)}>
-              {/* Modal */}
-              <div id="print-modal" className="relative bg-slate-800 rounded-2xl border border-white/10 shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden print:max-w-full print:max-h-full print:rounded-none print:border-0 print:shadow-none print:bg-white" onClick={(e) => e.stopPropagation()}>
-                {/* Header */}
-                <div className="sticky top-0 bg-slate-800 border-b border-white/10 px-6 py-4 flex items-center justify-between print:bg-white print:border-gray-300 print:static">
-                  <div className="flex items-center gap-3">
-                    {(() => {
-                      const serviceTypeConfig = serviceTypes.find(s => s.value.toLowerCase() === (selectedOrder.tipColet || 'colete').toLowerCase()) || serviceTypes[0];
-                      return (
-                        <div className={`w-10 h-10 rounded-xl ${serviceTypeConfig.bgColor} flex items-center justify-center ${serviceTypeConfig.color}`}>
-                          <ServiceIcon service={selectedOrder.tipColet || 'colete'} className="w-6 h-6" />
-                        </div>
-                      );
-                    })()}
-                    <div>
-                      <h2 className="text-lg font-bold text-white">
-                        {serviceTypes.find(s => s.value.toLowerCase() === (selectedOrder.tipColet || 'colete').toLowerCase())?.label || selectedOrder.tipColet || 'Colete'}
-                      </h2>
-                      {(selectedOrder.orderNumber || selectedOrder.id) && (
-                        <p className="text-xs text-gray-400">#{formatOrderNumber(selectedOrder.orderNumber || selectedOrder.id || 1)}</p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 print:hidden">
-                    <button
-                      onClick={() => window.print()}
-                      className="p-2 hover:bg-white/10 rounded-lg transition-colors group"
-                      title="PrinteazÄƒ detalii comandÄƒ"
-                    >
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => setSelectedOrder(null)}
-                      className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                    >
-                      <CloseIcon className="w-5 h-5 text-gray-400" />
-                    </button>
-                  </div>
-                </div>
-                
-                {/* Content */}
-                <div className="overflow-y-auto max-h-[calc(85vh-80px)] p-6 space-y-6 custom-scrollbar">
-                  {/* Route Section */}
-                  <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">RutÄƒ Transport</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-green-400 text-xs font-medium uppercase">
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                          </svg>
-                          Ridicare
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Image 
-                            src={`/img/flag/${(() => {
-                              const country = selectedOrder.expeditorTara?.toLowerCase().trim();
-                              const matched = countries.find(c => 
-                                c.name.toLowerCase() === country || 
-                                c.code.toLowerCase() === country
-                              );
-                              return matched?.code || 'ro';
-                            })()}.svg`}
-                            alt={selectedOrder.expeditorTara || 'RO'}
-                            width={20}
-                            height={15}
-                            className="rounded"
-                          />
-                          <span className="text-white font-medium">
-                            {(() => {
-                              const country = selectedOrder.expeditorTara?.toLowerCase().trim();
-                              const matched = countries.find(c => 
-                                c.name.toLowerCase() === country || 
-                                c.code.toLowerCase() === country
-                              );
-                              return matched?.name || selectedOrder.expeditorTara || 'RomÃ¢nia';
-                            })()}
-                          </span>
-                        </div>
-                        {selectedOrder.oras_ridicare && (
-                          <div>
-                            <p className="text-xs text-gray-500">OraÈ™</p>
-                            <p className="text-gray-300 font-medium">{selectedOrder.oras_ridicare}</p>
-                          </div>
-                        )}
-                        <div>
-                          <p className="text-xs text-gray-500">JudeÈ› / Regiune</p>
-                          <p className="text-gray-300 font-medium">{selectedOrder.expeditorJudet}</p>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-orange-400 text-xs font-medium uppercase">
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                          </svg>
-                          Livrare
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Image 
-                            src={`/img/flag/${(() => {
-                              const country = selectedOrder.destinatarTara?.toLowerCase().trim();
-                              const matched = countries.find(c => 
-                                c.name.toLowerCase() === country || 
-                                c.code.toLowerCase() === country
-                              );
-                              return matched?.code || 'ro';
-                            })()}.svg`}
-                            alt={selectedOrder.destinatarTara || 'RO'}
-                            width={20}
-                            height={15}
-                            className="rounded"
-                          />
-                          <span className="text-white font-medium">
-                            {(() => {
-                              const country = selectedOrder.destinatarTara?.toLowerCase().trim();
-                              const matched = countries.find(c => 
-                                c.name.toLowerCase() === country || 
-                                c.code.toLowerCase() === country
-                              );
-                              return matched?.name || selectedOrder.destinatarTara || 'RomÃ¢nia';
-                            })()}
-                          </span>
-                        </div>
-                        {selectedOrder.oras_livrare && (
-                          <div>
-                            <p className="text-xs text-gray-500">OraÈ™</p>
-                            <p className="text-gray-300 font-medium">{selectedOrder.oras_livrare}</p>
-                          </div>
-                        )}
-                        <div>
-                          <p className="text-xs text-gray-500">JudeÈ› / Regiune</p>
-                          <p className="text-gray-300 font-medium">{selectedOrder.destinatarJudet}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Transport Details */}
-                  <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Detalii Transport</h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {selectedOrder.greutate && (
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">Greutate</p>
-                          <p className="text-white font-medium">{selectedOrder.greutate}{String(selectedOrder.greutate).includes('kg') ? '' : ' kg'}</p>
-                        </div>
-                      )}
-                      {(selectedOrder.lungime || selectedOrder.latime || selectedOrder.inaltime) && (
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">Dimensiuni (LÃ—lÃ—h)</p>
-                          <p className="text-white font-medium">
-                            {selectedOrder.lungime || '-'} Ã— {selectedOrder.latime || '-'} Ã— {selectedOrder.inaltime || '-'} cm
-                          </p>
-                        </div>
-                      )}
-                      {selectedOrder.cantitate && (
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">
-                            {selectedOrder.serviciu?.toLowerCase().trim() === 'persoane' ? 'NumÄƒr pasageri' : 'Cantitate'}
-                          </p>
-                          <p className="text-white font-medium">
-                            {selectedOrder.cantitate}
-                            {selectedOrder.serviciu?.toLowerCase().trim() === 'persoane' ? ' persoane' : ''}
-                          </p>
-                        </div>
-                      )}
-
-                    </div>
-                    {selectedOrder.descriere && (
-                      <div className="mt-4 pt-4 border-t border-white/5">
-                        <p className="text-xs text-gray-500 mb-1">Descriere</p>
-                        <p className="text-gray-300 text-sm">{selectedOrder.descriere}</p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Schedule */}
-                  {selectedOrder.dataColectare && (
-                    <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Programare</h3>
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                          <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">Data ridicare</p>
-                          <p className="text-white font-medium">
-                            {(() => {
-                              const [y, m, d] = selectedOrder.dataColectare.split('-');
-                              return `${d}/${m}/${y}`;
-                            })()}
-                            {selectedOrder.ora && ` â€¢ ${selectedOrder.ora}`}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Options */}
-                  {selectedOrder.optiuni && selectedOrder.optiuni.length > 0 && (
-                    <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">OpÈ›iuni Suplimentare</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedOrder.optiuni.map((opt, idx) => {
-                          const optionLabels: Record<string, string> = {
-                            'asigurare': 'Asigurare transport',
-                            'incarcare_descarcare': 'ÃŽncÄƒrcare/DescÄƒrcare inclusÄƒ',
-                            'montaj_demontaj': 'Montaj/Demontaj mobilier',
-                            'ambalare': 'Ambalare profesionalÄƒ',
-                            'ambalare_speciala': 'Ambalare specialÄƒ electronice',
-                            'frigo': 'Transport frigorific',
-                            'bagaje_extra': 'Bagaje suplimentare',
-                            'animale': 'Transport animale de companie',
-                            'cusca_transport': 'CuÈ™cÄƒ transport profesionalÄƒ',
-                            'fragil': 'Manipulare fragil',
-                            'express': 'Livrare express',
-                            'temperatura_controlata': 'TemperaturÄƒ controlatÄƒ'
-                          };
-                          const label = optionLabels[opt] || opt;
-                          return (
-                            <span key={idx} className="px-3 py-1.5 bg-green-500/20 text-green-400 rounded-lg text-sm font-medium border border-green-500/20">
-                              {label}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Observations */}
-                  <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                    <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">ObservaÈ›ii</h3>
-                    <p className="text-gray-300 text-sm">{selectedOrder.observatii || 'FÄƒrÄƒ observaÈ›ii'}</p>
-                  </div>
-
-                  {/* Contact Info */}
-                  {(selectedOrder.clientName || selectedOrder.clientPhone) && (
-                    <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-                      <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Date Contact</h3>
-                      <div className="space-y-3">
-                        {selectedOrder.clientName && (
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
-                              <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                              </svg>
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-xs text-gray-500">Nume</p>
-                              <p className="text-white font-medium truncate">{formatClientName(selectedOrder.clientName)}</p>
-                            </div>
-                          </div>
-                        )}
-                        {selectedOrder.clientPhone && (
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
-                              <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                              </svg>
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-xs text-gray-500">Telefon</p>
-                              <p className="text-white font-medium">{selectedOrder.clientPhone}</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-3 pt-2 print:hidden">
-                    {selectedOrder.status === 'in_lucru' && (
-                      <button 
-                        onClick={() => {
-                          setSelectedOrder(null);
-                          if (selectedOrder.id && selectedOrder.status) {
-                            handleFinalizeOrder(selectedOrder.id, selectedOrder.status);
-                          }
-                        }}
-                        className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white text-base rounded-xl font-medium transition-colors"
-                      >
-                        FinalizeazÄƒ comanda
-                      </button>
-                    )}
-                    {selectedOrder.status === 'livrata' && (
-                      <button 
-                        onClick={() => {
-                          setSelectedOrder(null);
-                          if (selectedOrder.id) {
-                            handleRequestReview(selectedOrder.id);
-                          }
-                        }}
-                        className="flex-1 py-3 bg-yellow-500 hover:bg-yellow-600 text-white text-base rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        Cere recenzie
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Created Date */}
-                  <div className="text-center text-xs text-gray-500 pt-2">
-                    ComandÄƒ creatÄƒ la {(() => {
-                      const date = selectedOrder.createdAt instanceof Date 
-                        ? selectedOrder.createdAt 
-                        : selectedOrder.createdAt?.toDate?.() || new Date();
-                      return date.toLocaleDateString('ro-RO', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      });
-                    })()}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
+          <OrderDetailsModal
+            order={selectedOrder}
+            onClose={() => setSelectedOrder(null)}
+            onFinalize={
+              selectedOrder.status === 'in_lucru' && selectedOrder.id && selectedOrder.status
+                ? () => handleFinalizeOrder(selectedOrder.id!, selectedOrder.status!)
+                : undefined
+            }
+            onRequestReview={
+              selectedOrder.status === 'livrata' && selectedOrder.id
+                ? () => handleRequestReview(selectedOrder.id!)
+                : undefined
+            }
+          />
         )}
       </div>
 
