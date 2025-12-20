@@ -5,9 +5,10 @@ import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import HelpCard from '@/components/HelpCard';
+import { logError } from '@/lib/errorMessages';
 import {
   UserIcon,
   BoxIcon,
@@ -27,6 +28,17 @@ interface ActivityItem {
   message: string;
   time: string;
   color: string;
+}
+
+interface RecentMessage {
+  id: string;
+  orderId: string;
+  orderNumber?: number;
+  senderName: string;
+  senderRole: 'client' | 'curier';
+  message: string;
+  createdAt: Date;
+  read?: boolean;
 }
 
 // ============================================
@@ -101,9 +113,6 @@ const mainNavTiles: NavTile[] = [
     borderColor: 'border-pink-500/20 hover:border-pink-500/40',
   },
 ];
-
-// Activities will be loaded from Firebase
-const recentActivities: ActivityItem[] = [];
 
 // ============================================
 // HELPER FUNCTIONS
@@ -391,34 +400,101 @@ function OrdersSummary({ totalOrders, statusCounts }: { totalOrders: number; sta
   );
 }
 
-// Recent Activity Component
-function RecentActivity() {
+// Recent Activity Component - Shows recent messages from couriers
+function RecentActivity({ recentMessages, unreadCount }: { recentMessages: RecentMessage[]; unreadCount: number }) {
+  // Format timestamp to relative time
+  const formatTime = (date: Date) => {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return 'Acum';
+    if (diffMins < 60) return `${diffMins} min`;
+    if (diffHours < 24) return `${diffHours} ore`;
+    if (diffDays < 7) return `${diffDays} zile`;
+    return date.toLocaleDateString('ro-RO', { day: '2-digit', month: 'short' });
+  };
+
+  // Truncate message preview
+  const truncateMessage = (msg: string, maxLength: number = 40) => {
+    if (msg.length <= maxLength) return msg;
+    return msg.substring(0, maxLength).trim() + '...';
+  };
+
   return (
     <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full flex flex-col">
       <div className="flex items-center justify-between mb-3 sm:mb-4">
         <h3 className="text-sm sm:text-lg font-semibold text-white flex items-center gap-2">
-          <div className="p-1.5 bg-purple-500/20 rounded-lg">
+          <div className="relative p-1.5 bg-purple-500/20 rounded-lg">
             <BellIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-orange-500 rounded-full animate-ping" />
+            )}
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-orange-500 rounded-full" />
+            )}
           </div>
-          Activitate
+          Mesaje recente
+          {unreadCount > 0 && (
+            <span className="text-[10px] sm:text-xs font-medium text-orange-400 bg-orange-500/20 px-1.5 py-0.5 rounded-full">
+              {unreadCount} noi
+            </span>
+          )}
         </h3>
       </div>
-      <div className="space-y-1.5 sm:space-y-2 flex-1 flex flex-col justify-center">
-        {recentActivities.length === 0 ? (
-          <div className="text-center">
+      <div className="space-y-1.5 sm:space-y-2 flex-1 flex flex-col">
+        {recentMessages.length === 0 ? (
+          <div className="text-center flex-1 flex flex-col items-center justify-center">
             <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 rounded-xl bg-purple-500/10 flex items-center justify-center">
-              <BellIcon className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400/50" />
+              <ChatIcon className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400/50" />
             </div>
-            <p className="text-gray-500 text-xs sm:text-sm">Nicio activitate recentă</p>
+            <p className="text-gray-500 text-xs sm:text-sm">Niciun mesaj recent</p>
           </div>
         ) : (
-          recentActivities.map((activity, index) => (
-            <div key={index} className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors">
-              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shrink-0 ${activity.color}`} />
-              <span className="text-gray-300 text-[11px] sm:text-sm flex-1 truncate">{activity.message}</span>
-              <span className="text-gray-500 text-[9px] sm:text-xs shrink-0">{activity.time}</span>
-            </div>
-          ))
+          <>
+            {recentMessages.map((msg) => (
+              <Link
+                key={msg.id}
+                href={`/dashboard/client/comenzi?orderId=${msg.orderId}`}
+                className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors group"
+              >
+                <div className="relative shrink-0 mt-0.5">
+                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-semibold ${
+                    !msg.read ? 'bg-orange-500/30 text-orange-300' : 'bg-slate-700 text-gray-400'
+                  }`}>
+                    {msg.senderName.charAt(0).toUpperCase()}
+                  </div>
+                  {!msg.read && (
+                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-1 mb-0.5">
+                    <span className={`text-[11px] sm:text-sm font-medium truncate ${!msg.read ? 'text-white' : 'text-gray-300'}`}>
+                      {msg.senderName}
+                    </span>
+                    <span className="text-[9px] sm:text-xs text-gray-500 shrink-0">
+                      {formatTime(msg.createdAt)}
+                    </span>
+                  </div>
+                  <p className={`text-[10px] sm:text-xs truncate ${!msg.read ? 'text-gray-300' : 'text-gray-500'}`}>
+                    {msg.orderNumber ? `#CP${msg.orderNumber} · ` : ''}{truncateMessage(msg.message)}
+                  </p>
+                </div>
+                <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-400 shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            ))}
+            <Link
+              href="/dashboard/client/comenzi"
+              className="text-center text-[11px] sm:text-xs text-purple-400 hover:text-purple-300 py-2 transition-colors"
+            >
+              Vezi toate mesajele →
+            </Link>
+          </>
         )}
       </div>
     </section>
@@ -435,6 +511,8 @@ export default function ClientDashboard() {
   const [totalNotifications, setTotalNotifications] = useState(0);
   const [totalOrders, setTotalOrders] = useState(0);
   const [statusCounts, setStatusCounts] = useState({ pending: 0, inTransit: 0, delivered: 0 });
+  const [recentMessages, setRecentMessages] = useState<RecentMessage[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {
@@ -519,6 +597,70 @@ export default function ClientDashboard() {
     }
   }, [user]);
 
+  // Real-time listener for recent messages sent to this client (from couriers)
+  useEffect(() => {
+    if (!user) return;
+
+    // Query messages where this client is the recipient (from couriers)
+    const q = query(
+      collection(db, 'mesaje'),
+      where('clientId', '==', user.uid),
+      where('senderRole', '==', 'curier'),
+      orderBy('createdAt', 'desc'),
+      limit(5)
+    );
+
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      const messages: RecentMessage[] = [];
+      let unread = 0;
+
+      // Gather order IDs to fetch order numbers
+      const orderIds = new Set<string>();
+      snapshot.docs.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.orderId) orderIds.add(data.orderId);
+      });
+
+      // Fetch order numbers in batch
+      const orderNumbers: Record<string, number> = {};
+      if (orderIds.size > 0) {
+        const orderPromises = Array.from(orderIds).map(async (orderId) => {
+          const orderDoc = await getDoc(doc(db, 'comenzi', orderId));
+          if (orderDoc.exists()) {
+            orderNumbers[orderId] = orderDoc.data().orderNumber;
+          }
+        });
+        await Promise.all(orderPromises);
+      }
+
+      snapshot.docs.forEach((docSnap) => {
+        const data = docSnap.data();
+        const createdAt = data.createdAt?.toDate?.() || new Date();
+        const isRead = data.readByClient === true;
+        
+        if (!isRead) unread++;
+        
+        messages.push({
+          id: docSnap.id,
+          orderId: data.orderId || '',
+          orderNumber: orderNumbers[data.orderId],
+          senderName: data.senderName || 'Curier',
+          senderRole: data.senderRole || 'curier',
+          message: data.message || '',
+          createdAt,
+          read: isRead,
+        });
+      });
+
+      setRecentMessages(messages);
+      setUnreadCount(unread);
+    }, (error) => {
+      logError(error, 'Error listening to recent messages');
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
   const handleLogout = async () => {
     await logout();
     router.push('/');
@@ -580,7 +722,7 @@ export default function ClientDashboard() {
           
           {/* Recent Activity - Takes 2 columns */}
           <div className="lg:col-span-2">
-            <RecentActivity />
+            <RecentActivity recentMessages={recentMessages} unreadCount={unreadCount} />
           </div>
         </div>
 
