@@ -57,38 +57,32 @@ export default function ComenziClientPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      <header className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-50 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4">
-            <div className="flex items-center gap-2 sm:gap-4">
-              <Link 
-                href="/dashboard/client" 
-                className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
-              >
-                <ArrowLeftIcon className="w-5 h-5" />
-              </Link>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center">
-                  <PackageIcon className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" />
-                </div>
-                <div>
-                  <h1 className="text-base sm:text-lg font-bold text-white">Comenzile Tale</h1>
-                  <p className="text-xs text-gray-500 hidden sm:block">Urmărește coletele</p>
-                </div>
+    <div className="min-h-screen">
+      {/* Header */}
+      <div className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-50 backdrop-blur-xl shadow-lg">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <Link 
+              href="/dashboard/client" 
+              className="p-2 sm:p-2.5 hover:bg-slate-800/80 rounded-xl transition-all duration-200 group"
+            >
+              <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+            </Link>
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-2.5 sm:p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl border border-blue-500/20">
+                <PackageIcon className="w-6 h-6 sm:w-7 sm:h-7 text-blue-400" />
               </div>
-            </div>
-            
-            <div className="flex items-center gap-2 text-xs sm:text-sm">
-              <span className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-blue-500/20 text-blue-400 font-medium border border-blue-500/30">
-                {orders.length} {orders.length === 1 ? 'comandă' : 'comenzi'}
-              </span>
+              <div>
+                <h1 className="text-lg sm:text-2xl font-bold text-white">Comenzile Tale</h1>
+                <p className="text-xs text-gray-400 mt-0.5 sm:hidden">Urmărește coletele tale</p>
+                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Urmărește și gestionează comenzile tale</p>
+              </div>
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
-      <main className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Add New Order CTA */}
         <Link
           href="/comanda"
@@ -159,19 +153,19 @@ export default function ComenziClientPage() {
           />
         )}
 
-        {/* Help Section */}
-        <div className="mt-8">
-          <HelpCard />
-        </div>
-      </main>
+        {/* Order Details Modal */}
+        {selectedOrder && (
+          <OrderDetailsModal
+            order={selectedOrder}
+            onClose={() => setSelectedOrder(null)}
+          />
+        )}
+      </div>
 
-      {/* Order Details Modal */}
-      {selectedOrder && (
-        <OrderDetailsModal
-          order={selectedOrder}
-          onClose={() => setSelectedOrder(null)}
-        />
-      )}
+      {/* Help Card - Same width as other sections */}
+      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-6 pb-4 sm:pb-8">
+        <HelpCard />
+      </div>
     </div>
   );
 }
