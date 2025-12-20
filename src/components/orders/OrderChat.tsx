@@ -38,10 +38,10 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const shouldScrollRef = useRef(true);
 
-  // Scroll to bottom when new messages arrive
+  // Scroll to bottom when new messages arrive - use container scroll, not scrollIntoView
   const scrollToBottom = () => {
-    if (shouldScrollRef.current) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    if (shouldScrollRef.current && chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   };
 
