@@ -23,17 +23,20 @@ export function useUnreadMessages(userId: string | undefined, orders: Order[]) {
       if (!order.id || !order.uid_client) return;
 
       const messagesRef = collection(db, 'mesaje');
+      // Query messages for this order where courier hasn't read yet
       const q = query(
         messagesRef,
         where('orderId', '==', order.id),
         where('clientId', '==', order.uid_client),
-        where('courierId', '==', userId),
-        where('read', '==', false)
+        where('courierId', '==', userId)
       );
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        // Filter out messages sent by current user (client-side filtering)
-        const unreadCount = snapshot.docs.filter(doc => doc.data().senderId !== userId).length;
+        // Count messages not sent by courier and not read by courier
+        const unreadCount = snapshot.docs.filter(doc => {
+          const data = doc.data();
+          return data.senderId !== userId && data.readByCourier !== true;
+        }).length;
         setUnreadCounts((prev) => ({
           ...prev,
           [order.id!]: unreadCount,

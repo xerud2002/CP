@@ -173,9 +173,16 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
         // Filter out own messages and update only received messages
         const updatePromises = snapshot.docs
           .filter(docSnap => docSnap.data().senderId !== user.uid)
-          .map(docSnap => 
-            updateDoc(doc(db, 'mesaje', docSnap.id), { read: true })
-          );
+          .map(docSnap => {
+            const updateData: Record<string, boolean> = { read: true };
+            // Set role-specific read flag
+            if (user.role === 'client') {
+              updateData.readByClient = true;
+            } else {
+              updateData.readByCourier = true;
+            }
+            return updateDoc(doc(db, 'mesaje', docSnap.id), updateData);
+          });
         
         if (updatePromises.length > 0) {
           await Promise.all(updatePromises);

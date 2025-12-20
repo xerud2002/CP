@@ -60,16 +60,19 @@ export function useClientOrdersLoader({ userId, countryFilter, serviceFilter }: 
       const messagesQuery = query(
         collection(db, 'mesaje'),
         where('orderId', '==', order.id),
-        where('clientId', '==', userId),
-        where('senderId', '!=', userId)
+        where('clientId', '==', userId)
       );
 
       const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-        const unreadMessages = snapshot.docs.filter(doc => !doc.data().readByClient);
+        // Count messages not sent by client and not read by client
+        const unreadCount = snapshot.docs.filter(doc => {
+          const data = doc.data();
+          return data.senderId !== userId && data.readByClient !== true;
+        }).length;
         const orderId = order.id as string;
         setUnreadCounts(prev => ({
           ...prev,
-          [orderId]: unreadMessages.length
+          [orderId]: unreadCount
         }));
       });
 
