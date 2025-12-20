@@ -50,6 +50,8 @@ export interface Order {
   observatii?: string;
   timestamp?: number;
   createdAt?: Date | { toDate: () => Date };
+  nrOferte?: number;
+  nrMesajeNoi?: number;
   // Curier-specific fields (legacy naming)
   tipColet?: string;
   expeditorTara?: string;

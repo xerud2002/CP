@@ -10,7 +10,7 @@ import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import OrderFilters from '@/components/orders/courier/filters/OrderFilters';
 import OrderList from '@/components/orders/courier/list/OrderList';
-import OrderDetailsModal from '@/components/orders/courier/details/OrderDetailsModal';
+import OrderDetailsModal from '@/components/orders/shared/OrderDetailsModal';
 import { useOrdersLoader } from '@/hooks/courier/useOrdersLoader';
 import { useUnreadMessages } from '@/hooks/courier/useUnreadMessages';
 import { useOrderHandlers } from '@/hooks/courier/useOrderHandlers';
