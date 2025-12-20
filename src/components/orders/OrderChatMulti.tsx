@@ -150,11 +150,11 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
   }
 
   return (
-    <div className="flex h-[600px] bg-slate-900 rounded-lg overflow-hidden border border-white/10">
+    <div className="flex flex-col md:flex-row h-[500px] md:h-[600px] bg-slate-900 rounded-lg overflow-hidden border border-white/10">
       {/* Sidebar - Lista curieri */}
-      <div className="w-80 border-r border-white/10 bg-slate-900/50 flex flex-col">
+      <div className={`${selectedCourierId ? 'hidden md:flex' : 'flex'} w-full md:w-80 border-b md:border-b-0 md:border-r border-white/10 bg-slate-900/50 flex-col`}>
         {/* Header */}
-        <div className="p-4 border-b border-white/10">
+        <div className="p-3 md:p-4 border-b border-white/10">
           <h3 className="text-white font-semibold text-sm flex items-center gap-2">
             <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
@@ -170,14 +170,14 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
             <button
               key={conv.courierId}
               onClick={() => setSelectedCourierId(conv.courierId)}
-              className={`w-full p-4 border-b border-white/5 hover:bg-slate-800/50 transition-colors text-left ${
+              className={`w-full p-3 md:p-4 border-b border-white/5 hover:bg-slate-800/50 transition-colors text-left ${
                 selectedCourierId === conv.courierId ? 'bg-slate-800/70' : ''
               }`}
             >
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-2.5 md:gap-3">
                 {/* Avatar */}
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-bold text-lg">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-bold text-base md:text-lg">
                     {conv.companyName.charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -206,14 +206,23 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
       </div>
 
       {/* Chat area */}
-      <div className="flex-1 flex flex-col">
+      <div className={`${!selectedCourierId ? 'hidden md:flex' : 'flex'} flex-1 flex-col bg-slate-800/50`}>
         {selectedCourierId ? (
           <>
             {/* Chat header */}
-            <div className="p-4 border-b border-white/10 bg-slate-800/30">
+            <div className="p-3 md:p-4 border-b border-white/10 bg-slate-800/30">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-                  <span className="text-white font-bold">
+                {/* Back button on mobile */}
+                <button
+                  onClick={() => setSelectedCourierId(null)}
+                  className="md:hidden p-1.5 hover:bg-slate-700/50 rounded-lg transition-colors"
+                >
+                  <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm md:text-base">
                     {conversations.find(c => c.courierId === selectedCourierId)?.companyName.charAt(0).toUpperCase()}
                   </span>
                 </div>

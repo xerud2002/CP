@@ -243,18 +243,18 @@ export default function ComenziClientPage() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {orders.map((order) => {
               const serviceConfig = getServiceIconMetadata(order.serviciu);
               
               return (
                 <div 
                   key={order.id} 
-                  className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-4 sm:p-6 hover:border-white/10 transition-all"
+                  className="bg-slate-800/50 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/5 p-3 sm:p-6 hover:border-white/10 transition-all"
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-2.5 sm:gap-4">
                     {/* Service Icon */}
-                    <div className={`relative w-12 h-12 rounded-xl ${serviceConfig.bg} flex items-center justify-center shrink-0 ${serviceConfig.color}`}>
+                    <div className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl ${serviceConfig.bg} flex items-center justify-center shrink-0 ${serviceConfig.color}`}>
                       <ServiceIcon service={order.serviciu} />
                       {(order.nrOferte || order.nrMesajeNoi) && (
                         <span className="absolute -top-1 -right-1 flex h-5 w-5">
@@ -269,10 +269,10 @@ export default function ComenziClientPage() {
                     {/* Order Details */}
                     <div className="flex-1 min-w-0">
                       {/* Header */}
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-white font-semibold">
+                      <div className="flex items-start justify-between mb-2 sm:mb-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 sm:gap-2 mb-1 flex-wrap">
+                            <h3 className="text-white font-semibold text-sm sm:text-base">
                               {serviceNames[order.serviciu] || order.serviciu}
                             </h3>
                             {(order.nrOferte ?? 0) > 0 && (
@@ -294,20 +294,22 @@ export default function ComenziClientPage() {
                         </div>
                         
                         {/* Action Buttons */}
-                        <div className="flex items-center gap-2 ml-4">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                           <button
                             onClick={() => setExpandedChatOrderId(expandedChatOrderId === order.id ? null : order.id || null)}
-                            className={`relative p-1.5 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-medium transition-all flex items-center gap-1.5 ${
+                            className={`relative px-3 py-2 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-medium transition-all flex items-center gap-1.5 ${
                               expandedChatOrderId === order.id 
-                                ? 'bg-orange-500/20 border-orange-500/40 text-orange-400 hover:bg-orange-500/30' 
-                                : 'bg-blue-500/10 hover:bg-blue-500/20 border-blue-500/20 hover:border-blue-500/40 text-blue-400'
+                                ? 'bg-green-500/30 border-green-500/50 text-green-300 hover:bg-green-500/40' 
+                                : order.id && unreadCounts[order.id] > 0
+                                  ? 'bg-green-500/20 border-green-500/40 text-green-400 hover:bg-green-500/30 animate-pulse'
+                                  : 'bg-green-500/10 hover:bg-green-500/20 border-green-500/20 hover:border-green-500/40 text-green-400'
                             }`}
                             title="Mesaje"
                           >
                             {order.id && unreadCounts[order.id] > 0 && (
-                              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center">
+                              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-4 w-4 bg-green-500 items-center justify-center text-[9px] font-bold text-white">
+                                <span className="relative inline-flex rounded-full h-5 w-5 bg-green-500 items-center justify-center text-[10px] font-bold text-white">
                                   {unreadCounts[order.id]}
                                 </span>
                               </span>
@@ -315,11 +317,11 @@ export default function ComenziClientPage() {
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
-                            <span className="hidden sm:inline">Chat</span>
+                            <span className="hidden sm:inline">Mesaje</span>
                           </button>
                           <button
                             onClick={() => setSelectedOrder(order)}
-                            className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                            className="px-3 py-2 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5"
                             title="Vezi detalii"
                           >
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -330,7 +332,7 @@ export default function ComenziClientPage() {
                           </button>
                           <button
                             onClick={() => handleDeleteOrder(order.id)}
-                            className="p-1.5 sm:px-3 sm:py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 text-xs font-medium transition-all flex items-center gap-1.5"
+                            className="px-3 py-2 sm:px-3 sm:py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 text-xs font-medium transition-all flex items-center gap-1.5"
                             title="Șterge comanda"
                           >
                             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -343,28 +345,28 @@ export default function ComenziClientPage() {
                       
                       {/* Route */}
                       <div className="flex items-center gap-2 mb-3 text-sm">
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1.5 min-w-0">
                           <Image 
                             src={getFlagPath(order.tara_ridicare)} 
                             alt={order.tara_ridicare} 
                             width={20} 
                             height={15} 
-                            className="rounded"
+                            className="rounded shrink-0"
                           />
-                          <span className="text-gray-300">{order.judet_ridicare}, {order.oras_ridicare}</span>
+                          <span className="text-gray-300 text-sm sm:text-base truncate">{order.judet_ridicare}, {order.oras_ridicare}</span>
                         </div>
                         <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1.5 min-w-0">
                           <Image 
                             src={getFlagPath(order.tara_livrare)} 
                             alt={order.tara_livrare} 
                             width={20} 
                             height={15} 
-                            className="rounded"
+                            className="rounded shrink-0"
                           />
-                          <span className="text-gray-300">{order.judet_livrare}, {order.oras_livrare}</span>
+                          <span className="text-gray-300 text-sm sm:text-base truncate">{order.judet_livrare}, {order.oras_livrare}</span>
                         </div>
                       </div>
                       
@@ -392,7 +394,7 @@ export default function ComenziClientPage() {
 
                   {/* Expandable Chat Section */}
                   {expandedChatOrderId === order.id && (
-                    <div className="mt-4 border-t border-white/5 pt-4 animate-in slide-in-from-top-2 duration-200">
+                    <div className="mt-3 sm:mt-4 border-t border-white/5 pt-3 sm:pt-4 animate-in slide-in-from-top-2 duration-200">
                       <OrderChatMulti 
                         orderId={order.id || ''} 
                         orderNumber={order.orderNumber}
@@ -421,11 +423,11 @@ export default function ComenziClientPage() {
           />
           
           {/* Modal Container */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 print:hidden" onClick={() => setSelectedOrder(null)}>
+          <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2 sm:p-4 print:hidden overflow-y-auto" onClick={() => setSelectedOrder(null)}>
             {/* Modal */}
-            <div className="relative bg-slate-800 rounded-2xl border border-white/10 shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="relative bg-slate-800 rounded-xl sm:rounded-2xl border border-white/10 shadow-2xl w-full max-w-2xl my-2 sm:my-0 sm:max-h-[90vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
               {/* Header */}
-              <div className="sticky top-0 bg-slate-800 border-b border-white/10 px-6 py-4 flex items-center justify-between print:static print:bg-gray-100 print:border-gray-300">
+              <div className="sticky top-0 bg-slate-800 border-b border-white/10 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between print:static print:bg-gray-100 print:border-gray-300 z-10">
                 <div className="flex items-center gap-3">
                 {(() => {
                   const config = getServiceIconMetadata(selectedOrder.serviciu);
