@@ -33,7 +33,9 @@ Romanian courier marketplace connecting clients with couriers for European packa
 | `src/contexts/AuthContext.tsx` | `useAuth()` hook: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
 | `src/lib/constants.ts` | **SINGLE SOURCE OF TRUTH**: `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` — NEVER duplicate |
 | `src/lib/toast.ts` | `showSuccess()`, `showError()`, `showWarning()`, `showInfo()` — auto-translates Firebase errors to Romanian |
+| `src/lib/errorMessages.ts` | `logError(context, error)` — Logs errors with context (dev console only) |
 | `src/components/icons/ServiceIcons.tsx` | **Centralized service icons**: `ServiceIcon` component + `getServiceIconMetadata()` helper |
+| `src/components/orders/OrderChat.tsx` | 1-to-1 chat component with real-time messaging (see Chat System below) |
 | `src/utils/orderStatusHelpers.ts` | Status transitions: `transitionToInLucru()`, `transitionToFinalizata()`, `canEditOrder()`, `canFinalizeOrder()` |
 | `src/utils/orderHelpers.ts` | `getNextOrderNumber()` (atomic counter), `formatOrderNumber()` (adds "CP" prefix) |
 | `src/types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole` |
@@ -44,6 +46,7 @@ Romanian courier marketplace connecting clients with couriers for European packa
 |------------|-------------|-------------|
 | `users` | `uid` (doc ID) | Base profile + `serviciiOferite: string[]` (couriers only) |
 | `comenzi` | `uid_client` | Orders with sequential `orderNumber`, `courierId` when accepted, status workflow |
+| `mesaje` | `clientId` + `courierId` | 1-to-1 chat messages per order (private conversations) |
 | `profil_curier` / `profil_client` | Doc ID = `uid` | Extended single-doc profiles |
 | `zona_acoperire` | `uid` | Multi-record coverage zones (courier can have many regions) |
 | `recenzii` | `clientId` | Reviews left by clients for couriers (only after `livrata`) |
@@ -157,6 +160,31 @@ if (canFinalizeOrder(order.status)) { /* show finalize button */ }
 await transitionToFinalizata(order.id, order.status);  // Only works if status === 'in_lucru'
 ```
 
+### 9. Real-time Listeners — Use onSnapshot Pattern
+**For live data** (messages, orders), use Firestore `onSnapshot`:
+```tsx
+import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+
+useEffect(() => {
+  if (!orderId || !user) return;
+  
+  const q = query(
+    collection(db, 'mesaje'),
+    where('orderId', '==', orderId),
+    where('clientId', '==', user.uid),
+    orderBy('createdAt', 'asc')
+  );
+  
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const msgs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setMessages(msgs);
+  });
+  
+  return () => unsubscribe();  // Cleanup on unmount
+}, [orderId, user]);
+```
+**Warning**: Always include cleanup return to prevent memory leaks.
+
 ## 📊 Order Status Lifecycle
 ```
 noua (new) → in_lucru (in progress) → livrata (delivered)
@@ -169,6 +197,35 @@ anulata        anulata
 - **`anulata`**: Terminal, no further actions
 
 **Full state machine**: `STATUS_TRANSITIONS.md`
+
+## 💬 Chat System
+
+**Private 1-to-1 conversations** between client and each courier per order. Key features:
+- **Separation**: Client talking to 3 couriers = 3 distinct conversations
+- **Real-time**: `onSnapshot` updates with unread count badges
+- **Auto-status**: First courier message transitions order `noua` → `in_lucru`
+
+### Query Pattern
+```tsx
+// Client sees messages with specific courier
+query(
+  collection(db, 'mesaje'),
+  where('orderId', '==', orderId),
+  where('clientId', '==', user.uid),
+  where('courierId', '==', courierId),  // Specific courier
+  orderBy('createdAt', 'asc')
+);
+
+// Courier sees messages with specific client
+query(
+  collection(db, 'mesaje'),
+  where('orderId', '==', orderId),
+  where('courierId', '==', user.uid),
+  where('clientId', '==', clientId),  // Specific client
+  orderBy('createdAt', 'asc')
+);
+```
+**Full docs**: `CHAT_SYSTEM.md`
 
 ## 🎨 Styling System
 
@@ -216,6 +273,18 @@ npm run lint      # ESLint
 npm start         # Run production build locally
 ```
 
+### Environment Setup
+Create `.env.local` with Firebase config (never commit):
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+```
+Get values from Firebase Console → Project Settings → General
+
 ### Firebase
 ```bash
 firebase deploy --only firestore:rules   # Deploy rules only
@@ -223,17 +292,26 @@ firebase deploy --only hosting           # Deploy hosting only
 firebase deploy                          # Full deployment
 ```
 
+### Migration Scripts
+Located in `scripts/` folder:
+- **Order status migration**: `node scripts/migrateOrderStatuses.js`
+- Requires `serviceAccountKey.json` (download from Firebase Console)
+- See `scripts/README.md` for setup instructions
+
 ### Debugging
 - **Firestore rules**: Test in Firebase Console → Firestore → Rules → Simulator
 - **Auth issues**: Check `user` and `loading` state in `useAuth()`
 - **Query errors**: Missing owner filter (`where('uid', '==', user.uid)`)
+- **Error logs**: Use `logError(context, error)` (dev console only)
 
 ## 📖 Documentation
 
 - `FIRESTORE_STRUCTURE.md`: Schema, security rules, indexes, query patterns
 - `STATUS_TRANSITIONS.md`: Order status lifecycle, transition rules, validation
+- `CHAT_SYSTEM.md`: 1-to-1 chat architecture, query patterns, real-time messaging
 - `SERVICE_FLOW_ARCHITECTURE.md`: Order flow from client to courier
 - `SECURITY_CHECKLIST.md`: Security measures, validation rules
+- `scripts/README.md`: Migration scripts and database maintenance
 
 ## 🐛 Common Pitfalls
 
