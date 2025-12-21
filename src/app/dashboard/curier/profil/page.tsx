@@ -352,6 +352,10 @@ function ProfilCurierContent() {
           createdAt: serverTimestamp(),
           timestamp: serverTimestamp()
         });
+        
+        // Update local state
+        setRating(5.0);
+        setReviewCount(1);
       }
       
       showSavedMessage('Profilul a fost salvat cu succes!');
