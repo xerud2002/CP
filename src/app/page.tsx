@@ -1,9 +1,15 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import WhatsAppButton from '@/components/ui/WhatsAppButton';
 import { countries } from '@/lib/constants';
+
+// Lazy load WhatsApp button - not critical for initial render
+const WhatsAppButton = dynamic(() => import('@/components/ui/WhatsAppButton'), {
+  ssr: false,
+  loading: () => null,
+});
 
 const testimonials = [
   {
@@ -387,7 +393,8 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-12 sm:py-16 md:py-24 px-3 sm:px-4 relative overflow-hidden">
+      {/* How It Works Section */}
+      <section className="below-fold py-12 sm:py-16 md:py-24 px-3 sm:px-4 relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-orange-500/5 rounded-full blur-3xl"></div>
@@ -473,7 +480,7 @@ export default function Home() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-12 sm:py-16 px-3 sm:px-4 bg-linear-to-b from-slate-900 to-slate-900/50">
+      <section className="below-fold py-12 sm:py-16 px-3 sm:px-4 bg-linear-to-b from-slate-900 to-slate-900/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
             <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-blue-500/10 text-blue-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
@@ -591,7 +598,7 @@ export default function Home() {
       </section>
 
       {/* Process Timeline Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-linear-to-b from-slate-900/50 to-slate-900">
+      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-linear-to-b from-slate-900/50 to-slate-900">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8 sm:mb-10 md:mb-14">
             <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-orange-500/10 text-orange-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
@@ -794,7 +801,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-linear-to-b from-slate-900/50 via-slate-900 to-slate-900/50 relative overflow-hidden">
+      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-linear-to-b from-slate-900/50 via-slate-900 to-slate-900/50 relative overflow-hidden">
         {/* Background decorations */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-500/5 rounded-full blur-3xl"></div>
@@ -967,7 +974,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section - Courier Recruitment */}
-      <section className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden">
+      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden">
         {/* Background effects */}
         <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-900/95 to-slate-900 pointer-events-none"></div>
         <div className="absolute inset-0 pointer-events-none">
@@ -1108,7 +1115,7 @@ export default function Home() {
       </section>
 
       {/* Trust & Coverage Section */}
-      <section className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden bg-linear-to-b from-slate-900/50 to-slate-900">
+      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden bg-linear-to-b from-slate-900/50 to-slate-900">
         {/* Background decorations */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
