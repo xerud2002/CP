@@ -139,9 +139,11 @@ function getGreeting(): string {
 // ============================================
 
 // Header Component
-const DashboardHeader = memo(function DashboardHeader({ notificationCount, onLogout }: { 
+const DashboardHeader = memo(function DashboardHeader({ notificationCount, onLogout, onBellClick, showBellDot }: { 
   notificationCount: number;
   onLogout: () => void;
+  onBellClick?: () => void;
+  showBellDot?: boolean;
 }) {
   return (
     <header className="bg-slate-900/90 backdrop-blur-xl border-b border-white/5 sticky top-0 z-60">
@@ -171,12 +173,16 @@ const DashboardHeader = memo(function DashboardHeader({ notificationCount, onLog
 
           {/* Right Side */}
           <div className="flex items-center gap-2 sm:gap-4">
-            {/* Notifications */}
-            <button className="relative p-2.5 sm:p-2 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/5 active:bg-white/10">
+            {/* Notifications / Help */}
+            <button 
+              onClick={onBellClick}
+              className="relative p-2.5 sm:p-2 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/5 active:bg-white/10"
+              title="Ghid platformă"
+            >
               <BellIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-              {notificationCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 rounded-full text-[10px] sm:text-xs font-medium text-white flex items-center justify-center">
-                  {notificationCount}
+              {(notificationCount > 0 || showBellDot) && (
+                <span className={`absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 ${notificationCount > 0 ? 'w-4 h-4 sm:w-5 sm:h-5 text-[10px] sm:text-xs font-medium' : 'w-2.5 h-2.5 sm:w-3 sm:h-3'} bg-orange-500 rounded-full text-white flex items-center justify-center ${showBellDot && notificationCount === 0 ? 'animate-pulse' : ''}`}>
+                  {notificationCount > 0 ? notificationCount : ''}
                 </span>
               )}
             </button>
@@ -591,6 +597,153 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
 });
 
 // ============================================
+// ONBOARDING MODAL COMPONENT
+// ============================================
+const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: { onClose: () => void; isFirstTime: boolean }) {
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    {
+      icon: '👋',
+      title: isFirstTime ? 'Bine ai venit!' : 'Ghid Platformă',
+      subtitle: 'Curierul Perfect',
+      content: isFirstTime 
+        ? 'Felicitări pentru înregistrare! Suntem bucuroși să te avem alături. Hai să-ți arătăm cum funcționează platforma noastră.'
+        : 'Descoperă cum să folosești platforma Curierul Perfect pentru a-ți dezvolta afacerea de transport.',
+    },
+    {
+      icon: '📦',
+      title: 'Comenzi disponibile',
+      subtitle: 'Găsește clienți',
+      content: 'În secțiunea "Comenzi" vei găsi toate cererile de transport postate de clienți. Poți filtra după serviciu (colete, mobilă, etc.) și după rută (țară, județ).',
+    },
+    {
+      icon: '💬',
+      title: 'Contactează clienții',
+      subtitle: 'Chat direct',
+      content: 'Când găsești o comandă potrivită, apasă pe ea și trimite un mesaj clientului. Poți negocia prețul și detaliile direct în chat-ul integrat.',
+    },
+    {
+      icon: '⭐',
+      title: 'Serviciile tale',
+      subtitle: 'Personalizare',
+      content: 'Configurează în "Servicii" ce tipuri de transport oferi. Astfel vei primi doar comenzile relevante pentru tine.',
+    },
+    {
+      icon: '👤',
+      title: 'Profilul tău',
+      subtitle: 'Inspiră încredere',
+      content: 'Completează-ți profilul cu date reale și o descriere atractivă. Clienții preferă curierii cu profiluri complete și recenzii bune.',
+    },
+    {
+      icon: '🚀',
+      title: 'Ești pregătit!',
+      subtitle: 'Succes!',
+      content: 'Acum știi tot ce trebuie. Mergi la "Comenzi" și începe să găsești clienți. Poți accesa oricând acest ghid din butonul 🔔 din header.',
+    },
+  ];
+
+  const currentStepData = steps[currentStep];
+  const isLastStep = currentStep === steps.length - 1;
+  const isFirstStep = currentStep === 0;
+
+  return (
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      
+      {/* Modal */}
+      <div className="relative w-full max-w-md bg-linear-to-br from-slate-800 via-slate-850 to-slate-900 rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+        {/* Progress bar */}
+        <div className="h-1 bg-slate-700">
+          <div 
+            className="h-full bg-linear-to-r from-orange-500 to-amber-500 transition-all duration-300"
+            style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+          />
+        </div>
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors z-10"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        {/* Content */}
+        <div className="p-6 sm:p-8">
+          {/* Icon */}
+          <div className="flex justify-center mb-4">
+            <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center text-4xl">
+              {currentStepData.icon}
+            </div>
+          </div>
+
+          {/* Text */}
+          <div className="text-center mb-6">
+            <p className="text-orange-400 text-sm font-medium mb-1">{currentStepData.subtitle}</p>
+            <h2 className="text-xl sm:text-2xl font-bold text-white mb-3">{currentStepData.title}</h2>
+            <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
+              {currentStepData.content}
+            </p>
+          </div>
+
+          {/* Step indicators */}
+          <div className="flex justify-center gap-1.5 mb-6">
+            {steps.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentStep(index)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  index === currentStep 
+                    ? 'w-6 bg-orange-500' 
+                    : index < currentStep 
+                      ? 'bg-orange-500/50' 
+                      : 'bg-slate-600'
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Navigation buttons */}
+          <div className="flex gap-3">
+            {!isFirstStep && (
+              <button
+                onClick={() => setCurrentStep(prev => prev - 1)}
+                className="flex-1 py-3 px-4 text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl font-medium transition-colors"
+              >
+                ← Înapoi
+              </button>
+            )}
+            <button
+              onClick={() => {
+                if (isLastStep) {
+                  onClose();
+                } else {
+                  setCurrentStep(prev => prev + 1);
+                }
+              }}
+              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-colors ${
+                isLastStep
+                  ? 'bg-linear-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600'
+                  : 'bg-orange-500 hover:bg-orange-600 text-white'
+              }`}
+            >
+              {isLastStep ? '🚀 Începe acum!' : 'Continuă →'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// ============================================
 // MAIN COMPONENT
 // ============================================
 export default function CurierDashboard() {
@@ -604,6 +757,33 @@ export default function CurierDashboard() {
   const [reviewCount, setReviewCount] = useState(0);
   const [recentMessages, setRecentMessages] = useState<RecentMessage[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [isNewCourier, setIsNewCourier] = useState(false);
+
+  // Check if this is a new courier (first visit)
+  useEffect(() => {
+    if (user) {
+      const onboardingKey = `curier_onboarding_${user.uid}`;
+      const hasSeenOnboarding = localStorage.getItem(onboardingKey);
+      if (!hasSeenOnboarding) {
+        setIsNewCourier(true);
+        setShowOnboarding(true);
+      }
+    }
+  }, [user]);
+
+  const handleCloseOnboarding = useCallback(() => {
+    if (user) {
+      const onboardingKey = `curier_onboarding_${user.uid}`;
+      localStorage.setItem(onboardingKey, 'true');
+    }
+    setShowOnboarding(false);
+    setIsNewCourier(false);
+  }, [user]);
+
+  const handleOpenOnboarding = useCallback(() => {
+    setShowOnboarding(true);
+  }, []);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -840,10 +1020,17 @@ export default function CurierDashboard() {
 
   return (
     <div className="min-h-screen">
+      {/* Onboarding Modal */}
+      {showOnboarding && (
+        <OnboardingModal onClose={handleCloseOnboarding} isFirstTime={isNewCourier} />
+      )}
+
       {/* Header */}
       <DashboardHeader 
         notificationCount={0} 
         onLogout={handleLogout}
+        onBellClick={handleOpenOnboarding}
+        showBellDot={isNewCourier}
       />
 
       {/* Main Content */}
