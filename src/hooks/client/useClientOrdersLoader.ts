@@ -9,14 +9,31 @@ interface UseClientOrdersLoaderProps {
   userId: string;
   countryFilter?: string;
   serviceFilter?: string;
+  initialExpandedOrderId?: string | null;
 }
 
-export function useClientOrdersLoader({ userId, countryFilter, serviceFilter }: UseClientOrdersLoaderProps) {
+export function useClientOrdersLoader({ userId, countryFilter, serviceFilter, initialExpandedOrderId }: UseClientOrdersLoaderProps) {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedChats, setExpandedChats] = useState<Set<string>>(new Set());
   const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
 
+  // Auto-expand chat when initialExpandedOrderId is provided
+  useEffect(() => {
+    if (initialExpandedOrderId && !loading && orders.length > 0) {
+      const orderExists = orders.some(o => o.id === initialExpandedOrderId);
+      if (orderExists) {
+        setExpandedChats(new Set([initialExpandedOrderId]));
+        // Scroll to the order
+        setTimeout(() => {
+          const orderElement = document.getElementById(`order-${initialExpandedOrderId}`);
+          if (orderElement) {
+            orderElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 100);
+      }
+    }
+  }, [initialExpandedOrderId, loading, orders]);
   // Load orders
   useEffect(() => {
     if (!userId) {

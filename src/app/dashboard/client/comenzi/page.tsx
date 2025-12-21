@@ -1,24 +1,43 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeftIcon, PackageIcon } from '@/components/icons/DashboardIcons';
-import HelpCard from '@/components/HelpCard';
-import OrderDetailsModal from '@/components/orders/shared/OrderDetailsModal';
 import ClientOrderFilters from '@/components/orders/client/filters/ClientOrderFilters';
 import ClientOrderList from '@/components/orders/client/list/ClientOrderList';
 import { useClientOrdersLoader } from '@/hooks/client/useClientOrdersLoader';
 import { useClientOrderActions } from '@/hooks/client/useClientOrderActions';
 import type { Order } from '@/types';
 
+// Lazy load heavy components
+const OrderDetailsModal = lazy(() => import('@/components/orders/shared/OrderDetailsModal'));
+const HelpCard = lazy(() => import('@/components/HelpCard'));
+
+// Wrapper component to handle Suspense for useSearchParams
 export default function ComenziClientPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="spinner" />
+      </div>
+    }>
+      <ComenziClientContent />
+    </Suspense>
+  );
+}
+
+function ComenziClientContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [countryFilter, setCountryFilter] = useState('all');
   const [serviceFilter, setServiceFilter] = useState('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+
+  // Get orderId from URL params (for auto-expanding chat from recent messages click)
+  const initialExpandedOrderId = searchParams.get('orderId');
 
   // Use custom hooks
   const { 
@@ -27,17 +46,22 @@ export default function ComenziClientPage() {
     expandedChats, 
     unreadCounts, 
     toggleChat 
-  } = useClientOrdersLoader({ userId: user?.uid || '', countryFilter, serviceFilter });
+  } = useClientOrdersLoader({ 
+    userId: user?.uid || '', 
+    countryFilter, 
+    serviceFilter,
+    initialExpandedOrderId 
+  });
   
   const { handleDelete } = useClientOrderActions();
 
   // Check if any filter is active
   const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all';
 
-  const clearAllFilters = () => {
+  const clearAllFilters = useCallback(() => {
     setCountryFilter('all');
     setServiceFilter('all');
-  };
+  }, []);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {
@@ -153,18 +177,22 @@ export default function ComenziClientPage() {
           />
         )}
 
-        {/* Order Details Modal */}
+        {/* Order Details Modal - Lazy loaded */}
         {selectedOrder && (
-          <OrderDetailsModal
-            order={selectedOrder}
-            onClose={() => setSelectedOrder(null)}
-          />
+          <Suspense fallback={<div className="fixed inset-0 z-60 bg-black/70 flex items-center justify-center"><div className="spinner" /></div>}>
+            <OrderDetailsModal
+              order={selectedOrder}
+              onClose={() => setSelectedOrder(null)}
+            />
+          </Suspense>
         )}
       </div>
 
-      {/* Help Card - Same width as other sections */}
+      {/* Help Card - Lazy loaded */}
       <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-6 pb-4 sm:pb-8">
-        <HelpCard />
+        <Suspense fallback={null}>
+          <HelpCard />
+        </Suspense>
       </div>
     </div>
   );

@@ -1,9 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { lazy, Suspense, memo } from 'react';
 import ClientOrderCard from './ClientOrderCard';
-import OrderChatMulti from '@/components/orders/OrderChatMulti';
 import type { Order } from '@/types';
+
+// Lazy load heavy chat component
+const OrderChatMulti = lazy(() => import('@/components/orders/OrderChatMulti'));
 
 interface ClientOrderListProps {
   orders: Order[];
@@ -15,7 +17,7 @@ interface ClientOrderListProps {
   onDelete: (order: Order) => void;
 }
 
-export default function ClientOrderList({
+function ClientOrderList({
   orders,
   loading,
   expandedChats,
@@ -57,10 +59,12 @@ export default function ClientOrderList({
             onDelete={() => onDelete(order)}
           />
           
-          {/* Expandable Chat */}
+          {/* Expandable Chat - Lazy loaded */}
           {order.id && expandedChats.has(order.id) && (
             <div className="mt-2 sm:mt-4 bg-slate-800/30 backdrop-blur-sm rounded-lg border border-white/5 p-2 sm:p-4">
-              <OrderChatMulti orderId={order.id} orderNumber={order.orderNumber} />
+              <Suspense fallback={<div className="flex justify-center py-8"><div className="spinner" /></div>}>
+                <OrderChatMulti orderId={order.id} orderNumber={order.orderNumber} />
+              </Suspense>
             </div>
           )}
         </div>
@@ -68,3 +72,5 @@ export default function ClientOrderList({
     </div>
   );
 }
+
+export default memo(ClientOrderList);

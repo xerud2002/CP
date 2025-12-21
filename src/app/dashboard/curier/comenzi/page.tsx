@@ -1,24 +1,40 @@
 ﻿'use client';
 
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState, useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { logError } from '@/lib/errorMessages';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
-import HelpCard from '@/components/HelpCard';
 import OrderFilters from '@/components/orders/courier/filters/OrderFilters';
 import OrderList from '@/components/orders/courier/list/OrderList';
-import OrderDetailsModal from '@/components/orders/shared/OrderDetailsModal';
 import { useOrdersLoader } from '@/hooks/courier/useOrdersLoader';
 import { useUnreadMessages } from '@/hooks/courier/useUnreadMessages';
 import { useOrderHandlers } from '@/hooks/courier/useOrderHandlers';
 import type { Order } from '@/types';
 
+// Lazy load heavy components
+const OrderDetailsModal = lazy(() => import('@/components/orders/shared/OrderDetailsModal'));
+const HelpCard = lazy(() => import('@/components/HelpCard'));
+
+// Wrapper component to handle Suspense for useSearchParams
 export default function ComenziCurierPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="spinner" />
+      </div>
+    }>
+      <ComenziCurierContent />
+    </Suspense>
+  );
+}
+
+function ComenziCurierContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   
   // Use custom hooks
   const { orders, loading: loadingOrders, reload: reloadOrders } = useOrdersLoader(user?.uid);
@@ -39,6 +55,25 @@ export default function ComenziCurierPage() {
       router.push('/login?role=curier');
     }
   }, [user, loading, router]);
+
+  // Auto-expand chat when orderId is in URL params (from recent messages click)
+  useEffect(() => {
+    const orderId = searchParams.get('orderId');
+    if (orderId && !loadingOrders && orders.length > 0) {
+      // Check if order exists in the list
+      const orderExists = orders.some(o => o.id === orderId);
+      if (orderExists) {
+        setExpandedChatOrderId(orderId);
+        // Scroll to the order after a short delay to ensure DOM is ready
+        setTimeout(() => {
+          const orderElement = document.getElementById(`order-${orderId}`);
+          if (orderElement) {
+            orderElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 100);
+      }
+    }
+  }, [searchParams, orders, loadingOrders]);
 
   // Mark page as visited when loaded
   useEffect(() => {
@@ -114,10 +149,16 @@ export default function ComenziCurierPage() {
   // Check if any filter is active
   const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all';
 
-  const clearAllFilters = () => {
+  // Memoized clear filters
+  const clearAllFilters = useCallback(() => {
     setCountryFilter('all');
     setServiceFilter('all');
-  };
+  }, []);
+
+  // Memoized toggle chat handler
+  const handleToggleChat = useCallback((orderId: string | null) => {
+    setExpandedChatOrderId(orderId);
+  }, []);
 
   if (loading) {
     return (
@@ -178,33 +219,38 @@ export default function ComenziCurierPage() {
           hasActiveFilters={hasActiveFilters}
           loadingOrders={loadingOrders}
           currentUserId={user?.uid}
-          onToggleChat={setExpandedChatOrderId}
+          onToggleChat={handleToggleChat}
           onViewDetails={handleOpenOrder}
           onClearFilters={clearAllFilters}
         />
 
-        {/* Order Details Modal */}
+        {/* Order Details Modal - Lazy loaded */}
         {selectedOrder && (
-          <OrderDetailsModal
-            order={selectedOrder}
-            onClose={() => setSelectedOrder(null)}
-            onFinalize={
-              selectedOrder.status === 'in_lucru' && selectedOrder.id && selectedOrder.status
-                ? () => handleFinalizeOrder(selectedOrder.id!, selectedOrder.status!)
-                : undefined
-            }
-            onRequestReview={
-              selectedOrder.status === 'livrata' && selectedOrder.id
-                ? () => handleRequestReview(selectedOrder.id!)
-                : undefined
-            }
-          />
+          <Suspense fallback={<div className="fixed inset-0 z-60 bg-black/70 flex items-center justify-center"><div className="spinner" /></div>}>
+            <OrderDetailsModal
+              order={selectedOrder}
+              onClose={() => setSelectedOrder(null)}
+              hideContactInfo={true}
+              onFinalize={
+                selectedOrder.status === 'in_lucru' && selectedOrder.id && selectedOrder.status
+                  ? () => handleFinalizeOrder(selectedOrder.id!, selectedOrder.status!)
+                  : undefined
+              }
+              onRequestReview={
+                selectedOrder.status === 'livrata' && selectedOrder.id
+                  ? () => handleRequestReview(selectedOrder.id!)
+                  : undefined
+              }
+            />
+          </Suspense>
         )}
       </div>
 
-      {/* Help Card - Same width as other sections */}
+      {/* Help Card - Lazy loaded */}
       <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-6 pb-4 sm:pb-8">
-        <HelpCard />
+        <Suspense fallback={null}>
+          <HelpCard />
+        </Suspense>
       </div>
     </div>
   );

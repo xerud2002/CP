@@ -15,13 +15,15 @@ interface OrderDetailsModalProps {
   onClose: () => void;
   onFinalize?: () => void;
   onRequestReview?: () => void;
+  hideContactInfo?: boolean;
 }
 
 export default function OrderDetailsModal({
   order,
   onClose,
   onFinalize,
-  onRequestReview
+  onRequestReview,
+  hideContactInfo = false
 }: OrderDetailsModalProps) {
   const serviceTypeConfig = serviceTypes.find(
     s => s.value.toLowerCase() === (order.tipColet || 'colete').toLowerCase()
@@ -165,8 +167,8 @@ export default function OrderDetailsModal({
               <p className="text-gray-300 text-sm">{order.observatii || 'Fără observații'}</p>
             </div>
 
-            {/* Contact Info */}
-            {(order.clientName || order.clientPhone) && (
+            {/* Contact Info - hidden for couriers */}
+            {!hideContactInfo && (order.clientName || order.clientPhone) && (
               <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
                 <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Date Contact</h3>
                 <div className="space-y-3">

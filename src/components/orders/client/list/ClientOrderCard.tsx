@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { memo } from 'react';
 import Image from 'next/image';
 import { ServiceIcon, getServiceIconMetadata } from '@/components/icons/ServiceIcons';
 import { formatOrderNumber } from '@/utils/orderHelpers';
@@ -24,7 +24,7 @@ const capitalize = (str: string | undefined) => {
   return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 };
 
-export default function ClientOrderCard({
+function ClientOrderCard({
   order,
   unreadCount = 0,
   chatExpanded,
@@ -59,7 +59,10 @@ export default function ClientOrderCard({
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/5 p-3 sm:p-6 hover:border-white/10 transition-all">
+    <div 
+      id={`order-${order.id}`}
+      className="bg-slate-800/50 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/5 p-3 sm:p-6 hover:border-white/10 transition-all"
+    >
       <div className="flex items-start gap-2.5 sm:gap-4">
         {/* Service Icon */}
         <div className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl ${serviceConfig.bg} flex items-center justify-center shrink-0 ${serviceConfig.color}`}>
@@ -197,3 +200,13 @@ export default function ClientOrderCard({
     </div>
   );
 }
+
+// Memoize to prevent unnecessary re-renders
+export default memo(ClientOrderCard, (prevProps, nextProps) => {
+  return (
+    prevProps.order.id === nextProps.order.id &&
+    prevProps.order.status === nextProps.order.status &&
+    prevProps.unreadCount === nextProps.unreadCount &&
+    prevProps.chatExpanded === nextProps.chatExpanded
+  );
+});

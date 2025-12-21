@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { memo } from 'react';
 import OrderCard from './OrderCard';
 import type { Order } from '@/types';
 
@@ -18,7 +18,7 @@ interface OrderListProps {
   onClearFilters: () => void;
 }
 
-export default function OrderList({
+function OrderList({
   orders,
   filteredOrders,
   viewedOrders,
@@ -113,3 +113,5 @@ export default function OrderList({
     </div>
   );
 }
+
+export default memo(OrderList);

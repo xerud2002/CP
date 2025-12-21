@@ -1,12 +1,14 @@
 'use client';
 
-import React from 'react';
+import React, { memo, lazy, Suspense } from 'react';
 import Image from 'next/image';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
-import OrderChat from '@/components/orders/OrderChat';
 import { formatOrderNumber } from '@/utils/orderHelpers';
 import { countries, serviceTypes } from '@/lib/constants';
 import type { Order } from '@/types';
+
+// Lazy load OrderChat - it's heavy and only shown when expanded
+const OrderChat = lazy(() => import('@/components/orders/OrderChat'));
 
 interface OrderCardProps {
   order: Order;
@@ -18,7 +20,7 @@ interface OrderCardProps {
   onViewDetails: () => void;
 }
 
-export default function OrderCard({
+function OrderCard({
   order,
   isNew,
   isExpanded,
@@ -84,7 +86,10 @@ export default function OrderCard({
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-4 sm:p-6 hover:border-white/10 transition-all">
+    <div 
+      id={`order-${order.id}`}
+      className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-4 sm:p-6 hover:border-white/10 transition-all"
+    >
       <div className="flex items-start gap-4">
         {/* Service Icon */}
         <div className={`relative w-12 h-12 rounded-xl ${serviceTypeConfig.bgColor} flex items-center justify-center shrink-0 ${serviceTypeConfig.color}`}>
@@ -204,17 +209,30 @@ export default function OrderCard({
         </div>
       </div>
 
-      {/* Expandable Chat Section */}
+      {/* Expandable Chat Section - Lazy loaded */}
       {isExpanded && (
         <div className="mt-4 border-t border-white/5 pt-4 animate-in slide-in-from-top-2 duration-200">
-          <OrderChat 
-            orderId={order.id || ''} 
-            orderNumber={order.orderNumber}
-            courierId={currentUserId}
-            clientId={order.uid_client}
-          />
+          <Suspense fallback={<div className="flex justify-center py-8"><div className="spinner" /></div>}>
+            <OrderChat 
+              orderId={order.id || ''} 
+              orderNumber={order.orderNumber}
+              courierId={currentUserId}
+              clientId={order.uid_client}
+            />
+          </Suspense>
         </div>
       )}
     </div>
   );
 }
+
+// Memoize to prevent re-renders when parent state changes
+export default memo(OrderCard, (prevProps, nextProps) => {
+  return (
+    prevProps.order.id === nextProps.order.id &&
+    prevProps.isNew === nextProps.isNew &&
+    prevProps.isExpanded === nextProps.isExpanded &&
+    prevProps.unreadCount === nextProps.unreadCount &&
+    prevProps.currentUserId === nextProps.currentUserId
+  );
+});
