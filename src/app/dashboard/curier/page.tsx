@@ -604,6 +604,13 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
   const steps = [
     {
+      icon: '🎁',
+      title: '100% GRATUIT!',
+      subtitle: 'Ofertă specială',
+      content: 'Platforma este complet GRATUITĂ în această perioadă! Fără comisioane, fără taxe ascunse. Profită acum de această oportunitate și construiește-ți baza de clienți fără costuri.',
+      highlight: true,
+    },
+    {
       icon: '👋',
       title: isFirstTime ? 'Bine ai venit!' : 'Ghid Platformă',
       subtitle: 'Curierul Perfect',
@@ -613,62 +620,91 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
     },
     {
       icon: '📦',
-      title: 'Comenzi disponibile',
-      subtitle: 'Găsește clienți',
-      content: 'În secțiunea "Comenzi" vei găsi toate cererile de transport postate de clienți. Poți filtra după serviciu (colete, mobilă, etc.) și după rută (țară, județ).',
+      title: 'Găsește comenzi',
+      subtitle: 'Clienți reali',
+      content: 'În secțiunea "Comenzi" găsești cereri reale de transport. Filtrează după serviciu (colete, mobilă, marfă) și rută (țară, județ) pentru a găsi exact ce cauți.',
     },
     {
       icon: '💬',
-      title: 'Contactează clienții',
-      subtitle: 'Chat direct',
-      content: 'Când găsești o comandă potrivită, apasă pe ea și trimite un mesaj clientului. Poți negocia prețul și detaliile direct în chat-ul integrat.',
+      title: 'Chat direct',
+      subtitle: 'Negociază liber',
+      content: 'Contactează clientul direct prin chat. Negociază prețul, stabilește detaliile și confirmă transportul. Totul în platformă, simplu și rapid.',
     },
     {
       icon: '⭐',
-      title: 'Serviciile tale',
-      subtitle: 'Personalizare',
-      content: 'Configurează în "Servicii" ce tipuri de transport oferi. Astfel vei primi doar comenzile relevante pentru tine.',
+      title: 'Alege serviciile',
+      subtitle: 'Tu decizi',
+      content: 'Setează în "Servicii" ce tipuri de transport oferi: colete, mobilă, electrocasnice, marfă generală. Primești doar comenzile care se potrivesc.',
     },
     {
       icon: '👤',
-      title: 'Profilul tău',
-      subtitle: 'Inspiră încredere',
-      content: 'Completează-ți profilul cu date reale și o descriere atractivă. Clienții preferă curierii cu profiluri complete și recenzii bune.',
+      title: 'Profil complet',
+      subtitle: 'Câștigă încredere',
+      content: 'Un profil detaliat atrage mai mulți clienți. Adaugă descriere, experiență și date de contact. Recenziile bune îți vor crește vizibilitatea.',
+    },
+    {
+      icon: '💡',
+      title: 'Părerea ta contează!',
+      subtitle: 'Ajută-ne să creștem',
+      content: 'Suntem la început și vrem să fim cei mai buni! Trimite-ne sugestii și idei pe WhatsApp sau email. Împreună construim platforma perfectă pentru curieri.',
     },
     {
       icon: '🚀',
-      title: 'Ești pregătit!',
-      subtitle: 'Succes!',
-      content: 'Acum știi tot ce trebuie. Mergi la "Comenzi" și începe să găsești clienți. Poți accesa oricând acest ghid din butonul 🔔 din header.',
+      title: 'Gata de start!',
+      subtitle: 'Succes garantat',
+      content: 'Ai toate uneltele necesare. Mergi la "Comenzi" și începe să câștigi clienți noi. Reține: poți accesa oricând acest ghid din butonul 🔔.',
     },
   ];
 
   const currentStepData = steps[currentStep];
   const isLastStep = currentStep === steps.length - 1;
   const isFirstStep = currentStep === 0;
+  const isHighlighted = currentStepData.highlight;
+
+  // Get button text based on step
+  const getButtonText = () => {
+    if (isFirstStep) return '✨ Descoperă platforma';
+    if (isLastStep) return '🚀 Hai la comenzi!';
+    if (currentStep === steps.length - 2) return '💡 Ultimul pas';
+    return 'Următorul pas →';
+  };
 
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
       />
       
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-linear-to-br from-slate-800 via-slate-850 to-slate-900 rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+      <div className={`relative w-full max-w-md rounded-2xl border shadow-2xl overflow-hidden transition-all ${
+        isHighlighted 
+          ? 'bg-linear-to-br from-emerald-900/90 via-emerald-800/80 to-slate-900 border-emerald-500/30' 
+          : 'bg-linear-to-br from-slate-800 via-slate-850 to-slate-900 border-white/10'
+      }`}>
         {/* Progress bar */}
-        <div className="h-1 bg-slate-700">
+        <div className="h-1.5 bg-slate-700/50">
           <div 
-            className="h-full bg-linear-to-r from-orange-500 to-amber-500 transition-all duration-300"
+            className={`h-full transition-all duration-500 ease-out ${
+              isHighlighted 
+                ? 'bg-linear-to-r from-emerald-400 to-emerald-500' 
+                : 'bg-linear-to-r from-orange-500 to-amber-500'
+            }`}
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           />
+        </div>
+
+        {/* Step counter */}
+        <div className="absolute top-4 left-4 px-2.5 py-1 bg-white/10 rounded-full">
+          <span className="text-xs font-medium text-gray-300">{currentStep + 1} / {steps.length}</span>
         </div>
 
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors z-10"
+          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-xl transition-all hover:scale-105 active:scale-95 z-10"
+          title="Închide (poți reveni oricând)"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -676,36 +712,54 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
         </button>
 
         {/* Content */}
-        <div className="p-6 sm:p-8">
-          {/* Icon */}
-          <div className="flex justify-center mb-4">
-            <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center text-4xl">
+        <div className="p-6 sm:p-8 pt-12">
+          {/* Icon with special styling for highlighted step */}
+          <div className="flex justify-center mb-5">
+            <div className={`w-24 h-24 rounded-2xl flex items-center justify-center text-5xl transition-all ${
+              isHighlighted 
+                ? 'bg-linear-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50 animate-pulse' 
+                : 'bg-linear-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30'
+            }`}>
               {currentStepData.icon}
             </div>
           </div>
 
+          {/* Special badge for free offer */}
+          {isHighlighted && (
+            <div className="flex justify-center mb-3">
+              <span className="px-4 py-1.5 bg-emerald-500/20 border border-emerald-400/40 rounded-full text-emerald-300 text-sm font-bold animate-pulse">
+                ⚡ PERIOADĂ LIMITATĂ
+              </span>
+            </div>
+          )}
+
           {/* Text */}
           <div className="text-center mb-6">
-            <p className="text-orange-400 text-sm font-medium mb-1">{currentStepData.subtitle}</p>
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-3">{currentStepData.title}</h2>
-            <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
+            <p className={`text-sm font-medium mb-1.5 ${isHighlighted ? 'text-emerald-400' : 'text-orange-400'}`}>
+              {currentStepData.subtitle}
+            </p>
+            <h2 className={`text-2xl sm:text-3xl font-bold mb-4 ${isHighlighted ? 'text-emerald-300' : 'text-white'}`}>
+              {currentStepData.title}
+            </h2>
+            <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
               {currentStepData.content}
             </p>
           </div>
 
           {/* Step indicators */}
-          <div className="flex justify-center gap-1.5 mb-6">
-            {steps.map((_, index) => (
+          <div className="flex justify-center gap-2 mb-6">
+            {steps.map((step, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentStep(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
+                className={`h-2 rounded-full transition-all duration-300 hover:opacity-80 ${
                   index === currentStep 
-                    ? 'w-6 bg-orange-500' 
+                    ? `w-8 ${isHighlighted ? 'bg-emerald-400' : 'bg-orange-500'}` 
                     : index < currentStep 
-                      ? 'bg-orange-500/50' 
-                      : 'bg-slate-600'
+                      ? `w-2 ${step.highlight ? 'bg-emerald-500/60' : 'bg-orange-500/50'}` 
+                      : 'w-2 bg-slate-600 hover:bg-slate-500'
                 }`}
+                title={step.title}
               />
             ))}
           </div>
@@ -715,7 +769,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
             {!isFirstStep && (
               <button
                 onClick={() => setCurrentStep(prev => prev - 1)}
-                className="flex-1 py-3 px-4 text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-xl font-medium transition-colors"
+                className="flex-1 py-3.5 px-4 text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl font-medium transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 ← Înapoi
               </button>
@@ -728,15 +782,24 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
                   setCurrentStep(prev => prev + 1);
                 }
               }}
-              className={`flex-1 py-3 px-4 rounded-xl font-medium transition-colors ${
-                isLastStep
-                  ? 'bg-linear-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600'
-                  : 'bg-orange-500 hover:bg-orange-600 text-white'
+              className={`flex-1 py-3.5 px-4 rounded-xl font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg ${
+                isHighlighted
+                  ? 'bg-linear-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-400 hover:to-emerald-500 shadow-emerald-500/25'
+                  : isLastStep
+                    ? 'bg-linear-to-r from-orange-500 to-amber-500 text-white hover:from-orange-400 hover:to-amber-400 shadow-orange-500/25'
+                    : 'bg-orange-500 hover:bg-orange-400 text-white shadow-orange-500/20'
               }`}
             >
-              {isLastStep ? '🚀 Începe acum!' : 'Continuă →'}
+              {getButtonText()}
             </button>
           </div>
+
+          {/* Skip hint on first step */}
+          {isFirstStep && (
+            <p className="text-center text-xs text-gray-500 mt-4">
+              Poți sări acest ghid și reveni oricând din 🔔
+            </p>
+          )}
         </div>
       </div>
     </div>
