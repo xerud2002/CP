@@ -425,6 +425,25 @@ function RecentActivity({ recentMessages, unreadCount }: { recentMessages: Recen
     return msg.substring(0, maxLength).trim() + '...';
   };
 
+  // Format display name: "Prenume N." (handles "prenume.nume", "prenume nume", "prenumeNume")
+  const formatDisplayName = (name: string): string => {
+    if (!name) return 'Curier';
+    // Split by dot, space, or camelCase
+    let parts = name.split(/[.\s]+/).filter(Boolean);
+    if (parts.length === 1) {
+      // Try camelCase split
+      const camelParts = name.split(/(?=[A-Z])/).filter(Boolean);
+      if (camelParts.length >= 2) parts = camelParts;
+    }
+    if (parts.length >= 2) {
+      const firstName = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
+      const lastInitial = parts[parts.length - 1].charAt(0).toUpperCase();
+      return `${firstName} ${lastInitial}.`;
+    }
+    // Single word - capitalize
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  };
+
   return (
     <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full flex flex-col">
       <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -466,7 +485,7 @@ function RecentActivity({ recentMessages, unreadCount }: { recentMessages: Recen
                   <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-semibold ${
                     !msg.read ? 'bg-orange-500/30 text-orange-300' : 'bg-slate-700 text-gray-400'
                   }`}>
-                    {msg.senderName.charAt(0).toUpperCase()}
+                    {formatDisplayName(msg.senderName).charAt(0).toUpperCase()}
                   </div>
                   {!msg.read && (
                     <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
@@ -475,7 +494,7 @@ function RecentActivity({ recentMessages, unreadCount }: { recentMessages: Recen
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-1 mb-0.5">
                     <span className={`text-[11px] sm:text-sm font-medium truncate ${!msg.read ? 'text-white' : 'text-gray-300'}`}>
-                      {msg.senderName}
+                      {formatDisplayName(msg.senderName)}
                     </span>
                     <span className="text-[9px] sm:text-xs text-gray-500 shrink-0">
                       {formatTime(msg.createdAt)}
