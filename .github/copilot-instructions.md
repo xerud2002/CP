@@ -16,19 +16,32 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 /comanda           → Order creation wizard (no header/footer)
 ```
 
-Auth pages use `?role=client|curier` query param. `LayoutWrapper.tsx` hides Header/Footer on dashboards and auth pages.
+Auth pages use `?role=client|curier` query param. [LayoutWrapper.tsx](src/components/LayoutWrapper.tsx) hides Header/Footer on dashboards and auth pages.
+
+### Component Organization
+```
+src/components/orders/
+  client/        → Client-specific order views (filters, list, cards)
+  courier/       → Courier-specific views (details, filters, list)
+  shared/        → Reusable across both roles (modals, sections)
+```
+Custom hooks in `src/hooks/{client|courier}/` handle data loading, real-time subscriptions, and business logic.
 
 ## Key Files
 
 | File | What It Does |
 |------|--------------|
-| `src/lib/constants.ts` | **SINGLE SOURCE**: `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
-| `src/contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `logout()` |
-| `src/lib/toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian |
-| `src/utils/orderStatusHelpers.ts` | `canEditOrder()`, `canFinalizeOrder()`, `transitionToFinalizata()` |
-| `src/utils/orderHelpers.ts` | `getNextOrderNumber()` (atomic), `formatOrderNumber()` → "CP141122" |
-| `src/components/icons/ServiceIcons.tsx` | `<ServiceIcon service="colete" />` — centralized, normalizes case |
-| `src/types/index.ts` | `User`, `Order`, `CoverageZone`, `UserRole` interfaces |
+| [constants.ts](src/lib/constants.ts) | **SINGLE SOURCE**: `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
+| [AuthContext.tsx](src/contexts/AuthContext.tsx) | `useAuth()`: `user`, `loading`, `login()`, `register()`, `logout()` |
+| [toast.ts](src/lib/toast.ts) | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian |
+| [orderStatusHelpers.ts](src/utils/orderStatusHelpers.ts) | `canEditOrder()`, `canFinalizeOrder()`, `transitionToFinalizata()` |
+| [orderHelpers.ts](src/utils/orderHelpers.ts) | `getNextOrderNumber()` (atomic), `formatOrderNumber()` → "CP141122" |
+| [ServiceIcons.tsx](src/components/icons/ServiceIcons.tsx) | `<ServiceIcon service="colete" />` — centralized, normalizes case |
+| [types/index.ts](src/types/index.ts) | `User`, `Order`, `CoverageZone`, `UserRole` interfaces |
+| [useClientOrdersLoader.ts](src/hooks/client/useClientOrdersLoader.ts) | Real-time orders + unread counts for clients |
+| [useOrdersLoader.ts](src/hooks/courier/useOrdersLoader.ts) | Real-time order filtering for couriers |
+
+**Architecture Docs** (root): `FIRESTORE_STRUCTURE.md`, `STATUS_TRANSITIONS.md`, `CHAT_SYSTEM.md`, `SERVICE_FLOW_ARCHITECTURE.md`
 
 ## Critical Patterns
 
@@ -98,13 +111,29 @@ useEffect(() => {
 }, [id]);
 ```
 
+**Multiple subscriptions**: Track in array, cleanup all:
+```tsx
+useEffect(() => {
+  const unsubscribes: Array<() => void> = [];
+  orders.forEach(order => {
+    const unsub = onSnapshot(query(...), snap => { /* ... */ });
+    unsubscribes.push(unsub);
+  });
+  return () => unsubscribes.forEach(fn => fn());
+}, [orders]);
+```
+
 ## Order Status Flow
 ```
 noua → in_lucru → livrata
-  ↓        ↓
-anulata  anulata
-```
-- `noua`: Editable, auto-transitions when courier messages
+  ↓        ↓**1-to-1 chat per order** (filter by BOTH) — see [CHAT_SYSTEM.md](CHAT_SYSTEM.md) |
+| `zona_acoperire` | `uid` | Courier coverage zones (multi-record) |
+| `profil_curier` | doc ID = `uid` | Extended courier profile |
+| `profil_client` | doc ID = `uid` | Extended client profile |
+| `recenzii` | `clientId` | Reviews (client reviews courier) |
+| `counters/orderNumber` | — | Atomic sequential counter |
+
+**Chat System**: Each client-courier pair has a separate conversation per order. Query MUST filter by `orderId`, `clientId`, AND `courierId` to ensure privacy. Unread badges use `where('read', '==', false)` + client-side filtering.
 - `in_lucru`: Locked, can finalize
 - `livrata`: Complete, enables reviews
 
@@ -126,11 +155,14 @@ anulata  anulata
 
 ## Commands
 ```bash
-npm run dev                              # Dev server
-npm run build                            # Type-check + build
-firebase deploy --only firestore:rules   # Deploy rules
-```
-
+np**Language**: UI text in Romanian | Code/comments/commits in English
+- **Client components**: All dashboard pages MUST have `'use client'` directive at top
+- **Path alias**: `@/*` → `./src/*` (configured in `tsconfig.json`)
+- **Imports**: Use path alias, never relative paths from deep nesting (e.g., `@/lib/constants` not `../../../lib/constants`)
+- **Constants**: Never duplicate — always import from [constants.ts](src/lib/constants.ts)
+- **Types**: Import from [types/index.ts](src/types/index.ts), never inline `interface` in components
+- **Firebase 11.1**: Uses modular SDK (`import { collection } from 'firebase/firestore'`), not legacy `firebase.firestore()`
+- **Docs**: Read root `.md` files for architecture context before major changes
 ## Common Mistakes
 
 | ❌ Wrong | ✅ Right |
