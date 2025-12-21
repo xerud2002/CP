@@ -716,7 +716,7 @@ function OrderDetailsModal({ order, onClose }: { order: Order | null; onClose: (
               <div className="flex flex-wrap gap-2">
                 {order.optiuni.map((opt, idx) => (
                   <span key={idx} className="px-3 py-1 bg-white/10 text-white rounded-lg text-sm capitalize">
-                    {opt}
+                    {opt.replace(/_/g, ' ')}
                   </span>
                 ))}
               </div>

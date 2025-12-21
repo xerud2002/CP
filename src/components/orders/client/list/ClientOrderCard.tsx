@@ -18,10 +18,10 @@ interface ClientOrderCardProps {
 
 const getFlagPath = (code: string) => `/img/flag/${code.toLowerCase()}.svg`;
 
-// Capitalize first letter of each word
+// Capitalize first letter of each word and replace underscores with spaces
 const capitalize = (str: string | undefined) => {
   if (!str) return '';
-  return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+  return str.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 };
 
 function ClientOrderCard({
