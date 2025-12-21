@@ -835,7 +835,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
               <div className={`mt-2 sm:mt-4 p-2.5 sm:p-4 rounded-lg sm:rounded-xl text-left ${
                 isHighlighted 
                   ? 'bg-emerald-500/10 border border-emerald-500/20' 
-                  : 'bg-orange-500/10 border border-orange-500/20'
+                  : 'bg-slate-700/40 border border-slate-600/40 backdrop-blur-sm'
               }`}>
                 <p className="text-gray-300 text-[11px] sm:text-xs leading-relaxed whitespace-pre-line">
                   {currentStepData.details}
