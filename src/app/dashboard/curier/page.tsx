@@ -770,26 +770,26 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
           : 'bg-linear-to-br from-slate-800 via-slate-850 to-slate-900 border-white/10'
       }`}>
         {/* Progress bar */}
-        <div className="h-1 sm:h-1.5 bg-slate-700/50 sticky top-0">
+        <div className="h-1.5 sm:h-2 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 sticky top-0 rounded-b-lg overflow-hidden">
           <div 
-            className={`h-full transition-all duration-500 ease-out ${
+            className={`h-full transition-all duration-500 ease-out shadow-lg ${
               isHighlighted 
-                ? 'bg-linear-to-r from-emerald-400 to-emerald-500' 
-                : 'bg-linear-to-r from-orange-500 to-amber-500'
+                ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400 shadow-emerald-500/50' 
+                : 'bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 shadow-orange-500/50'
             }`}
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           />
         </div>
 
         {/* Step counter */}
-        <div className="absolute top-2 left-2 sm:top-4 sm:left-4 px-1.5 py-0.5 sm:px-2.5 sm:py-1 bg-white/10 rounded-full">
-          <span className="text-[9px] sm:text-xs font-medium text-gray-300">{currentStep + 1}/{steps.length}</span>
+        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-1 sm:px-2.5 sm:py-1 bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-white/10 rounded-lg shadow-lg">
+          <span className="text-[10px] sm:text-xs font-semibold text-white">{currentStep + 1}/{steps.length}</span>
         </div>
 
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 sm:top-4 sm:right-4 p-1 sm:p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg sm:rounded-xl transition-all active:scale-95 z-10"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 text-gray-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/90 backdrop-blur-sm border border-white/10 rounded-lg sm:rounded-xl transition-all active:scale-95 shadow-lg z-10"
           title="Închide"
         >
           <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -842,23 +842,6 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
                 </p>
               </div>
             )}
-          </div>
-
-          {/* Step indicators - smaller on mobile */}
-          <div className="flex justify-center gap-1.5 sm:gap-2 mb-3 sm:mb-6">
-            {steps.map((step, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentStep(index)}
-                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                  index === currentStep 
-                    ? `w-5 sm:w-8 ${isHighlighted ? 'bg-emerald-400' : 'bg-orange-500'}` 
-                    : index < currentStep 
-                      ? `w-1.5 sm:w-2 ${step.highlight ? 'bg-emerald-500/60' : 'bg-orange-500/50'}` 
-                      : 'w-1.5 sm:w-2 bg-slate-600'
-                }`}
-              />
-            ))}
           </div>
 
           {/* Navigation buttons - optimized for mobile */}
