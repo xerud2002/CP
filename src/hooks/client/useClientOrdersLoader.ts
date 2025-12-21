@@ -155,12 +155,15 @@ export function useClientOrdersLoader({
 
   // Sort orders
   const sortedOrders = [...filteredOrders].sort((a, b) => {
+    const aTime = a.createdAt instanceof Date ? a.createdAt.getTime() : (a.createdAt?.toDate?.().getTime() || 0);
+    const bTime = b.createdAt instanceof Date ? b.createdAt.getTime() : (b.createdAt?.toDate?.().getTime() || 0);
+    
     switch (sortBy) {
       case 'oldest':
-        return (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0);
+        return aTime - bTime;
       case 'newest':
       default:
-        return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+        return bTime - aTime;
     }
   });
 

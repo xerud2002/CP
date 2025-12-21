@@ -173,7 +173,7 @@ export function useOrdersLoader(userId: string | undefined, options: UseOrdersLo
     if (!searchQuery.trim()) return filteredByService;
     const query = searchQuery.toLowerCase().trim();
     return filteredByService.filter(order => {
-      const orderNum = order.orderNumber?.toLowerCase() || '';
+      const orderNum = order.orderNumber?.toString() || '';
       const pickupCity = (order.oras_ridicare || '').toLowerCase();
       const deliveryCity = (order.oras_livrare || '').toLowerCase();
       return orderNum.includes(query) || pickupCity.includes(query) || deliveryCity.includes(query);
@@ -184,8 +184,8 @@ export function useOrdersLoader(userId: string | undefined, options: UseOrdersLo
   const sortedOrders = useMemo(() => {
     const sorted = [...filteredBySearch];
     sorted.sort((a, b) => {
-      const aTime = a.createdAt?.getTime() || 0;
-      const bTime = b.createdAt?.getTime() || 0;
+      const aTime = a.createdAt instanceof Date ? a.createdAt.getTime() : (a.createdAt?.toDate?.().getTime() || 0);
+      const bTime = b.createdAt instanceof Date ? b.createdAt.getTime() : (b.createdAt?.toDate?.().getTime() || 0);
       return sortBy === 'oldest' ? aTime - bTime : bTime - aTime;
     });
     return sorted;
