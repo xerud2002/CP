@@ -756,7 +756,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
   };
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-2 sm:p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-1 sm:p-4">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
@@ -764,7 +764,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
       />
       
       {/* Modal - optimized for mobile */}
-      <div className={`relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border shadow-2xl transition-all ${
+      <div className={`relative w-full max-w-md h-[96vh] sm:max-h-[90vh] overflow-y-auto rounded-xl sm:rounded-2xl border shadow-2xl transition-all ${
         isHighlighted 
           ? 'bg-linear-to-br from-emerald-900/95 via-emerald-800/90 to-slate-900 border-emerald-500/30' 
           : 'bg-linear-to-br from-slate-800 via-slate-850 to-slate-900 border-white/10'
@@ -782,14 +782,14 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
         </div>
 
         {/* Step counter */}
-        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-white/10 rounded-full">
-          <span className="text-[10px] sm:text-xs font-medium text-gray-300">{currentStep + 1}/{steps.length}</span>
+        <div className="absolute top-2 left-2 sm:top-4 sm:left-4 px-1.5 py-0.5 sm:px-2.5 sm:py-1 bg-white/10 rounded-full">
+          <span className="text-[9px] sm:text-xs font-medium text-gray-300">{currentStep + 1}/{steps.length}</span>
         </div>
 
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg sm:rounded-xl transition-all active:scale-95 z-10"
+          className="absolute top-2 right-2 sm:top-4 sm:right-4 p-1 sm:p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg sm:rounded-xl transition-all active:scale-95 z-10"
           title="Închide"
         >
           <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -798,10 +798,10 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
         </button>
 
         {/* Content */}
-        <div className="p-4 sm:p-6 pt-10 sm:pt-12">
+        <div className="p-3 sm:p-6 pt-8 sm:pt-12">
           {/* Icon */}
-          <div className="flex justify-center mb-3 sm:mb-5">
-            <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center p-3 sm:p-4 transition-all ${
+          <div className="flex justify-center mb-2 sm:mb-5">
+            <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl flex items-center justify-center p-2.5 sm:p-4 transition-all ${
               isHighlighted 
                 ? 'bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/20' 
                 : 'bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-orange-500/30 shadow-lg shadow-orange-500/10'
@@ -812,27 +812,27 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
           {/* Special badge for free offer */}
           {isHighlighted && (
-            <div className="flex justify-center mb-2 sm:mb-3">
-              <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-emerald-500/20 border border-emerald-400/40 rounded-full text-emerald-300 text-xs sm:text-sm font-bold animate-pulse">
+            <div className="flex justify-center mb-1.5 sm:mb-3">
+              <span className="px-2.5 py-0.5 sm:px-4 sm:py-1.5 bg-emerald-500/20 border border-emerald-400/40 rounded-full text-emerald-300 text-[10px] sm:text-sm font-bold animate-pulse">
                 OFERTĂ LIMITATĂ
               </span>
             </div>
           )}
 
           {/* Text */}
-          <div className="text-center mb-4 sm:mb-6">
-            <p className={`text-xs sm:text-sm font-medium mb-1 ${isHighlighted ? 'text-emerald-400' : 'text-orange-400'}`}>
+          <div className="text-center mb-3 sm:mb-6">
+            <p className={`text-xs sm:text-sm font-medium mb-0.5 sm:mb-1 ${isHighlighted ? 'text-emerald-400' : 'text-orange-400'}`}>
               {currentStepData.subtitle}
             </p>
-            <h2 className={`text-xl sm:text-2xl font-bold mb-2 sm:mb-3 ${isHighlighted ? 'text-emerald-300' : 'text-white'}`}>
+            <h2 className={`text-lg sm:text-2xl font-bold mb-1.5 sm:mb-3 ${isHighlighted ? 'text-emerald-300' : 'text-white'}`}>
               {currentStepData.title}
             </h2>
-            <p className="text-gray-300 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
+            <p className="text-gray-300 text-xs sm:text-sm leading-relaxed mb-2 sm:mb-4">
               {currentStepData.content}
             </p>
             {/* Additional details */}
             {currentStepData.details && (
-              <div className={`mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl text-left ${
+              <div className={`mt-2 sm:mt-4 p-2.5 sm:p-4 rounded-lg sm:rounded-xl text-left ${
                 isHighlighted 
                   ? 'bg-emerald-500/10 border border-emerald-500/20' 
                   : 'bg-orange-500/10 border border-orange-500/20'
@@ -845,7 +845,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
           </div>
 
           {/* Step indicators - smaller on mobile */}
-          <div className="flex justify-center gap-1.5 sm:gap-2 mb-4 sm:mb-6">
+          <div className="flex justify-center gap-1.5 sm:gap-2 mb-3 sm:mb-6">
             {steps.map((step, index) => (
               <button
                 key={index}
@@ -866,7 +866,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
             {!isFirstStep && (
               <button
                 onClick={() => setCurrentStep(prev => prev - 1)}
-                className="flex-1 py-2.5 sm:py-3.5 px-3 sm:px-4 text-gray-300 bg-white/5 active:bg-white/15 border border-white/10 rounded-xl text-sm sm:text-base font-medium transition-all active:scale-[0.98]"
+                className="flex-1 py-2 sm:py-3.5 px-3 sm:px-4 text-gray-300 bg-white/5 active:bg-white/15 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all active:scale-[0.98]"
               >
                 ←
               </button>
@@ -879,7 +879,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
                   setCurrentStep(prev => prev + 1);
                 }
               }}
-              className={`flex-1 py-2.5 sm:py-3.5 px-3 sm:px-4 rounded-xl text-sm sm:text-base font-semibold transition-all active:scale-[0.98] shadow-lg ${
+              className={`flex-1 py-2 sm:py-3.5 px-3 sm:px-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold transition-all active:scale-[0.98] shadow-lg ${
                 isHighlighted
                   ? 'bg-linear-to-r from-emerald-500 to-emerald-600 text-white shadow-emerald-500/25'
                   : isLastStep
@@ -893,7 +893,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
           {/* Skip hint on first step */}
           {isFirstStep && (
-            <p className="text-center text-[10px] sm:text-xs text-gray-500 mt-3 sm:mt-4">
+            <p className="text-center text-[10px] sm:text-xs text-gray-500 mt-2 sm:mt-4">
               Poți sări ghidul din butonul de notificări
             </p>
           )}
