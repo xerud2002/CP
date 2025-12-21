@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { formatOrderNumber } from '@/utils/orderHelpers';
 import { ArrowLeftIcon, StarIcon, CheckCircleIcon, UserIcon } from '@/components/icons/DashboardIcons';
@@ -112,7 +112,7 @@ function RecenziiClientContent() {
       const q = query(
         collection(db, 'comenzi'),
         where('uid_client', '==', user.uid),
-        where('status', '==', 'completed')
+        where('status', '==', 'livrata')
       );
       
       const snapshot = await getDocs(q);
@@ -131,6 +131,39 @@ function RecenziiClientContent() {
     }
   };
 
+  const updateCourierRating = async (courierId: string) => {
+    try {
+      // Get all reviews for this courier
+      const reviewsQuery = query(
+        collection(db, 'recenzii'),
+        where('courierId', '==', courierId)
+      );
+      const reviewsSnapshot = await getDocs(reviewsQuery);
+      
+      if (reviewsSnapshot.empty) return;
+
+      // Calculate average rating
+      let totalRating = 0;
+      let count = 0;
+      reviewsSnapshot.forEach((doc) => {
+        const reviewData = doc.data();
+        totalRating += reviewData.rating || 0;
+        count++;
+      });
+
+      const averageRating = totalRating / count;
+
+      // Update courier profile
+      const courierProfileRef = doc(db, 'profil_curier', courierId);
+      await updateDoc(courierProfileRef, {
+        rating: averageRating,
+        reviewCount: count
+      });
+    } catch (error) {
+      console.error('Error updating courier rating:', error);
+    }
+  };
+
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || !selectedOrder) return;
@@ -139,8 +172,12 @@ function RecenziiClientContent() {
     setMessage('');
 
     try {
+      // Get client name
+      const clientName = user.displayName || user.nume || user.email?.split('@')[0] || 'Client';
+
       await addDoc(collection(db, 'recenzii'), {
         clientId: user.uid,
+        clientName: clientName,
         orderId: selectedOrder.id,
         courierId: selectedOrder.courierId,
         courierName: selectedOrder.courierName || 'Curier',
@@ -149,6 +186,11 @@ function RecenziiClientContent() {
         serviciu: selectedOrder.serviciu,
         createdAt: serverTimestamp(),
       });
+
+      // Update courier rating
+      if (selectedOrder.courierId) {
+        await updateCourierRating(selectedOrder.courierId);
+      }
       
       setMessage('✅ Recenzie trimisă cu succes!');
       setShowReviewForm(false);

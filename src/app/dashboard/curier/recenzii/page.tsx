@@ -79,19 +79,35 @@ export default function RecenziiPage() {
         const reviewsSnapshot = await getDocs(reviewsQuery);
         const reviewsData: Review[] = [];
         
-        reviewsSnapshot.forEach((doc) => {
-          const data = doc.data();
+        for (const docSnap of reviewsSnapshot.docs) {
+          const data = docSnap.data();
+          
+          // Get client name if not in review
+          let clientName = data.clientName || 'Client';
+          if (!data.clientName && data.clientId) {
+            try {
+              const clientRef = doc(db, 'users', data.clientId);
+              const clientSnap = await getDoc(clientRef);
+              if (clientSnap.exists()) {
+                const clientData = clientSnap.data();
+                clientName = clientData.displayName || clientData.nume || clientData.email?.split('@')[0] || 'Client';
+              }
+            } catch (err) {
+              console.error('Error loading client name:', err);
+            }
+          }
+          
           reviewsData.push({
-            id: doc.id,
+            id: docSnap.id,
             clientId: data.clientId,
-            clientName: data.clientName || 'Client',
+            clientName: clientName,
             courierId: data.courierId,
             orderId: data.orderId,
             rating: data.rating,
             comment: data.comment,
             createdAt: data.createdAt?.toDate() || new Date(),
           });
-        });
+        }
         
         setReviews(reviewsData);
       } catch (error) {
