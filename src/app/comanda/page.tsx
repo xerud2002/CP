@@ -102,7 +102,6 @@ const optiuniSuplimentareByService: Record<string, Array<{id: string, name: stri
   ],
   'platforma': [
     { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii vehiculului/echipamentului' },
-    { id: 'incarcare_descarcare', name: 'Încărcare/Descărcare', price: 'variabil', description: 'Servicii de încărcare și descărcare cu echipament specializat' },
   ],
   'tractari': [
     { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii vehiculului' },
@@ -115,7 +114,6 @@ const optiuniSuplimentareByService: Record<string, Array<{id: string, name: stri
   'paleti': [
     { id: 'asigurare', name: 'Asigurare Transport', price: 'variabil', description: 'Asigurare conform valorii mărfii' },
     { id: 'frigo', name: 'Frigo', price: 'variabil', description: 'Transport frigorific pentru produse care necesită temperatură controlată' },
-    { id: 'incarcare_descarcare', name: 'Încărcare/Descărcare', price: 'variabil', description: 'Servicii de încărcare și descărcare cu motostivuitor' },
   ],
 };
 
