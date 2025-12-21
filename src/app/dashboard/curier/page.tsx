@@ -686,7 +686,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
       title: '100% GRATUIT!',
       subtitle: 'Ofertă limitată de lansare',
       content: 'Platforma este complet GRATUITĂ în această perioadă de lansare! Zero comisioane, zero taxe ascunse, zero costuri pentru tine. Profită acum de această oportunitate unică și construiește-ți baza de clienți fără niciun cost.',
-      details: '✓ Acces nelimitat la toate comenzile\n✓ Chat direct cu clienții\n✓ Profil profesional personalizat\n✓ Notificări în timp real',
+      details: 'Beneficii incluse:\n• Acces nelimitat la toate comenzile\n• Chat direct cu clienții\n• Profil profesional personalizat\n• Notificări în timp real',
       highlight: true,
     },
     {
@@ -696,49 +696,49 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
       content: isFirstTime 
         ? 'Felicitări pentru înregistrare! Suntem bucuroși să te avem în comunitatea Curierul Perfect. Hai să-ți arătăm pas cu pas cum funcționează platforma și cum poți avea succes.'
         : 'Descoperă toate funcționalitățile platformei Curierul Perfect și învață cum să-ți optimizezi activitatea pentru a câștiga mai mulți clienți și a crește veniturile.',
-      details: 'În următoarele 7 pași vei învăța:\n→ Cum găsești cele mai bune comenzi\n→ Cum negociezi eficient cu clienții\n→ Cum îți optimizezi profilul',
+      details: 'În următoarele 7 pași vei învăța:\n• Cum găsești cele mai bune comenzi\n• Cum negociezi eficient cu clienții\n• Cum îți optimizezi profilul',
     },
     {
       icon: OnboardingIcons.packages,
       title: 'Găsește comenzi potrivite',
       subtitle: 'Cereri reale, clienți verificați',
       content: 'Secțiunea "Comenzi" este inima platformei - aici găsești toate cererile de transport publicate de clienți reali. Folosește filtrele inteligente pentru a găsi exact comenzile care se potrivesc vehiculului și rutelor tale.',
-      details: '📍 Filtrează după:\n• Serviciu (colete, mobilă, electrocasnice, marfă)\n• Rută (țară origine/destinație, județ)\n• Dată preluare și livrare\n• Status comandă (nouă, în lucru)',
+      details: 'Filtrează după:\n• Serviciu (colete, mobilă, electrocasnice, marfă)\n• Rută (țară origine/destinație, județ)\n• Dată preluare și livrare\n• Status comandă (nouă, în lucru)',
     },
     {
       icon: OnboardingIcons.chat,
       title: 'Chat direct cu clienții',
       subtitle: 'Negociază liber, fără restricții',
       content: 'Ai găsit o comandă interesantă? Contactează clientul instant prin chat! Nu există intermediari - negociezi direct prețul, stabilești toate detaliile, clarifici întrebările și confirmați colaborarea. Totul în platformă, simplu și rapid.',
-      details: '💬 Avantaje chat:\n• Răspunsuri în timp real\n• Istoric complet conversații\n• Notificări instant la mesaje noi\n• Attachmente (poze cu marfa)',
+      details: 'Avantaje chat:\n• Răspunsuri în timp real\n• Istoric complet conversații\n• Notificări instant la mesaje noi\n• Attachmente (poze cu marfa)',
     },
     {
       icon: OnboardingIcons.settings,
       title: 'Configurează serviciile',
       subtitle: 'Personalizează ce oferi',
       content: 'Accesează "Servicii" și setează exact ce tipuri de transport oferi. Astfel, vei primi notificări doar pentru comenzile relevante pentru tine. Poți activa/dezactiva servicii oricând în funcție de disponibilitate.',
-      details: '🚛 Tipuri de servicii:\n• Colete (până 30kg)\n• Mobilă (relocări, mutări)\n• Electrocasnice (frigidere, mașini spălat)\n• Marfă generală (palete, materiale)',
+      details: 'Tipuri de servicii:\n• Colete (până 30kg)\n• Mobilă (relocări, mutări)\n• Electrocasnice (frigidere, mașini spălat)\n• Marfă generală (palete, materiale)',
     },
     {
       icon: OnboardingIcons.profile,
       title: 'Profil profesional complet',
       subtitle: 'Prima impresie contează!',
       content: 'Un profil detaliat și profesional atrage semnificativ mai mulți clienți! Adaugă o descriere captivantă despre serviciile tale, experiența în domeniu, tip vehicul și datele de contact. Recenziile pozitive de la clienți îți vor crește dramatic vizibilitatea.',
-      details: '⭐ Include în profil:\n• Descriere detaliată servicii\n• Experiență și specializare\n• Tip vehicul și capacitate\n• Date contact (telefon, email)\n• Zone acoperire',
+      details: 'Include în profil:\n• Descriere detaliată servicii\n• Experiență și specializare\n• Tip vehicul și capacitate\n• Date contact (telefon, email)\n• Zone acoperire',
     },
     {
       icon: OnboardingIcons.idea,
       title: 'Părerea ta contează enorm!',
       subtitle: 'Construim împreună viitorul',
       content: 'Suntem la început de drum și vrem să devenim cea mai bună platformă pentru curieri din România! Feedback-ul tău este extrem de valoros. Trimite-ne orice sugestie, idee de îmbunătățire sau raportează problemele întâmpinate.',
-      details: '📞 Contactează-ne:\n• WhatsApp: [număr]\n• Email: contact@curirerulperfect.ro\n• Direct din secțiunea Suport\n\nNe răspundem rapid la toate mesajele!',
+      details: 'Contactează-ne:\n• WhatsApp: [număr]\n• Email: contact@curirerulperfect.ro\n• Direct din secțiunea Suport\n\nNe răspundem rapid la toate mesajele!',
     },
     {
       icon: OnboardingIcons.rocket,
       title: 'Gata de decolare!',
       subtitle: 'Succes garantat în 3 pași',
       content: 'Perfect! Acum ai toate informațiile necesare pentru a avea succes pe platformă. Pasul următor: mergi direct la secțiunea "Comenzi", explorează cereri disponibile și începe să construiești relații cu clienții noi. Succes!',
-      details: '🎯 Primii tăi pași:\n1. Completează profilul (90% success rate)\n2. Configurează serviciile preferate\n3. Răspunde rapid la mesaje\n\n💡 Poți accesa acest ghid oricând din 🔔',
+      details: 'Primii tăi pași:\n1. Completează profilul (90% success rate)\n2. Configurează serviciile preferate\n3. Răspunde rapid la mesaje\n\nPoți accesa acest ghid oricând din butonul de notificări.',
     },
   ];
 
@@ -814,7 +814,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
           {isHighlighted && (
             <div className="flex justify-center mb-2 sm:mb-3">
               <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-emerald-500/20 border border-emerald-400/40 rounded-full text-emerald-300 text-xs sm:text-sm font-bold animate-pulse">
-                ⚡ OFERTĂ LIMITATĂ
+                OFERTĂ LIMITATĂ
               </span>
             </div>
           )}
@@ -894,7 +894,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
           {/* Skip hint on first step */}
           {isFirstStep && (
             <p className="text-center text-[10px] sm:text-xs text-gray-500 mt-3 sm:mt-4">
-              Poți sări ghidul din 🔔
+              Poți sări ghidul din butonul de notificări
             </p>
           )}
         </div>
