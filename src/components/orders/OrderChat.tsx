@@ -40,6 +40,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
   const [loading, setLoading] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<{ url: string; name: string } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -403,13 +404,17 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                   
                   {/* Image attachment - displayed outside bubble */}
                   {msg.attachmentUrl && isImageFile(msg.attachmentType) && (
-                    <a href={msg.attachmentUrl} target="_blank" rel="noopener noreferrer" className="block">
+                    <button 
+                      type="button"
+                      onClick={() => setPreviewImage({ url: msg.attachmentUrl!, name: msg.attachmentName || 'Imagine' })}
+                      className="block cursor-zoom-in hover:opacity-90 transition-opacity"
+                    >
                       <img 
                         src={msg.attachmentUrl} 
                         alt={msg.attachmentName || 'Atașament'} 
                         className="max-w-[50%] max-h-24 rounded-lg object-cover"
                       />
-                    </a>
+                    </button>
                   )}
 
                   {/* Message bubble - only show if there's text or non-image attachment */}
@@ -530,6 +535,21 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
           </button>
         </div>
       </form>
+
+      {/* Image Preview Modal */}
+      {previewImage && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 cursor-pointer"
+          onClick={() => setPreviewImage(null)}
+        >
+          <img 
+            src={previewImage.url} 
+            alt={previewImage.name}
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 }
