@@ -4,10 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo, lazy, Suspense, useCallback } from 'react';
 import { doc, getDoc, collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import HelpCard from '@/components/HelpCard';
 import { logError } from '@/lib/errorMessages';
 import {
   UserIcon,
@@ -19,6 +18,9 @@ import {
   BellIcon,
   StarIcon,
 } from '@/components/icons/DashboardIcons';
+
+// Lazy load below-fold components
+const HelpCard = lazy(() => import('@/components/HelpCard'));
 
 // ============================================
 // TYPES & INTERFACES
@@ -726,8 +728,10 @@ export default function ClientDashboard() {
           </div>
         </div>
 
-        {/* Help Card */}
-        <HelpCard />
+        {/* Help Card - Lazy loaded */}
+        <Suspense fallback={null}>
+          <HelpCard />
+        </Suspense>
       </main>
     </div>
   );

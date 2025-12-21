@@ -4,10 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo, lazy, Suspense, useCallback } from 'react';
 import { collection, query, where, getDocs, doc, getDoc, onSnapshot, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import HelpCard from '@/components/HelpCard';
 import { logError } from '@/lib/errorMessages';
 import {
   UserIcon,
@@ -17,6 +16,9 @@ import {
   StarIcon,
   ChatIcon,
 } from '@/components/icons/DashboardIcons';
+
+// Lazy load below-fold components
+const HelpCard = lazy(() => import('@/components/HelpCard'));
 
 // ============================================
 // TYPES & INTERFACES
@@ -137,7 +139,7 @@ function getGreeting(): string {
 // ============================================
 
 // Header Component
-function DashboardHeader({ notificationCount, onLogout }: { 
+const DashboardHeader = memo(function DashboardHeader({ notificationCount, onLogout }: { 
   notificationCount: number;
   onLogout: () => void;
 }) {
@@ -154,6 +156,7 @@ function DashboardHeader({ notificationCount, onLogout }: {
                 alt="Curierul Perfect Logo" 
                 width={40} 
                 height={40} 
+                priority
                 className="w-full h-full object-contain drop-shadow-lg"
               />
             </div>
@@ -194,10 +197,10 @@ function DashboardHeader({ notificationCount, onLogout }: {
       </div>
     </header>
   );
-}
+});
 
 // Welcome Section Component - Simplified
-function WelcomeSection({ userName, hasNewOrders, rating, reviewCount }: { userName: string; hasNewOrders: boolean; rating: number; reviewCount: number }) {
+const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, rating, reviewCount }: { userName: string; hasNewOrders: boolean; rating: number; reviewCount: number }) {
   const greeting = getGreeting();
 
   return (
@@ -271,11 +274,11 @@ function WelcomeSection({ userName, hasNewOrders, rating, reviewCount }: { userN
       </div>
     </section>
   );
-}
+});
 
 // Setup Progress Component for new couriers
 // Shows only 2 active steps: Profile and Services (Zones and Calendar are disabled)
-function SetupProgress({ setupComplete, completedSteps, totalSteps }: { setupComplete: boolean; completedSteps: number; totalSteps: number }) {
+const SetupProgress = memo(function SetupProgress({ setupComplete, completedSteps, totalSteps }: { setupComplete: boolean; completedSteps: number; totalSteps: number }) {
   if (setupComplete) return null;
   
   const percentage = Math.round((completedSteps / totalSteps) * 100);
@@ -331,10 +334,10 @@ function SetupProgress({ setupComplete, completedSteps, totalSteps }: { setupCom
       </div>
     </section>
   );
-}
+});
 
 // Main Navigation Grid
-function MainNavigation({ badges, newOrdersCount }: { badges: Record<string, boolean>; newOrdersCount: number }) {
+const MainNavigation = memo(function MainNavigation({ badges, newOrdersCount }: { badges: Record<string, boolean>; newOrdersCount: number }) {
   // Color mappings for hover gradients
   const gradientMap: Record<string, string> = {
     'text-orange-400': 'from-orange-500/20 to-amber-500/20',
@@ -417,10 +420,10 @@ function MainNavigation({ badges, newOrdersCount }: { badges: Record<string, boo
       </div>
     </section>
   );
-}
+});
 
 // Orders Summary Component - Replaces Quick Actions
-function OrdersSummary() {
+const OrdersSummary = memo(function OrdersSummary() {
   return (
     <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full">
       <div className="flex items-center justify-between mb-3 sm:mb-4">
@@ -465,10 +468,10 @@ function OrdersSummary() {
       </Link>
     </section>
   );
-}
+});
 
 // Recent Activity Component - Shows recent messages
-function RecentActivity({ recentMessages, unreadCount }: { recentMessages: RecentMessage[]; unreadCount: number }) {
+const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCount }: { recentMessages: RecentMessage[]; unreadCount: number }) {
   // Format timestamp to relative time
   const formatTime = (date: Date) => {
     const now = new Date();
@@ -566,7 +569,7 @@ function RecentActivity({ recentMessages, unreadCount }: { recentMessages: Recen
       </div>
     </section>
   );
-}
+});
 
 // ============================================
 // MAIN COMPONENT
@@ -767,10 +770,10 @@ export default function CurierDashboard() {
     return () => unsubscribe();
   }, [user]);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     await logout();
     router.push('/');
-  };
+  }, [logout, router]);
 
   // Loading State
   if (loading) {
@@ -848,8 +851,10 @@ export default function CurierDashboard() {
           </div>
         </div>
 
-        {/* Help Card */}
-        <HelpCard />
+        {/* Help Card - Lazy loaded */}
+        <Suspense fallback={null}>
+          <HelpCard />
+        </Suspense>
       </main>
     </div>
   );
