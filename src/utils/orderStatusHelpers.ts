@@ -35,7 +35,11 @@ export const transitionToInLucru = async (orderId: string, currentStatus: string
  * Transition order status to 'livrata' (finalized)
  * Can only be done if current status is 'in_lucru'
  */
-export const transitionToFinalizata = async (orderId: string, currentStatus: string): Promise<boolean> => {
+export const transitionToFinalizata = async (
+  orderId: string, 
+  currentStatus: string, 
+  courierInfo?: { courierId: string; courierName: string }
+): Promise<boolean> => {
   if (currentStatus !== 'in_lucru') {
     showError('Poți finaliza doar comenzile cu statusul "În Lucru"!');
     return false;
@@ -43,11 +47,19 @@ export const transitionToFinalizata = async (orderId: string, currentStatus: str
 
   try {
     const orderRef = doc(db, 'comenzi', orderId);
-    await updateDoc(orderRef, {
+    const updateData: Record<string, unknown> = {
       status: 'livrata',
       statusUpdatedAt: serverTimestamp(),
       finalizataAt: serverTimestamp(),
-    });
+    };
+
+    // Store courier info if provided (for reviews)
+    if (courierInfo) {
+      updateData.courierId = courierInfo.courierId;
+      updateData.courierName = courierInfo.courierName;
+    }
+
+    await updateDoc(orderRef, updateData);
     showSuccess('Comanda a fost marcată ca finalizată!');
     return true;
   } catch (error) {

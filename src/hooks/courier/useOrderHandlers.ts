@@ -1,5 +1,6 @@
 import { transitionToFinalizata, canFinalizeOrder } from '@/utils/orderStatusHelpers';
 import { showWarning } from '@/lib/toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 /**
  * Custom hook for order action handlers
@@ -9,6 +10,8 @@ import { showWarning } from '@/lib/toast';
  * @returns {handleFinalizeOrder, handleRequestReview}
  */
 export function useOrderHandlers(reloadOrders: () => void) {
+  const { user } = useAuth();
+
   /**
    * Finalize order (change status to 'livrata')
    */
@@ -17,8 +20,14 @@ export function useOrderHandlers(reloadOrders: () => void) {
       showWarning('Poți finaliza doar comenzile cu statusul "În Lucru"!');
       return;
     }
+
+    // Get courier info for reviews
+    const courierInfo = user ? {
+      courierId: user.uid,
+      courierName: user.displayName || user.nume || user.email?.split('@')[0] || 'Curier'
+    } : undefined;
     
-    const success = await transitionToFinalizata(orderId, status);
+    const success = await transitionToFinalizata(orderId, status, courierInfo);
     if (success) {
       // Reload orders to reflect the change
       reloadOrders();

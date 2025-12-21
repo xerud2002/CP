@@ -25,6 +25,12 @@ service cloud.firestore {
     match /profil_curier/{userId} {
       allow read: if isAuthenticated(); // Public read (clients need to see)
       allow write: if isAuthenticated() && (userId == request.auth.uid || isAdmin());
+      // Allow updates to rating and reviewCount from any authenticated user (for review system)
+      allow update: if isAuthenticated() && 
+        (userId == request.auth.uid || 
+         isAdmin() ||
+         // Allow updating only rating and reviewCount fields
+         (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['rating', 'reviewCount'])));
     }
     
     // Extended client profiles

@@ -23,6 +23,7 @@ export interface Order {
   orderNumber?: number;
   uid_client?: string;
   courierId?: string;
+  courierName?: string;
   nume?: string;
   email?: string;
   telefon?: string;

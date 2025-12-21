@@ -118,6 +118,21 @@
         { "fieldPath": "senderRole", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "comenzi",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid_client", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "recenzii",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "courierId", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

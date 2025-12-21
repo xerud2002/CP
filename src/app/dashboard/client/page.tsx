@@ -32,6 +32,8 @@ interface RecentMessage {
   message: string;
   createdAt: Date;
   read?: boolean;
+  senderId?: string;
+  unreadCount?: number;
 }
 
 // ============================================
@@ -383,7 +385,7 @@ function RecentActivity({ recentMessages, unreadCount }: { recentMessages: Recen
 
   // Format display name: returns company name as is
   const formatDisplayName = (name: string): string => {
-    if (!name) return 'Curier';
+    if (!name) return 'Curier Transport';
     return name;
   };
 
@@ -436,9 +438,16 @@ function RecentActivity({ recentMessages, unreadCount }: { recentMessages: Recen
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-1 mb-0.5">
-                    <span className={`text-[11px] sm:text-sm font-medium truncate ${!msg.read ? 'text-white' : 'text-gray-300'}`}>
-                      {formatDisplayName(msg.senderName)}
-                    </span>
+                    <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                      <span className={`text-[11px] sm:text-sm font-medium truncate ${!msg.read ? 'text-white' : 'text-gray-300'}`}>
+                        {formatDisplayName(msg.senderName)}
+                      </span>
+                      {msg.unreadCount && msg.unreadCount > 0 && (
+                        <span className="text-[9px] sm:text-[10px] font-semibold text-orange-400 bg-orange-500/20 px-1.5 py-0.5 rounded-full shrink-0">
+                          {msg.unreadCount}
+                        </span>
+                      )}
+                    </div>
                     <span className="text-[9px] sm:text-xs text-gray-500 shrink-0">
                       {formatTime(msg.createdAt)}
                     </span>
@@ -575,7 +584,7 @@ export default function ClientDashboard() {
     );
 
     const unsubscribe = onSnapshot(q, async (snapshot) => {
-      const messages: RecentMessage[] = [];
+      const allMessages: RecentMessage[] = [];
       let unread = 0;
 
       // Gather order IDs and courier IDs
@@ -605,7 +614,9 @@ export default function ClientDashboard() {
         const courierPromises = Array.from(courierIds).map(async (courierId) => {
           const courierDoc = await getDoc(doc(db, 'profil_curier', courierId));
           if (courierDoc.exists()) {
-            courierNames[courierId] = courierDoc.data().numeCompanie || courierDoc.data().nume || 'Curier';
+            const data = courierDoc.data();
+            // Priority: company name > personal name > fallback
+            courierNames[courierId] = data.denumire_firma || data.nume || 'Curier Transport';
           }
         });
         await Promise.all(courierPromises);
@@ -618,19 +629,49 @@ export default function ClientDashboard() {
         
         if (!isRead) unread++;
         
-        messages.push({
+        allMessages.push({
           id: docSnap.id,
           orderId: data.orderId || '',
           orderNumber: orderNumbers[data.orderId],
-          senderName: courierNames[data.senderId] || data.senderName || 'Curier',
+          senderName: courierNames[data.senderId] || 'Curier Transport',
           senderRole: data.senderRole || 'curier',
           message: data.message || '',
           createdAt,
           read: isRead,
+          senderId: data.senderId,
         });
       });
 
-      setRecentMessages(messages);
+      // Group by courier (senderId) and keep only the most recent message per courier
+      // Also track unread count per courier
+      const courierMessageMap = new Map<string, RecentMessage>();
+      const courierUnreadCount = new Map<string, number>();
+
+      allMessages.forEach(msg => {
+        if (msg.senderId) {
+          const existing = courierMessageMap.get(msg.senderId);
+          
+          // Count unread messages per courier
+          if (!msg.read) {
+            courierUnreadCount.set(msg.senderId, (courierUnreadCount.get(msg.senderId) || 0) + 1);
+          }
+          
+          // Keep the message with the most recent createdAt
+          if (!existing || msg.createdAt > existing.createdAt) {
+            courierMessageMap.set(msg.senderId, msg);
+          }
+        }
+      });
+
+      // Convert map back to array, add unread count, and sort by date (most recent first)
+      const uniqueMessages = Array.from(courierMessageMap.values())
+        .map(msg => ({
+          ...msg,
+          unreadCount: courierUnreadCount.get(msg.senderId!) || 0
+        }))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+      setRecentMessages(uniqueMessages);
       setUnreadCount(unread);
     }, (error) => {
       logError(error, 'Error listening to recent messages');
