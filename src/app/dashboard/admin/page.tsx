@@ -476,7 +476,10 @@ function CouriersGrid({ couriers, onSuspend }: {
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Servicii active:</span>
               <span className="text-gray-300">
-                {(courier as any).serviciiOferite?.length || 0}
+                {(() => {
+                  const courierData = courier as unknown as Record<string, unknown>;
+                  return courierData.serviciiOferite && Array.isArray(courierData.serviciiOferite) ? courierData.serviciiOferite.length : 0;
+                })()}
               </span>
             </div>
           </div>
@@ -748,13 +751,7 @@ export default function AdminDashboard() {
     }
   }, [user, loading, router]);
 
-  // Load data
-  useEffect(() => {
-    if (user && user.role === 'admin') {
-      loadData();
-    }
-  }, [user]);
-
+  // Load data function
   const loadData = async () => {
     setLoadingData(true);
     try {
@@ -791,6 +788,14 @@ export default function AdminDashboard() {
       setLoadingData(false);
     }
   };
+
+  // Auto-load data when component mounts
+  useEffect(() => {
+    if (user && user.role === 'admin') {
+      loadData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const handleRoleChange = async (uid: string, newRole: string) => {
     try {

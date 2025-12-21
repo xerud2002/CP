@@ -141,7 +141,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
     });
 
     return () => unsubscribe();
-  }, [orderId, user?.uid, user?.role, courierId, clientId]);
+  }, [orderId, user, courierId, clientId]);
 
   // Mark messages as read when chat is opened
   useEffect(() => {

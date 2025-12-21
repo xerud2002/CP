@@ -54,11 +54,6 @@ function ClientOrderCard({
     return null;
   };
 
-  const formatDate = (dateString: string) => {
-    const [year, month, day] = dateString.split('-');
-    return `${day}/${month}/${year}`;
-  };
-
   const formatDateTime = () => {
     const createdAt = order.createdAt as Date | { toDate: () => Date } | string | number | undefined;
     const date = order.timestamp 

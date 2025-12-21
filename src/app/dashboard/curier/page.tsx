@@ -23,13 +23,6 @@ const HelpCard = lazy(() => import('@/components/HelpCard'));
 // ============================================
 // TYPES & INTERFACES
 // ============================================
-interface ActivityItem {
-  type: string;
-  message: string;
-  time: string;
-  color: string;
-}
-
 interface RecentMessage {
   id: string;
   orderId: string;

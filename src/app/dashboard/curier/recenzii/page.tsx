@@ -10,7 +10,7 @@ import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { showSuccess, showWarning } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
-import { getRatingClass, getRatingBgClass, formatRating, ratingColors } from '@/lib/rating';
+import { getRatingClass } from '@/lib/rating';
 import RatingCard from '@/components/RatingCard';
 
 // Types

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, memo, lazy, Suspense, useCallback } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { doc, getDoc, collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
@@ -13,8 +13,6 @@ import {
   BoxIcon,
   ChatIcon,
   PackageIcon,
-  TruckIcon,
-  CheckCircleIcon,
   BellIcon,
   StarIcon,
 } from '@/components/icons/DashboardIcons';
@@ -25,13 +23,6 @@ const HelpCard = lazy(() => import('@/components/HelpCard'));
 // ============================================
 // TYPES & INTERFACES
 // ============================================
-interface ActivityItem {
-  type: string;
-  message: string;
-  time: string;
-  color: string;
-}
-
 interface RecentMessage {
   id: string;
   orderId: string;
@@ -217,41 +208,6 @@ function WelcomeSection({ userName }: { userName: string }) {
           </div>
         </div>
       </div>
-    </section>
-  );
-}
-
-// Stats Section Component
-// Afișează 3 carduri statistice în grid responsive:
-// 1. Colete trimise (orange) - total comenzi plasate de client
-// 2. În tranzit (blue) - comenzi cu status: in_tranzit, acceptata, colectata
-// 3. Livrate (emerald) - comenzi cu status: livrata, finalizata
-// Date extrase din colecția 'comenzi' filtrată după uid_client
-function StatsSection({ totalOrders, statusCounts }: { totalOrders: number; statusCounts: { pending: number; inTransit: number; delivered: number } }) {
-  const stats = [
-    { icon: PackageIcon, label: 'Colete trimise', value: totalOrders.toString(), color: 'text-orange-400', bgColor: 'bg-orange-500/20', borderColor: 'border-orange-500/20' },
-    { icon: TruckIcon, label: 'În tranzit', value: statusCounts.inTransit.toString(), color: 'text-blue-400', bgColor: 'bg-blue-500/20', borderColor: 'border-blue-500/20' },
-    { icon: CheckCircleIcon, label: 'Livrate', value: statusCounts.delivered.toString(), color: 'text-emerald-400', bgColor: 'bg-emerald-500/20', borderColor: 'border-emerald-500/20' },
-  ];
-
-  return (
-    <section className="grid grid-cols-3 gap-2 sm:gap-4">
-      {stats.map((stat, index) => {
-        const IconComponent = stat.icon;
-        return (
-          <div key={index} className={`bg-linear-to-br from-slate-900/50 via-slate-800/40 to-slate-900/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-5 border ${stat.borderColor} hover:border-opacity-50 transition-all`}>
-            <div className="flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-4 text-center sm:text-left">
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${stat.bgColor} flex items-center justify-center shrink-0`}>
-                <IconComponent className={`w-5 h-5 sm:w-6 sm:h-6 ${stat.color}`} />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-bold text-white">{stat.value}</div>
-                <div className="text-[10px] sm:text-sm text-gray-400">{stat.label}</div>
-              </div>
-            </div>
-          </div>
-        );
-      })}
     </section>
   );
 }
