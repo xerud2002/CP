@@ -600,16 +600,81 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
 // ONBOARDING MODAL COMPONENT
 // ============================================
 
-// Simple emoji-based icons for onboarding steps
+// Themed SVG icons matching website colors
 const OnboardingIcons = {
-  gift: '🎁',
-  welcome: '👋',
-  packages: '📦',
-  chat: '💬',
-  settings: '⚙️',
-  profile: '👤',
-  idea: '💡',
-  rocket: '🚀',
+  gift: () => (
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
+      <rect x="8" y="28" width="48" height="28" rx="4" className="fill-emerald-500/30 stroke-emerald-400" strokeWidth="2"/>
+      <path d="M8 28h48v8H8z" className="fill-emerald-400"/>
+      <circle cx="32" cy="32" r="3" className="fill-white"/>
+      <path d="M32 18c-4 0-8 2-8 6s4 4 8 4 8 0 8-4-4-6-8-6z" className="fill-orange-400"/>
+      <path d="M24 24c0-2 2-4 4-4h8c2 0 4 2 4 4" className="stroke-orange-500" strokeWidth="2" fill="none"/>
+    </svg>
+  ),
+  welcome: () => (
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="24" r="10" className="fill-orange-400"/>
+      <path d="M16 56c0-8.8 7.2-16 16-16s16 7.2 16 16" className="stroke-orange-500" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M26 22c0-1 .5-2 1.5-2s1.5 1 1.5 2" className="stroke-slate-800" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M35 22c0-1 .5-2 1.5-2s1.5 1 1.5 2" className="stroke-slate-800" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M26 28c2 2 4 2 6 2s4 0 6-2" className="stroke-slate-800" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  packages: () => (
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
+      <path d="M12 24l20-12 20 12v24l-20 12-20-12V24z" className="fill-orange-500/20 stroke-orange-400" strokeWidth="2"/>
+      <path d="M12 24l20 12 20-12M32 36v24" className="stroke-orange-500" strokeWidth="2"/>
+      <path d="M22 18l20 12M42 30l-20-12" className="stroke-amber-400" strokeWidth="1.5"/>
+      <circle cx="32" cy="14" r="3" className="fill-emerald-400"/>
+    </svg>
+  ),
+  chat: () => (
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
+      <rect x="10" y="14" width="34" height="28" rx="6" className="fill-purple-500/30 stroke-purple-400" strokeWidth="2"/>
+      <path d="M20 44l4-6h10" className="stroke-purple-400" strokeWidth="2" strokeLinecap="round"/>
+      <rect x="20" y="24" width="34" height="28" rx="6" className="fill-slate-700 stroke-slate-500" strokeWidth="2"/>
+      <path d="M44 52l-4-6h-10" className="stroke-slate-400" strokeWidth="2" strokeLinecap="round"/>
+      <circle cx="32" cy="36" r="2" className="fill-orange-400"/>
+      <circle cx="40" cy="36" r="2" className="fill-orange-400"/>
+      <circle cx="24" cy="36" r="2" className="fill-orange-400"/>
+    </svg>
+  ),
+  settings: () => (
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
+      <circle cx="32" cy="32" r="24" className="fill-amber-500/20 stroke-amber-400" strokeWidth="2"/>
+      <circle cx="32" cy="32" r="8" className="fill-slate-800 stroke-orange-500" strokeWidth="2"/>
+      <g className="stroke-orange-400" strokeWidth="3" strokeLinecap="round">
+        <path d="M32 12v8M32 44v8M52 32h-8M20 32h-8"/>
+        <path d="M45 19l-5.6 5.6M24.6 39.4L19 45M45 45l-5.6-5.6M24.6 24.6L19 19"/>
+      </g>
+    </svg>
+  ),
+  profile: () => (
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
+      <rect x="12" y="8" width="40" height="48" rx="6" className="fill-slate-700 stroke-slate-500" strokeWidth="2"/>
+      <circle cx="32" cy="22" r="7" className="fill-orange-400"/>
+      <path d="M20 46c0-6.6 5.4-12 12-12s12 5.4 12 12" className="stroke-orange-500" strokeWidth="2.5" strokeLinecap="round"/>
+      <rect x="20" y="14" width="8" height="2" rx="1" className="fill-emerald-400"/>
+      <rect x="36" y="14" width="8" height="2" rx="1" className="fill-emerald-400"/>
+    </svg>
+  ),
+  idea: () => (
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
+      <path d="M32 12c-8 0-14 6-14 14 0 4 2 8 4 10v8c0 2 2 4 4 4h12c2 0 4-2 4-4v-8c2-2 4-6 4-10 0-8-6-14-14-14z" className="fill-amber-400/30 stroke-amber-400" strokeWidth="2"/>
+      <path d="M26 48h12M28 52h8" className="stroke-amber-500" strokeWidth="2.5" strokeLinecap="round"/>
+      <circle cx="32" cy="26" r="4" className="fill-amber-200"/>
+      <path d="M28 22l-6-6M36 22l6-6M32 16V8" className="stroke-orange-400" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
+  rocket: () => (
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
+      <path d="M32 8c-8 0-12 16-12 24v16l4 8h16l4-8V32c0-8-4-24-12-24z" className="fill-orange-500/30 stroke-orange-400" strokeWidth="2"/>
+      <ellipse cx="32" cy="24" rx="6" ry="8" className="fill-slate-800 stroke-orange-500" strokeWidth="1.5"/>
+      <circle cx="32" cy="24" r="3" className="fill-emerald-400"/>
+      <path d="M20 36c-4 0-6 2-6 4s2 4 6 4M44 36c4 0 6 2 6 4s-2 4-6 4" className="fill-amber-400/40 stroke-amber-500" strokeWidth="2"/>
+      <path d="M28 56l-2 4M36 56l2 4M32 56v6" className="stroke-orange-400" strokeWidth="2" strokeLinecap="round"/>
+    </svg>
+  ),
 };
 
 const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: { onClose: () => void; isFirstTime: boolean }) {
@@ -619,8 +684,9 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
     {
       icon: OnboardingIcons.gift,
       title: '100% GRATUIT!',
-      subtitle: 'Ofertă specială',
-      content: 'Platforma este complet GRATUITĂ în această perioadă! Fără comisioane, fără taxe ascunse. Profită acum de această oportunitate și construiește-ți baza de clienți fără costuri.',
+      subtitle: 'Ofertă limitată de lansare',
+      content: 'Platforma este complet GRATUITĂ în această perioadă de lansare! Zero comisioane, zero taxe ascunse, zero costuri pentru tine. Profită acum de această oportunitate unică și construiește-ți baza de clienți fără niciun cost.',
+      details: '✓ Acces nelimitat la toate comenzile\n✓ Chat direct cu clienții\n✓ Profil profesional personalizat\n✓ Notificări în timp real',
       highlight: true,
     },
     {
@@ -628,44 +694,51 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
       title: isFirstTime ? 'Bine ai venit!' : 'Ghid Platformă',
       subtitle: 'Curierul Perfect',
       content: isFirstTime 
-        ? 'Felicitări pentru înregistrare! Suntem bucuroși să te avem alături. Hai să-ți arătăm cum funcționează platforma noastră.'
-        : 'Descoperă cum să folosești platforma Curierul Perfect pentru a-ți dezvolta afacerea de transport.',
+        ? 'Felicitări pentru înregistrare! Suntem bucuroși să te avem în comunitatea Curierul Perfect. Hai să-ți arătăm pas cu pas cum funcționează platforma și cum poți avea succes.'
+        : 'Descoperă toate funcționalitățile platformei Curierul Perfect și învață cum să-ți optimizezi activitatea pentru a câștiga mai mulți clienți și a crește veniturile.',
+      details: 'În următoarele 7 pași vei învăța:\n→ Cum găsești cele mai bune comenzi\n→ Cum negociezi eficient cu clienții\n→ Cum îți optimizezi profilul',
     },
     {
       icon: OnboardingIcons.packages,
-      title: 'Găsește comenzi',
-      subtitle: 'Clienți reali',
-      content: 'În secțiunea "Comenzi" găsești cereri reale de transport. Filtrează după serviciu (colete, mobilă, marfă) și rută (țară, județ) pentru a găsi exact ce cauți.',
+      title: 'Găsește comenzi potrivite',
+      subtitle: 'Cereri reale, clienți verificați',
+      content: 'Secțiunea "Comenzi" este inima platformei - aici găsești toate cererile de transport publicate de clienți reali. Folosește filtrele inteligente pentru a găsi exact comenzile care se potrivesc vehiculului și rutelor tale.',
+      details: '📍 Filtrează după:\n• Serviciu (colete, mobilă, electrocasnice, marfă)\n• Rută (țară origine/destinație, județ)\n• Dată preluare și livrare\n• Status comandă (nouă, în lucru)',
     },
     {
       icon: OnboardingIcons.chat,
-      title: 'Chat direct',
-      subtitle: 'Negociază liber',
-      content: 'Contactează clientul direct prin chat. Negociază prețul, stabilește detaliile și confirmă transportul. Totul în platformă, simplu și rapid.',
+      title: 'Chat direct cu clienții',
+      subtitle: 'Negociază liber, fără restricții',
+      content: 'Ai găsit o comandă interesantă? Contactează clientul instant prin chat! Nu există intermediari - negociezi direct prețul, stabilești toate detaliile, clarifici întrebările și confirmați colaborarea. Totul în platformă, simplu și rapid.',
+      details: '💬 Avantaje chat:\n• Răspunsuri în timp real\n• Istoric complet conversații\n• Notificări instant la mesaje noi\n• Attachmente (poze cu marfa)',
     },
     {
       icon: OnboardingIcons.settings,
-      title: 'Alege serviciile',
-      subtitle: 'Tu decizi',
-      content: 'Setează în "Servicii" ce tipuri de transport oferi: colete, mobilă, electrocasnice, marfă generală. Primești doar comenzile care se potrivesc.',
+      title: 'Configurează serviciile',
+      subtitle: 'Personalizează ce oferi',
+      content: 'Accesează "Servicii" și setează exact ce tipuri de transport oferi. Astfel, vei primi notificări doar pentru comenzile relevante pentru tine. Poți activa/dezactiva servicii oricând în funcție de disponibilitate.',
+      details: '🚛 Tipuri de servicii:\n• Colete (până 30kg)\n• Mobilă (relocări, mutări)\n• Electrocasnice (frigidere, mașini spălat)\n• Marfă generală (palete, materiale)',
     },
     {
       icon: OnboardingIcons.profile,
-      title: 'Profil complet',
-      subtitle: 'Câștigă încredere',
-      content: 'Un profil detaliat atrage mai mulți clienți. Adaugă descriere, experiență și date de contact. Recenziile bune îți vor crește vizibilitatea.',
+      title: 'Profil profesional complet',
+      subtitle: 'Prima impresie contează!',
+      content: 'Un profil detaliat și profesional atrage semnificativ mai mulți clienți! Adaugă o descriere captivantă despre serviciile tale, experiența în domeniu, tip vehicul și datele de contact. Recenziile pozitive de la clienți îți vor crește dramatic vizibilitatea.',
+      details: '⭐ Include în profil:\n• Descriere detaliată servicii\n• Experiență și specializare\n• Tip vehicul și capacitate\n• Date contact (telefon, email)\n• Zone acoperire',
     },
     {
       icon: OnboardingIcons.idea,
-      title: 'Părerea ta contează!',
-      subtitle: 'Ajută-ne să creștem',
-      content: 'Suntem la început și vrem să fim cei mai buni! Trimite-ne sugestii și idei pe WhatsApp sau email. Împreună construim platforma perfectă pentru curieri.',
+      title: 'Părerea ta contează enorm!',
+      subtitle: 'Construim împreună viitorul',
+      content: 'Suntem la început de drum și vrem să devenim cea mai bună platformă pentru curieri din România! Feedback-ul tău este extrem de valoros. Trimite-ne orice sugestie, idee de îmbunătățire sau raportează problemele întâmpinate.',
+      details: '📞 Contactează-ne:\n• WhatsApp: [număr]\n• Email: contact@curirerulperfect.ro\n• Direct din secțiunea Suport\n\nNe răspundem rapid la toate mesajele!',
     },
     {
       icon: OnboardingIcons.rocket,
-      title: 'Gata de start!',
-      subtitle: 'Succes garantat',
-      content: 'Ai toate uneltele necesare. Mergi la "Comenzi" și începe să câștigi clienți noi. Reține: poți accesa oricând acest ghid din butonul din header.',
+      title: 'Gata de decolare!',
+      subtitle: 'Succes garantat în 3 pași',
+      content: 'Perfect! Acum ai toate informațiile necesare pentru a avea succes pe platformă. Pasul următor: mergi direct la secțiunea "Comenzi", explorează cereri disponibile și începe să construiești relații cu clienții noi. Succes!',
+      details: '🎯 Primii tăi pași:\n1. Completează profilul (90% success rate)\n2. Configurează serviciile preferate\n3. Răspunde rapid la mesaje\n\n💡 Poți accesa acest ghid oricând din 🔔',
     },
   ];
 
@@ -728,12 +801,12 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
         <div className="p-4 sm:p-6 pt-10 sm:pt-12">
           {/* Icon */}
           <div className="flex justify-center mb-3 sm:mb-5">
-            <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl flex items-center justify-center text-4xl sm:text-5xl transition-all ${
+            <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-2xl flex items-center justify-center p-3 sm:p-4 transition-all ${
               isHighlighted 
-                ? 'bg-linear-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50' 
-                : 'bg-linear-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30'
+                ? 'bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/20' 
+                : 'bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-orange-500/30 shadow-lg shadow-orange-500/10'
             }`}>
-              {currentStepData.icon}
+              {currentStepData.icon()}
             </div>
           </div>
 
@@ -741,7 +814,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
           {isHighlighted && (
             <div className="flex justify-center mb-2 sm:mb-3">
               <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-emerald-500/20 border border-emerald-400/40 rounded-full text-emerald-300 text-xs sm:text-sm font-bold animate-pulse">
-                ⚡ GRATUIT ACUM
+                ⚡ OFERTĂ LIMITATĂ
               </span>
             </div>
           )}
@@ -754,9 +827,21 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
             <h2 className={`text-xl sm:text-2xl font-bold mb-2 sm:mb-3 ${isHighlighted ? 'text-emerald-300' : 'text-white'}`}>
               {currentStepData.title}
             </h2>
-            <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">
+            <p className="text-gray-300 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4">
               {currentStepData.content}
             </p>
+            {/* Additional details */}
+            {currentStepData.details && (
+              <div className={`mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl text-left ${
+                isHighlighted 
+                  ? 'bg-emerald-500/10 border border-emerald-500/20' 
+                  : 'bg-orange-500/10 border border-orange-500/20'
+              }`}>
+                <p className="text-gray-300 text-[11px] sm:text-xs leading-relaxed whitespace-pre-line">
+                  {currentStepData.details}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Step indicators - smaller on mobile */}
