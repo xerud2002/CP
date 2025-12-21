@@ -36,19 +36,56 @@ function ComenziCurierContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  // Filters - initialize from URL params or default
+  // Filters - initialize from localStorage first, then URL params, then default
   const [countryFilter, setCountryFilter] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('courierOrderFilter_country') || searchParams.get('country') || 'all';
+    }
     return searchParams.get('country') || 'all';
   });
   const [serviceFilter, setServiceFilter] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('courierOrderFilter_service') || searchParams.get('service') || 'all';
+    }
     return searchParams.get('service') || 'all';
   });
   const [searchQuery, setSearchQuery] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('courierOrderFilter_search') || searchParams.get('search') || '';
+    }
     return searchParams.get('search') || '';
   });
   const [sortBy, setSortBy] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('courierOrderFilter_sort') || searchParams.get('sort') || 'newest';
+    }
     return searchParams.get('sort') || 'newest';
   });
+  
+  // Save filters to localStorage when they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('courierOrderFilter_country', countryFilter);
+    }
+  }, [countryFilter]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('courierOrderFilter_service', serviceFilter);
+    }
+  }, [serviceFilter]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('courierOrderFilter_search', searchQuery);
+    }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('courierOrderFilter_sort', sortBy);
+    }
+  }, [sortBy]);
   
   // Use custom hooks with filter options
   const { orders, loading: loadingOrders, reload: reloadOrders } = useOrdersLoader(user?.uid, {

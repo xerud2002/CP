@@ -38,6 +38,46 @@ function ComenziClientContent() {
   const [sortBy, setSortBy] = useState('newest');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
+  // Load filters from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedCountry = localStorage.getItem('clientOrderFilter_country');
+      const savedService = localStorage.getItem('clientOrderFilter_service');
+      const savedSearch = localStorage.getItem('clientOrderFilter_search');
+      const savedSort = localStorage.getItem('clientOrderFilter_sort');
+      
+      if (savedCountry) setCountryFilter(savedCountry);
+      if (savedService) setServiceFilter(savedService);
+      if (savedSearch) setSearchQuery(savedSearch);
+      if (savedSort) setSortBy(savedSort);
+    }
+  }, []);
+
+  // Save filters to localStorage when they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('clientOrderFilter_country', countryFilter);
+    }
+  }, [countryFilter]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('clientOrderFilter_service', serviceFilter);
+    }
+  }, [serviceFilter]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('clientOrderFilter_search', searchQuery);
+    }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('clientOrderFilter_sort', sortBy);
+    }
+  }, [sortBy]);
+
   // Get orderId from URL params (for auto-expanding chat from recent messages click)
   const initialExpandedOrderId = searchParams.get('orderId');
 
