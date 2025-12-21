@@ -76,6 +76,10 @@ function OrderCard({
     if (order.tipColet === 'masini') {
       return 'Transport auto';
     }
+    // Show vehicle type if available
+    if (order.tip_vehicul) {
+      return `Vehicul: ${order.tip_vehicul}`;
+    }
     if (order.greutate) {
       const label = order.tipColet === 'paleti' ? 'Palet' : 'Colet';
       return `${label}: ${order.greutate}${String(order.greutate).includes('kg') ? '' : ' kg'}`;

@@ -133,7 +133,7 @@ export default function OrderDetailsModal({
               length={order.lungime}
               width={order.latime}
               height={order.inaltime}
-              quantity={order.cantitate}
+              vehicleType={order.tip_vehicul}
               description={order.descriere}
               serviceType={order.serviciu}
             />

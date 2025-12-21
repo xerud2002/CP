@@ -7,7 +7,7 @@ interface OrderTransportDetailsProps {
   length?: string | number;
   width?: string | number;
   height?: string | number;
-  quantity?: string | number;
+  vehicleType?: string;
   description?: string;
   serviceType?: string;
 }
@@ -17,7 +17,7 @@ export default function OrderTransportDetails({
   length,
   width,
   height,
-  quantity,
+  vehicleType,
   description,
   serviceType
 }: OrderTransportDetailsProps) {
@@ -27,10 +27,10 @@ export default function OrderTransportDetails({
   
   const hasDimensions = length || width || height;
   
-  const cleanQuantity = quantity?.toString().trim();
-  const hasQuantity = cleanQuantity && cleanQuantity !== '0' && cleanQuantity !== '';
+  const cleanVehicleType = vehicleType?.toString().trim();
+  const hasVehicleType = cleanVehicleType && cleanVehicleType !== '';
 
-  if (!hasWeight && !hasDimensions && !hasQuantity && !description) {
+  if (!hasWeight && !hasDimensions && !hasVehicleType && !description) {
     return null;
   }
 
@@ -54,14 +54,11 @@ export default function OrderTransportDetails({
             </p>
           </div>
         )}
-        {hasQuantity && (
+        {hasVehicleType && (
           <div>
-            <p className="text-xs text-gray-500 mb-1">
-              {serviceType?.toLowerCase().trim() === 'persoane' ? 'Număr pasageri' : 'Cantitate'}
-            </p>
+            <p className="text-xs text-gray-500 mb-1">Tip vehicul</p>
             <p className="text-white font-medium">
-              {cleanQuantity}
-              {serviceType?.toLowerCase().trim() === 'persoane' ? ' persoane' : ''}
+              {cleanVehicleType}
             </p>
           </div>
         )}

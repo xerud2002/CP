@@ -40,6 +40,7 @@ export interface Order {
   latime?: string;
   inaltime?: string;
   cantitate?: string;
+  tip_vehicul?: string;
   descriere?: string;
   tip_programare?: 'data_specifica' | 'range' | 'flexibil';
   data_ridicare?: string;
