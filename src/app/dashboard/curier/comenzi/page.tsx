@@ -46,9 +46,38 @@ function ComenziCurierContent() {
   const [viewedOrders, setViewedOrders] = useState<Set<string>>(new Set());
   const [expandedChatOrderId, setExpandedChatOrderId] = useState<string | null>(null);
   
-  // Filters
-  const [countryFilter, setCountryFilter] = useState<string>('all');
-  const [serviceFilter, setServiceFilter] = useState<string>('all');
+  // Filters - initialize from URL params or default to 'all'
+  const [countryFilter, setCountryFilter] = useState<string>(() => {
+    return searchParams.get('country') || 'all';
+  });
+  const [serviceFilter, setServiceFilter] = useState<string>(() => {
+    return searchParams.get('service') || 'all';
+  });
+
+  // Update URL when filters change
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const params = new URLSearchParams(window.location.search);
+    
+    // Update or remove country param
+    if (countryFilter !== 'all') {
+      params.set('country', countryFilter);
+    } else {
+      params.delete('country');
+    }
+    
+    // Update or remove service param
+    if (serviceFilter !== 'all') {
+      params.set('service', serviceFilter);
+    } else {
+      params.delete('service');
+    }
+    
+    // Update URL without causing navigation
+    const newUrl = params.toString() ? `?${params.toString()}` : window.location.pathname;
+    window.history.replaceState({}, '', newUrl);
+  }, [countryFilter, serviceFilter]);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {

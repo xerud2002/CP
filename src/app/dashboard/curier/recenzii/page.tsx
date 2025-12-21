@@ -11,6 +11,7 @@ import HelpCard from '@/components/HelpCard';
 import { showSuccess, showWarning } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
 import { getRatingClass, getRatingBgClass, formatRating, ratingColors } from '@/lib/rating';
+import RatingCard from '@/components/RatingCard';
 
 // Types
 interface Review {
@@ -161,27 +162,22 @@ export default function RecenziiPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
-        {/* Rating Overview */}
-        <div className="bg-linear-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl rounded-2xl border border-blue-500/30 p-6 mb-6">
+        {/* Rating Overview - DOS Style */}
+        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-            {/* Overall Rating - Color coded like daiostea.ro */}
-            <div className={`flex flex-col items-center backdrop-blur-sm rounded-xl p-6 border ${getRatingBgClass(rating)} min-w-50`}>
-              <div className={`text-5xl font-bold mb-2 ${getRatingClass(rating)}`}>{formatRating(rating)}</div>
-              <div className="flex gap-1 mb-3">
-                {renderStars(Math.round(rating))}
-              </div>
-              <div className="text-sm text-gray-400">
-                {reviewCount} {reviewCount === 1 ? 'recenzie' : 'recenzii'}
-              </div>
-            </div>
+            <RatingCard 
+              rating={rating}
+              reviewCount={reviewCount}
+              size="lg"
+            />
 
             {/* Info */}
             <div className="flex-1">
               <h3 className="text-white font-semibold text-lg mb-2">Impactul recenziilor</h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Un rating ridicat îți <span className="text-blue-400 font-semibold">crește vizibilitatea</span> în platformă și 
+                Un rating ridicat îți <span className="text-cyan-400 font-semibold">crește vizibilitatea</span> în platformă și 
                 atrage mai mulți clienți. Recenziile pozitive confirmă calitatea serviciilor tale și îți construiesc 
-                <span className="text-blue-400 font-semibold"> reputația</span> în comunitatea CurierulPerfect.
+                <span className="text-cyan-400 font-semibold"> reputația</span> în comunitatea CurierulPerfect.
               </p>
             </div>
           </div>

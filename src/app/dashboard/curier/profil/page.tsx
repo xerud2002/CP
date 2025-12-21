@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef, Suspense, useMemo } from 'react';
 import { ArrowLeftIcon, CheckIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
@@ -327,10 +327,33 @@ function ProfilCurierContent() {
     setSaving(true);
     try {
       const docRef = doc(db, 'profil_curier', user.uid);
+      
+      // Check if this is the first time saving the profile (profile completion)
+      const existingDoc = await getDoc(docRef);
+      const isFirstSave = !existingDoc.exists();
+      
       await setDoc(docRef, {
         ...profile,
         updatedAt: serverTimestamp(),
+        // Set initial rating and review count on first save
+        ...(isFirstSave && { rating: 5.0, reviewCount: 1 })
       }, { merge: true });
+      
+      // If first save, create initial 5-star review
+      if (isFirstSave) {
+        const reviewsRef = collection(db, 'recenzii');
+        await addDoc(reviewsRef, {
+          courierId: user.uid,
+          clientId: 'system',
+          clientName: 'Curierul Perfect',
+          orderId: null,
+          rating: 5,
+          comment: 'Bun venit pe platformă! Aceasta este recenzia ta inițială de 5 stele. Continuă să oferi servicii excelente!',
+          createdAt: serverTimestamp(),
+          timestamp: serverTimestamp()
+        });
+      }
+      
       showSavedMessage('Profilul a fost salvat cu succes!');
     } catch (error) {
       logError(error, 'Error saving profile');
