@@ -600,112 +600,16 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
 // ONBOARDING MODAL COMPONENT
 // ============================================
 
-// Illustrated icons for onboarding steps - more visual and descriptive
-const OnboardingIllustrations = {
-  // Gift with sparkles - for free offer
-  gift: (
-    <div className="relative">
-      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
-        <rect x="6" y="20" width="36" height="24" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
-        <rect x="4" y="14" width="40" height="8" rx="2" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
-        <path d="M24 14V44" stroke="currentColor" strokeWidth="2"/>
-        <path d="M24 14C24 14 20 8 16 8C12 8 10 11 12 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M24 14C24 14 28 8 32 8C36 8 38 11 36 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      </svg>
-      <span className="absolute -top-1 -right-1 text-lg">✨</span>
-    </div>
-  ),
-  // Waving hand with face
-  welcome: (
-    <div className="relative flex items-center gap-1">
-      <div className="w-10 h-10 rounded-full bg-amber-400/80 flex items-center justify-center">
-        <span className="text-xl">😊</span>
-      </div>
-      <span className="text-3xl animate-bounce">👋</span>
-    </div>
-  ),
-  // Package/boxes stack
-  packages: (
-    <div className="relative">
-      <svg className="w-14 h-12" viewBox="0 0 56 48" fill="none">
-        <rect x="2" y="20" width="24" height="20" rx="2" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
-        <path d="M2 26H26" stroke="currentColor" strokeWidth="2"/>
-        <path d="M14 26V40" stroke="currentColor" strokeWidth="2"/>
-        <rect x="22" y="8" width="32" height="26" rx="2" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
-        <path d="M22 16H54" stroke="currentColor" strokeWidth="2"/>
-        <path d="M38 16V34" stroke="currentColor" strokeWidth="2"/>
-        <circle cx="48" cy="40" r="6" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2"/>
-        <path d="M45 40L47 42L51 38" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    </div>
-  ),
-  // Chat bubbles with typing
-  chat: (
-    <div className="relative">
-      <svg className="w-14 h-12" viewBox="0 0 56 48" fill="none">
-        <path d="M4 8C4 5.79 5.79 4 8 4H32C34.21 4 36 5.79 36 8V24C36 26.21 34.21 28 32 28H12L4 36V8Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
-        <circle cx="12" cy="16" r="2" fill="currentColor"/>
-        <circle cx="20" cy="16" r="2" fill="currentColor"/>
-        <circle cx="28" cy="16" r="2" fill="currentColor"/>
-        <path d="M20 24C20 21.79 21.79 20 24 20H48C50.21 20 52 21.79 52 24V40C52 42.21 50.21 44 48 44H52L44 44H28L20 52V24Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
-        <path d="M28 32H44" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M28 38H38" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      </svg>
-    </div>
-  ),
-  // Settings/customize with sliders
-  settings: (
-    <div className="relative">
-      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
-        <rect x="4" y="8" width="40" height="6" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
-        <circle cx="32" cy="11" r="5" fill="currentColor" stroke="currentColor" strokeWidth="2"/>
-        <rect x="4" y="21" width="40" height="6" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
-        <circle cx="16" cy="24" r="5" fill="currentColor" stroke="currentColor" strokeWidth="2"/>
-        <rect x="4" y="34" width="40" height="6" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
-        <circle cx="28" cy="37" r="5" fill="currentColor" stroke="currentColor" strokeWidth="2"/>
-      </svg>
-    </div>
-  ),
-  // Profile card with star
-  profile: (
-    <div className="relative">
-      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
-        <rect x="4" y="4" width="40" height="40" rx="4" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2"/>
-        <circle cx="24" cy="18" r="8" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
-        <path d="M12 40C12 32 17 28 24 28C31 28 36 32 36 40" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      </svg>
-      <span className="absolute -top-1 -right-1 text-lg">⭐</span>
-    </div>
-  ),
-  // Lightbulb with rays
-  idea: (
-    <div className="relative">
-      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
-        <path d="M24 4V8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M40 12L37 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M44 24H40" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M8 12L11 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M4 24H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M18 40H30" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M20 44H28" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        <path d="M24 36V32C24 32 32 28 32 20C32 15.58 28.42 12 24 12C19.58 12 16 15.58 16 20C16 28 24 32 24 32V36Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
-      </svg>
-      <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-sm">💡</span>
-    </div>
-  ),
-  // Rocket launching
-  rocket: (
-    <div className="relative">
-      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
-        <path d="M24 4C24 4 32 12 32 28L28 32H20L16 28C16 12 24 4 24 4Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
-        <circle cx="24" cy="18" r="4" fill="currentColor" fillOpacity="0.5" stroke="currentColor" strokeWidth="2"/>
-        <path d="M16 28L8 32L12 24" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-        <path d="M32 28L40 32L36 24" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-        <path d="M20 32L18 44L24 38L30 44L28 32" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-      </svg>
-      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-sm">🔥</span>
-    </div>
-  ),
+// Simple emoji-based icons for onboarding steps
+const OnboardingIcons = {
+  gift: '🎁',
+  welcome: '👋',
+  packages: '📦',
+  chat: '💬',
+  settings: '⚙️',
+  profile: '👤',
+  idea: '💡',
+  rocket: '🚀',
 };
 
 const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: { onClose: () => void; isFirstTime: boolean }) {
@@ -713,14 +617,14 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
   const steps = [
     {
-      icon: OnboardingIllustrations.gift,
+      icon: OnboardingIcons.gift,
       title: '100% GRATUIT!',
       subtitle: 'Ofertă specială',
       content: 'Platforma este complet GRATUITĂ în această perioadă! Fără comisioane, fără taxe ascunse. Profită acum de această oportunitate și construiește-ți baza de clienți fără costuri.',
       highlight: true,
     },
     {
-      icon: OnboardingIllustrations.welcome,
+      icon: OnboardingIcons.welcome,
       title: isFirstTime ? 'Bine ai venit!' : 'Ghid Platformă',
       subtitle: 'Curierul Perfect',
       content: isFirstTime 
@@ -728,37 +632,37 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
         : 'Descoperă cum să folosești platforma Curierul Perfect pentru a-ți dezvolta afacerea de transport.',
     },
     {
-      icon: OnboardingIllustrations.packages,
+      icon: OnboardingIcons.packages,
       title: 'Găsește comenzi',
       subtitle: 'Clienți reali',
       content: 'În secțiunea "Comenzi" găsești cereri reale de transport. Filtrează după serviciu (colete, mobilă, marfă) și rută (țară, județ) pentru a găsi exact ce cauți.',
     },
     {
-      icon: OnboardingIllustrations.chat,
+      icon: OnboardingIcons.chat,
       title: 'Chat direct',
       subtitle: 'Negociază liber',
       content: 'Contactează clientul direct prin chat. Negociază prețul, stabilește detaliile și confirmă transportul. Totul în platformă, simplu și rapid.',
     },
     {
-      icon: OnboardingIllustrations.settings,
+      icon: OnboardingIcons.settings,
       title: 'Alege serviciile',
       subtitle: 'Tu decizi',
       content: 'Setează în "Servicii" ce tipuri de transport oferi: colete, mobilă, electrocasnice, marfă generală. Primești doar comenzile care se potrivesc.',
     },
     {
-      icon: OnboardingIllustrations.profile,
+      icon: OnboardingIcons.profile,
       title: 'Profil complet',
       subtitle: 'Câștigă încredere',
       content: 'Un profil detaliat atrage mai mulți clienți. Adaugă descriere, experiență și date de contact. Recenziile bune îți vor crește vizibilitatea.',
     },
     {
-      icon: OnboardingIllustrations.idea,
+      icon: OnboardingIcons.idea,
       title: 'Părerea ta contează!',
       subtitle: 'Ajută-ne să creștem',
       content: 'Suntem la început și vrem să fim cei mai buni! Trimite-ne sugestii și idei pe WhatsApp sau email. Împreună construim platforma perfectă pentru curieri.',
     },
     {
-      icon: OnboardingIllustrations.rocket,
+      icon: OnboardingIcons.rocket,
       title: 'Gata de start!',
       subtitle: 'Succes garantat',
       content: 'Ai toate uneltele necesare. Mergi la "Comenzi" și începe să câștigi clienți noi. Reține: poți accesa oricând acest ghid din butonul din header.',
@@ -773,27 +677,27 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
   // Get button text based on step
   const getButtonText = () => {
     if (isFirstStep) return '✨ Descoperă platforma';
-    if (isLastStep) return '🚀 Hai la comenzi!';
-    if (currentStep === steps.length - 2) return '💡 Ultimul pas';
-    return 'Următorul pas →';
+    if (isLastStep) return '🚀 Start!';
+    if (currentStep === steps.length - 2) return 'Ultimul pas';
+    return 'Continuă →';
   };
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-2 sm:p-4">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
       />
       
-      {/* Modal */}
-      <div className={`relative w-full max-w-md rounded-2xl border shadow-2xl overflow-hidden transition-all ${
+      {/* Modal - optimized for mobile */}
+      <div className={`relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl border shadow-2xl transition-all ${
         isHighlighted 
-          ? 'bg-linear-to-br from-emerald-900/90 via-emerald-800/80 to-slate-900 border-emerald-500/30' 
+          ? 'bg-linear-to-br from-emerald-900/95 via-emerald-800/90 to-slate-900 border-emerald-500/30' 
           : 'bg-linear-to-br from-slate-800 via-slate-850 to-slate-900 border-white/10'
       }`}>
         {/* Progress bar */}
-        <div className="h-1.5 bg-slate-700/50">
+        <div className="h-1 sm:h-1.5 bg-slate-700/50 sticky top-0">
           <div 
             className={`h-full transition-all duration-500 ease-out ${
               isHighlighted 
@@ -805,29 +709,29 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
         </div>
 
         {/* Step counter */}
-        <div className="absolute top-4 left-4 px-2.5 py-1 bg-white/10 rounded-full">
-          <span className="text-xs font-medium text-gray-300">{currentStep + 1} / {steps.length}</span>
+        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-white/10 rounded-full">
+          <span className="text-[10px] sm:text-xs font-medium text-gray-300">{currentStep + 1}/{steps.length}</span>
         </div>
 
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-xl transition-all hover:scale-105 active:scale-95 z-10"
-          title="Închide (poți reveni oricând)"
+          className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg sm:rounded-xl transition-all active:scale-95 z-10"
+          title="Închide"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
         {/* Content */}
-        <div className="p-6 sm:p-8 pt-12">
-          {/* Icon with special styling for highlighted step */}
-          <div className="flex justify-center mb-5">
-            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all ${
+        <div className="p-4 sm:p-6 pt-10 sm:pt-12">
+          {/* Icon */}
+          <div className="flex justify-center mb-3 sm:mb-5">
+            <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl flex items-center justify-center text-4xl sm:text-5xl transition-all ${
               isHighlighted 
-                ? 'bg-linear-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50 text-emerald-400' 
-                : 'bg-linear-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 text-orange-400'
+                ? 'bg-linear-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50' 
+                : 'bg-linear-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30'
             }`}>
               {currentStepData.icon}
             </div>
@@ -835,52 +739,51 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
           {/* Special badge for free offer */}
           {isHighlighted && (
-            <div className="flex justify-center mb-3">
-              <span className="px-4 py-1.5 bg-emerald-500/20 border border-emerald-400/40 rounded-full text-emerald-300 text-sm font-bold animate-pulse">
-                ⚡ PERIOADĂ LIMITATĂ
+            <div className="flex justify-center mb-2 sm:mb-3">
+              <span className="px-3 py-1 sm:px-4 sm:py-1.5 bg-emerald-500/20 border border-emerald-400/40 rounded-full text-emerald-300 text-xs sm:text-sm font-bold animate-pulse">
+                ⚡ GRATUIT ACUM
               </span>
             </div>
           )}
 
           {/* Text */}
-          <div className="text-center mb-6">
-            <p className={`text-sm font-medium mb-1.5 ${isHighlighted ? 'text-emerald-400' : 'text-orange-400'}`}>
+          <div className="text-center mb-4 sm:mb-6">
+            <p className={`text-xs sm:text-sm font-medium mb-1 ${isHighlighted ? 'text-emerald-400' : 'text-orange-400'}`}>
               {currentStepData.subtitle}
             </p>
-            <h2 className={`text-2xl sm:text-3xl font-bold mb-4 ${isHighlighted ? 'text-emerald-300' : 'text-white'}`}>
+            <h2 className={`text-xl sm:text-2xl font-bold mb-2 sm:mb-3 ${isHighlighted ? 'text-emerald-300' : 'text-white'}`}>
               {currentStepData.title}
             </h2>
-            <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+            <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">
               {currentStepData.content}
             </p>
           </div>
 
-          {/* Step indicators */}
-          <div className="flex justify-center gap-2 mb-6">
+          {/* Step indicators - smaller on mobile */}
+          <div className="flex justify-center gap-1.5 sm:gap-2 mb-4 sm:mb-6">
             {steps.map((step, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentStep(index)}
-                className={`h-2 rounded-full transition-all duration-300 hover:opacity-80 ${
+                className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                   index === currentStep 
-                    ? `w-8 ${isHighlighted ? 'bg-emerald-400' : 'bg-orange-500'}` 
+                    ? `w-5 sm:w-8 ${isHighlighted ? 'bg-emerald-400' : 'bg-orange-500'}` 
                     : index < currentStep 
-                      ? `w-2 ${step.highlight ? 'bg-emerald-500/60' : 'bg-orange-500/50'}` 
-                      : 'w-2 bg-slate-600 hover:bg-slate-500'
+                      ? `w-1.5 sm:w-2 ${step.highlight ? 'bg-emerald-500/60' : 'bg-orange-500/50'}` 
+                      : 'w-1.5 sm:w-2 bg-slate-600'
                 }`}
-                title={step.title}
               />
             ))}
           </div>
 
-          {/* Navigation buttons */}
-          <div className="flex gap-3">
+          {/* Navigation buttons - optimized for mobile */}
+          <div className="flex gap-2 sm:gap-3">
             {!isFirstStep && (
               <button
                 onClick={() => setCurrentStep(prev => prev - 1)}
-                className="flex-1 py-3.5 px-4 text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl font-medium transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="flex-1 py-2.5 sm:py-3.5 px-3 sm:px-4 text-gray-300 bg-white/5 active:bg-white/15 border border-white/10 rounded-xl text-sm sm:text-base font-medium transition-all active:scale-[0.98]"
               >
-                ← Înapoi
+                ←
               </button>
             )}
             <button
@@ -891,12 +794,12 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
                   setCurrentStep(prev => prev + 1);
                 }
               }}
-              className={`flex-1 py-3.5 px-4 rounded-xl font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg ${
+              className={`flex-1 py-2.5 sm:py-3.5 px-3 sm:px-4 rounded-xl text-sm sm:text-base font-semibold transition-all active:scale-[0.98] shadow-lg ${
                 isHighlighted
-                  ? 'bg-linear-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-400 hover:to-emerald-500 shadow-emerald-500/25'
+                  ? 'bg-linear-to-r from-emerald-500 to-emerald-600 text-white shadow-emerald-500/25'
                   : isLastStep
-                    ? 'bg-linear-to-r from-orange-500 to-amber-500 text-white hover:from-orange-400 hover:to-amber-400 shadow-orange-500/25'
-                    : 'bg-orange-500 hover:bg-orange-400 text-white shadow-orange-500/20'
+                    ? 'bg-linear-to-r from-orange-500 to-amber-500 text-white shadow-orange-500/25'
+                    : 'bg-orange-500 text-white shadow-orange-500/20'
               }`}
             >
               {getButtonText()}
@@ -905,8 +808,8 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
           {/* Skip hint on first step */}
           {isFirstStep && (
-            <p className="text-center text-xs text-gray-500 mt-4">
-              Poți sări acest ghid și reveni oricând din 🔔
+            <p className="text-center text-[10px] sm:text-xs text-gray-500 mt-3 sm:mt-4">
+              Poți sări ghidul din 🔔
             </p>
           )}
         </div>
