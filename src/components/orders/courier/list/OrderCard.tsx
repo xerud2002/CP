@@ -40,7 +40,7 @@ function OrderCard({
       c.name.toLowerCase() === country || 
       c.code.toLowerCase() === country
     );
-    return matched?.code || 'ro';
+    return matched?.code.toLowerCase() || 'ro';
   };
 
   // Capitalize first letter of each word and replace underscores with spaces
