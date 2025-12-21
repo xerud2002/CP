@@ -676,10 +676,10 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
   // Get button text based on step
   const getButtonText = () => {
-    if (isFirstStep) return '✨ Descoperă platforma';
-    if (isLastStep) return '🚀 Start!';
+    if (isFirstStep) return 'Descoperă';
+    if (isLastStep) return 'Start';
     if (currentStep === steps.length - 2) return 'Ultimul pas';
-    return 'Continuă →';
+    return 'Continuă';
   };
 
   return (
