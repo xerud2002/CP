@@ -7,7 +7,6 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import { db } from '@/lib/firebase';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
 import { serviceTypes } from '@/lib/constants';
-import { getRatingClass, getRatingBgClass, formatRating } from '@/lib/rating';
 import RatingCard from '@/components/RatingCard';
 
 interface CourierProfileModalProps {
@@ -71,12 +70,21 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
           else if (tara) zones.add(capitalize(tara));
         });
 
-        // Calculate rating
+        // Calculate rating from reviews
         let totalRating = 0, reviewCount = 0;
         reviewsSnapshot.forEach(doc => {
           const rating = doc.data().rating;
           if (rating) { totalRating += rating; reviewCount++; }
         });
+
+        // Use profile rating if available, otherwise calculate from reviews
+        const finalRating = profilData?.rating !== undefined 
+          ? profilData.rating 
+          : (reviewCount > 0 ? totalRating / reviewCount : 0);
+        
+        const finalReviewCount = profilData?.reviewCount !== undefined
+          ? profilData.reviewCount
+          : reviewCount;
 
         // Calculate experience
         const createdAt = userData?.createdAt?.toDate() || profilData?.createdAt?.toDate();
@@ -90,8 +98,8 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
           telefon: profilData?.telefon || userData?.telefon || '',
           email: userData?.email || '',
           verificat: userData?.verificat || profilData?.verificat || false,
-          rating: reviewCount > 0 ? totalRating / reviewCount : 0,
-          nrRecenzii: reviewCount,
+          rating: finalRating,
+          nrRecenzii: finalReviewCount,
           nrLivrari: profilData?.nrLivrari || userData?.nrLivrari || 0,
           serviciiOferite: userData?.serviciiOferite || profilData?.serviciiOferite || [],
           zoneAcoperire: [...zones],

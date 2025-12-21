@@ -770,19 +770,19 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
           : 'bg-linear-to-br from-slate-800 via-slate-850 to-slate-900 border-white/10'
       }`}>
         {/* Progress bar */}
-        <div className="h-1.5 sm:h-2 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 sticky top-0 rounded-b-lg overflow-hidden">
+        <div className="h-1.5 sm:h-2 bg-linear-to-r from-slate-800 via-slate-700 to-slate-800 sticky top-0 rounded-b-lg overflow-hidden">
           <div 
             className={`h-full transition-all duration-500 ease-out shadow-lg ${
               isHighlighted 
-                ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400 shadow-emerald-500/50' 
-                : 'bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 shadow-orange-500/50'
+                ? 'bg-linear-to-r from-emerald-400 via-emerald-500 to-emerald-400 shadow-emerald-500/50'
+                : 'bg-linear-to-r from-orange-400 via-orange-500 to-amber-500 shadow-orange-500/50'
             }`}
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           />
         </div>
 
         {/* Step counter */}
-        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-1 sm:px-2.5 sm:py-1 bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-white/10 rounded-lg shadow-lg">
+        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-1 sm:px-2.5 sm:py-1 bg-linear-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-white/10 rounded-lg shadow-lg">
           <span className="text-[10px] sm:text-xs font-semibold text-white">{currentStep + 1}/{steps.length}</span>
         </div>
 
@@ -803,8 +803,8 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
           <div className="flex justify-center mb-2 sm:mb-5">
             <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl flex items-center justify-center p-2.5 sm:p-4 transition-all ${
               isHighlighted 
-                ? 'bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/20' 
-                : 'bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-orange-500/30 shadow-lg shadow-orange-500/10'
+                ? 'bg-linear-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/20'
+                : 'bg-linear-to-br from-slate-700/50 to-slate-800/50 border border-orange-500/30 shadow-lg shadow-orange-500/10'
             }`}>
               {currentStepData.icon()}
             </div>
