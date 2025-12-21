@@ -10,6 +10,7 @@ import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { showSuccess, showWarning } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
+import { getRatingClass, getRatingBgClass, formatRating, ratingColors } from '@/lib/rating';
 
 // Types
 interface Review {
@@ -104,15 +105,16 @@ export default function RecenziiPage() {
     }
   }, [user]);
 
-  // Helper function to render stars
-  const renderStars = (rating: number) => {
+  // Helper function to render stars with color-coding (daiostea.ro style)
+  const renderStars = (rating: number, size: string = 'w-5 h-5') => {
     const stars = [];
+    const colorClass = getRatingClass(rating);
     for (let i = 1; i <= 5; i++) {
       stars.push(
         <StarIcon
           key={i}
           filled={i <= rating}
-          className={`w-5 h-5 ${i <= rating ? 'text-yellow-400' : 'text-gray-600'}`}
+          className={`${size} ${i <= rating ? colorClass : 'text-gray-600'}`}
         />
       );
     }
@@ -162,9 +164,9 @@ export default function RecenziiPage() {
         {/* Rating Overview */}
         <div className="bg-linear-to-br from-blue-500/10 to-cyan-500/10 backdrop-blur-xl rounded-2xl border border-blue-500/30 p-6 mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-            {/* Overall Rating */}
-            <div className="flex flex-col items-center bg-slate-900/40 backdrop-blur-sm rounded-xl p-6 border border-blue-500/20 min-w-50">
-              <div className="text-5xl font-bold text-white mb-2">{rating.toFixed(1)}</div>
+            {/* Overall Rating - Color coded like daiostea.ro */}
+            <div className={`flex flex-col items-center backdrop-blur-sm rounded-xl p-6 border ${getRatingBgClass(rating)} min-w-50`}>
+              <div className={`text-5xl font-bold mb-2 ${getRatingClass(rating)}`}>{formatRating(rating)}</div>
               <div className="flex gap-1 mb-3">
                 {renderStars(Math.round(rating))}
               </div>
@@ -301,7 +303,7 @@ export default function RecenziiPage() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-semibold">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-semibold">
                         {review.clientName.charAt(0).toUpperCase()}
                       </div>
                       <div>
@@ -309,8 +311,9 @@ export default function RecenziiPage() {
                         <p className="text-gray-500 text-xs">{formatDate(review.createdAt)}</p>
                       </div>
                     </div>
+                    {/* Color-coded star rating */}
                     <div className="flex gap-1">
-                      {renderStars(review.rating)}
+                      {renderStars(review.rating, 'w-4 h-4 sm:w-5 sm:h-5')}
                     </div>
                   </div>
                   

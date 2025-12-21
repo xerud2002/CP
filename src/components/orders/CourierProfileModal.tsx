@@ -7,6 +7,7 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import { db } from '@/lib/firebase';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
 import { serviceTypes } from '@/lib/constants';
+import { getRatingClass, getRatingBgClass, formatRating } from '@/lib/rating';
 
 interface CourierProfileModalProps {
   courierId: string;
@@ -180,26 +181,22 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
             </div>
           ) : profile ? (
             <div className="space-y-5">
-              {/* Stats Row */}
-              <div className="grid grid-cols-3 gap-3">
+              {/* Stats Row - Color-coded rating like daiostea.ro */}
+              <div className="grid grid-cols-2 gap-3">
                 <StatCard 
                   icon={<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />}
-                  iconColor="text-yellow-400"
-                  value={profile.rating.toFixed(1)}
+                  iconColor={getRatingClass(profile.rating)}
+                  value={formatRating(profile.rating)}
                   label={`${profile.nrRecenzii} recenzii`}
+                  bgClass={getRatingBgClass(profile.rating)}
                   filled
                 />
                 <StatCard 
-                  icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />}
-                  iconColor="text-blue-400"
-                  value={profile.nrLivrari}
-                  label="livrări"
-                />
-                <StatCard 
-                  icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />}
+                  icon={<path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />}
                   iconColor="text-emerald-400"
-                  value={profile.aniExperienta < 1 ? '<1' : profile.aniExperienta}
-                  label={profile.aniExperienta === 1 ? 'an' : 'ani'}
+                  value={profile.nrLivrari}
+                  label="Comenzi Finalizate"
+                  filled
                 />
               </div>
 
@@ -272,15 +269,16 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-function StatCard({ icon, iconColor, value, label, filled }: { 
+function StatCard({ icon, iconColor, value, label, filled, bgClass }: { 
   icon: React.ReactNode; 
   iconColor: string; 
   value: string | number; 
   label: string;
   filled?: boolean;
+  bgClass?: string;
 }) {
   return (
-    <div className="bg-slate-800/50 rounded-xl p-3 text-center border border-white/5">
+    <div className={`rounded-xl p-3 text-center border ${bgClass || 'bg-slate-800/50 border-white/5'}`}>
       <div className="flex items-center justify-center gap-1 mb-1">
         <svg className={`w-4 h-4 ${iconColor}`} fill={filled ? 'currentColor' : 'none'} viewBox="0 0 20 20" stroke={filled ? undefined : 'currentColor'}>
           {icon}
