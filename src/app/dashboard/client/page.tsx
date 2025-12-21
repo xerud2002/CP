@@ -425,23 +425,10 @@ function RecentActivity({ recentMessages, unreadCount }: { recentMessages: Recen
     return msg.substring(0, maxLength).trim() + '...';
   };
 
-  // Format display name: "Prenume N." (handles "prenume.nume", "prenume nume", "prenumeNume")
+  // Format display name: returns company name as is
   const formatDisplayName = (name: string): string => {
     if (!name) return 'Curier';
-    // Split by dot, space, or camelCase
-    let parts = name.split(/[.\s]+/).filter(Boolean);
-    if (parts.length === 1) {
-      // Try camelCase split
-      const camelParts = name.split(/(?=[A-Z])/).filter(Boolean);
-      if (camelParts.length >= 2) parts = camelParts;
-    }
-    if (parts.length >= 2) {
-      const firstName = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
-      const lastInitial = parts[parts.length - 1].charAt(0).toUpperCase();
-      return `${firstName} ${lastInitial}.`;
-    }
-    // Single word - capitalize
-    return name.charAt(0).toUpperCase() + name.slice(1);
+    return name;
   };
 
   return (
@@ -635,11 +622,13 @@ export default function ClientDashboard() {
       const messages: RecentMessage[] = [];
       let unread = 0;
 
-      // Gather order IDs to fetch order numbers
+      // Gather order IDs and courier IDs
       const orderIds = new Set<string>();
+      const courierIds = new Set<string>();
       snapshot.docs.forEach(docSnap => {
         const data = docSnap.data();
         if (data.orderId) orderIds.add(data.orderId);
+        if (data.senderId) courierIds.add(data.senderId);
       });
 
       // Fetch order numbers in batch
@@ -654,6 +643,18 @@ export default function ClientDashboard() {
         await Promise.all(orderPromises);
       }
 
+      // Fetch courier company names in batch
+      const courierNames: Record<string, string> = {};
+      if (courierIds.size > 0) {
+        const courierPromises = Array.from(courierIds).map(async (courierId) => {
+          const courierDoc = await getDoc(doc(db, 'profil_curier', courierId));
+          if (courierDoc.exists()) {
+            courierNames[courierId] = courierDoc.data().numeCompanie || courierDoc.data().nume || 'Curier';
+          }
+        });
+        await Promise.all(courierPromises);
+      }
+
       snapshot.docs.forEach((docSnap) => {
         const data = docSnap.data();
         const createdAt = data.createdAt?.toDate?.() || new Date();
@@ -665,7 +666,7 @@ export default function ClientDashboard() {
           id: docSnap.id,
           orderId: data.orderId || '',
           orderNumber: orderNumbers[data.orderId],
-          senderName: data.senderName || 'Curier',
+          senderName: courierNames[data.senderId] || data.senderName || 'Curier',
           senderRole: data.senderRole || 'curier',
           message: data.message || '',
           createdAt,

@@ -1985,32 +1985,32 @@ function ComandaForm() {
               </div>
 
               {/* Sumar comandă */}
-              <div className="bg-linear-to-br from-orange-500/20 via-amber-500/10 to-green-500/20 backdrop-blur-xl rounded-2xl border-2 border-orange-500/30 p-6 sm:p-8 shadow-2xl shadow-orange-500/10">
+              <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-linear-to-br from-orange-500/30 to-amber-500/30 border border-orange-500/50 flex items-center justify-center shadow-lg">
-                    <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-orange-400 to-green-400">Sumar comandă</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">Sumar comandă</h2>
                 </div>
                 
                 <div className="space-y-3 text-sm">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between py-2 border-b border-white/5">
                     <span className="text-gray-400">Serviciu:</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-medium">
                       {servicii.find(s => s.id === selectedService)?.name}
                     </span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between py-2 border-b border-white/5">
                     <span className="text-gray-400">Ruta:</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-medium">
                       {ridicareCountryName} → {livrareCountryName}
                     </span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between py-2 border-b border-white/5">
                     <span className="text-gray-400">Program ridicare:</span>
-                    <span className="text-white font-semibold">
+                    <span className="text-white font-medium">
                       {formData.tip_programare === 'data_specifica' && formData.data_ridicare ? formData.data_ridicare : ''}
                       {formData.tip_programare === 'range' && formData.data_ridicare && formData.data_ridicare_end ? `${formData.data_ridicare} - ${formData.data_ridicare_end}` : ''}
                       {formData.tip_programare === 'flexibil' ? 'Flexibil' : ''}
@@ -2018,14 +2018,14 @@ function ComandaForm() {
                     </span>
                   </div>
                   {formData.optiuni.length > 0 && (
-                    <div className="pt-2 border-t border-white/10">
+                    <div className="pt-3">
                       <span className="text-gray-400 block mb-2">Opțiuni suplimentare:</span>
                       <div className="flex flex-wrap gap-2">
                         {formData.optiuni.map(optId => {
                           const allOptions = optiuniSuplimentareByService[selectedService] || [];
                           const option = allOptions.find(o => o.id === optId);
                           return option ? (
-                            <span key={optId} className="px-2 py-1 bg-green-500/20 text-green-400 rounded-lg text-xs">
+                            <span key={optId} className="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs border border-emerald-500/20">
                               {option.name}
                             </span>
                           ) : null;
@@ -2035,33 +2035,31 @@ function ComandaForm() {
                   )}
                 </div>
                 
-                <div className="mt-6 p-5 bg-linear-to-br from-slate-700/50 to-slate-800/50 rounded-xl border border-white/10">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-8 h-8 rounded-lg bg-linear-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center">
-                      <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                      </svg>
-                    </div>
-                    <p className="text-white font-semibold">Ce urmează:</p>
-                  </div>
-                  <ul className="space-y-2.5">
-                    <li className="flex items-start gap-2.5 text-sm text-gray-300">
-                      <svg className="w-5 h-5 text-green-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <div className="mt-6 p-4 bg-slate-700/30 rounded-xl border border-white/5">
+                  <p className="text-white font-medium mb-3 flex items-center gap-2">
+                    <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    Ce urmează:
+                  </p>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2 text-sm text-gray-300">
+                      <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      <span>Trimitem cererea către partenerii noștri</span>
+                      Trimitem cererea către partenerii noștri
                     </li>
-                    <li className="flex items-start gap-2.5 text-sm text-gray-300">
-                      <svg className="w-5 h-5 text-green-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <li className="flex items-center gap-2 text-sm text-gray-300">
+                      <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      <span>Vei primi oferte în <strong className="text-white">24-48 ore</strong></span>
+                      Vei primi oferte în <strong className="text-white">24-48 ore</strong>
                     </li>
-                    <li className="flex items-start gap-2.5 text-sm text-gray-300">
-                      <svg className="w-5 h-5 text-green-400 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <li className="flex items-center gap-2 text-sm text-gray-300">
+                      <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      <span>Compari și alegi oferta potrivită</span>
+                      Compari și alegi oferta potrivită
                     </li>
                   </ul>
                 </div>

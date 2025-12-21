@@ -203,9 +203,20 @@ function OrderCard({
           </div>
           
           {/* Meta Info */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-400">
-            {getServiceInfo() && <span>{getServiceInfo()}</span>}
-            {order.descriere && <span>Descriere: {order.descriere}</span>}
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-400">
+              {getServiceInfo() && <span>{getServiceInfo()}</span>}
+              {order.descriere && <span>Descriere: {order.descriere}</span>}
+            </div>
+            {order.optiuni && order.optiuni.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2">
+                {order.optiuni.map((option, index) => (
+                  <span key={index} className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-md text-xs border border-emerald-500/20">
+                    {capitalize(option)}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
