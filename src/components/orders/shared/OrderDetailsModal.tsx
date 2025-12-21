@@ -120,10 +120,10 @@ export default function OrderDetailsModal({
             {/* Route Section */}
             <OrderRouteSection
               pickupCountry={order.expeditorTara}
-              pickupRegion={order.expeditorJudet || ''}
+              pickupRegion={order.expeditorJudet || order.judet_ridicare || ''}
               pickupCity={order.oras_ridicare}
               deliveryCountry={order.destinatarTara}
-              deliveryRegion={order.destinatarJudet || ''}
+              deliveryRegion={order.destinatarJudet || order.judet_livrare || ''}
               deliveryCity={order.oras_livrare}
             />
 
@@ -160,12 +160,6 @@ export default function OrderDetailsModal({
                 </div>
               </div>
             )}
-
-            {/* Observations */}
-            <div className="bg-slate-700/30 rounded-xl p-4 border border-white/5">
-              <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Observații</h3>
-              <p className="text-gray-300 text-sm">{order.observatii || 'Fără observații'}</p>
-            </div>
 
             {/* Contact Info - hidden for couriers */}
             {!hideContactInfo && (order.clientName || order.clientPhone) && (

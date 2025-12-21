@@ -706,14 +706,6 @@ function OrderDetailsModal({ order, onClose }: { order: Order | null; onClose: (
             )}
           </div>
 
-          {/* Additional Info */}
-          {order.observatii && (
-            <div className="bg-slate-900/50 rounded-xl p-4">
-              <h4 className="text-yellow-400 font-semibold mb-3">Observații</h4>
-              <p className="text-white text-sm">{order.observatii}</p>
-            </div>
-          )}
-
           {/* Options */}
           {order.optiuni && order.optiuni.length > 0 && (
             <div className="bg-slate-900/50 rounded-xl p-4">

@@ -22,15 +22,18 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://curierulperfect.ro'),
   title: {
-    default: "Curierul Perfect - Transport Complet în Europa | Colete, Persoane, Mobilă",
+    default: "Curierul Perfect - Transport Național și European | Colete, Persoane, Mobilă",
     template: "%s | Curierul Perfect"
   },
-  description: "Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în 16+ țări europene. Conectează-te cu curieri verificați.",
+  description: "Platformă de transport național și european: colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în România și 16+ țări europene. Conectă-te cu curieri verificați.",
   keywords: [
+    "transport național România",
     "transport colete Europa",
     "curier România Europa",
     "transport persoane Europa",
     "transport mobilă Europa",
+    "transport național și internațional",
+    "livrări naționale",
     "transport electronice",
     "transport animale de companie",
     "platformă auto Europa",
@@ -42,7 +45,7 @@ export const metadata: Metadata = {
     "trimite colete Italia",
     "trimite colete Spania",
     "marketplace curierat",
-    "transport diaspora",
+    "transport România",
   ],
   authors: [{ name: "Curierul Perfect" }],
   creator: "Curierul Perfect",

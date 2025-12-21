@@ -1984,30 +1984,6 @@ function ComandaForm() {
                 </div>
               </div>
 
-              {/* Observații */}
-              <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-linear-to-br from-yellow-500/20 to-amber-500/20 border border-yellow-500/30 flex items-center justify-center shadow-lg">
-                    <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white">Observații suplimentare</h2>
-                    <p className="text-gray-400 text-sm">Detalii adiționale (opțional)</p>
-                  </div>
-                </div>
-                
-                <textarea
-                  name="observatii"
-                  value={formData.observatii}
-                  onChange={handleInputChange}
-                  className="form-input w-full"
-                  rows={4}
-                  placeholder="Ex: marfă fragilă, necesită manipulare specială, alte cerințe..."
-                />
-              </div>
-
               {/* Sumar comandă */}
               <div className="bg-linear-to-br from-orange-500/20 via-amber-500/10 to-green-500/20 backdrop-blur-xl rounded-2xl border-2 border-orange-500/30 p-6 sm:p-8 shadow-2xl shadow-orange-500/10">
                 <div className="flex items-center gap-3 mb-6">

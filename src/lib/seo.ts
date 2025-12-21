@@ -6,15 +6,18 @@ const SITE_NAME = 'Curierul Perfect';
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} - Transport Complet în Europa | Colete, Persoane, Mobilă`,
+    default: `${SITE_NAME} - Transport Național și European | Colete, Persoane, Mobilă`,
     template: `%s | ${SITE_NAME}`
   },
-  description: 'Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în 16+ țări europene.',
+  description: 'Platformă de transport național și european: colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în România și 16+ țări europene.',
   keywords: [
+    'transport național România',
     'transport colete Europa',
     'curier România Europa',
     'transport persoane Europa',
     'transport mobilă Europa',
+    'transport național și internațional',
+    'livrări naționale',
     'transport electronice',
     'transport animale de companie',
     'platformă auto Europa',
@@ -26,7 +29,7 @@ export const defaultMetadata: Metadata = {
     'trimite colete Italia',
     'trimite colete Spania',
     'marketplace curierat',
-    'transport diaspora',
+    'transport România',
   ],
   authors: [{ name: SITE_NAME }],
   creator: SITE_NAME,
@@ -46,7 +49,7 @@ export const defaultMetadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} - Transport European`,
+        alt: `${SITE_NAME} - Transport Național și European`,
       },
     ],
   },

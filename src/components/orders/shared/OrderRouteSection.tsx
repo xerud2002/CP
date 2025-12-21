@@ -31,6 +31,11 @@ export default function OrderRouteSection({
     return matched || { code: 'ro', name: countryName };
   };
 
+  const capitalize = (str?: string) => {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   const pickupData = getCountryData(pickupCountry);
   const deliveryData = getCountryData(deliveryCountry);
 
@@ -59,7 +64,7 @@ export default function OrderRouteSection({
           {pickupCity && (
             <div>
               <p className="text-xs text-gray-500">Oraș</p>
-              <p className="text-gray-300 font-medium">{pickupCity}</p>
+              <p className="text-gray-300 font-medium">{capitalize(pickupCity)}</p>
             </div>
           )}
           <div>
@@ -89,7 +94,7 @@ export default function OrderRouteSection({
           {deliveryCity && (
             <div>
               <p className="text-xs text-gray-500">Oraș</p>
-              <p className="text-gray-300 font-medium">{deliveryCity}</p>
+              <p className="text-gray-300 font-medium">{capitalize(deliveryCity)}</p>
             </div>
           )}
           <div>

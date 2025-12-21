@@ -45,7 +45,8 @@ function ClientOrderCard({
       return 'Transport auto';
     }
     if (order.greutate) {
-      return `Colet: ${order.greutate}${!String(order.greutate).includes('kg') ? ' kg' : ''}`;
+      const label = order.serviciu === 'paleti' ? 'Palet' : 'Colet';
+      return `${label}: ${order.greutate}${!String(order.greutate).includes('kg') ? ' kg' : ''}`;
     }
     if (order.cantitate) {
       return `Cantitate: ${order.cantitate}`;
@@ -56,6 +57,23 @@ function ClientOrderCard({
   const formatDate = (dateString: string) => {
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
+  };
+
+  const formatDateTime = () => {
+    const createdAt = order.createdAt as Date | { toDate: () => Date } | string | number | undefined;
+    const date = order.timestamp 
+      ? new Date(order.timestamp) 
+      : createdAt && typeof createdAt === 'object' && 'toDate' in createdAt
+        ? createdAt.toDate() 
+        : new Date(createdAt as string | number | Date);
+    
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${day}/${month}/${year} • ${hours}:${minutes}`;
   };
 
   return (
@@ -97,11 +115,19 @@ function ClientOrderCard({
                   </span>
                 )}
               </div>
-              {order.orderNumber && (
-                <p className="text-xs text-gray-400">
-                  #{formatOrderNumber(order.orderNumber)}
-                </p>
-              )}
+              <div className="flex items-center gap-2 text-xs text-gray-400">
+                {order.orderNumber && (
+                  <span>#{formatOrderNumber(order.orderNumber)}</span>
+                )}
+                {(order.timestamp || order.createdAt) && (
+                  <span className="flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {formatDateTime()}
+                  </span>
+                )}
+              </div>
             </div>
             
             {/* Action Buttons */}
@@ -188,12 +214,7 @@ function ClientOrderCard({
           {/* Meta Info */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-400">
             {getServiceInfo() && <span>{getServiceInfo()}</span>}
-            {order.dataColectare && (
-              <span>Data aprox: {formatDate(order.dataColectare)}</span>
-            )}
-            {order.data_ridicare && !order.dataColectare && (
-              <span>Data aprox: {formatDate(order.data_ridicare)}</span>
-            )}
+            {order.descriere && <span>Descriere: {order.descriere}</span>}
           </div>
         </div>
       </div>

@@ -79,7 +79,7 @@ const structuredData = {
   "name": "Curierul Perfect",
   "url": "https://curierulperfect.ro",
   "logo": "https://curierulperfect.ro/logo.png",
-  "description": "Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări.",
+  "description": "Platformă de transport național și european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări în România și toată Europa.",
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": "+40-XXX-XXX-XXX",
@@ -132,22 +132,22 @@ export default function Home() {
                     <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-green-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                   </span>
-                  <span className="whitespace-nowrap">Peste 500+ curieri activi</span>
+                  <span className="whitespace-nowrap">Acoperire în toată Europa</span>
                 </span>
               </div>
 
               {/* Main Title - Mobile first */}
               <h1 className="text-[28px] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 md:mb-6 leading-[1.15] sm:leading-[1.1]">
-                <span className="text-white">Transport și</span>
+                <span className="text-white">Transport</span>
                 <br />
-                <span className="text-gradient">curierat european</span>
+                <span className="text-gradient">național și european</span>
                 <br />
-                <span className="text-white">pentru orice</span>
+                <span className="text-white">rapid și sigur</span>
               </h1>
 
               {/* Subtitle - Mobile optimized */}
               <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-lg mb-5 sm:mb-6 md:mb-8 leading-relaxed">
-                Conectăm românii din diaspora cu curieri verificați. Orice serviciu de transport ai nevoie: colete, mobilă, auto, persoane sau animale - găsești totul aici.
+                Platformă de transport pentru România și toată Europa. Conectăm clienți cu curieri verificați pentru livrări rapide și sigure: colete, mobilă, auto, persoane, animale și multe altele.
               </p>
 
               {/* CTA Buttons - Stack on mobile */}
@@ -492,7 +492,7 @@ export default function Home() {
               <span className="text-white">?</span>
             </h2>
             <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4">
-              Platformă dedicată românilor din diaspora pentru toate nevoile de transport între România și Europa
+              Soluție completă de transport național și european pentru orice tip de marfă sau pasageri între România și Europa
             </p>
           </div>
 
@@ -587,9 +587,9 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                   </svg>
                 </div>
-                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1.5 sm:mb-2">Acoperire Europeană</h3>
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-1.5 sm:mb-2">Acoperire Națională și Europeană</h3>
                 <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">
-                  Transport în peste 16 țări europene. De la UK la Spania, de la Germania la Italia - suntem peste tot unde sunt români.
+                  Transport național în toată România și internațional în peste 16 țări europene. De la UK la Spania, de la Germania la Italia - acoperire completă.
                 </p>
               </div>
             </div>
@@ -1129,14 +1129,14 @@ export default function Home() {
               <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
               </svg>
-              Acoperire europeană
+              Acoperire națională și europeană
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-2">
-              <span className="text-white">Transport sigur și profesional în </span>
-              <span className="text-gradient">peste 16 țări europene</span>
+              <span className="text-white">Transport național și european sigur în </span>
+              <span className="text-gradient">peste 16 țări</span>
             </h2>
             <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4">
-              De la colete și mobilă, până la transport persoane și animale - rețea extinsă de transportatori verificați pentru orice nevoie
+              Livrări naționale și internaționale: colete, mobilă, transport persoane și animale - rețea extinsă de transportatori verificați pentru orice destinație
             </p>
           </div>
 
