@@ -192,6 +192,8 @@ function ComandaForm() {
   // Custom dropdown states for country selectors
   const [isRidicareCountryOpen, setIsRidicareCountryOpen] = useState(false);
   const [isLivrareCountryOpen, setIsLivrareCountryOpen] = useState(false);
+  const [ridicareCountrySearch, setRidicareCountrySearch] = useState('');
+  const [livrareCountrySearch, setLivrareCountrySearch] = useState('');
   const ridicareCountryRef = useRef<HTMLDivElement>(null);
   const livrareCountryRef = useRef<HTMLDivElement>(null);
 
@@ -239,9 +241,11 @@ function ComandaForm() {
       }
       if (ridicareCountryRef.current && !ridicareCountryRef.current.contains(target)) {
         setIsRidicareCountryOpen(false);
+        setRidicareCountrySearch('');
       }
       if (livrareCountryRef.current && !livrareCountryRef.current.contains(target)) {
         setIsLivrareCountryOpen(false);
+        setLivrareCountrySearch('');
       }
       if (ridicareJudetRef.current && !ridicareJudetRef.current.contains(target)) {
         setIsRidicareJudetOpen(false);
@@ -545,6 +549,17 @@ function ComandaForm() {
     [judetLivrareList, livrareJudetSearch]
   );
 
+  // Memoized filtered country lists for search
+  const filteredRidicareCountries = useMemo(
+    () => countries.filter(c => c.name.toLowerCase().includes(ridicareCountrySearch.toLowerCase())),
+    [ridicareCountrySearch]
+  );
+
+  const filteredLivrareCountries = useMemo(
+    () => countries.filter(c => c.name.toLowerCase().includes(livrareCountrySearch.toLowerCase())),
+    [livrareCountrySearch]
+  );
+
   // Loading state
   if (loading || !user) {
     return (
@@ -761,29 +776,49 @@ function ComandaForm() {
                           </svg>
                         </button>
                         {isRidicareCountryOpen && (
-                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
-                            {countries.map((c) => (
-                              <button
-                                key={c.code}
-                                type="button"
-                                onClick={() => {
-                                  setFormData({ ...formData, tara_ridicare: c.code, judet_ridicare: '' });
-                                  setIsRidicareCountryOpen(false);
-                                }}
-                                className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
-                                  formData.tara_ridicare === c.code ? 'bg-slate-700/50' : ''
-                                }`}
-                              >
-                                <Image
-                                  src={c.flag}
-                                  alt={c.name}
-                                  width={24}
-                                  height={18}
-                                  className="rounded-sm shrink-0"
-                                />
-                                <span className="text-white text-sm">{c.name}</span>
-                              </button>
-                            ))}
+                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
+                            <div className="p-2 border-b border-white/10">
+                              <input
+                                type="text"
+                                value={ridicareCountrySearch}
+                                onChange={(e) => setRidicareCountrySearch(e.target.value)}
+                                placeholder="Caută..."
+                                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                onClick={(e) => e.stopPropagation()}
+                                aria-label="Caută țara de ridicare"
+                              />
+                            </div>
+                            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
+                              {filteredRidicareCountries.length > 0 ? (
+                                filteredRidicareCountries.map((c) => (
+                                  <button
+                                    key={c.code}
+                                    type="button"
+                                    onClick={() => {
+                                      setFormData({ ...formData, tara_ridicare: c.code, judet_ridicare: '' });
+                                      setIsRidicareCountryOpen(false);
+                                      setRidicareCountrySearch('');
+                                    }}
+                                    className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                                      formData.tara_ridicare === c.code ? 'bg-slate-700/50' : ''
+                                    }`}
+                                  >
+                                    <Image
+                                      src={c.flag}
+                                      alt={c.name}
+                                      width={24}
+                                      height={18}
+                                      className="rounded-sm shrink-0"
+                                    />
+                                    <span className="text-white text-sm">{c.name}</span>
+                                  </button>
+                                ))
+                              ) : (
+                                <div className="px-3 py-4 text-center text-gray-400 text-sm">
+                                  Nu s-au găsit rezultate
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>
@@ -920,29 +955,49 @@ function ComandaForm() {
                           </svg>
                         </button>
                         {isLivrareCountryOpen && (
-                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
-                            {countries.map((c) => (
-                              <button
-                                key={c.code}
-                                type="button"
-                                onClick={() => {
-                                  setFormData({ ...formData, tara_livrare: c.code, judet_livrare: '' });
-                                  setIsLivrareCountryOpen(false);
-                                }}
-                                className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
-                                  formData.tara_livrare === c.code ? 'bg-slate-700/50' : ''
-                                }`}
-                              >
-                                <Image
-                                  src={c.flag}
-                                  alt={c.name}
-                                  width={24}
-                                  height={18}
-                                  className="rounded-sm shrink-0"
-                                />
-                                <span className="text-white text-sm">{c.name}</span>
-                              </button>
-                            ))}
+                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
+                            <div className="p-2 border-b border-white/10">
+                              <input
+                                type="text"
+                                value={livrareCountrySearch}
+                                onChange={(e) => setLivrareCountrySearch(e.target.value)}
+                                placeholder="Caută..."
+                                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                onClick={(e) => e.stopPropagation()}
+                                aria-label="Caută țara de livrare"
+                              />
+                            </div>
+                            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
+                              {filteredLivrareCountries.length > 0 ? (
+                                filteredLivrareCountries.map((c) => (
+                                  <button
+                                    key={c.code}
+                                    type="button"
+                                    onClick={() => {
+                                      setFormData({ ...formData, tara_livrare: c.code, judet_livrare: '' });
+                                      setIsLivrareCountryOpen(false);
+                                      setLivrareCountrySearch('');
+                                    }}
+                                    className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                                      formData.tara_livrare === c.code ? 'bg-slate-700/50' : ''
+                                    }`}
+                                  >
+                                    <Image
+                                      src={c.flag}
+                                      alt={c.name}
+                                      width={24}
+                                      height={18}
+                                      className="rounded-sm shrink-0"
+                                    />
+                                    <span className="text-white text-sm">{c.name}</span>
+                                  </button>
+                                ))
+                              ) : (
+                                <div className="px-3 py-4 text-center text-gray-400 text-sm">
+                                  Nu s-au găsit rezultate
+                                </div>
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>

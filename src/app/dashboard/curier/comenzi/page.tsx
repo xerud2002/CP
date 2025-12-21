@@ -36,8 +36,27 @@ function ComenziCurierContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  // Use custom hooks
-  const { orders, loading: loadingOrders, reload: reloadOrders } = useOrdersLoader(user?.uid);
+  // Filters - initialize from URL params or default
+  const [countryFilter, setCountryFilter] = useState<string>(() => {
+    return searchParams.get('country') || 'all';
+  });
+  const [serviceFilter, setServiceFilter] = useState<string>(() => {
+    return searchParams.get('service') || 'all';
+  });
+  const [searchQuery, setSearchQuery] = useState<string>(() => {
+    return searchParams.get('search') || '';
+  });
+  const [sortBy, setSortBy] = useState<string>(() => {
+    return searchParams.get('sort') || 'newest';
+  });
+  
+  // Use custom hooks with filter options
+  const { orders, loading: loadingOrders, reload: reloadOrders } = useOrdersLoader(user?.uid, {
+    countryFilter: countryFilter === 'all' ? '' : countryFilter,
+    serviceFilter: serviceFilter === 'all' ? '' : serviceFilter,
+    searchQuery,
+    sortBy
+  });
   const unreadCounts = useUnreadMessages(user?.uid, orders);
   const { handleFinalizeOrder, handleRequestReview } = useOrderHandlers(reloadOrders);
   
@@ -45,14 +64,6 @@ function ComenziCurierContent() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [viewedOrders, setViewedOrders] = useState<Set<string>>(new Set());
   const [expandedChatOrderId, setExpandedChatOrderId] = useState<string | null>(null);
-  
-  // Filters - initialize from URL params or default to 'all'
-  const [countryFilter, setCountryFilter] = useState<string>(() => {
-    return searchParams.get('country') || 'all';
-  });
-  const [serviceFilter, setServiceFilter] = useState<string>(() => {
-    return searchParams.get('service') || 'all';
-  });
 
   // Update URL when filters change
   useEffect(() => {
@@ -74,10 +85,24 @@ function ComenziCurierContent() {
       params.delete('service');
     }
     
+    // Update or remove search param
+    if (searchQuery.trim()) {
+      params.set('search', searchQuery);
+    } else {
+      params.delete('search');
+    }
+    
+    // Update or remove sort param
+    if (sortBy !== 'newest') {
+      params.set('sort', sortBy);
+    } else {
+      params.delete('sort');
+    }
+    
     // Update URL without causing navigation
     const newUrl = params.toString() ? `?${params.toString()}` : window.location.pathname;
     window.history.replaceState({}, '', newUrl);
-  }, [countryFilter, serviceFilter]);
+  }, [countryFilter, serviceFilter, searchQuery, sortBy]);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -144,44 +169,15 @@ function ComenziCurierContent() {
     }
   };
 
-  // Apply all filters (optimized)
-  const filteredOrders = useMemo(() => {
-    return orders.filter(order => {
-      // Country filter (checks both expeditor and destinatar)
-      if (countryFilter !== 'all') {
-        // countryFilter is already a country code (GB, RO, IT, etc.)
-        const selectedCountryCode = countryFilter.toLowerCase();
-        
-        const orderExpeditorCode = (order.expeditorTara || '').toLowerCase().trim();
-        const orderDestinatarCode = (order.destinatarTara || '').toLowerCase().trim();
-        
-        // Check if either expeditor or destinatar country matches
-        if (orderExpeditorCode !== selectedCountryCode && orderDestinatarCode !== selectedCountryCode) {
-          return false;
-        }
-      }
-      
-      // Service filter
-      if (serviceFilter !== 'all') {
-        const normalizedServiceFilter = serviceFilter.toLowerCase().trim();
-        const normalizedOrderService = (order.tipColet || '').toLowerCase().trim();
-        
-        if (normalizedOrderService !== normalizedServiceFilter) {
-          return false;
-        }
-      }
-      
-      return true;
-    });
-  }, [orders, countryFilter, serviceFilter]);
-
   // Check if any filter is active
-  const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all';
+  const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all' || searchQuery.trim() !== '' || sortBy !== 'newest';
 
   // Memoized clear filters
   const clearAllFilters = useCallback(() => {
     setCountryFilter('all');
     setServiceFilter('all');
+    setSearchQuery('');
+    setSortBy('newest');
   }, []);
 
   // Memoized toggle chat handler
@@ -232,8 +228,12 @@ function ComenziCurierContent() {
         <OrderFilters
           countryFilter={countryFilter}
           serviceFilter={serviceFilter}
+          searchQuery={searchQuery}
+          sortBy={sortBy}
           onCountryChange={setCountryFilter}
           onServiceChange={setServiceFilter}
+          onSearchChange={setSearchQuery}
+          onSortChange={setSortBy}
           hasActiveFilters={hasActiveFilters}
           onClearFilters={clearAllFilters}
         />
@@ -241,7 +241,7 @@ function ComenziCurierContent() {
         {/* Orders List */}
         <OrderList
           orders={orders}
-          filteredOrders={filteredOrders}
+          filteredOrders={orders}
           viewedOrders={viewedOrders}
           expandedChatOrderId={expandedChatOrderId}
           unreadCounts={unreadCounts}

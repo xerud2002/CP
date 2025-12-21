@@ -1,17 +1,26 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
 import type { Order } from '@/types';
+
+interface UseOrdersLoaderOptions {
+  countryFilter?: string;
+  serviceFilter?: string;
+  searchQuery?: string;
+  sortBy?: string;
+}
 
 /**
  * Custom hook to load courier orders from Firestore
  * Handles loading new orders (filtered by active services) and courier's assigned orders
  * 
  * @param userId - Current user ID (courier)
+ * @param options - Filter and search options
  * @returns {orders, loading, reload}
  */
-export function useOrdersLoader(userId: string | undefined) {
+export function useOrdersLoader(userId: string | undefined, options: UseOrdersLoaderOptions = {}) {
+  const { countryFilter = '', serviceFilter = '', searchQuery = '', sortBy = 'newest' } = options;
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -134,9 +143,7 @@ export function useOrdersLoader(userId: string | undefined) {
         }
       });
       
-      if (loadedOrders.length > 0) {
-        setOrders(loadedOrders);
-      }
+      setOrders(loadedOrders);
     } catch (error) {
       logError(error, 'Error loading orders for courier');
     } finally {
@@ -144,11 +151,52 @@ export function useOrdersLoader(userId: string | undefined) {
     }
   }, [userId]);
 
+  // Client-side filtering by country (pickup OR delivery)
+  const filteredByCountry = useMemo(() => {
+    if (!countryFilter) return orders;
+    return orders.filter(order => 
+      order.expeditorTara === countryFilter || order.destinatarTara === countryFilter
+    );
+  }, [orders, countryFilter]);
+
+  // Client-side filtering by service type
+  const filteredByService = useMemo(() => {
+    if (!serviceFilter) return filteredByCountry;
+    return filteredByCountry.filter(order => {
+      const orderService = (order.serviciu || order.tipColet || '').toLowerCase().trim();
+      return orderService === serviceFilter.toLowerCase().trim();
+    });
+  }, [filteredByCountry, serviceFilter]);
+
+  // Client-side filtering by search query (order number or city)
+  const filteredBySearch = useMemo(() => {
+    if (!searchQuery.trim()) return filteredByService;
+    const query = searchQuery.toLowerCase().trim();
+    return filteredByService.filter(order => {
+      const orderNum = order.orderNumber?.toLowerCase() || '';
+      const pickupCity = (order.oras_ridicare || '').toLowerCase();
+      const deliveryCity = (order.oras_livrare || '').toLowerCase();
+      return orderNum.includes(query) || pickupCity.includes(query) || deliveryCity.includes(query);
+    });
+  }, [filteredByService, searchQuery]);
+
+  // Client-side sorting
+  const sortedOrders = useMemo(() => {
+    const sorted = [...filteredBySearch];
+    sorted.sort((a, b) => {
+      const aTime = a.createdAt?.getTime() || 0;
+      const bTime = b.createdAt?.getTime() || 0;
+      return sortBy === 'oldest' ? aTime - bTime : bTime - aTime;
+    });
+    return sorted;
+  }, [filteredBySearch, sortBy]);
+
+
   useEffect(() => {
     if (userId) {
       loadOrders();
     }
   }, [userId, loadOrders]);
 
-  return { orders, loading, reload: loadOrders };
+  return { orders: sortedOrders, loading, reload: loadOrders };
 }

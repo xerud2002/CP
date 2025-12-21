@@ -34,6 +34,8 @@ function ComenziClientContent() {
   const searchParams = useSearchParams();
   const [countryFilter, setCountryFilter] = useState('all');
   const [serviceFilter, setServiceFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('newest');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
   // Get orderId from URL params (for auto-expanding chat from recent messages click)
@@ -50,17 +52,21 @@ function ComenziClientContent() {
     userId: user?.uid || '', 
     countryFilter, 
     serviceFilter,
+    searchQuery,
+    sortBy,
     initialExpandedOrderId 
   });
   
   const { handleDelete } = useClientOrderActions();
 
   // Check if any filter is active
-  const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all';
+  const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all' || searchQuery !== '';
 
   const clearAllFilters = useCallback(() => {
     setCountryFilter('all');
     setServiceFilter('all');
+    setSearchQuery('');
+    setSortBy('newest');
   }, []);
 
   useEffect(() => {
@@ -134,8 +140,12 @@ function ComenziClientContent() {
         <ClientOrderFilters 
           countryFilter={countryFilter}
           serviceFilter={serviceFilter}
+          searchQuery={searchQuery}
+          sortBy={sortBy}
           onCountryChange={setCountryFilter}
           onServiceChange={setServiceFilter}
+          onSearchChange={setSearchQuery}
+          onSortChange={setSortBy}
           hasActiveFilters={hasActiveFilters}
           onClearFilters={clearAllFilters}
         />

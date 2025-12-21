@@ -9,10 +9,19 @@ interface UseClientOrdersLoaderProps {
   userId: string;
   countryFilter?: string;
   serviceFilter?: string;
+  searchQuery?: string;
+  sortBy?: string;
   initialExpandedOrderId?: string | null;
 }
 
-export function useClientOrdersLoader({ userId, countryFilter, serviceFilter, initialExpandedOrderId }: UseClientOrdersLoaderProps) {
+export function useClientOrdersLoader({ 
+  userId, 
+  countryFilter, 
+  serviceFilter, 
+  searchQuery,
+  sortBy = 'newest',
+  initialExpandedOrderId 
+}: UseClientOrdersLoaderProps) {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedChats, setExpandedChats] = useState<Set<string>>(new Set());
@@ -101,7 +110,7 @@ export function useClientOrdersLoader({ userId, countryFilter, serviceFilter, in
     };
   }, [userId, orders]);
 
-  // Filter orders - normalize service names and check country
+  // Filter orders - normalize service names and check country, status, search
   const filteredOrders = orders.filter(order => {
     // Country filter (checks both expeditor and destinatar)
     if (countryFilter && countryFilter !== 'all') {
@@ -124,8 +133,35 @@ export function useClientOrdersLoader({ userId, countryFilter, serviceFilter, in
         return false;
       }
     }
+
+    // Search filter (order number, cities)
+    if (searchQuery && searchQuery.trim() !== '') {
+      const search = searchQuery.toLowerCase().trim();
+      const orderNumber = `#cp${order.orderNumber || ''}`.toLowerCase();
+      const pickupCity = (order.oras_ridicare || '').toLowerCase();
+      const deliveryCity = (order.oras_livrare || '').toLowerCase();
+      
+      const matches = orderNumber.includes(search) || 
+                     pickupCity.includes(search) || 
+                     deliveryCity.includes(search);
+      
+      if (!matches) {
+        return false;
+      }
+    }
     
     return true;
+  });
+
+  // Sort orders
+  const sortedOrders = [...filteredOrders].sort((a, b) => {
+    switch (sortBy) {
+      case 'oldest':
+        return (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0);
+      case 'newest':
+      default:
+        return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+    }
   });
 
   // Toggle chat expansion
@@ -142,7 +178,7 @@ export function useClientOrdersLoader({ userId, countryFilter, serviceFilter, in
   }, []);
 
   return {
-    orders: filteredOrders,
+    orders: sortedOrders,
     loading,
     expandedChats,
     unreadCounts,
