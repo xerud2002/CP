@@ -600,79 +600,79 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
 // ONBOARDING MODAL COMPONENT
 // ============================================
 
-// Themed SVG icons matching website colors
+// Themed SVG icons using inline colors
 const OnboardingIcons = {
   gift: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
-      <rect x="8" y="28" width="48" height="28" rx="4" className="fill-emerald-500/30 stroke-emerald-400" strokeWidth="2"/>
-      <path d="M8 28h48v8H8z" className="fill-emerald-400"/>
-      <circle cx="32" cy="32" r="3" className="fill-white"/>
-      <path d="M32 18c-4 0-8 2-8 6s4 4 8 4 8 0 8-4-4-6-8-6z" className="fill-orange-400"/>
-      <path d="M24 24c0-2 2-4 4-4h8c2 0 4 2 4 4" className="stroke-orange-500" strokeWidth="2" fill="none"/>
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="28" width="48" height="28" rx="4" fill="#10b98150" stroke="#34d399" strokeWidth="2"/>
+      <path d="M8 28h48v8H8z" fill="#34d399"/>
+      <circle cx="32" cy="32" r="3" fill="#ffffff"/>
+      <path d="M32 18c-4 0-8 2-8 6s4 4 8 4 8 0 8-4-4-6-8-6z" fill="#fb923c"/>
+      <path d="M24 24c0-2 2-4 4-4h8c2 0 4 2 4 4" stroke="#f97316" strokeWidth="2" fill="none"/>
     </svg>
   ),
   welcome: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
-      <circle cx="32" cy="24" r="10" className="fill-orange-400"/>
-      <path d="M16 56c0-8.8 7.2-16 16-16s16 7.2 16 16" className="stroke-orange-500" strokeWidth="3" strokeLinecap="round"/>
-      <path d="M26 22c0-1 .5-2 1.5-2s1.5 1 1.5 2" className="stroke-slate-800" strokeWidth="1.5" strokeLinecap="round"/>
-      <path d="M35 22c0-1 .5-2 1.5-2s1.5 1 1.5 2" className="stroke-slate-800" strokeWidth="1.5" strokeLinecap="round"/>
-      <path d="M26 28c2 2 4 2 6 2s4 0 6-2" className="stroke-slate-800" strokeWidth="2" strokeLinecap="round"/>
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="24" r="10" fill="#fb923c"/>
+      <path d="M16 56c0-8.8 7.2-16 16-16s16 7.2 16 16" stroke="#f97316" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M26 22c0-1 .5-2 1.5-2s1.5 1 1.5 2" stroke="#1e293b" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M35 22c0-1 .5-2 1.5-2s1.5 1 1.5 2" stroke="#1e293b" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M26 28c2 2 4 2 6 2s4 0 6-2" stroke="#1e293b" strokeWidth="2" strokeLinecap="round"/>
     </svg>
   ),
   packages: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
-      <path d="M12 24l20-12 20 12v24l-20 12-20-12V24z" className="fill-orange-500/20 stroke-orange-400" strokeWidth="2"/>
-      <path d="M12 24l20 12 20-12M32 36v24" className="stroke-orange-500" strokeWidth="2"/>
-      <path d="M22 18l20 12M42 30l-20-12" className="stroke-amber-400" strokeWidth="1.5"/>
-      <circle cx="32" cy="14" r="3" className="fill-emerald-400"/>
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 24l20-12 20 12v24l-20 12-20-12V24z" fill="#f9731633" stroke="#fb923c" strokeWidth="2"/>
+      <path d="M12 24l20 12 20-12M32 36v24" stroke="#f97316" strokeWidth="2"/>
+      <path d="M22 18l20 12M42 30l-20-12" stroke="#fbbf24" strokeWidth="1.5"/>
+      <circle cx="32" cy="14" r="3" fill="#34d399"/>
     </svg>
   ),
   chat: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
-      <rect x="10" y="14" width="34" height="28" rx="6" className="fill-purple-500/30 stroke-purple-400" strokeWidth="2"/>
-      <path d="M20 44l4-6h10" className="stroke-purple-400" strokeWidth="2" strokeLinecap="round"/>
-      <rect x="20" y="24" width="34" height="28" rx="6" className="fill-slate-700 stroke-slate-500" strokeWidth="2"/>
-      <path d="M44 52l-4-6h-10" className="stroke-slate-400" strokeWidth="2" strokeLinecap="round"/>
-      <circle cx="32" cy="36" r="2" className="fill-orange-400"/>
-      <circle cx="40" cy="36" r="2" className="fill-orange-400"/>
-      <circle cx="24" cy="36" r="2" className="fill-orange-400"/>
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="14" width="34" height="28" rx="6" fill="#a855f750" stroke="#a855f7" strokeWidth="2"/>
+      <path d="M20 44l4-6h10" stroke="#a855f7" strokeWidth="2" strokeLinecap="round"/>
+      <rect x="20" y="24" width="34" height="28" rx="6" fill="#334155" stroke="#64748b" strokeWidth="2"/>
+      <path d="M44 52l-4-6h-10" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/>
+      <circle cx="32" cy="36" r="2" fill="#fb923c"/>
+      <circle cx="40" cy="36" r="2" fill="#fb923c"/>
+      <circle cx="24" cy="36" r="2" fill="#fb923c"/>
     </svg>
   ),
   settings: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
-      <circle cx="32" cy="32" r="24" className="fill-amber-500/20 stroke-amber-400" strokeWidth="2"/>
-      <circle cx="32" cy="32" r="8" className="fill-slate-800 stroke-orange-500" strokeWidth="2"/>
-      <g className="stroke-orange-400" strokeWidth="3" strokeLinecap="round">
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="24" fill="#f5970533" stroke="#fbbf24" strokeWidth="2"/>
+      <circle cx="32" cy="32" r="8" fill="#1e293b" stroke="#f97316" strokeWidth="2"/>
+      <g stroke="#fb923c" strokeWidth="3" strokeLinecap="round">
         <path d="M32 12v8M32 44v8M52 32h-8M20 32h-8"/>
         <path d="M45 19l-5.6 5.6M24.6 39.4L19 45M45 45l-5.6-5.6M24.6 24.6L19 19"/>
       </g>
     </svg>
   ),
   profile: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
-      <rect x="12" y="8" width="40" height="48" rx="6" className="fill-slate-700 stroke-slate-500" strokeWidth="2"/>
-      <circle cx="32" cy="22" r="7" className="fill-orange-400"/>
-      <path d="M20 46c0-6.6 5.4-12 12-12s12 5.4 12 12" className="stroke-orange-500" strokeWidth="2.5" strokeLinecap="round"/>
-      <rect x="20" y="14" width="8" height="2" rx="1" className="fill-emerald-400"/>
-      <rect x="36" y="14" width="8" height="2" rx="1" className="fill-emerald-400"/>
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="8" width="40" height="48" rx="6" fill="#334155" stroke="#64748b" strokeWidth="2"/>
+      <circle cx="32" cy="22" r="7" fill="#fb923c"/>
+      <path d="M20 46c0-6.6 5.4-12 12-12s12 5.4 12 12" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round"/>
+      <rect x="20" y="14" width="8" height="2" rx="1" fill="#34d399"/>
+      <rect x="36" y="14" width="8" height="2" rx="1" fill="#34d399"/>
     </svg>
   ),
   idea: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
-      <path d="M32 12c-8 0-14 6-14 14 0 4 2 8 4 10v8c0 2 2 4 4 4h12c2 0 4-2 4-4v-8c2-2 4-6 4-10 0-8-6-14-14-14z" className="fill-amber-400/30 stroke-amber-400" strokeWidth="2"/>
-      <path d="M26 48h12M28 52h8" className="stroke-amber-500" strokeWidth="2.5" strokeLinecap="round"/>
-      <circle cx="32" cy="26" r="4" className="fill-amber-200"/>
-      <path d="M28 22l-6-6M36 22l6-6M32 16V8" className="stroke-orange-400" strokeWidth="2" strokeLinecap="round"/>
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M32 12c-8 0-14 6-14 14 0 4 2 8 4 10v8c0 2 2 4 4 4h12c2 0 4-2 4-4v-8c2-2 4-6 4-10 0-8-6-14-14-14z" fill="#fbbf2450" stroke="#fbbf24" strokeWidth="2"/>
+      <path d="M26 48h12M28 52h8" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round"/>
+      <circle cx="32" cy="26" r="4" fill="#fde68a"/>
+      <path d="M28 22l-6-6M36 22l6-6M32 16V8" stroke="#fb923c" strokeWidth="2" strokeLinecap="round"/>
     </svg>
   ),
   rocket: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none">
-      <path d="M32 8c-8 0-12 16-12 24v16l4 8h16l4-8V32c0-8-4-24-12-24z" className="fill-orange-500/30 stroke-orange-400" strokeWidth="2"/>
-      <ellipse cx="32" cy="24" rx="6" ry="8" className="fill-slate-800 stroke-orange-500" strokeWidth="1.5"/>
-      <circle cx="32" cy="24" r="3" className="fill-emerald-400"/>
-      <path d="M20 36c-4 0-6 2-6 4s2 4 6 4M44 36c4 0 6 2 6 4s-2 4-6 4" className="fill-amber-400/40 stroke-amber-500" strokeWidth="2"/>
-      <path d="M28 56l-2 4M36 56l2 4M32 56v6" className="stroke-orange-400" strokeWidth="2" strokeLinecap="round"/>
+    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M32 8c-8 0-12 16-12 24v16l4 8h16l4-8V32c0-8-4-24-12-24z" fill="#f9731650" stroke="#fb923c" strokeWidth="2"/>
+      <ellipse cx="32" cy="24" rx="6" ry="8" fill="#1e293b" stroke="#f97316" strokeWidth="1.5"/>
+      <circle cx="32" cy="24" r="3" fill="#34d399"/>
+      <path d="M20 36c-4 0-6 2-6 4s2 4 6 4M44 36c4 0 6 2 6 4s-2 4-6 4" fill="#fbbf2466" stroke="#f59e0b" strokeWidth="2"/>
+      <path d="M28 56l-2 4M36 56l2 4M32 56v6" stroke="#fb923c" strokeWidth="2" strokeLinecap="round"/>
     </svg>
   ),
 };
@@ -703,7 +703,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
       title: 'Găsește comenzi potrivite',
       subtitle: 'Cereri reale, clienți verificați',
       content: 'Secțiunea "Comenzi" este inima platformei - aici găsești toate cererile de transport publicate de clienți reali. Folosește filtrele inteligente pentru a găsi exact comenzile care se potrivesc vehiculului și rutelor tale.',
-      details: 'Filtrează după:\n• Serviciu (colete, mobilă, electrocasnice, marfă)\n• Rută (țară origine/destinație, județ)\n• Dată preluare și livrare\n• Status comandă (nouă, în lucru)',
+      details: 'Filtrează după:\n• Serviciu (colete, mobilă, electrocasnice, marfă)\n• Rută (țară origine/destinație, județ)\n• Status comandă (nouă, în lucru)',
     },
     {
       icon: OnboardingIcons.chat,
