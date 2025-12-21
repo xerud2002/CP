@@ -600,48 +600,111 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
 // ONBOARDING MODAL COMPONENT
 // ============================================
 
-// Modern SVG icons for onboarding steps
-const OnboardingIcons = {
+// Illustrated icons for onboarding steps - more visual and descriptive
+const OnboardingIllustrations = {
+  // Gift with sparkles - for free offer
   gift: (
-    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-    </svg>
+    <div className="relative">
+      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
+        <rect x="6" y="20" width="36" height="24" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
+        <rect x="4" y="14" width="40" height="8" rx="2" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
+        <path d="M24 14V44" stroke="currentColor" strokeWidth="2"/>
+        <path d="M24 14C24 14 20 8 16 8C12 8 10 11 12 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M24 14C24 14 28 8 32 8C36 8 38 11 36 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+      <span className="absolute -top-1 -right-1 text-lg">✨</span>
+    </div>
   ),
-  sparkles: (
-    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-    </svg>
+  // Waving hand with face
+  welcome: (
+    <div className="relative flex items-center gap-1">
+      <div className="w-10 h-10 rounded-full bg-amber-400/80 flex items-center justify-center">
+        <span className="text-xl">😊</span>
+      </div>
+      <span className="text-3xl animate-bounce">👋</span>
+    </div>
   ),
-  box: (
-    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-    </svg>
+  // Package/boxes stack
+  packages: (
+    <div className="relative">
+      <svg className="w-14 h-12" viewBox="0 0 56 48" fill="none">
+        <rect x="2" y="20" width="24" height="20" rx="2" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
+        <path d="M2 26H26" stroke="currentColor" strokeWidth="2"/>
+        <path d="M14 26V40" stroke="currentColor" strokeWidth="2"/>
+        <rect x="22" y="8" width="32" height="26" rx="2" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
+        <path d="M22 16H54" stroke="currentColor" strokeWidth="2"/>
+        <path d="M38 16V34" stroke="currentColor" strokeWidth="2"/>
+        <circle cx="48" cy="40" r="6" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2"/>
+        <path d="M45 40L47 42L51 38" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </div>
   ),
+  // Chat bubbles with typing
   chat: (
-    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
-    </svg>
+    <div className="relative">
+      <svg className="w-14 h-12" viewBox="0 0 56 48" fill="none">
+        <path d="M4 8C4 5.79 5.79 4 8 4H32C34.21 4 36 5.79 36 8V24C36 26.21 34.21 28 32 28H12L4 36V8Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
+        <circle cx="12" cy="16" r="2" fill="currentColor"/>
+        <circle cx="20" cy="16" r="2" fill="currentColor"/>
+        <circle cx="28" cy="16" r="2" fill="currentColor"/>
+        <path d="M20 24C20 21.79 21.79 20 24 20H48C50.21 20 52 21.79 52 24V40C52 42.21 50.21 44 48 44H52L44 44H28L20 52V24Z" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
+        <path d="M28 32H44" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M28 38H38" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+    </div>
   ),
-  cog: (
-    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
+  // Settings/customize with sliders
+  settings: (
+    <div className="relative">
+      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
+        <rect x="4" y="8" width="40" height="6" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
+        <circle cx="32" cy="11" r="5" fill="currentColor" stroke="currentColor" strokeWidth="2"/>
+        <rect x="4" y="21" width="40" height="6" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
+        <circle cx="16" cy="24" r="5" fill="currentColor" stroke="currentColor" strokeWidth="2"/>
+        <rect x="4" y="34" width="40" height="6" rx="3" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="2"/>
+        <circle cx="28" cy="37" r="5" fill="currentColor" stroke="currentColor" strokeWidth="2"/>
+      </svg>
+    </div>
   ),
-  user: (
-    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
+  // Profile card with star
+  profile: (
+    <div className="relative">
+      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
+        <rect x="4" y="4" width="40" height="40" rx="4" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2"/>
+        <circle cx="24" cy="18" r="8" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
+        <path d="M12 40C12 32 17 28 24 28C31 28 36 32 36 40" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+      <span className="absolute -top-1 -right-1 text-lg">⭐</span>
+    </div>
   ),
-  lightbulb: (
-    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
-    </svg>
+  // Lightbulb with rays
+  idea: (
+    <div className="relative">
+      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
+        <path d="M24 4V8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M40 12L37 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M44 24H40" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M8 12L11 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M4 24H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M18 40H30" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M20 44H28" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M24 36V32C24 32 32 28 32 20C32 15.58 28.42 12 24 12C19.58 12 16 15.58 16 20C16 28 24 32 24 32V36Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
+      </svg>
+      <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-sm">💡</span>
+    </div>
   ),
+  // Rocket launching
   rocket: (
-    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-    </svg>
+    <div className="relative">
+      <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none">
+        <path d="M24 4C24 4 32 12 32 28L28 32H20L16 28C16 12 24 4 24 4Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="2"/>
+        <circle cx="24" cy="18" r="4" fill="currentColor" fillOpacity="0.5" stroke="currentColor" strokeWidth="2"/>
+        <path d="M16 28L8 32L12 24" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+        <path d="M32 28L40 32L36 24" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+        <path d="M20 32L18 44L24 38L30 44L28 32" fill="currentColor" fillOpacity="0.4" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+      </svg>
+      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-sm">🔥</span>
+    </div>
   ),
 };
 
@@ -650,14 +713,14 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
   const steps = [
     {
-      icon: OnboardingIcons.gift,
+      icon: OnboardingIllustrations.gift,
       title: '100% GRATUIT!',
       subtitle: 'Ofertă specială',
       content: 'Platforma este complet GRATUITĂ în această perioadă! Fără comisioane, fără taxe ascunse. Profită acum de această oportunitate și construiește-ți baza de clienți fără costuri.',
       highlight: true,
     },
     {
-      icon: OnboardingIcons.sparkles,
+      icon: OnboardingIllustrations.welcome,
       title: isFirstTime ? 'Bine ai venit!' : 'Ghid Platformă',
       subtitle: 'Curierul Perfect',
       content: isFirstTime 
@@ -665,37 +728,37 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
         : 'Descoperă cum să folosești platforma Curierul Perfect pentru a-ți dezvolta afacerea de transport.',
     },
     {
-      icon: OnboardingIcons.box,
+      icon: OnboardingIllustrations.packages,
       title: 'Găsește comenzi',
       subtitle: 'Clienți reali',
       content: 'În secțiunea "Comenzi" găsești cereri reale de transport. Filtrează după serviciu (colete, mobilă, marfă) și rută (țară, județ) pentru a găsi exact ce cauți.',
     },
     {
-      icon: OnboardingIcons.chat,
+      icon: OnboardingIllustrations.chat,
       title: 'Chat direct',
       subtitle: 'Negociază liber',
       content: 'Contactează clientul direct prin chat. Negociază prețul, stabilește detaliile și confirmă transportul. Totul în platformă, simplu și rapid.',
     },
     {
-      icon: OnboardingIcons.cog,
+      icon: OnboardingIllustrations.settings,
       title: 'Alege serviciile',
       subtitle: 'Tu decizi',
       content: 'Setează în "Servicii" ce tipuri de transport oferi: colete, mobilă, electrocasnice, marfă generală. Primești doar comenzile care se potrivesc.',
     },
     {
-      icon: OnboardingIcons.user,
+      icon: OnboardingIllustrations.profile,
       title: 'Profil complet',
       subtitle: 'Câștigă încredere',
       content: 'Un profil detaliat atrage mai mulți clienți. Adaugă descriere, experiență și date de contact. Recenziile bune îți vor crește vizibilitatea.',
     },
     {
-      icon: OnboardingIcons.lightbulb,
+      icon: OnboardingIllustrations.idea,
       title: 'Părerea ta contează!',
       subtitle: 'Ajută-ne să creștem',
       content: 'Suntem la început și vrem să fim cei mai buni! Trimite-ne sugestii și idei pe WhatsApp sau email. Împreună construim platforma perfectă pentru curieri.',
     },
     {
-      icon: OnboardingIcons.rocket,
+      icon: OnboardingIllustrations.rocket,
       title: 'Gata de start!',
       subtitle: 'Succes garantat',
       content: 'Ai toate uneltele necesare. Mergi la "Comenzi" și începe să câștigi clienți noi. Reține: poți accesa oricând acest ghid din butonul din header.',
