@@ -442,7 +442,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                             <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                             </svg>
-                            <span className="text-xs truncate max-w-[150px]">{msg.attachmentName}</span>
+                            <span className="text-xs truncate max-w-37.5">{msg.attachmentName}</span>
                           </a>
                         </div>
                       )}
@@ -539,7 +539,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
       {/* Image Preview Modal */}
       {previewImage && (
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 cursor-pointer"
+          className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 cursor-pointer"
           onClick={() => setPreviewImage(null)}
         >
           <img 

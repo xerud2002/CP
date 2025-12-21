@@ -101,7 +101,7 @@ export function ConfirmProvider({ children }: ConfirmProviderProps) {
     <ConfirmContext.Provider value={{ confirm }}>
       {children}
       {isOpen && options && typeof window !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
           {/* Backdrop */}
           <div 
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
@@ -202,7 +202,7 @@ export function showConfirm(options: ConfirmOptions): Promise<boolean> {
     const styles = getVariantStyles(options.variant);
 
     container.innerHTML = `
-      <div class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+      <div class="fixed inset-0 z-9999 flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="confirm-backdrop"></div>
         <div class="relative w-full max-w-sm bg-slate-900 rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
           <div class="p-6">
