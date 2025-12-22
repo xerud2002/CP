@@ -52,14 +52,14 @@ export default function OrderFilters({
   const selectedSort = sortOptions.find(s => s.value === sortBy);
 
   return (
-    <div className="bg-slate-800/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-4 mb-4 sm:mb-6 relative z-40">
+    <div className="bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-2xl border border-white/5 p-2 sm:p-4 mb-3 sm:mb-6 relative z-10">
       {/* Main filters row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-2 sm:mb-3">
         <CountryFilter value={countryFilter} onChange={onCountryChange} />
         <ServiceTypeFilter value={serviceFilter} onChange={onServiceChange} />
 
         {/* Sort Filter */}
-        <div ref={sortDropdownRef} className="relative z-30">
+        <div ref={sortDropdownRef} className="relative z-10">
           <label className="block text-xs text-gray-400 mb-1.5">Sortare</label>
           <div className="relative">
             <button
@@ -83,8 +83,14 @@ export default function OrderFilters({
             </button>
             
             {isSortOpen && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
-                <div className="max-h-80 overflow-y-auto custom-scrollbar">
+              <>
+                {/* Mobile backdrop */}
+                <div 
+                  className="fixed inset-0 bg-black/50 z-[9998] sm:hidden"
+                  onClick={() => setIsSortOpen(false)}
+                />
+                <div className="fixed sm:absolute top-auto sm:top-full left-0 right-0 sm:left-0 sm:right-0 bottom-0 sm:bottom-auto mt-0 sm:mt-2 max-h-[50vh] sm:max-h-auto bg-slate-900 border-t sm:border border-white/10 rounded-t-2xl sm:rounded-xl shadow-2xl overflow-hidden z-[9999] animate-in slide-in-from-bottom sm:slide-in-from-top-2 duration-200">
+                  <div className="max-h-[calc(50vh-2rem)] sm:max-h-80 overflow-y-auto custom-scrollbar">
                   {sortOptions.map((option) => (
                     <button
                       key={option.value}
@@ -117,33 +123,39 @@ export default function OrderFilters({
                   ))}
                 </div>
               </div>
+              </>
             )}
           </div>
         </div>
       </div>
 
       {/* Search bar */}
-      <div className="relative">
-        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Caută după număr comandă (#CP141135) sau oraș..."
-          className="form-input w-full pl-10 pr-4 py-2 sm:py-2.5 bg-slate-900/50 border border-white/10 rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
-        />
-        {searchQuery && (
-          <button
-            onClick={() => onSearchChange('')}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+      <div className="relative z-20">
+        <label className="block text-xs text-gray-400 mb-1.5">Caută</label>
+        <div className="relative">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-          </button>
-        )}
+          </div>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Caută după comandă sau oraș..."
+            className="w-full pl-10 pr-10 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all hover:bg-slate-800"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => onSearchChange('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
       
       {/* Clear filters button */}

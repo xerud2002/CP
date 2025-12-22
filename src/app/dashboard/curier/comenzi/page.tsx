@@ -236,31 +236,30 @@ function ComenziCurierContent() {
     <div className="min-h-screen">
       {/* Header */}
       <div className="bg-slate-900/90 border-b border-white/5 sticky top-0 z-50 backdrop-blur-xl shadow-lg">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
-          <div className="flex items-center gap-3 sm:gap-4">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 py-2 sm:py-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link 
               href="/dashboard/curier" 
-              className="p-2 sm:p-2.5 hover:bg-slate-800/80 rounded-xl transition-all duration-200 group"
+              className="p-2 hover:bg-slate-800/80 rounded-xl transition-all duration-200 group"
             >
               <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
             </Link>
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-2.5 sm:p-3 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-xl border border-orange-500/20">
-                <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-xl border border-orange-500/20">
+                <svg className="w-5 h-5 sm:w-7 sm:h-7 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
               </div>
               <div>
-                <h1 className="text-lg sm:text-2xl font-bold text-white">Comenzile Mele</h1>
-                <p className="text-xs text-gray-400 mt-0.5 sm:hidden">Gestioneaza comenzile tale</p>
-                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Gestioneaza comenzile ?i livrarile tale</p>
+                <h1 className="text-base sm:text-2xl font-bold text-white">Comenzile Mele</h1>
+                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Gestioneaza comenzile tale</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6 py-3 sm:py-8">
         {/* Filters */}
         <OrderFilters
           countryFilter={countryFilter}
@@ -313,7 +312,7 @@ function ComenziCurierContent() {
       </div>
 
       {/* Help Card - Lazy loaded */}
-      <div className="relative z-0 max-w-7xl mx-auto px-3 sm:px-6 pb-4 sm:pb-8">
+      <div className="relative z-0 max-w-7xl mx-auto px-2 sm:px-6 pb-3 sm:pb-8">
         <Suspense fallback={null}>
           <HelpCard />
         </Suspense>

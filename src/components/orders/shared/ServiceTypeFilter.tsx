@@ -27,7 +27,7 @@ export default function ServiceTypeFilter({ value, onChange }: ServiceTypeFilter
   const selectedService = serviceTypes.find(s => s.id === value || s.value === value);
 
   return (
-    <div ref={dropdownRef} className="relative z-70">
+    <div ref={dropdownRef} className="relative z-20">
       <label className="block text-xs text-gray-400 mb-1.5">Tip serviciu</label>
       <div className="relative">
         <button
@@ -58,8 +58,14 @@ export default function ServiceTypeFilter({ value, onChange }: ServiceTypeFilter
         </button>
         
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
-            <div className="max-h-80 overflow-y-auto custom-scrollbar">
+          <>
+            {/* Mobile backdrop */}
+            <div 
+              className="fixed inset-0 bg-black/50 z-[9998] sm:hidden"
+              onClick={() => setIsOpen(false)}
+            />
+            <div className="fixed sm:absolute top-auto sm:top-full left-0 right-0 sm:left-0 sm:right-0 bottom-0 sm:bottom-auto mt-0 sm:mt-2 max-h-[70vh] sm:max-h-auto bg-slate-900 border-t sm:border border-white/10 rounded-t-2xl sm:rounded-xl shadow-2xl overflow-hidden z-[9999] animate-in slide-in-from-bottom sm:slide-in-from-top-2 duration-200">
+              <div className="max-h-[calc(70vh-2rem)] sm:max-h-80 overflow-y-auto custom-scrollbar">
               <button
                 onClick={() => {
                   onChange('all');
@@ -109,6 +115,7 @@ export default function ServiceTypeFilter({ value, onChange }: ServiceTypeFilter
               ))}
             </div>
           </div>
+          </>
         )}
       </div>
     </div>

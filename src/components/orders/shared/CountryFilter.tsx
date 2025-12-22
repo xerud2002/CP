@@ -37,7 +37,7 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
   const selectedCountry = countries.find(c => c.code === value);
 
   return (
-    <div ref={dropdownRef} className="relative z-40">
+    <div ref={dropdownRef} className="relative z-30">
       <label className="block text-xs text-gray-400 mb-1.5">Țară</label>
       <div className="relative">
         <button
@@ -72,7 +72,16 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
         </button>
         
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
+          <>
+            {/* Mobile backdrop */}
+            <div 
+              className="fixed inset-0 bg-black/50 z-[9998] sm:hidden"
+              onClick={() => {
+                setIsOpen(false);
+                setSearch('');
+              }}
+            />
+            <div className="fixed sm:absolute top-auto sm:top-full left-0 right-0 sm:left-0 sm:right-0 bottom-0 sm:bottom-auto mt-0 sm:mt-2 max-h-[70vh] sm:max-h-auto bg-slate-900 border-t sm:border border-white/10 rounded-t-2xl sm:rounded-xl shadow-2xl overflow-hidden z-[9999] animate-in slide-in-from-bottom sm:slide-in-from-top-2 duration-200">
             <div className="p-2 border-b border-white/5">
               <input
                 type="text"
@@ -83,7 +92,7 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
                 autoFocus
               />
             </div>
-            <div className="max-h-64 overflow-y-auto custom-scrollbar">
+            <div className="max-h-[calc(70vh-4rem)] sm:max-h-64 overflow-y-auto custom-scrollbar">
               <button
                 onClick={() => {
                   onChange('all');
@@ -144,6 +153,7 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
               )}
             </div>
           </div>
+          </>
         )}
       </div>
     </div>
