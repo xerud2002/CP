@@ -254,7 +254,7 @@ export const badgeColors = {
 // EXPORT DEFAULT - PENTRU IMPORT RAPID
 // ============================================
 
-export default {
+const colors = {
   brand: brandColors,
   role: roleColors,
   status: statusColors,
@@ -264,3 +264,5 @@ export default {
   rating: ratingColors,
   badge: badgeColors,
 };
+
+export default colors;
