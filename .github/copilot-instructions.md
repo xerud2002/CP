@@ -410,3 +410,17 @@ Country and region dropdowns include inline search functionality:
     </div>
   </div>
   ```
+
+
+## Troubleshooting: Missing Country Flag SVGs (404 Errors)
+
+If you see repeated 404 errors in the browser console for missing `public/img/flag/XX.svg` files (where `XX` is a country code), it means the flag asset is missing from the `public/img/flag/` directory.
+
+- **Required:** Each country in `constants.ts` must have a corresponding SVG flag in `public/img/flag/` named as its 2-letter code (e.g., `RO.svg`, `DE.svg`).
+- **Symptoms:** Orders or filters may show broken images or missing flags in the UI.
+- **How to fix:**
+  1. Add the missing SVG file(s) to `public/img/flag/`.
+  2. Use open-source flag SVGs (e.g., [hampusborgos/country-flags](https://github.com/hampusborgos/country-flags)).
+  3. Ensure the filename matches the country code in `constants.ts` (case-sensitive).
+
+**AI agents:** When adding new countries or updating `constants.ts`, always add the corresponding flag SVG to avoid asset errors.
