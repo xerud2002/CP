@@ -1,3 +1,13 @@
+// Shared document requirements type for courier verification/profile
+export interface DocumentRequirement {
+  id: string;
+  title: string;
+  description: string;
+  required: boolean;
+  icon: 'id' | 'license' | 'company' | 'transport' | 'pet' | 'cold' | 'vehicle' | 'insurance';
+  category: 'identity' | 'company' | 'transport' | 'special' | 'cold' | 'insurance';
+  forServices?: string[];
+}
 export type UserRole = 'client' | 'curier' | 'admin';
 
 export interface User {

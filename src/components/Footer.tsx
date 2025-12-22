@@ -216,7 +216,7 @@ export default function Footer() {
               />
               <button
                 type="submit"
-                className="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-medium transition-colors text-sm whitespace-nowrap"
+                className="btn-primary px-6 py-3 text-sm whitespace-nowrap"
               >
                 Abonează-te
               </button>

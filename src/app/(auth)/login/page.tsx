@@ -142,7 +142,7 @@ function LoginForm() {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 ${isCurier ? 'bg-orange-500/20' : 'bg-green-500/20'}`}>
+            <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 ${isCurier ? 'bg-orange-500/20' : 'bg-emerald-500/20'}`}>
               {isCurier ? (
                 <svg className="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 17h8M8 17a2 2 0 11-4 0m4 0a2 2 0 10-4 0m12 0a2 2 0 11-4 0m4 0a2 2 0 10-4 0M3 9h13a2 2 0 012 2v4H3V9zm13 0V5a2 2 0 00-2-2H5a2 2 0 00-2 2v4h13z" />

@@ -78,7 +78,7 @@ function AdminHeader({ userName, onLogout, onRefresh }: {
         <div className="flex items-center justify-between h-16">
           {/* Left Side - Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center shadow-lg shadow-red-500/25">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/25">
               <span className="text-white font-bold text-lg">CP</span>
             </div>
             <div className="hidden sm:block">
@@ -108,7 +108,7 @@ function AdminHeader({ userName, onLogout, onRefresh }: {
 
             {/* User Avatar */}
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-red-500/25">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-orange-500/25">
                 {userName.charAt(0).toUpperCase()}
               </div>
               <div className="hidden sm:block">
@@ -138,7 +138,7 @@ function WelcomeSection({ userName }: { userName: string }) {
   return (
     <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-white/10 p-6 sm:p-8">
       {/* Animated Background Orbs */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
 
       <div className="relative z-10">
@@ -154,7 +154,7 @@ function WelcomeSection({ userName }: { userName: string }) {
 
           {/* Status Badge */}
           <div className="flex flex-wrap gap-2">
-            <span className="px-3 py-1.5 rounded-full bg-red-500/20 text-red-400 text-sm font-medium border border-red-500/30">
+            <span className="px-3 py-1.5 rounded-full bg-orange-500/20 text-orange-400 text-sm font-medium border border-orange-500/30">
               ● Administrator
             </span>
           </div>
@@ -207,7 +207,7 @@ function TabNavigation({ tabs, activeTab, onTabChange }: {
           onClick={() => onTabChange(tab.id)}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
             activeTab === tab.id
-              ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-lg shadow-red-500/25'
+              ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25'
               : 'text-gray-400 hover:text-white hover:bg-white/5'
           }`}
         >
@@ -275,7 +275,7 @@ function UsersTable({ users, onRoleChange, onDelete, filter }: {
               <td className="py-4 px-4">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm ${
-                    u.role === 'admin' ? 'bg-gradient-to-br from-red-400 to-red-600' :
+                    u.role === 'admin' ? 'bg-gradient-to-br from-orange-500 to-orange-600' :
                     u.role === 'curier' ? 'bg-gradient-to-br from-orange-400 to-orange-600' :
                     'bg-gradient-to-br from-emerald-400 to-emerald-600'
                   }`}>
@@ -293,7 +293,7 @@ function UsersTable({ users, onRoleChange, onDelete, filter }: {
                   value={u.role}
                   onChange={(e) => onRoleChange(u.uid, e.target.value)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer transition-all ${
-                    u.role === 'admin' ? 'bg-red-500/20 text-red-400' :
+                    u.role === 'admin' ? 'bg-orange-500/20 text-orange-400' :
                     u.role === 'curier' ? 'bg-orange-500/20 text-orange-400' :
                     'bg-emerald-500/20 text-emerald-400'
                   }`}
@@ -344,7 +344,7 @@ function OrdersTable({ orders, onStatusChange, onViewDetails }: {
 }) {
   const statusColors: Record<string, string> = {
     noua: 'bg-white/10 text-white',
-    in_lucru: 'bg-orange-500/20 text-orange-400',
+    in_lucru: 'bg-amber-500/20 text-amber-400',
     acceptata: 'bg-blue-500/20 text-blue-400',
     in_tranzit: 'bg-purple-500/20 text-purple-400',
     livrata: 'bg-emerald-500/20 text-emerald-400',

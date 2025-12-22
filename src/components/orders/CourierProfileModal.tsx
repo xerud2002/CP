@@ -136,7 +136,7 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
       {/* Modal */}
       <div className="relative w-full max-w-md bg-slate-900 rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="relative p-6 pb-4 bg-gradient-to-br from-orange-500/20 to-amber-500/10 border-b border-white/10">
+        <div className="relative p-6 pb-4 bg-gradient-to-br from-orange-500/20 to-orange-600/10 border-b border-white/10">
           <button
             onClick={onClose}
             className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition-colors"

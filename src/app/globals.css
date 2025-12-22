@@ -74,16 +74,37 @@ input[type="number"] {
 }
 
 :root {
+  /* Brand Colors - Ton Portocaliu Principal */
   --orange: #f97316;
   --orange-light: #fb923c;
-  --green: #34d399;
-  --green-light: #6ee7b7;
+  --orange-dark: #ea580c;
+  
+  /* Success - Verde Emerald */
+  --emerald: #10b981;
+  --emerald-light: #34d399;
+  
+  /* Warning - Amber */
+  --amber: #f59e0b;
+  --amber-light: #fbbf24;
+  
+  /* Danger - Red */
+  --red: #ef4444;
+  --red-light: #f87171;
+  
+  /* Background */
   --blue: #0f172a;
   --blue-light: #1e293b;
-  --red: #ef4444;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  
+  /* Text */
   --white: #f9fafb;
-  --glass-bg: rgba(30, 58, 138, 0.4);
-  --glass-border: rgba(99, 102, 241, 0.2);
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  
+  /* Glass Effect */
+  --glass-bg: rgba(30, 41, 59, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 /* Smooth scrolling */
@@ -103,7 +124,7 @@ body {
 /* Animated gradient accent line */
 .gradient-line {
   height: 3px;
-  background: linear-gradient(90deg, var(--orange), var(--green), var(--orange));
+  background: linear-gradient(90deg, var(--orange), var(--emerald), var(--orange));
   background-size: 200% 100%;
   animation: gradient-shift 3s ease infinite;
 }
@@ -216,19 +237,19 @@ body {
 }
 
 .btn-secondary {
-  background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+  background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-light) 100%);
   color: #0f172a;
   padding: 0.875rem 2rem;
   border-radius: 0.75rem;
   font-weight: 600;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
   border: none;
   cursor: pointer;
 }
 .btn-secondary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(52, 211, 153, 0.4);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
 }
 
 .btn-danger {
@@ -264,17 +285,17 @@ body {
 
 .btn-outline-green {
   background: transparent;
-  color: var(--green);
+  color: var(--emerald);
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
   font-weight: 600;
-  border: 2px solid var(--green);
+  border: 2px solid var(--emerald);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .btn-outline-green:hover {
-  background: var(--green);
+  background: var(--emerald);
   color: #0f172a;
-  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 /* ========================================

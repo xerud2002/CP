@@ -32,7 +32,7 @@ export const getRatingClass = (rating: number): string => {
   switch (roundedRating) {
     case 5: return 'text-cyan-400'; // turcoaz
     case 4: return 'text-emerald-400'; // verde
-    case 3: return 'text-yellow-400'; // galben
+    case 3: return 'text-amber-400'; // galben
     case 2: return 'text-orange-400'; // portocaliu
     default: return 'text-red-400'; // roșu
   }
@@ -43,7 +43,7 @@ export const getRatingBgClass = (rating: number): string => {
   switch (roundedRating) {
     case 5: return 'bg-cyan-500/20 border-cyan-500/30';
     case 4: return 'bg-emerald-500/20 border-emerald-500/30';
-    case 3: return 'bg-yellow-500/20 border-yellow-500/30';
+    case 3: return 'bg-amber-500/20 border-amber-500/30';
     case 2: return 'bg-orange-500/20 border-orange-500/30';
     default: return 'bg-red-500/20 border-red-500/30';
   }

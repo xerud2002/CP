@@ -11,228 +11,8 @@ import { ArrowLeftIcon, CheckCircleIcon } from '@/components/icons/DashboardIcon
 import HelpCard from '@/components/HelpCard';
 import { showSuccess, showError } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
-import { countries } from '@/lib/constants';
-import { showConfirm } from '@/components/ui/ConfirmModal';
 
-// Constants
-const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-
-// Helper function for category colors
-const getCategoryColors = (category: string): string => {
-  const colors: Record<string, string> = {
-    identity: 'bg-blue-500/20 text-blue-400',
-    company: 'bg-purple-500/20 text-purple-400',
-    transport: 'bg-green-500/20 text-green-400',
-    special: 'bg-pink-500/20 text-pink-400',
-    cold: 'bg-cyan-500/20 text-cyan-400',
-    insurance: 'bg-yellow-500/20 text-yellow-400',
-  };
-  return colors[category] || 'bg-slate-700/50 text-gray-400';
-};
-
-// Types
-interface UploadedDocument {
-  url: string;
-  name: string;
-  uploadedAt: Date;
-  status: 'pending' | 'approved' | 'rejected';
-  rejectionReason?: string;
-}
-
-interface DocumentRequirement {
-  id: string;
-  title: string;
-  description: string;
-  required: boolean;
-  icon: 'id' | 'license' | 'company' | 'transport' | 'pet' | 'cold' | 'vehicle' | 'insurance';
-  category: 'identity' | 'company' | 'transport' | 'special' | 'cold' | 'insurance';
-  forServices?: string[];
-}
-
-interface CourierProfile {
-  taraSediu: string;
-  tipBusiness: 'firma' | 'pf';
-}
-
-// Document requirements function (same as in profil/page.tsx)
-const getDocumentRequirements = (
-  countryCode: string, 
-  activeServices: string[], 
-  tipBusiness: 'firma' | 'pf'
-): DocumentRequirement[] => {
-  const documents: DocumentRequirement[] = [];
-
-  // === ALWAYS REQUIRED: ID Document ===
-  documents.push({
-    id: 'id_card',
-    title: countryCode === 'gb' 
-      ? 'Driving Licence / Passport' 
-      : 'Carte de Identitate / Pașaport',
-    description: countryCode === 'gb'
-      ? 'Full UK Driving Licence or valid Passport'
-      : 'Copie față-verso a actului de identitate valid',
-    required: true,
-    icon: countryCode === 'gb' ? 'license' : 'id',
-    category: 'identity',
-  });
-
-  // === FIRMA (Company) specific documents ===
-  if (tipBusiness === 'firma') {
-    documents.push({
-      id: 'company_registration',
-      title: countryCode === 'ro' ? 'Certificat CUI/CIF' :
-             countryCode === 'gb' ? 'Certificate of Incorporation' :
-             countryCode === 'de' ? 'Handelsregisterauszug' :
-             countryCode === 'fr' ? 'Extrait Kbis' :
-             countryCode === 'it' ? 'Visura Camerale' :
-             countryCode === 'es' ? 'Certificado de Inscripción' :
-             'Certificat Înregistrare Firmă',
-      description: 'Document oficial de înregistrare a companiei',
-      required: true,
-      icon: 'company',
-      category: 'company',
-    });
-  }
-
-  // === PF (Individual) specific documents ===
-  if (tipBusiness === 'pf') {
-    documents.push({
-      id: 'pf_authorization',
-      title: countryCode === 'ro' ? 'Autorizație PFA / II / IF' :
-             countryCode === 'gb' ? 'Self-Employment Registration' :
-             countryCode === 'de' ? 'Gewerbeanmeldung' :
-             'Autorizație Persoană Fizică',
-      description: 'Document care atestă activitatea ca persoană fizică autorizată',
-      required: false,
-      icon: 'company',
-      category: 'company',
-    });
-  }
-
-  // === SERVICE-SPECIFIC DOCUMENTS ===
-
-  // Animale - Pet transport certificate
-  if (activeServices.includes('Animale')) {
-    documents.push({
-      id: 'pet_transport_cert',
-      title: countryCode === 'ro' ? 'Autorizație ANSVSA' :
-             countryCode === 'gb' ? 'APHA Pet Transport Licence' :
-             countryCode === 'de' ? 'Tiertransport-Zulassung' :
-             countryCode === 'fr' ? 'Agrément Transporteur' :
-             'Certificat Transport Animale',
-      description: 'Autorizație obligatorie pentru transportul animalelor',
-      required: false,
-      icon: 'pet',
-      category: 'special',
-      forServices: ['Animale'],
-    });
-  }
-
-  // Platformă - Special vehicle license
-  if (activeServices.includes('Platformă')) {
-    documents.push({
-      id: 'platform_license',
-      title: 'Atestat Platformă Auto',
-      description: 'Atestat pentru operare platformă/trailer',
-      required: false,
-      icon: 'vehicle',
-      category: 'transport',
-      forServices: ['Platformă'],
-    });
-  }
-
-  // Paleți / heavy transport
-  if (activeServices.includes('Paleți')) {
-    documents.push({
-      id: 'heavy_transport_cert',
-      title: 'Certificat Transport Marfă',
-      description: 'Atestat profesional pentru transport marfă',
-      required: false,
-      icon: 'transport',
-      category: 'transport',
-      forServices: ['Paleți'],
-    });
-  }
-
-  // Transport Persoane - Taxi/passenger transport license
-  if (activeServices.includes('Persoane')) {
-    documents.push({
-      id: 'passenger_transport_license',
-      title: countryCode === 'ro' ? 'Licență Transport Persoane' :
-             countryCode === 'gb' ? 'Private Hire / Taxi Licence' :
-             countryCode === 'de' ? 'Personenbeförderungsschein' :
-             countryCode === 'fr' ? 'Licence VTC / Taxi' :
-             'Licență Transport Persoane',
-      description: 'Autorizație obligatorie pentru transport persoane cu plată',
-      required: false,
-      icon: 'license',
-      category: 'transport',
-      forServices: ['Persoane'],
-    });
-  }
-
-  // Tractări Auto - Towing service license
-  if (activeServices.includes('Tractari')) {
-    documents.push({
-      id: 'towing_license',
-      title: countryCode === 'ro' ? 'Atestat Tractare Auto' :
-             countryCode === 'gb' ? 'Vehicle Recovery Licence' :
-             countryCode === 'de' ? 'Abschleppgenehmigung' :
-             countryCode === 'fr' ? 'Agrément Dépannage' :
-             'Atestat Tractare Auto',
-      description: 'Autorizație pentru servicii tractare și asistență rutieră',
-      required: false,
-      icon: 'vehicle',
-      category: 'transport',
-      forServices: ['Tractari'],
-    });
-  }
-
-  // Mutări Mobilă - Furniture transport certification
-  if (activeServices.includes('Mobila')) {
-    documents.push({
-      id: 'furniture_transport_cert',
-      title: countryCode === 'ro' ? 'Atestat Transport Mobilier' :
-             countryCode === 'gb' ? 'Removal Services Licence' :
-             countryCode === 'de' ? 'Umzugslizenz' :
-             'Atestat Transport Mobilier',
-      description: 'Certificat pentru servicii de mutări și transport mobilier',
-      required: false,
-      icon: 'transport',
-      category: 'transport',
-      forServices: ['Mobila'],
-    });
-  }
-
-  // === INSURANCE DOCUMENTS ===
-
-  // UK requires Goods in Transit Insurance
-  if (countryCode === 'gb') {
-    documents.push({
-      id: 'gb_goods_insurance',
-      title: 'Goods in Transit Insurance',
-      description: 'Asigurare obligatorie pentru bunuri în tranzit (UK)',
-      required: false,
-      icon: 'insurance',
-      category: 'insurance',
-    });
-  }
-
-  // CMR Insurance for international transport
-  if (activeServices.some(s => ['Colete', 'Express', 'Fragil', 'Electronice'].includes(s))) {
-    documents.push({
-      id: 'cmr_insurance',
-      title: 'Asigurare CMR',
-      description: 'Asigurare pentru transport internațional (recomandat)',
-      required: false,
-      icon: 'insurance',
-      category: 'insurance',
-    });
-  }
-
-  return documents;
-};
+import { getDocumentRequirements } from '@/utils/documentRequirements';
 
 // Icon helper
 const getDocIcon = (iconType: string) => {
@@ -464,7 +244,7 @@ function VerificarePageContent() {
             <Link href="/dashboard/curier" className="p-2 hover:bg-slate-800/80 rounded-xl">
               <ArrowLeftIcon className="w-5 h-5 text-gray-400" />
             </Link>
-            <div className="p-2.5 bg-gradient-to-br from-green-500/20 to-green-500/20 rounded-xl border border-green-500/20">
+            <div className="p-2.5 bg-linear-to-br from-green-500/20 to-green-500/20 rounded-xl border border-green-500/20">
               <CheckCircleIcon className="w-6 h-6 text-green-400" />
             </div>
             <div>
@@ -477,7 +257,7 @@ function VerificarePageContent() {
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
         {/* Why Verification is Important */}
-        <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl rounded-2xl border border-green-500/30 p-6 mb-6">
+        <div className="bg-linear-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl rounded-2xl border border-green-500/30 p-6 mb-6">
           <div className="flex items-start gap-4">
             <div className="p-3 bg-green-500/20 rounded-xl border border-green-500/30 shrink-0">
               <svg className="w-6 h-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

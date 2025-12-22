@@ -34,7 +34,7 @@ export default function Header() {
         : 'bg-transparent backdrop-blur-sm'
     }`}>
       {/* Gradient line */}
-      <div className={`h-0.5 bg-gradient-to-r from-orange-500 via-green-500 to-orange-500 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
+      <div className={`h-0.5 bg-gradient-to-r from-orange-500 via-emerald-500 to-orange-500 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
       
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4 lg:px-8 h-16">
         {/* Logo */}

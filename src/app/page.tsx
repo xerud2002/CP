@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { countries } from '@/lib/constants';
+import { ServiceIcon } from '@/components/icons/ServiceIcons';
 
 // Lazy load WhatsApp button - not critical for initial render
 const WhatsAppButton = dynamic(() => import('@/components/ui/WhatsAppButton'), {
@@ -199,9 +200,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                        </svg>
+                        <ServiceIcon service="colete" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-400" />
                       </div>
                       <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Colete</h3>
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Pachete și cutii</p>
@@ -216,10 +215,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <rect x="2" y="4" width="20" height="16" rx="2" />
-                          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                        <ServiceIcon service="plicuri" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-400" />
                       </div>
                       <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Plicuri</h3>
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Documente, acte</p>
@@ -234,9 +230,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-rose-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-rose-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-rose-400" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                        </svg>
+                        <ServiceIcon service="persoane" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-rose-400" />
                       </div>
                       <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Persoane</h3>
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Transport în Europa</p>
@@ -251,11 +245,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round" />
-                          <line x1="8" y1="21" x2="16" y2="21" strokeLinecap="round" strokeLinejoin="round" />
-                          <line x1="12" y1="17" x2="12" y2="21" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                        <ServiceIcon service="electronice" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-purple-400" />
                       </div>
                       <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Electronice</h3>
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">TV, electrocasnice</p>
@@ -270,9 +260,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 to-rose-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-pink-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-4c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM6 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm3.5-2c-.83 0-1.5.67-1.5 1.5S8.67 7 9.5 7s1.5-.67 1.5-1.5S10.33 4 9.5 4zm5 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm-2.5 9c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                        </svg>
+                        <ServiceIcon service="animale" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-pink-400" />
                       </div>
                       <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Animale</h3>
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Transport animale</p>
@@ -287,14 +275,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-red-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <rect x="2" y="16" width="20" height="4" rx="1" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" strokeLinecap="round" strokeLinejoin="round" />
-                          <circle cx="8" cy="20" r="1" />
-                          <circle cx="16" cy="20" r="1" />
-                          <path d="M12 16V4" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M9 7h6" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                        <ServiceIcon service="platforma" className="w-5 h-5 sm:w-6 sm:h-6 text-red-400" />
                       </div>
                       <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Transport Platformă</h3>
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Mașini, utilaje</p>
@@ -309,13 +290,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-orange-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <path d="M5 17h-2a1 1 0 0 1-1-1v-5l3-3h14l3 3v5a1 1 0 0 1-1 1h-2" strokeLinecap="round" strokeLinejoin="round" />
-                          <circle cx="7" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="m9 17 6-6" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="m15 11 4 4" strokeLinecap="round" strokeLinejoin="round" />
-                          <circle cx="17" cy="17" r="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                        <ServiceIcon service="tractari" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-orange-400" />
                       </div>
                       <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Tractări Auto</h3>
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Asistență rutieră</p>
@@ -330,13 +305,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-amber-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                        <ServiceIcon service="mobila" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-amber-400" />
                       </div>
                       <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Mutări Mobilă</h3>
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Transport mobilier</p>
@@ -351,14 +320,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-orange-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                          <path d="M3 6h18" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M3 12h18" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M3 18h18" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M4 6v12" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M20 6v12" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                        <ServiceIcon service="paleti" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-orange-400" />
                       </div>
                       <h3 className="text-white font-semibold text-[11px] sm:text-xs md:text-sm mb-0.5 leading-tight">Transport Paleți</h3>
                       <p className="text-gray-400 text-[9px] sm:text-[10px] md:text-xs leading-tight">Marfă paletizată</p>

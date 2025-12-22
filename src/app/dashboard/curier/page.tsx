@@ -94,9 +94,9 @@ const mainNavTiles: NavTile[] = [
     icon: CheckCircleIcon,
     title: 'Verificare',
     description: 'Documente și verificare',
-    color: 'text-green-400',
-    bgColor: 'bg-green-500/10 hover:bg-green-500/20',
-    borderColor: 'border-green-500/20 hover:border-green-500/40',
+    color: 'text-emerald-400',
+    bgColor: 'bg-emerald-500/10 hover:bg-emerald-500/20',
+    borderColor: 'border-emerald-500/20 hover:border-emerald-500/40',
   },
   {
     href: '/dashboard/curier/recenzii',
@@ -260,10 +260,10 @@ const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, ra
             <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Rating</span>
           </div>
 
-          <div className="flex flex-col items-center p-2 sm:p-3 bg-slate-800/40 backdrop-blur-sm rounded-xl border border-green-500/20">
+          <div className="flex flex-col items-center p-2 sm:p-3 bg-slate-800/40 backdrop-blur-sm rounded-xl border border-emerald-500/20">
             <div className="flex items-center gap-1.5 mb-0.5">
-              <div className="p-1.5 bg-green-500/20 rounded-lg">
-                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="p-1.5 bg-emerald-500/20 rounded-lg">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </div>

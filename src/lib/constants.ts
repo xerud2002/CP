@@ -55,7 +55,7 @@ export const serviceTypes = [
     color: 'text-blue-400',
     bgColor: 'bg-blue-500/20',
     borderColor: 'border-blue-500/30',
-    gradient: 'from-blue-500 to-cyan-500',
+    gradient: 'from-orange-500 to-orange-600',
   },
   { 
     id: 'plicuri', 
@@ -110,7 +110,7 @@ export const serviceTypes = [
     color: 'text-red-400',
     bgColor: 'bg-red-500/20',
     borderColor: 'border-red-500/30',
-    gradient: 'from-red-500 to-rose-500',
+    gradient: 'from-orange-500 to-amber-500',
   },
   { 
     id: 'tractari', 
@@ -121,7 +121,7 @@ export const serviceTypes = [
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/20',
     borderColor: 'border-orange-500/30',
-    gradient: 'from-orange-500 to-amber-500',
+    gradient: 'from-orange-500 to-orange-600',
   },
   { 
     id: 'mobila', 

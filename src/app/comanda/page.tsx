@@ -868,11 +868,18 @@ function ComandaForm() {
                                     setIsRidicareJudetOpen(false);
                                     setRidicareJudetSearch('');
                                   }}
-                                  className={`w-full flex items-center justify-between px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                                  className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
                                     formData.judet_ridicare === j ? 'bg-slate-700/50' : ''
                                   }`}
                                 >
-                                  <span className="text-white text-sm">{j}</span>
+                                  <Image 
+                                    src={`/img/flag/${formData.tara_ridicare.toLowerCase()}.svg`} 
+                                    alt={`${formData.tara_ridicare}`}
+                                    width={20} 
+                                    height={15} 
+                                    className="rounded-sm shadow-sm opacity-60 shrink-0"
+                                  />
+                                  <span className="text-white text-sm flex-1 text-left">{j}</span>
                                   <span className="text-gray-500 text-xs font-mono">{formData.tara_ridicare}</span>
                                 </button>
                               ))
@@ -1048,11 +1055,18 @@ function ComandaForm() {
                                     setIsLivrareJudetOpen(false);
                                     setLivrareJudetSearch('');
                                   }}
-                                  className={`w-full flex items-center justify-between px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                                  className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
                                     formData.judet_livrare === j ? 'bg-slate-700/50' : ''
                                   }`}
                                 >
-                                  <span className="text-white text-sm">{j}</span>
+                                  <Image 
+                                    src={`/img/flag/${formData.tara_livrare.toLowerCase()}.svg`} 
+                                    alt={`${formData.tara_livrare}`}
+                                    width={20} 
+                                    height={15} 
+                                    className="rounded-sm shadow-sm opacity-60 shrink-0"
+                                  />
+                                  <span className="text-white text-sm flex-1 text-left">{j}</span>
                                   <span className="text-gray-500 text-xs font-mono">{formData.tara_livrare}</span>
                                 </button>
                               ))
