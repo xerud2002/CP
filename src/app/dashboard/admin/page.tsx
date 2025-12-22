@@ -514,46 +514,310 @@ function StatsContent({ users, orders }: { users: User[]; orders: Order[] }) {
   const couriersCount = users.filter(u => u.role === 'curier').length;
   const deliveredOrders = orders.filter(o => o.status === 'livrata').length;
   const pendingOrders = orders.filter(o => o.status === 'noua').length;
+  const inProgressOrders = orders.filter(o => o.status === 'in_lucru').length;
+  const cancelledOrders = orders.filter(o => o.status === 'anulata').length;
+  
+  // Calculate order distribution by service type
+  const serviceDistribution = orders.reduce((acc, order) => {
+    const service = order.serviciu?.toLowerCase() || 'altele';
+    acc[service] = (acc[service] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Calculate orders by country
+  const countryDistribution = orders.reduce((acc, order) => {
+    const country = order.tara_ridicare || 'Necunoscut';
+    acc[country] = (acc[country] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Top 5 countries
+  const topCountries = Object.entries(countryDistribution)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+
+  // Recent 7 days orders
+  const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const recentOrders = orders.filter(o => (o.timestamp || 0) > sevenDaysAgo).length;
+  
+  // Average orders per day (last 30 days)
+  const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  const last30DaysOrders = orders.filter(o => (o.timestamp || 0) > thirtyDaysAgo).length;
+  const avgOrdersPerDay = (last30DaysOrders / 30).toFixed(1);
+
+  // Service type colors
+  const serviceColors: Record<string, string> = {
+    colete: 'bg-orange-500',
+    paleti: 'bg-blue-500',
+    persoane: 'bg-purple-500',
+    masini: 'bg-emerald-500',
+    animale: 'bg-pink-500',
+    altele: 'bg-gray-500',
+  };
+
+  // Status distribution for chart
+  const statusData = [
+    { label: 'Noi', count: pendingOrders, color: 'bg-white/20', textColor: 'text-white' },
+    { label: 'În Lucru', count: inProgressOrders, color: 'bg-amber-500', textColor: 'text-amber-400' },
+    { label: 'Livrate', count: deliveredOrders, color: 'bg-emerald-500', textColor: 'text-emerald-400' },
+    { label: 'Anulate', count: cancelledOrders, color: 'bg-red-500', textColor: 'text-red-400' },
+  ];
+
+  const totalStatusOrders = statusData.reduce((sum, s) => sum + s.count, 0);
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-white">Statistici platformă</h3>
-      
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5">
-          <div className="text-3xl font-bold text-emerald-400 mb-1">{clientsCount}</div>
-          <div className="text-gray-400 text-sm">Clienți activi</div>
+      {/* Quick Stats Row */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="bg-linear-to-br from-emerald-500/20 to-emerald-600/10 rounded-xl p-4 border border-emerald-500/20">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+              <UsersIcon className="w-4 h-4 text-emerald-400" />
+            </div>
+            <span className="text-gray-400 text-xs">Clienți</span>
+          </div>
+          <div className="text-2xl font-bold text-emerald-400">{clientsCount}</div>
         </div>
-        <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5">
-          <div className="text-3xl font-bold text-orange-400 mb-1">{couriersCount}</div>
-          <div className="text-gray-400 text-sm">Curieri activi</div>
+        <div className="bg-linear-to-br from-orange-500/20 to-orange-600/10 rounded-xl p-4 border border-orange-500/20">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
+              <TruckIcon className="w-4 h-4 text-orange-400" />
+            </div>
+            <span className="text-gray-400 text-xs">Curieri</span>
+          </div>
+          <div className="text-2xl font-bold text-orange-400">{couriersCount}</div>
         </div>
-        <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5">
-          <div className="text-3xl font-bold text-blue-400 mb-1">{deliveredOrders}</div>
-          <div className="text-gray-400 text-sm">Comenzi livrate</div>
+        <div className="bg-linear-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-4 border border-blue-500/20">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+              <PackageIcon className="w-4 h-4 text-blue-400" />
+            </div>
+            <span className="text-gray-400 text-xs">Total Comenzi</span>
+          </div>
+          <div className="text-2xl font-bold text-blue-400">{orders.length}</div>
         </div>
-        <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5">
-          <div className="text-3xl font-bold text-yellow-400 mb-1">{pendingOrders}</div>
-          <div className="text-gray-400 text-sm">În așteptare</div>
+        <div className="bg-linear-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-4 border border-purple-500/20">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+              <ChartIcon className="w-4 h-4 text-purple-400" />
+            </div>
+            <span className="text-gray-400 text-xs">Ultimele 7 zile</span>
+          </div>
+          <div className="text-2xl font-bold text-purple-400">{recentOrders}</div>
+        </div>
+        <div className="bg-linear-to-br from-pink-500/20 to-pink-600/10 rounded-xl p-4 border border-pink-500/20">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center">
+              <ChartIcon className="w-4 h-4 text-pink-400" />
+            </div>
+            <span className="text-gray-400 text-xs">Media/zi (30d)</span>
+          </div>
+          <div className="text-2xl font-bold text-pink-400">{avgOrdersPerDay}</div>
         </div>
       </div>
 
-      <div className="bg-slate-800/30 rounded-xl p-6 border border-white/5">
-        <h4 className="text-white font-medium mb-4">Rata de conversie</h4>
-        <div className="h-4 bg-slate-700 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-linear-to-r from-emerald-500 to-emerald-400 rounded-full transition-all"
-            style={{ width: `${orders.length > 0 ? (deliveredOrders / orders.length) * 100 : 0}%` }}
-          />
+      {/* Main Stats Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Order Status Distribution */}
+        <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
+          <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+            <PackageIcon className="w-5 h-5 text-orange-400" />
+            Distribuție Status Comenzi
+          </h4>
+          
+          {/* Visual bar chart */}
+          <div className="space-y-3 mb-4">
+            {statusData.map((status) => (
+              <div key={status.label} className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span className={status.textColor}>{status.label}</span>
+                  <span className="text-gray-400">{status.count} ({totalStatusOrders > 0 ? Math.round((status.count / totalStatusOrders) * 100) : 0}%)</span>
+                </div>
+                <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full ${status.color} rounded-full transition-all duration-500`}
+                    style={{ width: `${totalStatusOrders > 0 ? (status.count / totalStatusOrders) * 100 : 0}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Success Rate */}
+          <div className="mt-4 pt-4 border-t border-white/10">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-400 text-sm">Rată succes</span>
+              <span className="text-emerald-400 font-bold text-lg">
+                {orders.length > 0 ? Math.round((deliveredOrders / orders.length) * 100) : 0}%
+              </span>
+            </div>
+          </div>
         </div>
-        <p className="text-gray-400 text-sm mt-2">
-          {orders.length > 0 ? Math.round((deliveredOrders / orders.length) * 100) : 0}% din comenzi livrate cu succes
-        </p>
+
+        {/* Service Type Distribution */}
+        <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
+          <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+            <TruckIcon className="w-5 h-5 text-blue-400" />
+            Comenzi pe Tip Serviciu
+          </h4>
+          
+          <div className="space-y-3">
+            {Object.entries(serviceDistribution)
+              .sort((a, b) => b[1] - a[1])
+              .map(([service, count]) => (
+                <div key={service} className="flex items-center gap-3">
+                  <div className={`w-3 h-3 rounded-full ${serviceColors[service] || 'bg-gray-500'}`} />
+                  <span className="text-gray-300 capitalize flex-1">{service}</span>
+                  <span className="text-white font-medium">{count}</span>
+                  <span className="text-gray-500 text-sm w-12 text-right">
+                    {orders.length > 0 ? Math.round((count / orders.length) * 100) : 0}%
+                  </span>
+                </div>
+              ))}
+          </div>
+
+          {Object.keys(serviceDistribution).length === 0 && (
+            <p className="text-gray-500 text-center py-4">Nu există date</p>
+          )}
+        </div>
+
+        {/* Top Countries */}
+        <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
+          <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+            <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Top 5 Țări (Ridicare)
+          </h4>
+          
+          <div className="space-y-3">
+            {topCountries.map(([country, count], idx) => (
+              <div key={country} className="flex items-center gap-3">
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                  idx === 0 ? 'bg-yellow-500/20 text-yellow-400' :
+                  idx === 1 ? 'bg-gray-400/20 text-gray-300' :
+                  idx === 2 ? 'bg-amber-600/20 text-amber-500' :
+                  'bg-slate-600/20 text-gray-400'
+                }`}>
+                  {idx + 1}
+                </span>
+                <span className="text-gray-300 flex-1">{country}</span>
+                <span className="text-white font-medium">{count}</span>
+              </div>
+            ))}
+          </div>
+
+          {topCountries.length === 0 && (
+            <p className="text-gray-500 text-center py-4">Nu există date</p>
+          )}
+        </div>
+
+        {/* Platform Health */}
+        <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
+          <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+            <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Sănătate Platformă
+          </h4>
+          
+          <div className="space-y-4">
+            {/* User Activity */}
+            <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                  <UsersIcon className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">Utilizatori Activi</p>
+                  <p className="text-gray-400 text-xs">Total înregistrați</p>
+                </div>
+              </div>
+              <span className="text-emerald-400 font-bold text-xl">{users.length}</span>
+            </div>
+
+            {/* Courier Ratio */}
+            <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                  <TruckIcon className="w-5 h-5 text-orange-400" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">Raport Curier/Client</p>
+                  <p className="text-gray-400 text-xs">Curieri per 10 clienți</p>
+                </div>
+              </div>
+              <span className="text-orange-400 font-bold text-xl">
+                {clientsCount > 0 ? ((couriersCount / clientsCount) * 10).toFixed(1) : '0'}
+              </span>
+            </div>
+
+            {/* Order Completion */}
+            <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                  <PackageIcon className="w-5 h-5 text-blue-400" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">Comenzi Finalizate</p>
+                  <p className="text-gray-400 text-xs">Livrate cu succes</p>
+                </div>
+              </div>
+              <span className="text-blue-400 font-bold text-xl">{deliveredOrders}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="text-center py-8 text-gray-400">
-        <ChartIcon className="w-12 h-12 mx-auto mb-3 text-gray-500" />
-        <p>Grafice detaliate vor fi disponibile în curând.</p>
+      {/* Activity Timeline - Recent Orders */}
+      <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
+        <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Activitate Recentă (Ultimele 5 comenzi)
+        </h4>
+        
+        <div className="space-y-3">
+          {orders.slice(0, 5).map((order, idx) => (
+            <div key={order.id || idx} className="flex items-center gap-4 p-3 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-colors">
+              <div className={`w-2 h-2 rounded-full ${
+                order.status === 'livrata' ? 'bg-emerald-500' :
+                order.status === 'anulata' ? 'bg-red-500' :
+                order.status === 'in_lucru' ? 'bg-amber-500' :
+                'bg-white/50'
+              }`} />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-white font-medium">
+                    {order.orderNumber ? `CP${order.orderNumber}` : 'Fără număr'}
+                  </span>
+                  <span className="text-gray-500">•</span>
+                  <span className="text-gray-400 text-sm capitalize">{order.serviciu || '-'}</span>
+                </div>
+                <p className="text-gray-500 text-xs truncate">
+                  {order.tara_ridicare} → {order.tara_livrare}
+                </p>
+              </div>
+              <span className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                order.status === 'livrata' ? 'bg-emerald-500/20 text-emerald-400' :
+                order.status === 'anulata' ? 'bg-red-500/20 text-red-400' :
+                order.status === 'in_lucru' ? 'bg-amber-500/20 text-amber-400' :
+                'bg-white/10 text-gray-300'
+              }`}>
+                {order.status === 'livrata' ? 'Livrată' :
+                 order.status === 'anulata' ? 'Anulată' :
+                 order.status === 'in_lucru' ? 'În Lucru' :
+                 order.status === 'noua' ? 'Nouă' :
+                 order.status || 'Nouă'}
+              </span>
+            </div>
+          ))}
+          
+          {orders.length === 0 && (
+            <p className="text-gray-500 text-center py-4">Nu există comenzi recente</p>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -561,54 +825,256 @@ function StatsContent({ users, orders }: { users: User[]; orders: Order[] }) {
 
 // Settings Tab Content
 function SettingsContent() {
+  const [settings, setSettings] = useState({
+    emailNotifications: true,
+    maintenanceMode: false,
+    newRegistrations: true,
+    courierAutoApproval: false,
+    orderNotifications: true,
+    weeklyReports: false,
+  });
+
+  const toggleSetting = (key: keyof typeof settings) => {
+    setSettings(prev => ({ ...prev, [key]: !prev[key] }));
+    showSuccess('Setare actualizată!');
+  };
+
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-semibold text-white">Setări platformă</h3>
-      
-      <div className="space-y-4">
-        <div className="bg-slate-800/30 rounded-xl p-5 border border-white/5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="text-white font-medium">Notificări email</h4>
-              <p className="text-gray-400 text-sm">Primește notificări pentru comenzi noi</p>
+      {/* Notifications Section */}
+      <div>
+        <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <BellIcon className="w-5 h-5 text-blue-400" />
+          Notificări
+        </h3>
+        
+        <div className="space-y-3">
+          <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-white font-medium">Notificări Email</h4>
+                  <p className="text-gray-400 text-sm">Primește email pentru evenimente importante</p>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer" 
+                  checked={settings.emailNotifications}
+                  onChange={() => toggleSetting('emailNotifications')}
+                />
+                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+              </label>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" defaultChecked />
-              <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-            </label>
           </div>
-        </div>
 
-        <div className="bg-slate-800/30 rounded-xl p-5 border border-white/5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="text-white font-medium">Mod întreținere</h4>
-              <p className="text-gray-400 text-sm">Dezactivează platforma temporar</p>
+          <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                  <PackageIcon className="w-5 h-5 text-orange-400" />
+                </div>
+                <div>
+                  <h4 className="text-white font-medium">Notificări Comenzi Noi</h4>
+                  <p className="text-gray-400 text-sm">Alertă la fiecare comandă nouă</p>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer" 
+                  checked={settings.orderNotifications}
+                  onChange={() => toggleSetting('orderNotifications')}
+                />
+                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+              </label>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" />
-              <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
-            </label>
           </div>
-        </div>
 
-        <div className="bg-slate-800/30 rounded-xl p-5 border border-white/5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="text-white font-medium">Înregistrări noi</h4>
-              <p className="text-gray-400 text-sm">Permite înregistrări de utilizatori noi</p>
+          <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                  <ChartIcon className="w-5 h-5 text-purple-400" />
+                </div>
+                <div>
+                  <h4 className="text-white font-medium">Rapoarte Săptămânale</h4>
+                  <p className="text-gray-400 text-sm">Primește sumar săptămânal pe email</p>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer" 
+                  checked={settings.weeklyReports}
+                  onChange={() => toggleSetting('weeklyReports')}
+                />
+                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+              </label>
             </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" defaultChecked />
-              <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-            </label>
           </div>
         </div>
       </div>
 
-      <div className="text-center py-8 text-gray-400">
-        <CogIcon className="w-12 h-12 mx-auto mb-3 text-gray-500" />
-        <p>Mai multe setări vor fi disponibile în curând.</p>
+      {/* Platform Section */}
+      <div>
+        <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <CogIcon className="w-5 h-5 text-orange-400" />
+          Setări Platformă
+        </h3>
+        
+        <div className="space-y-3">
+          <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-white font-medium">Mod Întreținere</h4>
+                  <p className="text-gray-400 text-sm">Dezactivează platforma pentru utilizatori</p>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer" 
+                  checked={settings.maintenanceMode}
+                  onChange={() => toggleSetting('maintenanceMode')}
+                />
+                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+              </label>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                  <UsersIcon className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <h4 className="text-white font-medium">Înregistrări Noi</h4>
+                  <p className="text-gray-400 text-sm">Permite utilizatori noi să se înregistreze</p>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer" 
+                  checked={settings.newRegistrations}
+                  onChange={() => toggleSetting('newRegistrations')}
+                />
+                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+              </label>
+            </div>
+          </div>
+
+          <div className="bg-slate-800/30 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                  <TruckIcon className="w-5 h-5 text-amber-400" />
+                </div>
+                <div>
+                  <h4 className="text-white font-medium">Aprobare Automată Curieri</h4>
+                  <p className="text-gray-400 text-sm">Curieri noi devin activi instant</p>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  className="sr-only peer" 
+                  checked={settings.courierAutoApproval}
+                  onChange={() => toggleSetting('courierAutoApproval')}
+                />
+                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div>
+        <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Acțiuni Rapide
+        </h3>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <button className="p-4 bg-slate-800/30 rounded-xl border border-white/5 hover:border-blue-500/30 hover:bg-blue-500/10 transition-all group text-left">
+            <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+            </div>
+            <h4 className="text-white font-medium mb-1">Export Date</h4>
+            <p className="text-gray-400 text-xs">Descarcă raport CSV</p>
+          </button>
+
+          <button className="p-4 bg-slate-800/30 rounded-xl border border-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/10 transition-all group text-left">
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h4 className="text-white font-medium mb-1">Backup Date</h4>
+            <p className="text-gray-400 text-xs">Salvare backup Firestore</p>
+          </button>
+
+          <button className="p-4 bg-slate-800/30 rounded-xl border border-white/5 hover:border-purple-500/30 hover:bg-purple-500/10 transition-all group text-left">
+            <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </div>
+            <h4 className="text-white font-medium mb-1">Curăță Cache</h4>
+            <p className="text-gray-400 text-xs">Resetare date temporare</p>
+          </button>
+        </div>
+      </div>
+
+      {/* Danger Zone */}
+      <div className="border border-red-500/20 rounded-xl p-5 bg-red-500/5">
+        <h3 className="text-lg font-semibold text-red-400 mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          Zona Periculoasă
+        </h3>
+        
+        <div className="space-y-3">
+          <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+            <div>
+              <h4 className="text-white font-medium">Șterge Comenzi Vechi</h4>
+              <p className="text-gray-400 text-xs">Elimină comenzile mai vechi de 1 an</p>
+            </div>
+            <button className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg text-sm font-medium hover:bg-red-500/30 transition-all">
+              Șterge
+            </button>
+          </div>
+          
+          <div className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg">
+            <div>
+              <h4 className="text-white font-medium">Reset Statistici</h4>
+              <p className="text-gray-400 text-xs">Resetează contoarele platformei</p>
+            </div>
+            <button className="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg text-sm font-medium hover:bg-red-500/30 transition-all">
+              Reset
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
