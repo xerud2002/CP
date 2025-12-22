@@ -204,9 +204,12 @@ anulata  anulata
 ## Commands
 ```bash
 npm run dev        # Start dev server (localhost:3000)
-npm run build      # Production build
+npm run build      # Production build (checks types, builds Next.js)
+npm start          # Production server (after build)
 npm run lint       # ESLint check
 ```
+
+**No emulators**: Project uses live Firebase services, not local emulators. Configuration in `firebase.json` for deployment only.
 
 ## Common Mistakes
 
@@ -233,6 +236,90 @@ npm run lint       # ESLint check
 3. Use `showError(err)` for all user-facing errors
 4. Test status transitions with `orderStatusHelpers.ts` functions
 5. Verify Firestore rules in `firestore.rules` match query ownership filters
+
+## File Organization — Role-Based Separation
+
+**Hook Pattern** (in `src/hooks/`):
+```
+client/
+  useClientOrdersLoader.ts    # Real-time orders + unread counts for clients
+  useClientOrderActions.ts    # Edit, delete, finalize actions
+courier/
+  useOrdersLoader.ts          # Real-time filtering for couriers
+  useOrderHandlers.ts         # Accept, message, finalize actions
+  useUnreadMessages.ts        # Unread message tracking
+```
+
+**Component Pattern** (in `src/components/orders/`):
+```
+client/
+  filters/ClientOrderFilters.tsx
+  list/ClientOrderCard.tsx, ClientOrderList.tsx
+courier/
+  filters/OrderFilters.tsx
+  list/[similar structure]
+shared/
+  OrderDetailsModal.tsx       # Reusable across roles
+  OrderRouteSection.tsx       # Display route info
+  CountryFilter.tsx           # Reusable filter component
+```
+
+**Why**: Separation by role prevents logic bleeding. A client hook should never import courier logic. If code is truly shared, move it to `shared/` or utils.
+
+## Data Loading Patterns
+
+### Real-time Subscriptions
+All dashboard pages use `onSnapshot` for real-time data:
+```tsx
+useEffect(() => {
+  const q = query(
+    collection(db, 'comenzi'),
+    where('uid_client', '==', user.uid),
+    orderBy('createdAt', 'desc')
+  );
+  
+  const unsubscribe = onSnapshot(q, 
+    snapshot => setOrders(snapshot.docs.map(d => ({ id: d.id, ...d.data() }))),
+    error => console.error(error)
+  );
+  
+  return () => unsubscribe();
+}, [user.uid]);
+```
+
+### Filtering Strategy
+- **Firestore**: Fetch all user's orders with basic `where()` clauses
+- **Client-side**: Apply additional filters (country, service type, search) in memory
+- **Why**: Firestore composite indexes are expensive. Client-side filtering provides flexibility for multi-field filters without index overhead.
+
+### Unread Message Tracking
+Pattern used in `useClientOrdersLoader.ts` and `useUnreadMessages.ts`:
+```tsx
+// Subscribe to unread messages for each order
+useEffect(() => {
+  const unsubscribes: Array<() => void> = [];
+  
+  orders.forEach(order => {
+    const q = query(
+      collection(db, 'mesaje'),
+      where('orderId', '==', order.id),
+      where('clientId', '==', clientId),
+      where('courierId', '==', order.courierId),
+      where('read', '==', false)
+    );
+    
+    const unsub = onSnapshot(q, snap => {
+      const count = snap.docs.filter(d => d.data().senderId !== user.uid).length;
+      setUnreadCounts(prev => ({ ...prev, [order.id]: count }));
+    });
+    
+    unsubscribes.push(unsub);
+  });
+  
+  return () => unsubscribes.forEach(fn => fn());
+}, [orders]);
+```
+**Critical**: Filter out own messages client-side (`senderId !== user.uid`) to avoid counting sent messages as unread.
 
 ## Order Filtering & Search
 
