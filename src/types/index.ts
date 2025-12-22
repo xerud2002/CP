@@ -16,6 +16,7 @@ export interface User {
   role: UserRole;
   displayName?: string;
   nume?: string;
+  prenume?: string;
   telefon?: string;
   createdAt?: Date;
 }

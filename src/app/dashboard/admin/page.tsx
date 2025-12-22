@@ -257,6 +257,51 @@ function UsersTable({ users, onRoleChange, onDelete, filter }: {
     ? users 
     : users.filter(u => u.role === filter);
 
+  // Helper to get display name (nume + prenume)
+  const getDisplayName = (user: User) => {
+    // If both nume and prenume exist, combine them
+    if (user.nume && user.prenume) {
+      return `${user.nume} ${user.prenume}`;
+    }
+    // If only nume exists
+    if (user.nume) return user.nume;
+    // If only prenume exists
+    if (user.prenume) return user.prenume;
+    // Fallback to displayName
+    if (user.displayName) return user.displayName;
+    // Last resort: extract from email
+    if (user.email) return user.email.split('@')[0];
+    return 'Utilizator';
+  };
+
+  // Helper to format phone
+  const formatPhone = (phone?: string) => {
+    if (!phone) return null;
+    return phone;
+  };
+
+  // Helper to format date more robustly
+  const formatUserDate = (createdAt: Date | string | { seconds: number } | undefined) => {
+    if (!createdAt) return null;
+    try {
+      let date: Date;
+      if (typeof createdAt === 'object' && 'seconds' in createdAt) {
+        date = new Date(createdAt.seconds * 1000);
+      } else if (typeof createdAt === 'string') {
+        date = new Date(createdAt);
+      } else {
+        date = createdAt as Date;
+      }
+      return date.toLocaleDateString('ro-RO', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      });
+    } catch {
+      return null;
+    }
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full">
@@ -270,61 +315,82 @@ function UsersTable({ users, onRoleChange, onDelete, filter }: {
           </tr>
         </thead>
         <tbody>
-          {filteredUsers.map((u) => (
-            <tr key={u.uid} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-              <td className="py-4 px-4">
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm ${
-                    u.role === 'admin' ? 'bg-linear-to-br from-orange-500 to-orange-600' :
-                    u.role === 'curier' ? 'bg-linear-to-br from-orange-400 to-orange-600' :
-                    'bg-linear-to-br from-emerald-400 to-emerald-600'
-                  }`}>
-                    {(u.nume || u.email || '?').charAt(0).toUpperCase()}
+          {filteredUsers.map((u) => {
+            const displayName = getDisplayName(u);
+            const phone = formatPhone(u.telefon);
+            const regDate = formatUserDate(u.createdAt);
+            
+            return (
+              <tr key={u.uid} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg ${
+                      u.role === 'admin' ? 'bg-linear-to-br from-red-500 to-red-600 shadow-red-500/25' :
+                      u.role === 'curier' ? 'bg-linear-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
+                      'bg-linear-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
+                    }`}>
+                      {displayName.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="text-white font-medium">{displayName}</p>
+                      {phone ? (
+                        <p className="text-gray-400 text-sm flex items-center gap-1">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                          </svg>
+                          {phone}
+                        </p>
+                      ) : (
+                        <p className="text-gray-500 text-sm italic">Telefon nesetat</p>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-white font-medium">{u.nume || u.displayName || '-'}</p>
-                    <p className="text-gray-400 text-sm">{u.telefon || 'Telefon nesetat'}</p>
+                </td>
+                <td className="py-4 px-4">
+                  <span className="text-gray-300">{u.email}</span>
+                </td>
+                <td className="py-4 px-4">
+                  <select
+                    value={u.role}
+                    onChange={(e) => onRoleChange(u.uid, e.target.value)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer transition-all ${
+                      u.role === 'admin' ? 'bg-red-500/20 text-red-400' :
+                      u.role === 'curier' ? 'bg-orange-500/20 text-orange-400' :
+                      'bg-emerald-500/20 text-emerald-400'
+                    }`}
+                  >
+                    <option value="client">Client</option>
+                    <option value="curier">Curier</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
+                <td className="py-4 px-4">
+                  {regDate ? (
+                    <span className="text-gray-400 text-sm">{regDate}</span>
+                  ) : (
+                    <span className="text-gray-500 text-sm italic">Necunoscut</span>
+                  )}
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center justify-end gap-2">
+                    <button 
+                      className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
+                      title="Vezi detalii"
+                    >
+                      <EyeIcon className="w-5 h-5" />
+                    </button>
+                    <button 
+                      onClick={() => onDelete(u.uid)}
+                      className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                      title="Șterge utilizator"
+                    >
+                      <TrashIcon className="w-5 h-5" />
+                    </button>
                   </div>
-                </div>
-              </td>
-              <td className="py-4 px-4 text-gray-300">{u.email}</td>
-              <td className="py-4 px-4">
-                <select
-                  value={u.role}
-                  onChange={(e) => onRoleChange(u.uid, e.target.value)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer transition-all ${
-                    u.role === 'admin' ? 'bg-orange-500/20 text-orange-400' :
-                    u.role === 'curier' ? 'bg-orange-500/20 text-orange-400' :
-                    'bg-emerald-500/20 text-emerald-400'
-                  }`}
-                >
-                  <option value="client">Client</option>
-                  <option value="curier">Curier</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </td>
-              <td className="py-4 px-4 text-gray-400 text-sm">
-                {u.createdAt ? formatDate(new Date(u.createdAt as unknown as string).getTime()) : '-'}
-              </td>
-              <td className="py-4 px-4">
-                <div className="flex items-center justify-end gap-2">
-                  <button 
-                    className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
-                    title="Vezi detalii"
-                  >
-                    <EyeIcon className="w-5 h-5" />
-                  </button>
-                  <button 
-                    onClick={() => onDelete(u.uid)}
-                    className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
-                    title="Șterge utilizator"
-                  >
-                    <TrashIcon className="w-5 h-5" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       {filteredUsers.length === 0 && (
@@ -343,9 +409,9 @@ function OrdersTable({ orders, onStatusChange, onViewDetails }: {
   onViewDetails: (order: Order) => void;
 }) {
   const statusColors: Record<string, string> = {
-    noua: 'bg-white/10 text-white',
+    noua: 'bg-blue-500/20 text-blue-400',
     in_lucru: 'bg-amber-500/20 text-amber-400',
-    acceptata: 'bg-blue-500/20 text-blue-400',
+    acceptata: 'bg-cyan-500/20 text-cyan-400',
     in_tranzit: 'bg-purple-500/20 text-purple-400',
     livrata: 'bg-emerald-500/20 text-emerald-400',
     anulata: 'bg-red-500/20 text-red-400',
@@ -360,8 +426,34 @@ function OrdersTable({ orders, onStatusChange, onViewDetails }: {
     anulata: 'Anulată',
   };
 
+  // Service icons and colors
+  const serviceConfig: Record<string, { icon: string; color: string; bgColor: string }> = {
+    colete: { icon: '📦', color: 'text-orange-400', bgColor: 'bg-orange-500/20' },
+    plicuri: { icon: '✉️', color: 'text-blue-400', bgColor: 'bg-blue-500/20' },
+    persoane: { icon: '👥', color: 'text-purple-400', bgColor: 'bg-purple-500/20' },
+    animale: { icon: '🐾', color: 'text-pink-400', bgColor: 'bg-pink-500/20' },
+    masini: { icon: '🚗', color: 'text-emerald-400', bgColor: 'bg-emerald-500/20' },
+    platforma: { icon: '🚛', color: 'text-cyan-400', bgColor: 'bg-cyan-500/20' },
+    paleti: { icon: '📋', color: 'text-amber-400', bgColor: 'bg-amber-500/20' },
+    electronice: { icon: '📺', color: 'text-indigo-400', bgColor: 'bg-indigo-500/20' },
+    tractari: { icon: '🔧', color: 'text-red-400', bgColor: 'bg-red-500/20' },
+    mutari: { icon: '🏠', color: 'text-teal-400', bgColor: 'bg-teal-500/20' },
+  };
+
   const formatOrderNumber = (orderNumber?: number) => {
     return orderNumber ? `CP${orderNumber}` : '-';
+  };
+
+  const getServiceConfig = (serviciu?: string) => {
+    const key = serviciu?.toLowerCase() || '';
+    return serviceConfig[key] || { icon: '📦', color: 'text-gray-400', bgColor: 'bg-gray-500/20' };
+  };
+
+  // Helper to get client display name
+  const getClientName = (order: Order) => {
+    if (order.nume) return order.nume;
+    if (order.email) return order.email.split('@')[0];
+    return 'Client necunoscut';
   };
 
   return (
@@ -379,60 +471,103 @@ function OrdersTable({ orders, onStatusChange, onViewDetails }: {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
-            <tr key={order.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-              <td className="py-4 px-4">
-                <span className="text-white font-mono font-medium">
-                  {formatOrderNumber(order.orderNumber)}
-                </span>
-              </td>
-              <td className="py-4 px-4">
-                <div>
-                  <p className="text-white font-medium">{order.nume || '-'}</p>
-                  <p className="text-gray-400 text-sm">{order.email || '-'}</p>
-                </div>
-              </td>
-              <td className="py-4 px-4">
-                <span className="text-gray-300 capitalize">{order.serviciu || '-'}</span>
-              </td>
-              <td className="py-4 px-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-300">{order.tara_ridicare || '-'}</span>
-                  <span className="text-gray-500">→</span>
-                  <span className="text-gray-300">{order.tara_livrare || '-'}</span>
-                </div>
-              </td>
-              <td className="py-4 px-4 text-gray-400 text-sm">
-                {order.data_ridicare ? new Date(order.data_ridicare).toLocaleDateString('ro-RO') : '-'}
-              </td>
-              <td className="py-4 px-4">
-                <select
-                  value={order.status || 'noua'}
-                  onChange={(e) => onStatusChange(order.id!, e.target.value)}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer transition-all bg-slate-700 text-white [&>option]:bg-slate-800 [&>option]:text-white ${statusColors[order.status || 'noua'] || 'bg-gray-500/20 text-gray-400'}`}
-                  style={{ colorScheme: 'dark' }}
-                >
-                  <option value="noua" className="bg-slate-800 text-white">{statusLabels.noua}</option>
-                  <option value="in_lucru" className="bg-slate-800 text-white">{statusLabels.in_lucru}</option>
-                  <option value="acceptata" className="bg-slate-800 text-white">{statusLabels.acceptata}</option>
-                  <option value="in_tranzit" className="bg-slate-800 text-white">{statusLabels.in_tranzit}</option>
-                  <option value="livrata" className="bg-slate-800 text-white">{statusLabels.livrata}</option>
-                  <option value="anulata" className="bg-slate-800 text-white">{statusLabels.anulata}</option>
-                </select>
-              </td>
-              <td className="py-4 px-4">
-                <div className="flex items-center justify-end gap-2">
-                  <button 
-                    onClick={() => onViewDetails(order)}
-                    className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
-                    title="Vezi detalii"
+          {orders.map((order) => {
+            const serviceConf = getServiceConfig(order.serviciu);
+            const clientName = getClientName(order);
+            
+            return (
+              <tr key={order.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-linear-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center">
+                      <span className="text-orange-400 text-xs font-bold">#</span>
+                    </div>
+                    <span className="text-white font-mono font-semibold">
+                      {formatOrderNumber(order.orderNumber)}
+                    </span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-linear-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-semibold text-sm">
+                      {clientName.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="text-white font-medium">{clientName}</p>
+                      <p className="text-gray-500 text-xs">{order.email || '-'}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-8 h-8 rounded-lg ${serviceConf.bgColor} flex items-center justify-center text-sm`}>
+                      {serviceConf.icon}
+                    </span>
+                    <span className={`capitalize font-medium ${serviceConf.color}`}>
+                      {order.serviciu || '-'}
+                    </span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-1 rounded bg-slate-700/50 text-white text-sm font-medium">
+                      {order.tara_ridicare || '??'}
+                    </span>
+                    <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                    <span className="px-2 py-1 rounded bg-slate-700/50 text-white text-sm font-medium">
+                      {order.tara_livrare || '??'}
+                    </span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  {order.data_ridicare ? (
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span className="text-gray-300 text-sm">
+                        {new Date(order.data_ridicare).toLocaleDateString('ro-RO', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric'
+                        })}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-gray-500 text-sm italic">Nesetat</span>
+                  )}
+                </td>
+                <td className="py-4 px-4">
+                  <select
+                    value={order.status || 'noua'}
+                    onChange={(e) => onStatusChange(order.id!, e.target.value)}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium border-0 cursor-pointer transition-all ${statusColors[order.status || 'noua'] || 'bg-gray-500/20 text-gray-400'}`}
+                    style={{ colorScheme: 'dark' }}
                   >
-                    <EyeIcon className="w-5 h-5" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
+                    <option value="noua" className="bg-slate-800 text-white">{statusLabels.noua}</option>
+                    <option value="in_lucru" className="bg-slate-800 text-white">{statusLabels.in_lucru}</option>
+                    <option value="acceptata" className="bg-slate-800 text-white">{statusLabels.acceptata}</option>
+                    <option value="in_tranzit" className="bg-slate-800 text-white">{statusLabels.in_tranzit}</option>
+                    <option value="livrata" className="bg-slate-800 text-white">{statusLabels.livrata}</option>
+                    <option value="anulata" className="bg-slate-800 text-white">{statusLabels.anulata}</option>
+                  </select>
+                </td>
+                <td className="py-4 px-4">
+                  <div className="flex items-center justify-end gap-2">
+                    <button 
+                      onClick={() => onViewDetails(order)}
+                      className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
+                      title="Vezi detalii"
+                    >
+                      <EyeIcon className="w-5 h-5" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       {orders.length === 0 && (
@@ -449,59 +584,159 @@ function CouriersGrid({ couriers, onSuspend }: {
   couriers: User[];
   onSuspend: (uid: string) => void;
 }) {
+  // Helper to get courier display name
+  const getCourierName = (courier: User) => {
+    if (courier.nume && courier.prenume) return `${courier.nume} ${courier.prenume}`;
+    if (courier.nume) return courier.nume;
+    if (courier.prenume) return courier.prenume;
+    if (courier.displayName) return courier.displayName;
+    if (courier.email) return courier.email.split('@')[0];
+    return 'Curier';
+  };
+
+  // Helper to get services list
+  const getServices = (courier: User) => {
+    const courierData = courier as unknown as Record<string, unknown>;
+    if (courierData.serviciiOferite && Array.isArray(courierData.serviciiOferite)) {
+      return courierData.serviciiOferite as string[];
+    }
+    return [];
+  };
+
+  // Service emoji map
+  const serviceEmojis: Record<string, string> = {
+    colete: '📦',
+    plicuri: '✉️',
+    persoane: '👥',
+    animale: '🐾',
+    masini: '🚗',
+    platforma: '🚛',
+    paleti: '📋',
+    electronice: '📺',
+    tractari: '🔧',
+    mutari: '🏠',
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {couriers.map((courier) => (
-        <div key={courier.uid} className="bg-slate-800/50 rounded-xl p-5 border border-white/5 hover:border-white/10 transition-all">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-linear-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold">
-                {(courier.nume || courier.email || '?').charAt(0).toUpperCase()}
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      {couriers.map((courier) => {
+        const courierName = getCourierName(courier);
+        const services = getServices(courier);
+        const courierData = courier as unknown as Record<string, unknown>;
+        const rating = courierData.rating as number | undefined;
+        const reviewCount = courierData.reviewCount as number | undefined;
+        
+        return (
+          <div key={courier.uid} className="bg-linear-to-br from-slate-800/80 to-slate-800/40 rounded-xl p-5 border border-white/5 hover:border-orange-500/30 transition-all hover:shadow-lg hover:shadow-orange-500/10 group">
+            {/* Header */}
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-linear-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-orange-500/25 group-hover:scale-105 transition-transform">
+                  {courierName.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-white font-semibold">{courierName}</p>
+                  <p className="text-gray-500 text-xs">{courier.email}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-white font-semibold">{courier.nume || courier.displayName || 'Nume nesetat'}</p>
-                <p className="text-gray-400 text-sm">{courier.email}</p>
-              </div>
-            </div>
-            <span className="px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-medium">
-              Activ
-            </span>
-          </div>
-          
-          <div className="space-y-2 mb-4">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-400">Telefon:</span>
-              <span className="text-gray-300">{courier.telefon || '-'}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-400">Servicii active:</span>
-              <span className="text-gray-300">
-                {(() => {
-                  const courierData = courier as unknown as Record<string, unknown>;
-                  return courierData.serviciiOferite && Array.isArray(courierData.serviciiOferite) ? courierData.serviciiOferite.length : 0;
-                })()}
+              <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-medium flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Activ
               </span>
             </div>
-          </div>
 
-          <div className="flex gap-2">
-            <button className="flex-1 px-3 py-2 bg-blue-500/10 text-blue-400 rounded-lg text-sm font-medium hover:bg-blue-500/20 transition-all flex items-center justify-center gap-2">
-              <EyeIcon className="w-4 h-4" />
-              Detalii
-            </button>
-            <button 
-              onClick={() => onSuspend(courier.uid)}
-              className="px-3 py-2 bg-red-500/10 text-red-400 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-all"
-              title="Suspendă curier"
-            >
-              <BanIcon className="w-4 h-4" />
-            </button>
+            {/* Rating */}
+            {rating !== undefined && (
+              <div className="flex items-center gap-2 mb-3 p-2 bg-yellow-500/10 rounded-lg">
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <svg
+                      key={star}
+                      className={`w-4 h-4 ${star <= Math.round(rating) ? 'text-yellow-400' : 'text-gray-600'}`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <span className="text-yellow-400 font-semibold text-sm">{rating.toFixed(1)}</span>
+                {reviewCount !== undefined && (
+                  <span className="text-gray-500 text-xs">({reviewCount} recenzii)</span>
+                )}
+              </div>
+            )}
+            
+            {/* Info Grid */}
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center justify-between text-sm p-2 bg-slate-700/30 rounded-lg">
+                <span className="text-gray-400 flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  Telefon
+                </span>
+                {courier.telefon ? (
+                  <span className="text-white font-medium">{courier.telefon}</span>
+                ) : (
+                  <span className="text-gray-500 italic text-xs">Nesetat</span>
+                )}
+              </div>
+              
+              <div className="flex items-center justify-between text-sm p-2 bg-slate-700/30 rounded-lg">
+                <span className="text-gray-400 flex items-center gap-2">
+                  <TruckIcon className="w-4 h-4" />
+                  Servicii
+                </span>
+                <span className="text-orange-400 font-bold">{services.length}</span>
+              </div>
+            </div>
+
+            {/* Services Tags */}
+            {services.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {services.slice(0, 5).map((service, idx) => {
+                  const serviceKey = service.toLowerCase();
+                  const emoji = serviceEmojis[serviceKey] || '📦';
+                  return (
+                    <span 
+                      key={idx} 
+                      className="px-2 py-1 bg-slate-700/50 text-gray-300 rounded-md text-xs flex items-center gap-1"
+                    >
+                      <span>{emoji}</span>
+                      <span className="capitalize">{service}</span>
+                    </span>
+                  );
+                })}
+                {services.length > 5 && (
+                  <span className="px-2 py-1 bg-orange-500/20 text-orange-400 rounded-md text-xs font-medium">
+                    +{services.length - 5}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="flex gap-2">
+              <button className="flex-1 px-3 py-2.5 bg-blue-500/10 text-blue-400 rounded-lg text-sm font-medium hover:bg-blue-500/20 transition-all flex items-center justify-center gap-2 border border-blue-500/20">
+                <EyeIcon className="w-4 h-4" />
+                Vezi Profil
+              </button>
+              <button 
+                onClick={() => onSuspend(courier.uid)}
+                className="px-3 py-2.5 bg-red-500/10 text-red-400 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-all border border-red-500/20"
+                title="Suspendă curier"
+              >
+                <BanIcon className="w-4 h-4" />
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
       {couriers.length === 0 && (
-        <div className="col-span-full text-center py-12 text-gray-400">
-          Nu există curieri înregistrați.
+        <div className="col-span-full text-center py-12">
+          <TruckIcon className="w-12 h-12 mx-auto mb-3 text-gray-600" />
+          <p className="text-gray-400">Nu există curieri înregistrați.</p>
         </div>
       )}
     </div>
