@@ -140,7 +140,7 @@ function OrderCard({
             <div className="flex items-center gap-2 sm:gap-2">
               <button
                 onClick={onToggleChat}
-                className={`relative px-4 py-2.5 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-medium transition-all flex items-center gap-1.5 min-w-[80px] sm:min-w-0 justify-center ${
+                className={`relative px-4 py-2.5 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-medium transition-all flex items-center gap-1.5 min-w-20 sm:min-w-0 justify-center ${
                   isExpanded 
                     ? 'bg-green-500/30 border-green-500/50 text-green-300 hover:bg-green-500/40' 
                     : unreadCount > 0
@@ -164,7 +164,7 @@ function OrderCard({
               </button>
               <button
                 onClick={onViewDetails}
-                className="px-4 py-2.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5 min-w-[80px] sm:min-w-0 justify-center"
+                className="px-4 py-2.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5 min-w-20 sm:min-w-0 justify-center"
                 title="Vezi detalii"
               >
                 <svg className="w-3.5 h-3.5 sm:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +178,7 @@ function OrderCard({
           
           {/* Route */}
           <div className="flex flex-wrap items-center gap-2 mb-3 text-xs sm:text-sm">
-            <div className="flex items-center gap-1.5 flex-shrink-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <Image 
                 src={`/img/flag/${getCountryCode(order.expeditorTara)}.svg`}
                 alt={order.expeditorTara || 'RO'}
@@ -194,7 +194,7 @@ function OrderCard({
             <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
-            <div className="flex items-center gap-1.5 flex-shrink-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <Image 
                 src={`/img/flag/${getCountryCode(order.destinatarTara)}.svg`}
                 alt={order.destinatarTara || 'RO'}

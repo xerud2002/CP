@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import CountryFilter from '../../shared/CountryFilter';
 import ServiceTypeFilter from '../../shared/ServiceTypeFilter';
@@ -31,7 +32,21 @@ export default function OrderFilters({
   onClearFilters
 }: OrderFiltersProps) {
   const [isSortOpen, setIsSortOpen] = useLocalStorage('courier_filters_sort_open', false);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
   const sortDropdownRef = useRef<HTMLDivElement>(null);
+  const sortButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Calculate dropdown position when opened
+  useEffect(() => {
+    if (isSortOpen && sortButtonRef.current) {
+      const rect = sortButtonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + 8,
+        left: rect.left,
+        width: rect.width
+      });
+    }
+  }, [isSortOpen]);
 
   // Close sort dropdown when clicking outside
   useEffect(() => {
@@ -52,17 +67,18 @@ export default function OrderFilters({
   const selectedSort = sortOptions.find(s => s.value === sortBy);
 
   return (
-    <div className="bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-2xl border border-white/5 p-2 sm:p-4 mb-3 sm:mb-6 relative z-10">
+    <div className="bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-2xl border border-white/5 p-2 sm:p-4 mb-3 sm:mb-6 overflow-visible">
       {/* Main filters row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-2 sm:mb-3">
         <CountryFilter value={countryFilter} onChange={onCountryChange} />
         <ServiceTypeFilter value={serviceFilter} onChange={onServiceChange} />
 
         {/* Sort Filter */}
-        <div ref={sortDropdownRef} className="relative z-10">
+        <div ref={sortDropdownRef} className="relative">
           <label className="block text-xs text-gray-400 mb-1.5">Sortare</label>
           <div className="relative">
             <button
+              ref={sortButtonRef}
               type="button"
               onClick={() => setIsSortOpen(!isSortOpen)}
               className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left text-sm"
@@ -82,15 +98,18 @@ export default function OrderFilters({
               </svg>
             </button>
             
-            {isSortOpen && (
-              <>
-                {/* Mobile backdrop */}
-                <div 
-                  className="fixed inset-0 bg-black/50 z-[9998] sm:hidden"
-                  onClick={() => setIsSortOpen(false)}
-                />
-                <div className="fixed sm:absolute top-auto sm:top-full left-0 right-0 sm:left-0 sm:right-0 bottom-0 sm:bottom-auto mt-0 sm:mt-2 max-h-[50vh] sm:max-h-auto bg-slate-900 border-t sm:border border-white/10 rounded-t-2xl sm:rounded-xl shadow-2xl overflow-hidden z-[9999] animate-in slide-in-from-bottom sm:slide-in-from-top-2 duration-200">
-                  <div className="max-h-[calc(50vh-2rem)] sm:max-h-80 overflow-y-auto custom-scrollbar">
+            {isSortOpen && typeof window !== 'undefined' && createPortal(
+              <div 
+                className="bg-slate-900 border border-white/10 rounded-xl shadow-2xl max-h-[300px] overflow-hidden"
+                style={{
+                  position: 'fixed',
+                  top: `${dropdownPosition.top}px`,
+                  left: `${dropdownPosition.left}px`,
+                  width: `${dropdownPosition.width}px`,
+                  zIndex: 99999
+                }}
+              >
+                <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
                   {sortOptions.map((option) => (
                     <button
                       key={option.value}
@@ -122,15 +141,15 @@ export default function OrderFilters({
                     </button>
                   ))}
                 </div>
-              </div>
-              </>
+              </div>,
+              document.body
             )}
           </div>
         </div>
       </div>
 
       {/* Search bar */}
-      <div className="relative z-20">
+      <div className="relative">
         <label className="block text-xs text-gray-400 mb-1.5">Caută</label>
         <div className="relative">
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">

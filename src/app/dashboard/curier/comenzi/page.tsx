@@ -245,7 +245,7 @@ function ComenziCurierContent() {
               <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
             </Link>
             <div className="flex items-center gap-2 sm:gap-4">
-              <div className="p-2 sm:p-3 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-xl border border-orange-500/20">
+              <div className="p-2 sm:p-3 bg-linear-to-br from-orange-500/20 to-amber-500/20 rounded-xl border border-orange-500/20">
                 <svg className="w-5 h-5 sm:w-7 sm:h-7 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
@@ -259,7 +259,7 @@ function ComenziCurierContent() {
         </div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6 py-3 sm:py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 py-3 sm:py-8">
         {/* Filters */}
         <OrderFilters
           countryFilter={countryFilter}
@@ -312,7 +312,7 @@ function ComenziCurierContent() {
       </div>
 
       {/* Help Card - Lazy loaded */}
-      <div className="relative z-0 max-w-7xl mx-auto px-2 sm:px-6 pb-3 sm:pb-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 pb-3 sm:pb-8">
         <Suspense fallback={null}>
           <HelpCard />
         </Suspense>
