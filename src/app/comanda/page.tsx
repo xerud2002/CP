@@ -10,6 +10,7 @@ import { db } from '@/lib/firebase';
 import { countries, judetByCountry } from '@/lib/constants';
 import { getNextOrderNumber } from '@/utils/orderHelpers';
 import { showSuccess, showError } from '@/lib/toast';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 // Servicii disponibile cu iconițe SVG (identice cu homepage)
 const servicii = [
@@ -182,35 +183,35 @@ function ComandaForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Calendar state pentru data_specifica
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useLocalStorage('comanda_calendar_open', false);
   const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
   const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
   const calendarRef = useRef<HTMLDivElement>(null);
 
   // Custom dropdown states for country selectors
-  const [isRidicareCountryOpen, setIsRidicareCountryOpen] = useState(false);
-  const [isLivrareCountryOpen, setIsLivrareCountryOpen] = useState(false);
+  const [isRidicareCountryOpen, setIsRidicareCountryOpen] = useLocalStorage('comanda_ridicare_country_open', false);
+  const [isLivrareCountryOpen, setIsLivrareCountryOpen] = useLocalStorage('comanda_livrare_country_open', false);
   const [ridicareCountrySearch, setRidicareCountrySearch] = useState('');
   const [livrareCountrySearch, setLivrareCountrySearch] = useState('');
   const ridicareCountryRef = useRef<HTMLDivElement>(null);
   const livrareCountryRef = useRef<HTMLDivElement>(null);
 
   // Custom dropdown states for judet/region selectors
-  const [isRidicareJudetOpen, setIsRidicareJudetOpen] = useState(false);
-  const [isLivrareJudetOpen, setIsLivrareJudetOpen] = useState(false);
+  const [isRidicareJudetOpen, setIsRidicareJudetOpen] = useLocalStorage('comanda_ridicare_judet_open', false);
+  const [isLivrareJudetOpen, setIsLivrareJudetOpen] = useLocalStorage('comanda_livrare_judet_open', false);
   const [ridicareJudetSearch, setRidicareJudetSearch] = useState('');
   const [livrareJudetSearch, setLivrareJudetSearch] = useState('');
   const ridicareJudetRef = useRef<HTMLDivElement>(null);
   const livrareJudetRef = useRef<HTMLDivElement>(null);
 
   // Calendar state pentru range start
-  const [isCalendarStartOpen, setIsCalendarStartOpen] = useState(false);
+  const [isCalendarStartOpen, setIsCalendarStartOpen] = useLocalStorage('comanda_calendar_start_open', false);
   const [calendarStartMonth, setCalendarStartMonth] = useState(new Date().getMonth());
   const [calendarStartYear, setCalendarStartYear] = useState(new Date().getFullYear());
   const calendarStartRef = useRef<HTMLDivElement>(null);
 
   // Calendar state pentru range end
-  const [isCalendarEndOpen, setIsCalendarEndOpen] = useState(false);
+  const [isCalendarEndOpen, setIsCalendarEndOpen] = useLocalStorage('comanda_calendar_end_open', false);
   const [calendarEndMonth, setCalendarEndMonth] = useState(new Date().getMonth());
   const [calendarEndYear, setCalendarEndYear] = useState(new Date().getFullYear());
   const calendarEndRef = useRef<HTMLDivElement>(null);

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 import CountryFilter from '../../shared/CountryFilter';
 import ServiceTypeFilter from '../../shared/ServiceTypeFilter';
 
@@ -29,7 +30,7 @@ export default function OrderFilters({
   hasActiveFilters,
   onClearFilters
 }: OrderFiltersProps) {
-  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isSortOpen, setIsSortOpen] = useLocalStorage('courier_filters_sort_open', false);
   const sortDropdownRef = useRef<HTMLDivElement>(null);
 
   // Close sort dropdown when clicking outside

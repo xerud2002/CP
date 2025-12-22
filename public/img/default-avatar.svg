@@ -1,0 +1,8 @@
+﻿<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background matching slate-700 -->
+  <rect width="512" height="512" fill="#334155"/>
+  <!-- Head circle in orange-400 -->
+  <circle cx="256" cy="180" r="100" fill="#fb923c"/>
+  <!-- Body/shoulders in orange-400 -->
+  <ellipse cx="256" cy="440" rx="180" ry="150" fill="#fb923c"/>
+</svg>

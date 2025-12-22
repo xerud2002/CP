@@ -427,10 +427,16 @@ function RecentActivity({ recentMessages, unreadCount }: { recentMessages: Recen
                 className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors group"
               >
                 <div className="relative shrink-0 mt-0.5">
-                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-semibold ${
-                    !msg.read ? 'bg-orange-500/30 text-orange-300' : 'bg-slate-700 text-gray-400'
+                  <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden flex items-center justify-center ${
+                    !msg.read ? 'bg-orange-500/30' : 'bg-slate-700'
                   }`}>
-                    {formatDisplayName(msg.senderName).charAt(0).toUpperCase()}
+                    <Image
+                      src="/img/default-avatar.svg"
+                      alt={formatDisplayName(msg.senderName)}
+                      width={32}
+                      height={32}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   {!msg.read && (
                     <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-orange-500 rounded-full animate-pulse" />

@@ -13,6 +13,7 @@ import { db, storage } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
 import { showError } from '@/lib/toast';
 import { countries } from '@/lib/constants';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface CourierProfile {
   // Personal Info
@@ -236,8 +237,8 @@ function ProfilCurierContent() {
   const [saving, setSaving] = useState(false);
   const [savedMessage, setSavedMessage] = useState('');
   
-  const [prefixDropdownOpen, setPrefixDropdownOpen] = useState(false);
-  const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
+  const [prefixDropdownOpen, setPrefixDropdownOpen] = useLocalStorage('courier_profile_prefix_dropdown', false);
+  const [countryDropdownOpen, setCountryDropdownOpen] = useLocalStorage('courier_profile_country_dropdown', false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [ordersCount, setOrdersCount] = useState(0);
   const [rating, setRating] = useState(5.0);

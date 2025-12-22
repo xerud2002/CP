@@ -11,6 +11,7 @@ import { ArrowLeftIcon, UserIcon, CheckIcon } from '@/components/icons/Dashboard
 import HelpCard from '@/components/HelpCard';
 import { countries, judetByCountry } from '@/lib/constants';
 import { showSuccess, showError } from '@/lib/toast';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 // Country-specific company tax information
 const countryTaxInfo: Record<string, { 
@@ -68,8 +69,8 @@ export default function ProfilClientPage() {
     cui: '',
   });
   const [saving, setSaving] = useState(false);
-  const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
-  const [judetDropdownOpen, setJudetDropdownOpen] = useState(false);
+  const [countryDropdownOpen, setCountryDropdownOpen] = useLocalStorage('client_profile_country_dropdown', false);
+  const [judetDropdownOpen, setJudetDropdownOpen] = useLocalStorage('client_profile_judet_dropdown', false);
   const [countrySearch, setCountrySearch] = useState('');
   const [judetSearch, setJudetSearch] = useState('');
   const countryDropdownRef = useRef<HTMLDivElement>(null);
