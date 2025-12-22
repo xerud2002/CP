@@ -1,10 +1,10 @@
-﻿'use client';
+'use client';
 
 import React, { Suspense, lazy } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { logError } from '@/lib/errorMessages';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import OrderFilters from '@/components/orders/courier/filters/OrderFilters';
@@ -245,15 +245,15 @@ function ComenziCurierContent() {
               <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
             </Link>
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-2.5 sm:p-3 bg-linear-to-br from-orange-500/20 to-amber-500/20 rounded-xl border border-orange-500/20">
+              <div className="p-2.5 sm:p-3 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-xl border border-orange-500/20">
                 <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
               </div>
               <div>
                 <h1 className="text-lg sm:text-2xl font-bold text-white">Comenzile Mele</h1>
-                <p className="text-xs text-gray-400 mt-0.5 sm:hidden">Gestionează comenzile tale</p>
-                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Gestionează comenzile și livrările tale</p>
+                <p className="text-xs text-gray-400 mt-0.5 sm:hidden">Gestioneaza comenzile tale</p>
+                <p className="text-xs sm:text-sm text-gray-400 hidden sm:block">Gestioneaza comenzile ?i livrarile tale</p>
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { collection, query, where, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -185,10 +186,13 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
               <div className="flex items-start gap-2.5">
                 {/* Avatar */}
                 {conv.profileImage ? (
-                  <img 
+                  <Image 
                     src={conv.profileImage} 
                     alt={conv.companyName}
+                    width={40}
+                    height={40}
                     className="w-10 h-10 rounded-full object-cover shrink-0 border-2 border-orange-500/30"
+                    unoptimized
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shrink-0 border-2 border-orange-400/20">
@@ -239,10 +243,13 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
                     </svg>
                   </button>
                   {conversations.find(c => c.courierId === selectedCourierId)?.profileImage ? (
-                    <img 
-                      src={conversations.find(c => c.courierId === selectedCourierId)?.profileImage} 
+                    <Image 
+                      src={conversations.find(c => c.courierId === selectedCourierId)?.profileImage || ''} 
                       alt={conversations.find(c => c.courierId === selectedCourierId)?.companyName || 'Logo'}
+                      width={40}
+                      height={40}
                       className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover border-2 border-orange-500/30 shrink-0"
+                      unoptimized
                     />
                   ) : (
                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shrink-0 border-2 border-orange-400/20">

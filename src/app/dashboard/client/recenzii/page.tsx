@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy, doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { formatOrderNumber } from '@/utils/orderHelpers';
 import { ArrowLeftIcon, StarIcon, CheckCircleIcon, UserIcon } from '@/components/icons/DashboardIcons';
@@ -298,7 +298,7 @@ function RecenziiClientContent() {
 
         {/* Orders to Review */}
         {completedOrders.length > 0 && !showReviewForm && (
-          <div className="bg-linear-to-br from-orange-500/20 to-yellow-500/20 rounded-xl border border-orange-500/20 p-4 sm:p-6 mb-6">
+          <div className="bg-gradient-to-br from-orange-500/20 to-yellow-500/20 rounded-xl border border-orange-500/20 p-4 sm:p-6 mb-6">
             <h3 className="text-white font-semibold mb-3">Comenzi finalizate - lasă o recenzie</h3>
             <div className="space-y-2">
               {completedOrders.map((order) => (

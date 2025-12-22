@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import CountryFilter from '../../shared/CountryFilter';
 import ServiceTypeFilter from '../../shared/ServiceTypeFilter';
@@ -42,7 +42,7 @@ export default function ClientOrderFilters({
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [setIsSortOpen]);
 
   const sortOptions = [
     { value: 'newest', label: 'Cele mai recente', icon: 'down' },

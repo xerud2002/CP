@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where, updateDoc, doc, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
@@ -421,10 +422,13 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                       onClick={() => setPreviewImage({ url: msg.attachmentUrl!, name: msg.attachmentName || 'Imagine' })}
                       className="block cursor-zoom-in group relative overflow-hidden rounded-xl"
                     >
-                      <img 
+                      <Image 
                         src={msg.attachmentUrl} 
                         alt={msg.attachmentName || 'Atașament'} 
+                        width={280}
+                        height={192}
                         className="max-w-[280px] max-h-48 rounded-xl object-cover transition-transform group-hover:scale-105 shadow-lg"
+                        unoptimized
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                         <svg className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -597,11 +601,14 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
             </svg>
           </button>
           <div className="relative max-w-6xl max-h-[90vh] animate-in zoom-in-95 duration-200">
-            <img 
+            <Image 
               src={previewImage.url} 
               alt={previewImage.name}
+              width={1200}
+              height={800}
               className="max-w-full max-h-[90vh] object-contain rounded-2xl shadow-2xl border border-slate-700/50"
               onClick={(e) => e.stopPropagation()}
+              unoptimized
             />
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-slate-900/90 backdrop-blur-sm rounded-xl border border-slate-700/50 text-sm text-gray-300 max-w-md truncate">
               {previewImage.name}

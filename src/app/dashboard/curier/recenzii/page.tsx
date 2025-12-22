@@ -166,7 +166,7 @@ export default function RecenziiPage() {
             <Link href="/dashboard/curier" className="p-2 hover:bg-slate-800/80 rounded-xl transition-colors">
               <ArrowLeftIcon className="w-5 h-5 text-gray-400" />
             </Link>
-            <div className="p-2.5 bg-linear-to-br from-blue-500/20 to-blue-500/20 rounded-xl border border-blue-500/20">
+            <div className="p-2.5 bg-gradient-to-br from-blue-500/20 to-blue-500/20 rounded-xl border border-blue-500/20">
               <ChatIcon />
             </div>
             <div>
@@ -179,7 +179,7 @@ export default function RecenziiPage() {
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
         {/* Rating Overview - DOS Style */}
-        <div className="bg-linear-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 mb-6">
+        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
             <RatingCard 
               rating={rating}
@@ -202,7 +202,7 @@ export default function RecenziiPage() {
         {/* Request Review Options */}
         <div className="grid md:grid-cols-2 gap-4 mb-6">
           {/* Invite via Email */}
-          <div className="bg-linear-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/30 p-6">
+          <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/30 p-6">
             <div className="flex items-start gap-4 mb-4">
               <div className="p-3 bg-purple-500/20 rounded-xl border border-purple-500/30 shrink-0">
                 <svg className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -242,7 +242,7 @@ export default function RecenziiPage() {
           </div>
 
           {/* Request Review Link */}
-          <div className="bg-linear-to-br from-orange-500/10 to-amber-500/10 backdrop-blur-xl rounded-2xl border border-orange-500/30 p-6">
+          <div className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 backdrop-blur-xl rounded-2xl border border-orange-500/30 p-6">
             <div className="flex items-start gap-4 mb-4">
               <div className="p-3 bg-orange-500/20 rounded-xl border border-orange-500/30 shrink-0">
                 <svg className="w-6 h-6 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -315,7 +315,7 @@ export default function RecenziiPage() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-semibold">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-semibold">
                         {review.clientName.charAt(0).toUpperCase()}
                       </div>
                       <div>

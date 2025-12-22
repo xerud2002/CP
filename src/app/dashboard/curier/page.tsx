@@ -205,10 +205,10 @@ const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, ra
   const greeting = getGreeting();
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-900/70 via-slate-800/50 to-slate-900/70 backdrop-blur-sm border border-orange-500/10 p-4 sm:p-6">
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/70 via-slate-800/50 to-slate-900/70 backdrop-blur-sm border border-orange-500/10 p-4 sm:p-6">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-linear-to-br from-orange-500/8 to-amber-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-linear-to-tr from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-orange-500/8 to-amber-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
 
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2 mb-4">
@@ -286,7 +286,7 @@ const SetupProgress = memo(function SetupProgress({ setupComplete, completedStep
   const steps = getSetupSteps(completedSteps >= 1, completedSteps >= 2);
   
   return (
-    <section className="bg-linear-to-br from-amber-500/10 to-orange-500/10 rounded-xl sm:rounded-2xl border border-amber-500/20 p-4 sm:p-6">
+    <section className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-xl sm:rounded-2xl border border-amber-500/20 p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
@@ -305,7 +305,7 @@ const SetupProgress = memo(function SetupProgress({ setupComplete, completedStep
       {/* Progress bar */}
       <div className="h-2 bg-slate-700 rounded-full mb-4 overflow-hidden">
         <div 
-          className="h-full bg-linear-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-500"
+          className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -383,10 +383,10 @@ const MainNavigation = memo(function MainNavigation({ badges, newOrdersCount }: 
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
+              className={`group relative bg-gradient-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
             >
               {/* Hover gradient overlay */}
-              <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
+              <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
               
               {/* New Orders Badge - only for Comenzi card */}
               {hasNewOrders && (
@@ -774,23 +774,23 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
       {/* Modal - optimized for mobile */}
       <div className={`relative w-full max-w-md h-[96vh] sm:max-h-[90vh] overflow-y-auto rounded-xl sm:rounded-2xl border shadow-2xl transition-all ${
         isHighlighted 
-          ? 'bg-linear-to-br from-emerald-900/95 via-emerald-800/90 to-slate-900 border-emerald-500/30' 
-          : 'bg-linear-to-br from-slate-800 via-slate-850 to-slate-900 border-white/10'
+          ? 'bg-gradient-to-br from-emerald-900/95 via-emerald-800/90 to-slate-900 border-emerald-500/30' 
+          : 'bg-gradient-to-br from-slate-800 via-slate-850 to-slate-900 border-white/10'
       }`}>
         {/* Progress bar */}
-        <div className="h-1.5 sm:h-2 bg-linear-to-r from-slate-800 via-slate-700 to-slate-800 sticky top-0 rounded-b-lg overflow-hidden">
+        <div className="h-1.5 sm:h-2 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 sticky top-0 rounded-b-lg overflow-hidden">
           <div 
             className={`h-full transition-all duration-500 ease-out shadow-lg ${
               isHighlighted 
-                ? 'bg-linear-to-r from-emerald-400 via-emerald-500 to-emerald-400 shadow-emerald-500/50'
-                : 'bg-linear-to-r from-orange-400 via-orange-500 to-amber-500 shadow-orange-500/50'
+                ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-400 shadow-emerald-500/50'
+                : 'bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 shadow-orange-500/50'
             }`}
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           />
         </div>
 
         {/* Step counter */}
-        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-1 sm:px-2.5 sm:py-1 bg-linear-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-white/10 rounded-lg shadow-lg">
+        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-1 sm:px-2.5 sm:py-1 bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-white/10 rounded-lg shadow-lg">
           <span className="text-[10px] sm:text-xs font-semibold text-white">{currentStep + 1}/{steps.length}</span>
         </div>
 
@@ -811,8 +811,8 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
           <div className="flex justify-center mb-2 sm:mb-5">
             <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl flex items-center justify-center p-2.5 sm:p-4 transition-all ${
               isHighlighted 
-                ? 'bg-linear-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/20'
-                : 'bg-linear-to-br from-slate-700/50 to-slate-800/50 border border-orange-500/30 shadow-lg shadow-orange-500/10'
+                ? 'bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/20'
+                : 'bg-gradient-to-br from-slate-700/50 to-slate-800/50 border border-orange-500/30 shadow-lg shadow-orange-500/10'
             }`}>
               {currentStepData.icon()}
             </div>
@@ -872,9 +872,9 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
               }}
               className={`flex-1 py-2 sm:py-3.5 px-3 sm:px-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold transition-all active:scale-[0.98] shadow-lg ${
                 isHighlighted
-                  ? 'bg-linear-to-r from-emerald-500 to-emerald-600 text-white shadow-emerald-500/25'
+                  ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-emerald-500/25'
                   : isLastStep
-                    ? 'bg-linear-to-r from-orange-500 to-amber-500 text-white shadow-orange-500/25'
+                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-orange-500/25'
                     : 'bg-orange-500 text-white shadow-orange-500/20'
               }`}
             >

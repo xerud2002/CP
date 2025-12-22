@@ -94,7 +94,7 @@ export default function ProfilClientPage() {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [setCountryDropdownOpen, setJudetDropdownOpen]);
 
   // Load profile data
   const loadProfile = useCallback(async () => {

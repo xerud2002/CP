@@ -78,7 +78,7 @@ function AdminHeader({ userName, onLogout, onRefresh }: {
         <div className="flex items-center justify-between h-16">
           {/* Left Side - Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-red-500 to-orange-500 flex items-center justify-center shadow-lg shadow-red-500/25">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center shadow-lg shadow-red-500/25">
               <span className="text-white font-bold text-lg">CP</span>
             </div>
             <div className="hidden sm:block">
@@ -108,7 +108,7 @@ function AdminHeader({ userName, onLogout, onRefresh }: {
 
             {/* User Avatar */}
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-linear-to-br from-red-400 to-red-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-red-500/25">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-red-500/25">
                 {userName.charAt(0).toUpperCase()}
               </div>
               <div className="hidden sm:block">
@@ -136,7 +136,7 @@ function WelcomeSection({ userName }: { userName: string }) {
   const greeting = getGreeting();
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-800/80 to-slate-900/80 border border-white/10 p-6 sm:p-8">
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-white/10 p-6 sm:p-8">
       {/* Animated Background Orbs */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
@@ -207,7 +207,7 @@ function TabNavigation({ tabs, activeTab, onTabChange }: {
           onClick={() => onTabChange(tab.id)}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
             activeTab === tab.id
-              ? 'bg-linear-to-r from-red-500 to-orange-500 text-white shadow-lg shadow-red-500/25'
+              ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-lg shadow-red-500/25'
               : 'text-gray-400 hover:text-white hover:bg-white/5'
           }`}
         >
@@ -275,9 +275,9 @@ function UsersTable({ users, onRoleChange, onDelete, filter }: {
               <td className="py-4 px-4">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm ${
-                    u.role === 'admin' ? 'bg-linear-to-br from-red-400 to-red-600' :
-                    u.role === 'curier' ? 'bg-linear-to-br from-orange-400 to-orange-600' :
-                    'bg-linear-to-br from-emerald-400 to-emerald-600'
+                    u.role === 'admin' ? 'bg-gradient-to-br from-red-400 to-red-600' :
+                    u.role === 'curier' ? 'bg-gradient-to-br from-orange-400 to-orange-600' :
+                    'bg-gradient-to-br from-emerald-400 to-emerald-600'
                   }`}>
                     {(u.nume || u.email || '?').charAt(0).toUpperCase()}
                   </div>
@@ -455,7 +455,7 @@ function CouriersGrid({ couriers, onSuspend }: {
         <div key={courier.uid} className="bg-slate-800/50 rounded-xl p-5 border border-white/5 hover:border-white/10 transition-all">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-linear-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold">
                 {(courier.nume || courier.email || '?').charAt(0).toUpperCase()}
               </div>
               <div>
@@ -542,7 +542,7 @@ function StatsContent({ users, orders }: { users: User[]; orders: Order[] }) {
         <h4 className="text-white font-medium mb-4">Rata de conversie</h4>
         <div className="h-4 bg-slate-700 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-linear-to-r from-emerald-500 to-emerald-400 rounded-full transition-all"
+            className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all"
             style={{ width: `${orders.length > 0 ? (deliveredOrders / orders.length) * 100 : 0}%` }}
           />
         </div>

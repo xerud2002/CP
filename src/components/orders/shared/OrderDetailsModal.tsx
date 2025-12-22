@@ -135,7 +135,6 @@ export default function OrderDetailsModal({
               height={order.inaltime}
               vehicleType={order.tip_vehicul}
               description={order.descriere}
-              serviceType={order.serviciu}
             />
 
             {/* Schedule */}

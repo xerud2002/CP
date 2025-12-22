@@ -9,7 +9,6 @@ interface OrderTransportDetailsProps {
   height?: string | number;
   vehicleType?: string;
   description?: string;
-  serviceType?: string;
 }
 
 export default function OrderTransportDetails({
@@ -18,8 +17,7 @@ export default function OrderTransportDetails({
   width,
   height,
   vehicleType,
-  description,
-  serviceType
+  description
 }: OrderTransportDetailsProps) {
   // Check if values are meaningful (not empty, not just whitespace, not "0")
   const cleanWeight = weight?.toString().trim();
