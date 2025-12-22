@@ -1,6 +1,21 @@
 @import "tailwindcss";
 
 /* ========================================
+   TEXT SELECTION STYLING
+   ======================================== */
+
+/* Custom text selection colors - brand orange */
+::selection {
+  background-color: rgba(249, 115, 22, 0.3); /* orange-500 with opacity */
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: rgba(249, 115, 22, 0.3);
+  color: #ffffff;
+}
+
+/* ========================================
    PERFORMANCE OPTIMIZATIONS
    ======================================== */
 
@@ -82,6 +97,8 @@ input[type="number"] {
   /* Success - Verde Emerald */
   --emerald: #10b981;
   --emerald-light: #34d399;
+  --green: #10b981;
+  --green-light: #34d399;
   
   /* Warning - Amber */
   --amber: #f59e0b;
