@@ -171,7 +171,12 @@ export function useOrdersLoader(userId: string | undefined, options: UseOrdersLo
   // Client-side filtering by search query (order number or city)
   const filteredBySearch = useMemo(() => {
     if (!searchQuery.trim()) return filteredByService;
-    const query = searchQuery.toLowerCase().trim();
+    let query = searchQuery.toLowerCase().trim();
+    
+    // Remove # and CP/cp prefix for order number search
+    // Supports: "#CP141140", "CP141140", "#141140", "141140"
+    query = query.replace(/^#/, '').replace(/^cp/i, '');
+    
     return filteredByService.filter(order => {
       const orderNum = order.orderNumber?.toString() || '';
       const pickupCity = (order.oras_ridicare || '').toLowerCase();

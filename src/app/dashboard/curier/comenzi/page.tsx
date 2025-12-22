@@ -186,25 +186,18 @@ function ComenziCurierContent() {
 
 
 
-  // Mark order as viewed
-  const markOrderAsViewed = (orderId: string) => {
+  // Mark order as viewed - memoized
+  const markOrderAsViewed = useCallback((orderId: string) => {
     if (!user || !orderId) return;
     
-    const newViewedOrders = new Set(viewedOrders);
-    newViewedOrders.add(orderId);
-    setViewedOrders(newViewedOrders);
-    
-    // Save to localStorage
-    localStorage.setItem(`curier_${user.uid}_viewed_orders`, JSON.stringify(Array.from(newViewedOrders)));
-  };
-
-  // Handle opening order details
-  const handleOpenOrder = (order: Order) => {
-    setSelectedOrder(order);
-    if (order.id) {
-      markOrderAsViewed(order.id);
-    }
-  };
+    setViewedOrders(prev => {
+      const newViewedOrders = new Set(prev);
+      newViewedOrders.add(orderId);
+      // Save to localStorage
+      localStorage.setItem(`curier_${user.uid}_viewed_orders`, JSON.stringify(Array.from(newViewedOrders)));
+      return newViewedOrders;
+    });
+  }, [user]);
 
   // Check if any filter is active
   const hasActiveFilters = countryFilter !== 'all' || serviceFilter !== 'all' || searchQuery.trim() !== '' || sortBy !== 'newest';
@@ -217,10 +210,22 @@ function ComenziCurierContent() {
     setSortBy('newest');
   }, []);
 
-  // Memoized toggle chat handler
+  // Memoized toggle chat handler - also marks order as viewed
   const handleToggleChat = useCallback((orderId: string | null) => {
     setExpandedChatOrderId(orderId);
-  }, []);
+    // Mark order as viewed when opening chat
+    if (orderId) {
+      markOrderAsViewed(orderId);
+    }
+  }, [markOrderAsViewed]);
+
+  // Memoized view details handler - marks order as viewed
+  const handleViewDetails = useCallback((order: Order) => {
+    setSelectedOrder(order);
+    if (order.id) {
+      markOrderAsViewed(order.id);
+    }
+  }, [markOrderAsViewed]);
 
   if (loading) {
     return (
@@ -285,7 +290,7 @@ function ComenziCurierContent() {
           loadingOrders={loadingOrders}
           currentUserId={user?.uid}
           onToggleChat={handleToggleChat}
-          onViewDetails={handleOpenOrder}
+          onViewDetails={handleViewDetails}
           onClearFilters={clearAllFilters}
         />
 
