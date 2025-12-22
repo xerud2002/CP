@@ -427,7 +427,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                         alt={msg.attachmentName || 'Atașament'} 
                         width={280}
                         height={192}
-                        className="max-w-[280px] max-h-48 rounded-xl object-cover transition-transform group-hover:scale-105 shadow-lg"
+                        className="max-w-70 max-h-48 rounded-xl object-cover transition-transform group-hover:scale-105 shadow-lg"
                         unoptimized
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">

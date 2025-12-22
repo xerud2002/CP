@@ -10,13 +10,13 @@ Paleta de culori a fost standardizată pentru consistență vizuală în întrea
 **Orange-500** este culoarea principală a brandului:
 - **Utilizare**: Butoane CTA, logo, elemente importante, notificări
 - **Clase Tailwind**: `bg-orange-500`, `text-orange-400`, `from-orange-500 to-orange-600`
-- **Gradient**: `bg-gradient-to-br from-orange-500 to-orange-600`
+- **Gradient**: `bg-linear-to-br from-orange-500 to-orange-600`
 
 ### Culoare Succes - Emerald (Verde)
 **Emerald-500** înlocuiește vechile tonuri de verde:
 - **Utilizare**: Status "livrata", confirmări, mesaje pozitive
 - **Clase Tailwind**: `bg-emerald-500`, `text-emerald-400`
-- **Gradient**: `bg-gradient-to-br from-emerald-500 to-emerald-600`
+- **Gradient**: `bg-linear-to-br from-emerald-500 to-emerald-600`
 
 ### Culoare Avertizare - Amber
 **Amber-500** pentru status-uri intermediare:
@@ -85,22 +85,22 @@ import { brandColors, buttonStyles } from '@/lib/colors';
 
 5. **Clase CSS invalide corectate**
    - ❌ Înainte: `bg-linear-to-br` (invalid)
-   - ✅ Acum: `bg-gradient-to-br` (corect)
+   - ✅ Acum: `bg-linear-to-br` (corect)
 
 ## 🎯 Roluri și Culori
 
 ### Admin
-- Avatar: `bg-gradient-to-br from-orange-500 to-orange-600`
+- Avatar: `bg-linear-to-br from-orange-500 to-orange-600`
 - Badge: `bg-orange-500/20 text-orange-400 border-orange-500/30`
 - Acces: Culoare orange pentru a indica autoritate
 
 ### Curier
-- Avatar: `bg-gradient-to-br from-orange-500 to-orange-600`
+- Avatar: `bg-linear-to-br from-orange-500 to-orange-600`
 - Badge: `bg-orange-500/20 text-orange-400 border-orange-500/30`
 - Acces: Culoare orange pentru rol activ
 
 ### Client
-- Avatar: `bg-gradient-to-br from-emerald-500 to-emerald-600`
+- Avatar: `bg-linear-to-br from-emerald-500 to-emerald-600`
 - Badge: `bg-emerald-500/20 text-emerald-400 border-emerald-500/30`
 - Acces: Culoare emerald pentru diferențiere
 
@@ -178,12 +178,12 @@ Folosește clasele din `globals.css`:
 ### Avatar Gradient
 ```tsx
 // Admin/Curier
-<div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-semibold">
+<div className="w-10 h-10 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-semibold">
   CP
 </div>
 
 // Client
-<div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white font-semibold">
+<div className="w-10 h-10 rounded-full bg-linear-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white font-semibold">
   C
 </div>
 ```
@@ -211,7 +211,7 @@ Folosește clasele din `globals.css`:
 1. **Import centralizat**: Preferă `colors.ts` în loc de clase hardcodate
 2. **Consistență opacity**: Folosește `/10`, `/20`, `/30` pentru transparență
 3. **Hover states**: Adaugă întotdeauna hover pentru interactivitate
-4. **Gradient-uri**: Folosește `bg-gradient-to-br` (bottom-right) pentru depth
+4. **Gradient-uri**: Folosește `bg-linear-to-br` (bottom-right) pentru depth
 5. **Border matches**: Border-ul trebuie să matcheze culoarea principală (`border-orange-500/30` cu `bg-orange-500/20`)
 
 ## 📚 Resurse Suplimentare

@@ -52,6 +52,7 @@ export interface Order {
   inaltime?: string;
   cantitate?: string;
   tip_vehicul?: string;
+  tip_animal?: string;
   descriere?: string;
   tip_programare?: 'data_specifica' | 'range' | 'flexibil';
   data_ridicare?: string;
@@ -92,4 +93,5 @@ export interface CourierProfile {
   reviewCount?: number;
   verificationStatus?: 'verified' | 'pending' | 'none';
   insuranceStatus?: 'verified' | 'pending' | 'none';
+  tipBusiness?: 'pf' | 'firma';
 }

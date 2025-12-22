@@ -10,9 +10,28 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ArrowLeftIcon, CheckCircleIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { showSuccess, showError } from '@/lib/toast';
+import { showConfirm } from '@/components/ui/ConfirmModal';
 import { logError } from '@/lib/errorMessages';
+import { CourierProfile } from '@/types';
+import { countries } from '@/lib/constants';
 
 import { getDocumentRequirements } from '@/utils/documentRequirements';
+
+// Category colors helper for document requirement cards
+const getCategoryColors = (category: string): string => {
+  switch (category) {
+    case 'identity':
+      return 'bg-blue-500/20 text-blue-400';
+    case 'company':
+      return 'bg-purple-500/20 text-purple-400';
+    case 'transport':
+      return 'bg-orange-500/20 text-orange-400';
+    case 'special':
+      return 'bg-emerald-500/20 text-emerald-400';
+    default:
+      return 'bg-slate-500/20 text-slate-400';
+  }
+};
 
 // Icon helper
 const getDocIcon = (iconType: string) => {
@@ -70,6 +89,19 @@ const getDocIcon = (iconType: string) => {
       );
   }
 };
+
+// Type for uploaded document status
+interface UploadedDocument {
+  url: string;
+  name: string;
+  uploadedAt: Date;
+  status: 'pending' | 'approved' | 'rejected';
+  rejectionReason?: string;
+}
+
+// Allowed file types for document upload
+const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 function VerificarePageContent() {
   const { user, loading } = useAuth();
@@ -219,7 +251,7 @@ function VerificarePageContent() {
 
   // Memoize documents calculation BEFORE any early returns
   const documents = useMemo(
-    () => profile ? getDocumentRequirements(profile.taraSediu, activeServices, profile.tipBusiness) : [],
+    () => profile ? getDocumentRequirements(profile.tara_sediu || 'RO', activeServices, profile.tipBusiness || 'pf') : [],
     [profile, activeServices]
   );
   const requiredDocs = useMemo(() => documents.filter(d => d.required), [documents]);
@@ -295,7 +327,7 @@ function VerificarePageContent() {
                 </div>
                 <div className="flex-1">
                   <p className="text-xs text-gray-500 mb-0.5">Țara înregistrată</p>
-                  <p className="text-white font-semibold">{countries.find(c => c.code.toLowerCase() === profile.taraSediu.toLowerCase())?.name || profile.taraSediu}</p>
+                  <p className="text-white font-semibold">{countries.find(c => c.code.toLowerCase() === profile.tara_sediu?.toLowerCase())?.name || profile.tara_sediu}</p>
                 </div>
               </div>
 
