@@ -21,6 +21,7 @@ import {
   EyeIcon,
   BanIcon,
   UserIcon,
+  MoneyIcon,
 } from '@/components/icons/DashboardIcons';
 
 // ============================================
