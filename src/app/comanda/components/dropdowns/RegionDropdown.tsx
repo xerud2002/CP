@@ -1,0 +1,113 @@
+'use client';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import Image from 'next/image';
+
+interface RegionDropdownProps {
+  value: string;
+  onChange: (value: string) => void;
+  label: string;
+  regions: string[];
+  countryCode?: string;
+}
+
+export default function RegionDropdown({ value, onChange, label, regions, countryCode }: RegionDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setSearchQuery('');
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const filteredRegions = useMemo(
+    () => regions.filter(r => r.toLowerCase().includes(searchQuery.toLowerCase())),
+    [regions, searchQuery]
+  );
+
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-300 mb-2">{label} *</label>
+      <div className="relative" ref={dropdownRef}>
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="form-select w-full flex items-center gap-3 cursor-pointer"
+          aria-label={label}
+        >
+          {countryCode && (
+            <Image 
+              src={`/img/flag/${countryCode.toLowerCase()}.svg`} 
+              alt=""
+              width={24} 
+              height={18} 
+              className="rounded-sm shadow-sm opacity-80 shrink-0"
+              onError={(e) => (e.target as HTMLImageElement).style.display = 'none'}
+            />
+          )}
+          <span className={`flex-1 text-left ${value ? '' : 'text-gray-400'}`}>
+            {value || 'Selectează...'}
+          </span>
+          <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        {isOpen && (
+          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
+            <div className="p-2 border-b border-white/10">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Caută..."
+                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                onClick={(e) => e.stopPropagation()}
+                aria-label={`Caută ${label.toLowerCase()}`}
+              />
+            </div>
+            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
+              {filteredRegions.length > 0 ? (
+                filteredRegions.map((region) => (
+                  <button
+                    key={region}
+                    type="button"
+                    onClick={() => {
+                      onChange(region);
+                      setIsOpen(false);
+                      setSearchQuery('');
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                      value === region ? 'bg-slate-700/50' : ''
+                    }`}
+                  >
+                    {countryCode && (
+                      <Image 
+                        src={`/img/flag/${countryCode.toLowerCase()}.svg`} 
+                        alt=""
+                        width={20} 
+                        height={15} 
+                        className="rounded-sm shadow-sm opacity-90 shrink-0"
+                        onError={(e) => (e.target as HTMLImageElement).style.display = 'none'}
+                      />
+                    )}
+                    <span className="text-white text-sm flex-1 text-left">{region}</span>
+                  </button>
+                ))
+              ) : (
+                <div className="px-3 py-4 text-center text-gray-400 text-sm">
+                  Nu s-au găsit rezultate
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

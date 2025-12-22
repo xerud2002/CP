@@ -292,7 +292,7 @@ export default function TarifePracticatePage() {
               <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
             </Link>
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-br from-indigo-500/20 via-purple-500/15 to-indigo-500/20 rounded-xl border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
+              <div className="p-3 bg-linear-to-br from-indigo-500/20 via-purple-500/15 to-indigo-500/20 rounded-xl border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
                 <svg className="w-7 h-7 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 11l3 3L22 4" />
                   <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
@@ -395,7 +395,7 @@ export default function TarifePracticatePage() {
                   }`}
                 >
                   {/* Hover gradient overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
+                  <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
                   
                   {/* Selected checkmark */}
                   {isSelected && (
@@ -418,7 +418,7 @@ export default function TarifePracticatePage() {
             })}
           </div>
           {selectedServices.length === 0 && (
-            <div className="mt-4 sm:mt-6 p-4 sm:p-5 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border-2 border-amber-500/30 rounded-xl sm:rounded-2xl flex items-start gap-3 sm:gap-4 shadow-lg shadow-amber-500/10">
+            <div className="mt-4 sm:mt-6 p-4 sm:p-5 bg-linear-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border-2 border-amber-500/30 rounded-xl sm:rounded-2xl flex items-start gap-3 sm:gap-4 shadow-lg shadow-amber-500/10">
               <div className="p-2.5 bg-amber-500/20 rounded-xl shrink-0">
                 <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -436,7 +436,7 @@ export default function TarifePracticatePage() {
         {selectedServices.length > 0 && (
           <div className="bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-emerald-500/20 to-green-500/20 rounded-xl flex items-center justify-center">
                 <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>

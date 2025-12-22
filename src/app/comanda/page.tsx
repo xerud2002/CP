@@ -1,16 +1,17 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, useMemo, Suspense } from 'react';
+import { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { countries, judetByCountry } from '@/lib/constants';
 import { getNextOrderNumber } from '@/utils/orderHelpers';
 import { showSuccess, showError } from '@/lib/toast';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import TransportDetailsStep from './components/steps/TransportDetailsStep';
+import OptionsReviewStep from './components/steps/OptionsReviewStep';
+import LocationsStep from './components/steps/LocationsStep';
 
 // Servicii disponibile cu iconițe SVG (identice cu homepage)
 const servicii = [
@@ -182,85 +183,6 @@ function ComandaForm() {
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Calendar state pentru data_specifica
-  const [isCalendarOpen, setIsCalendarOpen] = useLocalStorage('comanda_calendar_open', false);
-  const [calendarMonth, setCalendarMonth] = useState(new Date().getMonth());
-  const [calendarYear, setCalendarYear] = useState(new Date().getFullYear());
-  const calendarRef = useRef<HTMLDivElement>(null);
-
-  // Custom dropdown states for country selectors
-  const [isRidicareCountryOpen, setIsRidicareCountryOpen] = useLocalStorage('comanda_ridicare_country_open', false);
-  const [isLivrareCountryOpen, setIsLivrareCountryOpen] = useLocalStorage('comanda_livrare_country_open', false);
-  const [ridicareCountrySearch, setRidicareCountrySearch] = useState('');
-  const [livrareCountrySearch, setLivrareCountrySearch] = useState('');
-  const ridicareCountryRef = useRef<HTMLDivElement>(null);
-  const livrareCountryRef = useRef<HTMLDivElement>(null);
-
-  // Custom dropdown states for judet/region selectors
-  const [isRidicareJudetOpen, setIsRidicareJudetOpen] = useLocalStorage('comanda_ridicare_judet_open', false);
-  const [isLivrareJudetOpen, setIsLivrareJudetOpen] = useLocalStorage('comanda_livrare_judet_open', false);
-  const [ridicareJudetSearch, setRidicareJudetSearch] = useState('');
-  const [livrareJudetSearch, setLivrareJudetSearch] = useState('');
-  const ridicareJudetRef = useRef<HTMLDivElement>(null);
-  const livrareJudetRef = useRef<HTMLDivElement>(null);
-
-  // Calendar state pentru range start
-  const [isCalendarStartOpen, setIsCalendarStartOpen] = useLocalStorage('comanda_calendar_start_open', false);
-  const [calendarStartMonth, setCalendarStartMonth] = useState(new Date().getMonth());
-  const [calendarStartYear, setCalendarStartYear] = useState(new Date().getFullYear());
-  const calendarStartRef = useRef<HTMLDivElement>(null);
-
-  // Calendar state pentru range end
-  const [isCalendarEndOpen, setIsCalendarEndOpen] = useLocalStorage('comanda_calendar_end_open', false);
-  const [calendarEndMonth, setCalendarEndMonth] = useState(new Date().getMonth());
-  const [calendarEndYear, setCalendarEndYear] = useState(new Date().getFullYear());
-  const calendarEndRef = useRef<HTMLDivElement>(null);
-
-  const monthNames = ['Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie', 'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'];
-  const dayNames = ['Lu', 'Ma', 'Mi', 'Jo', 'Vi', 'Sâ', 'Du'];
-
-  // Close calendar and dropdowns on outside click
-  useEffect(() => {
-    const handleClickOutside = (event: Event) => {
-      const mouseEvent = event as MouseEvent;
-      
-      // Only handle left mouse button clicks
-      if (mouseEvent.button !== undefined && mouseEvent.button !== 0) return;
-      
-      const target = event.target as Node;
-      
-      if (calendarRef.current && !calendarRef.current.contains(target)) {
-        setIsCalendarOpen(false);
-      }
-      if (calendarStartRef.current && !calendarStartRef.current.contains(target)) {
-        setIsCalendarStartOpen(false);
-      }
-      if (calendarEndRef.current && !calendarEndRef.current.contains(target)) {
-        setIsCalendarEndOpen(false);
-      }
-      if (ridicareCountryRef.current && !ridicareCountryRef.current.contains(target)) {
-        setIsRidicareCountryOpen(false);
-        setRidicareCountrySearch('');
-      }
-      if (livrareCountryRef.current && !livrareCountryRef.current.contains(target)) {
-        setIsLivrareCountryOpen(false);
-        setLivrareCountrySearch('');
-      }
-      if (ridicareJudetRef.current && !ridicareJudetRef.current.contains(target)) {
-        setIsRidicareJudetOpen(false);
-        setRidicareJudetSearch('');
-      }
-      if (livrareJudetRef.current && !livrareJudetRef.current.contains(target)) {
-        setIsLivrareJudetOpen(false);
-        setLivrareJudetSearch('');
-      }
-    };
-    
-    // Use 'click' event which doesn't fire on scroll
-    document.addEventListener('click', handleClickOutside, true);
-    return () => document.removeEventListener('click', handleClickOutside, true);
-  }, [setIsCalendarOpen, setIsCalendarStartOpen, setIsCalendarEndOpen, setIsRidicareCountryOpen, setIsLivrareCountryOpen, setIsRidicareJudetOpen, setIsLivrareJudetOpen]);
-
   // Încarcă datele din localStorage la mount
   useEffect(() => {
     try {
@@ -278,6 +200,29 @@ function ComandaForm() {
       console.error('Error loading from localStorage:', error);
     }
   }, [serviciu]);
+
+  // Resetează câmpuri specifice serviciului când se schimbă serviciul
+  useEffect(() => {
+    // Nu reseta dacă este încărcarea inițială sau dacă nu există serviciu selectat
+    if (selectedService && step > 1) {
+      setFormData(prev => ({
+        ...prev,
+        // Resetează câmpuri specifice serviciului
+        tip_animal: '',
+        tip_vehicul: '',
+        stare_vehicul: '',
+        motiv_tractare: '',
+        roti_functionale: '',
+        greutate: '',
+        lungime: '',
+        latime: '',
+        inaltime: '',
+        cantitate: '1',
+        descriere: '',
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedService]);
 
   // Salvează step și service în localStorage
   useEffect(() => {
@@ -313,50 +258,6 @@ function ComandaForm() {
       }));
     }
   }, [user]);
-
-  // Calendar helper functions
-  const getDaysInMonth = (month: number, year: number) => {
-    return new Date(year, month + 1, 0).getDate();
-  };
-
-  const getFirstDayOfMonth = (month: number, year: number) => {
-    const day = new Date(year, month, 1).getDay();
-    return day === 0 ? 6 : day - 1; // Convert Sunday (0) to 6, Monday (1) to 0, etc.
-  };
-
-  const isDateDisabled = (day: number, month: number, year: number) => {
-    const date = new Date(year, month, day);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
-  };
-
-  const formatDateDisplay = (dateStr: string) => {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' });
-  };
-
-  const handleDateSelect = (day: number) => {
-    const date = new Date(calendarYear, calendarMonth, day);
-    const formattedValue = date.toISOString().split('T')[0];
-    setFormData(prev => ({ ...prev, data_ridicare: formattedValue }));
-    setIsCalendarOpen(false);
-  };
-
-  const handleDateStartSelect = (day: number) => {
-    const date = new Date(calendarStartYear, calendarStartMonth, day);
-    const formattedValue = date.toISOString().split('T')[0];
-    setFormData(prev => ({ ...prev, data_ridicare: formattedValue }));
-    setIsCalendarStartOpen(false);
-  };
-
-  const handleDateEndSelect = (day: number) => {
-    const date = new Date(calendarEndYear, calendarEndMonth, day);
-    const formattedValue = date.toISOString().split('T')[0];
-    setFormData(prev => ({ ...prev, data_ridicare_end: formattedValue }));
-    setIsCalendarEndOpen(false);
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -451,7 +352,14 @@ function ComandaForm() {
   };
 
   const handlePrevStep = () => {
-    setStep(prev => Math.max(prev - 1, 1));
+    const newStep = Math.max(step - 1, 1);
+    
+    // Dacă se merge înapoi la Pasul 1 (selectare serviciu), resetează serviciul selectat
+    if (newStep === 1) {
+      setSelectedService('');
+    }
+    
+    setStep(newStep);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -515,54 +423,21 @@ function ComandaForm() {
     [formData.tara_livrare]
   );
 
-  // Memoized country data for pickup location
-  const ridicareCountry = useMemo(
-    () => countries.find(c => c.code === formData.tara_ridicare),
+  // Memoized country names for summary display
+  const ridicareCountryName = useMemo(
+    () => countries.find(c => c.code === formData.tara_ridicare)?.name || formData.tara_ridicare,
     [formData.tara_ridicare]
   );
 
-  const ridicareCountryName = useMemo(
-    () => ridicareCountry?.name || 'Selectează...',
-    [ridicareCountry]
-  );
-
-  // Memoized country data for delivery location
-  const livrareCountry = useMemo(
-    () => countries.find(c => c.code === formData.tara_livrare),
-    [formData.tara_livrare]
-  );
-
   const livrareCountryName = useMemo(
-    () => livrareCountry?.name || 'Selectează...',
-    [livrareCountry]
-  );
-
-  // Memoized filtered judet lists for search
-  const filteredJudetRidicareList = useMemo(
-    () => judetRidicareList.filter(j => j.toLowerCase().includes(ridicareJudetSearch.toLowerCase())),
-    [judetRidicareList, ridicareJudetSearch]
-  );
-
-  const filteredJudetLivrareList = useMemo(
-    () => judetLivrareList.filter(j => j.toLowerCase().includes(livrareJudetSearch.toLowerCase())),
-    [judetLivrareList, livrareJudetSearch]
-  );
-
-  // Memoized filtered country lists for search
-  const filteredRidicareCountries = useMemo(
-    () => countries.filter(c => c.name.toLowerCase().includes(ridicareCountrySearch.toLowerCase())),
-    [ridicareCountrySearch]
-  );
-
-  const filteredLivrareCountries = useMemo(
-    () => countries.filter(c => c.name.toLowerCase().includes(livrareCountrySearch.toLowerCase())),
-    [livrareCountrySearch]
+    () => countries.find(c => c.code === formData.tara_livrare)?.name || formData.tara_livrare,
+    [formData.tara_livrare]
   );
 
   // Loading state
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Se încarcă...</p>
@@ -572,7 +447,7 @@ function ComandaForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
       {/* Header */}
       <header className="bg-slate-900/90 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 shadow-2xl shadow-black/20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -587,7 +462,7 @@ function ComandaForm() {
                 </svg>
               </Link>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg shadow-orange-500/20">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-linear-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg shadow-orange-500/20">
                   <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
@@ -595,6 +470,11 @@ function ComandaForm() {
                 <div>
                   <h1 className="text-lg sm:text-xl font-bold text-white">
                     Comandă Transport
+                    {selectedService && (
+                      <span className="ml-2 text-orange-400">
+                        • {servicii.find(s => s.id === selectedService)?.name || selectedService}
+                      </span>
+                    )}
                   </h1>
                   <p className="text-xs text-gray-500 hidden sm:block">
                     Completează detaliile comenzii tale
@@ -608,7 +488,7 @@ function ComandaForm() {
               <span className="text-xs sm:text-sm font-medium text-gray-400">Pas <span className="text-white">{step}</span>/5</span>
               <div className="w-20 sm:w-32 h-2 bg-slate-800 rounded-full overflow-hidden shadow-inner">
                 <div 
-                  className="h-full bg-gradient-to-r from-orange-500 via-amber-500 to-green-500 transition-all duration-500 ease-out shadow-lg"
+                  className="h-full bg-linear-to-r from-orange-500 via-amber-500 to-green-500 transition-all duration-500 ease-out shadow-lg"
                   style={{ width: `${(step / 5) * 100}%` }}
                 />
               </div>
@@ -621,9 +501,9 @@ function ComandaForm() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Step 1: Selectare Serviciu */}
           {step === 1 && (
-            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+            <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg">
                   <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                   </svg>
@@ -642,11 +522,11 @@ function ComandaForm() {
                     onClick={() => setSelectedService(service.id)}
                     className={`group relative p-5 rounded-xl border-2 text-left transition-all duration-300 hover:scale-[1.02] active:scale-95 ${
                       selectedService === service.id
-                        ? 'border-orange-500 bg-gradient-to-br from-orange-500/20 to-amber-500/10 shadow-lg shadow-orange-500/20'
+                        ? 'border-orange-500 bg-linear-to-br from-orange-500/20 to-amber-500/10 shadow-lg shadow-orange-500/20'
                         : 'border-white/10 hover:border-white/20 bg-slate-700/40 hover:bg-slate-700/60'
                     }`}
                   >
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-3 text-white shadow-lg transition-transform group-hover:scale-110`}>
+                    <div className={`w-14 h-14 rounded-xl bg-linear-to-br ${service.color} flex items-center justify-center mb-3 text-white shadow-lg transition-transform group-hover:scale-110`}>
                       {service.icon}
                     </div>
                     <h3 className="font-bold text-white mb-1.5 group-hover:text-orange-400 transition-colors">{service.name}</h3>
@@ -675,9 +555,9 @@ function ComandaForm() {
 
           {/* Step 2: Date Personale */}
           {step === 2 && (
-            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+            <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center shadow-lg">
                   <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
@@ -735,1406 +615,39 @@ function ComandaForm() {
 
           {/* Step 3: Locații */}
           {step === 3 && (
-            <div className="space-y-6">
-              {/* Ridicare */}
-              <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg">
-                    <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white">Adresa de ridicare</h2>
-                    <p className="text-gray-400 text-sm">De unde ridicăm?</p>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Țara *</label>
-                      <div className="relative" ref={ridicareCountryRef}>
-                        <button
-                          type="button"
-                          onClick={() => setIsRidicareCountryOpen(!isRidicareCountryOpen)}
-                          className="form-select w-full flex items-center gap-3 cursor-pointer"
-                          aria-label="Selectează țara de ridicare"
-                        >
-                          <Image 
-                            src={`/img/flag/${formData.tara_ridicare.toLowerCase()}.svg`} 
-                            alt={`Steagul ${ridicareCountryName}`}
-                            width={24} 
-                            height={18} 
-                            className="rounded-sm shadow-sm shrink-0"
-                          />
-                          <span className="flex-1 text-left">{ridicareCountryName}</span>
-                          <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isRidicareCountryOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                        {isRidicareCountryOpen && (
-                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
-                            <div className="p-2 border-b border-white/10">
-                              <input
-                                type="text"
-                                value={ridicareCountrySearch}
-                                onChange={(e) => setRidicareCountrySearch(e.target.value)}
-                                placeholder="Caută..."
-                                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                onClick={(e) => e.stopPropagation()}
-                                aria-label="Caută țara de ridicare"
-                              />
-                            </div>
-                            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
-                              {filteredRidicareCountries.length > 0 ? (
-                                filteredRidicareCountries.map((c) => (
-                                  <button
-                                    key={c.code}
-                                    type="button"
-                                    onClick={() => {
-                                      setFormData({ ...formData, tara_ridicare: c.code, judet_ridicare: '' });
-                                      setIsRidicareCountryOpen(false);
-                                      setRidicareCountrySearch('');
-                                    }}
-                                    className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
-                                      formData.tara_ridicare === c.code ? 'bg-slate-700/50' : ''
-                                    }`}
-                                  >
-                                    <Image
-                                      src={c.flag}
-                                      alt={c.name}
-                                      width={24}
-                                      height={18}
-                                      className="rounded-sm shrink-0"
-                                    />
-                                    <span className="text-white text-sm">{c.name}</span>
-                                  </button>
-                                ))
-                              ) : (
-                                <div className="px-3 py-4 text-center text-gray-400 text-sm">
-                                  Nu s-au găsit rezultate
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Județ/Regiune *</label>
-                      <div className="relative" ref={ridicareJudetRef}>
-                        <button
-                          type="button"
-                          onClick={() => setIsRidicareJudetOpen(!isRidicareJudetOpen)}
-                          className="form-select w-full flex items-center gap-3 cursor-pointer"
-                          aria-label="Selectează județul sau regiunea de ridicare"
-                        >
-                          <Image 
-                            src={`/img/flag/${formData.tara_ridicare.toLowerCase()}.svg`} 
-                            alt={`Steagul ${ridicareCountryName}`}
-                            width={24} 
-                            height={18} 
-                            className="rounded-sm shadow-sm opacity-60 shrink-0"
-                          />
-                          <span className="flex-1 text-left">{formData.judet_ridicare || 'Selectează...'}</span>
-                          <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isRidicareJudetOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                        {isRidicareJudetOpen && (
-                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
-                            <div className="p-2 border-b border-white/10">
-                              <input
-                                type="text"
-                                value={ridicareJudetSearch}
-                                onChange={(e) => setRidicareJudetSearch(e.target.value)}
-                                placeholder="Caută..."
-                                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                onClick={(e) => e.stopPropagation()}
-                                aria-label="Caută județul sau regiunea de ridicare"
-                              />
-                            </div>
-                            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
-                              {filteredJudetRidicareList.length > 0 ? (
-                                filteredJudetRidicareList.map((j) => (
-                                <button
-                                  key={j}
-                                  type="button"
-                                  onClick={() => {
-                                    setFormData({ ...formData, judet_ridicare: j });
-                                    setIsRidicareJudetOpen(false);
-                                    setRidicareJudetSearch('');
-                                  }}
-                                  className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
-                                    formData.judet_ridicare === j ? 'bg-slate-700/50' : ''
-                                  }`}
-                                >
-                                  <Image 
-                                    src={`/img/flag/${formData.tara_ridicare.toLowerCase()}.svg`} 
-                                    alt={`${formData.tara_ridicare}`}
-                                    width={20} 
-                                    height={15} 
-                                    className="rounded-sm shadow-sm opacity-60 shrink-0"
-                                  />
-                                  <span className="text-white text-sm flex-1 text-left">{j}</span>
-                                  <span className="text-gray-500 text-xs font-mono">{formData.tara_ridicare}</span>
-                                </button>
-                              ))
-                            ) : (
-                              <div className="px-3 py-4 text-center text-gray-400 text-sm">
-                                Nu s-au găsit rezultate
-                              </div>
-                            )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      {errors.judet_ridicare && <p className="text-red-400 text-sm mt-1">{errors.judet_ridicare}</p>}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Oraș *</label>
-                    <input
-                      type="text"
-                      name="oras_ridicare"
-                      value={formData.oras_ridicare}
-                      onChange={handleInputChange}
-                      className="form-input w-full"
-                      placeholder="București"
-                    />
-                    {errors.oras_ridicare && <p className="text-red-400 text-sm mt-1">{errors.oras_ridicare}</p>}
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Adresa completă</label>
-                    <input
-                      type="text"
-                      name="adresa_ridicare"
-                      value={formData.adresa_ridicare}
-                      onChange={handleInputChange}
-                      className="form-input w-full"
-                      placeholder="Str. Exemplu, Nr. 10, Sector 1"
-                    />
-                    {errors.adresa_ridicare && <p className="text-red-400 text-sm mt-1">{errors.adresa_ridicare}</p>}
-                  </div>
-                </div>
-              </div>
-
-              {/* Livrare */}
-              <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center shadow-lg">
-                    <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-white">Adresa de livrare</h2>
-                    <p className="text-gray-400 text-sm">Unde livrăm?</p>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Țara *</label>
-                      <div className="relative" ref={livrareCountryRef}>
-                        <button
-                          type="button"
-                          onClick={() => setIsLivrareCountryOpen(!isLivrareCountryOpen)}
-                          className="form-select w-full flex items-center gap-3 cursor-pointer"
-                          aria-label="Selectează țara de livrare"
-                        >
-                          <Image 
-                            src={`/img/flag/${formData.tara_livrare.toLowerCase()}.svg`} 
-                            alt={`Steagul ${livrareCountryName}`}
-                            width={24} 
-                            height={18} 
-                            className="rounded-sm shadow-sm shrink-0"
-                          />
-                          <span className="flex-1 text-left">{livrareCountryName}</span>
-                          <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isLivrareCountryOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                        {isLivrareCountryOpen && (
-                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
-                            <div className="p-2 border-b border-white/10">
-                              <input
-                                type="text"
-                                value={livrareCountrySearch}
-                                onChange={(e) => setLivrareCountrySearch(e.target.value)}
-                                placeholder="Caută..."
-                                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                onClick={(e) => e.stopPropagation()}
-                                aria-label="Caută țara de livrare"
-                              />
-                            </div>
-                            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
-                              {filteredLivrareCountries.length > 0 ? (
-                                filteredLivrareCountries.map((c) => (
-                                  <button
-                                    key={c.code}
-                                    type="button"
-                                    onClick={() => {
-                                      setFormData({ ...formData, tara_livrare: c.code, judet_livrare: '' });
-                                      setIsLivrareCountryOpen(false);
-                                      setLivrareCountrySearch('');
-                                    }}
-                                    className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
-                                      formData.tara_livrare === c.code ? 'bg-slate-700/50' : ''
-                                    }`}
-                                  >
-                                    <Image
-                                      src={c.flag}
-                                      alt={c.name}
-                                      width={24}
-                                      height={18}
-                                      className="rounded-sm shrink-0"
-                                    />
-                                    <span className="text-white text-sm">{c.name}</span>
-                                  </button>
-                                ))
-                              ) : (
-                                <div className="px-3 py-4 text-center text-gray-400 text-sm">
-                                  Nu s-au găsit rezultate
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Județ/Regiune *</label>
-                      <div className="relative" ref={livrareJudetRef}>
-                        <button
-                          type="button"
-                          onClick={() => setIsLivrareJudetOpen(!isLivrareJudetOpen)}
-                          className="form-select w-full flex items-center gap-3 cursor-pointer"
-                          aria-label="Selectează județul sau regiunea de livrare"
-                        >
-                          <Image 
-                            src={`/img/flag/${formData.tara_livrare.toLowerCase()}.svg`} 
-                            alt={`Steagul ${livrareCountryName}`}
-                            width={24} 
-                            height={18} 
-                            className="rounded-sm shadow-sm opacity-60 shrink-0"
-                          />
-                          <span className="flex-1 text-left">{formData.judet_livrare || 'Selectează...'}</span>
-                          <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isLivrareJudetOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                        {isLivrareJudetOpen && (
-                          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
-                            <div className="p-2 border-b border-white/10">
-                              <input
-                                type="text"
-                                value={livrareJudetSearch}
-                                onChange={(e) => setLivrareJudetSearch(e.target.value)}
-                                placeholder="Caută..."
-                                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                                onClick={(e) => e.stopPropagation()}
-                                aria-label="Caută județul sau regiunea de livrare"
-                              />
-                            </div>
-                            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
-                              {filteredJudetLivrareList.length > 0 ? (
-                                filteredJudetLivrareList.map((j) => (
-                                <button
-                                  key={j}
-                                  type="button"
-                                  onClick={() => {
-                                    setFormData({ ...formData, judet_livrare: j });
-                                    setIsLivrareJudetOpen(false);
-                                    setLivrareJudetSearch('');
-                                  }}
-                                  className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
-                                    formData.judet_livrare === j ? 'bg-slate-700/50' : ''
-                                  }`}
-                                >
-                                  <Image 
-                                    src={`/img/flag/${formData.tara_livrare.toLowerCase()}.svg`} 
-                                    alt={`${formData.tara_livrare}`}
-                                    width={20} 
-                                    height={15} 
-                                    className="rounded-sm shadow-sm opacity-60 shrink-0"
-                                  />
-                                  <span className="text-white text-sm flex-1 text-left">{j}</span>
-                                  <span className="text-gray-500 text-xs font-mono">{formData.tara_livrare}</span>
-                                </button>
-                              ))
-                            ) : (
-                              <div className="px-3 py-4 text-center text-gray-400 text-sm">
-                                Nu s-au găsit rezultate
-                              </div>
-                            )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      {errors.judet_livrare && <p className="text-red-400 text-sm mt-1">{errors.judet_livrare}</p>}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Oraș *</label>
-                    <input
-                      type="text"
-                      name="oras_livrare"
-                      value={formData.oras_livrare}
-                      onChange={handleInputChange}
-                      className="form-input w-full"
-                      placeholder="London"
-                    />
-                    {errors.oras_livrare && <p className="text-red-400 text-sm mt-1">{errors.oras_livrare}</p>}
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Adresa completă</label>
-                    <input
-                      type="text"
-                      name="adresa_livrare"
-                      value={formData.adresa_livrare}
-                      onChange={handleInputChange}
-                      className="form-input w-full"
-                      placeholder="123 Example Street, London"
-                    />
-                    {errors.adresa_livrare && <p className="text-red-400 text-sm mt-1">{errors.adresa_livrare}</p>}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <LocationsStep
+              formData={formData}
+              setFormData={setFormData}
+              handleInputChange={handleInputChange}
+              errors={errors}
+              judetRidicareList={judetRidicareList}
+              judetLivrareList={judetLivrareList}
+            />
           )}
 
           {/* Step 4: Detalii Transport */}
           {step === 4 && (
-            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex items-center justify-center shadow-lg">
-                  <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-                <div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white">Detalii transport</h2>
-                  <p className="text-gray-400 text-sm">Informații despre ce vrei să trimiți</p>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 gap-4">
-                {/* Colete și Paleți - greutate, dimensiuni, cantitate */}
-                {(selectedService === 'colete' || selectedService === 'paleti') && (
-                  <>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Greutate (kg) *</label>
-                        <input
-                          type="number"
-                          name="greutate"
-                          value={formData.greutate}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="10"
-                          min="0"
-                          step="0.1"
-                        />
-                        {errors.greutate && <p className="text-red-400 text-sm mt-1">{errors.greutate}</p>}
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Lungime (cm)</label>
-                        <input
-                          type="number"
-                          name="lungime"
-                          value={formData.lungime}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="50"
-                          min="0"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Lățime (cm)</label>
-                        <input
-                          type="number"
-                          name="latime"
-                          value={formData.latime}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="30"
-                          min="0"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Înălțime (cm)</label>
-                        <input
-                          type="number"
-                          name="inaltime"
-                          value={formData.inaltime}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="20"
-                          min="0"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Cantitate ({selectedService === 'paleti' ? 'paleți' : 'colete'})
-                      </label>
-                      <input
-                        type="number"
-                        name="cantitate"
-                        value={formData.cantitate}
-                        onChange={handleInputChange}
-                        className="form-input w-full"
-                        placeholder="1"
-                        min="1"
-                      />
-                    </div>
-                  </>
-                )}
-
-                {/* Plicuri/Documente - doar cantitate */}
-                {selectedService === 'plicuri' && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Număr plicuri/documente</label>
-                    <input
-                      type="number"
-                      name="cantitate"
-                      value={formData.cantitate}
-                      onChange={handleInputChange}
-                      className="form-input w-full"
-                      placeholder="1"
-                      min="1"
-                    />
-                  </div>
-                )}
-
-                {/* Electronice - greutate, dimensiuni, cantitate */}
-                {selectedService === 'electronice' && (
-                  <>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Greutate (kg)</label>
-                        <input
-                          type="number"
-                          name="greutate"
-                          value={formData.greutate}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="5"
-                          min="0"
-                          step="0.1"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Lungime (cm)</label>
-                        <input
-                          type="number"
-                          name="lungime"
-                          value={formData.lungime}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="40"
-                          min="0"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Lățime (cm)</label>
-                        <input
-                          type="number"
-                          name="latime"
-                          value={formData.latime}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="30"
-                          min="0"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Înălțime (cm)</label>
-                        <input
-                          type="number"
-                          name="inaltime"
-                          value={formData.inaltime}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="20"
-                          min="0"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Număr produse</label>
-                      <input
-                        type="number"
-                        name="cantitate"
-                        value={formData.cantitate}
-                        onChange={handleInputChange}
-                        className="form-input w-full"
-                        placeholder="1"
-                        min="1"
-                      />
-                    </div>
-                  </>
-                )}
-
-                {/* Animale - câmpuri simple */}
-                {selectedService === 'animale' && (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Tip animal *</label>
-                        <select
-                          name="tip_animal"
-                          value={formData.tip_animal || ''}
-                          onChange={handleInputChange}
-                          className="form-select w-full"
-                        >
-                          <option value="">Selectează</option>
-                          <option value="caine">Câine</option>
-                          <option value="pisica">Pisică</option>
-                          <option value="pasare">Pasăre</option>
-                          <option value="rozator">Rozător</option>
-                          <option value="alt">Alt animal</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Greutate (kg)</label>
-                        <input
-                          type="number"
-                          name="greutate"
-                          value={formData.greutate}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="ex: 25"
-                          min="0"
-                          step="0.5"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Nr. animale</label>
-                        <input
-                          type="number"
-                          name="cantitate"
-                          value={formData.cantitate}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="1"
-                          min="1"
-                          max="10"
-                        />
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-xl bg-pink-500/10 border border-pink-500/30">
-                      <p className="text-sm text-gray-400">💡 Menționează în descriere: rasa, dacă are cușcă proprie, vaccinuri la zi, etc.</p>
-                    </div>
-                  </>
-                )}
-
-                {/* Mașini - câmpuri simple */}
-                {selectedService === 'masini' && (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Tip vehicul *</label>
-                        <select
-                          name="tip_vehicul"
-                          value={formData.tip_vehicul || ''}
-                          onChange={handleInputChange}
-                          className="form-select w-full"
-                        >
-                          <option value="">Selectează</option>
-                          <option value="autoturism">Autoturism</option>
-                          <option value="suv">SUV / Crossover</option>
-                          <option value="camioneta">Camionetă / Van</option>
-                          <option value="motocicleta">Motocicletă</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Greutate (kg)</label>
-                        <input
-                          type="number"
-                          name="greutate"
-                          value={formData.greutate}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="ex: 1500"
-                          min="0"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Funcțional?</label>
-                        <select
-                          name="stare_vehicul"
-                          value={formData.stare_vehicul || ''}
-                          onChange={handleInputChange}
-                          className="form-select w-full"
-                        >
-                          <option value="">Selectează</option>
-                          <option value="functional">Da, merge</option>
-                          <option value="nefunctional">Nu, defect</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/30">
-                      <p className="text-sm text-gray-400">💡 Menționează în descriere: marca, modelul, anul fabricației</p>
-                    </div>
-                  </>
-                )}
-
-                {/* Platformă - câmpuri simple */}
-                {selectedService === 'platforma' && (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Tip vehicul *</label>
-                        <select
-                          name="tip_vehicul"
-                          value={formData.tip_vehicul || ''}
-                          onChange={handleInputChange}
-                          className="form-select w-full"
-                        >
-                          <option value="">Selectează</option>
-                          <option value="autoturism">Autoturism</option>
-                          <option value="suv">SUV / Crossover</option>
-                          <option value="camioneta">Camionetă / Van</option>
-                          <option value="motocicleta">Motocicletă</option>
-                          <option value="utilaj">Utilaj / Echipament</option>
-                          <option value="alt">Altul</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Greutate (kg)</label>
-                        <input
-                          type="number"
-                          name="greutate"
-                          value={formData.greutate}
-                          onChange={handleInputChange}
-                          className="form-input w-full"
-                          placeholder="ex: 1500"
-                          min="0"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Funcțional?</label>
-                        <select
-                          name="stare_vehicul"
-                          value={formData.stare_vehicul || ''}
-                          onChange={handleInputChange}
-                          className="form-select w-full"
-                        >
-                          <option value="">Selectează</option>
-                          <option value="functional">Da, merge</option>
-                          <option value="nefunctional">Nu, defect</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30">
-                      <p className="text-sm text-gray-400">💡 Menționează în descriere: marca, modelul, anul fabricației</p>
-                    </div>
-                  </>
-                )}
-
-                {/* Tractări - câmpuri simple */}
-                {selectedService === 'tractari' && (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Tip vehicul *</label>
-                        <select
-                          name="tip_vehicul"
-                          value={formData.tip_vehicul || ''}
-                          onChange={handleInputChange}
-                          className="form-select w-full"
-                        >
-                          <option value="">Selectează</option>
-                          <option value="autoturism">Autoturism</option>
-                          <option value="suv">SUV / Crossover</option>
-                          <option value="camioneta">Camionetă / Van</option>
-                          <option value="motocicleta">Motocicletă</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Motiv tractare</label>
-                        <select
-                          name="motiv_tractare"
-                          value={formData.motiv_tractare || ''}
-                          onChange={handleInputChange}
-                          className="form-select w-full"
-                        >
-                          <option value="">Selectează</option>
-                          <option value="pana">Pană / Defecțiune</option>
-                          <option value="accident">Accident</option>
-                          <option value="relocare">Relocare</option>
-                          <option value="alt">Alt motiv</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Roțile se rotesc?</label>
-                        <select
-                          name="roti_functionale"
-                          value={formData.roti_functionale || ''}
-                          onChange={handleInputChange}
-                          className="form-select w-full"
-                        >
-                          <option value="">Selectează</option>
-                          <option value="da">Da, se rotesc</option>
-                          <option value="nu">Nu, blocate</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/30">
-                      <p className="text-sm text-gray-400">💡 Menționează în descriere: marca, modelul, locația exactă</p>
-                    </div>
-                  </>
-                )}
-
-                {/* Mobilă - info + dimensiuni */}
-                {selectedService === 'mobila' && (
-                  <>
-                    <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
-                      <div className="flex items-start gap-3">
-                        <svg className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <div>
-                          <p className="text-amber-400 font-medium mb-1">Transport mobilier</p>
-                          <p className="text-sm text-gray-400">Adaugă detalii despre piesele de mobilier (tip, dimensiuni, cantitate) în câmpul de mai jos.</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Număr piese mobilier</label>
-                      <input
-                        type="number"
-                        name="cantitate"
-                        value={formData.cantitate}
-                        onChange={handleInputChange}
-                        className="form-input w-full"
-                        placeholder="1"
-                        min="1"
-                      />
-                    </div>
-                  </>
-                )}
-                
-                {/* Persoane - număr pasageri */}
-                {selectedService === 'persoane' && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Număr pasageri</label>
-                    <input
-                      type="number"
-                      name="cantitate"
-                      value={formData.cantitate}
-                      onChange={handleInputChange}
-                      className="form-input w-full"
-                      placeholder="1"
-                      min="1"
-                      max="8"
-                    />
-                  </div>
-                )}
-                
-                {/* Descriere - adaptată în funcție de serviciu */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    {selectedService === 'plicuri' ? 'Descriere documente' : 
-                     selectedService === 'masini' ? 'Detalii vehicul *' :
-                     selectedService === 'persoane' ? 'Observații călătorie' :
-                     selectedService === 'animale' ? 'Tip animal și detalii *' :
-                     selectedService === 'electronice' ? 'Tip echipament *' :
-                     selectedService === 'platforma' ? 'Detalii vehicul/echipament *' :
-                     selectedService === 'tractari' ? 'Detalii vehicul și situație *' :
-                     selectedService === 'mobila' ? 'Descriere mobilier *' :
-                     selectedService === 'paleti' ? 'Descriere marfă' :
-                     'Descriere colet'} 
-                    {(selectedService === 'colete' || selectedService === 'paleti') && '*'}
-                  </label>
-                  <textarea
-                    name="descriere"
-                    value={formData.descriere}
-                    onChange={handleInputChange}
-                    className="form-input w-full"
-                    rows={3}
-                    placeholder={
-                      selectedService === 'plicuri' ? 'Descrie documentele (ex: contracte, acte notariale, corespondență oficială)' :
-                      selectedService === 'masini' ? 'Ex: BMW X5, 2020, negru, funcțional/nefuncțional' :
-                      selectedService === 'persoane' ? 'Ex: bagaje, copii mici, nevoi speciale...' :
-                      selectedService === 'animale' ? 'Ex: Câine Labrador, 25kg, are cușcă proprie, vaccinuri la zi' :
-                      selectedService === 'electronice' ? 'Ex: Laptop MacBook Pro, TV 55", PlayStation 5, toate în cutii originale' :
-                      selectedService === 'platforma' ? 'Ex: BMW Seria 3, 2018, 1.5 tone, funcțional dar fără roți' :
-                      selectedService === 'tractari' ? 'Ex: Dacia Logan, 2019, pană de motor pe autostradă A1 km 45' :
-                      selectedService === 'mobila' ? 'Ex: Canapea 3 locuri, dulap 2m, masă dining + 6 scaune, pat matrimonial' :
-                      selectedService === 'paleti' ? 'Ex: 2 paleți cu produse alimentare ambalate, fiecare 500kg' :
-                      'Descrie ce vrei să trimiți (ex: colet fragil, electronice, haine)'
-                    }
-                  />
-                  {errors.descriere && <p className="text-red-400 text-sm mt-1">{errors.descriere}</p>}
-                </div>
-                
-                {/* Data aproximativă de colectare */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Data aproximativă de colectare *</label>
-                  <div className="relative" ref={calendarRef}>
-                    <button
-                      type="button"
-                      onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                      className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-left text-white hover:border-orange-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <svg className="w-5 h-5 text-orange-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                          <line x1="16" y1="2" x2="16" y2="6" />
-                          <line x1="8" y1="2" x2="8" y2="6" />
-                          <line x1="3" y1="10" x2="21" y2="10" />
-                        </svg>
-                        {formData.data_ridicare ? (
-                          <span className="text-sm truncate">{formatDateDisplay(formData.data_ridicare)}</span>
-                        ) : (
-                          <span className="text-gray-400 text-sm">Alege o dată</span>
-                        )}
-                      </div>
-                      <svg className={`w-5 h-5 text-gray-400 transition-transform ${isCalendarOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
-
-                    {isCalendarOpen && (
-                      <div className="absolute z-50 mt-2 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-                        <div className="flex items-center justify-between p-4 border-b border-white/5">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (calendarMonth === 0) {
-                                setCalendarMonth(11);
-                                setCalendarYear(calendarYear - 1);
-                              } else {
-                                setCalendarMonth(calendarMonth - 1);
-                              }
-                            }}
-                            className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                          </button>
-                          <span className="font-semibold text-white">{monthNames[calendarMonth]} {calendarYear}</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (calendarMonth === 11) {
-                                setCalendarMonth(0);
-                                setCalendarYear(calendarYear + 1);
-                              } else {
-                                setCalendarMonth(calendarMonth + 1);
-                              }
-                            }}
-                            className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </button>
-                        </div>
-
-                        <div className="grid grid-cols-7 gap-1 px-3 pt-3">
-                          {dayNames.map(day => (
-                            <div key={day} className="text-center text-xs font-medium text-gray-400 py-2">{day}</div>
-                          ))}
-                        </div>
-
-                        <div className="grid grid-cols-7 gap-1 p-3">
-                          {Array.from({ length: getFirstDayOfMonth(calendarMonth, calendarYear) }).map((_, i) => (
-                            <div key={`empty-${i}`} className="h-10" />
-                          ))}
-                          {Array.from({ length: getDaysInMonth(calendarMonth, calendarYear) }).map((_, i) => {
-                            const day = i + 1;
-                            const isDisabled = isDateDisabled(day, calendarMonth, calendarYear);
-                            const isSelected = formData.data_ridicare && 
-                              new Date(formData.data_ridicare).getDate() === day &&
-                              new Date(formData.data_ridicare).getMonth() === calendarMonth &&
-                              new Date(formData.data_ridicare).getFullYear() === calendarYear;
-                            
-                            return (
-                              <button
-                                key={day}
-                                type="button"
-                                onClick={() => !isDisabled && handleDateSelect(day)}
-                                disabled={isDisabled}
-                                className={`h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
-                                  isDisabled 
-                                    ? 'text-gray-600 cursor-not-allowed' 
-                                    : isSelected
-                                      ? 'bg-gradient-to-br from-orange-600 to-amber-600 text-white shadow-lg'
-                                      : 'text-white hover:bg-slate-700/50'
-                                }`}
-                              >
-                                {day}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {errors.data_ridicare && <p className="text-red-400 text-sm mt-1">{errors.data_ridicare}</p>}
-                </div>
-
-                {formData.tip_programare === 'range' && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Data de la *</label>
-                      <div className="relative" ref={calendarStartRef}>
-                        <button
-                          type="button"
-                          onClick={() => setIsCalendarStartOpen(!isCalendarStartOpen)}
-                          className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-left text-white hover:border-blue-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                        >
-                          <div className="flex items-center gap-3 min-w-0">
-                            <svg className="w-5 h-5 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                              <line x1="16" y1="2" x2="16" y2="6" />
-                              <line x1="8" y1="2" x2="8" y2="6" />
-                              <line x1="3" y1="10" x2="21" y2="10" />
-                            </svg>
-                            {formData.data_ridicare ? (
-                              <span className="text-sm truncate">{formatDateDisplay(formData.data_ridicare)}</span>
-                            ) : (
-                              <span className="text-gray-400 text-sm">Dată start</span>
-                            )}
-                          </div>
-                          <svg className={`w-5 h-5 text-gray-400 transition-transform ${isCalendarStartOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-
-                        {isCalendarStartOpen && (
-                          <div className="absolute z-50 mt-2 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-                            <div className="flex items-center justify-between p-4 border-b border-white/5">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (calendarStartMonth === 0) {
-                                    setCalendarStartMonth(11);
-                                    setCalendarStartYear(calendarStartYear - 1);
-                                  } else {
-                                    setCalendarStartMonth(calendarStartMonth - 1);
-                                  }
-                                }}
-                                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                </svg>
-                              </button>
-                              <span className="font-semibold text-white">{monthNames[calendarStartMonth]} {calendarStartYear}</span>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (calendarStartMonth === 11) {
-                                    setCalendarStartMonth(0);
-                                    setCalendarStartYear(calendarStartYear + 1);
-                                  } else {
-                                    setCalendarStartMonth(calendarStartMonth + 1);
-                                  }
-                                }}
-                                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                              </button>
-                            </div>
-
-                            <div className="grid grid-cols-7 gap-1 px-3 pt-3">
-                              {dayNames.map(day => (
-                                <div key={day} className="text-center text-xs font-medium text-gray-400 py-2">{day}</div>
-                              ))}
-                            </div>
-
-                            <div className="grid grid-cols-7 gap-1 p-3">
-                              {Array.from({ length: getFirstDayOfMonth(calendarStartMonth, calendarStartYear) }).map((_, i) => (
-                                <div key={`empty-${i}`} className="h-10" />
-                              ))}
-                              {Array.from({ length: getDaysInMonth(calendarStartMonth, calendarStartYear) }).map((_, i) => {
-                                const day = i + 1;
-                                const isDisabled = isDateDisabled(day, calendarStartMonth, calendarStartYear);
-                                const isSelected = formData.data_ridicare && 
-                                  new Date(formData.data_ridicare).getDate() === day &&
-                                  new Date(formData.data_ridicare).getMonth() === calendarStartMonth &&
-                                  new Date(formData.data_ridicare).getFullYear() === calendarStartYear;
-                                
-                                return (
-                                  <button
-                                    key={day}
-                                    type="button"
-                                    onClick={() => !isDisabled && handleDateStartSelect(day)}
-                                    disabled={isDisabled}
-                                    className={`h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
-                                      isDisabled 
-                                        ? 'text-gray-600 cursor-not-allowed' 
-                                        : isSelected
-                                          ? 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-lg'
-                                          : 'text-white hover:bg-slate-700/50'
-                                    }`}
-                                  >
-                                    {day}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      {errors.data_ridicare && <p className="text-red-400 text-sm mt-1">{errors.data_ridicare}</p>}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Data până la *</label>
-                      <div className="relative" ref={calendarEndRef}>
-                        <button
-                          type="button"
-                          onClick={() => setIsCalendarEndOpen(!isCalendarEndOpen)}
-                          className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-left text-white hover:border-blue-500/50 transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                        >
-                          <div className="flex items-center gap-3 min-w-0">
-                            <svg className="w-5 h-5 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                              <line x1="16" y1="2" x2="16" y2="6" />
-                              <line x1="8" y1="2" x2="8" y2="6" />
-                              <line x1="3" y1="10" x2="21" y2="10" />
-                            </svg>
-                            {formData.data_ridicare_end ? (
-                              <span className="text-sm truncate">{formatDateDisplay(formData.data_ridicare_end)}</span>
-                            ) : (
-                              <span className="text-gray-400 text-sm">Dată final</span>
-                            )}
-                          </div>
-                          <svg className={`w-5 h-5 text-gray-400 transition-transform ${isCalendarEndOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-
-                        {isCalendarEndOpen && (
-                          <div className="absolute z-50 mt-2 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-                            <div className="flex items-center justify-between p-4 border-b border-white/5">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (calendarEndMonth === 0) {
-                                    setCalendarEndMonth(11);
-                                    setCalendarEndYear(calendarEndYear - 1);
-                                  } else {
-                                    setCalendarEndMonth(calendarEndMonth - 1);
-                                  }
-                                }}
-                                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                </svg>
-                              </button>
-                              <span className="font-semibold text-white">{monthNames[calendarEndMonth]} {calendarEndYear}</span>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (calendarEndMonth === 11) {
-                                    setCalendarEndMonth(0);
-                                    setCalendarEndYear(calendarEndYear + 1);
-                                  } else {
-                                    setCalendarEndMonth(calendarEndMonth + 1);
-                                  }
-                                }}
-                                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                              </button>
-                            </div>
-
-                            <div className="grid grid-cols-7 gap-1 px-3 pt-3">
-                              {dayNames.map(day => (
-                                <div key={day} className="text-center text-xs font-medium text-gray-400 py-2">{day}</div>
-                              ))}
-                            </div>
-
-                            <div className="grid grid-cols-7 gap-1 p-3">
-                              {Array.from({ length: getFirstDayOfMonth(calendarEndMonth, calendarEndYear) }).map((_, i) => (
-                                <div key={`empty-${i}`} className="h-10" />
-                              ))}
-                              {Array.from({ length: getDaysInMonth(calendarEndMonth, calendarEndYear) }).map((_, i) => {
-                                const day = i + 1;
-                                const isDisabled = isDateDisabled(day, calendarEndMonth, calendarEndYear);
-                                const isSelected = formData.data_ridicare_end && 
-                                  new Date(formData.data_ridicare_end).getDate() === day &&
-                                  new Date(formData.data_ridicare_end).getMonth() === calendarEndMonth &&
-                                  new Date(formData.data_ridicare_end).getFullYear() === calendarEndYear;
-                                
-                                return (
-                                  <button
-                                    key={day}
-                                    type="button"
-                                    onClick={() => !isDisabled && handleDateEndSelect(day)}
-                                    disabled={isDisabled}
-                                    className={`h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
-                                      isDisabled 
-                                        ? 'text-gray-600 cursor-not-allowed' 
-                                        : isSelected
-                                          ? 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-lg'
-                                          : 'text-white hover:bg-slate-700/50'
-                                    }`}
-                                  >
-                                    {day}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      {errors.data_ridicare_end && <p className="text-red-400 text-sm mt-1">{errors.data_ridicare_end}</p>}
-                    </div>
-                  </div>
-                )}
-
-                {formData.tip_programare === 'flexibil' && (
-                  <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/30">
-                    <div className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-green-400 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <div>
-                        <p className="text-green-400 font-medium mb-1">Program flexibil selectat</p>
-                        <p className="text-sm text-gray-400">Curierii vor putea ridica coletul în funcție de disponibilitatea lor. Vei fi contactat pentru confirmare.</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            <TransportDetailsStep
+              selectedService={selectedService}
+              formData={formData}
+              setFormData={setFormData}
+              handleInputChange={handleInputChange}
+              errors={errors}
+            />
           )}
 
           {/* Step 5: Opțiuni Suplimentare și Revizuire */}
           {step === 5 && (
-            <div className="space-y-6">
-              {/* Tip ofertanți */}
-              <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${servicii.find(s => s.id === selectedService)?.color || 'from-blue-500 to-cyan-500'} bg-opacity-20 border ${selectedService === 'plicuri' ? 'border-yellow-500/30' : selectedService === 'persoane' ? 'border-rose-500/30' : 'border-blue-500/30'} flex items-center justify-center shadow-lg`}>
-                    <div className={selectedService === 'plicuri' ? 'text-yellow-400' : selectedService === 'persoane' ? 'text-rose-400' : 'text-blue-400'}>
-                      {servicii.find(s => s.id === selectedService)?.icon || (
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                        </svg>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white">De la cine dorești oferte?</h2>
-                    <p className="text-gray-400 text-sm">Selectează tipul de transportatori</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <label
-                    className="flex items-start gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all hover:border-white/20"
-                    style={{
-                      borderColor: formData.tip_ofertanti.includes('firme') ? '#3b82f6' : 'rgba(255,255,255,0.1)',
-                      backgroundColor: formData.tip_ofertanti.includes('firme') ? 'rgba(59,130,246,0.1)' : 'rgba(71,85,105,0.3)'
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={formData.tip_ofertanti.includes('firme')}
-                      onChange={() => handleOfertantiToggle('firme')}
-                      className="mt-1 w-5 h-5 rounded border-white/20 bg-slate-700 text-blue-500 focus:ring-blue-500"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                        <span className="font-bold text-white text-lg">Firme de Transport</span>
-                      </div>
-                      <p className="text-sm text-gray-400">Companii cu licență, asigurare și echipamente profesionale</p>
-                    </div>
-                  </label>
-
-                  <label
-                    className="flex items-start gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all hover:border-white/20"
-                    style={{
-                      borderColor: formData.tip_ofertanti.includes('persoane_private') ? '#10b981' : 'rgba(255,255,255,0.1)',
-                      backgroundColor: formData.tip_ofertanti.includes('persoane_private') ? 'rgba(16,185,129,0.1)' : 'rgba(71,85,105,0.3)'
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={formData.tip_ofertanti.includes('persoane_private')}
-                      onChange={() => handleOfertantiToggle('persoane_private')}
-                      className="mt-1 w-5 h-5 rounded border-white/20 bg-slate-700 text-green-500 focus:ring-green-500"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        <span className="font-bold text-white text-lg">Persoane Private</span>
-                      </div>
-                      <p className="text-sm text-gray-400">Transportatori independenți cu tarife flexibile</p>
-                    </div>
-                  </label>
-                </div>
-
-                {formData.tip_ofertanti.length === 0 && (
-                  <div className="mt-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    <p className="text-amber-400 text-sm font-medium">Selectează cel puțin un tip pentru a primi oferte</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Opțiuni suplimentare */}
-              <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-green-500/20 border border-emerald-500/30 flex items-center justify-center shadow-lg">
-                    <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white">Opțiuni suplimentare</h2>
-                    <p className="text-gray-400 text-sm">Servicii adiționale (opțional)</p>
-                  </div>
-                </div>
-                
-                <div className="space-y-3">
-                  {(optiuniSuplimentareByService[selectedService] || []).map((opt) => (
-                    <label
-                      key={opt.id}
-                      className="flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all hover:border-white/20"
-                      style={{
-                        borderColor: formData.optiuni.includes(opt.id) ? '#34d399' : 'rgba(255,255,255,0.1)',
-                        backgroundColor: formData.optiuni.includes(opt.id) ? 'rgba(52,211,153,0.1)' : 'rgba(71,85,105,0.3)'
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.optiuni.includes(opt.id)}
-                        onChange={() => handleOptionToggle(opt.id)}
-                        className="mt-1 w-5 h-5 rounded border-white/20 bg-slate-700 text-green-500 focus:ring-green-500"
-                      />
-                      <div className="flex-1">
-                        <span className="font-semibold text-white block mb-1">{opt.name}</span>
-                        <p className="text-sm text-gray-400">{opt.description}</p>
-                      </div>
-                    </label>
-                  ))}
-                  {(!optiuniSuplimentareByService[selectedService] || optiuniSuplimentareByService[selectedService].length === 0) && (
-                    <p className="text-gray-400 text-center py-4">Nu există opțiuni suplimentare pentru acest serviciu</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Sumar comandă */}
-              <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                    </svg>
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-white">Sumar comandă</h2>
-                </div>
-                
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between py-2 border-b border-white/5">
-                    <span className="text-gray-400">Serviciu:</span>
-                    <span className="text-white font-medium">
-                      {servicii.find(s => s.id === selectedService)?.name}
-                    </span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-white/5">
-                    <span className="text-gray-400">Ruta:</span>
-                    <span className="text-white font-medium">
-                      {ridicareCountryName} → {livrareCountryName}
-                    </span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-white/5">
-                    <span className="text-gray-400">Program ridicare:</span>
-                    <span className="text-white font-medium">
-                      {formData.tip_programare === 'data_specifica' && formData.data_ridicare ? formData.data_ridicare : ''}
-                      {formData.tip_programare === 'range' && formData.data_ridicare && formData.data_ridicare_end ? `${formData.data_ridicare} - ${formData.data_ridicare_end}` : ''}
-                      {formData.tip_programare === 'flexibil' ? 'Flexibil' : ''}
-                      {!formData.tip_programare ? '-' : ''}
-                    </span>
-                  </div>
-                  {formData.optiuni.length > 0 && (
-                    <div className="pt-3">
-                      <span className="text-gray-400 block mb-2">Opțiuni suplimentare:</span>
-                      <div className="flex flex-wrap gap-2">
-                        {formData.optiuni.map(optId => {
-                          const allOptions = optiuniSuplimentareByService[selectedService] || [];
-                          const option = allOptions.find(o => o.id === optId);
-                          return option ? (
-                            <span key={optId} className="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg text-xs border border-emerald-500/20">
-                              {option.name}
-                            </span>
-                          ) : null;
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="mt-6 p-4 bg-slate-700/30 rounded-xl border border-white/5">
-                  <p className="text-white font-medium mb-3 flex items-center gap-2">
-                    <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                    Ce urmează:
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-sm text-gray-300">
-                      <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Trimitem cererea către partenerii noștri
-                    </li>
-                    <li className="flex items-center gap-2 text-sm text-gray-300">
-                      <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Vei primi oferte în <strong className="text-white">24-48 ore</strong>
-                    </li>
-                    <li className="flex items-center gap-2 text-sm text-gray-300">
-                      <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      Compari și alegi oferta potrivită
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <OptionsReviewStep
+              selectedService={selectedService}
+              formData={formData}
+              handleOfertantiToggle={handleOfertantiToggle}
+              handleOptionToggle={handleOptionToggle}
+              ridicareCountryName={ridicareCountryName}
+              livrareCountryName={livrareCountryName}
+              currentServiceInfo={servicii.find(s => s.id === selectedService)}
+              serviceOptions={optiuniSuplimentareByService[selectedService] || []}
+            />
           )}
 
           {/* Navigation Buttons */}
@@ -2156,7 +669,7 @@ function ComandaForm() {
               <button
                 type="button"
                 onClick={handleNextStep}
-                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl font-bold transition-all duration-300 shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 hover:scale-[1.02] active:scale-95"
+                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-linear-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl font-bold transition-all duration-300 shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 hover:scale-[1.02] active:scale-95"
               >
                 <span>Continuă</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -2167,7 +680,7 @@ function ComandaForm() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl font-bold transition-all duration-300 shadow-xl shadow-green-500/40 hover:shadow-green-500/60 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-95"
+                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl font-bold transition-all duration-300 shadow-xl shadow-green-500/40 hover:shadow-green-500/60 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-95"
               >
                 {submitting ? (
                   <>
@@ -2194,7 +707,7 @@ function ComandaForm() {
 export default function ComandaPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Se încarcă...</p>

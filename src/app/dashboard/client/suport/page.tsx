@@ -168,7 +168,7 @@ export default function SuportClientPage() {
         </div>
 
         {/* Working Hours */}
-        <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl border border-blue-500/20 p-6 text-center mb-6">
+        <div className="bg-linear-to-br from-blue-500/20 to-purple-500/20 rounded-xl border border-blue-500/20 p-6 text-center mb-6">
           <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
             <ClockIcon className="w-8 h-8 text-blue-400" />
           </div>

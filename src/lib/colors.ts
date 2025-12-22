@@ -88,19 +88,19 @@ export const brandColors = {
 
 export const roleColors = {
   admin: {
-    avatar: 'bg-gradient-to-br from-orange-500 to-orange-600',
+    avatar: 'bg-linear-to-br from-orange-500 to-orange-600',
     badge: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
     text: 'text-orange-400',
   },
   
   curier: {
-    avatar: 'bg-gradient-to-br from-orange-500 to-orange-600',
+    avatar: 'bg-linear-to-br from-orange-500 to-orange-600',
     badge: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
     text: 'text-orange-400',
   },
   
   client: {
-    avatar: 'bg-gradient-to-br from-emerald-500 to-emerald-600',
+    avatar: 'bg-linear-to-br from-emerald-500 to-emerald-600',
     badge: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
     text: 'text-emerald-400',
   },
@@ -214,10 +214,10 @@ export const buttonStyles = {
 // ============================================
 
 export const gradients = {
-  primary: 'bg-gradient-to-br from-orange-500 to-orange-600',
-  primaryLight: 'bg-gradient-to-br from-orange-500/20 to-orange-600/10',
-  success: 'bg-gradient-to-br from-emerald-500 to-emerald-600',
-  background: 'bg-gradient-to-br from-slate-800/80 to-slate-900/80',
+  primary: 'bg-linear-to-br from-orange-500 to-orange-600',
+  primaryLight: 'bg-linear-to-br from-orange-500/20 to-orange-600/10',
+  success: 'bg-linear-to-br from-emerald-500 to-emerald-600',
+  background: 'bg-linear-to-br from-slate-800/80 to-slate-900/80',
   
   // Gradient-uri pentru orb-uri decorative
   orb: {

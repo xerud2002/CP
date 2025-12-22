@@ -405,8 +405,8 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                     <div className="flex items-center gap-2 px-2">
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${
                         isClient 
-                          ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white'
-                          : 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
+                          ? 'bg-linear-to-br from-emerald-500 to-emerald-600 text-white'
+                          : 'bg-linear-to-br from-orange-500 to-orange-600 text-white'
                       }`}>
                         {msg.senderName.charAt(0).toUpperCase()}
                       </div>
@@ -443,10 +443,10 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                     <div
                       className={`px-4 py-2.5 rounded-2xl shadow-sm relative ${
                         isOwnMessage
-                          ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md'
+                          ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white rounded-br-md'
                           : isClient
-                          ? 'bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 text-emerald-50 border border-emerald-500/30 rounded-bl-md backdrop-blur-sm'
-                          : 'bg-gradient-to-br from-orange-500/20 to-orange-600/20 text-orange-50 border border-orange-500/30 rounded-bl-md backdrop-blur-sm'
+                          ? 'bg-linear-to-br from-emerald-500/20 to-emerald-600/20 text-emerald-50 border border-emerald-500/30 rounded-bl-md backdrop-blur-sm'
+                          : 'bg-linear-to-br from-orange-500/20 to-orange-600/20 text-orange-50 border border-orange-500/30 rounded-bl-md backdrop-blur-sm'
                       }`}
                     >
                       {/* Non-image attachment with improved styling */}
@@ -564,7 +564,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
           <button
             type="submit"
             disabled={loading || uploadingFile || (!newMessage.trim() && !selectedFile)}
-            className="px-4 sm:px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20 disabled:hover:scale-100 flex items-center gap-2 text-sm shrink-0 group"
+            className="px-4 sm:px-6 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20 disabled:hover:scale-100 flex items-center gap-2 text-sm shrink-0 group"
           >
             {(loading || uploadingFile) ? (
               <>

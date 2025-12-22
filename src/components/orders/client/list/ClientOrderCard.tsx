@@ -44,6 +44,16 @@ function ClientOrderCard({
     if (order.serviciu === 'masini') {
       return 'Transport auto';
     }
+    if (order.serviciu === 'animale' && order.tip_animal) {
+      const animalLabels: Record<string, string> = {
+        'caine': 'Câine',
+        'pisica': 'Pisică',
+        'pasare': 'Pasăre',
+        'rozator': 'Rozător',
+        'alt': 'Alt animal'
+      };
+      return `Tip animal: ${animalLabels[order.tip_animal] || order.tip_animal}`;
+    }
     // Show vehicle type if available
     if (order.tip_vehicul) {
       return `Vehicul: ${order.tip_vehicul}`;

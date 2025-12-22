@@ -69,7 +69,7 @@ function RegisterForm() {
       {/* Left Side - Decorative */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-slate-900">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 via-slate-900 to-green-500/20"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 via-slate-900 to-green-500/20"></div>
         
         {/* Decorative circles */}
         <div className="absolute top-20 left-20 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl"></div>
@@ -280,8 +280,8 @@ function RegisterForm() {
               disabled={loading || googleLoading}
               className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 flex items-center justify-center gap-2 ${
                 isCurier 
-                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/30' 
-                  : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-lg shadow-green-500/30'
+                  ? 'bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/30' 
+                  : 'bg-linear-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-lg shadow-green-500/30'
               } ${(loading || googleLoading) ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {loading ? (

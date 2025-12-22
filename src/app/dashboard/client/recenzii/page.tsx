@@ -298,7 +298,7 @@ function RecenziiClientContent() {
 
         {/* Orders to Review */}
         {completedOrders.length > 0 && !showReviewForm && (
-          <div className="bg-gradient-to-br from-orange-500/20 to-yellow-500/20 rounded-xl border border-orange-500/20 p-4 sm:p-6 mb-6">
+          <div className="bg-linear-to-br from-orange-500/20 to-yellow-500/20 rounded-xl border border-orange-500/20 p-4 sm:p-6 mb-6">
             <h3 className="text-white font-semibold mb-3">Comenzi finalizate - lasă o recenzie</h3>
             <div className="space-y-2">
               {completedOrders.map((order) => (

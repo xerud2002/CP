@@ -82,7 +82,7 @@ export default function FidelitateClientPage() {
         {/* Current Status */}
         <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-white/5 p-6 sm:p-8 mb-6">
           <div className="text-center mb-6">
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r ${currentTier.color} text-white font-bold mb-4`}>
+            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r ${currentTier.color} text-white font-bold mb-4`}>
               <StarIcon className="w-5 h-5" />
               Nivel {currentTier.name}
             </div>
@@ -98,7 +98,7 @@ export default function FidelitateClientPage() {
               </div>
               <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
                 <div 
-                  className={`h-full bg-gradient-to-r ${nextTier.color} transition-all duration-500`}
+                  className={`h-full bg-linear-to-r ${nextTier.color} transition-all duration-500`}
                   style={{ width: `${(currentPoints / nextTier.points) * 100}%` }}
                 />
               </div>
@@ -136,7 +136,7 @@ export default function FidelitateClientPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${tier.color} flex items-center justify-center`}>
+                    <div className={`w-12 h-12 rounded-lg bg-linear-to-br ${tier.color} flex items-center justify-center`}>
                       <StarIcon className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -160,7 +160,7 @@ export default function FidelitateClientPage() {
         </div>
 
         {/* CTA */}
-        <div className="bg-gradient-to-br from-orange-500/20 to-yellow-500/20 rounded-xl border border-orange-500/20 p-6 text-center">
+        <div className="bg-linear-to-br from-orange-500/20 to-yellow-500/20 rounded-xl border border-orange-500/20 p-6 text-center">
           <h3 className="text-xl font-bold text-white mb-2">Câștigă Puncte Acum!</h3>
           <p className="text-gray-300 mb-4">Fiecare comandă te apropie de următorul nivel</p>
           <Link 

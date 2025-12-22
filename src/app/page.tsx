@@ -188,7 +188,7 @@ export default function Home() {
             <div className="animate-fade-in-delayed">
               <div className="relative">
                 {/* Glow effect */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-orange-500/10 to-green-500/10 rounded-3xl blur-2xl"></div>
+                <div className="absolute -inset-4 bg-linear-to-r from-orange-500/10 to-green-500/10 rounded-3xl blur-2xl"></div>
                 
                 {/* Services Grid - 3x3 */}
                 <div className="relative grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-3">
@@ -197,7 +197,7 @@ export default function Home() {
                     href="/comanda?serviciu=colete"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-blue-500/30 hover:border-blue-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
                         <ServiceIcon service="colete" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-400" />
@@ -212,7 +212,7 @@ export default function Home() {
                     href="/comanda?serviciu=plicuri"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-yellow-500/30 hover:border-yellow-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-yellow-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
                         <ServiceIcon service="plicuri" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-yellow-400" />
@@ -227,7 +227,7 @@ export default function Home() {
                     href="/comanda?serviciu=persoane"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-rose-500/30 hover:border-rose-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-rose-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-rose-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-rose-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
                         <ServiceIcon service="persoane" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-rose-400" />
@@ -242,7 +242,7 @@ export default function Home() {
                     href="/comanda?serviciu=electronice"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-purple-500/30 hover:border-purple-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
                         <ServiceIcon service="electronice" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-purple-400" />
@@ -257,7 +257,7 @@ export default function Home() {
                     href="/comanda?serviciu=animale"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-pink-500/30 hover:border-pink-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-pink-500/20 to-rose-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-pink-500/20 to-rose-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-pink-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
                         <ServiceIcon service="animale" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-pink-400" />
@@ -272,7 +272,7 @@ export default function Home() {
                     href="/comanda?serviciu=platforma"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-red-500/30 hover:border-red-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-red-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-red-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
                         <ServiceIcon service="platforma" className="w-5 h-5 sm:w-6 sm:h-6 text-red-400" />
@@ -287,7 +287,7 @@ export default function Home() {
                     href="/comanda?serviciu=tractari"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-orange-500/30 hover:border-orange-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-orange-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
                         <ServiceIcon service="tractari" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-orange-400" />
@@ -302,7 +302,7 @@ export default function Home() {
                     href="/comanda?serviciu=mobila"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-amber-500/30 hover:border-amber-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-amber-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-amber-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
                         <ServiceIcon service="mobila" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-amber-400" />
@@ -317,7 +317,7 @@ export default function Home() {
                     href="/comanda?serviciu=paleti"
                     className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-orange-500/30 hover:border-orange-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
                     <div className="relative">
                       <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-orange-500/20 rounded-lg flex items-center justify-center mb-1.5 sm:mb-2">
                         <ServiceIcon service="paleti" className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-orange-400" />
@@ -380,9 +380,9 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             {/* Step 1 */}
             <div className="relative group">
-              <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-gradient-to-r from-orange-500/50 to-transparent"></div>
+              <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-linear-to-r from-orange-500/50 to-transparent"></div>
               <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-orange-500/40 transition-all duration-300">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-linear-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-orange-500/40 transition-all duration-300">
                   <svg className="w-7 h-7 sm:w-9 sm:h-9 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -396,9 +396,9 @@ export default function Home() {
 
             {/* Step 2 */}
             <div className="relative group">
-              <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-gradient-to-r from-green-500/50 to-transparent"></div>
+              <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-linear-to-r from-green-500/50 to-transparent"></div>
               <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-green-500/40 transition-all duration-300">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-linear-to-br from-green-500/20 to-green-600/10 border border-green-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-green-500/40 transition-all duration-300">
                   <svg className="w-7 h-7 sm:w-9 sm:h-9 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                   </svg>
@@ -411,9 +411,9 @@ export default function Home() {
 
             {/* Step 3 */}
             <div className="relative group">
-              <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-gradient-to-r from-blue-500/50 to-transparent"></div>
+              <div className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-linear-to-r from-blue-500/50 to-transparent"></div>
               <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-blue-500/40 transition-all duration-300">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-linear-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-blue-500/40 transition-all duration-300">
                   <svg className="w-7 h-7 sm:w-9 sm:h-9 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
@@ -427,7 +427,7 @@ export default function Home() {
             {/* Step 4 */}
             <div className="relative group">
               <div className="text-center">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-gradient-to-br from-yellow-500/20 to-amber-600/10 border border-yellow-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-yellow-500/40 transition-all duration-300">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-linear-to-br from-yellow-500/20 to-amber-600/10 border border-yellow-500/20 flex items-center justify-center group-hover:scale-110 group-hover:border-yellow-500/40 transition-all duration-300">
                   <svg className="w-7 h-7 sm:w-9 sm:h-9 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
@@ -442,7 +442,7 @@ export default function Home() {
       </section>
 
       {/* Benefits Section */}
-      <section className="below-fold py-12 sm:py-16 px-3 sm:px-4 bg-gradient-to-b from-slate-900 to-slate-900/50">
+      <section className="below-fold py-12 sm:py-16 px-3 sm:px-4 bg-linear-to-b from-slate-900 to-slate-900/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
             <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-blue-500/10 text-blue-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
@@ -461,7 +461,7 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Benefit 1 */}
             <div className="group relative bg-slate-800/40 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-orange-500/30 transition-all duration-300 active:scale-95 sm:hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-orange-500/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                   <svg className="w-6 h-6 sm:w-7 sm:h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -477,7 +477,7 @@ export default function Home() {
 
             {/* Benefit 2 */}
             <div className="group relative bg-slate-800/40 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-green-500/30 transition-all duration-300 active:scale-95 sm:hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-green-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-green-500/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                   <svg className="w-6 h-6 sm:w-7 sm:h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -493,7 +493,7 @@ export default function Home() {
 
             {/* Benefit 3 */}
             <div className="group relative bg-slate-800/40 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-blue-500/30 transition-all duration-300 active:scale-95 sm:hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-blue-500/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                   <svg className="w-6 h-6 sm:w-7 sm:h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -509,7 +509,7 @@ export default function Home() {
 
             {/* Benefit 4 */}
             <div className="group relative bg-slate-800/40 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-purple-500/30 transition-all duration-300 active:scale-95 sm:hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-purple-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-purple-500/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                   <svg className="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -525,7 +525,7 @@ export default function Home() {
 
             {/* Benefit 5 */}
             <div className="group relative bg-slate-800/40 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-cyan-500/30 transition-all duration-300 active:scale-95 sm:hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-cyan-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-cyan-500/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                   <svg className="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -541,7 +541,7 @@ export default function Home() {
 
             {/* Benefit 6 */}
             <div className="group relative bg-slate-800/40 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/5 hover:border-amber-500/30 transition-all duration-300 active:scale-95 sm:hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-amber-500/5 to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-amber-500/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
                   <svg className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -560,7 +560,7 @@ export default function Home() {
       </section>
 
       {/* Process Timeline Section */}
-      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-gradient-to-b from-slate-900/50 to-slate-900">
+      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-linear-to-b from-slate-900/50 to-slate-900">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-8 sm:mb-10 md:mb-14">
             <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-orange-500/10 text-orange-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
@@ -578,7 +578,7 @@ export default function Home() {
           {/* Timeline */}
           <div className="relative">
             {/* Vertical line - hidden on mobile */}
-            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-orange-500 via-green-500 to-purple-500"></div>
+            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-linear-to-b from-orange-500 via-green-500 to-purple-500"></div>
 
             {/* Timeline Steps */}
             <div className="space-y-8 sm:space-y-10 md:space-y-12">
@@ -601,7 +601,7 @@ export default function Home() {
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
                 <div className="relative shrink-0 order-2 md:order-0">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30 border-4 border-slate-900">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                     </svg>
@@ -628,7 +628,7 @@ export default function Home() {
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
                 <div className="relative shrink-0 order-2 md:order-2">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/30 border-4 border-slate-900">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
@@ -655,7 +655,7 @@ export default function Home() {
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
                 <div className="relative shrink-0 order-2 md:order-0">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-lg shadow-blue-500/30 border-4 border-slate-900">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-lg shadow-blue-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
@@ -682,7 +682,7 @@ export default function Home() {
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
                 <div className="relative shrink-0 order-2 md:order-2">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/30 border-4 border-slate-900">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
@@ -709,7 +709,7 @@ export default function Home() {
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
                 <div className="relative shrink-0 order-2 md:order-0">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/30 border-4 border-slate-900">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                     </svg>
@@ -736,7 +736,7 @@ export default function Home() {
                 </div>
                 {/* Iconiță pe mobil (order-2), pe desktop centru */}
                 <div className="relative shrink-0 order-2 md:order-2">
-                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center shadow-lg shadow-yellow-500/30 border-4 border-slate-900">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl sm:rounded-2xl bg-linear-to-br from-yellow-500 to-amber-600 flex items-center justify-center shadow-lg shadow-yellow-500/30 border-4 border-slate-900">
                     <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                     </svg>
@@ -750,7 +750,7 @@ export default function Home() {
           <div className="mt-10 sm:mt-12 md:mt-14 text-center px-3">
             <Link 
               href="/comanda"
-              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-all active:scale-95 md:hover:scale-105 text-sm sm:text-base min-h-12 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-3.5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-all active:scale-95 md:hover:scale-105 text-sm sm:text-base min-h-12 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto"
             >
               <span>Solicită oferte gratuit</span>
               <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -763,7 +763,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-gradient-to-b from-slate-900/50 via-slate-900 to-slate-900/50 relative overflow-hidden">
+      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-linear-to-b from-slate-900/50 via-slate-900 to-slate-900/50 relative overflow-hidden">
         {/* Background decorations */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-500/5 rounded-full blur-3xl"></div>
@@ -772,7 +772,7 @@ export default function Home() {
 
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 text-yellow-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4 shadow-lg shadow-yellow-500/10">
+            <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-linear-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 text-yellow-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4 shadow-lg shadow-yellow-500/10">
               <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
@@ -798,9 +798,9 @@ export default function Home() {
                     className="shrink-0 w-[calc(33.333%-1rem)] min-w-70 sm:min-w-80 md:min-w-85 group relative"
                   >
                     {/* Card */}
-                    <div className="relative h-full bg-gradient-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-xl rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-white/10 hover:border-yellow-500/30 transition-all duration-500 active:scale-95 md:hover:transform md:hover:-translate-y-2 hover:shadow-2xl hover:shadow-yellow-500/20">
+                    <div className="relative h-full bg-linear-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-xl rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-white/10 hover:border-yellow-500/30 transition-all duration-500 active:scale-95 md:hover:transform md:hover:-translate-y-2 hover:shadow-2xl hover:shadow-yellow-500/20">
                       {/* Decorative corner */}
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-yellow-500/10 to-transparent rounded-tr-2xl rounded-bl-full"></div>
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-yellow-500/10 to-transparent rounded-tr-2xl rounded-bl-full"></div>
                       
                       {/* Quote icon */}
                       <div className="absolute top-6 right-6 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -814,7 +814,7 @@ export default function Home() {
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-orange-500/20 to-yellow-500/20 border border-yellow-500/30 flex items-center justify-center shadow-lg shrink-0">
+                              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-orange-500/20 to-yellow-500/20 border border-yellow-500/30 flex items-center justify-center shadow-lg shrink-0">
                                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                 </svg>
@@ -838,8 +838,8 @@ export default function Home() {
                           </div>
                           
                           {/* Rating box */}
-                          <div className="ml-2 sm:ml-3 md:ml-4 text-center bg-gradient-to-br from-yellow-500/20 to-amber-500/20 border border-yellow-500/30 rounded-lg sm:rounded-xl px-2.5 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 shadow-lg shrink-0">
-                            <div className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-yellow-400 to-amber-500">
+                          <div className="ml-2 sm:ml-3 md:ml-4 text-center bg-linear-to-br from-yellow-500/20 to-amber-500/20 border border-yellow-500/30 rounded-lg sm:rounded-xl px-2.5 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 shadow-lg shrink-0">
+                            <div className="text-xl sm:text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-linear-to-br from-yellow-400 to-amber-500">
                               {testimonial.rating.toFixed(1)}
                             </div>
                             <div className="text-[9px] sm:text-[10px] text-yellow-500/80 font-semibold uppercase tracking-wider">Rating</div>
@@ -881,7 +881,7 @@ export default function Home() {
                       <div className="pt-4 border-t border-white/5">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                            <div className="w-8 h-8 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold shadow-lg">
                               {testimonial.author.charAt(0)}
                             </div>
                             <div>
@@ -909,8 +909,8 @@ export default function Home() {
             </div>
             
             {/* Gradient fade edges */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-900 to-transparent pointer-events-none z-10"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-900 to-transparent pointer-events-none z-10"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-slate-900 to-transparent pointer-events-none z-10"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-slate-900 to-transparent pointer-events-none z-10"></div>
           </div>
 
           {/* Stats bar */}
@@ -938,27 +938,27 @@ export default function Home() {
       {/* CTA Section - Courier Recruitment */}
       <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden">
         {/* Background effects */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-900 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-900/95 to-slate-900 pointer-events-none"></div>
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-orange-500/10 rounded-full blur-3xl"></div>
           <div className="absolute top-1/4 right-1/4 w-100 h-100 bg-green-500/5 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-5xl mx-auto relative z-10">
-          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-800/90 via-slate-800/70 to-slate-800/90 backdrop-blur-xl border border-white/10 shadow-2xl">
+          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-linear-to-br from-slate-800/90 via-slate-800/70 to-slate-800/90 backdrop-blur-xl border border-white/10 shadow-2xl">
             {/* Animated gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-green-500/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-green-500/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
             
             {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-green-500/10 to-transparent rounded-full blur-3xl"></div>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-linear-to-tr from-green-500/10 to-transparent rounded-full blur-3xl"></div>
             
             <div className="relative p-5 sm:p-6 md:p-10 lg:p-14">
               {/* Icon with animation */}
               <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto mb-5 sm:mb-6 md:mb-8 group">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl animate-pulse"></div>
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-                <div className="relative w-full h-full rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-2xl shadow-orange-500/40 group-hover:scale-110 transition-transform duration-300">
+                <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-orange-600 rounded-2xl animate-pulse"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-orange-600 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                <div className="relative w-full h-full rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-2xl shadow-orange-500/40 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8 17h8M8 17a2 2 0 11-4 0m4 0a2 2 0 10-4 0m12 0a2 2 0 11-4 0m4 0a2 2 0 10-4 0M3 9h13a2 2 0 012 2v4H3V9zm13 0V5a2 2 0 00-2-2H5a2 2 0 00-2 2v4h13z" />
                   </svg>
@@ -979,9 +979,9 @@ export default function Home() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 md:mb-10 max-w-3xl mx-auto">
                 {/* Benefit 1 */}
                 <div className="group relative bg-slate-700/30 hover:bg-slate-700/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-white/5 hover:border-green-500/30 transition-all duration-300 active:scale-95 md:hover:-translate-y-1">
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 to-green-500/0 group-hover:from-green-500/5 group-hover:to-green-500/10 rounded-xl sm:rounded-2xl transition-all duration-300"></div>
+                  <div className="absolute inset-0 bg-linear-to-br from-green-500/0 to-green-500/0 group-hover:from-green-500/5 group-hover:to-green-500/10 rounded-xl sm:rounded-2xl transition-all duration-300"></div>
                   <div className="relative">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-green-500/20">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-lg sm:rounded-xl bg-linear-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-green-500/20">
                       <svg className="w-6 h-6 sm:w-7 sm:h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                       </svg>
@@ -995,9 +995,9 @@ export default function Home() {
 
                 {/* Benefit 2 */}
                 <div className="group relative bg-slate-700/30 hover:bg-slate-700/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-white/5 hover:border-blue-500/30 transition-all duration-300 active:scale-95 md:hover:-translate-y-1">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/10 rounded-xl sm:rounded-2xl transition-all duration-300"></div>
+                  <div className="absolute inset-0 bg-linear-to-br from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/10 rounded-xl sm:rounded-2xl transition-all duration-300"></div>
                   <div className="relative">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-lg sm:rounded-xl bg-linear-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
                       <svg className="w-6 h-6 sm:w-7 sm:h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
@@ -1011,9 +1011,9 @@ export default function Home() {
 
                 {/* Benefit 3 */}
                 <div className="group relative bg-slate-700/30 hover:bg-slate-700/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-white/5 hover:border-purple-500/30 transition-all duration-300 active:scale-95 md:hover:-translate-y-1">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/0 group-hover:from-purple-500/5 group-hover:to-purple-500/10 rounded-xl sm:rounded-2xl transition-all duration-300"></div>
+                  <div className="absolute inset-0 bg-linear-to-br from-purple-500/0 to-purple-500/0 group-hover:from-purple-500/5 group-hover:to-purple-500/10 rounded-xl sm:rounded-2xl transition-all duration-300"></div>
                   <div className="relative">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-lg sm:rounded-xl bg-linear-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20">
                       <svg className="w-6 h-6 sm:w-7 sm:h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -1030,7 +1030,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center">
                 <Link 
                   href="/register?role=curier" 
-                  className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12"
+                  className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12"
                 >
                   <span>Înregistrează-te Gratuit</span>
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -1077,7 +1077,7 @@ export default function Home() {
       </section>
 
       {/* Trust & Coverage Section */}
-      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden bg-gradient-to-b from-slate-900/50 to-slate-900">
+      <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden bg-linear-to-b from-slate-900/50 to-slate-900">
         {/* Background decorations */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
@@ -1087,7 +1087,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto relative z-10">
           {/* Header */}
           <div className="text-center mb-8 sm:mb-12">
-            <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-green-500/10 border border-blue-500/20 text-blue-400 text-xs sm:text-sm font-medium mb-4 sm:mb-6 shadow-lg">
+            <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-linear-to-r from-blue-500/10 to-green-500/10 border border-blue-500/20 text-blue-400 text-xs sm:text-sm font-medium mb-4 sm:mb-6 shadow-lg">
               <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
               </svg>
@@ -1114,9 +1114,9 @@ export default function Home() {
                   opacity: 0
                 }}
               >
-                <div className="relative h-full bg-gradient-to-br from-slate-800/60 to-slate-800/30 backdrop-blur-sm hover:from-slate-800/80 hover:to-slate-800/60 border border-white/5 hover:border-white/20 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer">
+                <div className="relative h-full bg-linear-to-br from-slate-800/60 to-slate-800/30 backdrop-blur-sm hover:from-slate-800/80 hover:to-slate-800/60 border border-white/5 hover:border-white/20 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer">
                   {/* Decorative corner */}
-                  <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-blue-500/10 to-transparent rounded-tr-lg sm:rounded-tr-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute top-0 right-0 w-16 h-16 bg-linear-to-br from-blue-500/10 to-transparent rounded-tr-lg sm:rounded-tr-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   
                   <div className="flex items-center gap-2 sm:gap-3 relative z-10">
                     {/* Flag container */}
@@ -1155,22 +1155,22 @@ export default function Home() {
           <div className="max-w-2xl mx-auto">
             <div className="group relative">
               {/* Glow effect */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-orange-600 to-green-500 rounded-2xl sm:rounded-3xl blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+              <div className="absolute -inset-1 bg-linear-to-r from-orange-500 via-orange-600 to-green-500 rounded-2xl sm:rounded-3xl blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
               
               {/* Main card */}
-              <div className="relative bg-gradient-to-br from-slate-800/95 via-slate-800/90 to-slate-800/95 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-10 lg:p-12 overflow-hidden shadow-2xl">
+              <div className="relative bg-linear-to-br from-slate-800/95 via-slate-800/90 to-slate-800/95 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-10 lg:p-12 overflow-hidden shadow-2xl">
                 {/* Background pattern */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-green-500/5"></div>
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-green-500/10 to-transparent rounded-full blur-3xl"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-green-500/5"></div>
+                <div className="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-linear-to-tr from-green-500/10 to-transparent rounded-full blur-3xl"></div>
                 
                 {/* Content */}
                 <div className="relative z-10 text-center">
                   {/* Animated icon */}
                   <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6">
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl sm:rounded-2xl animate-pulse opacity-30"></div>
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl sm:rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
-                    <div className="relative w-full h-full rounded-xl sm:rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-2xl shadow-orange-500/50 group-hover:scale-110 transition-transform duration-300">
+                    <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-orange-600 rounded-xl sm:rounded-2xl animate-pulse opacity-30"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-orange-600 rounded-xl sm:rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
+                    <div className="relative w-full h-full rounded-xl sm:rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-2xl shadow-orange-500/50 group-hover:scale-110 transition-transform duration-300">
                       <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                       </svg>
@@ -1188,7 +1188,7 @@ export default function Home() {
                   {/* Button */}
                   <Link 
                     href="#top" 
-                    className="group/btn inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12"
+                    className="group/btn inline-flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12"
                   >
                     <span>Începe acum</span>
                     <div className="flex items-center gap-2">
