@@ -7,6 +7,11 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 
 **Multi-tenant SaaS** with roles: `client` | `curier` | `admin`. Owner-based Firestore security via `uid` fields.
 
+**Role Permissions**:
+- `client`: Create orders, chat with couriers, write reviews, manage own profile
+- `curier`: View all orders, message clients, update order status, manage services/coverage zones
+- `admin`: Full access to all data, user management, system settings (implementation in progress)
+
 **⚠️ CRITICAL SECURITY**: Firestore rules check ownership but **don't filter results**—client queries MUST include `where('uid', '==', user.uid)`. This is enforced in `firestore.rules` but not auto-applied to queries.
 
 ### Route Structure
@@ -32,12 +37,15 @@ Custom hooks in `src/hooks/{client|courier}/` handle data loading, real-time sub
 | File | Purpose |
 |------|---------|
 | `constants.ts` | **SINGLE SOURCE OF TRUTH**: `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
-| `AuthContext.tsx` | `useAuth()` hook: `user`, `loading`, `login()`, `register()`, `logout()` |
+| `AuthContext.tsx` | `useAuth()` hook: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
 | `toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian via `errorMessages.ts` |
+| `errorMessages.ts` | Firebase error code → Romanian message mapping (e.g., `auth/user-not-found` → "Nu există cont cu acest email") |
 | `orderStatusHelpers.ts` | `canEditOrder()`, `canFinalizeOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
 | `orderHelpers.ts` | `getNextOrderNumber()` (atomic transaction), `formatOrderNumber()` → "CP141122" |
+| `documentRequirements.ts` | Service type → required documents mapping (e.g., animals need health certificates) |
+| `rating.ts` | `calculateNewRating()` — weighted average algorithm for courier ratings |
 | `ServiceIcons.tsx` | `<ServiceIcon service="colete" />` — centralized icons, normalizes case-insensitive lookup |
-| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole` |
+| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole`, `Review` |
 | `useClientOrdersLoader.ts` | Real-time orders + unread message counts for clients |
 | `useOrdersLoader.ts` | Real-time order filtering for couriers (by service type, country) |
 
@@ -107,7 +115,21 @@ try {
 ```
 **Why**: `showError()` uses `errorMessages.ts` to map Firebase error codes to user-friendly Romanian messages. Never use `alert()` or raw error messages.
 
-### 5. Timestamps — Server-Side Only
+### 5. Authentication — Email & Google OAuth
+```tsx
+// Email/password registration
+const userData = await register(email, password, 'client');
+
+// Google OAuth login (role selected beforehand)
+const userData = await loginWithGoogle('curier');
+
+// Password reset
+await resetPassword(email);
+showSuccess('Email de resetare trimis!');
+```
+**Why**: `AuthContext` provides unified auth interface. Google OAuth creates/updates user document in Firestore with selected role. Password reset uses Firebase's built-in email flow.
+
+### 6. Timestamps — Server-Side Only
 ```tsx
 import { serverTimestamp } from 'firebase/firestore';
 
@@ -125,7 +147,7 @@ await addDoc(collection(db, 'comenzi'), {
 ```
 **Why**: Client clocks are unreliable. `serverTimestamp()` ensures consistent, tamper-proof timestamps.
 
-### 6. Order Status — Use Helpers, Not Direct Checks
+### 7. Order Status — Use Helpers, Not Direct Checks
 ```tsx
 import { canEditOrder, transitionToFinalizata } from '@/utils/orderStatusHelpers';
 
@@ -141,7 +163,7 @@ if (order.status === 'noua' || order.status === 'in_lucru') {
 ```
 **Why**: Status transition rules are complex (see `STATUS_TRANSITIONS.md`). Helpers centralize business logic and prevent bugs.
 
-### 7. Real-time Data — onSnapshot Cleanup
+### 8. Real-time Data — onSnapshot Cleanup
 ```tsx
 useEffect(() => {
   const q = query(
@@ -168,6 +190,30 @@ useEffect(() => {
 }, [orders]);
 ```
 **Why**: `onSnapshot` creates persistent connections. Without cleanup, you'll leak listeners and hit Firebase quota limits.
+
+## Service-Specific Requirements
+
+### Document Requirements by Service Type
+The `documentRequirements.ts` utility maps service types to required documents:
+- **Animals** (`animale`): Health certificate, vaccination records, travel permit
+- **Perishable goods** (`perisabile`): Temperature control certificate, quality certificate
+- **Fragile items** (`fragile`): Special handling documentation
+
+Use `getRequiredDocuments(serviceType)` to display requirements in order forms.
+
+### Courier Rating System
+Ratings use weighted average algorithm in `rating.ts`:
+```tsx
+import { calculateNewRating } from '@/lib/rating';
+
+// Calculate new rating after review
+const newRating = calculateNewRating(
+  currentRating,      // Courier's current rating (1-5)
+  currentReviewCount, // Number of existing reviews
+  newReviewRating     // New review rating (1-5)
+);
+```
+**Formula**: Weighted average that gives more weight to newer reviews while preserving historical data. Updates `profil_curier` document's `rating` and `reviewCount` fields.
 
 ## Order Status Flow
 ```
