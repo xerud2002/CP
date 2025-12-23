@@ -2,6 +2,7 @@
 
 import CountryDropdown from '../dropdowns/CountryDropdown';
 import RegionDropdown from '../dropdowns/RegionDropdown';
+import CityDropdown from '../dropdowns/CityDropdown';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FormDataType = any;
@@ -13,6 +14,8 @@ interface LocationsStepProps {
   errors: Record<string, string>;
   judetRidicareList: string[];
   judetLivrareList: string[];
+  oraseRidicareList: string[];
+  oraseLivrareList: string[];
 }
 
 export default function LocationsStep({
@@ -22,11 +25,13 @@ export default function LocationsStep({
   errors,
   judetRidicareList,
   judetLivrareList,
+  oraseRidicareList,
+  oraseLivrareList,
 }: LocationsStepProps) {
   return (
     <div className="space-y-6">
-      {/* Ridicare */}
-      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+      {/* Ridicare - z-index mai mare pentru dropdown */}
+      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl overflow-visible relative z-20">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-12 h-12 rounded-xl bg-linear-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg">
             <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -40,18 +45,18 @@ export default function LocationsStep({
           </div>
         </div>
         
-        <div className="grid grid-cols-1 gap-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 overflow-visible">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-visible">
             <CountryDropdown
               value={formData.tara_ridicare}
-              onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, tara_ridicare: value, judet_ridicare: '' }))}
+              onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, tara_ridicare: value, judet_ridicare: '', oras_ridicare: '', localitate_ridicare: '' }))}
               label="Țara"
             />
             
-            <div>
+            <div className="overflow-visible">
               <RegionDropdown
                 value={formData.judet_ridicare}
-                onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, judet_ridicare: value }))}
+                onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, judet_ridicare: value, oras_ridicare: '', localitate_ridicare: '' }))}
                 label="Județ/Regiune"
                 regions={judetRidicareList}
                 countryCode={formData.tara_ridicare}
@@ -60,18 +65,36 @@ export default function LocationsStep({
             </div>
           </div>
           
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Oraș *</label>
-            <input
-              type="text"
-              name="oras_ridicare"
-              value={formData.oras_ridicare}
-              onChange={handleInputChange}
-              className="form-input w-full"
-              placeholder="București"
-            />
-            {errors.oras_ridicare && <p className="text-red-400 text-sm mt-1">{errors.oras_ridicare}</p>}
+          {/* Oraș sau Localitate - alege una */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-visible">
+            <div className="overflow-visible">
+              <CityDropdown
+                value={formData.oras_ridicare}
+                onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, oras_ridicare: value, localitate_ridicare: '' }))}
+                label="Oraș"
+                cities={oraseRidicareList}
+                countryCode={formData.tara_ridicare}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">sau Localitate/Comună</label>
+              <input
+                type="text"
+                name="localitate_ridicare"
+                value={formData.localitate_ridicare || ''}
+                onChange={(e) => {
+                  handleInputChange(e);
+                  if (e.target.value) {
+                    setFormData((prev: FormDataType) => ({ ...prev, oras_ridicare: '' }));
+                  }
+                }}
+                className="form-input w-full"
+                placeholder="Comuna, sat..."
+              />
+            </div>
           </div>
+          {errors.locatie_ridicare && <p className="text-red-400 text-sm -mt-2">{errors.locatie_ridicare}</p>}
           
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Adresa completă</label>
@@ -88,8 +111,8 @@ export default function LocationsStep({
         </div>
       </div>
 
-      {/* Livrare */}
-      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+      {/* Livrare - z-index mai mic pentru a fi sub dropdown-ul de la Ridicare */}
+      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl overflow-visible relative z-10">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-12 h-12 rounded-xl bg-linear-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center shadow-lg">
             <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -102,18 +125,18 @@ export default function LocationsStep({
           </div>
         </div>
         
-        <div className="grid grid-cols-1 gap-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 overflow-visible">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-visible">
             <CountryDropdown
               value={formData.tara_livrare}
-              onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, tara_livrare: value, judet_livrare: '' }))}
+              onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, tara_livrare: value, judet_livrare: '', oras_livrare: '', localitate_livrare: '' }))}
               label="Țara"
             />
             
-            <div>
+            <div className="overflow-visible">
               <RegionDropdown
                 value={formData.judet_livrare}
-                onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, judet_livrare: value }))}
+                onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, judet_livrare: value, oras_livrare: '', localitate_livrare: '' }))}
                 label="Județ/Regiune"
                 regions={judetLivrareList}
                 countryCode={formData.tara_livrare}
@@ -122,18 +145,36 @@ export default function LocationsStep({
             </div>
           </div>
           
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Oraș *</label>
-            <input
-              type="text"
-              name="oras_livrare"
-              value={formData.oras_livrare}
-              onChange={handleInputChange}
-              className="form-input w-full"
-              placeholder="London"
-            />
-            {errors.oras_livrare && <p className="text-red-400 text-sm mt-1">{errors.oras_livrare}</p>}
+          {/* Oraș sau Localitate - alege una */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-visible">
+            <div className="overflow-visible">
+              <CityDropdown
+                value={formData.oras_livrare}
+                onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, oras_livrare: value, localitate_livrare: '' }))}
+                label="Oraș"
+                cities={oraseLivrareList}
+                countryCode={formData.tara_livrare}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">sau Localitate/Comună</label>
+              <input
+                type="text"
+                name="localitate_livrare"
+                value={formData.localitate_livrare || ''}
+                onChange={(e) => {
+                  handleInputChange(e);
+                  if (e.target.value) {
+                    setFormData((prev: FormDataType) => ({ ...prev, oras_livrare: '' }));
+                  }
+                }}
+                className="form-input w-full"
+                placeholder="Comuna, sat..."
+              />
+            </div>
           </div>
+          {errors.locatie_livrare && <p className="text-red-400 text-sm -mt-2">{errors.locatie_livrare}</p>}
           
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Adresa completă</label>

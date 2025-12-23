@@ -2,15 +2,15 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 
-interface RegionDropdownProps {
+interface CityDropdownProps {
   value: string;
   onChange: (value: string) => void;
   label: string;
-  regions: string[];
+  cities: string[];
   countryCode?: string;
 }
 
-export default function RegionDropdown({ value, onChange, label, regions, countryCode }: RegionDropdownProps) {
+export default function CityDropdown({ value, onChange, label, cities, countryCode }: CityDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -39,14 +39,22 @@ export default function RegionDropdown({ value, onChange, label, regions, countr
       .replace(/ț/g, 't');
   };
 
-  const filteredRegions = useMemo(
-    () => regions.filter(r => normalizeText(r).includes(normalizeText(searchQuery))),
-    [regions, searchQuery]
+  const filteredCities = useMemo(
+    () => cities.filter(c => normalizeText(c).includes(normalizeText(searchQuery))),
+    [cities, searchQuery]
   );
+
+  // Check if current value exists in cities list
+  const isValidValue = useMemo(
+    () => !value || cities.includes(value),
+    [value, cities]
+  );
+
+  const displayValue = isValidValue ? value : '';
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-300 mb-2">{label} *</label>
+      <label className="block text-sm font-medium text-gray-300 mb-2">{label}</label>
       <div className="relative" ref={dropdownRef}>
         <button
           type="button"
@@ -64,8 +72,8 @@ export default function RegionDropdown({ value, onChange, label, regions, countr
               onError={(e) => (e.target as HTMLImageElement).style.display = 'none'}
             />
           )}
-          <span className={`flex-1 text-left ${value ? '' : 'text-gray-400'}`}>
-            {value || 'Selectează...'}
+          <span className={`flex-1 text-left ${displayValue ? '' : 'text-gray-400'}`}>
+            {displayValue || 'Selectează oraș...'}
           </span>
           <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -78,25 +86,25 @@ export default function RegionDropdown({ value, onChange, label, regions, countr
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Caută..."
+                placeholder="Caută oraș..."
                 className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 onClick={(e) => e.stopPropagation()}
                 aria-label={`Caută ${label.toLowerCase()}`}
               />
             </div>
             <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
-              {filteredRegions.length > 0 ? (
-                filteredRegions.map((region) => (
+              {filteredCities.length > 0 ? (
+                filteredCities.map((city) => (
                   <button
-                    key={region}
+                    key={city}
                     type="button"
                     onClick={() => {
-                      onChange(region);
+                      onChange(city);
                       setIsOpen(false);
                       setSearchQuery('');
                     }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
-                      value === region ? 'bg-slate-700/50' : ''
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-slate-700 transition-colors ${
+                      displayValue === city ? 'bg-slate-700/50' : ''
                     }`}
                   >
                     {countryCode && (
@@ -109,7 +117,7 @@ export default function RegionDropdown({ value, onChange, label, regions, countr
                         onError={(e) => (e.target as HTMLImageElement).style.display = 'none'}
                       />
                     )}
-                    <span className="text-white text-sm flex-1 text-left">{region}</span>
+                    <span className="text-white text-sm flex-1 text-left">{city}</span>
                   </button>
                 ))
               ) : (

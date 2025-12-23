@@ -31,8 +31,21 @@ export default function CountryDropdown({ value, onChange, label, onCountryChang
     [value]
   );
 
+  // Normalizează textul pentru căutare fără diacritice
+  const normalizeText = (text: string) => {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // elimină diacriticele
+      .replace(/ă/g, 'a')
+      .replace(/â/g, 'a')
+      .replace(/î/g, 'i')
+      .replace(/ș/g, 's')
+      .replace(/ț/g, 't');
+  };
+
   const filteredCountries = useMemo(
-    () => countries.filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase())),
+    () => countries.filter(c => normalizeText(c.name).includes(normalizeText(searchQuery))),
     [searchQuery]
   );
 
@@ -64,7 +77,7 @@ export default function CountryDropdown({ value, onChange, label, onCountryChang
           </svg>
         </button>
         {isOpen && (
-          <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
+          <div className="absolute z-[100] mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
             <div className="p-2 border-b border-white/10">
               <input
                 type="text"

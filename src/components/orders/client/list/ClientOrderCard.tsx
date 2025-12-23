@@ -56,7 +56,8 @@ function ClientOrderCard({
     }
     // Show vehicle type if available
     if (order.tip_vehicul) {
-      return `Vehicul: ${order.tip_vehicul}`;
+      const vehicleText = `Vehicul: ${order.tip_vehicul}`;
+      return order.descriere ? `${vehicleText} - ${order.descriere}` : vehicleText;
     }
     if (order.greutate) {
       const label = order.serviciu === 'paleti' ? 'Palet' : 'Colet';
@@ -224,7 +225,8 @@ function ClientOrderCard({
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-400">
               {getServiceInfo() && <span>{getServiceInfo()}</span>}
-              {order.descriere && <span>Descriere: {order.descriere}</span>}
+              {/* Only show separate descriere if there's no tip_vehicul (vehicle description is included in getServiceInfo) */}
+              {order.descriere && !order.tip_vehicul && <span>Descriere: {order.descriere}</span>}
             </div>
             {order.optiuni && order.optiuni.length > 0 && (
               <div className="flex flex-wrap items-center gap-2">

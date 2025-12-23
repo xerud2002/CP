@@ -37,6 +37,7 @@ Custom hooks in `src/hooks/{client|courier}/` handle data loading, real-time sub
 | File | Purpose |
 |------|---------|
 | `constants.ts` | **SINGLE SOURCE OF TRUTH**: `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
+| `cities.ts` | Cities by country and region: `oraseByCountryAndRegion`, `getOraseForRegion()`, `getAllOraseForCountry()` |
 | `AuthContext.tsx` | `useAuth()` hook: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
 | `toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian via `errorMessages.ts` |
 | `errorMessages.ts` | Firebase error code → Romanian message mapping (e.g., `auth/user-not-found` → "Nu există cont cu acest email") |
@@ -428,34 +429,56 @@ const sortOptions = [
 ];
 ```
 
-## Order Creation Form - Dropdown Search
+## Order Creation Form - Location Selection
 
-Country and region dropdowns include inline search functionality:
-- **Country dropdowns** (`tara_ridicare`, `tara_livrare`): Search bar at top filters by country name
-- **Region dropdowns** (`judet_ridicare`, `judet_livrare`): Search bar at top filters by region name
-- Search is case-insensitive and clears when dropdown closes
-- "Nu s-au găsit rezultate" message appears when no matches
-- Implementation pattern:
-  ```tsx
-  // State for search
-  const [countrySearch, setCountrySearch] = useState('');
-  
-  // Filtered list
-  const filteredCountries = useMemo(
-    () => countries.filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase())),
-    [countrySearch]
-  );
-  
-  // Dropdown structure
-  <div className="absolute ... flex flex-col">
-    <div className="p-2 border-b">
-      <input value={countrySearch} onChange={...} placeholder="Caută..." />
-    </div>
-    <div className="overflow-y-auto">
-      {filteredCountries.map(...)}
-    </div>
-  </div>
-  ```
+The order form uses a combination of dropdown and manual input for location selection:
+
+### Location Structure
+- **Country dropdown** (`tara_ridicare`, `tara_livrare`): 16 European countries
+- **Region dropdown** (`judet_ridicare`, `judet_livrare`): Regions/counties per country
+- **City dropdown** (`oras_ridicare`, `oras_livrare`): Major cities (20-30 per region)
+- **Localitate text input** (`localitate_ridicare`, `localitate_livrare`): Manual input for smaller localities/communes
+
+### Selection Logic
+- User can choose **either** a city from dropdown **OR** manually enter a localitate
+- Selecting a city clears the localitate field and vice versa
+- Validation requires at least one: `oras OR localitate` for each location
+- Error message: "Selectează un oraș sau introdu o localitate"
+
+### Dropdown Search
+All dropdowns include inline search functionality:
+- Search bar at top filters by name (case-insensitive)
+- "Nu s-au găsit rezultate" message when no matches
+- Search clears when dropdown closes
+- When country/region changes, city and localitate are reset
+
+### Data Storage
+- Cities stored in `cities.ts` with `oraseByCountryAndRegion` object
+- Helper functions: `getOraseForRegion()`, `getAllOraseForCountry()`
+- 16 countries × ~20 regions × ~25 cities ≈ 8000+ cities total
+
+### Implementation Pattern
+```tsx
+// City + Localitate on same row
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <CityDropdown
+    value={formData.oras_ridicare}
+    onChange={(value) => setFormData(prev => ({ ...prev, oras_ridicare: value, localitate_ridicare: '' }))}
+    ...
+  />
+  <input
+    name="localitate_ridicare"
+    value={formData.localitate_ridicare || ''}
+    onChange={(e) => {
+      handleInputChange(e);
+      if (e.target.value) {
+        setFormData(prev => ({ ...prev, oras_ridicare: '' }));
+      }
+    }}
+    placeholder="Comuna, sat..."
+  />
+</div>
+```
 
 
 ## Troubleshooting: Missing Country Flag SVGs (404 Errors)

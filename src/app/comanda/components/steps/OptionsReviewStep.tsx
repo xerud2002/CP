@@ -182,9 +182,15 @@ export default function OptionsReviewStep({
             </span>
           </div>
           <div className="flex justify-between py-2 border-b border-white/5">
-            <span className="text-gray-400">Ruta:</span>
-            <span className="text-white font-medium">
-              {ridicareCountryName} → {livrareCountryName}
+            <span className="text-gray-400">De la:</span>
+            <span className="text-white font-medium text-right">
+              {formData.oras_ridicare || formData.localitate_ridicare || '-'}, {formData.judet_ridicare}, {ridicareCountryName}
+            </span>
+          </div>
+          <div className="flex justify-between py-2 border-b border-white/5">
+            <span className="text-gray-400">La:</span>
+            <span className="text-white font-medium text-right">
+              {formData.oras_livrare || formData.localitate_livrare || '-'}, {formData.judet_livrare}, {livrareCountryName}
             </span>
           </div>
           <div className="flex justify-between py-2 border-b border-white/5">

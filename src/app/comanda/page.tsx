@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { countries, judetByCountry } from '@/lib/constants';
+import { getOraseForRegion } from '@/lib/cities';
 import { getNextOrderNumber } from '@/utils/orderHelpers';
 import { showSuccess, showError } from '@/lib/toast';
 import TransportDetailsStep from './components/steps/TransportDetailsStep';
@@ -145,11 +146,13 @@ function ComandaForm() {
     tara_ridicare: 'RO',
     judet_ridicare: '',
     oras_ridicare: '',
+    localitate_ridicare: '',
     adresa_ridicare: '',
     
     tara_livrare: 'GB',
     judet_livrare: '',
     oras_livrare: '',
+    localitate_livrare: '',
     adresa_livrare: '',
     
     // Detalii transport
@@ -301,10 +304,16 @@ function ComandaForm() {
 
     if (currentStep === 3) {
       if (!formData.judet_ridicare) newErrors.judet_ridicare = 'Selectează județul/regiunea';
-      if (!formData.oras_ridicare) newErrors.oras_ridicare = 'Orașul este obligatoriu';
+      // Trebuie să aibă fie oraș, fie localitate
+      if (!formData.oras_ridicare && !formData.localitate_ridicare) {
+        newErrors.locatie_ridicare = 'Selectează un oraș sau introdu o localitate';
+      }
       
       if (!formData.judet_livrare) newErrors.judet_livrare = 'Selectează județul/regiunea';
-      if (!formData.oras_livrare) newErrors.oras_livrare = 'Orașul este obligatoriu';
+      // Trebuie să aibă fie oraș, fie localitate
+      if (!formData.oras_livrare && !formData.localitate_livrare) {
+        newErrors.locatie_livrare = 'Selectează un oraș sau introdu o localitate';
+      }
     }
 
     if (currentStep === 4) {
@@ -421,6 +430,17 @@ function ComandaForm() {
   const judetLivrareList = useMemo(
     () => judetByCountry[formData.tara_livrare] || [],
     [formData.tara_livrare]
+  );
+
+  // Memoized city lists
+  const oraseRidicareList = useMemo(
+    () => getOraseForRegion(formData.tara_ridicare, formData.judet_ridicare),
+    [formData.tara_ridicare, formData.judet_ridicare]
+  );
+
+  const oraseLivrareList = useMemo(
+    () => getOraseForRegion(formData.tara_livrare, formData.judet_livrare),
+    [formData.tara_livrare, formData.judet_livrare]
   );
 
   // Memoized country names for summary display
@@ -622,6 +642,8 @@ function ComandaForm() {
               errors={errors}
               judetRidicareList={judetRidicareList}
               judetLivrareList={judetLivrareList}
+              oraseRidicareList={oraseRidicareList}
+              oraseLivrareList={oraseLivrareList}
             />
           )}
 
