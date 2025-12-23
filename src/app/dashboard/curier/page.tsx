@@ -8,6 +8,7 @@ import { useEffect, useState, memo, lazy, Suspense, useCallback } from 'react';
 import { collection, query, where, getDocs, doc, getDoc, onSnapshot, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
+import { useUserActivity } from '@/hooks/useUserActivity';
 import {
   UserIcon,
   BoxIcon,
@@ -935,6 +936,9 @@ export default function CurierDashboard() {
   const handleOpenOnboarding = useCallback(() => {
     setShowOnboarding(true);
   }, []);
+
+  // Track user activity for online status
+  useUserActivity(user?.uid);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {

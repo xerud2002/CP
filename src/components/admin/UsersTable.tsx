@@ -3,6 +3,7 @@
 import { User } from '@/types';
 import { getDisplayName, formatUserDate } from './types';
 import { EyeIcon, TrashIcon } from '@/components/icons/DashboardIcons';
+import { useState, useMemo } from 'react';
 
 interface UsersTableProps {
   users: User[];
@@ -10,17 +11,144 @@ interface UsersTableProps {
   onDelete: (uid: string) => void;
   onViewDetails: (user: User) => void;
   filter: 'all' | 'client' | 'curier';
+  statusFilter?: 'all' | 'online' | 'offline';
 }
 
-export default function UsersTable({ users, onRoleChange, onDelete, onViewDetails, filter }: UsersTableProps) {
-  const filteredUsers = filter === 'all' 
-    ? users 
-    : users.filter(u => u.role === filter);
+type SortColumn = 'role' | 'regDate' | 'status' | 'lastSeen' | null;
+type SortDirection = 'asc' | 'desc';
+
+export default function UsersTable({ users, onRoleChange, onDelete, onViewDetails, filter, statusFilter = 'all' }: UsersTableProps) {
+  const [sortColumn, setSortColumn] = useState<SortColumn>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+
+  const handleSort = (column: SortColumn) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  const filteredAndSortedUsers = useMemo(() => {
+    // First filter by role
+    let filtered = filter === 'all' 
+      ? users 
+      : users.filter(u => u.role === filter);
+
+    // Then filter by status
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(u => {
+        const online = isUserOnline(u.lastSeen);
+        return statusFilter === 'online' ? online : !online;
+      });
+    }
+
+    // If no sorting, return filtered
+    if (!sortColumn) return filtered;
+
+    // Apply sorting
+    return [...filtered].sort((a, b) => {
+      let compareResult = 0;
+
+      switch (sortColumn) {
+        case 'role': {
+          const roleOrder = { admin: 0, curier: 1, client: 2 };
+          compareResult = (roleOrder[a.role] || 999) - (roleOrder[b.role] || 999);
+          break;
+        }
+        case 'regDate': {
+          const aDate = a.createdAt ? (typeof a.createdAt === 'object' && 'seconds' in a.createdAt ? a.createdAt.seconds : new Date(a.createdAt).getTime()) : 0;
+          const bDate = b.createdAt ? (typeof b.createdAt === 'object' && 'seconds' in b.createdAt ? b.createdAt.seconds : new Date(b.createdAt).getTime()) : 0;
+          compareResult = (aDate as number) - (bDate as number);
+          break;
+        }
+        case 'status': {
+          const isOnlineA = isUserOnline(a.lastSeen);
+          const isOnlineB = isUserOnline(b.lastSeen);
+          compareResult = (isOnlineB ? 1 : 0) - (isOnlineA ? 1 : 0);
+          break;
+        }
+        case 'lastSeen': {
+          const getLastSeenTimestamp = (lastSeen?: Date | { seconds: number }) => {
+            if (!lastSeen) return 0;
+            if (typeof lastSeen === 'object' && 'seconds' in lastSeen) {
+              return lastSeen.seconds * 1000;
+            }
+            return new Date(lastSeen).getTime();
+          };
+          compareResult = getLastSeenTimestamp(b.lastSeen) - getLastSeenTimestamp(a.lastSeen);
+          break;
+        }
+      }
+
+      return sortDirection === 'asc' ? compareResult : -compareResult;
+    });
+  }, [users, filter, statusFilter, sortColumn, sortDirection]);
+
+  // Helper to check if user is online (active in last 5 minutes)
+  const isUserOnline = (lastSeen?: Date | { seconds: number }) => {
+    if (!lastSeen) return false;
+    let lastSeenDate: Date;
+    if (typeof lastSeen === 'object' && 'seconds' in lastSeen) {
+      lastSeenDate = new Date(lastSeen.seconds * 1000);
+    } else {
+      lastSeenDate = lastSeen as Date;
+    }
+    const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+    return lastSeenDate.getTime() > fiveMinutesAgo;
+  };
 
   // Helper to format phone
   const formatPhone = (phone?: string) => {
     if (!phone) return null;
     return phone;
+  };
+
+  // Helper to format last seen
+  const formatLastSeen = (lastSeen?: Date | { seconds: number }) => {
+    if (!lastSeen) return 'Niciodată';
+    let lastSeenDate: Date;
+    if (typeof lastSeen === 'object' && 'seconds' in lastSeen) {
+      lastSeenDate = new Date(lastSeen.seconds * 1000);
+    } else {
+      lastSeenDate = lastSeen as Date;
+    }
+    
+    const now = Date.now();
+    const diff = now - lastSeenDate.getTime();
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (minutes < 1) return 'Acum';
+    if (minutes < 60) return `${minutes} min`;
+    if (hours < 24) return `${hours}h`;
+    if (days < 7) return `${days}d`;
+    return lastSeenDate.toLocaleDateString('ro-RO', { day: '2-digit', month: 'short' });
+  };
+
+  // Helper to get sort indicator
+  const getSortIcon = (column: SortColumn) => {
+    if (sortColumn !== column) {
+      return (
+        <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+        </svg>
+      );
+    }
+    if (sortDirection === 'asc') {
+      return (
+        <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+        </svg>
+      );
+    }
+    return (
+      <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    );
   };
 
   return (
@@ -30,16 +158,52 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
           <tr className="border-b border-white/10">
             <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Utilizator</th>
             <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Email</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Rol</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Data înregistrării</th>
+            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">
+              <button 
+                onClick={() => handleSort('role')}
+                className="flex items-center gap-2 hover:text-white transition-colors group"
+              >
+                Rol
+                {getSortIcon('role')}
+              </button>
+            </th>
+            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">
+              <button 
+                onClick={() => handleSort('regDate')}
+                className="flex items-center gap-2 hover:text-white transition-colors group"
+              >
+                Data înregistrării
+                {getSortIcon('regDate')}
+              </button>
+            </th>
+            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">
+              <button 
+                onClick={() => handleSort('status')}
+                className="flex items-center gap-2 hover:text-white transition-colors group"
+              >
+                Status
+                {getSortIcon('status')}
+              </button>
+            </th>
+            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">
+              <button 
+                onClick={() => handleSort('lastSeen')}
+                className="flex items-center gap-2 hover:text-white transition-colors group"
+              >
+                Last Seen
+                {getSortIcon('lastSeen')}
+              </button>
+            </th>
             <th className="text-right py-4 px-4 text-gray-400 font-medium text-sm">Acțiuni</th>
           </tr>
         </thead>
         <tbody>
-          {filteredUsers.map((u) => {
+          {filteredAndSortedUsers.map((u) => {
             const displayName = getDisplayName(u);
             const phone = formatPhone(u.telefon);
             const regDate = formatUserDate(u.createdAt);
+            const online = isUserOnline(u.lastSeen);
+            const lastSeenText = formatLastSeen(u.lastSeen);
             
             return (
               <tr key={u.uid} className="border-b border-white/5 hover:bg-white/5 transition-colors">
@@ -93,6 +257,21 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                   )}
                 </td>
                 <td className="py-4 px-4">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${
+                      online ? 'bg-emerald-500 animate-pulse' : 'bg-gray-500'
+                    }`} />
+                    <span className={`text-sm font-medium ${
+                      online ? 'text-emerald-400' : 'text-gray-500'
+                    }`}>
+                      {online ? 'Online' : 'Offline'}
+                    </span>
+                  </div>
+                </td>
+                <td className="py-4 px-4">
+                  <span className="text-gray-400 text-sm">{lastSeenText}</span>
+                </td>
+                <td className="py-4 px-4">
                   <div className="flex items-center justify-end gap-2">
                     <button 
                       onClick={() => onViewDetails(u)}
@@ -115,7 +294,7 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
           })}
         </tbody>
       </table>
-      {filteredUsers.length === 0 && (
+      {filteredAndSortedUsers.length === 0 && (
         <div className="text-center py-12 text-gray-400">
           Nu există utilizatori în această categorie.
         </div>

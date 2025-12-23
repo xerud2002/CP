@@ -8,6 +8,7 @@ import { useEffect, useState, lazy, Suspense } from 'react';
 import { doc, getDoc, collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
+import { useUserActivity } from '@/hooks/useUserActivity';
 import {
   UserIcon,
   BoxIcon,
@@ -492,6 +493,9 @@ export default function ClientDashboard() {
   const [statusCounts, setStatusCounts] = useState({ pending: 0, inTransit: 0, delivered: 0 });
   const [recentMessages, setRecentMessages] = useState<RecentMessage[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+
+  // Track user activity for online status
+  useUserActivity(user?.uid);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {

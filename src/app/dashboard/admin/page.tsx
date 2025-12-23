@@ -56,6 +56,7 @@ export default function AdminDashboard() {
   const [loadingData, setLoadingData] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [userFilter, setUserFilter] = useState<'all' | 'client' | 'curier'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'online' | 'offline'>('all');
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -82,6 +83,36 @@ export default function AdminDashboard() {
       usersSnapshot.forEach((doc) => {
         usersData.push({ uid: doc.id, ...doc.data() } as User);
       });
+
+      // Load client profiles to get nume/prenume
+      const clientProfilesSnapshot = await getDocs(collection(db, 'profil_client'));
+      const clientProfiles = new Map();
+      clientProfilesSnapshot.forEach((doc) => {
+        clientProfiles.set(doc.id, doc.data());
+      });
+
+      // Load courier profiles to get nume/prenume
+      const courierProfilesSnapshot = await getDocs(collection(db, 'profil_curier'));
+      const courierProfiles = new Map();
+      courierProfilesSnapshot.forEach((doc) => {
+        courierProfiles.set(doc.id, doc.data());
+      });
+
+      // Merge profile data with users
+      usersData.forEach(user => {
+        if (user.role === 'client' && clientProfiles.has(user.uid)) {
+          const profile = clientProfiles.get(user.uid);
+          user.nume = profile.nume || user.nume;
+          user.prenume = profile.prenume || user.prenume;
+          user.telefon = profile.telefon || user.telefon;
+        } else if (user.role === 'curier' && courierProfiles.has(user.uid)) {
+          const profile = courierProfiles.get(user.uid);
+          user.nume = profile.nume || user.nume;
+          user.prenume = profile.prenume || user.prenume;
+          user.telefon = profile.telefon || user.telefon;
+        }
+      });
+
       setUsers(usersData);
 
       // Load orders
@@ -283,39 +314,70 @@ export default function AdminDashboard() {
           {/* Users Tab */}
           {activeTab === 'users' && (
             <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row gap-4 justify-between">
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setUserFilter('all')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      userFilter === 'all' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    Toți ({users.length})
-                  </button>
-                  <button
-                    onClick={() => setUserFilter('client')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      userFilter === 'client' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    Clienți ({clientsCount})
-                  </button>
-                  <button
-                    onClick={() => setUserFilter('curier')}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      userFilter === 'curier' ? 'bg-orange-500/20 text-orange-400' : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    Curieri ({couriersCount})
-                  </button>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 justify-between">
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setUserFilter('all')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        userFilter === 'all' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      Toți ({users.length})
+                    </button>
+                    <button
+                      onClick={() => setUserFilter('client')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        userFilter === 'client' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      Clienți ({clientsCount})
+                    </button>
+                    <button
+                      onClick={() => setUserFilter('curier')}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        userFilter === 'curier' ? 'bg-orange-500/20 text-orange-400' : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      Curieri ({couriersCount})
+                    </button>
+                  </div>
+                  <div className="w-full sm:w-64">
+                    <SearchBar 
+                      value={searchQuery}
+                      onChange={setSearchQuery}
+                      placeholder="Caută utilizator..."
+                    />
+                  </div>
                 </div>
-                <div className="w-full sm:w-64">
-                  <SearchBar 
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                    placeholder="Caută utilizator..."
-                  />
+                <div className="flex gap-2">
+                  <span className="text-gray-400 text-sm flex items-center">Status:</span>
+                  <button
+                    onClick={() => setStatusFilter('all')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                      statusFilter === 'all' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    Toți
+                  </button>
+                  <button
+                    onClick={() => setStatusFilter('online')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+                      statusFilter === 'online' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Online
+                  </button>
+                  <button
+                    onClick={() => setStatusFilter('offline')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+                      statusFilter === 'offline' ? 'bg-gray-500/20 text-gray-400' : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    <div className="w-2 h-2 rounded-full bg-gray-500" />
+                    Offline
+                  </button>
                 </div>
               </div>
               <UsersTable 
@@ -324,6 +386,7 @@ export default function AdminDashboard() {
                 onDelete={handleDeleteUser}
                 onViewDetails={setSelectedUser}
                 filter={userFilter}
+                statusFilter={statusFilter}
               />
             </div>
           )}

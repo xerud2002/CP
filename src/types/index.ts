@@ -19,6 +19,7 @@ export interface User {
   prenume?: string;
   telefon?: string;
   createdAt?: Date;
+  lastSeen?: Date;
 }
 
 export interface CoverageZone {
