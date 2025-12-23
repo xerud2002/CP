@@ -264,6 +264,7 @@ export default function AdminDashboard() {
         userName={userName}
         onLogout={handleLogout}
         onRefresh={loadData}
+        notificationCount={0}
       />
 
       {/* Main Content */}

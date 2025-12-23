@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { User, Order } from '@/types';
 import {
   UsersIcon,
@@ -23,6 +24,13 @@ const serviceColors: Record<string, string> = {
 };
 
 export default function StatsContent({ users, orders }: StatsContentProps) {
+  // Collapsible sections state
+  const [isStatusDistOpen, setIsStatusDistOpen] = useState(true);
+  const [isServiceDistOpen, setIsServiceDistOpen] = useState(true);
+  const [isTopCountriesOpen, setIsTopCountriesOpen] = useState(true);
+  const [isPlatformHealthOpen, setIsPlatformHealthOpen] = useState(true);
+  const [isRecentActivityOpen, setIsRecentActivityOpen] = useState(true);
+
   const clientsCount = users.filter(u => u.role === 'client').length;
   const couriersCount = users.filter(u => u.role === 'curier').length;
   const deliveredOrders = orders.filter(o => o.status === 'livrata').length;
@@ -123,11 +131,25 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Order Status Distribution */}
         <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
-          <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-            <PackageIcon className="w-5 h-5 text-orange-400" />
-            Distribuție Status Comenzi
-          </h4>
+          <button
+            onClick={() => setIsStatusDistOpen(!isStatusDistOpen)}
+            className="w-full flex items-center justify-between text-left"
+          >
+            <h4 className="text-white font-semibold flex items-center gap-2">
+              <PackageIcon className="w-5 h-5 text-orange-400" />
+              Distribuție Status Comenzi
+            </h4>
+            <svg 
+              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isStatusDistOpen ? 'rotate-180' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
           
+          <div className={`overflow-hidden transition-all duration-300 ${isStatusDistOpen ? 'mt-4 max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
           {/* Visual bar chart */}
           <div className="space-y-3 mb-4">
             {statusData.map((status) => (
@@ -155,15 +177,30 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
               </span>
             </div>
           </div>
+          </div>
         </div>
 
         {/* Service Type Distribution */}
         <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
-          <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-            <TruckIcon className="w-5 h-5 text-blue-400" />
-            Comenzi pe Tip Serviciu
-          </h4>
+          <button
+            onClick={() => setIsServiceDistOpen(!isServiceDistOpen)}
+            className="w-full flex items-center justify-between text-left"
+          >
+            <h4 className="text-white font-semibold flex items-center gap-2">
+              <TruckIcon className="w-5 h-5 text-blue-400" />
+              Comenzi pe Tip Serviciu
+            </h4>
+            <svg 
+              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isServiceDistOpen ? 'rotate-180' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
           
+          <div className={`overflow-hidden transition-all duration-300 ${isServiceDistOpen ? 'mt-4 max-h-125 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="space-y-3">
             {Object.entries(serviceDistribution)
               .sort((a, b) => b[1] - a[1])
@@ -182,17 +219,32 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
           {Object.keys(serviceDistribution).length === 0 && (
             <p className="text-gray-500 text-center py-4">Nu există date</p>
           )}
+          </div>
         </div>
 
         {/* Top Countries */}
         <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
-          <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-            <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <button
+            onClick={() => setIsTopCountriesOpen(!isTopCountriesOpen)}
+            className="w-full flex items-center justify-between text-left"
+          >
+            <h4 className="text-white font-semibold flex items-center gap-2">
+              <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Top 5 Țări (Ridicare)
+            </h4>
+            <svg 
+              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isTopCountriesOpen ? 'rotate-180' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-            Top 5 Țări (Ridicare)
-          </h4>
+          </button>
           
+          <div className={`overflow-hidden transition-all duration-300 ${isTopCountriesOpen ? 'mt-4 max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="space-y-3">
             {topCountries.map(([country, count], idx) => (
               <div key={country} className="flex items-center gap-3">
@@ -213,17 +265,32 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
           {topCountries.length === 0 && (
             <p className="text-gray-500 text-center py-4">Nu există date</p>
           )}
+          </div>
         </div>
 
         {/* Platform Health */}
         <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
-          <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-            <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          <button
+            onClick={() => setIsPlatformHealthOpen(!isPlatformHealthOpen)}
+            className="w-full flex items-center justify-between text-left"
+          >
+            <h4 className="text-white font-semibold flex items-center gap-2">
+              <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              Sănătate Platformă
+            </h4>
+            <svg 
+              className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isPlatformHealthOpen ? 'rotate-180' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-            Sănătate Platformă
-          </h4>
+          </button>
           
+          <div className={`overflow-hidden transition-all duration-300 ${isPlatformHealthOpen ? 'mt-4 max-h-125 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="space-y-4">
             {/* User Activity */}
             <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-lg">
@@ -269,18 +336,33 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
               <span className="text-blue-400 font-bold text-xl">{deliveredOrders}</span>
             </div>
           </div>
+          </div>
         </div>
       </div>
 
       {/* Activity Timeline - Recent Orders */}
       <div className="bg-slate-800/50 rounded-xl p-5 border border-white/5">
-        <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
-          <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <button
+          onClick={() => setIsRecentActivityOpen(!isRecentActivityOpen)}
+          className="w-full flex items-center justify-between text-left"
+        >
+          <h4 className="text-white font-semibold flex items-center gap-2">
+            <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Activitate Recentă (Ultimele 5 comenzi)
+          </h4>
+          <svg 
+            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isRecentActivityOpen ? 'rotate-180' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
-          Activitate Recentă (Ultimele 5 comenzi)
-        </h4>
+        </button>
         
+        <div className={`overflow-hidden transition-all duration-300 ${isRecentActivityOpen ? 'mt-4 max-h-125 opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="space-y-3">
           {orders.slice(0, 5).map((order, idx) => (
             <div key={order.id || idx} className="flex items-center gap-4 p-3 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-colors">
@@ -320,6 +402,7 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
           {orders.length === 0 && (
             <p className="text-gray-500 text-center py-4">Nu există comenzi recente</p>
           )}
+        </div>
         </div>
       </div>
     </div>
