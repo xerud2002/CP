@@ -231,6 +231,14 @@ export default function AdminDashboard() {
     router.push('/');
   };
 
+  const handleSendMessage = (user: User) => {
+    // For now, show a toast. You can implement a modal or redirect to a messaging page
+    showSuccess(`Funcția de mesagerie pentru ${user.email} va fi implementată curând!`);
+    // TODO: Implement messaging functionality
+    // Option 1: Open a modal with message form
+    // Option 2: Redirect to a messaging page with user ID
+  };
+
   // Calculate stats
   const clientsCount = users.filter(u => u.role === 'client').length;
   const couriersCount = users.filter(u => u.role === 'curier').length;
@@ -385,6 +393,7 @@ export default function AdminDashboard() {
                 onRoleChange={handleRoleChange}
                 onDelete={handleDeleteUser}
                 onViewDetails={setSelectedUser}
+                onSendMessage={handleSendMessage}
                 filter={userFilter}
                 statusFilter={statusFilter}
               />

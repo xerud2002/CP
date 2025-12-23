@@ -2,7 +2,7 @@
 
 import { User } from '@/types';
 import { getDisplayName, formatUserDate } from './types';
-import { EyeIcon, TrashIcon } from '@/components/icons/DashboardIcons';
+import { EyeIcon, TrashIcon, ChatIcon } from '@/components/icons/DashboardIcons';
 import { useState, useMemo } from 'react';
 
 interface UsersTableProps {
@@ -10,6 +10,7 @@ interface UsersTableProps {
   onRoleChange: (uid: string, role: string) => void;
   onDelete: (uid: string) => void;
   onViewDetails: (user: User) => void;
+  onSendMessage: (user: User) => void;
   filter: 'all' | 'client' | 'curier';
   statusFilter?: 'all' | 'online' | 'offline';
 }
@@ -17,7 +18,7 @@ interface UsersTableProps {
 type SortColumn = 'role' | 'regDate' | 'status' | 'lastSeen' | null;
 type SortDirection = 'asc' | 'desc';
 
-export default function UsersTable({ users, onRoleChange, onDelete, onViewDetails, filter, statusFilter = 'all' }: UsersTableProps) {
+export default function UsersTable({ users, onRoleChange, onDelete, onViewDetails, onSendMessage, filter, statusFilter = 'all' }: UsersTableProps) {
   const [sortColumn, setSortColumn] = useState<SortColumn>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
 
@@ -273,6 +274,13 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                 </td>
                 <td className="py-4 px-4">
                   <div className="flex items-center justify-end gap-2">
+                    <button 
+                      onClick={() => onSendMessage(u)}
+                      className="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all"
+                      title="Trimite mesaj"
+                    >
+                      <ChatIcon className="w-5 h-5" />
+                    </button>
                     <button 
                       onClick={() => onViewDetails(u)}
                       className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
