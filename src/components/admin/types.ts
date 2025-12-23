@@ -46,8 +46,10 @@ export function getDisplayName(user: User): string {
   if (user.nume) return user.nume;
   if (user.prenume) return user.prenume;
   if (user.displayName) return user.displayName;
-  if (user.email) return user.email.split('@')[0];
-  return 'Utilizator';
+  // Return role-based default name
+  if (user.role === 'curier') return 'Curier';
+  if (user.role === 'admin') return 'Administrator';
+  return 'Client';
 }
 
 // Format user date helper

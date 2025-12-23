@@ -1,6 +1,6 @@
 {
   "name": "curierul-perfect-v2",
-  "version": "0.1.0",
+  "version": "1.81.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

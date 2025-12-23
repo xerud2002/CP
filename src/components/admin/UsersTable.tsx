@@ -8,10 +8,11 @@ interface UsersTableProps {
   users: User[];
   onRoleChange: (uid: string, role: string) => void;
   onDelete: (uid: string) => void;
+  onViewDetails: (user: User) => void;
   filter: 'all' | 'client' | 'curier';
 }
 
-export default function UsersTable({ users, onRoleChange, onDelete, filter }: UsersTableProps) {
+export default function UsersTable({ users, onRoleChange, onDelete, onViewDetails, filter }: UsersTableProps) {
   const filteredUsers = filter === 'all' 
     ? users 
     : users.filter(u => u.role === filter);
@@ -94,6 +95,7 @@ export default function UsersTable({ users, onRoleChange, onDelete, filter }: Us
                 <td className="py-4 px-4">
                   <div className="flex items-center justify-end gap-2">
                     <button 
+                      onClick={() => onViewDetails(u)}
                       className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
                       title="Vezi detalii"
                     >

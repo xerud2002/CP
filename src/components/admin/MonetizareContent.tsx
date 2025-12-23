@@ -9,7 +9,7 @@ import {
 } from '@/components/icons/DashboardIcons';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
 import { serviceTypes } from '@/lib/constants';
-import { User, Order, serviceInfo } from './types';
+import { User, Order } from './types';
 
 interface MonetizareContentProps {
   users: User[];
@@ -144,7 +144,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </svg>
         </button>
 
-        <div className={`grid grid-cols-1 md:grid-cols-4 gap-4 overflow-hidden transition-all duration-300 ${isLeadWorkflowOpen ? 'mt-4 max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-4 gap-4 overflow-hidden transition-all duration-300 ${isLeadWorkflowOpen ? 'mt-4 max-h-125 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="p-4 bg-slate-700/30 rounded-xl text-center">
             <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-3">
               <span className="text-2xl">1️⃣</span>
@@ -201,7 +201,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </svg>
         </button>
 
-        <div className={`overflow-hidden transition-all duration-300 ${isCommissionOpen ? 'mt-4 max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className={`overflow-hidden transition-all duration-300 ${isCommissionOpen ? 'mt-4 max-h-500 opacity-100' : 'max-h-0 opacity-0'}`}>
           <p className="text-gray-400 text-sm mb-6">
             Setează prețul în LEI pe care curierul îl plătește pentru a vedea detaliile clientului pentru fiecare tip de serviciu.
           </p>
@@ -304,7 +304,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </svg>
         </button>
 
-        <div className={`overflow-hidden transition-all duration-300 ${isSubscriptionOpen ? 'mt-4 max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className={`overflow-hidden transition-all duration-300 ${isSubscriptionOpen ? 'mt-4 max-h-500 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="p-4 bg-purple-500/10 rounded-xl text-center border border-purple-500/20">
             <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
@@ -431,7 +431,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </svg>
         </button>
 
-        <div className={`overflow-hidden transition-all duration-300 ${isPaymentMethodsOpen ? 'mt-4 max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className={`overflow-hidden transition-all duration-300 ${isPaymentMethodsOpen ? 'mt-4 max-h-125 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg border border-emerald-500/20">
             <div className="flex items-center gap-3">
@@ -503,7 +503,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </svg>
         </button>
 
-        <div className={`overflow-hidden transition-all duration-300 ${isRecentPurchasesOpen ? 'mt-4 max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className={`overflow-hidden transition-all duration-300 ${isRecentPurchasesOpen ? 'mt-4 max-h-250 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="overflow-x-auto">
           <table className="w-full">
             <thead>

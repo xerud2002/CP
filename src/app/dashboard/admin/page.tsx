@@ -32,6 +32,7 @@ import {
   SettingsContent,
   MonetizareContent,
   OrderDetailsModal,
+  UserDetailsModal,
   StatItem,
   TabItem,
 } from '@/components/admin';
@@ -57,6 +58,7 @@ export default function AdminDashboard() {
   const [userFilter, setUserFilter] = useState<'all' | 'client' | 'curier'>('all');
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   // Persist active tab to localStorage
   useEffect(() => {
@@ -319,6 +321,7 @@ export default function AdminDashboard() {
                 users={filteredUsers}
                 onRoleChange={handleRoleChange}
                 onDelete={handleDeleteUser}
+                onViewDetails={setSelectedUser}
                 filter={userFilter}
               />
             </div>
@@ -355,6 +358,14 @@ export default function AdminDashboard() {
           {activeTab === 'settings' && <SettingsContent />}
         </div>
       </main>
+
+      {/* User Details Modal */}
+      {selectedUser && (
+        <UserDetailsModal 
+          user={selectedUser} 
+          onClose={() => setSelectedUser(null)} 
+        />
+      )}
     </div>
   );
 }
