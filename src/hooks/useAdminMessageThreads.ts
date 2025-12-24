@@ -42,7 +42,7 @@ export function useAdminMessageThreads() {
 
         // Group by user
         const userThreadsMap = new Map<string, MessageThread>();
-        let unreadTotal = 0;
+        const userUnreadCounts = new Map<string, number>();
 
         messages.forEach((msg: any) => {
           // Find the other user (not admin)
@@ -53,10 +53,13 @@ export function useAdminMessageThreads() {
           const existing = userThreadsMap.get(otherUserId);
           const messageTime = msg.createdAt?.toDate?.() || new Date();
 
-          // Count unread messages (sent by user, not read by admin)
-          const isUnread = !msg.read && msg.senderId !== user.uid;
-          if (isUnread) unreadTotal++;
+          // Count unread messages (sent by other user, not read by admin)
+          const isUnread = !msg.read && msg.senderId === otherUserId;
+          if (isUnread) {
+            userUnreadCounts.set(otherUserId, (userUnreadCounts.get(otherUserId) || 0) + 1);
+          }
 
+          // Keep the most recent message for this user
           if (!existing || messageTime > existing.lastMessageTime) {
             userThreadsMap.set(otherUserId, {
               userId: otherUserId,
@@ -64,12 +67,20 @@ export function useAdminMessageThreads() {
               userRole: otherUserRole || 'client',
               lastMessage: msg.message || '',
               lastMessageTime: messageTime,
-              unreadCount: (existing?.unreadCount || 0) + (isUnread ? 1 : 0)
+              unreadCount: 0 // Will be set after loop
             });
-          } else if (isUnread) {
-            // Increment unread count
-            existing.unreadCount++;
           }
+        });
+
+        // Set unread counts for each thread
+        userThreadsMap.forEach((thread, userId) => {
+          thread.unreadCount = userUnreadCounts.get(userId) || 0;
+        });
+
+        // Calculate total unread
+        let unreadTotal = 0;
+        userUnreadCounts.forEach(count => {
+          unreadTotal += count;
         });
 
         // Convert to array and sort by last message time

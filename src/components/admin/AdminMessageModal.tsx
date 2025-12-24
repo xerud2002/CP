@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { User } from '@/types';
 import { CloseIcon, ChatIcon } from '@/components/icons/DashboardIcons';
-import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { showSuccess, showError } from '@/lib/toast';
@@ -49,14 +49,21 @@ export default function AdminMessageModal({ user: targetUser, onClose }: AdminMe
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const loadedMessages: Message[] = [];
-      snapshot.forEach((doc) => {
-        const data = doc.data();
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
         // Only show messages between admin and target user
         if (
           (data.senderId === adminUser.uid && data.receiverId === targetUser.uid) ||
           (data.senderId === targetUser.uid && data.receiverId === adminUser.uid)
         ) {
-          loadedMessages.push({ id: doc.id, ...data } as Message);
+          loadedMessages.push({ id: docSnap.id, ...data } as Message);
+          
+          // Mark message as read if sent by user and not yet read
+          if (data.senderId === targetUser.uid && !data.read) {
+            updateDoc(doc(db, 'admin_messages', docSnap.id), { read: true }).catch(err => {
+              console.error('Error marking message as read:', err);
+            });
+          }
         }
       });
       setMessages(loadedMessages);
@@ -153,7 +160,7 @@ export default function AdminMessageModal({ user: targetUser, onClose }: AdminMe
                         : 'bg-slate-700/50 text-gray-100'
                     }`}
                   >
-                    <p className="text-sm whitespace-pre-wrap break-words">{msg.message}</p>
+                    <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.message}</p>
                     <p className={`text-xs mt-1 ${isAdmin ? 'text-orange-200' : 'text-gray-400'}`}>
                       {msg.createdAt?.toDate?.()?.toLocaleString('ro-RO', {
                         day: '2-digit',
