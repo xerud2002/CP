@@ -8,6 +8,7 @@ import { db } from '@/lib/firebase';
 import { User, Order } from '@/types';
 import { showSuccess, showError, showWarning } from '@/lib/toast';
 import { showConfirm } from '@/components/ui/ConfirmModal';
+import { useAdminMessageThreads } from '@/hooks/useAdminMessageThreads';
 import {
   UsersIcon,
   TruckIcon,
@@ -34,6 +35,7 @@ import {
   OrderDetailsModal,
   UserDetailsModal,
   AdminMessageModal,
+  AdminMessagesListModal,
   StatItem,
   TabItem,
 } from '@/components/admin';
@@ -63,6 +65,10 @@ export default function AdminDashboard() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [messageModalUser, setMessageModalUser] = useState<User | null>(null);
+  const [showMessagesListModal, setShowMessagesListModal] = useState(false);
+
+  // Track admin message threads
+  const { totalUnread } = useAdminMessageThreads();
 
   // Persist active tab to localStorage
   useEffect(() => {
@@ -317,8 +323,17 @@ export default function AdminDashboard() {
         userName={userName}
         onLogout={handleLogout}
         onRefresh={loadData}
-        notificationCount={0}
+        notificationCount={totalUnread}
+        onBellClick={() => setShowMessagesListModal(true)}
       />
+
+      {/* Admin Messages List Modal */}
+      {showMessagesListModal && (
+        <AdminMessagesListModal 
+          onClose={() => setShowMessagesListModal(false)}
+          onSelectUser={(user) => setMessageModalUser(user)}
+        />
+      )}
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
