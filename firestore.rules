@@ -117,5 +117,25 @@ service cloud.firestore {
       allow delete: if isAuthenticated() && 
         (resource.data.senderId == request.auth.uid || isAdmin());
     }
+    
+    // Admin messages collection - for direct admin-to-user messaging
+    match /admin_messages/{messageId} {
+      // Read: admin OR user who is in participants array
+      allow read: if isAuthenticated() && 
+        (isAdmin() || request.auth.uid in resource.data.participants);
+      
+      // Create: admin OR the sender must be the authenticated user
+      allow create: if isAuthenticated() && 
+        (isAdmin() || request.auth.uid == request.resource.data.senderId) &&
+        request.resource.data.senderId in request.resource.data.participants &&
+        request.resource.data.receiverId in request.resource.data.participants;
+      
+      // Update: admin OR participants (for marking as read)
+      allow update: if isAuthenticated() && 
+        (isAdmin() || request.auth.uid in resource.data.participants);
+      
+      // Delete: only admin
+      allow delete: if isAdmin();
+    }
   }
 }

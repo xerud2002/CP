@@ -9,6 +9,8 @@ import { collection, query, where, getDocs, doc, getDoc, onSnapshot, orderBy, li
 import { db } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
 import { useUserActivity } from '@/hooks/useUserActivity';
+import { useAdminMessages } from '@/hooks/useAdminMessages';
+import UserMessageModal from '@/components/UserMessageModal';
 import {
   UserIcon,
   BoxIcon,
@@ -135,8 +137,9 @@ function getGreeting(): string {
 // ============================================
 
 // Header Component
-const DashboardHeader = memo(function DashboardHeader({ notificationCount, onLogout, onBellClick, showBellDot }: { 
+const DashboardHeader = memo(function DashboardHeader({ notificationCount, adminUnreadCount, onLogout, onBellClick, showBellDot }: { 
   notificationCount: number;
+  adminUnreadCount?: number;
   onLogout: () => void;
   onBellClick?: () => void;
   showBellDot?: boolean;
@@ -173,12 +176,12 @@ const DashboardHeader = memo(function DashboardHeader({ notificationCount, onLog
             <button 
               onClick={onBellClick}
               className="relative p-2.5 sm:p-2 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/5 active:bg-white/10"
-              title="Ghid platformă"
+              title="Mesaje de la administrator"
             >
               <BellIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-              {(notificationCount > 0 || showBellDot) && (
-                <span className={`absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 ${notificationCount > 0 ? 'w-4 h-4 sm:w-5 sm:h-5 text-[10px] sm:text-xs font-medium' : 'w-2.5 h-2.5 sm:w-3 sm:h-3'} bg-orange-500 rounded-full text-white flex items-center justify-center ${showBellDot && notificationCount === 0 ? 'animate-pulse' : ''}`}>
-                  {notificationCount > 0 ? notificationCount : ''}
+              {(adminUnreadCount && adminUnreadCount > 0) && (
+                <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 rounded-full text-[10px] sm:text-xs font-medium text-white flex items-center justify-center">
+                  {adminUnreadCount}
                 </span>
               )}
             </button>
@@ -911,6 +914,10 @@ export default function CurierDashboard() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [isNewCourier, setIsNewCourier] = useState(false);
+  const [showAdminMessages, setShowAdminMessages] = useState(false);
+
+  // Track admin messages
+  const { unreadCount: adminUnreadCount } = useAdminMessages();
 
   // Check if this is a new courier (first visit)
   useEffect(() => {
@@ -1213,10 +1220,16 @@ export default function CurierDashboard() {
       {/* Header */}
       <DashboardHeader 
         notificationCount={0} 
+        adminUnreadCount={adminUnreadCount}
         onLogout={handleLogout}
-        onBellClick={handleOpenOnboarding}
+        onBellClick={() => setShowAdminMessages(true)}
         showBellDot={isNewCourier}
       />
+
+      {/* Admin Messages Modal */}
+      {showAdminMessages && (
+        <UserMessageModal onClose={() => setShowAdminMessages(false)} />
+      )}
 
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">

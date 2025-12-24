@@ -1,13 +1,16 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { Order } from '@/types';
-import { EyeIcon } from '@/components/icons/DashboardIcons';
+import { EyeIcon, SearchIcon } from '@/components/icons/DashboardIcons';
 
 interface OrdersTableProps {
   orders: Order[];
   onStatusChange: (orderId: string, status: string) => void;
   onViewDetails: (order: Order) => void;
 }
+
+type OrderStatus = 'all' | 'noua' | 'in_lucru' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata';
 
 const statusColors: Record<string, string> = {
   noua: 'bg-blue-500/20 text-blue-400',
@@ -42,6 +45,9 @@ const serviceConfig: Record<string, { icon: string; color: string; bgColor: stri
 };
 
 export default function OrdersTable({ orders, onStatusChange, onViewDetails }: OrdersTableProps) {
+  const [statusFilter, setStatusFilter] = useState<OrderStatus>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
   const formatOrderNumber = (orderNumber?: number) => {
     return orderNumber ? `CP${orderNumber}` : '-';
   };
@@ -57,8 +63,132 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
     return 'Client necunoscut';
   };
 
+  // Filter and search orders
+  const filteredOrders = useMemo(() => {
+    let result = orders;
+
+    // Filter by status
+    if (statusFilter !== 'all') {
+      result = result.filter(order => order.status === statusFilter);
+    }
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter(order => {
+        const orderNum = order.orderNumber ? `cp${order.orderNumber}` : '';
+        const clientName = getClientName(order).toLowerCase();
+        const email = (order.email || '').toLowerCase();
+        const pickupCity = (order.oras_ridicare || '').toLowerCase();
+        const deliveryCity = (order.oras_livrare || '').toLowerCase();
+        const pickupCountry = (order.tara_ridicare || '').toLowerCase();
+        const deliveryCountry = (order.tara_livrare || '').toLowerCase();
+        
+        return orderNum.includes(query) ||
+               clientName.includes(query) ||
+               email.includes(query) ||
+               pickupCity.includes(query) ||
+               deliveryCity.includes(query) ||
+               pickupCountry.includes(query) ||
+               deliveryCountry.includes(query);
+      });
+    }
+
+    return result;
+  }, [orders, statusFilter, searchQuery]);
+
+  // Count orders by status for badges
+  const statusCounts = useMemo(() => {
+    return {
+      all: orders.length,
+      noua: orders.filter(o => o.status === 'noua').length,
+      in_lucru: orders.filter(o => o.status === 'in_lucru').length,
+      acceptata: orders.filter(o => o.status === 'acceptata').length,
+      in_tranzit: orders.filter(o => o.status === 'in_tranzit').length,
+      livrata: orders.filter(o => o.status === 'livrata').length,
+      anulata: orders.filter(o => o.status === 'anulata').length,
+    };
+  }, [orders]);
+
   return (
-    <div className="overflow-x-auto">
+    <div className="space-y-4">
+      {/* Filters Section */}
+      <div className="flex flex-col gap-4">
+        {/* Status Filter Buttons */}
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setStatusFilter('all')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              statusFilter === 'all' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            Toate ({statusCounts.all})
+          </button>
+          <button
+            onClick={() => setStatusFilter('noua')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              statusFilter === 'noua' ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            Noi ({statusCounts.noua})
+          </button>
+          <button
+            onClick={() => setStatusFilter('in_lucru')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              statusFilter === 'in_lucru' ? 'bg-amber-500/20 text-amber-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            În Lucru ({statusCounts.in_lucru})
+          </button>
+          <button
+            onClick={() => setStatusFilter('acceptata')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              statusFilter === 'acceptata' ? 'bg-cyan-500/20 text-cyan-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            Acceptate ({statusCounts.acceptata})
+          </button>
+          <button
+            onClick={() => setStatusFilter('in_tranzit')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              statusFilter === 'in_tranzit' ? 'bg-purple-500/20 text-purple-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            În Tranzit ({statusCounts.in_tranzit})
+          </button>
+          <button
+            onClick={() => setStatusFilter('livrata')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              statusFilter === 'livrata' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            Livrate ({statusCounts.livrata})
+          </button>
+          <button
+            onClick={() => setStatusFilter('anulata')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              statusFilter === 'anulata' ? 'bg-red-500/20 text-red-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            Anulate ({statusCounts.anulata})
+          </button>
+        </div>
+
+        {/* Search Bar */}
+        <div className="relative w-full sm:w-80">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Caută după comandă, client, email, oraș..."
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50 transition-all"
+          />
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
           <tr className="border-b border-white/10">
@@ -72,7 +202,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => {
+          {filteredOrders.map((order) => {
             const serviceConf = getServiceConfig(order.serviciu);
             const clientName = getClientName(order);
             
@@ -171,11 +301,14 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
           })}
         </tbody>
       </table>
-      {orders.length === 0 && (
+      {filteredOrders.length === 0 && (
         <div className="text-center py-12 text-gray-400">
-          Nu există comenzi.
+          {orders.length === 0 
+            ? 'Nu există comenzi.'
+            : 'Nu s-au găsit comenzi pentru filtrele selectate.'}
         </div>
       )}
+      </div>
     </div>
   );
 }

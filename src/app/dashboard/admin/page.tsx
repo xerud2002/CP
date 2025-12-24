@@ -33,6 +33,7 @@ import {
   MonetizareContent,
   OrderDetailsModal,
   UserDetailsModal,
+  AdminMessageModal,
   StatItem,
   TabItem,
 } from '@/components/admin';
@@ -57,9 +58,11 @@ export default function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [userFilter, setUserFilter] = useState<'all' | 'client' | 'curier'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'online' | 'offline'>('all');
+  const [verificationFilter, setVerificationFilter] = useState<'all' | 'verified' | 'unverified'>('all');
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [messageModalUser, setMessageModalUser] = useState<User | null>(null);
 
   // Persist active tab to localStorage
   useEffect(() => {
@@ -226,17 +229,28 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleToggleVerification = async (uid: string, currentStatus: boolean | undefined) => {
+    const newStatus = !currentStatus;
+    try {
+      await updateDoc(doc(db, 'users', uid), { 
+        verified: newStatus,
+        verifiedAt: serverTimestamp()
+      });
+      showSuccess(newStatus ? 'Curier marcat ca verificat!' : 'Verificare anulată!');
+      loadData();
+    } catch (error) {
+      console.error('Error toggling verification:', error);
+      showError('Eroare la modificarea statusului de verificare.');
+    }
+  };
+
   const handleLogout = async () => {
     await logout();
     router.push('/');
   };
 
   const handleSendMessage = (user: User) => {
-    // For now, show a toast. You can implement a modal or redirect to a messaging page
-    showSuccess(`Funcția de mesagerie pentru ${user.email} va fi implementată curând!`);
-    // TODO: Implement messaging functionality
-    // Option 1: Open a modal with message form
-    // Option 2: Redirect to a messaging page with user ID
+    setMessageModalUser(user);
   };
 
   // Calculate stats
@@ -387,6 +401,42 @@ export default function AdminDashboard() {
                     Offline
                   </button>
                 </div>
+                {/* Verification Filter - Only show for couriers */}
+                {userFilter === 'curier' && (
+                  <div className="flex gap-2">
+                    <span className="text-gray-400 text-sm flex items-center">Verificare:</span>
+                    <button
+                      onClick={() => setVerificationFilter('all')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                        verificationFilter === 'all' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      Toți
+                    </button>
+                    <button
+                      onClick={() => setVerificationFilter('verified')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+                        verificationFilter === 'verified' ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      Verificați
+                    </button>
+                    <button
+                      onClick={() => setVerificationFilter('unverified')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+                        verificationFilter === 'unverified' ? 'bg-amber-500/20 text-amber-400' : 'text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      Neverificați
+                    </button>
+                  </div>
+                )}
               </div>
               <UsersTable 
                 users={filteredUsers}
@@ -394,8 +444,10 @@ export default function AdminDashboard() {
                 onDelete={handleDeleteUser}
                 onViewDetails={setSelectedUser}
                 onSendMessage={handleSendMessage}
+                onToggleVerification={handleToggleVerification}
                 filter={userFilter}
                 statusFilter={statusFilter}
+                verificationFilter={verificationFilter}
               />
             </div>
           )}
@@ -437,6 +489,14 @@ export default function AdminDashboard() {
         <UserDetailsModal 
           user={selectedUser} 
           onClose={() => setSelectedUser(null)} 
+        />
+      )}
+
+      {/* Admin Message Modal */}
+      {messageModalUser && (
+        <AdminMessageModal
+          user={messageModalUser}
+          onClose={() => setMessageModalUser(null)}
         />
       )}
     </div>

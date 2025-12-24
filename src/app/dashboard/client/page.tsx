@@ -9,6 +9,8 @@ import { doc, getDoc, collection, query, where, orderBy, onSnapshot, limit } fro
 import { db } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
 import { useUserActivity } from '@/hooks/useUserActivity';
+import { useAdminMessages } from '@/hooks/useAdminMessages';
+import UserMessageModal from '@/components/UserMessageModal';
 import {
   UserIcon,
   BoxIcon,
@@ -125,9 +127,11 @@ function getGreeting(): string {
 // ============================================
 
 // Header Component
-function DashboardHeader({ notificationCount, onLogout }: { 
+function DashboardHeader({ notificationCount, adminUnreadCount, onLogout, onOpenAdminMessages }: { 
   notificationCount: number;
+  adminUnreadCount: number;
   onLogout: () => void;
+  onOpenAdminMessages: () => void;
 }) {
   return (
     <header className="bg-slate-900/90 backdrop-blur-xl border-b border-white/5 sticky top-0 z-60">
@@ -157,11 +161,15 @@ function DashboardHeader({ notificationCount, onLogout }: {
           {/* Right Side */}
           <div className="flex items-center gap-2 sm:gap-4">
             {/* Notifications */}
-            <button className="relative p-2.5 sm:p-2 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/5 active:bg-white/10">
+            <button 
+              onClick={onOpenAdminMessages}
+              className="relative p-2.5 sm:p-2 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/5 active:bg-white/10"
+              title="Mesaje de la administrator"
+            >
               <BellIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-              {notificationCount > 0 && (
+              {adminUnreadCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 rounded-full text-[10px] sm:text-xs font-medium text-white flex items-center justify-center">
-                  {notificationCount}
+                  {adminUnreadCount}
                 </span>
               )}
             </button>
@@ -493,9 +501,13 @@ export default function ClientDashboard() {
   const [statusCounts, setStatusCounts] = useState({ pending: 0, inTransit: 0, delivered: 0 });
   const [recentMessages, setRecentMessages] = useState<RecentMessage[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showAdminMessages, setShowAdminMessages] = useState(false);
 
   // Track user activity for online status
   useUserActivity(user?.uid);
+
+  // Track admin messages
+  const { unreadCount: adminUnreadCount } = useAdminMessages();
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {
@@ -731,8 +743,15 @@ export default function ClientDashboard() {
       {/* Header */}
       <DashboardHeader 
         notificationCount={0} 
+        adminUnreadCount={adminUnreadCount}
         onLogout={handleLogout}
+        onOpenAdminMessages={() => setShowAdminMessages(true)}
       />
+
+      {/* Admin Messages Modal */}
+      {showAdminMessages && (
+        <UserMessageModal onClose={() => setShowAdminMessages(false)} />
+      )}
 
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">

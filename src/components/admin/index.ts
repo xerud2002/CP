@@ -10,6 +10,7 @@ export { default as SettingsContent } from './SettingsContent';
 export { default as MonetizareContent } from './MonetizareContent';
 export { default as OrderDetailsModal } from './OrderDetailsModal';
 export { default as UserDetailsModal } from './UserDetailsModal';
+export { default as AdminMessageModal } from './AdminMessageModal';
 
 // Types and utilities
 export * from './types';

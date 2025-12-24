@@ -11,16 +11,32 @@ interface UsersTableProps {
   onDelete: (uid: string) => void;
   onViewDetails: (user: User) => void;
   onSendMessage: (user: User) => void;
+  onToggleVerification: (uid: string, currentStatus: boolean | undefined) => void;
   filter: 'all' | 'client' | 'curier';
   statusFilter?: 'all' | 'online' | 'offline';
+  verificationFilter?: 'all' | 'verified' | 'unverified';
 }
 
 type SortColumn = 'role' | 'regDate' | 'status' | 'lastSeen' | null;
 type SortDirection = 'asc' | 'desc';
 
-export default function UsersTable({ users, onRoleChange, onDelete, onViewDetails, onSendMessage, filter, statusFilter = 'all' }: UsersTableProps) {
+export default function UsersTable({ users, onRoleChange, onDelete, onViewDetails, onSendMessage, onToggleVerification, filter, statusFilter = 'all', verificationFilter = 'all' }: UsersTableProps) {
   const [sortColumn, setSortColumn] = useState<SortColumn>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+
+  // Helper to check if user is online (active in last 5 minutes)
+  // MUST be defined before useMemo that uses it
+  const isUserOnline = (lastSeen?: Date | { seconds: number }) => {
+    if (!lastSeen) return false;
+    let lastSeenDate: Date;
+    if (typeof lastSeen === 'object' && 'seconds' in lastSeen) {
+      lastSeenDate = new Date(lastSeen.seconds * 1000);
+    } else {
+      lastSeenDate = lastSeen as Date;
+    }
+    const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+    return lastSeenDate.getTime() > fiveMinutesAgo;
+  };
 
   const handleSort = (column: SortColumn) => {
     if (sortColumn === column) {
@@ -42,6 +58,17 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
       filtered = filtered.filter(u => {
         const online = isUserOnline(u.lastSeen);
         return statusFilter === 'online' ? online : !online;
+      });
+    }
+
+    // Filter by verification status (only for couriers)
+    if (verificationFilter !== 'all' && filter === 'curier') {
+      filtered = filtered.filter(u => {
+        if (verificationFilter === 'verified') {
+          return u.verified === true;
+        } else {
+          return !u.verified;
+        }
       });
     }
 
@@ -85,20 +112,7 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
 
       return sortDirection === 'asc' ? compareResult : -compareResult;
     });
-  }, [users, filter, statusFilter, sortColumn, sortDirection]);
-
-  // Helper to check if user is online (active in last 5 minutes)
-  const isUserOnline = (lastSeen?: Date | { seconds: number }) => {
-    if (!lastSeen) return false;
-    let lastSeenDate: Date;
-    if (typeof lastSeen === 'object' && 'seconds' in lastSeen) {
-      lastSeenDate = new Date(lastSeen.seconds * 1000);
-    } else {
-      lastSeenDate = lastSeen as Date;
-    }
-    const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
-    return lastSeenDate.getTime() > fiveMinutesAgo;
-  };
+  }, [users, filter, statusFilter, verificationFilter, sortColumn, sortDirection]);
 
   // Helper to format phone
   const formatPhone = (phone?: string) => {
@@ -195,6 +209,9 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                 {getSortIcon('lastSeen')}
               </button>
             </th>
+            {filter === 'curier' && (
+              <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Verificare</th>
+            )}
             <th className="text-right py-4 px-4 text-gray-400 font-medium text-sm">Acțiuni</th>
           </tr>
         </thead>
@@ -272,6 +289,35 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                 <td className="py-4 px-4">
                   <span className="text-gray-400 text-sm">{lastSeenText}</span>
                 </td>
+                {filter === 'curier' && (
+                  <td className="py-4 px-4">
+                    <button
+                      onClick={() => onToggleVerification(u.uid, u.verified)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all flex items-center gap-1.5 ${
+                        u.verified 
+                          ? 'bg-blue-500/20 text-blue-400 border-blue-500/30 hover:bg-blue-500/30' 
+                          : 'bg-amber-500/20 text-amber-400 border-amber-500/30 hover:bg-amber-500/30'
+                      }`}
+                      title={u.verified ? 'Anulează verificarea' : 'Marcă ca verificat'}
+                    >
+                      {u.verified ? (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          Verificat
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                          Neverificat
+                        </>
+                      )}
+                    </button>
+                  </td>
+                )}
                 <td className="py-4 px-4">
                   <div className="flex items-center justify-end gap-2">
                     <button 

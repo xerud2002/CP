@@ -20,6 +20,7 @@ export interface User {
   telefon?: string;
   createdAt?: Date;
   lastSeen?: Date;
+  verified?: boolean;
 }
 
 export interface CoverageZone {
