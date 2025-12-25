@@ -17,6 +17,7 @@ import {
   CogIcon,
   UserIcon,
   MoneyIcon,
+  DocumentCheckIcon,
 } from '@/components/icons/DashboardIcons';
 
 // Import Admin Components
@@ -32,6 +33,7 @@ import {
   StatsContent,
   SettingsContent,
   MonetizareContent,
+  DocumentVerificationContent,
   OrderDetailsModal,
   UserDetailsModal,
   AdminMessageModal,
@@ -275,6 +277,7 @@ export default function AdminDashboard() {
     { id: 'users', label: 'Utilizatori', icon: UsersIcon, badge: users.length },
     { id: 'orders', label: 'Comenzi', icon: PackageIcon, badge: pendingOrders },
     { id: 'couriers', label: 'Curieri', icon: TruckIcon, badge: couriersCount },
+    { id: 'documents', label: 'Verificare Documente', icon: DocumentCheckIcon },
     { id: 'stats', label: 'Statistici', icon: ChartIcon },
     { id: 'monetizare', label: 'Monetizare', icon: MoneyIcon },
     { id: 'settings', label: 'Setări', icon: CogIcon },
@@ -483,6 +486,9 @@ export default function AdminDashboard() {
               onSuspend={handleSuspendCourier}
             />
           )}
+
+          {/* Documents Verification Tab */}
+          {activeTab === 'documents' && <DocumentVerificationContent />}
 
           {/* Stats Tab */}
           {activeTab === 'stats' && (

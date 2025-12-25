@@ -76,7 +76,7 @@ function OrderCard({
     if (order.tipColet === 'masini') {
       return 'Transport auto';
     }
-    if (order.tipColet === 'animale' && order.tip_animal) {
+    if (order.tipColet === 'animale') {
       const animalLabels: Record<string, string> = {
         'caine': 'Câine',
         'pisica': 'Pisică',
@@ -84,7 +84,10 @@ function OrderCard({
         'rozator': 'Rozător',
         'alt': 'Alt animal'
       };
-      return `Tip animal: ${animalLabels[order.tip_animal] || order.tip_animal}`;
+      const normalizedType = order.tip_animal?.toLowerCase().trim();
+      const animalType = normalizedType && animalLabels[normalizedType] ? animalLabels[normalizedType] : (order.tip_animal || 'Animal');
+      const greutateText = order.greutate ? ` • ${order.greutate}${String(order.greutate).includes('kg') ? '' : ' kg'}` : '';
+      return `Tip animal: ${animalType}${greutateText}`;
     }
     // Show vehicle type if available
     if (order.tip_vehicul) {
@@ -92,7 +95,7 @@ function OrderCard({
       return order.descriere ? `${vehicleText} - ${order.descriere}` : vehicleText;
     }
     if (order.greutate) {
-      const label = order.tipColet === 'paleti' ? 'Palet' : 'Colet';
+      const label = order.tipColet === 'paleti' ? 'Palet' : 'Greutate';
       return `${label}: ${order.greutate}${String(order.greutate).includes('kg') ? '' : ' kg'}`;
     }
     if (order.cantitate) {
@@ -224,8 +227,10 @@ function OrderCard({
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-gray-400">
               {getServiceInfo() && <span className="font-medium">{getServiceInfo()}</span>}
-              {/* Only show separate descriere if there's no tip_vehicul (vehicle description is included in getServiceInfo) */}
-              {order.descriere && !order.tip_vehicul && <span className="truncate max-w-full">Descriere: {order.descriere}</span>}
+              {/* Show descriere for non-vehicle orders (vehicle includes it in getServiceInfo) */}
+              {order.descriere && !order.tip_vehicul && (
+                <span className="truncate max-w-full">Descriere: {order.descriere}</span>
+              )}
             </div>
             {order.optiuni && order.optiuni.length > 0 && (
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">

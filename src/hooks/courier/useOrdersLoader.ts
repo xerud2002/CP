@@ -103,6 +103,8 @@ export function useOrdersLoader(userId: string | undefined, options: UseOrdersLo
               inaltime: data.inaltime,
               cantitate: data.cantitate,
               descriere: data.descriere,
+              tip_animal: data.tip_animal,
+              tip_vehicul: data.tip_vehicul,
             });
           }
         }
@@ -139,6 +141,8 @@ export function useOrdersLoader(userId: string | undefined, options: UseOrdersLo
             inaltime: data.inaltime,
             cantitate: data.cantitate,
             descriere: data.descriere,
+            tip_animal: data.tip_animal,
+            tip_vehicul: data.tip_vehicul,
           });
         }
       });
