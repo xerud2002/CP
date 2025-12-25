@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
 
 /**
  * Hook to track user activity and update lastSeen in Firestore
@@ -8,17 +8,31 @@ import { db } from '@/lib/firebase';
  * Also updates on page visibility changes and before unload
  */
 export function useUserActivity(userId: string | undefined) {
+  const isUnmountingRef = useRef(false);
+
   useEffect(() => {
     if (!userId) return;
+    
+    isUnmountingRef.current = false;
 
     const updateLastSeen = async () => {
+      // Don't update if component is unmounting (user logging out)
+      if (isUnmountingRef.current) return;
+      
+      // Don't update if user is no longer authenticated
+      if (!auth.currentUser) return;
+      
       try {
         await updateDoc(doc(db, 'users', userId), {
           lastSeen: serverTimestamp()
         });
       } catch (error) {
         // Silently fail - don't disrupt user experience
-        console.error('Failed to update lastSeen:', error);
+        // Only log if it's not a permission error (which happens on logout)
+        const errorMessage = (error as Error)?.message || '';
+        if (!errorMessage.includes('permission')) {
+          console.error('Failed to update lastSeen:', error);
+        }
       }
     };
 
@@ -54,11 +68,11 @@ export function useUserActivity(userId: string | undefined) {
 
     // Cleanup
     return () => {
+      isUnmountingRef.current = true;
       clearInterval(interval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      // Final update on component unmount
-      updateLastSeen();
+      // Don't update lastSeen on unmount - user might be logging out
     };
   }, [userId]);
 }

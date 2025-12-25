@@ -86,8 +86,7 @@ function OrderCard({
       };
       const normalizedType = order.tip_animal?.toLowerCase().trim();
       const animalType = normalizedType && animalLabels[normalizedType] ? animalLabels[normalizedType] : (order.tip_animal || 'Animal');
-      const greutateText = order.greutate ? ` • ${order.greutate}${String(order.greutate).includes('kg') ? '' : ' kg'}` : '';
-      return `Tip animal: ${animalType}${greutateText}`;
+      return `Tip animal: ${animalType}`;
     }
     // Show vehicle type if available
     if (order.tip_vehicul) {

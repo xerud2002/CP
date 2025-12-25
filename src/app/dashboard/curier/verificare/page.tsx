@@ -396,6 +396,31 @@ function VerificarePageContent() {
               {requiredDocs.map((docReq) => {
                 const uploaded = uploadedDocuments[docReq.id];
                 const isUploading = uploadingDoc === docReq.id;
+                const isApproved = uploaded?.status === 'approved';
+                
+                // Show simplified card for approved documents
+                if (isApproved) {
+                  return (
+                    <div key={docReq.id} className="bg-emerald-500/10 backdrop-blur-xl rounded-xl border border-emerald-500/30 p-4">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-lg bg-emerald-500/20 text-emerald-400">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-emerald-400 font-medium flex items-center gap-2">
+                            {docReq.title}
+                            <span className="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full">
+                              ✓ Verificat
+                            </span>
+                          </h4>
+                          <p className="text-gray-500 text-sm mt-0.5">Document aprobat de administrator</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
                 
                 return (
                   <div key={docReq.id} className={`bg-slate-800/40 backdrop-blur-xl rounded-xl border p-4 transition-colors ${
@@ -435,57 +460,62 @@ function VerificarePageContent() {
                         {uploaded ? (
                           <div>
                             <div className="flex items-center gap-3">
-                              <a
-                                href={uploaded.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm text-green-400 hover:text-green-300 flex items-center gap-1"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                </svg>
-                                Vezi
-                              </a>
-                              <button
-                              onClick={async () => {
-                                if (!user) return;
-                                const confirmed = await showConfirm({
-                                  title: 'Șterge document',
-                                  message: 'Ești sigur că vrei să ștergi acest document? Va trebui re-încărcat.',
-                                  confirmText: 'Șterge',
-                                  cancelText: 'Anulează',
-                                  variant: 'warning'
-                                });
-                                if (confirmed) {
-                                  try {
-                                    const docRef = doc(db, 'profil_curier', user.uid);
-                                    await setDoc(docRef, {
-                                      documents: {
-                                        [docReq.id]: deleteField()
+                              {/* Only show Vezi/Sterge for non-approved documents */}
+                              {uploaded.status !== 'approved' && (
+                                <>
+                                  <a
+                                    href={uploaded.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-green-400 hover:text-green-300 flex items-center gap-1"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    Vezi
+                                  </a>
+                                  <button
+                                    onClick={async () => {
+                                      if (!user) return;
+                                      const confirmed = await showConfirm({
+                                        title: 'Șterge document',
+                                        message: 'Ești sigur că vrei să ștergi acest document? Va trebui re-încărcat.',
+                                        confirmText: 'Șterge',
+                                        cancelText: 'Anulează',
+                                        variant: 'warning'
+                                      });
+                                      if (confirmed) {
+                                        try {
+                                          const docRef = doc(db, 'profil_curier', user.uid);
+                                          await setDoc(docRef, {
+                                            documents: {
+                                              [docReq.id]: deleteField()
+                                            }
+                                          }, { merge: true });
+                                          
+                                          setUploadedDocuments(prev => {
+                                            const newDocs = { ...prev };
+                                            delete newDocs[docReq.id];
+                                            return newDocs;
+                                          });
+                                          
+                                          showSuccess('Document șters cu succes!');
+                                        } catch (error) {
+                                          logError(error);
+                                          showError('Eroare la ștergerea documentului.');
+                                        }
                                       }
-                                    }, { merge: true });
-                                    
-                                    setUploadedDocuments(prev => {
-                                      const newDocs = { ...prev };
-                                      delete newDocs[docReq.id];
-                                      return newDocs;
-                                    });
-                                    
-                                    showSuccess('Document șters cu succes!');
-                                  } catch (error) {
-                                    logError(error);
-                                    showError('Eroare la ștergerea documentului.');
-                                  }
-                                }
-                              }}
-                              className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
-                            >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                              </svg>
-                              Șterge
-                            </button>
+                                    }}
+                                    className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Șterge
+                                  </button>
+                                </>
+                              )}
                               <div className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
                                 uploaded.status === 'approved' ? 'bg-emerald-500/20 text-emerald-400' :
                                 uploaded.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
@@ -499,9 +529,11 @@ function VerificarePageContent() {
                             <p className="text-xs text-gray-500 mt-2">
                               📎 {uploaded.name} • {uploaded.uploadedAt.toLocaleDateString('ro-RO')}
                             </p>
-                            <p className="text-xs text-yellow-500/80 mt-1">
-                              💡 Dacă link-ul nu funcționează, apasă &quot;Șterge&quot; și re-încarcă documentul
-                            </p>
+                            {uploaded.status !== 'approved' && (
+                              <p className="text-xs text-yellow-500/80 mt-1">
+                                💡 Dacă link-ul nu funcționează, apasă &quot;Șterge&quot; și re-încarcă documentul
+                              </p>
+                            )}
                           </div>
                         ) : (
                           <label className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg cursor-pointer transition-colors text-sm">
@@ -539,6 +571,31 @@ function VerificarePageContent() {
             <div className="space-y-3">
               {optionalDocs.map((docReq) => {
                 const uploaded = uploadedDocuments[docReq.id];
+                const isApproved = uploaded?.status === 'approved';
+                
+                // Show simplified card for approved documents
+                if (isApproved) {
+                  return (
+                    <div key={docReq.id} className="bg-emerald-500/10 backdrop-blur-xl rounded-xl border border-emerald-500/30 p-4">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-lg bg-emerald-500/20 text-emerald-400">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-emerald-400 font-medium flex items-center gap-2">
+                            {docReq.title}
+                            <span className="text-xs px-2 py-0.5 bg-emerald-500/20 text-emerald-400 rounded-full">
+                              ✓ Verificat
+                            </span>
+                          </h4>
+                          <p className="text-gray-500 text-sm mt-0.5">Document aprobat de administrator</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
                 
                 return (
                   <div key={docReq.id} className={`bg-slate-800/40 backdrop-blur-xl rounded-xl border p-4 ${
@@ -556,64 +613,83 @@ function VerificarePageContent() {
                         {uploaded ? (
                           <div>
                             <div className="flex items-center gap-3">
-                              <a
-                                href={uploaded.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm text-green-400 hover:text-green-300 flex items-center gap-1"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                </svg>
-                                Vezi
-                              </a>
-                              <button
-                                onClick={async () => {
-                                if (!user) return;
-                                const confirmed = await showConfirm({
-                                  title: 'Șterge document',
-                                  message: 'Ești sigur că vrei să ștergi acest document? Va trebui re-încărcat.',
-                                  confirmText: 'Șterge',
-                                  cancelText: 'Anulează',
-                                  variant: 'warning'
-                                });
-                                if (confirmed) {
-                                  try {
-                                    const docRef = doc(db, 'profil_curier', user.uid);
-                                    await setDoc(docRef, {
-                                      documents: {
-                                        [docReq.id]: deleteField()
+                              {/* Only show Vezi/Sterge for non-approved documents */}
+                              {uploaded.status !== 'approved' && (
+                                <>
+                                  <a
+                                    href={uploaded.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm text-green-400 hover:text-green-300 flex items-center gap-1"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    Vezi
+                                  </a>
+                                  <button
+                                    onClick={async () => {
+                                      if (!user) return;
+                                      const confirmed = await showConfirm({
+                                        title: 'Șterge document',
+                                        message: 'Ești sigur că vrei să ștergi acest document? Va trebui re-încărcat.',
+                                        confirmText: 'Șterge',
+                                        cancelText: 'Anulează',
+                                        variant: 'warning'
+                                      });
+                                      if (confirmed) {
+                                        try {
+                                          const docRef = doc(db, 'profil_curier', user.uid);
+                                          await setDoc(docRef, {
+                                            documents: {
+                                              [docReq.id]: deleteField()
+                                            }
+                                          }, { merge: true });
+                                          
+                                          setUploadedDocuments(prev => {
+                                            const newDocs = { ...prev };
+                                            delete newDocs[docReq.id];
+                                            return newDocs;
+                                          });
+                                          
+                                          showSuccess('Document șters cu succes!');
+                                        } catch (error) {
+                                          logError(error);
+                                          showError('Eroare la ștergerea documentului.');
+                                        }
                                       }
-                                    }, { merge: true });
-                                    
-                                    setUploadedDocuments(prev => {
-                                      const newDocs = { ...prev };
-                                      delete newDocs[docReq.id];
-                                      return newDocs;
-                                    });
-                                    
-                                    showSuccess('Document șters cu succes!');
-                                  } catch (error) {
-                                    logError(error);
-                                    showError('Eroare la ștergerea documentului.');
-                                  }
-                                }
-                              }}
-                              className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
-                            >
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                              </svg>
-                              Șterge
-                            </button>
+                                    }}
+                                    className="text-sm text-red-400 hover:text-red-300 flex items-center gap-1"
+                                  >
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Șterge
+                                  </button>
+                                </>
+                              )}
+                              {/* Status badge */}
+                              {uploaded.status && (
+                                <div className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
+                                  uploaded.status === 'approved' ? 'bg-emerald-500/20 text-emerald-400' :
+                                  uploaded.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
+                                  'bg-yellow-500/20 text-yellow-400'
+                                }`}>
+                                  {uploaded.status === 'approved' ? '✓ Aprobat' :
+                                   uploaded.status === 'rejected' ? '✗ Respins' :
+                                   '⏱ În verificare'}
+                                </div>
+                              )}
                             </div>
                             <p className="text-xs text-gray-500 mt-2">
                               📎 Document încărcat • {uploaded.uploadedAt.toLocaleDateString('ro-RO')}
                             </p>
-                            <p className="text-xs text-yellow-500/80 mt-1">
-                              💡 Dacă link-ul nu funcționează, apasă &quot;Șterge&quot; și re-încarcă documentul
-                            </p>
+                            {uploaded.status !== 'approved' && (
+                              <p className="text-xs text-yellow-500/80 mt-1">
+                                💡 Dacă link-ul nu funcționează, apasă &quot;Șterge&quot; și re-încarcă documentul
+                              </p>
+                            )}
                           </div>
                         ) : (
                           <label className="inline-flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg cursor-pointer transition-colors text-sm">

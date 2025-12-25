@@ -47,6 +47,16 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Headers for Firebase Auth popup to work without COOP errors
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+        ],
+      },
     ];
   },
 };

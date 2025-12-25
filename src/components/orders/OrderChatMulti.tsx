@@ -16,6 +16,7 @@ interface CourierConversation {
   lastMessage: string;
   lastMessageTime: Date;
   unreadCount: number;
+  verified?: boolean;
 }
 
 interface OrderChatMultiProps {
@@ -83,6 +84,7 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
           const userDoc = await getDoc(doc(db, 'users', courierId));
           const userData = userDoc.data();
           const courierName = userData?.nume || userData?.displayName || 'Curier';
+          const isVerified = userData?.verified === true;
 
           // Get company name and profile image from profil_curier
           const profilDoc = await getDoc(doc(db, 'profil_curier', courierId));
@@ -97,7 +99,8 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
             profileImage,
             lastMessage: data.lastMessage,
             lastMessageTime: data.lastMessageTime,
-            unreadCount: data.unreadCount
+            unreadCount: data.unreadCount,
+            verified: isVerified
           });
         } catch (error) {
           console.error('Error fetching courier data:', error);
@@ -205,7 +208,17 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
-                    <h4 className="text-white font-medium text-sm truncate pr-2">{conv.companyName}</h4>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="text-white font-medium text-sm truncate">{conv.companyName}</h4>
+                      {/* Verified badge */}
+                      {conv.verified && (
+                        <div className="p-0.5 bg-emerald-500/20 rounded-full shrink-0" title="Curier verificat">
+                          <svg className="w-3 h-3 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
                     <span className="text-gray-500 text-xs shrink-0">
                       {formatTime(conv.lastMessageTime)}
                     </span>
@@ -259,10 +272,22 @@ export default function OrderChatMulti({ orderId, orderNumber }: OrderChatMultiP
                     </div>
                   )}
                   <div className="min-w-0">
-                    <h4 className="text-white font-medium text-sm truncate">
-                      {conversations.find(c => c.courierId === selectedCourierId)?.companyName}
-                    </h4>
-                    <p className="text-gray-500 text-xs">Curier</p>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="text-white font-medium text-sm truncate">
+                        {conversations.find(c => c.courierId === selectedCourierId)?.companyName}
+                      </h4>
+                      {/* Verified badge in header */}
+                      {conversations.find(c => c.courierId === selectedCourierId)?.verified && (
+                        <div className="p-0.5 bg-emerald-500/20 rounded-full shrink-0" title="Curier verificat">
+                          <svg className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-gray-500 text-xs">
+                      {conversations.find(c => c.courierId === selectedCourierId)?.verified ? 'Curier verificat' : 'Curier'}
+                    </p>
                   </div>
                 </div>
                 

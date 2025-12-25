@@ -1,16 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, updateDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { showSuccess, showError } from '@/lib/toast';
 import { showConfirm } from '@/components/ui/ConfirmModal';
-import { getDocumentRequirements } from '@/utils/documentRequirements';
+
+// Required documents that must be approved for courier verification
+const REQUIRED_DOCUMENTS = ['id_card', 'company_registration', 'pf_authorization'];
 
 interface UploadedDocument {
   url: string;
   name: string;
-  uploadedAt: any;
+  uploadedAt: Date | { toDate: () => Date };
   status: 'pending' | 'approved' | 'rejected';
   rejectionReason?: string;
 }
@@ -98,7 +100,42 @@ export default function DocumentVerificationContent() {
         [`documents.${docKey}.approvedAt`]: new Date(),
         [`documents.${docKey}.rejectionReason`]: null
       });
-      showSuccess('Document aprobat!');
+      
+      // Check if all required documents are now approved
+      const courierDoc = await getDoc(docRef);
+      if (courierDoc.exists()) {
+        const courierData = courierDoc.data();
+        const documents = courierData.documents || {};
+        
+        // Get which required docs this courier has uploaded
+        const uploadedRequiredDocs = REQUIRED_DOCUMENTS.filter(reqDoc => documents[reqDoc]);
+        
+        // Check if all uploaded required docs are approved
+        const allRequiredApproved = uploadedRequiredDocs.length > 0 && 
+          uploadedRequiredDocs.every(reqDoc => documents[reqDoc]?.status === 'approved');
+        
+        if (allRequiredApproved) {
+          // Update user verification status
+          const userRef = doc(db, 'users', courierId);
+          await updateDoc(userRef, {
+            verified: true,
+            verifiedAt: serverTimestamp()
+          });
+          
+          // Also update courier profile
+          await updateDoc(docRef, {
+            verificationStatus: 'verified',
+            verifiedAt: serverTimestamp()
+          });
+          
+          showSuccess('Document aprobat! Curierul a fost marcat ca VERIFICAT ✓');
+        } else {
+          showSuccess('Document aprobat!');
+        }
+      } else {
+        showSuccess('Document aprobat!');
+      }
+      
       loadCouriers();
     } catch (error) {
       console.error('Error approving document:', error);
@@ -140,9 +177,19 @@ export default function DocumentVerificationContent() {
   };
 
   const getDocumentLabel = (docKey: string): string => {
-    const allRequirements = getDocumentRequirements('all');
-    const req = allRequirements.find(r => r.id === docKey);
-    return req?.title || docKey;
+    // Map document IDs to Romanian labels
+    const docLabels: Record<string, string> = {
+      'id_card': 'Carte de Identitate / Pașaport',
+      'company_registration': 'Certificat Înregistrare Firmă',
+      'pf_authorization': 'Autorizație PF',
+      'animal_transport': 'Certificat Transport Animale',
+      'person_transport': 'Licență Transport Persoane',
+      'vehicle_towing': 'Atestat Tractare Auto',
+      'furniture_transport': 'Atestat Transport Mobilier',
+      'cmr_insurance': 'Asigurare CMR',
+      'cold_chain': 'Certificat Lanț de Frig',
+    };
+    return docLabels[docKey] || docKey;
   };
 
   const getStatusColor = (status: string) => {
@@ -265,7 +312,11 @@ export default function DocumentVerificationContent() {
                         <p>Fișier: {doc.name}</p>
                         <p>
                           Încărcat:{' '}
-                          {doc.uploadedAt?.toDate ? new Date(doc.uploadedAt.toDate()).toLocaleDateString('ro-RO') : 'N/A'}
+                          {doc.uploadedAt && typeof doc.uploadedAt === 'object' && 'toDate' in doc.uploadedAt 
+                            ? new Date(doc.uploadedAt.toDate()).toLocaleDateString('ro-RO') 
+                            : doc.uploadedAt instanceof Date 
+                              ? doc.uploadedAt.toLocaleDateString('ro-RO')
+                              : 'N/A'}
                         </p>
                         {doc.rejectionReason && (
                           <p className="text-red-400 mt-2">

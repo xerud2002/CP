@@ -9,7 +9,8 @@ import {
   signOut,
   sendPasswordResetEmail,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  browserPopupRedirectResolver
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
@@ -88,7 +89,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     
     try {
-      const userCredential = await signInWithPopup(auth, provider);
+      // Use browserPopupRedirectResolver to handle COOP issues
+      const userCredential = await signInWithPopup(auth, provider, browserPopupRedirectResolver);
       
       // Check if user already exists in Firestore
       const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));

@@ -39,6 +39,12 @@ interface RecentMessage {
   unreadCount?: number;
 }
 
+interface CourierVerificationData {
+  isVerified: boolean;
+  approvedDocuments: string[];
+  pendingDocuments: string[];
+}
+
 // ============================================
 // CONFIGURATION DATA
 // ============================================
@@ -179,7 +185,7 @@ const DashboardHeader = memo(function DashboardHeader({ notificationCount, admin
               title="Mesaje de la administrator"
             >
               <BellIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-              {(adminUnreadCount && adminUnreadCount > 0) && (
+              {adminUnreadCount !== undefined && adminUnreadCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 rounded-full text-[10px] sm:text-xs font-medium text-white flex items-center justify-center">
                   {adminUnreadCount}
                 </span>
@@ -205,7 +211,7 @@ const DashboardHeader = memo(function DashboardHeader({ notificationCount, admin
 });
 
 // Welcome Section Component - Simplified
-const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, rating, reviewCount }: { userName: string; hasNewOrders: boolean; rating: number; reviewCount: number }) {
+const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, rating, reviewCount, verificationData }: { userName: string; hasNewOrders: boolean; rating: number; reviewCount: number; verificationData?: CourierVerificationData }) {
   const greeting = getGreeting();
 
   return (
@@ -217,9 +223,20 @@ const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, ra
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2 mb-4">
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-2xl font-bold text-white mb-0.5 sm:mb-1">
-              {greeting}, <span className="text-emerald-400">{userName}</span>!
-            </h1>
+            <div className="flex items-center gap-2 mb-0.5 sm:mb-1">
+              <h1 className="text-lg sm:text-2xl font-bold text-white">
+                {greeting}, <span className="text-emerald-400">{userName}</span>!
+              </h1>
+              {/* Verification Badge */}
+              {verificationData?.isVerified && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[9px] sm:text-xs font-medium border border-emerald-500/30" title="Cont verificat">
+                  <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="hidden sm:inline">Verificat</span>
+                </span>
+              )}
+            </div>
             {hasNewOrders ? (
               <p className="text-orange-400 text-xs sm:text-base flex items-center gap-1.5 sm:gap-2">
                 <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full animate-pulse"></span>
@@ -276,6 +293,116 @@ const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, ra
             <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Recenzii</span>
           </div>
         </div>
+
+        {/* Certification & Verification Badges */}
+        {verificationData && (verificationData.approvedDocuments.length > 0 || !verificationData.isVerified) && (
+          <div className="mt-3 pt-3 border-t border-white/5">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
+              {/* Verified Status */}
+              {verificationData.isVerified ? (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 text-[10px] sm:text-xs font-medium border border-emerald-500/25">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Identitate verificată
+                </span>
+              ) : (
+                <Link href="/dashboard/curier/verificare" className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-500/15 text-amber-400 text-[10px] sm:text-xs font-medium border border-amber-500/25 hover:bg-amber-500/25 transition-colors">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  Neverificat
+                </Link>
+              )}
+
+              {/* Approved Certifications */}
+              {verificationData.approvedDocuments.includes('cmr_insurance') && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-500/15 text-blue-400 text-[10px] sm:text-xs font-medium border border-blue-500/25" title="Asigurare CMR aprobată">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  CMR
+                </span>
+              )}
+
+              {verificationData.approvedDocuments.includes('gb_goods_insurance') && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-500/15 text-blue-400 text-[10px] sm:text-xs font-medium border border-blue-500/25" title="Goods in Transit Insurance">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  GIT Insurance
+                </span>
+              )}
+
+              {verificationData.approvedDocuments.includes('pet_transport_cert') && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-pink-500/15 text-pink-400 text-[10px] sm:text-xs font-medium border border-pink-500/25" title="Autorizație transport animale">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+                  </svg>
+                  Animale
+                </span>
+              )}
+
+              {verificationData.approvedDocuments.includes('passenger_transport_license') && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-purple-500/15 text-purple-400 text-[10px] sm:text-xs font-medium border border-purple-500/25" title="Licență transport persoane">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Persoane
+                </span>
+              )}
+
+              {verificationData.approvedDocuments.includes('towing_license') && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-orange-500/15 text-orange-400 text-[10px] sm:text-xs font-medium border border-orange-500/25" title="Atestat tractare auto">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                    <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z" />
+                  </svg>
+                  Tractări
+                </span>
+              )}
+
+              {verificationData.approvedDocuments.includes('platform_license') && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-cyan-500/15 text-cyan-400 text-[10px] sm:text-xs font-medium border border-cyan-500/25" title="Atestat platformă auto">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                    <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z" />
+                  </svg>
+                  Platformă
+                </span>
+              )}
+
+              {verificationData.approvedDocuments.includes('heavy_transport_cert') && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-500/15 text-amber-400 text-[10px] sm:text-xs font-medium border border-amber-500/25" title="Certificat transport marfă">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
+                    <path fillRule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clipRule="evenodd" />
+                  </svg>
+                  Marfă
+                </span>
+              )}
+
+              {verificationData.approvedDocuments.includes('furniture_transport_cert') && (
+                <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-indigo-500/15 text-indigo-400 text-[10px] sm:text-xs font-medium border border-indigo-500/25" title="Atestat transport mobilier">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clipRule="evenodd" />
+                  </svg>
+                  Mobilier
+                </span>
+              )}
+
+              {/* Pending Documents Count */}
+              {verificationData.pendingDocuments.length > 0 && (
+                <Link href="/dashboard/curier/verificare" className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-yellow-500/15 text-yellow-400 text-[10px] sm:text-xs font-medium border border-yellow-500/25 hover:bg-yellow-500/25 transition-colors">
+                  <svg className="w-3 h-3 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                  </svg>
+                  {verificationData.pendingDocuments.length} în verificare
+                </Link>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -915,6 +1042,7 @@ export default function CurierDashboard() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [isNewCourier, setIsNewCourier] = useState(false);
   const [showAdminMessages, setShowAdminMessages] = useState(false);
+  const [verificationData, setVerificationData] = useState<CourierVerificationData | undefined>(undefined);
 
   // Track admin messages
   const { unreadCount: adminUnreadCount } = useAdminMessages();
@@ -963,6 +1091,10 @@ export default function CurierDashboard() {
         const profilRef = doc(db, 'profil_curier', user.uid);
         const profilSnap = await getDoc(profilRef);
         
+        // Track approved and pending documents
+        const approvedDocs: string[] = [];
+        const pendingDocs: string[] = [];
+        
         if (profilSnap.exists()) {
           const profilData = profilSnap.data();
           if (profilData.nume) {
@@ -973,6 +1105,18 @@ export default function CurierDashboard() {
           setReviewCount(profilData.reviewCount !== undefined ? profilData.reviewCount : 0);
           // Check if profile is complete (has name and phone at minimum)
           setHasNoProfile(!profilData.nume || !profilData.telefon);
+          
+          // Parse documents for verification badges
+          if (profilData.documents) {
+            Object.entries(profilData.documents).forEach(([docId, docData]) => {
+              const doc = docData as { status?: string };
+              if (doc.status === 'approved') {
+                approvedDocs.push(docId);
+              } else if (doc.status === 'pending') {
+                pendingDocs.push(docId);
+              }
+            });
+          }
         } else {
           setHasNoProfile(true);
           // Set default rating for new couriers
@@ -980,14 +1124,19 @@ export default function CurierDashboard() {
           setReviewCount(0);
         }
         
-        // Check services from users collection
+        // Check services and verification status from users collection
         const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
         const userSnapshot = await getDocs(userQuery);
+        
+        let isVerified = false;
         
         if (!userSnapshot.empty) {
           const userData = userSnapshot.docs[0].data();
           const services = userData.serviciiOferite;
           setHasNoServices(!services || !Array.isArray(services) || services.length === 0);
+          
+          // Get verification status
+          isVerified = userData.verified === true;
           
           // Fallback: if no name from profil_curier, try users collection
           if (!userNume && userData.nume) {
@@ -996,6 +1145,13 @@ export default function CurierDashboard() {
         } else {
           setHasNoServices(true);
         }
+        
+        // Set verification data
+        setVerificationData({
+          isVerified,
+          approvedDocuments: approvedDocs,
+          pendingDocuments: pendingDocs
+        });
 
       } catch (error) {
         logError(error, 'Error fetching curier user data');
@@ -1234,7 +1390,7 @@ export default function CurierDashboard() {
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Welcome Section */}
-        <WelcomeSection userName={userName} hasNewOrders={false} rating={rating} reviewCount={reviewCount} />
+        <WelcomeSection userName={userName} hasNewOrders={false} rating={rating} reviewCount={reviewCount} verificationData={verificationData} />
 
         {/* Setup Progress - Only 2 steps: Profile and Services (Zones/Calendar disabled) */}
         <SetupProgress setupComplete={setupComplete} completedSteps={completedStepsCount} totalSteps={2} />

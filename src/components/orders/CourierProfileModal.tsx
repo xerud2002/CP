@@ -97,7 +97,7 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
           descriere: profilData?.descriere || profilData?.bio || '',
           telefon: profilData?.telefon || userData?.telefon || '',
           email: userData?.email || '',
-          verificat: userData?.verificat || profilData?.verificat || false,
+          verificat: userData?.verified || profilData?.verificationStatus === 'verified' || false,
           rating: finalRating,
           nrRecenzii: finalReviewCount,
           nrLivrari: profilData?.nrLivrari || userData?.nrLivrari || 0,
