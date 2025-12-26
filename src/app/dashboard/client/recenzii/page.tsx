@@ -70,17 +70,6 @@ function RecenziiClientContent() {
     }
   }, [orderIdFromUrl, completedOrders, showReviewForm]);
 
-  // Auto-select order from URL param
-  useEffect(() => {
-    if (orderIdFromUrl && completedOrders.length > 0 && !showReviewForm) {
-      const order = completedOrders.find(o => o.id === orderIdFromUrl);
-      if (order) {
-        setSelectedOrder(order);
-        setShowReviewForm(true);
-      }
-    }
-  }, [orderIdFromUrl, completedOrders, showReviewForm]);
-
   const loadReviews = async () => {
     if (!user) return;
     

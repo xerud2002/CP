@@ -8,7 +8,6 @@ import { doc, getDoc, setDoc, serverTimestamp, deleteField } from 'firebase/fire
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ArrowLeftIcon, CheckCircleIcon } from '@/components/icons/DashboardIcons';
-import HelpCard from '@/components/HelpCard';
 import { showSuccess, showError } from '@/lib/toast';
 import { showConfirm } from '@/components/ui/ConfirmModal';
 import { logError } from '@/lib/errorMessages';
@@ -307,144 +306,49 @@ function VerificarePageContent() {
           </div>
         </div>
 
-        {/* Verification Status Section */}
-        <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-white/5 p-6 mb-6">
-          <div className="flex items-start gap-4 mb-6">
-            <div className={`p-3 rounded-xl border ${
-              Object.values(uploadedDocuments).filter(d => d.status === 'approved').length >= requiredDocs.length
-                ? 'bg-emerald-500/20 border-emerald-500/30'
-                : 'bg-slate-700/30 border-white/10'
-            }`}>
-              <CheckCircleIcon className={`w-6 h-6 ${
-                Object.values(uploadedDocuments).filter(d => d.status === 'approved').length >= requiredDocs.length
-                  ? 'text-emerald-400'
-                  : 'text-gray-400'
-              }`} />
+        {/* Compact Verification Status */}
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-white/5 p-5 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Verified Count */}
+            <div className="flex items-center gap-3 p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+              <div className="p-2 bg-emerald-500/20 rounded-lg">
+                <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-emerald-400 font-bold text-xl">
+                  {Object.values(uploadedDocuments).filter(d => d.status === 'approved').length}
+                </p>
+                <p className="text-gray-400 text-xs">Verificate</p>
+              </div>
             </div>
-            <div className="flex-1">
-              <h3 className="text-white font-semibold text-lg mb-1">Status Verificare</h3>
-              <p className="text-gray-400 text-sm">
-                {Object.values(uploadedDocuments).filter(d => d.status === 'approved').length >= requiredDocs.length
-                  ? 'Contul tău este verificat'
-                  : 'Verificarea documentelor în curs'}
-              </p>
-            </div>
-          </div>
 
-          {/* Verified Documents */}
-          <div className="mb-4">
-            <div className="flex items-center gap-2 mb-3">
-              <svg className="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span className="text-sm font-medium text-emerald-400">
-                Documente Verificate ({Object.values(uploadedDocuments).filter(d => d.status === 'approved').length})
-              </span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {requiredDocs.filter(doc => uploadedDocuments[doc.id]?.status === 'approved').map(doc => (
-                <div key={doc.id} className="flex items-center gap-2 p-2.5 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                  <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm text-emerald-300 truncate">{doc.title}</span>
-                </div>
-              ))}
-              {optionalDocs.filter(doc => uploadedDocuments[doc.id]?.status === 'approved').map(doc => (
-                <div key={doc.id} className="flex items-center gap-2 p-2.5 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-                  <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm text-emerald-300 truncate">{doc.title}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Pending Documents */}
-          {requiredDocs.filter(doc => uploadedDocuments[doc.id]?.status === 'pending').length > 0 && (
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-3">
-                <svg className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+            {/* Pending Count */}
+            <div className="flex items-center gap-3 p-3 bg-amber-500/10 rounded-xl border border-amber-500/20">
+              <div className="p-2 bg-amber-500/20 rounded-lg">
+                <svg className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                 </svg>
-                <span className="text-sm font-medium text-amber-400">
-                  În așteptare ({requiredDocs.filter(doc => uploadedDocuments[doc.id]?.status === 'pending').length + optionalDocs.filter(doc => uploadedDocuments[doc.id]?.status === 'pending').length})
-                </span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {requiredDocs.filter(doc => uploadedDocuments[doc.id]?.status === 'pending').map(doc => (
-                  <div key={doc.id} className="flex items-center gap-2 p-2.5 bg-amber-500/10 rounded-lg border border-amber-500/20">
-                    <svg className="w-4 h-4 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-sm text-amber-300 truncate">{doc.title}</span>
-                  </div>
-                ))}
-                {optionalDocs.filter(doc => uploadedDocuments[doc.id]?.status === 'pending').map(doc => (
-                  <div key={doc.id} className="flex items-center gap-2 p-2.5 bg-amber-500/10 rounded-lg border border-amber-500/20">
-                    <svg className="w-4 h-4 text-amber-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-sm text-amber-300 truncate">{doc.title}</span>
-                  </div>
-                ))}
+              <div>
+                <p className="text-amber-400 font-bold text-xl">
+                  {Object.values(uploadedDocuments).filter(d => d.status === 'pending').length}
+                </p>
+                <p className="text-gray-400 text-xs">În așteptare</p>
               </div>
             </div>
-          )}
 
-          {/* Services Section */}
-          <div className="mb-4">
-            <div className="flex items-center gap-2 mb-3">
-              <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-sm font-medium text-blue-400">
-                Servicii Selectate ({activeServices.length})
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {activeServices.map((service, idx) => (
-                <span
-                  key={idx}
-                  className="px-3 py-1.5 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-medium border border-blue-500/20"
-                >
-                  {service.charAt(0).toUpperCase() + service.slice(1)}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="border-t border-white/5 pt-4">
-            <div className="flex items-center gap-3 p-3 bg-slate-700/30 rounded-xl mb-3 border border-white/5">
-              <div className="p-2 bg-orange-500/20 rounded-lg shrink-0">
-                <svg className="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            {/* Total Required */}
+            <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-xl border border-white/5">
+              <div className="p-2 bg-slate-600/50 rounded-lg">
+                <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
                 </svg>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-500 mb-0.5">Țara înregistrată</p>
-                <p className="text-white font-semibold truncate">{countries.find(c => c.code.toLowerCase() === profile.tara_sediu?.toLowerCase())?.name || profile.tara_sediu}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 p-3 bg-slate-700/30 rounded-xl border border-white/5">
-              <div className={`p-2 rounded-lg shrink-0 ${profile.tipBusiness === 'firma' ? 'bg-purple-500/20' : 'bg-blue-500/20'}`}>
-                {profile.tipBusiness === 'firma' ? (
-                  <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-500 mb-0.5">Tip activitate</p>
-                <p className="text-white font-semibold">
-                  {profile.tipBusiness === 'firma' ? 'Firmă' : 'Persoană Fizică'}
-                </p>
+              <div>
+                <p className="text-white font-bold text-xl">{requiredDocs.length}</p>
+                <p className="text-gray-400 text-xs">Obligatorii</p>
               </div>
             </div>
           </div>
@@ -781,16 +685,6 @@ function VerificarePageContent() {
             </div>
           </div>
         )}
-
-        {/* Info Box */}
-        <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl mb-6">
-          <p className="text-blue-400 text-sm">
-            <strong>💡 Verificare rapidă:</strong> Documentele sunt verificate în 24-48 ore. Vei primi notificare la aprobare.
-          </p>
-        </div>
-
-        {/* Help Card */}
-        <HelpCard />
       </div>
     </div>
   );
