@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lighthouse": "npm run build && npm run start & timeout /t 5 && lighthouse http://localhost:3000 --view --preset=desktop --chrome-flags=\"--headless\" && taskkill /IM node.exe /F",
+    "lighthouse:mobile": "npm run build && npm run start & timeout /t 5 && lighthouse http://localhost:3000 --view --preset=mobile --chrome-flags=\"--headless\" && taskkill /IM node.exe /F"
   },
   "dependencies": {
     "firebase": "^11.1.0",
