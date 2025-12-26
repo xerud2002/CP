@@ -125,7 +125,7 @@ input[type="number"] {
 }
 
 /* Smooth scrolling */
-html {
+html[data-scroll-behavior="smooth"] {
   scroll-behavior: smooth;
 }
 

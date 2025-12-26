@@ -9,8 +9,8 @@ import {
   signOut,
   sendPasswordResetEmail,
   GoogleAuthProvider,
-  signInWithPopup,
-  browserPopupRedirectResolver
+  signInWithRedirect,
+  getRedirectResult
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
@@ -50,6 +50,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
 
+    // Handle redirect result from Google Sign-In
+    const handleRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          // User signed in successfully via redirect
+          const userDoc = await getDoc(doc(db, 'users', result.user.uid));
+          
+          if (!userDoc.exists()) {
+            // Get role from sessionStorage (set before redirect)
+            const role = (sessionStorage.getItem('pendingGoogleRole') || 'client') as UserRole;
+            sessionStorage.removeItem('pendingGoogleRole');
+            
+            // Create new user document
+            const userData: User = {
+              uid: result.user.uid,
+              email: result.user.email || '',
+              role,
+              createdAt: new Date(),
+            };
+            
+            await setDoc(doc(db, 'users', result.user.uid), userData);
+          }
+        }
+      } catch (error) {
+        console.error('Error handling redirect:', error);
+      }
+    };
+
+    handleRedirect();
+
     return () => unsubscribe();
   }, []);
 
@@ -83,43 +114,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loginWithGoogle = async (role: UserRole): Promise<User> => {
     const provider = new GoogleAuthProvider();
-    // Configure provider to avoid popup blockers
     provider.setCustomParameters({
       prompt: 'select_account'
     });
     
-    try {
-      // Use browserPopupRedirectResolver to handle COOP issues
-      const userCredential = await signInWithPopup(auth, provider, browserPopupRedirectResolver);
-      
-      // Check if user already exists in Firestore
-      const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
-      
-      if (userDoc.exists()) {
-        // User exists, return existing data
-        const userData = { uid: userCredential.user.uid, ...userDoc.data() } as User;
-        setUser(userData);
-        return userData;
-      } else {
-        // New user, create record with the specified role
-        const userData: User = {
-          uid: userCredential.user.uid,
-          email: userCredential.user.email || '',
-          role,
-          createdAt: new Date(),
-        };
-        
-        await setDoc(doc(db, 'users', userCredential.user.uid), userData);
-        setUser(userData);
-        return userData;
-      }
-    } catch (error: unknown) {
-      // If popup is blocked, provide helpful error
-      if (error instanceof Error && error.message.includes('popup')) {
-        throw new Error('Pop-up blocat de browser. Vă rugăm să permiteți pop-up-uri pentru acest site.');
-      }
-      throw error;
-    }
+    // Store role in sessionStorage for after redirect
+    sessionStorage.setItem('pendingGoogleRole', role);
+    
+    // Use redirect instead of popup to avoid COOP issues
+    await signInWithRedirect(auth, provider);
+    
+    // This will never return as the page redirects
+    // The actual sign-in is handled in the useEffect hook
+    throw new Error('Redirect in progress');
   };
 
   const logout = async () => {

@@ -214,8 +214,6 @@ function ClientOrderCard({
 export default memo(ClientOrderCard, (prevProps, nextProps) => {
   return (
     prevProps.order.id === nextProps.order.id &&
-    prevProps.order.status === nextProps.order.status &&
-    prevProps.unreadCount === nextProps.unreadCount &&
-    prevProps.chatExpanded === nextProps.chatExpanded
+    prevProps.order.status === nextProps.order.status
   );
 });

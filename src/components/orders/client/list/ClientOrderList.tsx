@@ -52,8 +52,6 @@ function ClientOrderList({
         <div key={order.id}>
           <ClientOrderCard
             order={order}
-            unreadCount={order.id ? (unreadCounts[order.id] || 0) : 0}
-            chatExpanded={order.id ? expandedChats.has(order.id) : false}
             onToggleChat={() => order.id && onToggleChat(order.id)}
             onViewDetails={() => onViewDetails(order)}
             onDelete={() => onDelete(order)}

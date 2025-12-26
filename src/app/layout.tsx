@@ -148,7 +148,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ro">
+    <html lang="ro" data-scroll-behavior="smooth">
       <head>
         {/* Preconnect to Firebase for faster auth/db connections */}
         <link rel="preconnect" href="https://firebasestorage.googleapis.com" />
