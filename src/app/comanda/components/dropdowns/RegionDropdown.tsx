@@ -61,6 +61,7 @@ export default function RegionDropdown({ value, onChange, label, regions, countr
               width={24} 
               height={18} 
               className="rounded-sm shadow-sm opacity-80 shrink-0"
+              unoptimized
               onError={(e) => (e.target as HTMLImageElement).style.display = 'none'}
             />
           )}
@@ -106,6 +107,7 @@ export default function RegionDropdown({ value, onChange, label, regions, countr
                         width={20} 
                         height={15} 
                         className="rounded-sm shadow-sm opacity-90 shrink-0"
+                        unoptimized
                         onError={(e) => (e.target as HTMLImageElement).style.display = 'none'}
                       />
                     )}

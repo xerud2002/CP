@@ -167,6 +167,7 @@ function ClientOrderCard({
                 width={20} 
                 height={15} 
                 className="rounded shrink-0"
+                unoptimized
               />
               <span className="text-gray-300 text-sm sm:text-base truncate">
                 {capitalize(order.oras_ridicare)}, {capitalize(order.expeditorJudet || order.judet_ridicare)}
@@ -182,6 +183,7 @@ function ClientOrderCard({
                 width={20} 
                 height={15} 
                 className="rounded shrink-0"
+                unoptimized
               />
               <span className="text-gray-300 text-sm sm:text-base truncate">
                 {capitalize(order.oras_livrare)}, {capitalize(order.destinatarJudet || order.judet_livrare)}

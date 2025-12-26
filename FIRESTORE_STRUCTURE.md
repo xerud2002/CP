@@ -70,6 +70,7 @@ Această aplicație folosește Firebase Firestore pentru gestionarea datelor în
   statusUpdatedAt?: Timestamp,  // When status last changed
   inLucruAt?: Timestamp,        // When transitioned to 'in_lucru'
   finalizataAt?: Timestamp,     // When marked as 'livrata'
+  dismissedBy?: string[],       // Array of courier UIDs who dismissed this order
   observatii?: string,
   orderNumber?: number,         // Sequential order number (e.g., 141121)
   timestamp: number,

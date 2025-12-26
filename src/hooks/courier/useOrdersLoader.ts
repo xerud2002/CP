@@ -68,6 +68,12 @@ export function useOrdersLoader(userId: string | undefined, options: UseOrdersLo
       snapshotNew.forEach((doc) => {
         if (!orderIds.has(doc.id)) {
           const data = doc.data();
+          
+          // Skip if courier dismissed this order
+          if (data.dismissedBy && Array.isArray(data.dismissedBy) && data.dismissedBy.includes(userId)) {
+            return;
+          }
+          
           const orderService = data.serviciu || data.tipColet || 'Colete';
           
           // Normalize service names for comparison (case-insensitive)

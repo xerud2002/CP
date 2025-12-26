@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
 import { formatOrderNumber } from '@/utils/orderHelpers';
 import { countries, serviceTypes } from '@/lib/constants';
-import { MessageButton, ViewButton, ActionButtonsGroup } from '@/components/ui/ActionButtons';
+import { MessageButton, ViewButton, ActionButtonsGroup, DismissButton } from '@/components/ui/ActionButtons';
 import type { Order } from '@/types';
 
 // Lazy load OrderChat - it's heavy and only shown when expanded
@@ -19,6 +19,7 @@ interface OrderCardProps {
   currentUserId?: string;
   onToggleChat: () => void;
   onViewDetails: () => void;
+  onDismiss: () => void;
 }
 
 function OrderCard({
@@ -28,7 +29,8 @@ function OrderCard({
   unreadCount,
   currentUserId,
   onToggleChat,
-  onViewDetails
+  onViewDetails,
+  onDismiss
 }: OrderCardProps) {
   const serviceTypeConfig = serviceTypes.find(
     s => s.value.toLowerCase() === (order.tipColet || 'colete').toLowerCase()
@@ -160,6 +162,10 @@ function OrderCard({
                 onClick={onViewDetails}
                 title="Vezi detalii"
               />
+              <DismissButton
+                onClick={onDismiss}
+                title="Nu sunt interesat"
+              />
             </ActionButtonsGroup>
           </div>
           
@@ -172,6 +178,7 @@ function OrderCard({
                 width={20} 
                 height={15} 
                 className="rounded shrink-0"
+                unoptimized
               />
               <span className="text-gray-300">
                 {capitalize(order.oras_ridicare || order.expeditorJudet)}
@@ -188,6 +195,7 @@ function OrderCard({
                 width={20} 
                 height={15} 
                 className="rounded shrink-0"
+                unoptimized
               />
               <span className="text-gray-300">
                 {capitalize(order.oras_livrare || order.destinatarJudet)}

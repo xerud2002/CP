@@ -31,6 +31,7 @@ interface RecentMessage {
   id: string;
   orderId: string;
   orderNumber?: number;
+  clientId?: string;
   senderName: string;
   senderRole: 'client' | 'curier';
   message: string;
@@ -84,7 +85,7 @@ const mainNavTiles: NavTile[] = [
     href: '/dashboard/curier/comenzi',
     icon: BoxIcon,
     title: 'Comenzi',
-    description: 'Gestionează comenzi',
+    description: 'Oferte comenzi',
     color: 'text-orange-400',
     bgColor: 'bg-orange-500/10 hover:bg-orange-500/20',
     borderColor: 'border-orange-500/20 hover:border-orange-500/40',
@@ -700,7 +701,7 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
             {recentMessages.map((msg) => (
               <button
                 key={msg.id}
-                onClick={() => onMessageClick(msg.orderId, msg.orderNumber || '', msg.clientId, msg.senderName)}
+                onClick={() => onMessageClick(msg.orderId, String(msg.orderNumber || ''), msg.clientId || '', msg.senderName)}
                 className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors group w-full text-left"
               >
                 <div className="relative shrink-0 mt-0.5">
@@ -1159,6 +1160,7 @@ export default function CurierDashboard() {
           id: docSnap.id,
           orderId: data.orderId || '',
           orderNumber: orderNumbers[data.orderId],
+          clientId: data.clientId,
           senderName: data.senderName || 'Client',
           senderRole: data.senderRole || 'client',
           message: data.message || '',
@@ -1259,12 +1261,10 @@ export default function CurierDashboard() {
     <div className="min-h-screen">
       {/* Header */}
       <DashboardHeader 
-        notificationCount={0} 
         adminUnreadCount={adminUnreadCount}
         onLogout={handleLogout}
         onBellClick={() => setShowAdminMessages(true)}
         onGuideClick={handleOpenOnboarding}
-        showBellDot={isNewCourier}
       />
 
       {/* Main Content */}
@@ -1305,7 +1305,7 @@ export default function CurierDashboard() {
 
       {/* Modals */}
       {showOnboarding && <OnboardingModal onClose={handleCloseOnboarding} isFirstTime={isNewCourier} />}
-      {showAdminMessages && <AdminMessagesListModal userId={user.uid} onClose={() => setShowAdminMessages(false)} />}
+      {showAdminMessages && <AdminMessagesListModal onClose={() => setShowAdminMessages(false)} onSelectUser={(user) => {/* Handle user selection */}} />}
       {selectedChatOrder && (
         <CourierChatModal
           orderId={selectedChatOrder.orderId}

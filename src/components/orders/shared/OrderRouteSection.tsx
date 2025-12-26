@@ -58,6 +58,7 @@ export default function OrderRouteSection({
               width={20}
               height={15}
               className="rounded"
+              unoptimized
             />
             <span className="text-white font-medium">{pickupData.name}</span>
           </div>
@@ -88,6 +89,7 @@ export default function OrderRouteSection({
               width={20}
               height={15}
               className="rounded"
+              unoptimized
             />
             <span className="text-white font-medium">{deliveryData.name}</span>
           </div>

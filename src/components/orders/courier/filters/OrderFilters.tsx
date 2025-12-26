@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useRef, useEffect } from 'react';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import CountryFilter from '../../shared/CountryFilter';
 import ServiceTypeFilter from '../../shared/ServiceTypeFilter';
@@ -32,21 +31,7 @@ export default function OrderFilters({
   onClearFilters
 }: OrderFiltersProps) {
   const [isSortOpen, setIsSortOpen] = useLocalStorage('courier_filters_sort_open', false);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
   const sortDropdownRef = useRef<HTMLDivElement>(null);
-  const sortButtonRef = useRef<HTMLButtonElement>(null);
-
-  // Calculate dropdown position when opened
-  useEffect(() => {
-    if (isSortOpen && sortButtonRef.current) {
-      const rect = sortButtonRef.current.getBoundingClientRect();
-      setDropdownPosition({
-        top: rect.bottom + 8,
-        left: rect.left,
-        width: rect.width
-      });
-    }
-  }, [isSortOpen]);
 
   // Close sort dropdown when clicking outside
   useEffect(() => {
@@ -67,18 +52,17 @@ export default function OrderFilters({
   const selectedSort = sortOptions.find(s => s.value === sortBy);
 
   return (
-    <div className="bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-2xl border border-white/5 p-2 sm:p-4 mb-3 sm:mb-6 overflow-visible">
+    <div className="bg-slate-800/80 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-white/5 p-3 sm:p-4 mb-4 sm:mb-6 relative z-40">
       {/* Main filters row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-2 sm:mb-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-3">
         <CountryFilter value={countryFilter} onChange={onCountryChange} />
         <ServiceTypeFilter value={serviceFilter} onChange={onServiceChange} />
 
         {/* Sort Filter */}
-        <div ref={sortDropdownRef} className="relative">
+        <div ref={sortDropdownRef} className="relative z-30">
           <label className="block text-xs text-gray-400 mb-1.5">Sortare</label>
           <div className="relative">
             <button
-              ref={sortButtonRef}
               type="button"
               onClick={() => setIsSortOpen(!isSortOpen)}
               className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left text-sm"
@@ -98,18 +82,9 @@ export default function OrderFilters({
               </svg>
             </button>
             
-            {isSortOpen && typeof window !== 'undefined' && createPortal(
-              <div 
-                className="bg-slate-900 border border-white/10 rounded-xl shadow-2xl max-h-[300px] overflow-hidden"
-                style={{
-                  position: 'fixed',
-                  top: `${dropdownPosition.top}px`,
-                  left: `${dropdownPosition.left}px`,
-                  width: `${dropdownPosition.width}px`,
-                  zIndex: 99999
-                }}
-              >
-                <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
+            {isSortOpen && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
+                <div className="max-h-80 overflow-y-auto custom-scrollbar">
                   {sortOptions.map((option) => (
                     <button
                       key={option.value}
@@ -141,8 +116,7 @@ export default function OrderFilters({
                     </button>
                   ))}
                 </div>
-              </div>,
-              document.body
+              </div>
             )}
           </div>
         </div>
@@ -161,7 +135,7 @@ export default function OrderFilters({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Caută după comandă sau oraș..."
+            placeholder="Caută după număr comandă (#CP141135) sau oraș..."
             className="w-full pl-10 pr-10 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all hover:bg-slate-800"
           />
           {searchQuery && (

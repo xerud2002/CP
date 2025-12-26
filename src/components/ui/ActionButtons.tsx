@@ -103,3 +103,19 @@ export function SmallDeleteButton({ onClick, title, disabled = false }: ActionBu
     </button>
   );
 }
+
+// Dismiss/Not Interested Button (for couriers to hide orders)
+export function DismissButton({ onClick, title, disabled = false }: ActionButtonProps) {
+  return (
+    <button 
+      onClick={onClick}
+      disabled={disabled}
+      className="p-2 text-gray-400 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      title={title}
+    >
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+      </svg>
+    </button>
+  );
+}

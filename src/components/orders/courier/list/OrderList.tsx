@@ -16,6 +16,7 @@ interface OrderListProps {
   onToggleChat: (orderId: string | null) => void;
   onViewDetails: (order: Order) => void;
   onClearFilters: () => void;
+  onDismissOrder: (orderId: string) => void;
 }
 
 function OrderList({
@@ -29,7 +30,8 @@ function OrderList({
   currentUserId,
   onToggleChat,
   onViewDetails,
-  onClearFilters
+  onClearFilters,
+  onDismissOrder
 }: OrderListProps) {
   return (
     <div className="bg-slate-800/40 backdrop-blur-xl rounded-lg sm:rounded-2xl border border-white/5 overflow-hidden relative z-10">
@@ -105,6 +107,7 @@ function OrderList({
                   currentUserId={currentUserId}
                   onToggleChat={() => onToggleChat(isExpanded ? null : order.id || null)}
                   onViewDetails={() => onViewDetails(order)}
+                  onDismiss={() => order.id && onDismissOrder(order.id)}
                 />
               );
             })}

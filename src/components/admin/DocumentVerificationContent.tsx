@@ -322,8 +322,46 @@ export default function DocumentVerificationContent() {
                 {/* Documents grid */}
                 <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {Object.entries(courier.documents).map(([docKey, doc]) => (
-                    <div key={docKey} className="bg-slate-700/30 rounded-lg p-4 border border-white/5 flex flex-col h-full">
-                      <div className="flex items-start justify-between gap-3 mb-3">
+                    <div key={docKey} className="bg-slate-700/30 rounded-lg p-4 border border-white/5 flex flex-col h-full relative">
+                      {/* Action buttons - top right */}
+                      <div className="absolute top-3 right-3 flex gap-1.5">
+                        <a
+                          href={doc.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
+                          title="Vezi document"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                        </a>
+                        {doc.status !== 'approved' && (
+                          <button
+                            onClick={() => handleApproveDocument(courier.uid, docKey)}
+                            className="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all"
+                            title="Aprobă"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </button>
+                        )}
+                        {doc.status !== 'rejected' && (
+                          <button
+                            onClick={() => handleRejectDocument(courier.uid, docKey)}
+                            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                            title="Respinge"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="flex items-start justify-between gap-3 mb-3 pr-20">
                         <h4 className="text-sm font-medium text-white leading-tight">{getDocumentLabel(docKey)}</h4>
                         <span className={`px-2 py-1 rounded text-xs font-medium border shrink-0 ${getStatusColor(doc.status)}`}>
                           {getStatusText(doc.status)}
@@ -346,34 +384,6 @@ export default function DocumentVerificationContent() {
                           <p className="text-red-400 mt-2">
                             Motiv respingere: {doc.rejectionReason}
                           </p>
-                        )}
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex gap-2">
-                        <a
-                          href={doc.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg text-xs font-medium transition-all text-center"
-                        >
-                          Vezi
-                        </a>
-                        {doc.status !== 'approved' && (
-                          <button
-                            onClick={() => handleApproveDocument(courier.uid, docKey)}
-                            className="flex-1 px-3 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded-lg text-xs font-medium transition-all"
-                          >
-                            Aprobă
-                          </button>
-                        )}
-                        {doc.status !== 'rejected' && (
-                          <button
-                            onClick={() => handleRejectDocument(courier.uid, docKey)}
-                            className="flex-1 px-3 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg text-xs font-medium transition-all"
-                          >
-                            Respinge
-                          </button>
                         )}
                       </div>
                     </div>

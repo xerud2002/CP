@@ -95,7 +95,7 @@ function ComenziCurierContent() {
     sortBy
   });
   const unreadCounts = useUnreadMessages(user?.uid, orders);
-  const { handleFinalizeOrder, handleRequestReview } = useOrderHandlers(reloadOrders);
+  const { handleFinalizeOrder, handleRequestReview, handleDismissOrder } = useOrderHandlers(reloadOrders);
   
   // Local UI state
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -291,6 +291,7 @@ function ComenziCurierContent() {
           currentUserId={user?.uid}
           onToggleChat={handleToggleChat}
           onViewDetails={handleViewDetails}
+          onDismissOrder={handleDismissOrder}
           onClearFilters={clearAllFilters}
         />
 

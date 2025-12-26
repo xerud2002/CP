@@ -166,8 +166,10 @@ export default function RecenziiPage() {
             <Link href="/dashboard/curier" className="p-2 hover:bg-slate-800/80 rounded-xl transition-colors">
               <ArrowLeftIcon className="w-5 h-5 text-gray-400" />
             </Link>
-            <div className="p-2.5 bg-linear-to-br from-blue-500/20 to-blue-500/20 rounded-xl border border-blue-500/20">
-              <ChatIcon />
+            <div className="p-2.5 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-xl border border-amber-500/20">
+              <svg className="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
             </div>
             <div>
               <h1 className="text-lg sm:text-2xl font-bold text-white">Recenzii</h1>
@@ -178,98 +180,39 @@ export default function RecenziiPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
-        {/* Rating Overview - DOS Style */}
-        <div className="bg-linear-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 mb-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-            <RatingCard 
-              rating={rating}
-              reviewCount={reviewCount}
-              size="lg"
-            />
-
-            {/* Info */}
-            <div className="flex-1">
-              <h3 className="text-white font-semibold text-lg mb-2">Impactul recenziilor</h3>
-              <p className="text-gray-300 text-sm leading-relaxed">
-                Un rating ridicat îți <span className="text-cyan-400 font-semibold">crește vizibilitatea</span> în platformă și 
-                atrage mai mulți clienți. Recenziile pozitive confirmă calitatea serviciilor tale și îți construiesc 
-                <span className="text-cyan-400 font-semibold"> reputația</span> în comunitatea CurierulPerfect.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Request Review Options */}
-        <div className="grid md:grid-cols-2 gap-4 mb-6">
-          {/* Invite via Email */}
-          <div className="bg-linear-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-xl rounded-2xl border border-purple-500/30 p-6">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="p-3 bg-purple-500/20 rounded-xl border border-purple-500/30 shrink-0">
-                <svg className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-white font-semibold text-lg mb-1">Invită prin Email</h3>
-                <p className="text-gray-400 text-sm">Trimite invitație de recenzie clienților tăi prin email</p>
+        {/* Rating Overview */}
+        <div className="bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-xl rounded-2xl border border-white/10 p-8 mb-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            {/* Left: Large Rating Display */}
+            <div className="flex flex-col items-center md:items-start gap-3">
+              <div className="flex items-end gap-3">
+                <span className="text-6xl font-bold text-white">{rating.toFixed(1)}</span>
+                <div className="pb-2">
+                  <div className="flex gap-1 mb-1">
+                    {renderStars(rating, 'w-6 h-6')}
+                  </div>
+                  <p className="text-sm text-gray-400">{reviewCount} {reviewCount === 1 ? 'recenzie' : 'recenzii'}</p>
+                </div>
               </div>
             </div>
-            <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); showWarning('Funcție în curs de dezvoltare'); }}>
-              <div>
-                <label className="form-label">Email client</label>
-                <input 
-                  type="email" 
-                  placeholder="client@example.com"
-                  className="form-input"
-                  required
-                />
-              </div>
-              <div>
-                <label className="form-label">Mesaj personalizat (opțional)</label>
-                <textarea 
-                  placeholder="Adaugă un mesaj personal..."
-                  className="form-input resize-none"
-                  rows={3}
-                />
-              </div>
-              <button type="submit" className="btn-primary w-full flex items-center justify-center">
-                <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-                Trimite invitație
-              </button>
-            </form>
-          </div>
 
-          {/* Request Review Link */}
-          <div className="bg-linear-to-br from-orange-500/10 to-amber-500/10 backdrop-blur-xl rounded-2xl border border-orange-500/30 p-6">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="p-3 bg-orange-500/20 rounded-xl border border-orange-500/30 shrink-0">
-                <svg className="w-6 h-6 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-white font-semibold text-lg mb-1">Link de recenzie</h3>
-                <p className="text-gray-400 text-sm">Generează link unic pentru a solicita recenzii</p>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <label className="form-label">Link-ul tău de recenzie</label>
+            {/* Right: Quick Share */}
+            <div className="flex-1 max-w-md w-full">
+              <div className="bg-slate-900/40 rounded-xl p-4 border border-white/5">
+                <label className="text-xs font-medium text-gray-400 mb-2 block">Link-ul tău de recenzie</label>
                 <div className="flex gap-2">
                   <input 
                     type="text" 
-                    value={`https://curierul-perfect.vercel.app/review/${user?.uid || ''}`}
-                    className="form-input flex-1"
+                    value={`curierul-perfect.vercel.app/review/${user?.uid || ''}`}
+                    className="form-input flex-1 text-sm"
                     readOnly
                   />
                   <button 
                     onClick={() => {
                       navigator.clipboard.writeText(`https://curierul-perfect.vercel.app/review/${user?.uid || ''}`);
-                      showSuccess('Link copiat în clipboard!');
+                      showSuccess('Link copiat!');
                     }}
-                    className="btn-outline-orange shrink-0"
+                    className="p-2 text-gray-400 hover:text-orange-400 hover:bg-orange-400/10 rounded-lg transition-colors shrink-0"
                     title="Copiază link"
                   >
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -277,10 +220,8 @@ export default function RecenziiPage() {
                     </svg>
                   </button>
                 </div>
-              </div>
-              <div className="bg-slate-900/40 rounded-lg p-4 border border-orange-500/20">
-                <p className="text-gray-400 text-xs leading-relaxed">
-                  💡 <span className="font-semibold">Sfat:</span> Trimite acest link clienților tăi prin SMS, WhatsApp sau alte platforme pentru a-i încuraja să lase o recenzie.
+                <p className="text-xs text-gray-500 mt-2">
+                  Trimite acest link clienților pentru a primi recenzii
                 </p>
               </div>
             </div>
@@ -288,50 +229,61 @@ export default function RecenziiPage() {
         </div>
 
         {/* Reviews List */}
-        <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-white/5 p-6 mb-6">
-          <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <div className="p-2 bg-blue-500/20 rounded-lg">
-              <ChatIcon />
-            </div>
-            Toate recenziile
-          </h2>
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-white/5 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+              <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              Toate recenziile
+            </h2>
+            {reviews.length > 0 && (
+              <span className="px-3 py-1 bg-blue-500/20 text-blue-400 text-sm font-medium rounded-full border border-blue-500/30">
+                {reviews.length}
+              </span>
+            )}
+          </div>
 
           {reviews.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-blue-500/10 flex items-center justify-center">
-                <ChatIcon />
+            <div className="text-center py-16">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center border border-amber-500/20">
+                <svg className="w-8 h-8 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg>
               </div>
-              <p className="text-gray-400 text-lg mb-2">Nu ai recenzii încă</p>
-              <p className="text-gray-500 text-sm">
-                Primele recenzii vor apărea după finalizarea comenzilor și evaluarea de către clienți.
+              <p className="text-gray-400 text-lg mb-2 font-medium">Nu ai recenzii încă</p>
+              <p className="text-gray-500 text-sm max-w-md mx-auto">
+                Primele recenzii vor apărea după finalizarea comenzilor și evaluarea de către clienți. Trimite link-ul tău de recenzie pentru a primi feedback.
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {reviews.map((review) => (
                 <div
                   key={review.id}
-                  className="bg-slate-900/40 backdrop-blur-sm rounded-xl p-5 border border-white/5 hover:border-blue-500/20 transition-colors"
+                  className="bg-slate-900/50 backdrop-blur-sm rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-semibold">
+                  <div className="flex items-start justify-between gap-4">
+                    {/* Left: Client info */}
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-white font-semibold text-sm shrink-0">
                         {review.clientName.charAt(0).toUpperCase()}
                       </div>
-                      <div>
-                        <p className="text-white font-medium">{review.clientName}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-white font-medium truncate">{review.clientName}</p>
                         <p className="text-gray-500 text-xs">{formatDate(review.createdAt)}</p>
                       </div>
                     </div>
-                    {/* Color-coded star rating */}
-                    <div className="flex gap-1">
-                      {renderStars(review.rating, 'w-4 h-4 sm:w-5 sm:h-5')}
+                    
+                    {/* Right: Stars */}
+                    <div className="flex gap-0.5 shrink-0">
+                      {renderStars(review.rating, 'w-4 h-4')}
                     </div>
                   </div>
                   
                   {review.comment && (
-                    <p className="text-gray-300 text-sm leading-relaxed pl-13">
-                      {review.comment}
+                    <p className="text-gray-300 text-sm leading-relaxed mt-3 pl-13">
+                      &quot;{review.comment}&quot;
                     </p>
                   )}
                 </div>
@@ -339,9 +291,6 @@ export default function RecenziiPage() {
             </div>
           )}
         </div>
-
-        {/* Help Card */}
-        <HelpCard />
       </div>
     </div>
   );
