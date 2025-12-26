@@ -11,7 +11,6 @@ interface ClientOrderListProps {
   orders: Order[];
   loading: boolean;
   expandedChats: Set<string>;
-  unreadCounts: Record<string, number>;
   onToggleChat: (orderId: string) => void;
   onViewDetails: (order: Order) => void;
   onDelete: (order: Order) => void;
@@ -21,7 +20,6 @@ function ClientOrderList({
   orders,
   loading,
   expandedChats,
-  unreadCounts,
   onToggleChat,
   onViewDetails,
   onDelete

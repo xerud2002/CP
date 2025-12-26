@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   // Optimize production builds
   productionBrowserSourceMaps: false,
   
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  
   // Experimental performance features
   experimental: {
     optimizeCss: true,

@@ -86,7 +86,6 @@ function ComenziClientContent() {
     orders, 
     loading: loadingOrders, 
     expandedChats, 
-    unreadCounts, 
     toggleChat 
   } = useClientOrdersLoader({ 
     userId: user?.uid || '', 
@@ -220,7 +219,6 @@ function ComenziClientContent() {
             orders={orders}
             loading={loadingOrders}
             expandedChats={expandedChats}
-            unreadCounts={unreadCounts}
             onToggleChat={toggleChat}
             onViewDetails={setSelectedOrder}
             onDelete={handleDelete}
