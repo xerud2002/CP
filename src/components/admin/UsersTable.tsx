@@ -2,7 +2,7 @@
 
 import { User } from '@/types';
 import { getDisplayName, formatUserDate } from './types';
-import { EyeIcon, TrashIcon, ChatIcon } from '@/components/icons/DashboardIcons';
+import { SmallMessageButton, SmallViewButton, SmallDeleteButton } from '@/components/ui/ActionButtons';
 import { useState, useMemo } from 'react';
 
 interface UsersTableProps {
@@ -320,27 +320,18 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                 )}
                 <td className="py-4 px-4">
                   <div className="flex items-center justify-end gap-2">
-                    <button 
+                    <SmallMessageButton
                       onClick={() => onSendMessage(u)}
-                      className="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all"
                       title="Trimite mesaj"
-                    >
-                      <ChatIcon className="w-5 h-5" />
-                    </button>
-                    <button 
+                    />
+                    <SmallViewButton
                       onClick={() => onViewDetails(u)}
-                      className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
                       title="Vezi detalii"
-                    >
-                      <EyeIcon className="w-5 h-5" />
-                    </button>
-                    <button 
+                    />
+                    <SmallDeleteButton
                       onClick={() => onDelete(u.uid)}
-                      className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
                       title="Șterge utilizator"
-                    >
-                      <TrashIcon className="w-5 h-5" />
-                    </button>
+                    />
                   </div>
                 </td>
               </tr>

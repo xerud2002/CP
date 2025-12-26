@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
 import { formatOrderNumber } from '@/utils/orderHelpers';
 import { countries, serviceTypes } from '@/lib/constants';
+import { MessageButton, ViewButton, ActionButtonsGroup } from '@/components/ui/ActionButtons';
 import type { Order } from '@/types';
 
 // Lazy load OrderChat - it's heavy and only shown when expanded
@@ -150,43 +151,16 @@ function OrderCard({
             </div>
             
             {/* Action Buttons */}
-            <div className="flex items-center gap-2 sm:gap-2">
-              <button
+            <ActionButtonsGroup>
+              <MessageButton
                 onClick={onToggleChat}
-                className={`relative px-4 py-2.5 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-medium transition-all flex items-center gap-1.5 min-w-20 sm:min-w-0 justify-center ${
-                  isExpanded 
-                    ? 'bg-green-500/30 border-green-500/50 text-green-300 hover:bg-green-500/40' 
-                    : unreadCount > 0
-                      ? 'bg-green-500/20 border-green-500/40 text-green-400 hover:bg-green-500/30 animate-pulse'
-                      : 'bg-green-500/10 hover:bg-green-500/20 border-green-500/20 hover:border-green-500/40 text-green-400'
-                }`}
                 title="Mesaje"
-              >
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-5 w-5 bg-green-500 items-center justify-center text-[10px] font-bold text-white">
-                      {unreadCount}
-                    </span>
-                  </span>
-                )}
-                <svg className="w-3.5 h-3.5 sm:mr-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-                <span>Mesaje</span>
-              </button>
-              <button
+              />
+              <ViewButton
                 onClick={onViewDetails}
-                className="px-4 py-2.5 sm:px-3 sm:py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 text-xs font-medium transition-all flex items-center gap-1.5 min-w-20 sm:min-w-0 justify-center"
                 title="Vezi detalii"
-              >
-                <svg className="w-3.5 h-3.5 sm:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-                <span>Vezi</span>
-              </button>
-            </div>
+              />
+            </ActionButtonsGroup>
           </div>
           
           {/* Route */}

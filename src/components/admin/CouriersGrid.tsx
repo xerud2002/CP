@@ -1,7 +1,8 @@
 'use client';
 
 import { User } from '@/types';
-import { TruckIcon, EyeIcon, BanIcon } from '@/components/icons/DashboardIcons';
+import { TruckIcon, BanIcon } from '@/components/icons/DashboardIcons';
+import { ViewButton, DeleteButton, ActionButtonsGroup } from '@/components/ui/ActionButtons';
 import { getDisplayName } from './types';
 
 interface CouriersGridProps {
@@ -150,19 +151,20 @@ export default function CouriersGrid({ couriers, onSuspend }: CouriersGridProps)
             )}
 
             {/* Actions */}
-            <div className="flex gap-2">
-              <button className="flex-1 px-3 py-2.5 bg-blue-500/10 text-blue-400 rounded-lg text-sm font-medium hover:bg-blue-500/20 transition-all flex items-center justify-center gap-2 border border-blue-500/20">
-                <EyeIcon className="w-4 h-4" />
-                Vezi Profil
-              </button>
+            <ActionButtonsGroup>
+              <ViewButton
+                onClick={() => {/* TODO: Add view profile handler */}}
+                title="Vezi Profil"
+              />
               <button 
                 onClick={() => onSuspend(courier.uid)}
-                className="px-3 py-2.5 bg-red-500/10 text-red-400 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-all border border-red-500/20"
+                className="px-3 sm:px-4 py-2 bg-red-500/10 text-red-400 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-all flex items-center justify-center gap-2 border border-red-500/20"
                 title="Suspendă curier"
               >
                 <BanIcon className="w-4 h-4" />
+                <span className="hidden sm:inline">Suspendă</span>
               </button>
-            </div>
+            </ActionButtonsGroup>
           </div>
         );
       })}

@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react';
 import { Order } from '@/types';
-import { EyeIcon, SearchIcon } from '@/components/icons/DashboardIcons';
+import { SearchIcon } from '@/components/icons/DashboardIcons';
+import { SmallViewButton } from '@/components/ui/ActionButtons';
 
 interface OrdersTableProps {
   orders: Order[];
@@ -287,13 +288,10 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
                 </td>
                 <td className="py-4 px-4">
                   <div className="flex items-center justify-end gap-2">
-                    <button 
+                    <SmallViewButton
                       onClick={() => onViewDetails(order)}
-                      className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
                       title="Vezi detalii"
-                    >
-                      <EyeIcon className="w-5 h-5" />
-                    </button>
+                    />
                   </div>
                 </td>
               </tr>
