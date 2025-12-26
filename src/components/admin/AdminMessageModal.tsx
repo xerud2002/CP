@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { User } from '@/types';
 import { CloseIcon, ChatIcon } from '@/components/icons/DashboardIcons';
-import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 import { showSuccess, showError } from '@/lib/toast';
@@ -21,7 +21,7 @@ interface Message {
   senderRole: 'admin' | 'client' | 'curier';
   receiverId: string;
   message: string;
-  createdAt: any;
+  createdAt: Timestamp;
   read: boolean;
 }
 

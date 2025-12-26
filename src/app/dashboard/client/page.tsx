@@ -127,8 +127,7 @@ function getGreeting(): string {
 // ============================================
 
 // Header Component
-function DashboardHeader({ notificationCount, adminUnreadCount, onLogout, onOpenAdminMessages }: { 
-  notificationCount: number;
+function DashboardHeader({ adminUnreadCount, onLogout, onOpenAdminMessages }: { 
   adminUnreadCount: number;
   onLogout: () => void;
   onOpenAdminMessages: () => void;
@@ -742,7 +741,6 @@ export default function ClientDashboard() {
     <div className="min-h-screen">
       {/* Header */}
       <DashboardHeader 
-        notificationCount={0} 
         adminUnreadCount={adminUnreadCount}
         onLogout={handleLogout}
         onOpenAdminMessages={() => setShowAdminMessages(true)}

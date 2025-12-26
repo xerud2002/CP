@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, query, getDocs, where, orderBy } from 'firebase/firestore';
+import { collection, query, getDocs, where, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -12,6 +12,19 @@ interface MessageThread {
   lastMessage: string;
   lastMessageTime: Date;
   unreadCount: number;
+}
+
+interface MessageData {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  senderName: string;
+  receiverName: string;
+  senderRole: string;
+  receiverRole: string;
+  createdAt?: Timestamp;
+  read: boolean;
+  message: string;
 }
 
 export function useAdminMessageThreads() {
@@ -38,13 +51,13 @@ export function useAdminMessageThreads() {
         const messages = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
-        }));
+        })) as MessageData[];
 
         // Group by user
         const userThreadsMap = new Map<string, MessageThread>();
         const userUnreadCounts = new Map<string, number>();
 
-        messages.forEach((msg: any) => {
+        messages.forEach((msg) => {
           // Find the other user (not admin)
           const otherUserId = msg.senderId === user.uid ? msg.receiverId : msg.senderId;
           const otherUserName = msg.senderId === user.uid ? msg.receiverName : msg.senderName;

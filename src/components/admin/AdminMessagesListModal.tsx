@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { CloseIcon, ChatIcon, UserIcon } from '@/components/icons/DashboardIcons';
 import { useAdminMessageThreads } from '@/hooks/useAdminMessageThreads';
 import { User } from '@/types';

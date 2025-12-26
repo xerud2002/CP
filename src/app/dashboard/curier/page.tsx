@@ -10,7 +10,7 @@ import { db } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
 import { useUserActivity } from '@/hooks/useUserActivity';
 import { useAdminMessages } from '@/hooks/useAdminMessages';
-import UserMessageModal from '@/components/UserMessageModal';
+import CourierChatModal from '@/components/orders/CourierChatModal';
 import {
   UserIcon,
   BoxIcon,
@@ -19,6 +19,7 @@ import {
   StarIcon,
   ChatIcon,
 } from '@/components/icons/DashboardIcons';
+import { AdminMessagesListModal } from '@/components/admin';
 
 // Lazy load below-fold components
 const HelpCard = lazy(() => import('@/components/HelpCard'));
@@ -143,13 +144,11 @@ function getGreeting(): string {
 // ============================================
 
 // Header Component
-const DashboardHeader = memo(function DashboardHeader({ notificationCount, adminUnreadCount, onLogout, onBellClick, onGuideClick, showBellDot }: { 
-  notificationCount: number;
+const DashboardHeader = memo(function DashboardHeader({ adminUnreadCount, onLogout, onBellClick, onGuideClick }: { 
   adminUnreadCount?: number;
   onLogout: () => void;
   onBellClick?: () => void;
   onGuideClick?: () => void;
-  showBellDot?: boolean;
 }) {
   return (
     <header className="bg-slate-900/90 backdrop-blur-xl border-b border-white/5 sticky top-0 z-60">
@@ -626,7 +625,7 @@ const OrdersSummary = memo(function OrdersSummary() {
 });
 
 // Recent Activity Component - Shows recent messages
-const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCount }: { recentMessages: RecentMessage[]; unreadCount: number }) {
+const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCount, onMessageClick }: { recentMessages: RecentMessage[]; unreadCount: number; onMessageClick: (orderId: string, orderNumber: string, clientId: string, clientName: string) => void }) {
   // Format timestamp to relative time
   const formatTime = (date: Date) => {
     const now = new Date();
@@ -699,10 +698,10 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
         ) : (
           <>
             {recentMessages.map((msg) => (
-              <Link
+              <button
                 key={msg.id}
-                href={`/dashboard/curier/comenzi?orderId=${msg.orderId}`}
-                className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors group"
+                onClick={() => onMessageClick(msg.orderId, msg.orderNumber || '', msg.clientId, msg.senderName)}
+                className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors group w-full text-left"
               >
                 <div className="relative shrink-0 mt-0.5">
                   <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden flex items-center justify-center ${
@@ -743,7 +742,7 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
                 <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-400 shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </Link>
+              </button>
             ))}
             <Link
               href="/dashboard/curier/comenzi"
@@ -761,83 +760,6 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
 // ============================================
 // ONBOARDING MODAL COMPONENT
 // ============================================
-
-// Themed SVG icons using inline colors
-const OnboardingIcons = {
-  gift: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="8" y="28" width="48" height="28" rx="4" fill="#10b98150" stroke="#34d399" strokeWidth="2"/>
-      <path d="M8 28h48v8H8z" fill="#34d399"/>
-      <circle cx="32" cy="32" r="3" fill="#ffffff"/>
-      <path d="M32 18c-4 0-8 2-8 6s4 4 8 4 8 0 8-4-4-6-8-6z" fill="#fb923c"/>
-      <path d="M24 24c0-2 2-4 4-4h8c2 0 4 2 4 4" stroke="#f97316" strokeWidth="2" fill="none"/>
-    </svg>
-  ),
-  welcome: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="32" cy="24" r="10" fill="#fb923c"/>
-      <path d="M16 56c0-8.8 7.2-16 16-16s16 7.2 16 16" stroke="#f97316" strokeWidth="3" strokeLinecap="round"/>
-      <path d="M26 22c0-1 .5-2 1.5-2s1.5 1 1.5 2" stroke="#1e293b" strokeWidth="1.5" strokeLinecap="round"/>
-      <path d="M35 22c0-1 .5-2 1.5-2s1.5 1 1.5 2" stroke="#1e293b" strokeWidth="1.5" strokeLinecap="round"/>
-      <path d="M26 28c2 2 4 2 6 2s4 0 6-2" stroke="#1e293b" strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  ),
-  packages: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M12 24l20-12 20 12v24l-20 12-20-12V24z" fill="#f9731633" stroke="#fb923c" strokeWidth="2"/>
-      <path d="M12 24l20 12 20-12M32 36v24" stroke="#f97316" strokeWidth="2"/>
-      <path d="M22 18l20 12M42 30l-20-12" stroke="#fbbf24" strokeWidth="1.5"/>
-      <circle cx="32" cy="14" r="3" fill="#34d399"/>
-    </svg>
-  ),
-  chat: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="10" y="14" width="34" height="28" rx="6" fill="#a855f750" stroke="#a855f7" strokeWidth="2"/>
-      <path d="M20 44l4-6h10" stroke="#a855f7" strokeWidth="2" strokeLinecap="round"/>
-      <rect x="20" y="24" width="34" height="28" rx="6" fill="#334155" stroke="#64748b" strokeWidth="2"/>
-      <path d="M44 52l-4-6h-10" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round"/>
-      <circle cx="32" cy="36" r="2" fill="#fb923c"/>
-      <circle cx="40" cy="36" r="2" fill="#fb923c"/>
-      <circle cx="24" cy="36" r="2" fill="#fb923c"/>
-    </svg>
-  ),
-  settings: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="32" cy="32" r="24" fill="#f5970533" stroke="#fbbf24" strokeWidth="2"/>
-      <circle cx="32" cy="32" r="8" fill="#1e293b" stroke="#f97316" strokeWidth="2"/>
-      <g stroke="#fb923c" strokeWidth="3" strokeLinecap="round">
-        <path d="M32 12v8M32 44v8M52 32h-8M20 32h-8"/>
-        <path d="M45 19l-5.6 5.6M24.6 39.4L19 45M45 45l-5.6-5.6M24.6 24.6L19 19"/>
-      </g>
-    </svg>
-  ),
-  profile: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="12" y="8" width="40" height="48" rx="6" fill="#334155" stroke="#64748b" strokeWidth="2"/>
-      <circle cx="32" cy="22" r="7" fill="#fb923c"/>
-      <path d="M20 46c0-6.6 5.4-12 12-12s12 5.4 12 12" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round"/>
-      <rect x="20" y="14" width="8" height="2" rx="1" fill="#34d399"/>
-      <rect x="36" y="14" width="8" height="2" rx="1" fill="#34d399"/>
-    </svg>
-  ),
-  idea: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M32 12c-8 0-14 6-14 14 0 4 2 8 4 10v8c0 2 2 4 4 4h12c2 0 4-2 4-4v-8c2-2 4-6 4-10 0-8-6-14-14-14z" fill="#fbbf2450" stroke="#fbbf24" strokeWidth="2"/>
-      <path d="M26 48h12M28 52h8" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round"/>
-      <circle cx="32" cy="26" r="4" fill="#fde68a"/>
-      <path d="M28 22l-6-6M36 22l6-6M32 16V8" stroke="#fb923c" strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  ),
-  rocket: () => (
-    <svg className="w-full h-full" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M32 8c-8 0-12 16-12 24v16l4 8h16l4-8V32c0-8-4-24-12-24z" fill="#f9731650" stroke="#fb923c" strokeWidth="2"/>
-      <ellipse cx="32" cy="24" rx="6" ry="8" fill="#1e293b" stroke="#f97316" strokeWidth="1.5"/>
-      <circle cx="32" cy="24" r="3" fill="#34d399"/>
-      <path d="M20 36c-4 0-6 2-6 4s2 4 6 4M44 36c4 0 6 2 6 4s-2 4-6 4" fill="#fbbf2466" stroke="#f59e0b" strokeWidth="2"/>
-      <path d="M28 56l-2 4M36 56l2 4M32 56v6" stroke="#fb923c" strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  ),
-};
 
 const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: { onClose: () => void; isFirstTime: boolean }) {
   const [currentStep, setCurrentStep] = useState(0);
@@ -1008,6 +930,7 @@ export default function CurierDashboard() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [isNewCourier, setIsNewCourier] = useState(false);
   const [showAdminMessages, setShowAdminMessages] = useState(false);
+  const [selectedChatOrder, setSelectedChatOrder] = useState<{ orderId: string; orderNumber?: string; clientId: string; clientName: string } | null>(null);
   const [verificationData, setVerificationData] = useState<CourierVerificationData | undefined>(undefined);
 
   // Track admin messages
@@ -1334,11 +1257,6 @@ export default function CurierDashboard() {
 
   return (
     <div className="min-h-screen">
-      {/* Onboarding Modal */}
-      {showOnboarding && (
-        <OnboardingModal onClose={handleCloseOnboarding} isFirstTime={isNewCourier} />
-      )}
-
       {/* Header */}
       <DashboardHeader 
         notificationCount={0} 
@@ -1348,11 +1266,6 @@ export default function CurierDashboard() {
         onGuideClick={handleOpenOnboarding}
         showBellDot={isNewCourier}
       />
-
-      {/* Admin Messages Modal */}
-      {showAdminMessages && (
-        <UserMessageModal onClose={() => setShowAdminMessages(false)} />
-      )}
 
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">
@@ -1374,7 +1287,13 @@ export default function CurierDashboard() {
           
           {/* Recent Activity - Takes 2 columns */}
           <div className="lg:col-span-2">
-            <RecentActivity recentMessages={recentMessages} unreadCount={unreadCount} />
+            <RecentActivity 
+              recentMessages={recentMessages} 
+              unreadCount={unreadCount}
+              onMessageClick={(orderId, orderNumber, clientId, clientName) => {
+                setSelectedChatOrder({ orderId, orderNumber, clientId, clientName });
+              }}
+            />
           </div>
         </div>
 
@@ -1383,6 +1302,21 @@ export default function CurierDashboard() {
           <HelpCard />
         </Suspense>
       </main>
+
+      {/* Modals */}
+      {showOnboarding && <OnboardingModal onClose={handleCloseOnboarding} isFirstTime={isNewCourier} />}
+      {showAdminMessages && <AdminMessagesListModal userId={user.uid} onClose={() => setShowAdminMessages(false)} />}
+      {selectedChatOrder && (
+        <CourierChatModal
+          orderId={selectedChatOrder.orderId}
+          orderNumber={selectedChatOrder.orderNumber}
+          clientId={selectedChatOrder.clientId}
+          clientName={selectedChatOrder.clientName}
+          onClose={() => setSelectedChatOrder(null)}
+        />
+      )}
     </div>
   );
 }
+
+
