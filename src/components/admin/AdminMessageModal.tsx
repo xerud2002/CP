@@ -134,7 +134,8 @@ export default function AdminMessageModal({ user: targetUser, onClose }: AdminMe
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+            title="Închide"
           >
             <CloseIcon className="w-5 h-5" />
           </button>

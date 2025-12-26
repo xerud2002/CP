@@ -71,10 +71,11 @@ export default function AdminMessagesListModal({ onClose, onSelectUser }: AdminM
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors p-1"
+            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
             aria-label="Închide"
+            title="Închide"
           >
-            <CloseIcon className="w-6 h-6" />
+            <CloseIcon className="w-5 h-5" />
           </button>
         </div>
 

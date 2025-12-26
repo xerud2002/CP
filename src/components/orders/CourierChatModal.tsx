@@ -128,7 +128,8 @@ export default function CourierChatModal({ orderId, orderNumber, clientId, clien
           </div>
           <button 
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+            title="Închide"
           >
             <CloseIcon className="w-5 h-5" />
           </button>

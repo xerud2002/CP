@@ -139,10 +139,11 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
         <div className="relative p-6 pb-4 bg-linear-to-br from-orange-500/20 to-orange-600/10 border-b border-white/10">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition-colors"
+            className="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
             aria-label="Închide"
+            title="Închide"
           >
-            <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -255,7 +256,7 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
         <div className="p-4 border-t border-white/10 bg-slate-800/30">
           <button
             onClick={onClose}
-            className="w-full py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl transition-colors font-medium"
+            className="w-full py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition-all font-medium"
           >
             Închide
           </button>
