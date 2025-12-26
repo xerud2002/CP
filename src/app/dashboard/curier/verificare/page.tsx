@@ -12,7 +12,6 @@ import { showSuccess, showError } from '@/lib/toast';
 import { showConfirm } from '@/components/ui/ConfirmModal';
 import { logError } from '@/lib/errorMessages';
 import { CourierProfile } from '@/types';
-import { countries } from '@/lib/constants';
 
 import { getDocumentRequirements } from '@/utils/documentRequirements';
 

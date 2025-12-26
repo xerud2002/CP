@@ -15,7 +15,7 @@ interface OrderCardProps {
   order: Order;
   isNew: boolean;
   isExpanded: boolean;
-  unreadCount: number;
+  unreadCount?: number; // Optional for future use
   currentUserId?: string;
   onToggleChat: () => void;
   onViewDetails: () => void;
@@ -26,7 +26,7 @@ function OrderCard({
   order,
   isNew,
   isExpanded,
-  unreadCount,
+  // unreadCount, // Currently unused but kept for future message indicator
   currentUserId,
   onToggleChat,
   onViewDetails,

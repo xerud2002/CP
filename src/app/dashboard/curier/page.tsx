@@ -1400,7 +1400,7 @@ export default function CurierDashboard() {
 
       {/* Modals */}
       {showOnboarding && <OnboardingModal onClose={handleCloseOnboarding} isFirstTime={isNewCourier} />}
-      {showAdminMessages && <AdminMessagesListModal onClose={() => setShowAdminMessages(false)} onSelectUser={(user) => {/* Handle user selection */}} />}
+      {showAdminMessages && <AdminMessagesListModal onClose={() => setShowAdminMessages(false)} onSelectUser={() => {/* Handle user selection */}} />}
       {selectedChatOrder && (
         <CourierChatModal
           orderId={selectedChatOrder.orderId}

@@ -2,7 +2,7 @@
 
 import { User } from '@/types';
 import { TruckIcon, BanIcon } from '@/components/icons/DashboardIcons';
-import { ViewButton, DeleteButton, ActionButtonsGroup } from '@/components/ui/ActionButtons';
+import { ViewButton, ActionButtonsGroup } from '@/components/ui/ActionButtons';
 import { getDisplayName } from './types';
 
 interface CouriersGridProps {

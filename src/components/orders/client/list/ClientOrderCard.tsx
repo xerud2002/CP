@@ -10,8 +10,6 @@ import type { Order } from '@/types';
 
 interface ClientOrderCardProps {
   order: Order;
-  unreadCount?: number;
-  chatExpanded: boolean;
   onToggleChat: () => void;
   onViewDetails: () => void;
   onDelete: () => void;
@@ -27,8 +25,6 @@ const capitalize = (str: string | undefined) => {
 
 function ClientOrderCard({
   order,
-  unreadCount = 0,
-  chatExpanded,
   onToggleChat,
   onViewDetails,
   onDelete
