@@ -33,7 +33,7 @@ interface RecentMessage {
   orderNumber?: number;
   clientId?: string;
   senderName: string;
-  senderRole: 'client' | 'curier';
+  senderRole: 'client' | 'curier' | 'admin';
   message: string;
   createdAt: Date;
   read?: boolean;
@@ -626,7 +626,17 @@ const OrdersSummary = memo(function OrdersSummary() {
 });
 
 // Recent Activity Component - Shows recent messages
-const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCount, onMessageClick }: { recentMessages: RecentMessage[]; unreadCount: number; onMessageClick: (orderId: string, orderNumber: string, clientId: string, clientName: string) => void }) {
+const RecentActivity = memo(function RecentActivity({ 
+  recentMessages, 
+  unreadCount, 
+  onMessageClick, 
+  onAdminMessageClick 
+}: { 
+  recentMessages: RecentMessage[]; 
+  unreadCount: number; 
+  onMessageClick: (orderId: string, orderNumber: string, clientId: string, clientName: string) => void;
+  onAdminMessageClick: () => void;
+}) {
   // Format timestamp to relative time
   const formatTime = (date: Date) => {
     const now = new Date();
@@ -701,20 +711,34 @@ const RecentActivity = memo(function RecentActivity({ recentMessages, unreadCoun
             {recentMessages.map((msg) => (
               <button
                 key={msg.id}
-                onClick={() => onMessageClick(msg.orderId, String(msg.orderNumber || ''), msg.clientId || '', msg.senderName)}
+                onClick={() => {
+                  if (msg.senderRole === 'admin') {
+                    onAdminMessageClick();
+                  } else {
+                    onMessageClick(msg.orderId, String(msg.orderNumber || ''), msg.clientId || '', msg.senderName);
+                  }
+                }}
                 className="flex items-start gap-2 sm:gap-3 p-2 sm:p-3 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors group w-full text-left"
               >
                 <div className="relative shrink-0 mt-0.5">
                   <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden flex items-center justify-center ${
                     !msg.read ? 'bg-orange-500/30' : 'bg-slate-700'
                   }`}>
-                    <Image
-                      src="/img/default-avatar.svg"
-                      alt={formatDisplayName(msg.senderName)}
-                      width={32}
-                      height={32}
-                      className="w-full h-full object-cover"
-                    />
+                    {msg.senderRole === 'admin' ? (
+                      <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-purple-500 to-pink-500">
+                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                      </div>
+                    ) : (
+                      <Image
+                        src="/img/default-avatar.svg"
+                        alt={formatDisplayName(msg.senderName)}
+                        width={32}
+                        height={32}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
                   {!msg.read && (
                     <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
@@ -1118,17 +1142,69 @@ export default function CurierDashboard() {
     if (!user) return;
 
     // Query messages where this courier is the recipient (from clients)
-    const q = query(
+    const qClient = query(
       collection(db, 'mesaje'),
       where('courierId', '==', user.uid),
       where('senderRole', '==', 'client'),
       orderBy('createdAt', 'desc'),
-      limit(5)
+      limit(10)
     );
 
-    const unsubscribe = onSnapshot(q, async (snapshot) => {
-      const allMessages: RecentMessage[] = [];
-      let unread = 0;
+    // Query admin messages for this courier
+    const qAdmin = query(
+      collection(db, 'admin_messages'),
+      where('participants', 'array-contains', user.uid),
+      orderBy('createdAt', 'desc'),
+      limit(10)
+    );
+
+    let allMessagesFromBoth: RecentMessage[] = [];
+    let clientMessagesLoaded = false;
+    let adminMessagesLoaded = false;
+
+    const processMessages = () => {
+      if (!clientMessagesLoaded || !adminMessagesLoaded) return;
+
+      // Group by sender (senderId) and keep only the most recent message per sender
+      // Also track unread count per sender
+      const senderMessageMap = new Map<string, RecentMessage>();
+      const senderUnreadCount = new Map<string, number>();
+
+      allMessagesFromBoth.forEach(msg => {
+        if (msg.senderId) {
+          const existing = senderMessageMap.get(msg.senderId);
+          
+          // Count unread messages per sender
+          if (!msg.read) {
+            senderUnreadCount.set(msg.senderId, (senderUnreadCount.get(msg.senderId) || 0) + 1);
+          }
+          
+          // Keep the message with the most recent createdAt
+          if (!existing || msg.createdAt > existing.createdAt) {
+            senderMessageMap.set(msg.senderId, msg);
+          }
+        }
+      });
+
+      // Convert map back to array, add unread count, and sort by date (most recent first)
+      const uniqueMessages = Array.from(senderMessageMap.values())
+        .map(msg => ({
+          ...msg,
+          unreadCount: senderUnreadCount.get(msg.senderId!) || 0
+        }))
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .slice(0, 5); // Keep only top 5
+
+      setRecentMessages(uniqueMessages);
+      
+      // Calculate total unread count
+      const totalUnread = Array.from(senderUnreadCount.values()).reduce((sum, count) => sum + count, 0);
+      setUnreadCount(totalUnread);
+    };
+
+    // Subscribe to client messages
+    const unsubscribeClient = onSnapshot(qClient, async (snapshot) => {
+      const clientMessages: RecentMessage[] = [];
 
       // Gather order IDs to fetch order numbers
       const orderIds = new Set<string>();
@@ -1154,15 +1230,13 @@ export default function CurierDashboard() {
         const createdAt = data.createdAt?.toDate?.() || new Date();
         const isRead = data.readByCourier === true;
         
-        if (!isRead) unread++;
-        
-        allMessages.push({
+        clientMessages.push({
           id: docSnap.id,
           orderId: data.orderId || '',
           orderNumber: orderNumbers[data.orderId],
           clientId: data.clientId,
           senderName: data.senderName || 'Client',
-          senderRole: data.senderRole || 'client',
+          senderRole: 'client',
           message: data.message || '',
           createdAt,
           read: isRead,
@@ -1170,42 +1244,57 @@ export default function CurierDashboard() {
         });
       });
 
-      // Group by client (senderId) and keep only the most recent message per client
-      // Also track unread count per client
-      const clientMessageMap = new Map<string, RecentMessage>();
-      const clientUnreadCount = new Map<string, number>();
+      // Update combined messages
+      allMessagesFromBoth = [
+        ...clientMessages,
+        ...allMessagesFromBoth.filter(m => m.senderRole !== 'client')
+      ];
+      clientMessagesLoaded = true;
+      processMessages();
+    }, (error) => {
+      logError(error, 'Error listening to client messages');
+    });
 
-      allMessages.forEach(msg => {
-        if (msg.senderId) {
-          const existing = clientMessageMap.get(msg.senderId);
-          
-          // Count unread messages per client
-          if (!msg.read) {
-            clientUnreadCount.set(msg.senderId, (clientUnreadCount.get(msg.senderId) || 0) + 1);
-          }
-          
-          // Keep the message with the most recent createdAt
-          if (!existing || msg.createdAt > existing.createdAt) {
-            clientMessageMap.set(msg.senderId, msg);
-          }
+    // Subscribe to admin messages
+    const unsubscribeAdmin = onSnapshot(qAdmin, (snapshot) => {
+      const adminMessages: RecentMessage[] = [];
+
+      snapshot.docs.forEach((docSnap) => {
+        const data = docSnap.data();
+        const createdAt = data.createdAt?.toDate?.() || new Date();
+        const isRead = data.read === true;
+        const isFromAdmin = data.senderRole === 'admin';
+        
+        // Only include messages sent by admin TO this courier
+        if (isFromAdmin && data.receiverId === user.uid) {
+          adminMessages.push({
+            id: docSnap.id,
+            orderId: '', // Admin messages don't have orderId
+            senderName: data.senderName || 'Admin',
+            senderRole: 'admin',
+            message: data.message || '',
+            createdAt,
+            read: isRead,
+            senderId: data.senderId,
+          });
         }
       });
 
-      // Convert map back to array, add unread count, and sort by date (most recent first)
-      const uniqueMessages = Array.from(clientMessageMap.values())
-        .map(msg => ({
-          ...msg,
-          unreadCount: clientUnreadCount.get(msg.senderId!) || 0
-        }))
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-      setRecentMessages(uniqueMessages);
-      setUnreadCount(unread);
+      // Update combined messages
+      allMessagesFromBoth = [
+        ...allMessagesFromBoth.filter(m => m.senderRole !== 'admin'),
+        ...adminMessages
+      ];
+      adminMessagesLoaded = true;
+      processMessages();
     }, (error) => {
-      logError(error, 'Error listening to recent messages');
+      logError(error, 'Error listening to admin messages');
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeClient();
+      unsubscribeAdmin();
+    };
   }, [user]);
 
   const handleLogout = useCallback(async () => {
@@ -1292,6 +1381,9 @@ export default function CurierDashboard() {
               unreadCount={unreadCount}
               onMessageClick={(orderId, orderNumber, clientId, clientName) => {
                 setSelectedChatOrder({ orderId, orderNumber, clientId, clientName });
+              }}
+              onAdminMessageClick={() => {
+                setShowAdminMessages(true);
               }}
             />
           </div>
