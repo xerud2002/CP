@@ -143,11 +143,12 @@ function getGreeting(): string {
 // ============================================
 
 // Header Component
-const DashboardHeader = memo(function DashboardHeader({ notificationCount, adminUnreadCount, onLogout, onBellClick, showBellDot }: { 
+const DashboardHeader = memo(function DashboardHeader({ notificationCount, adminUnreadCount, onLogout, onBellClick, onGuideClick, showBellDot }: { 
   notificationCount: number;
   adminUnreadCount?: number;
   onLogout: () => void;
   onBellClick?: () => void;
+  onGuideClick?: () => void;
   showBellDot?: boolean;
 }) {
   return (
@@ -177,8 +178,8 @@ const DashboardHeader = memo(function DashboardHeader({ notificationCount, admin
           </Link>
 
           {/* Right Side */}
-          <div className="flex items-center gap-2 sm:gap-4">
-            {/* Notifications / Help */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* Notifications / Messages */}
             <button 
               onClick={onBellClick}
               className="relative p-2.5 sm:p-2 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/5 active:bg-white/10"
@@ -191,6 +192,28 @@ const DashboardHeader = memo(function DashboardHeader({ notificationCount, admin
                 </span>
               )}
             </button>
+
+            {/* Guide Button */}
+            <button 
+              onClick={onGuideClick}
+              className="p-2.5 sm:p-2 text-gray-400 hover:text-purple-400 transition-colors rounded-xl hover:bg-purple-500/10 active:bg-purple-500/20"
+              title="Ghid platformă"
+            >
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+              </svg>
+            </button>
+
+            {/* Help / Support */}
+            <a 
+              href="mailto:support@curierulperfect.ro"
+              className="p-2.5 sm:p-2 text-gray-400 hover:text-emerald-400 transition-colors rounded-xl hover:bg-emerald-500/10 active:bg-emerald-500/20"
+              title="Suport"
+            >
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+              </svg>
+            </a>
 
             {/* Logout */}
             <button 
@@ -821,203 +844,146 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
   const steps = [
     {
-      icon: OnboardingIcons.gift,
-      title: '100% GRATUIT!',
-      subtitle: 'Ofertă limitată de lansare',
-      content: 'Platforma este complet GRATUITĂ în această perioadă de lansare! Zero comisioane, zero taxe ascunse, zero costuri pentru tine. Profită acum de această oportunitate unică și construiește-ți baza de clienți fără niciun cost.',
-      details: 'Beneficii incluse:\n• Acces nelimitat la toate comenzile\n• Chat direct cu clienții\n• Profil profesional personalizat\n• Notificări în timp real',
-      highlight: true,
+      title: 'Acces Premium GRATUIT',
+      subtitle: 'Ofertă exclusivă de lansare',
+      content: 'Ești printre primii curieri pe platformă! Accesul este 100% gratuit - nicio comisie, nicio taxă.',
+      items: ['Comenzi nelimitate', 'Chat direct cu clienții', 'Profil complet gratuit', 'Notificări în timp real'],
+      cta: 'Începe Gratuit',
     },
     {
-      icon: OnboardingIcons.welcome,
-      title: isFirstTime ? 'Bine ai venit!' : 'Ghid Platformă',
+      title: isFirstTime ? 'Bine ai venit!' : 'Ghid Rapid',
       subtitle: 'Curierul Perfect',
-      content: isFirstTime 
-        ? 'Felicitări pentru înregistrare! Suntem bucuroși să te avem în comunitatea Curierul Perfect. Hai să-ți arătăm pas cu pas cum funcționează platforma și cum poți avea succes.'
-        : 'Descoperă toate funcționalitățile platformei Curierul Perfect și învață cum să-ți optimizezi activitatea pentru a câștiga mai mulți clienți și a crește veniturile.',
-      details: 'În următoarele pași vei învăța:\n• Cum găsești cele mai bune comenzi\n• Cum negociezi eficient cu clienții\n• Cum îți optimizezi profilul pentru succes',
+      content: 'Platforma ta pentru a găsi clienți și a crește veniturile din transport.',
+      items: ['Găsește cereri de transport', 'Negociază fără intermediari', 'Construiește-ți reputația', 'Crește veniturile constant'],
+      cta: 'Continuă',
     },
     {
-      icon: OnboardingIcons.packages,
-      title: 'Găsește comenzi potrivite',
-      subtitle: 'Cereri reale de la clienți verificați',
-      content: 'Secțiunea "Comenzi" este inima platformei - aici găsești toate cererile de transport publicate de clienți reali. Folosește filtrele inteligente pentru a găsi exact comenzile care se potrivesc serviciilor tale.',
-      details: 'Filtrează după:\n• Serviciu (colete, mobilă, electrocasnice, marfă)\n• Țară și județ (origine și destinație)\n• Status comandă (nouă, în lucru, finalizată)',
+      title: 'Secțiunea Comenzi',
+      subtitle: 'Găsește clienți',
+      content: 'Aici găsești toate cererile de transport. Filtrează după serviciu, locație sau status.',
+      items: ['Filtre: serviciu & zonă', 'Comenzi noi în timp real', 'Clienți verificați', 'România & Europa'],
+      cta: 'Continuă',
     },
     {
-      icon: OnboardingIcons.chat,
-      title: 'Chat direct cu clienții',
-      subtitle: 'Negociază liber, fără restricții',
-      content: 'Ai găsit o comandă interesantă? Contactează clientul instant prin chat integrat! Nu există intermediari - negociezi direct prețul, stabilești toate detaliile și clarifici orice întrebări. Simplu și rapid.',
-      details: 'Avantaje chat:\n• Mesagerie în timp real\n• Istoric complet conversații\n• Notificări instant\n• Posibilitate de negociere directă',
+      title: 'Chat Direct',
+      subtitle: 'Negociază liber',
+      content: 'Contactează clienții instant. Negociezi prețul și detaliile direct, fără intermediari.',
+      items: ['Mesaje în timp real', 'Istoric conversații', 'Notificare mesaj nou', 'Tu decizi prețul'],
+      cta: 'Continuă',
     },
     {
-      icon: OnboardingIcons.settings,
-      title: 'Configurează serviciile tale',
-      subtitle: 'Personalizează ce oferi',
-      content: 'Accesează "Servicii" și activează tipurile de transport pe care le oferi. Astfel, clienții vor vedea ce servicii poți asigura. Poți actualiza serviciile oricând în funcție de disponibilitatea ta.',
-      details: 'Tipuri de servicii:\n• Colete (pachete mici și medii)\n• Mobilă (relocări, mutări complete)\n• Electrocasnice (frigidere, mașini)\n• Marfă generală (palete, materiale)',
+      title: 'Serviciile Tale',
+      subtitle: 'Personalizează oferta',
+      content: 'Activează tipurile de transport pe care le oferi. Clienții văd exact ce servicii asiguri.',
+      items: ['Colete & pachete', 'Mobilă & mutări', 'Electrocasnice', 'Transport general'],
+      cta: 'Continuă',
     },
     {
-      icon: OnboardingIcons.profile,
-      title: 'Completează-ți profilul',
-      subtitle: 'Prima impresie contează!',
-      content: 'Un profil complet și profesional atrage semnificativ mai mulți clienți! Adaugă o descriere captivantă despre serviciile tale, experiența în domeniu, tipul de vehicul și datele de contact.',
-      details: 'Include în profil:\n• Descriere detaliată a serviciilor\n• Experiență în transport\n• Tip vehicul și capacitate\n• Date de contact (telefon, email)',
+      title: 'Profilul Tău',
+      subtitle: 'Prima impresie contează',
+      content: 'Un profil complet atrage mai mulți clienți. Adaugă descriere, experiență și contact.',
+      items: ['Descriere servicii', 'Ani de experiență', 'Tip vehicul & capacitate', 'Telefon & email'],
+      cta: 'Continuă',
     },
     {
-      icon: OnboardingIcons.idea,
-      title: 'Părerea ta contează!',
-      subtitle: 'Construim împreună platforma',
-      content: 'Suntem la început de drum și vrem să devenim cea mai bună platformă pentru curieri! Feedback-ul tău ne ajută să îmbunătățim continuu. Trimite-ne orice sugestie sau raportează problemele întâmpinate.',
-      details: 'Contactează-ne:\n• Email: contact@curirerulperfect.ro\n• Direct din secțiunea Suport\n• WhatsApp (vezi în Suport)\n\nRăspundem rapid la toate mesajele!',
-    },
-    {
-      icon: OnboardingIcons.rocket,
-      title: 'Gata de start!',
-      subtitle: 'Începe să câștigi clienți',
-      content: 'Perfect! Acum ai toate informațiile necesare pentru succes. Următorul pas: mergi la secțiunea "Comenzi", explorează cererile disponibile și începe să contactezi clienții. Mult succes!',
-      details: 'Primii tăi pași:\n1. Completează profilul complet\n2. Activează serviciile tale\n3. Răspunde rapid la mesaje\n\nPoți revedea acest ghid oricând din butonul de notificări.',
+      title: 'Gata de Start!',
+      subtitle: 'Următorii pași',
+      content: 'Ai tot ce trebuie pentru succes. Urmează acești pași simpli:',
+      items: ['1. Completează profilul 100%', '2. Activează serviciile', '3. Explorează comenzile', '4. Răspunde rapid la mesaje'],
+      cta: 'Începe Acum!',
     },
   ];
 
-  const currentStepData = steps[currentStep];
-  const isLastStep = currentStep === steps.length - 1;
-  const isFirstStep = currentStep === 0;
-  const isHighlighted = currentStepData.highlight;
-
-  // Get button text based on step
-  const getButtonText = () => {
-    if (isFirstStep) return 'Descoperă';
-    if (isLastStep) return 'Start';
-    if (currentStep === steps.length - 2) return 'Ultimul pas';
-    return 'Continuă';
-  };
+  const step = steps[currentStep];
+  const isFirst = currentStep === 0;
+  const isLast = currentStep === steps.length - 1;
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-1 sm:p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
       
-      {/* Modal - optimized for mobile */}
-      <div className={`relative w-full max-w-md h-[96vh] sm:max-h-[90vh] overflow-y-auto rounded-xl sm:rounded-2xl border shadow-2xl transition-all ${
-        isHighlighted 
-          ? 'bg-linear-to-br from-emerald-900/95 via-emerald-800/90 to-slate-900 border-emerald-500/30' 
-          : 'bg-linear-to-br from-slate-800 via-slate-850 to-slate-900 border-white/10'
-      }`}>
+      {/* Modal */}
+      <div className="relative w-full max-w-sm bg-slate-900 rounded-2xl border border-slate-700/50 shadow-2xl overflow-hidden">
+        
         {/* Progress bar */}
-        <div className="h-1.5 sm:h-2 bg-linear-to-r from-slate-800 via-slate-700 to-slate-800 sticky top-0 rounded-b-lg overflow-hidden">
+        <div className="h-1 bg-slate-800">
           <div 
-            className={`h-full transition-all duration-500 ease-out shadow-lg ${
-              isHighlighted 
-                ? 'bg-linear-to-r from-emerald-400 via-emerald-500 to-emerald-400 shadow-emerald-500/50'
-                : 'bg-linear-to-r from-orange-400 via-orange-500 to-amber-500 shadow-orange-500/50'
-            }`}
+            className="h-full bg-orange-500 transition-all duration-300"
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           />
         </div>
 
-        {/* Step counter */}
-        <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2 py-1 sm:px-2.5 sm:py-1 bg-linear-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm border border-white/10 rounded-lg shadow-lg">
-          <span className="text-[10px] sm:text-xs font-semibold text-white">{currentStep + 1}/{steps.length}</span>
+        {/* Header */}
+        <div className="px-6 pt-5 pb-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {steps.map((_, idx) => (
+              <div 
+                key={idx}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  idx === currentStep ? 'bg-orange-500 w-4' : idx < currentStep ? 'bg-orange-500/50' : 'bg-slate-700'
+                }`}
+              />
+            ))}
+          </div>
+          <button onClick={onClose} className="p-1 text-slate-500 hover:text-white rounded transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 sm:p-2 text-gray-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/90 backdrop-blur-sm border border-white/10 rounded-lg sm:rounded-xl transition-all active:scale-95 shadow-lg z-10"
-          title="Închide"
-        >
-          <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
         {/* Content */}
-        <div className="p-3 sm:p-6 pt-8 sm:pt-12">
-          {/* Icon */}
-          <div className="flex justify-center mb-2 sm:mb-5">
-            <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl flex items-center justify-center p-2.5 sm:p-4 transition-all ${
-              isHighlighted 
-                ? 'bg-linear-to-br from-emerald-500/30 to-emerald-600/20 border-2 border-emerald-400/50 shadow-lg shadow-emerald-500/20'
-                : 'bg-linear-to-br from-slate-700/50 to-slate-800/50 border border-orange-500/30 shadow-lg shadow-orange-500/10'
-            }`}>
-              {currentStepData.icon()}
-            </div>
+        <div className="px-6 pb-6">
+          {/* Step number */}
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+              {currentStep + 1}
+            </span>
+            <span className="text-orange-400 text-sm font-medium">{step.subtitle}</span>
           </div>
 
-          {/* Special badge for free offer */}
-          {isHighlighted && (
-            <div className="flex justify-center mb-1.5 sm:mb-3">
-              <span className="px-2.5 py-0.5 sm:px-4 sm:py-1.5 bg-emerald-500/20 border border-emerald-400/40 rounded-full text-emerald-300 text-[10px] sm:text-sm font-bold animate-pulse">
-                OFERTĂ LIMITATĂ
-              </span>
-            </div>
-          )}
+          {/* Title & description */}
+          <h2 className="text-xl font-bold text-white mb-2">{step.title}</h2>
+          <p className="text-slate-400 text-sm mb-5">{step.content}</p>
 
-          {/* Text */}
-          <div className="text-center mb-3 sm:mb-6">
-            <p className={`text-xs sm:text-sm font-medium mb-0.5 sm:mb-1 ${isHighlighted ? 'text-emerald-400' : 'text-orange-400'}`}>
-              {currentStepData.subtitle}
-            </p>
-            <h2 className={`text-lg sm:text-2xl font-bold mb-1.5 sm:mb-3 ${isHighlighted ? 'text-emerald-300' : 'text-white'}`}>
-              {currentStepData.title}
-            </h2>
-            <p className="text-gray-300 text-xs sm:text-sm leading-relaxed mb-2 sm:mb-4">
-              {currentStepData.content}
-            </p>
-            {/* Additional details */}
-            {currentStepData.details && (
-              <div className={`mt-2 sm:mt-4 p-2.5 sm:p-4 rounded-lg sm:rounded-xl text-left ${
-                isHighlighted 
-                  ? 'bg-emerald-500/10 border border-emerald-500/20' 
-                  : 'bg-slate-700/40 border border-slate-600/40 backdrop-blur-sm'
-              }`}>
-                <p className="text-gray-300 text-[11px] sm:text-xs leading-relaxed whitespace-pre-line">
-                  {currentStepData.details}
-                </p>
+          {/* Items list */}
+          <div className="space-y-2 mb-6">
+            {step.items.map((item, idx) => (
+              <div key={idx} className="flex items-center gap-3 p-2.5 bg-slate-800/50 rounded-lg">
+                <svg className="w-4 h-4 text-orange-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-slate-300 text-sm">{item}</span>
               </div>
-            )}
+            ))}
           </div>
 
-          {/* Navigation buttons - optimized for mobile */}
-          <div className="flex gap-2 sm:gap-3">
-            {!isFirstStep && (
+          {/* Navigation */}
+          <div className="flex gap-3">
+            {!isFirst && (
               <button
                 onClick={() => setCurrentStep(prev => prev - 1)}
-                className="flex-1 py-2 sm:py-3.5 px-3 sm:px-4 text-gray-300 bg-white/5 active:bg-white/15 border border-white/10 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all active:scale-[0.98]"
+                className="p-3 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl transition-all"
               >
-                ←
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
               </button>
             )}
             <button
-              onClick={() => {
-                if (isLastStep) {
-                  onClose();
-                } else {
-                  setCurrentStep(prev => prev + 1);
-                }
-              }}
-              className={`flex-1 py-2 sm:py-3.5 px-3 sm:px-4 rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold transition-all active:scale-[0.98] shadow-lg ${
-                isHighlighted
-                  ? 'bg-linear-to-r from-emerald-500 to-emerald-600 text-white shadow-emerald-500/25'
-                  : isLastStep
-                    ? 'bg-linear-to-r from-orange-500 to-amber-500 text-white shadow-orange-500/25'
-                    : 'bg-orange-500 text-white shadow-orange-500/20'
-              }`}
+              onClick={() => isLast ? onClose() : setCurrentStep(prev => prev + 1)}
+              className="flex-1 py-3 px-4 bg-orange-500 hover:bg-orange-400 rounded-xl font-semibold text-white transition-all active:scale-[0.98]"
             >
-              {getButtonText()}
+              {step.cta}
             </button>
           </div>
 
-          {/* Skip hint on first step */}
-          {isFirstStep && (
-            <p className="text-center text-[10px] sm:text-xs text-gray-500 mt-2 sm:mt-4">
-              Poți sări ghidul din butonul de notificări
-            </p>
+          {/* Skip on first step */}
+          {isFirst && (
+            <button onClick={onClose} className="w-full text-center text-xs text-slate-500 hover:text-slate-400 mt-3 py-2">
+              Sări introducerea
+            </button>
           )}
         </div>
       </div>
@@ -1379,6 +1345,7 @@ export default function CurierDashboard() {
         adminUnreadCount={adminUnreadCount}
         onLogout={handleLogout}
         onBellClick={() => setShowAdminMessages(true)}
+        onGuideClick={handleOpenOnboarding}
         showBellDot={isNewCourier}
       />
 

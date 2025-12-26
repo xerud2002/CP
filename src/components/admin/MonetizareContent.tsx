@@ -17,12 +17,12 @@ interface MonetizareContentProps {
 }
 
 export default function MonetizareContent({ users, orders }: MonetizareContentProps) {
-  // Collapsible sections
-  const [isLeadWorkflowOpen, setIsLeadWorkflowOpen] = useState(false);
-  const [isCommissionOpen, setIsCommissionOpen] = useState(false);
-  const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(false);
-  const [isPaymentMethodsOpen, setIsPaymentMethodsOpen] = useState(false);
-  const [isRecentPurchasesOpen, setIsRecentPurchasesOpen] = useState(false);
+  // Collapsible sections - all expanded by default
+  const [isLeadWorkflowOpen, setIsLeadWorkflowOpen] = useState(true);
+  const [isCommissionOpen, setIsCommissionOpen] = useState(true);
+  const [isSubscriptionOpen, setIsSubscriptionOpen] = useState(true);
+  const [isPaymentMethodsOpen, setIsPaymentMethodsOpen] = useState(true);
+  const [isRecentPurchasesOpen, setIsRecentPurchasesOpen] = useState(true);
 
   // Service-based commission rates (LEI per lead)
   const [serviceCommissions, setServiceCommissions] = useState<Record<string, number>>({
@@ -146,32 +146,32 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
 
         <div className={`grid grid-cols-1 md:grid-cols-4 gap-4 overflow-hidden transition-all duration-300 ${isLeadWorkflowOpen ? 'mt-4 max-h-125 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="p-4 bg-slate-700/30 rounded-xl text-center">
-            <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">1️⃣</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/30 to-blue-600/20 flex items-center justify-center mx-auto mb-3 border border-blue-500/30 shadow-lg shadow-blue-500/10">
+              <span className="text-xl font-bold text-blue-400">1</span>
             </div>
             <h4 className="text-white font-medium mb-1">Client postează</h4>
             <p className="text-gray-400 text-xs">Clientul creează o comandă cu detalii de transport</p>
           </div>
 
           <div className="p-4 bg-slate-700/30 rounded-xl text-center">
-            <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">2️⃣</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500/30 to-orange-600/20 flex items-center justify-center mx-auto mb-3 border border-orange-500/30 shadow-lg shadow-orange-500/10">
+              <span className="text-xl font-bold text-orange-400">2</span>
             </div>
             <h4 className="text-white font-medium mb-1">Curier vede comanda</h4>
             <p className="text-gray-400 text-xs">Curierul vede ruta și serviciul, dar NU datele de contact</p>
           </div>
 
           <div className="p-4 bg-slate-700/30 rounded-xl text-center">
-            <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">3️⃣</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 flex items-center justify-center mx-auto mb-3 border border-emerald-500/30 shadow-lg shadow-emerald-500/10">
+              <span className="text-xl font-bold text-emerald-400">3</span>
             </div>
             <h4 className="text-white font-medium mb-1">Plătește lead-ul</h4>
             <p className="text-gray-400 text-xs">Curierul plătește prețul setat pentru a vedea detaliile</p>
           </div>
 
           <div className="p-4 bg-slate-700/30 rounded-xl text-center">
-            <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">4️⃣</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+              <span className="text-xl font-bold text-purple-400">4</span>
             </div>
             <h4 className="text-white font-medium mb-1">Contactează clientul</h4>
             <p className="text-gray-400 text-xs">Curierul primește telefon/email și poate contacta clientul</p>
@@ -307,32 +307,32 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
         <div className={`overflow-hidden transition-all duration-300 ${isSubscriptionOpen ? 'mt-4 max-h-500 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="p-4 bg-purple-500/10 rounded-xl text-center border border-purple-500/20">
-            <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">1️⃣</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+              <span className="text-xl font-bold text-purple-400">1</span>
             </div>
             <h4 className="text-white font-medium mb-1">Alege planul</h4>
             <p className="text-gray-400 text-xs">Curierul selectează un abonament lunar sau anual</p>
           </div>
 
           <div className="p-4 bg-purple-500/10 rounded-xl text-center border border-purple-500/20">
-            <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">2️⃣</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+              <span className="text-xl font-bold text-purple-400">2</span>
             </div>
             <h4 className="text-white font-medium mb-1">Plătește abonamentul</h4>
             <p className="text-gray-400 text-xs">Plată unică lunară/anuală pentru acces nelimitat</p>
           </div>
 
           <div className="p-4 bg-purple-500/10 rounded-xl text-center border border-purple-500/20">
-            <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">3️⃣</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+              <span className="text-xl font-bold text-purple-400">3</span>
             </div>
             <h4 className="text-white font-medium mb-1">Acces complet</h4>
             <p className="text-gray-400 text-xs">Vede toate detaliile comenzilor fără costuri suplimentare</p>
           </div>
 
           <div className="p-4 bg-purple-500/10 rounded-xl text-center border border-purple-500/20">
-            <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
-              <span className="text-2xl">4️⃣</span>
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+              <span className="text-xl font-bold text-purple-400">4</span>
             </div>
             <h4 className="text-white font-medium mb-1">Lead-uri nelimitate</h4>
             <p className="text-gray-400 text-xs">Contactează oricâți clienți dorește pe durata abonamentului</p>
@@ -340,25 +340,70 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
         </div>
 
         {/* Subscription comparison */}
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Free - Basic */}
           <div className="p-4 bg-slate-900/50 rounded-xl border border-white/5">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-white font-semibold">Basic</h4>
-              <span className="px-2 py-0.5 bg-slate-500/20 text-gray-400 text-xs rounded-full">Gratuit</span>
+              <h4 className="text-white font-semibold">Gratuit</h4>
+              <span className="px-2 py-0.5 bg-slate-500/20 text-gray-400 text-xs rounded-full">Basic</span>
             </div>
-            <p className="text-2xl font-bold text-white mb-2">0 LEI<span className="text-sm font-normal text-gray-500">/lună</span></p>
+            <p className="text-2xl font-bold text-white mb-3">0 LEI<span className="text-sm font-normal text-gray-500">/lună</span></p>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2 text-gray-400">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 Vezi comenzile disponibile
               </li>
               <li className="flex items-center gap-2 text-gray-400">
-                <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                Plătești per lead
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Profil public vizibil
+              </li>
+              <li className="flex items-center gap-2 text-gray-400">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                1 lead gratuit / zi
+              </li>
+              <li className="flex items-center gap-2 text-gray-400">
+                <svg className="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                Fără badge verificat
+              </li>
+              <li className="flex items-center gap-2 text-gray-400">
+                <svg className="w-4 h-4 text-red-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                Suport în 48h
               </li>
             </ul>
           </div>
 
+          {/* Starter */}
+          <div className="p-4 bg-blue-500/10 rounded-xl border border-blue-500/30">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-blue-400 font-semibold">Starter</h4>
+              <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded-full">Lunar</span>
+            </div>
+            <p className="text-2xl font-bold text-blue-400 mb-3">49 LEI<span className="text-sm font-normal text-gray-500">/lună</span></p>
+            <ul className="space-y-2 text-sm">
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                15 lead-uri / lună
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Notificări comenzi noi
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Chat nelimitat cu clienții
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Statistici de bază
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Suport e-mail
+              </li>
+            </ul>
+          </div>
+
+          {/* Pro - Popular */}
           <div className="p-4 bg-purple-500/10 rounded-xl border border-purple-500/30 relative">
             <div className="absolute -top-2 left-1/2 -translate-x-1/2">
               <span className="px-3 py-1 bg-purple-500 text-white text-xs rounded-full font-medium">Popular</span>
@@ -367,41 +412,62 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
               <h4 className="text-purple-400 font-semibold">Pro</h4>
               <span className="px-2 py-0.5 bg-purple-500/20 text-purple-400 text-xs rounded-full">Lunar</span>
             </div>
-            <p className="text-2xl font-bold text-purple-400 mb-2">199 LEI<span className="text-sm font-normal text-gray-500">/lună</span></p>
+            <p className="text-2xl font-bold text-purple-400 mb-3">99 LEI<span className="text-sm font-normal text-gray-500">/lună</span></p>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2 text-gray-300">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                 Lead-uri nelimitate
               </li>
               <li className="flex items-center gap-2 text-gray-300">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                Notificări prioritare
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Badge curier verificat
               </li>
               <li className="flex items-center gap-2 text-gray-300">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                Badge verificat
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Prioritate în căutări
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Statistici avansate
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Notificare prin SMS
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Suport prioritar
               </li>
             </ul>
           </div>
 
+          {/* Business - Annual */}
           <div className="p-4 bg-amber-500/10 rounded-xl border border-amber-500/30">
             <div className="flex items-center justify-between mb-3">
               <h4 className="text-amber-400 font-semibold">Business</h4>
               <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs rounded-full">Anual</span>
             </div>
-            <p className="text-2xl font-bold text-amber-400 mb-2">1499 LEI<span className="text-sm font-normal text-gray-500">/an</span></p>
+            <p className="text-2xl font-bold text-amber-400 mb-3">799 LEI<span className="text-sm font-normal text-gray-500">/an</span></p>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2 text-gray-300">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                Totul din Pro
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Totul din Pro inclus
               </li>
               <li className="flex items-center gap-2 text-gray-300">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                Economisești 37%
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Economisești 33%
               </li>
               <li className="flex items-center gap-2 text-gray-300">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                Suport prioritar
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Profil promovat
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Export rapoarte PDF
+              </li>
+              <li className="flex items-center gap-2 text-gray-300">
+                <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                Suport 24/7 dedicat
               </li>
             </ul>
           </div>

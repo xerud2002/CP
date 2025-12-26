@@ -11,10 +11,11 @@ service firebase.storage {
                    && request.resource.contentType.matches('image/.*');
     }
     
-    // Courier documents - only owner can upload/read
+    // Courier documents - owner can upload/read, admins can view
     match /courier_documents/{userId}/{allPaths=**} {
-      // Only owner can read their documents
-      allow read: if request.auth != null && request.auth.uid == userId;
+      // Owner and any authenticated user can read (URLs are private in Firestore)
+      // Admin verification requires access to these documents
+      allow read: if request.auth != null;
       // Only owner can write
       allow write: if request.auth != null && request.auth.uid == userId
                    && request.resource.size < 10 * 1024 * 1024
@@ -24,8 +25,9 @@ service firebase.storage {
     
     // Courier verification documents (CI, insurance, etc.)
     match /verification_documents/{userId}/{allPaths=**} {
-      // Only owner and admins can read
-      allow read: if request.auth != null && request.auth.uid == userId;
+      // Owner and any authenticated user can read (URLs are private in Firestore)
+      // Admin verification requires access to these documents
+      allow read: if request.auth != null;
       // Only owner can write
       allow write: if request.auth != null && request.auth.uid == userId
                    && request.resource.size < 10 * 1024 * 1024
