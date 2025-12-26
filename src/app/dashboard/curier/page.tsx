@@ -1188,10 +1188,13 @@ export default function CurierDashboard() {
 
       // Convert map back to array, add unread count, and sort by date (most recent first)
       const uniqueMessages = Array.from(senderMessageMap.values())
-        .map(msg => ({
-          ...msg,
-          unreadCount: senderUnreadCount.get(msg.senderId!) || 0
-        }))
+        .map(msg => {
+          const unreadCount = senderUnreadCount.get(msg.senderId!);
+          return {
+            ...msg,
+            unreadCount: unreadCount && unreadCount > 0 ? unreadCount : undefined
+          };
+        })
         .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
         .slice(0, 5); // Keep only top 5
 
