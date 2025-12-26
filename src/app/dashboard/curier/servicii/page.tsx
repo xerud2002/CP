@@ -435,7 +435,7 @@ export default function TarifePracticatePage() {
                         key={docReq.id} 
                         className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex items-center gap-3"
                       >
-                        <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center shrink-0">
                           <CheckCircleIcon className="w-5 h-5 text-emerald-400" />
                         </div>
                         <div className="min-w-0">
@@ -463,7 +463,7 @@ export default function TarifePracticatePage() {
                         key={docReq.id} 
                         className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-center gap-3"
                       >
-                        <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center shrink-0">
                           <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
@@ -511,7 +511,7 @@ export default function TarifePracticatePage() {
                               : 'bg-slate-700/30 border-white/10'
                           }`}
                         >
-                          <div className={`w-10 h-10 ${service?.bgColor} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                          <div className={`w-10 h-10 ${service?.bgColor} rounded-lg flex items-center justify-center shrink-0`}>
                             <ServiceIcon service={serviceValue} className={`w-5 h-5 ${service?.color}`} />
                           </div>
                           <div className="min-w-0 flex-1">
@@ -523,7 +523,7 @@ export default function TarifePracticatePage() {
                             </p>
                           </div>
                           {isServiceVerified && (
-                            <CheckCircleIcon className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                            <CheckCircleIcon className="w-5 h-5 text-emerald-400 shrink-0" />
                           )}
                         </div>
                       );
