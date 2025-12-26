@@ -68,6 +68,7 @@ export default function AdminDashboard() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [messageModalUser, setMessageModalUser] = useState<User | null>(null);
   const [showMessagesListModal, setShowMessagesListModal] = useState(false);
+  const [pendingDocsCount, setPendingDocsCount] = useState(0);
 
   // Track admin message threads
   const { totalUnread } = useAdminMessageThreads();
@@ -105,9 +106,21 @@ export default function AdminDashboard() {
       // Load courier profiles to get nume/prenume
       const courierProfilesSnapshot = await getDocs(collection(db, 'profil_curier'));
       const courierProfiles = new Map();
+      let pendingDocuments = 0;
       courierProfilesSnapshot.forEach((doc) => {
-        courierProfiles.set(doc.id, doc.data());
+        const data = doc.data();
+        courierProfiles.set(doc.id, data);
+        // Count pending documents
+        if (data.documents) {
+          Object.values(data.documents).forEach((docData: unknown) => {
+            const document = docData as { status?: string };
+            if (document.status === 'pending') {
+              pendingDocuments++;
+            }
+          });
+        }
       });
+      setPendingDocsCount(pendingDocuments);
 
       // Merge profile data with users
       usersData.forEach(user => {
@@ -277,7 +290,7 @@ export default function AdminDashboard() {
     { id: 'users', label: 'Utilizatori', icon: UsersIcon, badge: users.length },
     { id: 'orders', label: 'Comenzi', icon: PackageIcon, badge: pendingOrders },
     { id: 'couriers', label: 'Curieri', icon: TruckIcon, badge: couriersCount },
-    { id: 'documents', label: 'Verificare Documente', icon: DocumentCheckIcon },
+    { id: 'documents', label: 'Verificare Documente', icon: DocumentCheckIcon, badge: pendingDocsCount > 0 ? pendingDocsCount : undefined },
     { id: 'stats', label: 'Statistici', icon: ChartIcon },
     { id: 'monetizare', label: 'Monetizare', icon: MoneyIcon },
     { id: 'settings', label: 'Setări', icon: CogIcon },

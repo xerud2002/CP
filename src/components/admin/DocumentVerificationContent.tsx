@@ -20,6 +20,7 @@ interface UploadedDocument {
 interface CourierDocuments {
   uid: string;
   nume: string;
+  denumire_firma?: string;
   telefon: string;
   email?: string;
   documents: Record<string, UploadedDocument>;
@@ -34,6 +35,23 @@ export default function DocumentVerificationContent() {
   const [rejectionReason, setRejectionReason] = useState('');
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedDocKey, setSelectedDocKey] = useState('');
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Load filter status from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('adminDocFilterStatus');
+    if (saved === 'all' || saved === 'pending' || saved === 'approved' || saved === 'rejected') {
+      setFilterStatus(saved);
+    }
+    // Mark as initialized after loading from localStorage
+    setIsInitialized(true);
+  }, []);
+
+  // Persist filter status to localStorage when it changes (only after initialization)
+  useEffect(() => {
+    if (!isInitialized) return;
+    localStorage.setItem('adminDocFilterStatus', filterStatus);
+  }, [filterStatus, isInitialized]);
 
   useEffect(() => {
     loadCouriers();
@@ -66,6 +84,7 @@ export default function DocumentVerificationContent() {
           couriersData.push({
             uid: doc.id,
             nume: data.nume || 'Fără nume',
+            denumire_firma: data.denumire_firma,
             telefon: data.telefon || userData?.telefon || 'N/A',
             email: userData?.email || 'N/A',
             documents: data.documents,
@@ -279,6 +298,9 @@ export default function DocumentVerificationContent() {
                 <div className="p-4 border-b border-white/5">
                   <div className="flex items-center justify-between">
                     <div>
+                      {courier.denumire_firma && (
+                        <p className="text-sm font-medium text-orange-400 mb-0.5">{courier.denumire_firma}</p>
+                      )}
                       <h3 className="text-lg font-semibold text-white">{courier.nume}</h3>
                       <div className="flex items-center gap-4 mt-1 text-sm text-gray-400">
                         <span>{courier.email}</span>

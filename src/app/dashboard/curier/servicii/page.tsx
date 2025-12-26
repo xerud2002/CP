@@ -5,11 +5,21 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { logError } from '@/lib/errorMessages';
 import { useEffect, useState } from 'react';
-import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
+import { ArrowLeftIcon, CheckCircleIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
-import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { ServiceIcon as BaseServiceIcon } from '@/components/icons/ServiceIcons';
+import { getDocumentRequirements } from '@/utils/documentRequirements';
+
+// Type for uploaded document status
+interface UploadedDocument {
+  url: string;
+  name: string;
+  uploadedAt: Date;
+  status: 'pending' | 'approved' | 'rejected';
+  rejectionReason?: string;
+}
 
 // Service types with custom structure for servicii page
 // NOTE: Not imported from constants due to custom subOptions for Colete service
@@ -92,47 +102,6 @@ const serviceTypes = [
   },
 ];
 
-// Supplementary options by service type
-const optiuniSuplimentareByService: Record<string, Array<{id: string, name: string, description: string}>> = {
-  'Colete': [
-    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare conform valorii mărfii' },
-    { id: 'frigo', name: 'Frigo', description: 'Transport frigorific' },
-  ],
-  'Plicuri': [
-    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare documente' },
-  ],
-  'Persoane': [
-    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare pasageri' },
-    { id: 'bagaje_extra', name: 'Bagaje Extra', description: 'Transport bagaje suplimentare' },
-    { id: 'animale', name: 'Transport Animale', description: 'Animale de companie' },
-  ],
-  'Electronice': [
-    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare echipamente' },
-    { id: 'ambalare_speciala', name: 'Ambalare Specială', description: 'Ambalare profesională' },
-  ],
-  'Animale': [
-    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare animale' },
-    { id: 'cusca_transport', name: 'Cușcă Transport', description: 'Cușcă profesională' },
-  ],
-  'Platforma': [
-    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare vehicul/echipament' },
-    { id: 'incarcare_descarcare', name: 'Încărcare/Descărcare', description: 'Cu echipament specializat' },
-  ],
-  'Tractari': [
-    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare vehicul' },
-  ],
-  'Mobila': [
-    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare mobilier' },
-    { id: 'montaj_demontaj', name: 'Montaj/Demontaj', description: 'Servicii montaj/demontaj' },
-    { id: 'ambalare', name: 'Ambalare Mobilier', description: 'Ambalare profesională' },
-  ],
-  'Paleti': [
-    { id: 'asigurare', name: 'Asigurare Transport', description: 'Asigurare marfă' },
-    { id: 'frigo', name: 'Frigo', description: 'Transport frigorific' },
-    { id: 'incarcare_descarcare', name: 'Încărcare/Descărcare', description: 'Cu motostivuitor' },
-  ],
-};
-
 // Local ServiceIcon wrapper with additional icons for sub-options
 const ServiceIcon = ({ service, className = "w-6 h-6" }: { service: string; className?: string }) => {
   // Additional icons specific to servicii page (sub-options)
@@ -179,8 +148,13 @@ export default function TarifePracticatePage() {
   
   // Selected services state (services the courier offers)
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, string[]>>({});
   const [savingServices, setSavingServices] = useState(false);
+  
+  // Verification status state
+  const [uploadedDocs, setUploadedDocs] = useState<Record<string, UploadedDocument>>({});
+  const [tipBusiness, setTipBusiness] = useState<'firma' | 'pf'>('pf');
+  const [taraSediu, setTaraSediu] = useState('ro');
+  const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -204,7 +178,16 @@ export default function TarifePracticatePage() {
         if (!userSnapshot.empty) {
           const userData = userSnapshot.docs[0].data();
           setSelectedServices(userData.serviciiOferite || []);
-          setSelectedOptions(userData.optiuniSuplimentare || {});
+          setIsVerified(userData.verified || false);
+        }
+        
+        // Load verification data from profil_curier
+        const profileDoc = await getDoc(doc(db, 'profil_curier', user.uid));
+        if (profileDoc.exists()) {
+          const profileData = profileDoc.data();
+          setUploadedDocs(profileData.documents || {});
+          setTipBusiness(profileData.tipBusiness || 'pf');
+          setTaraSediu(profileData.tara_sediu?.toLowerCase() || 'ro');
         }
       } catch (error) {
         logError(error, 'Error loading servicii data');
@@ -240,32 +223,6 @@ export default function TarifePracticatePage() {
       logError(error, 'Error saving servicii');
     } finally {
       setSavingServices(false);
-    }
-  };
-
-  // Toggle supplementary option for a service
-  const toggleOption = async (serviceValue: string, optionId: string) => {
-    if (!user) return;
-    
-    const serviceOptions = selectedOptions[serviceValue] || [];
-    const newServiceOptions = serviceOptions.includes(optionId)
-      ? serviceOptions.filter(o => o !== optionId)
-      : [...serviceOptions, optionId];
-    
-    const newOptions = { ...selectedOptions, [serviceValue]: newServiceOptions };
-    
-    try {
-      const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
-      const userSnapshot = await getDocs(userQuery);
-      
-      if (!userSnapshot.empty) {
-        const userDocRef = doc(db, 'users', userSnapshot.docs[0].id);
-        await updateDoc(userDocRef, { optiuniSuplimentare: newOptions });
-      }
-      
-      setSelectedOptions(newOptions);
-    } catch (error) {
-      logError(error, 'Error saving options');
     }
   };
 
@@ -347,7 +304,7 @@ export default function TarifePracticatePage() {
                 <div className="w-4 h-4 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin"></div>
               )}
               <span className="text-xs bg-indigo-500/20 text-indigo-400 px-2.5 py-1 rounded-full font-medium">
-                {selectedServices.length} / {serviceTypes.length} active
+                {selectedServices.filter(sv => serviceTypes.find(s => s.value === sv)).length} / {serviceTypes.length} active
               </span>
             </div>
           </div>
@@ -432,75 +389,172 @@ export default function TarifePracticatePage() {
           )}
         </div>
 
-        {/* Supplementary Options per Service */}
-        {selectedServices.length > 0 && (
-          <div className="bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-emerald-500/20 to-green-500/20 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+        {/* Verification Status Section */}
+        {(() => {
+          const documentRequirements = getDocumentRequirements(taraSediu, selectedServices, tipBusiness);
+          const approvedDocs = documentRequirements.filter(doc => uploadedDocs[doc.id]?.status === 'approved');
+          const pendingDocs = documentRequirements.filter(doc => uploadedDocs[doc.id]?.status === 'pending');
+          
+          return (
+            <div className="bg-slate-800/80 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center ${
+                  isVerified 
+                    ? 'bg-linear-to-br from-emerald-500/20 to-green-500/20' 
+                    : 'bg-linear-to-br from-amber-500/20 to-orange-500/20'
+                }`}>
+                  {isVerified ? (
+                    <CheckCircleIcon className="w-6 h-6 text-emerald-400" />
+                  ) : (
+                    <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  )}
+                </div>
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-white">Status Verificare</h2>
+                  <p className="text-gray-400 text-xs sm:text-sm">
+                    {isVerified 
+                      ? 'Contul tău este verificat' 
+                      : 'Documentele tale sunt în curs de verificare'
+                    }
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-lg sm:text-xl font-bold text-white">Opțiuni Suplimentare</h2>
-                <p className="text-gray-400 text-xs sm:text-sm">Selectează opțiunile pe care le oferi pentru fiecare serviciu</p>
-              </div>
-            </div>
 
-            <div className="space-y-6">
-              {selectedServices.map(serviceValue => {
-                const service = serviceTypes.find(s => s.value === serviceValue);
-                const options = optiuniSuplimentareByService[serviceValue] || [];
-                
-                if (options.length === 0) return null;
-                
-                return (
-                  <div key={serviceValue} className="bg-slate-700/30 rounded-xl p-4 sm:p-5 border border-white/5">
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className={`w-8 h-8 ${service?.bgColor} rounded-lg flex items-center justify-center`}>
-                        <ServiceIcon service={serviceValue} className={`w-5 h-5 ${service?.color}`} />
+              {/* Verified Documents */}
+              {approvedDocs.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-emerald-400 mb-3 flex items-center gap-2">
+                    <CheckCircleIcon className="w-4 h-4" />
+                    Documente Verificate ({approvedDocs.length})
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {approvedDocs.map(docReq => (
+                      <div 
+                        key={docReq.id} 
+                        className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex items-center gap-3"
+                      >
+                        <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <CheckCircleIcon className="w-5 h-5 text-emerald-400" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-white font-medium text-sm truncate">{docReq.title}</p>
+                          <p className="text-emerald-400 text-xs">Verificat</p>
+                        </div>
                       </div>
-                      <h3 className="text-white font-semibold">{service?.label}</h3>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
-                      {options.map(option => {
-                        const isSelected = (selectedOptions[serviceValue] || []).includes(option.id);
-                        
-                        return (
-                          <button
-                            key={option.id}
-                            type="button"
-                            onClick={() => toggleOption(serviceValue, option.id)}
-                            className={`group relative bg-slate-800/80 backdrop-blur-xl rounded-xl border p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95 text-left ${
-                              isSelected 
-                                ? 'border-emerald-500/50 ring-2 ring-emerald-500/50' 
-                                : 'border-white/10 hover:border-white/20'
-                            }`}
-                          >
-                            {/* Selected checkmark */}
-                            {isSelected && (
-                              <div className="absolute top-2 right-2 w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center z-10 shadow-lg shadow-emerald-500/50">
-                                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                </svg>
-                              </div>
-                            )}
-                            
-                            <div className="relative">
-                              <span className="font-semibold text-white text-xs sm:text-sm block mb-1">{option.name}</span>
-                              <p className="text-gray-400 text-[10px] sm:text-xs line-clamp-2">{option.description}</p>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
+                    ))}
                   </div>
-                );
-              })}
+                </div>
+              )}
+
+              {/* Pending Documents */}
+              {pendingDocs.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    În așteptare ({pendingDocs.length})
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {pendingDocs.map(docReq => (
+                      <div 
+                        key={docReq.id} 
+                        className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-center gap-3"
+                      >
+                        <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-white font-medium text-sm truncate">{docReq.title}</p>
+                          <p className="text-amber-400 text-xs">În verificare</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Service Verification Status */}
+              {selectedServices.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-blue-400 mb-3 flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    Servicii Selectate ({selectedServices.filter(sv => serviceTypes.find(s => s.value === sv)).length})
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                    {selectedServices.map(serviceValue => {
+                      const service = serviceTypes.find(s => s.value === serviceValue);
+                      
+                      // Skip services that don't exist in serviceTypes
+                      if (!service) return null;
+                      
+                      // Check if service-specific documents are verified
+                      const serviceDocIds = documentRequirements
+                        .filter(d => d.forServices?.includes(serviceValue))
+                        .map(d => d.id);
+                      const hasServiceDocs = serviceDocIds.length > 0;
+                      const allServiceDocsVerified = serviceDocIds.every(id => uploadedDocs[id]?.status === 'approved');
+                      const isServiceVerified = isVerified && (!hasServiceDocs || allServiceDocsVerified);
+                      
+                      return (
+                        <div 
+                          key={serviceValue} 
+                          className={`rounded-xl p-4 flex items-center gap-3 border ${
+                            isServiceVerified
+                              ? 'bg-emerald-500/10 border-emerald-500/30'
+                              : 'bg-slate-700/30 border-white/10'
+                          }`}
+                        >
+                          <div className={`w-10 h-10 ${service?.bgColor} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                            <ServiceIcon service={serviceValue} className={`w-5 h-5 ${service?.color}`} />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-white font-medium text-sm truncate">{service?.label}</p>
+                            <p className={`text-xs ${
+                              isServiceVerified ? 'text-emerald-400' : 'text-gray-400'
+                            }`}>
+                              {isServiceVerified ? 'Verificat' : 'Neconfirmat'}
+                            </p>
+                          </div>
+                          {isServiceVerified && (
+                            <CheckCircleIcon className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* No documents uploaded yet */}
+              {approvedDocs.length === 0 && pendingDocs.length === 0 && (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+                    </svg>
+                  </div>
+                  <p className="text-gray-400 mb-4">Nu ai încărcat încă documente pentru verificare</p>
+                  <Link 
+                    href="/dashboard/curier/verificare" 
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-xl transition-colors border border-blue-500/30"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                    </svg>
+                    Încarcă documente
+                  </Link>
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Help Card */}
         <div className="mt-6 sm:mt-8">
