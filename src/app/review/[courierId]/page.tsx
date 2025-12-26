@@ -33,10 +33,7 @@ export default function ReviewPage() {
   const [hoveredStar, setHoveredStar] = useState(0);
 
   useEffect(() => {
-    loadCourier();
-  }, [courierId]);
-
-  const loadCourier = async () => {
+    const loadCourier = async () => {
     try {
       const courierDoc = await getDoc(doc(db, 'profil_curier', courierId));
       
@@ -60,6 +57,9 @@ export default function ReviewPage() {
       setLoading(false);
     }
   };
+    
+    loadCourier();
+  }, [courierId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,7 +151,7 @@ export default function ReviewPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="spinner"></div>
       </div>
     );
@@ -159,7 +159,7 @@ export default function ReviewPage() {
 
   if (!courier) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/20 flex items-center justify-center">
             <svg className="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -177,7 +177,7 @@ export default function ReviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Header */}
       <div className="bg-slate-900/80 border-b border-white/5 backdrop-blur-xl">
         <div className="max-w-4xl mx-auto px-4 py-4">
@@ -194,7 +194,7 @@ export default function ReviewPage() {
         <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center border border-amber-500/20">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-linear-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center border border-amber-500/20">
               <svg className="w-8 h-8 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
               </svg>

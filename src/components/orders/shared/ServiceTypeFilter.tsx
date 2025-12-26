@@ -59,7 +59,7 @@ export default function ServiceTypeFilter({ value, onChange }: ServiceTypeFilter
         
         {isOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
-            <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
+            <div className="max-h-100 overflow-y-auto custom-scrollbar">
               <button
                 onClick={() => {
                   onChange('all');

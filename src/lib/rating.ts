@@ -52,3 +52,20 @@ export const getRatingBgClass = (rating: number): string => {
 export const formatRating = (rating: number): string => {
   return rating.toFixed(1);
 };
+
+/**
+ * Calculate new rating using weighted average algorithm
+ * @param currentRating - Current courier rating (1-5)
+ * @param currentReviewCount - Number of existing reviews
+ * @param newReviewRating - New review rating (1-5)
+ * @returns Updated rating
+ */
+export const calculateNewRating = (
+  currentRating: number,
+  currentReviewCount: number,
+  newReviewRating: number
+): number => {
+  const totalRating = currentRating * currentReviewCount + newReviewRating;
+  const newCount = currentReviewCount + 1;
+  return totalRating / newCount;
+};

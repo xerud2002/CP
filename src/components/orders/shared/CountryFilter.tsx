@@ -84,7 +84,7 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
                 autoFocus
               />
             </div>
-            <div className="max-h-[calc(70vh-4rem)] sm:max-h-[340px] overflow-y-auto custom-scrollbar">
+            <div className="max-h-[calc(70vh-4rem)] sm:max-h-85 overflow-y-auto custom-scrollbar">
               <button
                 onClick={() => {
                   onChange('all');

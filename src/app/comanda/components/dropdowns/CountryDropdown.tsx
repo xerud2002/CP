@@ -77,7 +77,7 @@ export default function CountryDropdown({ value, onChange, label, onCountryChang
           </svg>
         </button>
         {isOpen && (
-          <div className="absolute z-[100] mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
+          <div className="absolute z-100 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
             <div className="p-2 border-b border-white/10">
               <input
                 type="text"
