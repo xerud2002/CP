@@ -52,8 +52,11 @@ export default function DevinoPartenerPage() {
             {[
               { 
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" className="fill-green-500/30"/>
+                    <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M9 12h6M12 9v6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+                    <circle cx="12" cy="12" r="3" className="fill-green-400"/>
                   </svg>
                 ), 
                 title: 'Zero Comisioane Permanent', 
@@ -62,8 +65,11 @@ export default function DevinoPartenerPage() {
               },
               { 
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="4" width="20" height="16" rx="3" className="fill-blue-500/30"/>
+                    <path d="M7 8h4m-4 4h10m-10 4h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <circle cx="18" cy="8" r="2" className="fill-blue-400"/>
+                    <path d="M16 18l2-2 2 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 ), 
                 title: 'Comenzi Nelimitate', 
@@ -72,8 +78,10 @@ export default function DevinoPartenerPage() {
               },
               { 
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" className="fill-amber-500/30"/>
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="12" cy="11" r="2" className="fill-amber-400"/>
                   </svg>
                 ), 
                 title: 'Acces Instant', 
@@ -82,8 +90,11 @@ export default function DevinoPartenerPage() {
               },
               { 
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="5" width="18" height="14" rx="3" className="fill-purple-500/30"/>
+                    <path d="M8 10h.01M12 10h.01M16 10h.01" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                    <path d="M8 14h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <circle cx="19" cy="5" r="3" className="fill-purple-400"/>
                   </svg>
                 ), 
                 title: 'Chat Direct cu Clienții', 
@@ -92,8 +103,12 @@ export default function DevinoPartenerPage() {
               },
               { 
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" className="fill-cyan-500/30"/>
+                    <ellipse cx="12" cy="12" rx="9" ry="4" stroke="currentColor" strokeWidth="1.5"/>
+                    <ellipse cx="12" cy="12" rx="9" ry="4" stroke="currentColor" strokeWidth="1.5" transform="rotate(60 12 12)"/>
+                    <ellipse cx="12" cy="12" rx="9" ry="4" stroke="currentColor" strokeWidth="1.5" transform="rotate(120 12 12)"/>
+                    <circle cx="12" cy="12" r="3" className="fill-cyan-400"/>
                   </svg>
                 ), 
                 title: '16 Țări Europa', 
@@ -102,8 +117,10 @@ export default function DevinoPartenerPage() {
               },
               { 
                 icon: (
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6z" className="fill-orange-500/30"/>
+                    <path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="12" cy="12" r="3" className="fill-orange-400"/>
                   </svg>
                 ), 
                 title: 'Reputație Verificată', 
@@ -136,8 +153,11 @@ export default function DevinoPartenerPage() {
                 title: 'Carte de identitate / Pașaport', 
                 desc: 'Document valid de identitate pentru verificare',
                 icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="5" width="18" height="14" rx="2" className="fill-orange-500/20"/>
+                    <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+                    <circle cx="9" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M14 10h4M14 14h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 )
               },
@@ -145,8 +165,10 @@ export default function DevinoPartenerPage() {
                 title: 'Asigurare RCA valabilă', 
                 desc: 'Pentru vehiculul folosit la transport',
                 icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L4 6v6c0 5.5 3.4 10.3 8 12 4.6-1.7 8-6.5 8-12V6l-8-4z" className="fill-orange-500/20"/>
+                    <path d="M12 2L4 6v6c0 5.5 3.4 10.3 8 12 4.6-1.7 8-6.5 8-12V6l-8-4z" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 )
               },
@@ -154,8 +176,11 @@ export default function DevinoPartenerPage() {
                 title: 'Certificat de înmatriculare', 
                 desc: 'Pentru vehiculul de transport (auto/dubă)',
                 icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z" className="fill-orange-500/20"/>
+                    <path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M7 8h10M7 12h6M7 16h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                    <circle cx="17" cy="14" r="2" stroke="currentColor" strokeWidth="1.5"/>
                   </svg>
                 )
               },
@@ -163,8 +188,11 @@ export default function DevinoPartenerPage() {
                 title: 'Telefon & Email activ', 
                 desc: 'Pentru comunicare rapidă cu clienții',
                 icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                    <rect x="4" y="2" width="16" height="20" rx="3" className="fill-orange-500/20"/>
+                    <rect x="4" y="2" width="16" height="20" rx="3" stroke="currentColor" strokeWidth="1.5"/>
+                    <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
+                    <path d="M9 6h6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 )
               }
@@ -214,8 +242,9 @@ export default function DevinoPartenerPage() {
                 desc: 'Completezi formularul de înregistrare și încarci documentele necesare (CI, RCA, certificat înmatriculare). Procesul durează doar 5 minute.', 
                 time: '5 min',
                 icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V9l-6-6z" className="fill-green-500/30"/>
+                    <path d="M15 3v6h6M9 13h6m-6 4h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 )
               },
@@ -225,8 +254,9 @@ export default function DevinoPartenerPage() {
                 desc: 'Echipa noastră verifică identitatea și documentele vehiculului pentru siguranța platformei. Primești email de confirmare când ești aprobat.', 
                 time: '24-48h',
                 icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" className="fill-green-500/30"/>
+                    <path d="M8 12l3 3 5-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 )
               },
@@ -236,8 +266,9 @@ export default function DevinoPartenerPage() {
                 desc: 'Contul e activat și poți vedea toate comenzile disponibile. Filtrezi după țară, serviciu și rută. Trimiți oferte clienților care te interesează.', 
                 time: 'Instant',
                 icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" className="fill-green-500/30"/>
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 )
               },
@@ -247,8 +278,10 @@ export default function DevinoPartenerPage() {
                 desc: 'Clienții îți văd ofertele și te contactează prin chat. Negociezi detaliile, finalizezi transportul și primești plata direct. Construiești reputația cu recenzii.', 
                 time: 'Continuu',
                 icon: (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" className="fill-green-500/30"/>
+                    <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
                   </svg>
                 )
               }
@@ -298,8 +331,9 @@ export default function DevinoPartenerPage() {
                 q: 'Costă ceva să mă înregistrez?', 
                 a: 'Nu, platforma este 100% gratuită pentru curieri pe perioadă nedeterminată. Nu percepem comisioane din comenzi, nu există taxe de înregistrare sau abonamente. Păstrezi toți banii câștigați și contactezi clienții direct.',
                 icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" className="fill-orange-500/30"/>
+                    <path d="M12 8v3m0 4h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                   </svg>
                 )
               },
@@ -307,8 +341,9 @@ export default function DevinoPartenerPage() {
                 q: 'Cât durează verificarea?', 
                 a: 'În general 24-48 ore lucrătoare după ce trimiți documentele complete. Primești email când contul e aprobat și poți începe să vezi comenzile.',
                 icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" className="fill-orange-500/30"/>
+                    <path d="M12 7v5l3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                   </svg>
                 )
               },
@@ -316,8 +351,9 @@ export default function DevinoPartenerPage() {
                 q: 'Pot lucra și pentru alte platforme?', 
                 a: 'Da, nu există exclusivitate. Poți lucra în paralel pe orice alte platforme sau pentru clienții tăi direcți. Flexibilitate totală.',
                 icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L4 6v6c0 5.5 3.4 10.3 8 12 4.6-1.7 8-6.5 8-12V6l-8-4z" className="fill-orange-500/30"/>
+                    <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 )
               },
@@ -325,8 +361,10 @@ export default function DevinoPartenerPage() {
                 q: 'Cum primesc plata?', 
                 a: 'Negociezi direct cu clientul metoda de plată prin chat-ul platformei (cash la ridicare/livrare, transfer bancar, etc.). Contactezi clienții direct, fără intermediari. Platforma nu procesează plăți, deci nu există întârzieri sau comisioane.',
                 icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="5" width="20" height="14" rx="2" className="fill-orange-500/30"/>
+                    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5"/>
+                    <path d="M6 9h.01M18 15h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                   </svg>
                 )
               },
@@ -334,8 +372,9 @@ export default function DevinoPartenerPage() {
                 q: 'Ce servicii pot oferi?', 
                 a: 'Colete, plicuri, mobilă, electronice, transport persoane, platformă auto, tractări, animale de companie și marfă perisabilă. Alegi serviciile care ți se potrivesc.',
                 icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L3 7v10l9 5 9-5V7l-9-5z" className="fill-orange-500/30"/>
+                    <path d="M12 22V12M3 7l9 5m9-5l-9 5" stroke="currentColor" strokeWidth="1.5"/>
                   </svg>
                 )
               },
@@ -343,8 +382,9 @@ export default function DevinoPartenerPage() {
                 q: 'Trebuie să am firmă?', 
                 a: 'Nu obligatoriu. Poți lucra ca persoană fizică autorizată (PFA) sau SRL, dar și fără firmă. Important e să ai documente valide pentru vehicul și asigurare RCA.',
                 icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" className="fill-orange-500/30"/>
+                    <path d="M9 10h.01M15 10h.01M9 14h.01M15 14h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                   </svg>
                 )
               }
