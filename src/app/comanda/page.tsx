@@ -18,42 +18,42 @@ import LocationsStep from './components/steps/LocationsStep';
 const servicii = [
   { 
     id: 'colete', 
-    name: 'Transport Colete', 
+    name: 'Colete', 
     description: 'Colete și pachete standard',
     color: 'from-blue-500 to-blue-600',
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
   },
   { 
     id: 'plicuri', 
-    name: 'Transport Plicuri/Documente', 
+    name: 'Plicuri/Documente', 
     description: 'Documente și plicuri urgente',
     color: 'from-yellow-400 to-yellow-500',
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
   },
   { 
     id: 'persoane', 
-    name: 'Transport Persoane', 
+    name: 'Persoane', 
     description: 'Pasageri - călătorii în Europa',
     color: 'from-pink-500 to-pink-600',
     icon: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
   },
   { 
     id: 'electronice', 
-    name: 'Transport Electronice', 
+    name: 'Electronice', 
     description: 'Echipamente electronice fragile',
     color: 'from-purple-500 to-purple-600',
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="2" y="3" width="20" height="14" rx="2" strokeLinecap="round" strokeLinejoin="round" /><line x1="8" y1="21" x2="16" y2="21" strokeLinecap="round" strokeLinejoin="round" /><line x1="12" y1="17" x2="12" y2="21" strokeLinecap="round" strokeLinejoin="round" /></svg>
   },
   { 
     id: 'animale', 
-    name: 'Transport Animale', 
+    name: 'Animale', 
     description: 'Transport animale de companie',
     color: 'from-green-500 to-green-600',
     icon: <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 512 512"><path d="M226.5 92.9c14.3 42.9-.3 86.2-32.6 96.8s-70.1-15.6-84.4-58.5s.3-86.2 32.6-96.8s70.1 15.6 84.4 58.5zM100.4 198.6c18.9 32.4 14.3 70.1-10.2 84.1s-59.7-.9-78.5-33.3S-2.7 179.3 21.8 165.3s59.7 .9 78.5 33.3zM69.2 401.2C121.6 259.9 214.7 224 256 224s134.4 35.9 186.8 177.2c3.6 9.7 5.2 20.1 5.2 30.5v1.6c0 25.8-20.9 46.7-46.7 46.7c-11.5 0-22.9-1.4-34-4.2l-88-22c-15.3-3.8-31.3-3.8-46.6 0l-88 22c-11.1 2.8-22.5 4.2-34 4.2C84.9 480 64 459.1 64 433.3v-1.6c0-10.4 1.6-20.8 5.2-30.5zM421.8 282.7c-24.5-14-29.1-51.7-10.2-84.1s54-47.3 78.5-33.3s29.1 51.7 10.2 84.1s-54 47.3-78.5 33.3zM310.1 189.7c-32.3-10.6-46.9-53.9-32.6-96.8s52.1-69.1 84.4-58.5s46.9 53.9 32.6 96.8s-52.1 69.1-84.4 58.5z"/></svg>
   },
   { 
     id: 'platforma', 
-    name: 'Transport cu Platformă', 
+    name: 'Platformă', 
     description: 'Vehicule și echipamente grele',
     color: 'from-red-500 to-red-600',
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><rect x="2" y="16" width="20" height="4" rx="1" strokeLinecap="round" strokeLinejoin="round" /><path d="M7 16V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8" strokeLinecap="round" strokeLinejoin="round" /><circle cx="8" cy="20" r="1" /><circle cx="16" cy="20" r="1" /><path d="M12 16V4" strokeLinecap="round" strokeLinejoin="round" /><path d="M9 7h6" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -67,14 +67,14 @@ const servicii = [
   },
   { 
     id: 'mobila', 
-    name: 'Transport Mobilă', 
+    name: 'Mobilă', 
     description: 'Mobilier și obiecte voluminoase',
     color: 'from-amber-500 to-amber-600',
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M20 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v3" strokeLinecap="round" strokeLinejoin="round" /><path d="M2 11v5a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v2H6v-2a2 2 0 0 0-4 0Z" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M20 18v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 4v9" strokeLinecap="round" strokeLinejoin="round" /></svg>
   },
   { 
     id: 'paleti', 
-    name: 'Transport Paleți', 
+    name: 'Paleți', 
     description: 'Transport paleți și marfă paletizată',
     color: 'from-cyan-500 to-cyan-600',
     icon: <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path d="M3 6h18" strokeLinecap="round" strokeLinejoin="round" /><path d="M3 12h18" strokeLinecap="round" strokeLinejoin="round" /><path d="M3 18h18" strokeLinecap="round" strokeLinejoin="round" /><path d="M4 6v12" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 6v12" strokeLinecap="round" strokeLinejoin="round" /><path d="M20 6v12" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -164,11 +164,12 @@ function ComandaForm() {
     descriere: '',
     
     // Câmpuri specifice serviciu
-    tip_animal: '',        // Animale
-    tip_vehicul: '',       // Platformă, Tractări
-    stare_vehicul: '',     // Platformă
-    motiv_tractare: '',    // Tractări
-    roti_functionale: '',  // Tractări
+    tip_animal: '',           // Animale
+    tip_vehicul: '',          // Platformă, Tractări
+    stare_vehicul: '',        // Platformă
+    motiv_tractare: '',       // Tractări
+    roti_functionale: '',     // Tractări
+    numar_inmatriculare: '',  // Tractări, Platformă
     
     // Date ridicare/livrare - sistem simplificat
     tip_programare: 'data_specifica', // 'data_specifica' | 'range' | 'flexibil'

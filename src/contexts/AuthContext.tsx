@@ -9,8 +9,7 @@ import {
   signOut,
   sendPasswordResetEmail,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult
+  signInWithPopup
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
@@ -50,37 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     });
 
-    // Handle redirect result from Google Sign-In
-    const handleRedirect = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result) {
-          // User signed in successfully via redirect
-          const userDoc = await getDoc(doc(db, 'users', result.user.uid));
-          
-          if (!userDoc.exists()) {
-            // Get role from sessionStorage (set before redirect)
-            const role = (sessionStorage.getItem('pendingGoogleRole') || 'client') as UserRole;
-            sessionStorage.removeItem('pendingGoogleRole');
-            
-            // Create new user document
-            const userData: User = {
-              uid: result.user.uid,
-              email: result.user.email || '',
-              role,
-              createdAt: new Date(),
-            };
-            
-            await setDoc(doc(db, 'users', result.user.uid), userData);
-          }
-        }
-      } catch (error) {
-        console.error('Error handling redirect:', error);
-      }
-    };
-
-    handleRedirect();
-
     return () => unsubscribe();
   }, []);
 
@@ -118,15 +86,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       prompt: 'select_account'
     });
     
-    // Store role in sessionStorage for after redirect
-    sessionStorage.setItem('pendingGoogleRole', role);
+    // Use popup for better compatibility
+    const result = await signInWithPopup(auth, provider);
     
-    // Use redirect instead of popup to avoid COOP issues
-    await signInWithRedirect(auth, provider);
+    // Check if user exists in Firestore
+    const userDoc = await getDoc(doc(db, 'users', result.user.uid));
     
-    // This will never return as the page redirects
-    // The actual sign-in is handled in the useEffect hook
-    throw new Error('Redirect in progress');
+    if (userDoc.exists()) {
+      // Existing user - return their data
+      const userData = { uid: result.user.uid, ...userDoc.data() } as User;
+      setUser(userData);
+      return userData;
+    } else {
+      // New user - create document with selected role
+      const userData: User = {
+        uid: result.user.uid,
+        email: result.user.email || '',
+        role,
+        createdAt: new Date(),
+      };
+      
+      await setDoc(doc(db, 'users', result.user.uid), userData);
+      setUser(userData);
+      return userData;
+    }
   };
 
   const logout = async () => {

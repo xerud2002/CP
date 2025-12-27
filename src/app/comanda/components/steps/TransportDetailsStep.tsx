@@ -2,6 +2,7 @@
 import AnimalTypeDropdown from '../dropdowns/AnimalTypeDropdown';
 import VehicleTypeDropdown from '../dropdowns/VehicleTypeDropdown';
 import DatePicker from '../DatePicker';
+import LicensePlateScanner from '../LicensePlateScanner';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FormDataType = any;
@@ -371,6 +372,14 @@ export default function TransportDetailsStep({
                 </select>
               </div>
             </div>
+            
+            {/* Număr înmatriculare cu OCR */}
+            <LicensePlateScanner
+              value={formData.numar_inmatriculare || ''}
+              onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, numar_inmatriculare: value }))}
+              country={formData.tara_ridicare}
+            />
+            
             <div className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/30">
               <p className="text-sm text-gray-400">💡 Menționează în descriere: marca, modelul, locația exactă</p>
             </div>

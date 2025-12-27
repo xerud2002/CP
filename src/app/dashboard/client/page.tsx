@@ -312,62 +312,6 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
   );
 }
 
-// Orders Summary Component
-// Afișează rezumat comenzi client:
-// - Dacă totalOrders = 0: ecran gol cu CTA "Trimite primul colet"
-// - Altfel: statistici detaliate + grafic status-uri (în funcție de implementare viitoare)
-// Status-uri posibile: pending/noua, in_tranzit/acceptata/colectata, livrata/finalizata
-function OrdersSummary({ totalOrders, statusCounts }: { totalOrders: number; statusCounts: { pending: number; inTransit: number; delivered: number } }) {
-  return (
-    <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full">
-      <div className="flex items-center justify-between mb-3 sm:mb-4">
-        <h3 className="text-sm sm:text-lg font-semibold text-white flex items-center gap-2">
-          <div className="p-1.5 bg-blue-500/20 rounded-lg">
-            <PackageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" />
-          </div>
-          Comenzile mele
-        </h3>
-        <Link href="/dashboard/client/comenzi" className="text-[11px] sm:text-sm text-orange-400 hover:text-orange-300 transition-colors">
-          Vezi toate →
-        </Link>
-      </div>
-      
-      {totalOrders === 0 ? (
-        <div className="text-center py-6 sm:py-8">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 rounded-xl bg-blue-500/10 flex items-center justify-center">
-            <PackageIcon className="w-7 h-7 sm:w-8 sm:h-8 text-blue-400/50" />
-          </div>
-          <p className="text-gray-400 text-xs sm:text-sm mb-3">Nu ai nicio comandă încă</p>
-          <Link 
-            href="/comanda"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-medium rounded-xl transition-colors text-xs sm:text-sm"
-          >
-            <BoxIcon className="w-4 h-4" />
-            Trimite primul colet
-          </Link>
-        </div>
-      ) : (
-        <div className="space-y-3 sm:space-y-4">
-          <div className="text-center py-3 sm:py-4">
-            <div className="text-3xl sm:text-4xl font-bold text-white mb-1">{totalOrders}</div>
-            <p className="text-xs sm:text-sm text-gray-400">{totalOrders === 1 ? 'Comandă activă' : 'Comenzi active'}</p>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="text-center p-2 bg-orange-500/10 rounded-lg border border-orange-500/20">
-              <div className="text-lg sm:text-xl font-bold text-orange-400">{statusCounts.pending}</div>
-              <div className="text-[10px] sm:text-xs text-gray-400">Noi</div>
-            </div>
-            <div className="text-center p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
-              <div className="text-lg sm:text-xl font-bold text-emerald-400">{statusCounts.delivered}</div>
-              <div className="text-[10px] sm:text-xs text-gray-400">Finalizate</div>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
-  );
-}
-
 // Recent Activity Component - Shows recent messages from couriers
 function RecentActivity({ recentMessages, unreadCount }: { recentMessages: RecentMessage[]; unreadCount: number }) {
   // Format timestamp to relative time
@@ -496,8 +440,6 @@ export default function ClientDashboard() {
   const router = useRouter();
   const [userNume, setUserNume] = useState<string | null>(null);
   const [totalNotifications, setTotalNotifications] = useState(0);
-  const [totalOrders, setTotalOrders] = useState(0);
-  const [statusCounts, setStatusCounts] = useState({ pending: 0, inTransit: 0, delivered: 0 });
   const [recentMessages, setRecentMessages] = useState<RecentMessage[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showAdminMessages, setShowAdminMessages] = useState(false);
@@ -554,33 +496,15 @@ export default function ClientDashboard() {
         
         const snapshot = await getDocs(q);
         let total = 0;
-        let orderCount = 0;
-        let pending = 0;
-        let inTransit = 0;
-        let delivered = 0;
         
         snapshot.forEach((doc) => {
           const data = doc.data();
           const nrOferte = data.nrOferte || 0;
           const nrMesajeNoi = data.nrMesajeNoi || 0;
           total += nrOferte + nrMesajeNoi;
-          
-          orderCount++;
-          
-          // Count by status
-          const status = data.status || 'pending';
-          if (status === 'pending' || status === 'noua') {
-            pending++;
-          } else if (status === 'in_tranzit' || status === 'acceptata' || status === 'colectata') {
-            inTransit++;
-          } else if (status === 'livrata' || status === 'finalizata') {
-            delivered++;
-          }
         });
         
         setTotalNotifications(total);
-        setTotalOrders(orderCount);
-        setStatusCounts({ pending, inTransit, delivered });
       } catch (error) {
         console.error('❌ Eroare la încărcarea notificărilor:', error);
       }
@@ -759,18 +683,8 @@ export default function ClientDashboard() {
         {/* Main Navigation - Quick access to all sections */}
         <MainNavigation totalNotifications={totalNotifications} />
 
-        {/* Orders and Activity Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-6">
-          {/* Orders Summary - Takes 3 columns on large screens */}
-          <div className="lg:col-span-3">
-            <OrdersSummary totalOrders={totalOrders} statusCounts={statusCounts} />
-          </div>
-          
-          {/* Recent Activity - Takes 2 columns */}
-          <div className="lg:col-span-2">
-            <RecentActivity recentMessages={recentMessages} unreadCount={unreadCount} />
-          </div>
-        </div>
+        {/* Recent Activity */}
+        <RecentActivity recentMessages={recentMessages} unreadCount={unreadCount} />
 
         {/* Help Card - Lazy loaded */}
         <Suspense fallback={null}>
