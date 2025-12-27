@@ -39,9 +39,11 @@ service firebase.storage {
     match /chat_attachments/{orderId}/{allPaths=**} {
       // All authenticated users can read (to view attachments in chat)
       allow read: if request.auth != null;
-      // All authenticated users can upload attachments
+      // All authenticated users can upload attachments - only images and PDFs allowed
       allow write: if request.auth != null
-                   && request.resource.size < 10 * 1024 * 1024;
+                   && request.resource.size < 10 * 1024 * 1024
+                   && (request.resource.contentType.matches('image/.*') 
+                       || request.resource.contentType == 'application/pdf');
     }
     
     // Default - deny all other access
