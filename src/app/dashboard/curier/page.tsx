@@ -19,7 +19,8 @@ import {
   StarIcon,
   ChatIcon,
 } from '@/components/icons/DashboardIcons';
-import { AdminMessagesListModal } from '@/components/admin';
+import { AdminMessagesListModal, AdminMessageModal } from '@/components/admin';
+import { User } from '@/types';
 
 // Lazy load below-fold components
 const HelpCard = lazy(() => import('@/components/HelpCard'));
@@ -927,6 +928,7 @@ export default function CurierDashboard() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [isNewCourier, setIsNewCourier] = useState(false);
   const [showAdminMessages, setShowAdminMessages] = useState(false);
+  const [selectedAdminUser, setSelectedAdminUser] = useState<User | null>(null);
   const [selectedChatOrder, setSelectedChatOrder] = useState<{ orderId: string; orderNumber?: string; clientId: string; clientName: string } | null>(null);
   const [verificationData, setVerificationData] = useState<CourierVerificationData | undefined>(undefined);
 
@@ -1372,7 +1374,8 @@ export default function CurierDashboard() {
 
       {/* Modals */}
       {showOnboarding && <OnboardingModal onClose={handleCloseOnboarding} isFirstTime={isNewCourier} />}
-      {showAdminMessages && <AdminMessagesListModal onClose={() => setShowAdminMessages(false)} onSelectUser={() => {/* Handle user selection */}} />}
+      {showAdminMessages && <AdminMessagesListModal onClose={() => setShowAdminMessages(false)} onSelectUser={(user) => { setSelectedAdminUser(user); setShowAdminMessages(false); }} />}
+      {selectedAdminUser && <AdminMessageModal user={selectedAdminUser} onClose={() => setSelectedAdminUser(null)} />}
       {selectedChatOrder && (
         <CourierChatModal
           orderId={selectedChatOrder.orderId}
