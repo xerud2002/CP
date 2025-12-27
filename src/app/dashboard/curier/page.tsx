@@ -791,11 +791,11 @@ const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: 
 
   const steps = [
     {
-      title: 'Bine ai venit!',
-      subtitle: 'Curierul Perfect',
-      content: 'Platformă 100% gratuită pentru curieri. Găsește clienți și crește-ți veniturile.',
-      items: ['Comenzi nelimitate', 'Chat direct cu clienții', 'Fără comisioane', 'România & Europa'],
-      cta: 'Începe',
+      title: 'Ofertă Limitată!',
+      subtitle: '100% GRATUIT',
+      content: 'Acces exclusiv pentru curieri verificați. Platformă complet gratuită pentru o perioadă limitată!',
+      items: ['Comenzi nelimitate', 'Zero comisioane', 'Chat direct cu clienții', 'Ofertă valabilă limitat'],
+      cta: 'Revendică Acces Gratuit',
     },
     {
       title: 'Cum funcționează?',
