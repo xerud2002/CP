@@ -792,10 +792,10 @@ const OnboardingModal = memo(function OnboardingModal({ onClose }: { onClose: ()
 
   const steps = [
     {
-      title: 'Ofertă Limitată!',
-      subtitle: '100% GRATUIT până pe 31 Martie 2026',
-      content: 'Acces exclusiv pentru curieri verificați. Platformă complet gratuită până pe 31 Martie 2026!',
-      items: ['Comenzi nelimitate', 'Zero comisioane', 'Chat direct cu clienții - contactezi direct', 'Ofertă valabilă până pe 31 Martie 2026'],
+      title: 'Ofertă Specială!',
+      subtitle: '100% GRATUIT pe perioadă nedeterminată',
+      content: 'Acces exclusiv pentru curieri verificați. Platformă complet gratuită pe perioadă nedeterminată!',
+      items: ['Comenzi nelimitate', 'Zero comisioane permanent', 'Chat direct cu clienții - contactezi direct', 'Acces gratuit pe perioadă nedeterminată'],
       cta: 'Revendică Acces Gratuit',
     },
     {
