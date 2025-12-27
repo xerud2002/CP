@@ -283,87 +283,108 @@ export default function Home() {
       </section>
 
       {/* Comparison: Curierul Perfect vs Facebook Groups */}
-      <section className="py-10 sm:py-14 md:py-16 px-3 sm:px-4 bg-slate-900/50">
+      <section className="py-12 sm:py-16 md:py-20 px-3 sm:px-4 bg-slate-900/50">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6 sm:mb-10">
+          <div className="text-center mb-8 sm:mb-12">
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs font-semibold mb-4">
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               Platformă profesională
             </span>
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-3 px-2">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 px-2">
               De ce <span className="text-orange-500">Curierul Perfect</span>
               <br className="sm:hidden" /> în loc de <span className="text-red-400">grupuri Facebook</span>?
             </h2>
-            <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto px-2">
-              Funcții profesionale care depășesc cu mult posibilitățile unui grup de Facebook
+            <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">
+              Platformă dedicată cu funcții profesionale care depășesc cu mult posibilitățile unui grup de Facebook
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8">
             {/* Curierul Perfect Column */}
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold mb-4 shadow-lg shadow-green-500/20">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold mb-5 shadow-lg shadow-green-500/30">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 Curierul Perfect
               </div>
-              <div className="space-y-2 sm:space-y-3">
+              <div className="space-y-3 sm:space-y-4">
                 {[
                   { 
                     icon: (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" className="fill-green-500/30" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" className="fill-green-500/40" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         <circle cx="12" cy="12" r="1.5" className="fill-green-400"/>
                         <circle cx="8" cy="12" r="1.5" className="fill-green-400"/>
                         <circle cx="16" cy="12" r="1.5" className="fill-green-400"/>
                       </svg>
                     ), 
                     title: 'Chat privat dedicat', 
-                    desc: 'Conversații private cu fiecare curier' 
+                    desc: 'Conversații private cu fiecare curier, fără ca alții să vadă mesajele tale și detaliile comenzii' 
                   },
                   { 
                     icon: (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" className="fill-yellow-500/30" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        <circle cx="12" cy="10" r="2" className="fill-yellow-400"/>
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" className="fill-green-500/40" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     ), 
                     title: 'Sistem de verificare și rating', 
-                    desc: 'Curieri verificați cu istoric vizibil' 
+                    desc: 'Fiecare curier e verificat și evaluat - vezi rating-ul și istoricul înainte să alegi' 
                   },
                   { 
                     icon: (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                        <path d="M14 9V5a3 3 0 00-6 0v4" className="fill-emerald-500/30" stroke="currentColor" strokeWidth="1.5"/>
-                        <path d="M5 9h14a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2v-9a2 2 0 012-2z" className="fill-emerald-500/30" stroke="currentColor" strokeWidth="1.5"/>
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="3" width="18" height="18" rx="2" className="fill-green-500/40" stroke="currentColor" strokeWidth="1.5"/>
                         <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     ), 
-                    title: 'Recenzii reale', 
-                    desc: 'Feedback pozitiv și negativ transparent' 
+                    title: 'Recenzii pozitive și negative', 
+                    desc: 'Vezi feedback complet - nu doar like-uri, ci recenzii reale care te ajută să alegi corect' 
                   },
                   { 
                     icon: (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                        <rect x="3" y="11" width="18" height="11" rx="2" className="fill-orange-500/30" stroke="currentColor" strokeWidth="1.5"/>
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="11" width="18" height="11" rx="2" className="fill-green-500/40" stroke="currentColor" strokeWidth="1.5"/>
                         <path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                        <circle cx="12" cy="16" r="2" className="fill-orange-400"/>
+                        <circle cx="12" cy="16" r="1.5" className="fill-green-400"/>
                       </svg>
                     ), 
                     title: 'Date protejate', 
-                    desc: 'Informațiile tale nu sunt publice' 
+                    desc: 'Informațiile tale personale sunt vizibile doar curierilor cu care comunici' 
+                  },
+                  { 
+                    icon: (
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" className="fill-green-500/40" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
+                    ), 
+                    title: 'Notificări instant', 
+                    desc: 'Primești alertă când un curier îți răspunde sau când apar comenzi noi pe rutele tale' 
+                  },
+                  { 
+                    icon: (
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="3" width="18" height="18" rx="2" className="fill-green-500/40" stroke="currentColor" strokeWidth="1.5"/>
+                        <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="1.5"/>
+                      </svg>
+                    ), 
+                    title: 'Dashboard organizat', 
+                    desc: 'Toate comenzile într-un singur loc, cu istoric complet, filtre și căutare rapidă' 
                   },
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-slate-800/50 border border-green-500/20">
-                    <div className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center text-green-400">
+                  <div key={idx} className="relative flex items-start gap-4 p-4 sm:p-5 rounded-xl bg-slate-800/50 border border-green-500/20 hover:border-green-500/40 transition-colors">
+                    <div className="shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-green-500/30 to-emerald-500/30 border border-green-500/30 flex items-center justify-center text-green-400">
                       {item.icon}
                     </div>
-                    <div className="min-w-0">
-                      <h3 className="text-white font-semibold text-sm sm:text-base truncate">{item.title}</h3>
-                      <p className="text-gray-400 text-xs sm:text-sm truncate">{item.desc}</p>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-white font-semibold text-sm sm:text-base mb-1">{item.title}</h3>
+                      <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">{item.desc}</p>
+                    </div>
+                    <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-green-500 text-white text-xs flex items-center justify-center font-bold">
+                      {idx + 1}
                     </div>
                   </div>
                 ))}
@@ -372,63 +393,84 @@ export default function Home() {
             
             {/* Facebook Groups Column */}
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800 border border-red-500/30 text-red-400 text-sm font-semibold mb-4">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-slate-800 border border-red-500/30 text-red-400 text-sm font-semibold mb-5">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
                 Grupuri Facebook
               </div>
-              <div className="space-y-2 sm:space-y-3">
+              <div className="space-y-3 sm:space-y-4">
                 {[
                   { 
                     icon: (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
                         <circle cx="12" cy="12" r="10" className="fill-red-500/20" stroke="currentColor" strokeWidth="1.5"/>
                         <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5"/>
-                        <path d="M12 5v2M12 17v2M5 12h2M17 12h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                       </svg>
                     ), 
                     title: 'Comentarii publice', 
-                    desc: 'Toți văd detaliile comenzii tale' 
+                    desc: 'Toată lumea vede detaliile comenzii tale, prețurile discutate și informațiile personale' 
                   },
                   { 
                     icon: (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
                         <circle cx="12" cy="12" r="10" className="fill-red-500/20" stroke="currentColor" strokeWidth="1.5"/>
                         <path d="M4.93 4.93l14.14 14.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                       </svg>
                     ), 
                     title: 'Fără verificare', 
-                    desc: 'Nu știi cine e de încredere' 
+                    desc: 'Nu știi cine e de încredere - nicio garanție, niciun istoric, doar promisiuni' 
                   },
                   { 
                     icon: (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
-                        <path d="M10 15v4a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3H10z" className="fill-red-500/20" stroke="currentColor" strokeWidth="1.5"/>
-                        <path d="M17 2h2.67A1.33 1.33 0 0121 3.33v8.34a1.33 1.33 0 01-1.33 1.33H17" stroke="currentColor" strokeWidth="1.5"/>
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z" className="fill-red-500/20" stroke="currentColor" strokeWidth="1.5"/>
+                        <path d="M4 22H3a1 1 0 01-1-1v-8a1 1 0 011-1h1" stroke="currentColor" strokeWidth="1.5"/>
                       </svg>
                     ), 
-                    title: 'Doar like-uri', 
-                    desc: 'Curieri problematici nu pot fi semnalați' 
+                    title: 'Doar like-uri, fără recenzii negative', 
+                    desc: 'Problemele reale se pierd în comentarii - vezi doar partea frumoasă' 
                   },
                   { 
                     icon: (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
                         <circle cx="12" cy="12" r="10" className="fill-red-500/20" stroke="currentColor" strokeWidth="1.5"/>
                         <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke="currentColor" strokeWidth="1.5"/>
                       </svg>
                     ), 
-                    title: 'Zero confidențialitate', 
-                    desc: 'Datele tale vizibile public' 
+                    title: 'Zero protecție date personale', 
+                    desc: 'Datele tale rămân publice la infinit - risc major de utilizare neautorizată' 
+                  },
+                  { 
+                    icon: (
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" className="fill-red-500/20" stroke="currentColor" strokeWidth="1.5"/>
+                        <path d="M4 4l16 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                    ), 
+                    title: 'Mesaje pierdute în haos', 
+                    desc: 'Comentarii îngropate, notificări ratate, conversații greu de urmărit' 
+                  },
+                  { 
+                    icon: (
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" className="fill-red-500/20" stroke="currentColor" strokeWidth="1.5"/>
+                      </svg>
+                    ), 
+                    title: 'Postări nestructurate', 
+                    desc: 'Informații lipsă, detalii incomplete - pierzi timp căutând și clarificând' 
                   },
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-slate-800/30 border border-red-500/10 opacity-70">
-                    <div className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400/70">
+                  <div key={idx} className="relative flex items-start gap-4 p-4 sm:p-5 rounded-xl bg-slate-800/30 border border-red-500/10 hover:border-red-500/20 transition-colors opacity-75">
+                    <div className="shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400/70">
                       {item.icon}
                     </div>
-                    <div className="min-w-0">
-                      <h3 className="text-gray-300 font-semibold text-sm sm:text-base truncate">{item.title}</h3>
-                      <p className="text-gray-500 text-xs sm:text-sm truncate">{item.desc}</p>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-gray-300 font-semibold text-sm sm:text-base mb-1">{item.title}</h3>
+                      <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">{item.desc}</p>
+                    </div>
+                    <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-red-500/80 text-white text-xs flex items-center justify-center font-bold">
+                      {idx + 1}
                     </div>
                   </div>
                 ))}
