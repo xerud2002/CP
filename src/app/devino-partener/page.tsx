@@ -41,6 +41,94 @@ export default function DevinoPartenerPage() {
         </div>
       </section>
 
+      {/* Comparison: Curierul Perfect vs Facebook Groups */}
+      <section className="py-16 px-4 bg-slate-900">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-sm font-semibold mb-6">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              Platformă profesională
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              De ce <span className="text-orange-500">Curierul Perfect</span><br className="sm:hidden" /> în loc de <span className="text-red-400">grupuri Facebook</span>?
+            </h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Platformă dedicată cu funcții profesionale care depășesc cu mult posibilitățile unui grup de Facebook
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Curierul Perfect Column */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold mb-6 shadow-lg shadow-green-500/30">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Curierul Perfect
+              </div>
+              <div className="space-y-4">
+                {[
+                  { icon: '💬', title: 'Chat privat dedicat', desc: 'Conversații private cu fiecare curier, fără ca alții să vadă mesajele tale și detaliile comenzii' },
+                  { icon: '⭐', title: 'Sistem de verificare și rating', desc: 'Fiecare curier e verificat și evaluat - vezi rating-ul și istoricul înainte să alegi' },
+                  { icon: '👍', title: 'Recenzii pozitive ȘI negative', desc: 'Feedback real și transparent - nu doar like-uri, ci experiențe complete de la alți clienți' },
+                  { icon: '📋', title: 'Comenzi structurate', desc: 'Formulare dedicate pentru fiecare tip de transport - toate detaliile într-un singur loc organizat' },
+                  { icon: '🔔', title: 'Notificări instant', desc: 'Primești alertă când un curier îți răspunde sau când apar comenzi noi pe rutele tale' },
+                  { icon: '🔒', title: 'Date protejate', desc: 'Informațiile tale personale sunt vizibile doar curierilor cu care comunici, nu întregului internet' },
+                ].map((item, idx) => (
+                  <div key={idx} className="relative flex items-start gap-4 p-5 rounded-xl bg-slate-800/50 border border-green-500/20 hover:border-green-500/40 transition-colors">
+                    <div className="shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/30 to-emerald-500/30 border border-green-500/30 flex items-center justify-center text-xl">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-white font-semibold mb-1">{item.title}</h3>
+                      <p className="text-gray-400 text-sm">{item.desc}</p>
+                    </div>
+                    <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-green-500 text-white text-xs flex items-center justify-center font-bold">
+                      {idx + 1}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Facebook Groups Column */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-800 border border-red-500/30 text-red-400 font-semibold mb-6">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Grupuri Facebook
+              </div>
+              <div className="space-y-4">
+                {[
+                  { icon: '👁', title: 'Comentarii publice', desc: 'Toată lumea vede detaliile comenzii tale, prețurile discutate și informațiile personale' },
+                  { icon: '🚫', title: 'Fără verificare', desc: 'Nu știi cine e de încredere - nicio garanție, niciun istoric, doar promisiuni' },
+                  { icon: '👎', title: 'Doar like-uri, fără recenzii negative', desc: 'Curieri problematici nu pot fi semnalați - feedback-ul negativ e șters sau ascuns' },
+                  { icon: '📝', title: 'Postări nestructurate', desc: 'Informații lipsă, detalii incomplete - pierzi timp căutând și clarificând' },
+                  { icon: '🔕', title: 'Mesaje pierdute în haos', desc: 'Comentarii îngropate, notificări ratate, conversații greu de urmărit' },
+                  { icon: '🌐', title: 'Zero confidențialitate', desc: 'Adresa, telefonul, detaliile comenzii - toate vizibile public pentru oricine' },
+                ].map((item, idx) => (
+                  <div key={idx} className="relative flex items-start gap-4 p-5 rounded-xl bg-slate-800/30 border border-red-500/10 hover:border-red-500/20 transition-colors opacity-75">
+                    <div className="shrink-0 w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-xl grayscale">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-gray-300 font-semibold mb-1">{item.title}</h3>
+                      <p className="text-gray-500 text-sm">{item.desc}</p>
+                    </div>
+                    <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-red-500/80 text-white text-xs flex items-center justify-center font-bold">
+                      {idx + 1}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Benefits */}
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
