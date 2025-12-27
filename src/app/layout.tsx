@@ -92,7 +92,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://curierulperfect.com",
     languages: {
-      'ro-RO': 'https://curierulperfect.ro',
+      'ro-RO': 'https://curierulperfect.com',
     },
   },
   category: "transport",

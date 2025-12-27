@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-const SITE_URL = 'https://curierulperfect.ro';
+const SITE_URL = 'https://curierulperfect.com';
 const SITE_NAME = 'Curierul Perfect';
 
 export const defaultMetadata: Metadata = {

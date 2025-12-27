@@ -787,7 +787,7 @@ const RecentActivity = memo(function RecentActivity({
 // ONBOARDING MODAL COMPONENT
 // ============================================
 
-const OnboardingModal = memo(function OnboardingModal({ onClose, isFirstTime }: { onClose: () => void; isFirstTime: boolean }) {
+const OnboardingModal = memo(function OnboardingModal({ onClose }: { onClose: () => void }) {
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
@@ -926,7 +926,8 @@ export default function CurierDashboard() {
   const [recentMessages, setRecentMessages] = useState<RecentMessage[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const [isNewCourier, setIsNewCourier] = useState(false);
+  // isNewCourier tracks if this is the courier's first visit
+  const [, setIsNewCourier] = useState(false);
   const [showAdminMessages, setShowAdminMessages] = useState(false);
   const [selectedAdminUser, setSelectedAdminUser] = useState<User | null>(null);
   const [selectedChatOrder, setSelectedChatOrder] = useState<{ orderId: string; orderNumber?: string; clientId: string; clientName: string } | null>(null);
@@ -1373,7 +1374,7 @@ export default function CurierDashboard() {
       </main>
 
       {/* Modals */}
-      {showOnboarding && <OnboardingModal onClose={handleCloseOnboarding} isFirstTime={isNewCourier} />}
+      {showOnboarding && <OnboardingModal onClose={handleCloseOnboarding} />}
       {showAdminMessages && <AdminMessagesListModal onClose={() => setShowAdminMessages(false)} onSelectUser={(user) => { setSelectedAdminUser(user); setShowAdminMessages(false); }} />}
       {selectedAdminUser && <AdminMessageModal user={selectedAdminUser} onClose={() => setSelectedAdminUser(null)} />}
       {selectedChatOrder && (

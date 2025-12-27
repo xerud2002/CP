@@ -78,9 +78,9 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Curierul Perfect",
-  "url": "https://curierulperfect.ro",
-  "logo": "https://curierulperfect.ro/logo.png",
-  "description": "Platformă de transport național și european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări în România și toată Europa.",
+  "url": "https://curierulperfect.com",
+  "logo": "https://curierulperfect.com/logo.png",
+  "description": "Curierul Perfect - Platformă de transport și curierat în România și Europa. Servicii de transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Compară oferte, alege curierul potrivit și primește livrări rapide și sigure.",
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": "+40-XXX-XXX-XXX",
@@ -91,7 +91,7 @@ const structuredData = {
     "https://www.facebook.com/curierulperfect",
     "https://www.instagram.com/curierulperfect"
   ],
-  "serviceArea": {
+  "areaServed": {
     "@type": "Place",
     "name": "Europa"
   },

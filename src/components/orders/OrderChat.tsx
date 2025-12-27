@@ -83,8 +83,6 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
   useEffect(() => {
     if (!orderId || !user) return;
 
-    console.log('OrderChat - Init', { userRole: user.role, orderId, courierId, clientId });
-
     const messagesRef = collection(db, 'mesaje');
     
     // Build query based on user role and available IDs
@@ -151,7 +149,6 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
           createdAt: data.createdAt?.toDate() || new Date(),
         });
       });
-      console.log('OrderChat - Messages loaded:', loadedMessages.length);
       setMessages(loadedMessages);
     }, (error) => {
       console.error('OrderChat - Error:', error);
@@ -225,7 +222,6 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
         
         if (updatePromises.length > 0) {
           await Promise.all(updatePromises);
-          console.log(`Marked ${updatePromises.length} messages as read`);
         }
       } catch (error) {
         console.error('Error marking messages as read:', error);

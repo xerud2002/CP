@@ -301,7 +301,6 @@ function ComenziCurierContent() {
             <OrderDetailsModal
               order={selectedOrder}
               onClose={() => setSelectedOrder(null)}
-              hideContactInfo={true}
               onFinalize={
                 selectedOrder.status === 'in_lucru' && selectedOrder.id && selectedOrder.status
                   ? () => handleFinalizeOrder(selectedOrder.id!, selectedOrder.status!)

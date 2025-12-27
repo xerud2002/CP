@@ -13,7 +13,6 @@ interface OrderDetailsModalProps {
   onClose: () => void;
   onFinalize?: () => void;
   onRequestReview?: () => void;
-  hideContactInfo?: boolean;
 }
 
 // Check if date is today or tomorrow
@@ -41,8 +40,7 @@ export default function OrderDetailsModal({
   order,
   onClose,
   onFinalize,
-  onRequestReview,
-  hideContactInfo = true // Default to hide contact info
+  onRequestReview
 }: OrderDetailsModalProps) {
   const serviceName = order.serviciu 
     ? (serviceNames[order.serviciu as keyof typeof serviceNames] || order.serviciu)

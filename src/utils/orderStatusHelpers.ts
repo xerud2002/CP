@@ -12,7 +12,6 @@ import { showSuccess, showError } from '@/lib/toast';
  */
 export const transitionToInLucru = async (orderId: string, currentStatus: string): Promise<boolean> => {
   if (currentStatus !== 'noua') {
-    console.log(`Order ${orderId} already transitioned from 'noua'`);
     return false;
   }
 
@@ -23,7 +22,7 @@ export const transitionToInLucru = async (orderId: string, currentStatus: string
       statusUpdatedAt: serverTimestamp(),
       inLucruAt: serverTimestamp(),
     });
-    console.log(`Order ${orderId} transitioned to 'in_lucru'`);
+    // Transition successful
     return true;
   } catch (error) {
     console.error('Error transitioning to in_lucru:', error);
