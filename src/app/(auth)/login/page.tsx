@@ -96,22 +96,6 @@ function LoginForm() {
               ? 'Accesează dashboard-ul și gestionează transporturi de colete, plicuri, persoane, mobilă, electronice, animale și servicii de platformă pe rutele tale europene.'
               : 'Transport sigur în toată Europa: colete, plicuri, persoane, mobilă, electronice, animale, platformă și tractări auto.'}
           </p>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1">16+</div>
-              <div className="text-gray-500 text-sm">Țări acoperite</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1">50k+</div>
-              <div className="text-gray-500 text-sm">Transporturi finalizate</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1">4.9★</div>
-              <div className="text-gray-500 text-sm">Rating mediu</div>
-            </div>
-          </div>
         </div>
       </div>
 

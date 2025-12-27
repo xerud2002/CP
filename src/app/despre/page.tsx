@@ -24,7 +24,7 @@ export default function DesprePage() {
             <h2 className="text-3xl font-bold text-white mb-6">Povestea noastră</h2>
             <div className="space-y-4 text-gray-300 leading-relaxed">
               <p>
-                Curierul Perfect s-a născut din experiența personală a mii de români care s-au confruntat cu dificultăți în găsirea de servicii de transport fiabile între România și țările din Europa de Vest.
+                Curierul Perfect s-a născut din experiența personală a românilor care s-au confruntat cu dificultăți în găsirea de servicii de transport fiabile între România și țările din Europa de Vest.
               </p>
               <p>
                 Am observat că mulți transportatori independenți ofereau servicii excelente, dar nu aveau o platformă centralizată unde să își prezinte serviciile. În același timp, clienții petreceau ore întregi căutând pe grupuri de Facebook sau prin recomandări opțiuni de transport.
@@ -134,31 +134,12 @@ export default function DesprePage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 px-4 bg-slate-800/50">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { number: '2000+', label: 'Comenzi finalizate' },
-              { number: '500+', label: 'Curieri verificați' },
-              { number: '16', label: 'Țări acoperite' },
-              { number: '4.8★', label: 'Rating mediu' }
-            ].map((stat, idx) => (
-              <div key={idx} className="text-center">
-                <div className="text-4xl font-bold text-gradient mb-2">{stat.number}</div>
-                <div className="text-gray-400">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-6">Gata să începi?</h2>
           <p className="text-gray-300 mb-8">
-            Alătură-te miilor de români care folosesc deja Curierul Perfect pentru transportul lor.
+            Încearcă Curierul Perfect pentru transportul tău în România și Europa.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/comanda" className="btn-primary px-8 py-4">

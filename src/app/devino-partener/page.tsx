@@ -38,22 +38,6 @@ export default function DevinoPartenerPage() {
               <span>Cum funcționează?</span>
             </Link>
           </div>
-          
-          {/* Quick stats */}
-          <div className="grid grid-cols-3 gap-4 sm:gap-8 mt-12 max-w-2xl mx-auto">
-            <div className="card p-4">
-              <div className="text-3xl font-bold text-gradient mb-1">500+</div>
-              <div className="text-xs sm:text-sm text-gray-400">Curieri activi</div>
-            </div>
-            <div className="card p-4">
-              <div className="text-3xl font-bold text-gradient mb-1">2000+</div>
-              <div className="text-xs sm:text-sm text-gray-400">Comenzi/lună</div>
-            </div>
-            <div className="card p-4">
-              <div className="text-3xl font-bold text-gradient mb-1">16</div>
-              <div className="text-xs sm:text-sm text-gray-400">Țări acoperite</div>
-            </div>
-          </div>
         </div>
       </section>
 

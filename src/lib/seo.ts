@@ -9,7 +9,7 @@ export const defaultMetadata: Metadata = {
     default: `${SITE_NAME} - Transport Național și European | Colete, Persoane, Mobilă`,
     template: `%s | ${SITE_NAME}`
   },
-  description: 'Platformă de transport național și european: colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în România și 16+ țări europene.',
+  description: 'Platformă de transport național și european: colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în România și Europa.',
   keywords: [
     'transport național România',
     'transport colete Europa',
