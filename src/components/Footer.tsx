@@ -30,7 +30,7 @@ export default function Footer() {
                 <span className="text-[10px] text-gray-600 font-medium tracking-wider uppercase mt-0.5 text-center">- TRANSPORT EUROPA -</span>
               </div>
             </Link>
-            <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
+            <p className="text-gray-300 text-sm leading-relaxed mb-6 max-w-sm">
               Platforma #1 care conectează românii din diaspora cu transportatori verificați pentru colete, mobilă, persoane, animale și mutări complete în toată Europa.
             </p>
             
@@ -40,7 +40,7 @@ export default function Footer() {
                 href="https://facebook.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-white/5 hover:bg-blue-600/20 border border-white/10 hover:border-blue-500/50 flex items-center justify-center text-gray-400 hover:text-blue-400 transition-all"
+                className="w-10 h-10 rounded-xl bg-white/5 hover:bg-blue-600/20 border border-white/10 hover:border-blue-500/50 flex items-center justify-center text-gray-300 hover:text-blue-400 transition-all"
                 aria-label="Facebook"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -51,7 +51,7 @@ export default function Footer() {
                 href="https://instagram.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-white/5 hover:bg-pink-600/20 border border-white/10 hover:border-pink-500/50 flex items-center justify-center text-gray-400 hover:text-pink-400 transition-all"
+                className="w-10 h-10 rounded-xl bg-white/5 hover:bg-pink-600/20 border border-white/10 hover:border-pink-500/50 flex items-center justify-center text-gray-300 hover:text-pink-400 transition-all"
                 aria-label="Instagram"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,7 @@ export default function Footer() {
                 href="https://tiktok.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-gray-400 hover:text-white transition-all"
+                className="w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/30 flex items-center justify-center text-gray-300 hover:text-white transition-all"
                 aria-label="TikTok"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -73,7 +73,7 @@ export default function Footer() {
                 href="https://wa.me/447880312621" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-white/5 hover:bg-green-600/20 border border-white/10 hover:border-green-500/50 flex items-center justify-center text-gray-400 hover:text-green-400 transition-all"
+                className="w-10 h-10 rounded-xl bg-white/5 hover:bg-green-600/20 border border-white/10 hover:border-green-500/50 flex items-center justify-center text-gray-300 hover:text-green-400 transition-all"
                 aria-label="WhatsApp"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -88,7 +88,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-5">Companie</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/despre" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/despre" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -96,7 +96,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/cum-functioneaza" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/cum-functioneaza" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -104,7 +104,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/devino-partener" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/devino-partener" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -112,7 +112,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/preturi" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/preturi" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -127,7 +127,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-5">Suport</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/faq" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/faq" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -135,7 +135,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/contact" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -143,7 +143,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/comanda" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/comanda" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -151,7 +151,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/reclamatii" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/reclamatii" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -166,7 +166,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-5">Legal</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/termeni" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/termeni" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -174,7 +174,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/confidentialitate" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/confidentialitate" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -182,7 +182,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/cookies" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -190,7 +190,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/gdpr" className="text-gray-400 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/gdpr" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -206,7 +206,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h4 className="text-white font-semibold mb-1">Abonează-te la newsletter</h4>
-              <p className="text-gray-400 text-sm">Primește oferte exclusive pentru transport colete, mobilă, persoane și multe altele.</p>
+              <p className="text-gray-300 text-sm">Primește oferte exclusive pentru transport colete, mobilă, persoane și multe altele.</p>
             </div>
             <form className="flex w-full md:w-auto gap-2">
               <input
@@ -229,17 +229,17 @@ export default function Footer() {
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-300 text-sm">
               © {currentYear} Curierul Perfect. Toate drepturile rezervate.
             </p>
             <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <div className="flex items-center gap-2 text-gray-300 text-sm">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
                 <span>Plăți securizate</span>
               </div>
-              <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <div className="flex items-center gap-2 text-gray-300 text-sm">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
