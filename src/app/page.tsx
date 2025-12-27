@@ -125,6 +125,8 @@ export default function Home() {
 
             {/* Right side - Services Grid */}
             <div className="animate-fade-in-delayed">
+              {/* Hidden h2 for proper heading hierarchy */}
+              <h2 className="sr-only">Servicii disponibile</h2>
               <div className="relative">
                 {/* Glow effect */}
                 <div className="absolute -inset-4 bg-linear-to-r from-orange-500/10 to-green-500/10 rounded-3xl blur-2xl"></div>
