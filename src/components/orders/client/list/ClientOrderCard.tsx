@@ -88,6 +88,10 @@ function ClientOrderCard({
       const label = order.serviciu === 'paleti' ? 'Palet' : 'Colet';
       return `${label}: ${order.greutate}${!String(order.greutate).includes('kg') ? ' kg' : ''}`;
     }
+    // For furniture, show team requirement instead of quantity
+    if (order.serviciu === 'mobila' && order.echipa_necesara) {
+      return order.echipa_necesara === 'da' ? 'Da, 2+ persoane' : 'Nu, 1 persoană';
+    }
     if (order.cantitate) {
       const label = order.serviciu === 'persoane' ? 'Număr persoane' : 
                     order.serviciu === 'mobila' ? 'Nr. piese mobilier' : 

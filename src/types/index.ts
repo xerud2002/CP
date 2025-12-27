@@ -68,6 +68,8 @@ export interface Order {
   numar_inmatriculare?: string;
   motiv_tractare?: string;
   roti_functionale?: string;
+  // Mobilă specific fields
+  echipa_necesara?: string; // 'da' | 'nu'
   timestamp?: number;
   createdAt?: Date | { toDate: () => Date };
   nrOferte?: number;

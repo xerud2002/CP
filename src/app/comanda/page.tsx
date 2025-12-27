@@ -170,6 +170,7 @@ function ComandaForm() {
     motiv_tractare: '',       // Tractări
     roti_functionale: '',     // Tractări
     numar_inmatriculare: '',  // Tractări, Platformă
+    echipa_necesara: '',      // Mobilă (2 persoane necesare)
     
     // Date ridicare/livrare - sistem simplificat
     tip_programare: 'data_specifica', // 'data_specifica' | 'range' | 'flexibil'
