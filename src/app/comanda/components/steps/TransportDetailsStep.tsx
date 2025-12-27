@@ -2,7 +2,6 @@
 import AnimalTypeDropdown from '../dropdowns/AnimalTypeDropdown';
 import VehicleTypeDropdown from '../dropdowns/VehicleTypeDropdown';
 import DatePicker from '../DatePicker';
-import LicensePlateScanner from '../LicensePlateScanner';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FormDataType = any;
@@ -335,14 +334,34 @@ export default function TransportDetailsStep({
         {/* Tractări - câmpuri simple */}
         {selectedService === 'tractari' && (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Row 1: Tip vehicul + Număr înmatriculare */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Tip vehicul *</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <span className="text-orange-400">Tip vehicul</span> *
+                </label>
                 <VehicleTypeDropdown
                   value={formData.tip_vehicul}
                   onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, tip_vehicul: value }))}
                 />
+                {errors.tip_vehicul && <p className="text-red-400 text-sm mt-1">{errors.tip_vehicul}</p>}
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Număr înmatriculare</label>
+                <input
+                  type="text"
+                  name="numar_inmatriculare"
+                  value={formData.numar_inmatriculare || ''}
+                  onChange={handleInputChange}
+                  className="form-input w-full uppercase tracking-wider"
+                  placeholder="B 123 ABC"
+                  maxLength={15}
+                />
+              </div>
+            </div>
+            
+            {/* Row 2: Motiv + Roți */}
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Motiv tractare</label>
                 <select
@@ -367,21 +386,10 @@ export default function TransportDetailsStep({
                   className="form-select w-full"
                 >
                   <option value="">Selectează</option>
-                  <option value="da">Da, se rotesc</option>
+                  <option value="da">Da</option>
                   <option value="nu">Nu, blocate</option>
                 </select>
               </div>
-            </div>
-            
-            {/* Număr înmatriculare cu OCR */}
-            <LicensePlateScanner
-              value={formData.numar_inmatriculare || ''}
-              onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, numar_inmatriculare: value }))}
-              country={formData.tara_ridicare}
-            />
-            
-            <div className="p-3 rounded-xl bg-orange-500/10 border border-orange-500/30">
-              <p className="text-sm text-gray-400">💡 Menționează în descriere: marca, modelul, locația exactă</p>
             </div>
           </>
         )}
@@ -389,28 +397,44 @@ export default function TransportDetailsStep({
         {/* Mobilă - info + dimensiuni */}
         {selectedService === 'mobila' && (
           <>
-            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
-              <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <div>
-                  <p className="text-amber-400 font-medium mb-1">Transport mobilier</p>
-                  <p className="text-sm text-gray-400">Adaugă detalii despre piesele de mobilier (tip, dimensiuni, cantitate) în câmpul de mai jos.</p>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Nr. piese mobilier</label>
+                <input
+                  type="number"
+                  name="cantitate"
+                  value={formData.cantitate}
+                  onChange={handleInputChange}
+                  className="form-input w-full"
+                  placeholder="1"
+                  min="1"
+                />
               </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Număr piese mobilier</label>
-              <input
-                type="number"
-                name="cantitate"
-                value={formData.cantitate}
-                onChange={handleInputChange}
-                className="form-input w-full"
-                placeholder="1"
-                min="1"
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Greutate estimată (kg)</label>
+                <input
+                  type="number"
+                  name="greutate"
+                  value={formData.greutate}
+                  onChange={handleInputChange}
+                  className="form-input w-full"
+                  placeholder="ex: 150"
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Necesită 2 persoane?</label>
+                <select
+                  name="echipa_necesara"
+                  value={formData.echipa_necesara || ''}
+                  onChange={handleInputChange}
+                  className="form-select w-full"
+                >
+                  <option value="">Selectează</option>
+                  <option value="nu">Nu, 1 persoană</option>
+                  <option value="da">Da, 2+ persoane</option>
+                </select>
+              </div>
             </div>
           </>
         )}
@@ -452,32 +476,77 @@ export default function TransportDetailsStep({
             value={formData.descriere}
             onChange={handleInputChange}
             className="form-input w-full"
-            rows={3}
+            rows={2}
             placeholder={
-              selectedService === 'plicuri' ? 'Descrie documentele (ex: contracte, acte notariale, corespondență oficială)' :
+              selectedService === 'plicuri' ? 'Descrie documentele (contracte, acte, corespondență)' :
               selectedService === 'masini' ? 'Ex: BMW X5, 2020, negru, funcțional/nefuncțional' :
               selectedService === 'persoane' ? 'Ex: bagaje, copii mici, nevoi speciale...' :
-              selectedService === 'animale' ? 'Ex: Câine Labrador, 25kg, are cușcă proprie, vaccinuri la zi' :
-              selectedService === 'electronice' ? 'Ex: Laptop MacBook Pro, TV 55", PlayStation 5, toate în cutii originale' :
-              selectedService === 'platforma' ? 'Ex: BMW Seria 3, 2018, 1.5 tone, funcțional dar fără roți' :
-              selectedService === 'tractari' ? 'Ex: Dacia Logan, 2019, pană de motor pe autostradă A1 km 45' :
-              selectedService === 'mobila' ? 'Ex: Canapea 3 locuri, dulap 2m, masă dining + 6 scaune, pat matrimonial' :
-              selectedService === 'paleti' ? 'Ex: 2 paleți cu produse alimentare ambalate, fiecare 500kg' :
-              'Descrie ce vrei să trimiți (ex: colet fragil, electronice, haine)'
+              selectedService === 'animale' ? 'Ex: Câine Labrador, 25kg, are cușcă, vaccinat' :
+              selectedService === 'electronice' ? 'Ex: Laptop, TV 55", PlayStation 5' :
+              selectedService === 'platforma' ? 'Ex: BMW Seria 3, 2018, 1.5t, funcțional' :
+              selectedService === 'tractari' ? 'Ex: Dacia Logan, 2019, pană motor, A1 km 45' :
+              selectedService === 'mobila' ? 'Ex: Canapea, dulap 2m, masă + 6 scaune' :
+              selectedService === 'paleti' ? 'Ex: 2 paleți alimente, fiecare 500kg' :
+              'Descrie ce trimiți (colet fragil, electronice, haine)'
             }
           />
           {errors.descriere && <p className="text-red-400 text-sm mt-1">{errors.descriere}</p>}
         </div>
         
-        {/* Data aproximativă de colectare */}
-        <DatePicker
-          value={formData.data_ridicare}
-          onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, data_ridicare: value }))}
-          label="Data aproximativă de colectare"
-          placeholder="Alege o dată"
-          accentColor="orange"
-          error={errors.data_ridicare}
-        />
+        {/* Data colectare - Urgent + DatePicker pe aceeași linie */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-300">Data colectare *</label>
+          <div className="grid grid-cols-2 gap-3 items-stretch">
+            {/* Urgent button - active if today or tomorrow */}
+            {(() => {
+              const today = new Date();
+              const tomorrow = new Date();
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              const todayStr = today.toISOString().split('T')[0];
+              const tomorrowStr = tomorrow.toISOString().split('T')[0];
+              const isUrgent = formData.data_ridicare === todayStr || formData.data_ridicare === tomorrowStr;
+              
+              return (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData((prev: FormDataType) => ({ 
+                      ...prev, 
+                      data_ridicare: todayStr,
+                      urgent: true
+                    }));
+                  }}
+                  className={`relative px-3 py-1.5 rounded-lg border transition-all flex items-center justify-center gap-1.5 text-xs font-medium ${
+                    isUrgent
+                      ? 'bg-linear-to-r from-orange-500 to-amber-500 border-orange-400 text-white shadow-lg shadow-orange-500/30'
+                      : 'bg-slate-700/50 border-white/10 text-gray-400 hover:border-orange-500/50 hover:text-orange-400 hover:bg-slate-700'
+                  }`}
+                >
+                  {isUrgent && (
+                    <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-300"></span>
+                    </span>
+                  )}
+                  <svg className={`w-4 h-4 ${isUrgent ? 'animate-pulse' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <span>Urgent (azi/mâine)</span>
+                </button>
+              );
+            })()}
+            
+            {/* Date picker */}
+            <DatePicker
+              value={formData.data_ridicare}
+              onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, data_ridicare: value }))}
+              label=""
+              placeholder="Altă dată"
+              accentColor="orange"
+              error={errors.data_ridicare}
+            />
+          </div>
+        </div>
 
         {formData.tip_programare === 'range' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

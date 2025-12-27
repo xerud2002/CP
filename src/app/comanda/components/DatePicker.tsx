@@ -99,7 +99,7 @@ export default function DatePicker({
 
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-300 mb-2">{label} *</label>
+      {label && <label className="block text-sm font-medium text-gray-300 mb-2">{label} *</label>}
       <div className="relative" ref={dropdownRef}>
         <button
           type="button"

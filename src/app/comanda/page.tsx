@@ -329,10 +329,14 @@ function ComandaForm() {
         if (!formData.descriere) newErrors.descriere = 'Detaliile vehiculului sunt obligatorii';
       }
       
-      // Validare în funcție de tipul de programare
-      if (formData.tip_programare === 'data_specifica') {
-        if (!formData.data_ridicare) newErrors.data_ridicare = 'Selectează data ridicării';
+      // Validare pentru tractări - tip vehicul și detalii obligatorii
+      if (selectedService === 'tractari') {
+        if (!formData.tip_vehicul) newErrors.tip_vehicul = 'Selectează tipul vehiculului';
+        if (!formData.descriere) newErrors.descriere = 'Detaliile vehiculului și situației sunt obligatorii';
       }
+      
+      // Validare data - obligatorie pentru toate serviciile
+      if (!formData.data_ridicare) newErrors.data_ridicare = 'Selectează data ridicării';
       if (formData.tip_programare === 'range') {
         if (!formData.data_ridicare) newErrors.data_ridicare = 'Selectează data de start';
         if (!formData.data_ridicare_end) newErrors.data_ridicare_end = 'Selectează data de final';

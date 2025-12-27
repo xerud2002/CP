@@ -23,6 +23,21 @@ const capitalize = (str: string | undefined) => {
   return str.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
 };
 
+// Check if date is today or tomorrow
+const isUrgent = (dateStr: string | undefined) => {
+  if (!dateStr) return false;
+  const date = new Date(dateStr);
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  today.setHours(0, 0, 0, 0);
+  tomorrow.setHours(0, 0, 0, 0);
+  date.setHours(0, 0, 0, 0);
+  
+  return date.getTime() === today.getTime() || date.getTime() === tomorrow.getTime();
+};
+
 function ClientOrderCard({
   order,
   onToggleChat,
@@ -51,7 +66,20 @@ function ClientOrderCard({
       };
       return `Tip animal: ${animalLabels[order.tip_animal] || order.tip_animal}`;
     }
-    // Show vehicle type if available
+    // Tractări - show vehicle type and description
+    if (order.serviciu === 'tractari') {
+      if (order.tip_vehicul && order.descriere) {
+        return `Tip: ${order.tip_vehicul} - Descriere: ${order.descriere}`;
+      }
+      if (order.tip_vehicul) {
+        return `Tip vehicul: ${order.tip_vehicul}`;
+      }
+      if (order.descriere) {
+        return `Descriere: ${order.descriere}`;
+      }
+      return null;
+    }
+    // Show vehicle type if available (for other services like platforma, masini)
     if (order.tip_vehicul) {
       const vehicleText = `Vehicul: ${order.tip_vehicul}`;
       return order.descriere ? `${vehicleText} - ${order.descriere}` : vehicleText;
@@ -111,6 +139,14 @@ function ClientOrderCard({
                 <h3 className="text-white font-semibold text-sm sm:text-base">
                   {order.serviciu ? (serviceNames[order.serviciu as keyof typeof serviceNames] || order.serviciu) : 'Colete'}
                 </h3>
+                {isUrgent(order.data_ridicare) && (
+                  <span className="px-2 py-0.5 bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-medium rounded-full flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Urgent
+                  </span>
+                )}
                 {(order.nrOferte ?? 0) > 0 && (
                   <span className="px-2 py-0.5 bg-orange-500/20 border border-orange-500/30 text-orange-400 text-xs font-medium rounded-full">
                     {order.nrOferte} {order.nrOferte === 1 ? 'ofertă' : 'oferte'}
