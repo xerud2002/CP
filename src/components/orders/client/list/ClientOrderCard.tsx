@@ -89,7 +89,10 @@ function ClientOrderCard({
       return `${label}: ${order.greutate}${!String(order.greutate).includes('kg') ? ' kg' : ''}`;
     }
     if (order.cantitate) {
-      return `Cantitate: ${order.cantitate}`;
+      const label = order.serviciu === 'persoane' ? 'Număr persoane' : 
+                    order.serviciu === 'mobila' ? 'Nr. piese mobilier' : 
+                    'Cantitate';
+      return `${label}: ${order.cantitate}`;
     }
     return null;
   };
