@@ -343,7 +343,7 @@ export default function Home() {
                       </svg>
                     ), 
                     title: 'Recenzii reale', 
-                    desc: 'Feedback pozitiv ȘI negativ transparent' 
+                    desc: 'Feedback pozitiv și negativ transparent' 
                   },
                   { 
                     icon: (
