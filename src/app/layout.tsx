@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import LayoutWrapper from "@/components/LayoutWrapper";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { Toaster } from 'sonner';
 
 const geistSans = Geist({
@@ -20,9 +21,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://curierulperfect.ro'),
+  metadataBase: new URL('https://curierulperfect.com'),
   title: {
-    default: "Curierul Perfect - Transport Național și European | Colete, Persoane, Mobilă",
+    default: "Curierul Perfect - Transport Colete România Europa | Persoane, Mobilă, Animale",
     template: "%s | Curierul Perfect"
   },
   description: "Platformă de transport național și european: colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în România și 16+ țări europene. Conectă-te cu curieri verificați.",
@@ -56,11 +57,11 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "Curierul Perfect - Transport Complet în Europa",
-    description: "Conectează-te cu curieri de încredere pentru transport: colete, plicuri, persoane, mobilă, electronice, animale și mai mult. Servicii în 16+ țări europene.",
+    title: "Transport Colete România Europa | Curierul Perfect",
+    description: "Trimite colete, mobilă, animale sau transportă persoane România-Europa. Curieri verificați, prețuri competitive. UK, Germania, Italia, Spania.",
     type: "website",
     locale: "ro_RO",
-    url: "https://curierulperfect.ro",
+    url: "https://curierulperfect.com",
     siteName: "Curierul Perfect",
     images: [
       {
@@ -89,7 +90,10 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://curierulperfect.ro",
+    canonical: "https://curierulperfect.com",
+    languages: {
+      'ro-RO': 'https://curierulperfect.ro',
+    },
   },
   category: "transport",
 };
@@ -110,8 +114,8 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Curierul Perfect',
-  url: 'https://curierulperfect.ro',
-  logo: 'https://curierulperfect.ro/logo.png',
+  url: 'https://curierulperfect.com',
+  logo: 'https://curierulperfect.com/logo.png',
   description: 'Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări.',
   contactPoint: {
     '@type': 'ContactPoint',
@@ -162,6 +166,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
+        <GoogleAnalytics />
         <AuthProvider>
           <LayoutWrapper>
             {children}

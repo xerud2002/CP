@@ -1,19 +1,25 @@
 # robots.txt for Curierul Perfect
-# https://curierulperfect.ro
+# https://curierulperfect.com
 
 User-agent: *
 Allow: /
 Allow: /comanda
+Allow: /servicii/
+Allow: /transport/
 Disallow: /dashboard/
 Disallow: /api/
-Disallow: /_next/
+Disallow: /_next/static/
+Disallow: /review/
 
 # Googlebot specific
 User-agent: Googlebot
 Allow: /
-Allow: /comanda
-Disallow: /dashboard/
-Disallow: /api/
+Crawl-delay: 1
 
-# Sitemap location
-Sitemap: https://curierulperfect.ro/sitemap.xml
+# Bingbot specific
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+# Sitemap locations
+Sitemap: https://curierulperfect.com/sitemap.xml
