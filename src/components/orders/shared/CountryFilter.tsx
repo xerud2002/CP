@@ -57,7 +57,7 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
           ) : (
             <>
               <Image 
-                src={`/img/flag/${selectedCountry?.code}.svg`}
+                src={`/img/flag/${selectedCountry?.code.toLowerCase()}.svg`}
                 alt={selectedCountry?.name || ''}
                 width={20}
                 height={15}
@@ -124,7 +124,7 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
                   }`}
                 >
                   <Image 
-                    src={`/img/flag/${country.code}.svg`}
+                    src={`/img/flag/${country.code.toLowerCase()}.svg`}
                     alt={country.name}
                     width={20}
                     height={15}

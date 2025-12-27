@@ -4,6 +4,12 @@ import React from 'react';
 import Image from 'next/image';
 import { countries } from '@/lib/constants';
 
+// Helper to get country data with lowercase code
+const getCountryData = (countryName: string | undefined) => {
+  const country = countries.find(c => c.name === countryName) || countries.find(c => c.code === 'RO')!;
+  return { ...country, code: country.code.toLowerCase() };
+};
+
 interface OrderRouteSectionProps {
   pickupCountry?: string;
   pickupRegion: string;
@@ -53,7 +59,7 @@ export default function OrderRouteSection({
           </div>
           <div className="flex items-center gap-2">
             <Image 
-              src={`/img/flag/${pickupData.code}.svg`}
+              src={`/img/flag/${pickupData.code.toLowerCase()}.svg`}
               alt={pickupData.name}
               width={20}
               height={15}
@@ -84,7 +90,7 @@ export default function OrderRouteSection({
           </div>
           <div className="flex items-center gap-2">
             <Image 
-              src={`/img/flag/${deliveryData.code}.svg`}
+              src={`/img/flag/${deliveryData.code.toLowerCase()}.svg`}
               alt={deliveryData.name}
               width={20}
               height={15}
