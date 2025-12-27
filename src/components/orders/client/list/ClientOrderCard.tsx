@@ -84,13 +84,21 @@ function ClientOrderCard({
       const vehicleText = `Vehicul: ${order.tip_vehicul}`;
       return order.descriere ? `${vehicleText} - ${order.descriere}` : vehicleText;
     }
+    // For furniture, show total weight and team requirement
+    if (order.serviciu === 'mobila') {
+      const parts = [];
+      if (order.greutate) {
+        parts.push(`Greutate totală aproximativă: ${order.greutate}${!String(order.greutate).includes('kg') ? ' kg' : ''}`);
+      }
+      if (order.echipa_necesara) {
+        const team = order.echipa_necesara === 'da' ? 'Necesită 2+ persoane' : 'Necesită 1 persoană';
+        parts.push(team);
+      }
+      if (parts.length > 0) return parts.join(' • ');
+    }
     if (order.greutate) {
       const label = order.serviciu === 'paleti' ? 'Palet' : 'Colet';
       return `${label}: ${order.greutate}${!String(order.greutate).includes('kg') ? ' kg' : ''}`;
-    }
-    // For furniture, show team requirement instead of quantity
-    if (order.serviciu === 'mobila' && order.echipa_necesara) {
-      return order.echipa_necesara === 'da' ? 'Da, 2+ persoane' : 'Nu, 1 persoană';
     }
     if (order.cantitate) {
       const label = order.serviciu === 'persoane' ? 'Număr persoane' : 
