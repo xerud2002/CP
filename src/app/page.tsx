@@ -156,7 +156,7 @@ export default function Home() {
                 <Link href="/comanda" className="btn-primary px-5 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base md:text-lg flex items-center justify-center w-full sm:w-auto min-h-12">
                   Plasează o comandă
                 </Link>
-                <Link href="/register?role=curier" className="btn-secondary px-5 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base md:text-lg flex items-center justify-center w-full sm:w-auto min-h-12">
+                <Link href="/devino-partener" className="btn-secondary px-5 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base md:text-lg flex items-center justify-center w-full sm:w-auto min-h-12">
                   Devino Partener
                 </Link>
               </div>
