@@ -235,7 +235,25 @@ export default function DocumentVerificationContent() {
 
   const filteredCouriers = couriers.filter(courier => {
     if (filterStatus === 'all') return true;
-    return Object.values(courier.documents).some(doc => doc.status === filterStatus);
+    
+    const docs = Object.values(courier.documents);
+    
+    if (filterStatus === 'pending') {
+      // Show couriers with at least one pending document
+      return docs.some(doc => doc.status === 'pending');
+    }
+    
+    if (filterStatus === 'approved') {
+      // Show couriers where ALL documents are approved
+      return docs.length > 0 && docs.every(doc => doc.status === 'approved');
+    }
+    
+    if (filterStatus === 'rejected') {
+      // Show couriers with at least one rejected document
+      return docs.some(doc => doc.status === 'rejected');
+    }
+    
+    return true;
   });
 
   const getPendingCount = (courier: CourierDocuments) => {
