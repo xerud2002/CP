@@ -16,7 +16,7 @@ export default function PreturiPage() {
 
   return (
     <main className="min-h-screen bg-slate-900">
-      <section className="py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
+      <section className="py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             <span className="text-gradient">Prețuri</span> Transparente
@@ -62,7 +62,7 @@ export default function PreturiPage() {
             ))}
           </div>
 
-          <div className="card p-8 mb-12 bg-gradient-to-br from-orange-500/5 to-purple-500/5 border-orange-500/20">
+          <div className="card p-8 mb-12 bg-linear-to-br from-orange-500/5 to-purple-500/5 border-orange-500/20">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">Exemple de prețuri orientative</h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center p-4 bg-slate-800/50 rounded-lg">

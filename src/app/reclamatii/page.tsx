@@ -31,7 +31,7 @@ export default function ReclamatiiPage() {
 
   return (
     <main className="min-h-screen bg-slate-900">
-      <section className="py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
+      <section className="py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             Reclamații și <span className="text-gradient">Soluționare Conflicte</span>
@@ -146,7 +146,7 @@ export default function ReclamatiiPage() {
                   { step: '4', title: 'Implementăm soluția', time: '3-7 zile', desc: 'Aplicăm măsurile corective sau compensații' }
                 ].map((item) => (
                   <div key={item.step} className="flex gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 bg-orange-500/10 rounded-full flex items-center justify-center">
+                    <div className="shrink-0 w-10 h-10 bg-orange-500/10 rounded-full flex items-center justify-center">
                       <span className="font-bold text-orange-400">{item.step}</span>
                     </div>
                     <div>

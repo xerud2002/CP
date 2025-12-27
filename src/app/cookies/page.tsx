@@ -24,7 +24,7 @@ export default function CookiesPage() {
 
   return (
     <main className="min-h-screen bg-slate-900">
-      <section className="py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
+      <section className="py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             Politica <span className="text-gradient">Cookies</span>
@@ -97,7 +97,7 @@ export default function CookiesPage() {
             </div>
           </div>
 
-          <div className="card p-8 mb-6 bg-gradient-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20">
+          <div className="card p-8 mb-6 bg-linear-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20">
             <h2 className="text-2xl font-bold text-white mb-6 text-center">⚙️ Setări Cookies</h2>
             
             <div className="space-y-4">
@@ -129,7 +129,7 @@ export default function CookiesPage() {
                     onChange={(e) => setPreferences({...preferences, analytics: e.target.checked})}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-orange-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                  <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-orange-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
                 </label>
               </div>
 
@@ -145,7 +145,7 @@ export default function CookiesPage() {
                     onChange={(e) => setPreferences({...preferences, marketing: e.target.checked})}
                     className="sr-only peer"
                   />
-                  <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-orange-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                  <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-orange-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
                 </label>
               </div>
             </div>

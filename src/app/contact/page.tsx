@@ -31,7 +31,7 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-slate-900">
-      <section className="py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
+      <section className="py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             Contactează-ne
@@ -168,7 +168,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="card p-6 bg-gradient-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20">
+            <div className="card p-6 bg-linear-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20">
               <h3 className="font-bold text-white mb-3">Social Media</h3>
               <div className="flex gap-3">
                 <a href="https://www.facebook.com/profile.php?id=61571831621426" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/5 hover:bg-white/10 rounded-lg transition">

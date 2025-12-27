@@ -29,7 +29,7 @@ export default function GDPRPage() {
 
   return (
     <main className="min-h-screen bg-slate-900">
-      <section className="py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
+      <section className="py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             Drepturile Tale <span className="text-gradient">GDPR</span>
@@ -116,7 +116,7 @@ export default function GDPRPage() {
                     <option value="">Selectează dreptul</option>
                     <option value="Dreptul de acces">📖 Acces la date</option>
                     <option value="Dreptul la rectificare">✏️ Rectificare date</option>
-                    <option value="Dreptul la ștergere">🗑️ Ștergere date ("Dreptul de a fi uitat")</option>
+                    <option value="Dreptul la ștergere">🗑️ Ștergere date (&quot;Dreptul de a fi uitat&quot;)</option>
                     <option value="Dreptul la restricționare">⛔ Restricționare procesare</option>
                     <option value="Dreptul la portabilitate">📦 Portabilitate date</option>
                     <option value="Dreptul la opoziție">🚫 Opoziție procesare</option>
@@ -178,7 +178,7 @@ export default function GDPRPage() {
                     { step: '4', title: 'Primești răspuns', desc: 'Te contactăm în max. 30 zile cu soluția' }
                   ].map((item) => (
                     <div key={item.step} className="flex gap-4">
-                      <div className="flex-shrink-0 w-10 h-10 bg-orange-500/10 rounded-full flex items-center justify-center">
+                      <div className="shrink-0 w-10 h-10 bg-orange-500/10 rounded-full flex items-center justify-center">
                         <span className="font-bold text-orange-400">{item.step}</span>
                       </div>
                       <div>
@@ -283,7 +283,7 @@ export default function GDPRPage() {
                   </svg>
                 </summary>
                 <div className="p-4 text-gray-300 text-sm">
-                  Păstrăm datele comenzilor 5 ani pentru obligații fiscale (conform legii contabilității). Datele sunt anonimizate (nume → "Utilizator #12345").
+                  Păstrăm datele comenzilor 5 ani pentru obligații fiscale (conform legii contabilității). Datele sunt anonimizate (nume → &quot;Utilizator #12345&quot;).
                 </div>
               </details>
 
@@ -316,7 +316,7 @@ export default function GDPRPage() {
             </div>
           </div>
 
-          <div className="card p-8 bg-gradient-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20">
+          <div className="card p-8 bg-linear-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20">
             <h2 className="text-2xl font-bold text-white mb-4 text-center">Contact DPO</h2>
             <p className="text-gray-300 mb-6 text-center">
               Pentru orice întrebare despre datele tale sau drepturile GDPR:

@@ -6,7 +6,7 @@ export default function CumFunctioneazaPage() {
   return (
     <main className="min-h-screen bg-slate-900">
       {/* Hero */}
-      <section className="relative py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
+      <section className="relative py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             Cum funcționează <span className="text-gradient">Curierul Perfect</span>?
@@ -75,7 +75,7 @@ export default function CumFunctioneazaPage() {
             <div key={idx} className="relative mb-12 last:mb-0">
               {/* Connector line */}
               {idx < 4 && (
-                <div className="absolute left-10 top-24 w-0.5 h-12 bg-gradient-to-b from-white/20 to-transparent hidden md:block" />
+                <div className="absolute left-10 top-24 w-0.5 h-12 bg-linear-to-b from-white/20 to-transparent hidden md:block" />
               )}
               
               <div className="flex flex-col md:flex-row gap-6 items-start">
@@ -86,7 +86,7 @@ export default function CumFunctioneazaPage() {
                       {item.icon}
                     </svg>
                   </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold">
                     {item.step}
                   </div>
                 </div>
@@ -122,17 +122,17 @@ export default function CumFunctioneazaPage() {
             {[
               {
                 title: 'Te înregistrezi',
-                desc: 'Creezi cont, adaugi documentele necesare (CI, asigurare, acte autovehicul) și aștepți verificarea.',
+                desc: 'Creezi cont GRATUIT (până pe 31 Martie 2026), adaugi documentele necesare (CI, asigurare, acte autovehicul) și aștepți verificarea.',
                 icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
               },
               {
                 title: 'Vezi comenzile',
-                desc: 'Accesezi lista cu toate comenzile disponibile, filtrate după țară, tip serviciu și rută.',
+                desc: 'Accesezi GRATUIT lista cu toate comenzile disponibile, filtrate după țară, tip serviciu și rută.',
                 icon: <><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></>
               },
               {
                 title: 'Trimiți oferte',
-                desc: 'Contactezi clienții direct prin chat, negociezi prețul și detaliile, iar apoi finalizezi transportul.',
+                desc: 'Contactezi clienții direct prin chat (FĂRĂ comisioane), negociezi prețul și detaliile, iar apoi finalizezi transportul.',
                 icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               }
             ].map((step, idx) => (
@@ -207,11 +207,11 @@ export default function CumFunctioneazaPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 bg-gradient-to-br from-orange-500/10 to-orange-600/5">
+      <section className="py-16 px-4 bg-linear-to-br from-orange-500/10 to-orange-600/5">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-6">Simplu, Rapid, Sigur</h2>
           <p className="text-gray-300 mb-8 text-lg">
-            Peste 2000 de români au folosit deja Curierul Perfect pentru transportul lor.
+            Platformă de încredere pentru transport în Europa.
           </p>
           <Link href="/comanda" className="btn-primary px-10 py-4 text-lg inline-flex items-center gap-3">
             <span>Plasează prima comandă</span>

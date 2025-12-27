@@ -3,7 +3,7 @@
 export default function TermeniPage() {
   return (
     <main className="min-h-screen bg-slate-900">
-      <section className="py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
+      <section className="py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             Termeni și <span className="text-gradient">Condiții</span>
@@ -13,7 +13,7 @@ export default function TermeniPage() {
       </section>
 
       <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto prose prose-invert prose-orange max-w-none">
+        <div className="max-w-4xl mx-auto prose prose-invert prose-orange">
           <div className="card p-8 mb-6">
             <h2 className="text-2xl font-bold text-white mb-4">1. Acceptarea Termenilor</h2>
             <p className="text-gray-300 leading-relaxed">

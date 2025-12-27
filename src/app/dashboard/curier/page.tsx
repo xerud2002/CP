@@ -188,7 +188,7 @@ const DashboardHeader = memo(function DashboardHeader({ adminUnreadCount, onLogo
             >
               <BellIcon className="w-5 h-5 sm:w-6 sm:h-6" />
               {(adminUnreadCount ?? 0) > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-[16px] h-4 sm:min-w-[20px] sm:h-5 px-1 bg-red-500 rounded-full text-[10px] sm:text-xs font-bold text-white flex items-center justify-center shadow-lg animate-pulse">
+                <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4 h-4 sm:min-w-5 sm:h-5 px-1 bg-red-500 rounded-full text-[10px] sm:text-xs font-bold text-white flex items-center justify-center shadow-lg animate-pulse">
                   {(adminUnreadCount ?? 0) > 9 ? '9+' : adminUnreadCount}
                 </span>
               )}
@@ -793,9 +793,9 @@ const OnboardingModal = memo(function OnboardingModal({ onClose }: { onClose: ()
   const steps = [
     {
       title: 'Ofertă Limitată!',
-      subtitle: '100% GRATUIT',
-      content: 'Acces exclusiv pentru curieri verificați. Platformă complet gratuită pentru o perioadă limitată!',
-      items: ['Comenzi nelimitate', 'Zero comisioane', 'Chat direct cu clienții', 'Ofertă valabilă limitat'],
+      subtitle: '100% GRATUIT până pe 31 Martie 2026',
+      content: 'Acces exclusiv pentru curieri verificați. Platformă complet gratuită până pe 31 Martie 2026!',
+      items: ['Comenzi nelimitate', 'Zero comisioane', 'Chat direct cu clienții - contactezi direct', 'Ofertă valabilă până pe 31 Martie 2026'],
       cta: 'Revendică Acces Gratuit',
     },
     {
