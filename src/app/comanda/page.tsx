@@ -335,6 +335,11 @@ function ComandaForm() {
         if (!formData.descriere) newErrors.descriere = 'Detaliile vehiculului și situației sunt obligatorii';
       }
       
+      // Validare pentru mobilă - descriere obligatorie
+      if (selectedService === 'mobila') {
+        if (!formData.descriere) newErrors.descriere = 'Descrierea mobilierului este obligatorie';
+      }
+      
       // Validare data - obligatorie pentru toate serviciile
       if (!formData.data_ridicare) newErrors.data_ridicare = 'Selectează data ridicării';
       if (formData.tip_programare === 'range') {
