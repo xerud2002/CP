@@ -356,22 +356,22 @@ export default function AdminDashboard() {
           {activeTab === 'users' && (
             <div className="space-y-3 sm:space-y-4">
               {/* Header row with filters and search */}
-              <div className="flex flex-col gap-3 sm:gap-4">
-                {/* Role filter tabs - scrollable on mobile */}
-                <div className="flex gap-1 bg-slate-900/50 p-1 rounded-xl overflow-x-auto scrollbar-hide -mx-1 px-1">
+              <div className="flex flex-col gap-2 sm:gap-4">
+                {/* Role filter tabs - compact on mobile */}
+                <div className="flex gap-0.5 sm:gap-1 bg-slate-900/50 p-0.5 sm:p-1 rounded-lg sm:rounded-xl">
                   <button
                     onClick={() => setUserFilter('all')}
-                    className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+                    className={`px-2 sm:px-4 py-1 sm:py-2 rounded-md sm:rounded-lg text-[11px] sm:text-sm font-medium transition-all whitespace-nowrap ${
                       userFilter === 'all' 
                         ? 'bg-white/10 text-white shadow-inner' 
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
                     }`}
                   >
-                    Toți <span className="text-gray-500">({users.length})</span>
+                    Toți <span className="text-gray-500 hidden sm:inline">({users.length})</span><span className="text-gray-500 sm:hidden">({users.length})</span>
                   </button>
                   <button
                     onClick={() => setUserFilter('client')}
-                    className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+                    className={`px-2 sm:px-4 py-1 sm:py-2 rounded-md sm:rounded-lg text-[11px] sm:text-sm font-medium transition-all whitespace-nowrap ${
                       userFilter === 'client' 
                         ? 'bg-emerald-500/20 text-emerald-400 shadow-inner shadow-emerald-500/10' 
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -381,7 +381,7 @@ export default function AdminDashboard() {
                   </button>
                   <button
                     onClick={() => setUserFilter('curier')}
-                    className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+                    className={`px-2 sm:px-4 py-1 sm:py-2 rounded-md sm:rounded-lg text-[11px] sm:text-sm font-medium transition-all whitespace-nowrap ${
                       userFilter === 'curier' 
                         ? 'bg-orange-500/20 text-orange-400 shadow-inner shadow-orange-500/10' 
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -404,7 +404,7 @@ export default function AdminDashboard() {
               {/* Secondary filters row - scrollable on mobile */}
               <div className="flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-3 pb-2 border-b border-white/5 overflow-x-auto scrollbar-hide -mx-1 px-1">
                 {/* Status filter */}
-                <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                   <span className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wide hidden sm:inline">Status:</span>
                   <div className="flex gap-0.5 sm:gap-1 bg-slate-900/30 p-0.5 rounded-lg">
                     <button
