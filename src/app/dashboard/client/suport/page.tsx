@@ -6,36 +6,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeftIcon, ChatIcon, PhoneIcon, MailIcon, ClockIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
-
-const faqItems = [
-  {
-    question: 'Cum pot trimite un colet în Europa?',
-    answer: 'Completează formularul de comandă, alege serviciul dorit și vei primi oferte de la curierii noștri parteneri în 24-48 ore.',
-  },
-  {
-    question: 'Cât durează livrarea?',
-    answer: 'Timpul de livrare depinde de destinație și serviciul ales. De obicei, livrările în Europa durează între 2-7 zile lucrătoare.',
-  },
-  {
-    question: 'Cum funcționează programul de fidelitate?',
-    answer: 'Câștigi 1 punct pentru fiecare RON cheltuit. Punctele îți aduc reduceri de până la 15% și alte beneficii exclusive.',
-  },
-  {
-    question: 'Ce metode de plată acceptați?',
-    answer: 'Acceptăm plata cu card, transfer bancar și numerar la ridicare (în funcție de curier).',
-  },
-  {
-    question: 'Pot anula o comandă?',
-    answer: 'Da, poți anula comanda gratuit înainte ca aceasta să fie preluată de curier. După preluare, se pot aplica taxe de anulare.',
-  },
-];
+import { CONTACT_INFO } from '@/lib/contact';
+import { FAQ_ITEMS } from '@/lib/faq';
 
 const contactMethods = [
   {
     icon: PhoneIcon,
     title: 'Telefon',
-    value: '+40 XXX XXX XXX',
-    description: 'Luni-Vineri, 09:00-18:00',
+    value: CONTACT_INFO.phone,
+    description: CONTACT_INFO.workingHours,
     color: 'text-blue-400',
     bg: 'bg-blue-500/10',
     border: 'border-blue-500/20',
@@ -43,8 +22,8 @@ const contactMethods = [
   {
     icon: MailIcon,
     title: 'Email',
-    value: 'support@curierulperfect.ro',
-    description: 'Răspundem în 24 ore',
+    value: CONTACT_INFO.email,
+    description: CONTACT_INFO.emailResponseTime,
     color: 'text-emerald-400',
     bg: 'bg-emerald-500/10',
     border: 'border-emerald-500/20',
@@ -52,8 +31,8 @@ const contactMethods = [
   {
     icon: ChatIcon,
     title: 'WhatsApp',
-    value: '+40 XXX XXX XXX',
-    description: 'Chat rapid 24/7',
+    value: CONTACT_INFO.whatsapp,
+    description: CONTACT_INFO.whatsappAvailability,
     color: 'text-green-400',
     bg: 'bg-green-500/10',
     border: 'border-green-500/20',
@@ -138,7 +117,7 @@ export default function SuportClientPage() {
           </h2>
           
           <div className="space-y-3">
-            {faqItems.map((item, index) => (
+            {FAQ_ITEMS.map((item, index) => (
               <div 
                 key={index}
                 className="bg-slate-700/30 rounded-xl border border-white/5 overflow-hidden"

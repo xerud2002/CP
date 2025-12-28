@@ -67,7 +67,6 @@ export default function CountryDropdown({ value, onChange, label, onCountryChang
             className="rounded-sm shadow-sm shrink-0"
             unoptimized
             onError={(e) => {
-              console.error(`Flag load error for: ${value}`);
               (e.target as HTMLImageElement).style.display = 'none';
             }}
           />

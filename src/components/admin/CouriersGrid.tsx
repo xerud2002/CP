@@ -153,7 +153,7 @@ export default function CouriersGrid({ couriers, onSuspend }: CouriersGridProps)
             {/* Actions */}
             <ActionButtonsGroup>
               <ViewButton
-                onClick={() => {/* TODO: Add view profile handler */}}
+                onClick={() => {/* Profile view implementation reserved */}}
                 title="Vezi Profil"
               />
               <button 

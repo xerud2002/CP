@@ -10,6 +10,7 @@ import {
   BecomeCourierCTA,
   TrustCoverage,
 } from '@/components/home';
+import { COMPANY_INFO, CONTACT_INFO, SOCIAL_LINKS } from '@/lib/contact';
 
 // Lazy load WhatsApp button - not critical for initial render
 const WhatsAppButton = dynamic(() => import('@/components/ui/WhatsAppButton'), {
@@ -21,23 +22,23 @@ const WhatsAppButton = dynamic(() => import('@/components/ui/WhatsAppButton'), {
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Curierul Perfect",
-  "url": "https://curierulperfect.com",
-  "logo": "https://curierulperfect.com/logo.png",
-  "description": "Curierul Perfect - Platformă de transport și curierat în România și Europa. Servicii de transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Compară oferte, alege curierul potrivit și primește livrări rapide și sigure.",
+  "name": COMPANY_INFO.name,
+  "url": COMPANY_INFO.url,
+  "logo": COMPANY_INFO.logo,
+  "description": COMPANY_INFO.description,
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+40-XXX-XXX-XXX",
+    "telephone": CONTACT_INFO.phone,
     "contactType": "customer service",
     "availableLanguage": ["Romanian", "English"]
   },
   "sameAs": [
-    "https://www.facebook.com/curierulperfect",
-    "https://www.instagram.com/curierulperfect"
+    SOCIAL_LINKS.facebook,
+    SOCIAL_LINKS.instagram
   ],
   "areaServed": {
     "@type": "Place",
-    "name": "Europa"
+    "name": COMPANY_INFO.areaServed
   },
   "hasOfferCatalog": {
     "@type": "OfferCatalog",

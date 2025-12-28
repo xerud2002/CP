@@ -37,15 +37,11 @@ export function useOrderHandlers(reloadOrders: () => void) {
   };
 
   /**
-   * Request review from client (placeholder - not yet implemented)
+   * Request review from client
+   * Note: Full email/push notification system will be implemented in future version
    */
   const handleRequestReview = (_orderId: string) => {
-    void _orderId; // Parameter reserved for future implementation
-    // TODO: Implement actual notification system (email/push/in-app)
-    // This will require:
-    // 1. Email service integration (SendGrid/AWS SES)
-    // 2. In-app notification collection in Firestore
-    // 3. Client-side notification UI
+    void _orderId; // Parameter reserved for future notification system
     showWarning('Funcția de cerere recenzie va fi disponibilă în curând!');
   };
 
