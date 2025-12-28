@@ -1068,7 +1068,7 @@ export default function CurierDashboard() {
           isVerified = userData.verified === true;
           
           // Calculate required documents completion percentage
-          const allDocs = getDocumentRequirements(taraSediu, services, tipBusiness);
+          const allDocs = getDocumentRequirements(taraSediu, services, tipBusiness as 'pf' | 'firma');
           const requiredDocs = allDocs.filter(d => d.required);
           if (requiredDocs.length > 0) {
             const approvedRequiredCount = requiredDocs.filter(d => approvedDocs.includes(d.id)).length;
