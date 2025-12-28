@@ -58,7 +58,9 @@ export function useClientOrderActions() {
 
       showSuccess('Comanda a fost arhivată! Va fi ștearsă definitiv după 30 zile.');
       
-      // Force page reload to refresh all listeners and clear cached data
+      // Wait 1 second for Firestore sync, then force page reload to refresh all listeners
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       if (typeof window !== 'undefined') {
         window.location.reload();
       }

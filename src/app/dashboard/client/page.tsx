@@ -518,7 +518,8 @@ export default function ClientDashboard() {
       limit(5)
     );
 
-    const unsubscribe = onSnapshot(q, async (snapshot) => {
+    // Force reading from server, not cache - prevents stale data after archiving
+    const unsubscribe = onSnapshot(q, { includeMetadataChanges: false }, async (snapshot) => {
       const allMessages: RecentMessage[] = [];
       let unread = 0;
 
