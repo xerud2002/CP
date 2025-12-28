@@ -289,10 +289,7 @@ export default function SuportClientPage() {
       {/* Admin Message Modal */}
       {showAdminMessageModal && (
         <UserMessageModal
-          isOpen={showAdminMessageModal}
           onClose={() => setShowAdminMessageModal(false)}
-          userId={user?.uid || ''}
-          userRole="client"
         />
       )}
     </div>
