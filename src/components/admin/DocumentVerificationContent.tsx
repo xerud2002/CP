@@ -339,7 +339,16 @@ export default function DocumentVerificationContent() {
 
                 {/* Documents grid */}
                 <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {Object.entries(courier.documents).map(([docKey, doc]) => (
+                  {Object.entries(courier.documents)
+                    .filter(([, doc]) => {
+                      // Filter documents based on selected status
+                      if (filterStatus === 'all') return true;
+                      if (filterStatus === 'pending') return doc.status === 'pending';
+                      if (filterStatus === 'approved') return doc.status === 'approved';
+                      if (filterStatus === 'rejected') return doc.status === 'rejected';
+                      return true;
+                    })
+                    .map(([docKey, doc]) => (
                     <div key={docKey} className="bg-slate-700/30 rounded-lg p-4 border border-white/5 flex flex-col h-full relative">
                       {/* Action buttons - top right */}
                       <div className="absolute top-3 right-3 flex gap-1.5">
