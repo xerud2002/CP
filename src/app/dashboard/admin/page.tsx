@@ -252,10 +252,24 @@ export default function AdminDashboard() {
   const handleToggleVerification = async (uid: string, currentStatus: boolean | undefined) => {
     const newStatus = !currentStatus;
     try {
+      // Update verification status in both users and profil_curier collections
       await updateDoc(doc(db, 'users', uid), { 
         verified: newStatus,
         verifiedAt: serverTimestamp()
       });
+      
+      // Also update profil_curier for consistency
+      try {
+        await updateDoc(doc(db, 'profil_curier', uid), { 
+          verificationStatus: newStatus ? 'verified' : 'unverified',
+          verified: newStatus,
+          verifiedAt: serverTimestamp()
+        });
+      } catch {
+        // profil_curier might not exist yet, ignore error
+        console.log('profil_curier not found for uid:', uid);
+      }
+      
       showSuccess(newStatus ? 'Curier marcat ca verificat!' : 'Verificare anulată!');
       loadData();
     } catch (error) {
