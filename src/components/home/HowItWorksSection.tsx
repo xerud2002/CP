@@ -4,45 +4,44 @@ const steps = [
   {
     id: 1,
     label: 'PASUL 01',
-    title: 'Selectează serviciul',
-    description: 'Alege tipul de transport și destinația pentru trimiterea ta.',
+    title: 'Descrie transportul',
+    description: 'Completezi datele despre ce vrei să transporți, de unde și unde - durează 2 minute.',
     color: 'orange',
     icon: (
       <svg className="w-7 h-7 sm:w-9 sm:h-9 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
       </svg>
     ),
   },
   {
     id: 2,
     label: 'PASUL 02',
-    title: 'Primește oferte',
-    description: 'Transportatorii disponibili îți trimit oferte personalizate și competitive.',
+    title: 'Primești oferte',
+    description: 'Curieri verificați văd comanda ta și îți trimit oferte cu prețuri clare și termene concrete.',
     color: 'green',
     icon: (
       <svg className="w-7 h-7 sm:w-9 sm:h-9 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
       </svg>
     ),
   },
   {
     id: 3,
     label: 'PASUL 03',
-    title: 'Alege transportatorul',
-    description: 'Compară prețurile, recenziile și alege transportatorul potrivit pentru tine.',
+    title: 'Alegi curierul',
+    description: 'Vezi rating-ul, recenziile și prețurile. Discuți detaliile și confirmi transportatorul preferat.',
     color: 'blue',
     icon: (
       <svg className="w-7 h-7 sm:w-9 sm:h-9 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     ),
   },
   {
     id: 4,
     label: 'PASUL 04',
-    title: 'Lasă o recenzie',
-    description: 'Ajută comunitatea lăsând feedback despre experiența ta cu transportatorul.',
+    title: 'Transport finalizat',
+    description: 'După livrare, evaluezi curierul - ajuți următorii clienți să aleagă cu încredere.',
     color: 'yellow',
     icon: (
       <svg className="w-7 h-7 sm:w-9 sm:h-9 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
@@ -101,8 +100,8 @@ export default function HowItWorksSection() {
             <span className="text-gradient">funcționează</span>
             <span className="text-white">?</span>
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto px-4">
-            În doar 4 pași simpli, transportul tău ajunge la destinație în siguranță.
+          <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4">
+            Comandă transport sigur în doar 4 pași simpli - fără telefoane, fără negocieri, fără surprize.
           </p>
         </div>
 

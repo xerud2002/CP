@@ -93,15 +93,6 @@ const mainNavTiles: NavTile[] = [
     borderColor: 'border-violet-500/20 hover:border-violet-500/40',
   },
   {
-    href: '/dashboard/client/fidelitate',
-    icon: StarIcon,
-    title: 'Fidelitate',
-    description: 'Puncte & reduceri',
-    color: 'text-yellow-400',
-    bgColor: 'bg-yellow-500/10 hover:bg-yellow-500/20',
-    borderColor: 'border-yellow-500/20 hover:border-yellow-500/40',
-  },
-  {
     href: '/dashboard/client/suport',
     icon: ChatIcon,
     title: 'Suport',
@@ -223,13 +214,12 @@ function WelcomeSection({ userName }: { userName: string }) {
 }
 
 // Main Navigation Grid
-// Secțiune cu 6 carduri de navigare rapidă:
+// Secțiune cu 5 carduri de navigare rapidă:
 // 1. Comandă Transport (orange) - badge "Popular" - link către /comanda pentru crearea comenzilor noi
 // 2. Comenzi (blue) - afișează notificări (oferte noi + mesaje noi) dacă există
 // 3. Profil (emerald) - gestionare date personale
 // 4. Recenzii (violet) - evaluare servicii curieri
-// 5. Fidelitate (yellow) - puncte & reduceri (sistem nedeveltat încă)
-// 6. Suport (pink) - ajutor 24/7
+// 5. Suport (pink) - ajutor 24/7
 // Fiecare card are: iconă colorată, titlu, descriere scurtă, hover gradient overlay
 // Notificările apar DOAR pe cardul "Comenzi" când există oferte sau mesaje noi
 function MainNavigation({ totalNotifications }: { totalNotifications: number }) {
@@ -541,13 +531,19 @@ export default function ClientDashboard() {
         if (data.senderId) courierIds.add(data.senderId);
       });
 
-      // Fetch order numbers in batch
+      // Fetch order numbers in batch and check if archived
       const orderNumbers: Record<string, number> = {};
+      const archivedOrders = new Set<string>();
       if (orderIds.size > 0) {
         const orderPromises = Array.from(orderIds).map(async (orderId) => {
           const orderDoc = await getDoc(doc(db, 'comenzi', orderId));
           if (orderDoc.exists()) {
-            orderNumbers[orderId] = orderDoc.data().orderNumber;
+            const orderData = orderDoc.data();
+            orderNumbers[orderId] = orderData.orderNumber;
+            // Mark archived orders
+            if (orderData.archived === true) {
+              archivedOrders.add(orderId);
+            }
           }
         });
         await Promise.all(orderPromises);
@@ -569,6 +565,13 @@ export default function ClientDashboard() {
 
       snapshot.docs.forEach((docSnap) => {
         const data = docSnap.data();
+        const orderId = data.orderId || '';
+        
+        // Skip messages from archived orders
+        if (archivedOrders.has(orderId)) {
+          return;
+        }
+        
         const createdAt = data.createdAt?.toDate?.() || new Date();
         const isRead = data.readByClient === true;
         
@@ -576,8 +579,8 @@ export default function ClientDashboard() {
         
         allMessages.push({
           id: docSnap.id,
-          orderId: data.orderId || '',
-          orderNumber: orderNumbers[data.orderId],
+          orderId,
+          orderNumber: orderNumbers[orderId],
           senderName: courierNames[data.senderId] || 'Curier Transport',
           senderRole: data.senderRole || 'curier',
           message: data.message || '',

@@ -16,7 +16,7 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 
 ### Route Structure
 ```
-/dashboard/client  → /comenzi, /profil, /recenzii, /fidelitate, /suport
+/dashboard/client  → /comenzi, /profil, /recenzii, /suport
 /dashboard/curier  → /comenzi, /profil, /recenzii, /servicii, /verificare
 /comanda           → Order creation wizard (no header/footer)
 ```

@@ -64,9 +64,11 @@ service cloud.firestore {
     match /comenzi/{docId} {
       // Clients read own orders, couriers read all orders, admin reads everything
       allow read: if isAuthenticated() && 
-        (resource.data.uid_client == request.auth.uid || 
-         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'curier' ||
-         isAdmin());
+        (request.auth.uid != null && 
+         (resource == null || // Allow queries even if no documents exist
+          resource.data.uid_client == request.auth.uid || 
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'curier' ||
+          isAdmin()));
       // Clients create orders
       allow create: if isAuthenticated() && 
         request.resource.data.uid_client == request.auth.uid;
@@ -113,9 +115,11 @@ service cloud.firestore {
          resource.data.courierId == request.auth.uid ||
          isAdmin());
       
-      // Delete: only message sender or admin
+      // Delete: message sender, client who owns the order, or admin
       allow delete: if isAuthenticated() && 
-        (resource.data.senderId == request.auth.uid || isAdmin());
+        (resource.data.senderId == request.auth.uid || 
+         resource.data.clientId == request.auth.uid ||
+         isAdmin());
     }
     
     // Admin messages collection - for direct admin-to-user messaging

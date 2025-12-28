@@ -55,6 +55,8 @@ export function useClientOrdersLoader({
     const q = query(
       collection(db, 'comenzi'),
       where('uid_client', '==', userId),
+      where('archived', '!=', true),  // Exclude archived orders
+      orderBy('archived'),  // Required for != query
       orderBy('createdAt', 'desc')
     );
 

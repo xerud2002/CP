@@ -64,6 +64,9 @@ export interface Order {
   tip_ofertanti?: string[];
   status?: 'noua' | 'acceptata' | 'in_tranzit' | 'livrata' | 'anulata' | 'in_lucru';
   observatii?: string;
+  // Archive fields
+  archived?: boolean;
+  archivedAt?: Date | { toDate: () => Date };
   // Tractări Auto specific fields
   numar_inmatriculare?: string;
   motiv_tractare?: string;

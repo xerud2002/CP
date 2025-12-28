@@ -9,6 +9,7 @@ import {
   ProcessTimeline,
   BecomeCourierCTA,
   TrustCoverage,
+  TrustBadges,
 } from '@/components/home';
 import { COMPANY_INFO, CONTACT_INFO, SOCIAL_LINKS } from '@/lib/contact';
 
@@ -69,6 +70,7 @@ export default function Home() {
         <HowItWorksSection />
         <BenefitsSection />
         <ProcessTimeline />
+        <TrustBadges />
         <BecomeCourierCTA />
         <TrustCoverage />
         

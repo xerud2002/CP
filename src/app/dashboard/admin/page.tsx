@@ -41,6 +41,7 @@ import {
   StatItem,
   TabItem,
 } from '@/components/admin';
+import ArchivedOrdersContent from '@/components/admin/ArchivedOrdersContent';
 
 // ============================================
 // MAIN COMPONENT
@@ -288,6 +289,7 @@ export default function AdminDashboard() {
     { id: 'users', label: 'Utilizatori', icon: UsersIcon, badge: users.length },
     { id: 'orders', label: 'Comenzi', icon: PackageIcon, badge: pendingOrders },
     { id: 'couriers', label: 'Curieri', icon: TruckIcon, badge: couriersCount },
+    { id: 'archived', label: 'Arhivă', icon: PackageIcon },
     { id: 'documents', label: 'Verificare Documente', icon: DocumentCheckIcon, badge: pendingDocsCount > 0 ? pendingDocsCount : undefined },
     { id: 'stats', label: 'Statistici', icon: ChartIcon },
     { id: 'monetizare', label: 'Monetizare', icon: MoneyIcon },
@@ -489,6 +491,9 @@ export default function AdminDashboard() {
               onViewDetails={setSelectedOrder}
             />
           )}
+
+          {/* Archived Orders Tab */}
+          {activeTab === 'archived' && <ArchivedOrdersContent />}
 
           {/* Couriers Tab */}
           {activeTab === 'couriers' && (

@@ -6,7 +6,7 @@
 export interface FAQItem {
   question: string;
   answer: string;
-  category?: 'transport' | 'livrare' | 'fidelitate' | 'plata' | 'anulare' | 'general';
+  category?: 'transport' | 'livrare' | 'plata' | 'anulare' | 'general';
 }
 
 export const FAQ_ITEMS: FAQItem[] = [
@@ -19,11 +19,6 @@ export const FAQ_ITEMS: FAQItem[] = [
     question: 'Cât durează livrarea?',
     answer: 'Timpul de livrare depinde de destinație și serviciul ales. De obicei, livrările în Europa durează între 2-7 zile lucrătoare.',
     category: 'livrare'
-  },
-  {
-    question: 'Cum funcționează programul de fidelitate?',
-    answer: 'Câștigi 1 punct pentru fiecare RON cheltuit. Punctele îți aduc reduceri de până la 15% și alte beneficii exclusive.',
-    category: 'fidelitate'
   },
   {
     question: 'Ce metode de plată acceptați?',
