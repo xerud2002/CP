@@ -180,6 +180,7 @@ function ComandaForm() {
     // Opțiuni
     optiuni: [] as string[],
     tip_ofertanti: [] as string[], // 'firme' | 'persoane_private'
+    max_oferte: 'nelimitat', // '1-3' | '4-5' | 'nelimitat'
     
     // Note
     observatii: '',
@@ -674,6 +675,7 @@ function ComandaForm() {
             <OptionsReviewStep
               selectedService={selectedService}
               formData={formData}
+              setFormData={setFormData}
               handleOfertantiToggle={handleOfertantiToggle}
               handleOptionToggle={handleOptionToggle}
               ridicareCountryName={ridicareCountryName}

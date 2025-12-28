@@ -55,16 +55,16 @@ export function useClientOrdersLoader({
     const q = query(
       collection(db, 'comenzi'),
       where('uid_client', '==', userId),
-      where('archived', '!=', true),  // Exclude archived orders
-      orderBy('archived'),  // Required for != query
       orderBy('createdAt', 'desc')
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const ordersData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Order[];
+      const ordersData = snapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        .filter(order => order.archived !== true) as Order[]; // Filter archived orders client-side
       
       setOrders(ordersData);
       setLoading(false);

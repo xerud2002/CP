@@ -22,6 +22,7 @@ interface ServiceInfo {
 interface OptionsReviewStepProps {
   selectedService: string;
   formData: FormDataType;
+  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
   handleOfertantiToggle: (type: string) => void;
   handleOptionToggle: (optionId: string) => void;
   ridicareCountryName: string;
@@ -33,6 +34,7 @@ interface OptionsReviewStepProps {
 export default function OptionsReviewStep({
   selectedService,
   formData,
+  setFormData,
   handleOfertantiToggle,
   handleOptionToggle,
   ridicareCountryName,
@@ -65,22 +67,22 @@ export default function OptionsReviewStep({
           <label
             className="flex items-start gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all hover:border-white/20"
             style={{
-              borderColor: formData.tip_ofertanti.includes('firme') ? '#3b82f6' : 'rgba(255,255,255,0.1)',
-              backgroundColor: formData.tip_ofertanti.includes('firme') ? 'rgba(59,130,246,0.1)' : 'rgba(71,85,105,0.3)'
+              borderColor: formData.tip_ofertanti.includes('firme') ? '#10b981' : 'rgba(255,255,255,0.1)',
+              backgroundColor: formData.tip_ofertanti.includes('firme') ? 'rgba(16,185,129,0.1)' : 'rgba(71,85,105,0.3)'
             }}
           >
             <input
               type="checkbox"
               checked={formData.tip_ofertanti.includes('firme')}
               onChange={() => handleOfertantiToggle('firme')}
-              className="mt-1 w-5 h-5 rounded border-white/20 bg-slate-700 text-blue-500 focus:ring-blue-500"
+              className="mt-1 w-5 h-5 rounded border-white/20 bg-slate-700 text-green-500 focus:ring-green-500"
             />
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
-                <span className="font-bold text-white text-lg">Firme Transport <span className="text-blue-400">(Verificate)</span></span>
+                <span className="font-bold text-white text-lg">Firme Transport <span className="text-green-400">(Verificate)</span></span>
               </div>
               <p className="text-sm text-gray-400">Companii cu licență, asigurare și echipamente profesionale</p>
             </div>
@@ -89,24 +91,24 @@ export default function OptionsReviewStep({
           <label
             className="flex items-start gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all hover:border-white/20"
             style={{
-              borderColor: formData.tip_ofertanti.includes('persoane_private') ? '#10b981' : 'rgba(255,255,255,0.1)',
-              backgroundColor: formData.tip_ofertanti.includes('persoane_private') ? 'rgba(16,185,129,0.1)' : 'rgba(71,85,105,0.3)'
+              borderColor: formData.tip_ofertanti.includes('persoane_private') ? '#ef4444' : 'rgba(255,255,255,0.1)',
+              backgroundColor: formData.tip_ofertanti.includes('persoane_private') ? 'rgba(239,68,68,0.1)' : 'rgba(71,85,105,0.3)'
             }}
           >
             <input
               type="checkbox"
               checked={formData.tip_ofertanti.includes('persoane_private')}
               onChange={() => handleOfertantiToggle('persoane_private')}
-              className="mt-1 w-5 h-5 rounded border-white/20 bg-slate-700 text-green-500 focus:ring-green-500"
+              className="mt-1 w-5 h-5 rounded border-white/20 bg-slate-700 text-red-500 focus:ring-red-500"
             />
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <span className="font-bold text-white text-lg">Persoane Private <span className="text-gray-400">(Neverificate)</span></span>
+                <span className="font-bold text-white text-lg">Persoane Private <span className="text-red-400">(Neverificate)</span></span>
               </div>
-              <p className="text-sm text-gray-400">Transportatori independenți cu tarife flexibile</p>
+              <p className="text-sm text-gray-400">Persoane înscrise care nu au completat procesul de verificare</p>
             </div>
           </label>
         </div>
@@ -119,6 +121,79 @@ export default function OptionsReviewStep({
             <p className="text-amber-400 text-sm font-medium">Selectează cel puțin un tip pentru a primi oferte</p>
           </div>
         )}
+
+        {/* Limită număr oferte */}
+        <div className="mt-6 pt-6 border-t border-white/10">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-white mb-1">Câte oferte vrei să primești?</h3>
+            <p className="text-gray-400 text-sm">Alege câte companii pot să te contacteze</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <label
+              className="flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all hover:border-white/20"
+              style={{
+                borderColor: formData.max_oferte === '1-3' ? '#8b5cf6' : 'rgba(255,255,255,0.1)',
+                backgroundColor: formData.max_oferte === '1-3' ? 'rgba(139,92,246,0.1)' : 'rgba(71,85,105,0.3)'
+              }}
+            >
+              <input
+                type="radio"
+                name="max_oferte"
+                value="1-3"
+                checked={formData.max_oferte === '1-3'}
+                onChange={(e) => setFormData((prev: FormDataType) => ({ ...prev, max_oferte: e.target.value }))}
+                className="w-4 h-4 text-violet-500 border-white/20 bg-slate-700 focus:ring-violet-500"
+              />
+              <div className="flex-1">
+                <span className="font-semibold text-white text-sm sm:text-base">1-3 oferte</span>
+                <p className="text-xs text-gray-400 mt-0.5">Selectiv</p>
+              </div>
+            </label>
+
+            <label
+              className="flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all hover:border-white/20"
+              style={{
+                borderColor: formData.max_oferte === '4-5' ? '#8b5cf6' : 'rgba(255,255,255,0.1)',
+                backgroundColor: formData.max_oferte === '4-5' ? 'rgba(139,92,246,0.1)' : 'rgba(71,85,105,0.3)'
+              }}
+            >
+              <input
+                type="radio"
+                name="max_oferte"
+                value="4-5"
+                checked={formData.max_oferte === '4-5'}
+                onChange={(e) => setFormData((prev: FormDataType) => ({ ...prev, max_oferte: e.target.value }))}
+                className="w-4 h-4 text-violet-500 border-white/20 bg-slate-700 focus:ring-violet-500"
+              />
+              <div className="flex-1">
+                <span className="font-semibold text-white text-sm sm:text-base">4-5 oferte</span>
+                <p className="text-xs text-gray-400 mt-0.5">Moderat</p>
+              </div>
+            </label>
+
+            <label
+              className="flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all hover:border-white/20"
+              style={{
+                borderColor: formData.max_oferte === 'nelimitat' ? '#8b5cf6' : 'rgba(255,255,255,0.1)',
+                backgroundColor: formData.max_oferte === 'nelimitat' ? 'rgba(139,92,246,0.1)' : 'rgba(71,85,105,0.3)'
+              }}
+            >
+              <input
+                type="radio"
+                name="max_oferte"
+                value="nelimitat"
+                checked={formData.max_oferte === 'nelimitat'}
+                onChange={(e) => setFormData((prev: FormDataType) => ({ ...prev, max_oferte: e.target.value }))}
+                className="w-4 h-4 text-violet-500 border-white/20 bg-slate-700 focus:ring-violet-500"
+              />
+              <div className="flex-1">
+                <span className="font-semibold text-white text-sm sm:text-base">Nelimitat</span>
+                <p className="text-xs text-gray-400 mt-0.5">Până găsesc ce trebuie</p>
+              </div>
+            </label>
+          </div>
+        </div>
       </div>
 
       {/* Opțiuni suplimentare */}

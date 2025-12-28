@@ -253,8 +253,8 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
 
   return (
     <section>
-      <h2 className="text-xs sm:text-sm font-medium text-gray-400 uppercase tracking-wide mb-2 sm:mb-3">Meniu rapid</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
+      <h2 className="text-xs sm:text-sm font-medium text-gray-400 uppercase tracking-wide mb-3 sm:mb-4">Meniu rapid</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {mainNavTiles.map((tile) => {
           const gradient = gradientMap[tile.color] || 'from-slate-500/20 to-slate-500/20';
           const borderColor = borderColorMap[tile.color] || 'border-white/10 hover:border-white/20';
@@ -266,7 +266,7 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] active:scale-95 flex flex-col`}
+              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-4 sm:p-5 transition-all duration-300 hover:scale-[1.02] active:scale-95 flex flex-col min-h-[120px] sm:min-h-[140px]`}
             >
               {/* Hover gradient overlay */}
               <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
@@ -287,12 +287,14 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
                 </span>
               )}
               
-              <div className="relative flex-1 flex flex-col">
-                <div className={`w-9 h-9 sm:w-10 sm:h-10 ${iconBg} rounded-lg flex items-center justify-center mb-2 sm:mb-3`}>
-                  <tile.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${tile.color}`} />
+              <div className="relative flex-1 flex flex-col justify-between">
+                <div className={`w-11 h-11 sm:w-12 sm:h-12 ${iconBg} rounded-lg flex items-center justify-center mb-3 sm:mb-4`}>
+                  <tile.icon className={`w-6 h-6 sm:w-7 sm:h-7 ${tile.color}`} />
                 </div>
-                <h3 className="text-white font-semibold text-xs sm:text-sm mb-0.5 sm:mb-1">{tile.title}</h3>
-                <p className="text-gray-400 text-[10px] sm:text-xs line-clamp-1">{tile.description}</p>
+                <div>
+                  <h3 className="text-white font-semibold text-sm sm:text-base mb-1">{tile.title}</h3>
+                  <p className="text-gray-400 text-xs sm:text-sm">{tile.description}</p>
+                </div>
               </div>
             </Link>
           );

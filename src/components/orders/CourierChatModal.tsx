@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { CloseIcon, ChatIcon } from '@/components/icons/DashboardIcons';
-import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, updateDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, updateDoc, doc, getDocs, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
-import { showSuccess, showError } from '@/lib/toast';
+import { showSuccess, showError, showWarning } from '@/lib/toast';
 
 interface Message {
   id: string;
@@ -79,6 +79,81 @@ export default function CourierChatModal({ orderId, orderNumber, clientId, clien
 
     setSending(true);
     try {
+      // VERIFICARE 1: Obține detaliile comenzii
+      const orderDoc = await getDoc(doc(db, 'comenzi', orderId));
+      if (!orderDoc.exists()) {
+        showError('Comanda nu mai există');
+        setSending(false);
+        return;
+      }
+      
+      const orderData = orderDoc.data();
+      const tipOfertanti = orderData.tip_ofertanti || [];
+      const maxOferte = orderData.max_oferte || 'nelimitat';
+      
+      // VERIFICARE 2: Status curier în timp real (verificat/neverificat/suspendat/șters)
+      // Se verifică la FIECARE mesaj pentru a reflecta schimbările în timp real
+      const courierProfileDoc = await getDoc(doc(db, 'profil_curier', user.uid));
+      
+      // Verifică dacă contul curierului există și este activ
+      if (!courierProfileDoc.exists()) {
+        showError('Contul tău de curier nu există sau a fost șters. Contactează suportul.');
+        setSending(false);
+        return;
+      }
+      
+      const courierProfile = courierProfileDoc.data();
+      
+      // Verifică dacă contul este suspendat
+      if (courierProfile.suspended === true) {
+        showError('Contul tău a fost suspendat. Nu poți trimite mesaje. Contactează suportul pentru detalii.');
+        setSending(false);
+        return;
+      }
+      
+      // Verifică statusul de verificare
+      const isVerified = courierProfile.verified === true;
+      
+      // Dacă curierul NU este verificat ȘI clientul NU acceptă persoane private → BLOCAT
+      if (!isVerified && !tipOfertanti.includes('persoane_private')) {
+        showWarning('Această comandă acceptă doar firme de transport verificate. Completează procesul de verificare pentru a putea trimite oferte.');
+        setSending(false);
+        return;
+      }
+      
+      // VERIFICARE 3: Limita de oferte (doar pentru primul mesaj de la acest curier)
+      const isFirstMessage = messages.length === 0 || !messages.some(m => m.courierId === user.uid);
+      
+      if (isFirstMessage && maxOferte !== 'nelimitat') {
+        // Obține toate mesajele pentru această comandă
+        const allMessagesQuery = query(
+          collection(db, 'mesaje'),
+          where('orderId', '==', orderId),
+          where('senderRole', '==', 'curier')
+        );
+        const allMessagesSnap = await getDocs(allMessagesQuery);
+        
+        // Extrage curieri unici
+        const uniqueCouriers = new Set<string>();
+        allMessagesSnap.docs.forEach(docSnap => {
+          const data = docSnap.data();
+          if (data.courierId) {
+            uniqueCouriers.add(data.courierId);
+          }
+        });
+        
+        // Determină limita numerică
+        const limit = maxOferte === '1-3' ? 3 : maxOferte === '4-5' ? 5 : 999;
+        
+        // Verifică dacă limita a fost atinsă (și curierul curent nu este deja în listă)
+        if (uniqueCouriers.size >= limit && !uniqueCouriers.has(user.uid)) {
+          showWarning(`Clientul acceptă maxim ${limit} oferte și limita a fost atinsă. Nu poți trimite mesaje până când clientul eliberează un slot.`);
+          setSending(false);
+          return;
+        }
+      }
+      
+      // Toate verificările au trecut - trimite mesajul
       await addDoc(collection(db, 'mesaje'), {
         orderId,
         orderNumber: orderNumber || '',
