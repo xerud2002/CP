@@ -202,8 +202,8 @@ export default function ReclamatiiPage() {
               <h3 className="text-lg font-bold text-white mb-3">Contact direct</h3>
               <p className="text-gray-300 text-sm mb-4">Pentru urgențe, contactează-ne imediat:</p>
               <div className="space-y-2">
-                <a href="mailto:support@curierulperfect.com" className="block text-orange-400 hover:text-orange-300">
-                  support@curierulperfect.com
+                <a href="mailto:contact@curierulperfect.com" className="block text-orange-400 hover:text-orange-300">
+                  contact@curierulperfect.com
                 </a>
                 <a href="https://wa.me/447880312621" target="_blank" rel="noopener noreferrer" className="block text-emerald-400 hover:text-emerald-300">
                   WhatsApp: +44 788 031 2621

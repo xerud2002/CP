@@ -5,7 +5,7 @@
 
 export const CONTACT_INFO = {
   phone: '+40 XXX XXX XXX',
-  email: 'support@curierulperfect.ro',
+  email: 'contact@curierulperfect.com',
   whatsapp: '+40 XXX XXX XXX',
   workingHours: 'Luni-Vineri, 09:00-18:00',
   emailResponseTime: 'Răspundem în 24 ore',

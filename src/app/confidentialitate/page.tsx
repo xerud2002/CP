@@ -134,7 +134,7 @@ export default function ConfidentialitatePage() {
             <div className="mt-6 p-4 bg-orange-500/10 border border-orange-500/20 rounded-lg">
               <p className="text-sm text-gray-300">
                 <strong className="text-orange-400">Cum îți exerciți drepturile:</strong> Trimite email la{' '}
-                <a href="mailto:privacy@curierulperfect.com" className="text-orange-400 underline">privacy@curierulperfect.com</a>{' '}
+                <a href="mailto:contact@curierulperfect.com" className="text-orange-400 underline">contact@curierulperfect.com</a>{' '}
                 sau din setările contului. Răspundem în max. 30 zile.
               </p>
             </div>

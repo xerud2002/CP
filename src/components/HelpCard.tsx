@@ -13,7 +13,7 @@ export default function HelpCard({
   subtitle = 'Echipa noastră îți răspunde rapid',
   showEmail = true,
   showWhatsApp = true,
-  emailAddress = 'support@curierulperfect.ro',
+  emailAddress = 'contact@curierulperfect.com',
   whatsAppNumber = '407880312621',
   className = ''
 }: HelpCardProps) {

@@ -322,13 +322,13 @@ export default function GDPRPage() {
               Pentru orice întrebare despre datele tale sau drepturile GDPR:
             </p>
             <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
-              <a href="mailto:privacy@curierulperfect.com" className="flex items-center gap-3 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition">
+              <a href="mailto:contact@curierulperfect.com" className="flex items-center gap-3 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition">
                 <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <div>
                   <p className="text-xs text-gray-500">Email DPO</p>
-                  <p className="text-white font-semibold">privacy@curierulperfect.com</p>
+                  <p className="text-white font-semibold">contact@curierulperfect.com</p>
                 </div>
               </a>
               <a href="https://www.dataprotection.ro" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition">

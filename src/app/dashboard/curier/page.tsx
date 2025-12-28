@@ -207,7 +207,7 @@ const DashboardHeader = memo(function DashboardHeader({ adminUnreadCount, onLogo
 
             {/* Help / Support */}
             <a 
-              href="mailto:support@curierulperfect.ro"
+              href="mailto:contact@curierulperfect.com"
               className="p-2.5 sm:p-2 text-gray-400 hover:text-emerald-400 transition-colors rounded-xl hover:bg-emerald-500/10 active:bg-emerald-500/20"
               title="Suport"
             >

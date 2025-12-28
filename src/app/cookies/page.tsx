@@ -219,7 +219,7 @@ export default function CookiesPage() {
             <p className="text-gray-300 mb-4">Pentru întrebări despre cookies:</p>
             <p className="text-gray-300">
               <strong className="text-white">Email:</strong>{' '}
-              <a href="mailto:privacy@curierulperfect.com" className="text-orange-400">privacy@curierulperfect.com</a>
+              <a href="mailto:contact@curierulperfect.com" className="text-orange-400">contact@curierulperfect.com</a>
             </p>
           </div>
 

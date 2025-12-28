@@ -18,7 +18,7 @@ export default function FAQPage() {
         { q: 'Cum plasez o comandă?', a: 'Accesează pagina "Plasează comandă", completezi formularul cu detaliile transportului (tip serviciu, rută, dimensiuni, dată), apoi aștepi oferte de la transportatori. Durează 2-3 minute.' },
         { q: 'Cât durează până primesc oferte?', a: 'În general între 2-24 ore. Depinde de disponibilitatea transportatorilor pe ruta ta și de urgența comenzii.' },
         { q: 'Pot anula o comandă?', a: 'Da. Înainte să confirmi un transportator, poți anula gratuit. După confirmare, condițiile de anulare se negociază direct cu curieru.' },
-        { q: 'Ce se întâmplă dacă coletul e deteriorat?', a: 'Recomandăm să optezi pentru asigurare transport. În caz de deteriorare, poți face reclamație și curierii sunt obligați să aibă asigurare de răspundere civilă. Contactează-ne la support@curierulperfect.com.' },
+        { q: 'Ce se întâmplă dacă coletul e deteriorat?', a: 'Recomandăm să optezi pentru asigurare transport. În caz de deteriorare, poți face reclamație și curierii sunt obligați să aibă asigurare de răspundere civilă. Contactează-ne la contact@curierulperfect.com.' },
         { q: 'Pot urmări coletul în timp real?', a: 'Depinde de transportator. Comunicarea directă prin chat permite actualizări în timp real. Unii curieri oferă tracking GPS.' }
       ]
     },
@@ -35,7 +35,7 @@ export default function FAQPage() {
       category: 'Curieri și siguranță',
       questions: [
         { q: 'Cum sunt verificați curierii?', a: 'Fiecare curier trebuie să prezinte: CI/pașaport, asigurare RCA valabilă, certificat înmatriculare vehicul. Echipa noastră verifică toate documentele înainte de aprobare.' },
-        { q: 'Ce fac dacă am probleme cu un curier?', a: 'Contactează-ne imediat la support@curierulperfect.com sau folosește secțiunea "Reclamații". Investigăm fiecare caz și luăm măsuri dacă e necesar.' },
+        { q: 'Ce fac dacă am probleme cu un curier?', a: 'Contactează-ne imediat la contact@curierulperfect.com sau folosește secțiunea "Reclamații". Investigăm fiecare caz și luăm măsuri dacă e necesar.' },
         { q: 'Pot lăsa o recenzie?', a: 'Da, după finalizarea transportului primești notificare să lași o recenzie. Recenziile ajută comunitatea să aleagă cei mai buni curieri.' }
       ]
     },
@@ -44,7 +44,7 @@ export default function FAQPage() {
       questions: [
         { q: 'Trebuie să am cont pentru a comanda?', a: 'Da, ai nevoie de cont pentru a plasa comenzi, comunica cu curierii și urmări istoricul transporturilor.' },
         { q: 'Cum îmi protejați datele?', a: 'Folosim criptare SSL, respectăm GDPR și nu vindem datele tale niciodată. Citește Politica de Confidențialitate pentru detalii.' },
-        { q: 'Pot șterge contul?', a: 'Da, din setările contului sau contactând support@curierulperfect.com. Datele vor fi șterse conform GDPR.' }
+        { q: 'Pot șterge contul?', a: 'Da, din setările contului sau contactând contact@curierulperfect.com. Datele vor fi șterse conform GDPR.' }
       ]
     }
   ];

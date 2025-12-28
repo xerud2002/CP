@@ -172,8 +172,8 @@ export default function TermeniPage() {
             <h2 className="text-2xl font-bold text-white mb-4">14. Contact</h2>
             <p className="text-gray-300 mb-4">Pentru întrebări despre termeni și condiții:</p>
             <p className="text-gray-300">
-              <strong className="text-white">Email:</strong> <a href="mailto:legal@curierulperfect.com" className="text-orange-400">legal@curierulperfect.com</a><br/>
-              <strong className="text-white">Suport:</strong> <a href="mailto:support@curierulperfect.com" className="text-orange-400">support@curierulperfect.com</a>
+              <strong className="text-white">Email:</strong> <a href="mailto:contact@curierulperfect.com" className="text-orange-400">contact@curierulperfect.com</a><br/>
+              <strong className="text-white">Suport:</strong> <a href="mailto:contact@curierulperfect.com" className="text-orange-400">contact@curierulperfect.com</a>
             </p>
           </div>
         </div>

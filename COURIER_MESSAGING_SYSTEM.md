@@ -1,4 +1,4 @@
-# Sistem de Mesaje Curieri - Reguli și Restricții
+![alt text]({5DDACDDC-2C13-481B-A8DC-CABD57BA4F71}.png)# Sistem de Mesaje Curieri - Reguli și Restricții
 
 ## Verificări la Trimiterea Primului Mesaj
 

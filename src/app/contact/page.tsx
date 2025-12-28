@@ -130,8 +130,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white mb-1">Email</h3>
-                  <a href="mailto:support@curierulperfect.com" className="text-orange-400 hover:text-orange-300">
-                    support@curierulperfect.com
+                  <a href="mailto:contact@curierulperfect.com" className="text-orange-400 hover:text-orange-300">
+                    contact@curierulperfect.com
                   </a>
                 </div>
               </div>
