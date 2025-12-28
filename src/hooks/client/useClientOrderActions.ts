@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import { doc, deleteDoc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, collection, query, where, getDocs, writeBatch } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { showSuccess, showError, showWarning } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';

@@ -12,12 +12,12 @@ import HelpCard from '@/components/HelpCard';
 import { countries, judetByCountry } from '@/lib/constants';
 import { COUNTRY_TAX_INFO } from '@/lib/businessInfo';
 import { showSuccess, showError } from '@/lib/toast';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface ClientProfile {
   nume: string;
   prenume: string;
   telefon: string;
+  telefonPrefix: string;
   email: string;
   tara: string;
   judet: string;
@@ -28,6 +28,21 @@ interface ClientProfile {
   cui?: string;
 }
 
+const phonePrefixes = [
+  { code: 'ro', name: '+40', flag: '/img/flag/ro.svg' },
+  { code: 'gb', name: '+44', flag: '/img/flag/gb.svg' },
+  { code: 'it', name: '+39', flag: '/img/flag/it.svg' },
+  { code: 'es', name: '+34', flag: '/img/flag/es.svg' },
+  { code: 'de', name: '+49', flag: '/img/flag/de.svg' },
+  { code: 'fr', name: '+33', flag: '/img/flag/fr.svg' },
+  { code: 'at', name: '+43', flag: '/img/flag/at.svg' },
+  { code: 'be', name: '+32', flag: '/img/flag/be.svg' },
+  { code: 'nl', name: '+31', flag: '/img/flag/nl.svg' },
+  { code: 'gr', name: '+30', flag: '/img/flag/gr.svg' },
+  { code: 'pt', name: '+351', flag: '/img/flag/pt.svg' },
+  { code: 'ie', name: '+353', flag: '/img/flag/ie.svg' },
+];
+
 export default function ProfilClientPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -35,6 +50,7 @@ export default function ProfilClientPage() {
     nume: '',
     prenume: '',
     telefon: '',
+    telefonPrefix: 'ro',
     email: user?.email || '',
     tara: 'RO',
     judet: '',
@@ -45,12 +61,15 @@ export default function ProfilClientPage() {
     cui: '',
   });
   const [saving, setSaving] = useState(false);
-  const [countryDropdownOpen, setCountryDropdownOpen] = useLocalStorage('client_profile_country_dropdown', false);
-  const [judetDropdownOpen, setJudetDropdownOpen] = useLocalStorage('client_profile_judet_dropdown', false);
+  const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
+  const [judetDropdownOpen, setJudetDropdownOpen] = useState(false);
+  const [prefixDropdownOpen, setPrefixDropdownOpen] = useState(false);
   const [countrySearch, setCountrySearch] = useState('');
   const [judetSearch, setJudetSearch] = useState('');
   const countryDropdownRef = useRef<HTMLDivElement>(null);
   const judetDropdownRef = useRef<HTMLDivElement>(null);
+  const prefixDropdownRef = useRef<HTMLDivElement>(null);
+  const prefixMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {
@@ -61,16 +80,22 @@ export default function ProfilClientPage() {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(target)) {
         setCountryDropdownOpen(false);
       }
-      if (judetDropdownRef.current && !judetDropdownRef.current.contains(event.target as Node)) {
+      if (judetDropdownRef.current && !judetDropdownRef.current.contains(target)) {
         setJudetDropdownOpen(false);
       }
+      // Check both button container and dropdown menu for prefix
+      const clickedInsidePrefix = prefixDropdownRef.current?.contains(target) || prefixMenuRef.current?.contains(target);
+      if (!clickedInsidePrefix) {
+        setPrefixDropdownOpen(false);
+      }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [setCountryDropdownOpen, setJudetDropdownOpen]);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
   // Load profile data
   const loadProfile = useCallback(async () => {
@@ -220,15 +245,72 @@ export default function ProfilClientPage() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Telefon *</label>
-                <input
-                  type="tel"
-                  value={profile.telefon}
-                  onChange={(e) => setProfile({ ...profile, telefon: e.target.value })}
-                  className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-                  placeholder="+40 XXX XXX XXX"
-                  required
-                />
+                <label className="block text-sm font-medium text-gray-300 mb-2">Număr telefon *</label>
+                <div className="flex gap-2">
+                  {/* Custom Prefix Dropdown */}
+                  <div className="relative" ref={prefixDropdownRef}>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPrefixDropdownOpen(!prefixDropdownOpen);
+                      }}
+                      className="w-32 px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-white hover:bg-slate-700/70 transition-colors flex items-center gap-2 cursor-pointer"
+                    >
+                      <Image
+                        src={phonePrefixes.find(p => p.code === profile.telefonPrefix)?.flag || '/img/flag/ro.svg'}
+                        alt={`Steag ${phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || 'România'}`}
+                        width={20}
+                        height={14}
+                        className="rounded-sm shrink-0"
+                        style={{ width: 'auto', height: 'auto' }}
+                      />
+                      <span>{phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || '+40'}</span>
+                      <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {prefixDropdownOpen && (
+                      <div ref={prefixMenuRef} className="fixed z-9999 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto" style={{
+                        top: prefixDropdownRef.current ? `${prefixDropdownRef.current.getBoundingClientRect().bottom + 4}px` : '0',
+                        left: prefixDropdownRef.current ? `${prefixDropdownRef.current.getBoundingClientRect().left}px` : '0'
+                      }}>
+                        {phonePrefixes.map((p) => (
+                          <button
+                            key={p.code}
+                            type="button"
+                            onClick={() => {
+                              setProfile({ ...profile, telefonPrefix: p.code });
+                              setPrefixDropdownOpen(false);
+                            }}
+                            className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-700 transition-colors ${
+                              profile.telefonPrefix === p.code ? 'bg-slate-700/50' : ''
+                            }`}
+                          >
+                            <Image
+                              src={p.flag}
+                              alt=""
+                              width={20}
+                              height={14}
+                              className="rounded-sm shrink-0"
+                              style={{ width: 'auto', height: 'auto' }}
+                            />
+                            <span className="text-white text-sm">{p.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    value={profile.telefon}
+                    onChange={(e) => setProfile({ ...profile, telefon: e.target.value })}
+                    className="flex-1 px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-white focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    placeholder="7xx xxx xxx"
+                    required
+                  />
+                </div>
               </div>
               
               <div>
@@ -253,7 +335,10 @@ export default function ProfilClientPage() {
                 <div className="relative" ref={countryDropdownRef}>
                   <button
                     type="button"
-                    onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCountryDropdownOpen(!countryDropdownOpen);
+                    }}
                     className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-white hover:bg-slate-700/70 transition-colors flex items-center gap-3 cursor-pointer focus:outline-none"
                     aria-label="Selectează țară"
                   >
@@ -263,6 +348,7 @@ export default function ProfilClientPage() {
                       width={24}
                       height={16}
                       className="rounded-sm shrink-0"
+                      style={{ width: 'auto', height: 'auto' }}
                     />
                     <span className="flex-1 text-left truncate">{currentCountryName}</span>
                     <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${countryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -306,6 +392,7 @@ export default function ProfilClientPage() {
                                 width={24}
                                 height={16}
                                 className="rounded-sm shrink-0"
+                                style={{ width: 'auto', height: 'auto' }}
                               />
                               <span className="text-white text-sm">{c.name}</span>
                             </button>
@@ -326,7 +413,10 @@ export default function ProfilClientPage() {
                 <div className="relative" ref={judetDropdownRef}>
                   <button
                     type="button"
-                    onClick={() => setJudetDropdownOpen(!judetDropdownOpen)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setJudetDropdownOpen(!judetDropdownOpen);
+                    }}
                     className="w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-white hover:bg-slate-700/70 transition-colors flex items-center gap-3 cursor-pointer focus:outline-none"
                     aria-label="Selectează județ sau regiune"
                   >
@@ -336,6 +426,7 @@ export default function ProfilClientPage() {
                       width={20}
                       height={14}
                       className="rounded-sm shrink-0"
+                      style={{ width: 'auto', height: 'auto' }}
                     />
                     <span className="flex-1 text-left truncate">{profile.judet || 'Selectează județ/regiune'}</span>
                     <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${judetDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -380,6 +471,7 @@ export default function ProfilClientPage() {
                                 width={20}
                                 height={14}
                                 className="rounded-sm shrink-0"
+                                style={{ width: 'auto', height: 'auto' }}
                               />
                               <span className="text-white text-sm">{judet}</span>
                             </button>

@@ -20,7 +20,7 @@ export default function GDPRPage() {
       setRequestType('');
       setEmail('');
       setDetails('');
-    } catch (error) {
+    } catch {
       showError('Eroare la trimiterea cererii. Încearcă din nou.');
     } finally {
       setLoading(false);

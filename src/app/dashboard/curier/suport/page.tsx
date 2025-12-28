@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeftIcon, ChatIcon, MailIcon, BellIcon, PackageIcon, StarIcon } from '@/components/icons/DashboardIcons';
+import { ArrowLeftIcon, ChatIcon, MailIcon, BellIcon, PackageIcon, StarIcon, CheckCircleIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { CONTACT_INFO } from '@/lib/contact';
 import { useAdminMessages } from '@/hooks/useAdminMessages';
@@ -49,15 +49,15 @@ const contactMethods = [
   },
 ];
 
-export default function SuportClientPage() {
+export default function SuportCurierPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [showAdminMessageModal, setShowAdminMessageModal] = useState(false);
   const { unreadCount } = useAdminMessages();
 
   useEffect(() => {
-    if (!loading && (!user || user.role !== 'client')) {
-      router.push('/login?role=client');
+    if (!loading && (!user || user.role !== 'curier')) {
+      router.push('/login?role=curier');
     }
   }, [user, loading, router]);
 
@@ -80,17 +80,17 @@ export default function SuportClientPage() {
           <div className="flex items-center justify-between h-14 sm:h-16">
             <div className="flex items-center gap-2 sm:gap-4">
               <Link 
-                href="/dashboard/client" 
+                href="/dashboard/curier" 
                 className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
               >
                 <ArrowLeftIcon className="w-5 h-5" />
               </Link>
               <div className="flex items-center gap-2 sm:gap-3">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-pink-500/20 flex items-center justify-center">
-                  <ChatIcon className="w-5 h-5 sm:w-6 sm:h-6 text-pink-400" />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-violet-500/20 flex items-center justify-center">
+                  <ChatIcon className="w-5 h-5 sm:w-6 sm:h-6 text-violet-400" />
                 </div>
                 <div>
-                  <h1 className="text-base sm:text-lg font-bold text-white">Suport Clienți</h1>
+                  <h1 className="text-base sm:text-lg font-bold text-white">Suport Curieri</h1>
                   <p className="text-xs text-gray-500 hidden sm:block">Ajutor 24/7</p>
                 </div>
               </div>
@@ -145,7 +145,7 @@ export default function SuportClientPage() {
 
         {/* Support Info */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6 text-center bg-linear-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Cum te putem ajuta?</h3>
+          <h3 className="text-2xl font-bold mb-6 text-center bg-linear-to-r from-blue-400 via-purple-400 to-violet-400 bg-clip-text text-transparent">Cum te putem ajuta?</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Asistență pentru comenzi */}
@@ -156,25 +156,25 @@ export default function SuportClientPage() {
                 </div>
                 <div>
                   <h4 className="text-white font-bold text-base mb-2">Asistență pentru comenzi</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Probleme cu comenzile active, întârzieri sau modificări - suntem aici pentru tine</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">Probleme cu comenzile active, întrebări despre clienți sau modificări necesare</p>
                 </div>
               </div>
             </div>
 
-            {/* Întrebări despre servicii */}
+            {/* Verificare cont */}
             <div className="group bg-linear-to-br from-blue-500/10 to-blue-600/5 backdrop-blur-sm rounded-xl border border-blue-500/20 p-5 hover:border-blue-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <ChatIcon className="w-6 h-6 text-blue-400" />
+                  <CheckCircleIcon className="w-6 h-6 text-blue-400" />
                 </div>
                 <div>
-                  <h4 className="text-white font-bold text-base mb-2">Întrebări despre servicii</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Informații despre cum funcționează platforma, prețuri și serviciile disponibile</p>
+                  <h4 className="text-white font-bold text-base mb-2">Verificare cont și documente</h4>
+                  <p className="text-gray-400 text-sm leading-relaxed">Status verificare, documente necesare sau probleme cu aprobarea contului</p>
                 </div>
               </div>
             </div>
 
-            {/* Raportare comportament */}
+            {/* Raportare comportament client */}
             <div className="group bg-linear-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm rounded-xl border border-red-500/20 p-5 hover:border-red-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
@@ -182,12 +182,12 @@ export default function SuportClientPage() {
                 </div>
                 <div>
                   <h4 className="text-white font-bold text-base mb-2">Raportare comportament neprofesional</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Limbaj inadecvat, atitudine nepotrivită sau orice formă de hărțuire - te ajutăm imediat</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">Client cu atitudine inadecvată, cerințe nerezonabile sau hărțuire - te ajutăm imediat</p>
                 </div>
               </div>
             </div>
 
-            {/* Servicii neprestate */}
+            {/* Plăți și comisioane */}
             <div className="group bg-linear-to-br from-yellow-500/10 to-yellow-600/5 backdrop-blur-sm rounded-xl border border-yellow-500/20 p-5 hover:border-yellow-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
@@ -196,23 +196,21 @@ export default function SuportClientPage() {
                   </svg>
                 </div>
                 <div>
-                  <h4 className="text-white font-bold text-base mb-2">Servicii neprestate sau probleme financiare</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Curierul nu și-a îndeplinit obligațiile, întârzieri nejustificate sau probleme cu plata</p>
+                  <h4 className="text-white font-bold text-base mb-2">Plăți și comisioane</h4>
+                  <p className="text-gray-400 text-sm leading-relaxed">Întrebări despre plăți, comisioane platformă sau probleme financiare</p>
                 </div>
               </div>
             </div>
 
-            {/* Sesizare încălcări */}
+            {/* Cum funcționează platforma */}
             <div className="group bg-linear-to-br from-orange-500/10 to-orange-600/5 backdrop-blur-sm rounded-xl border border-orange-500/20 p-5 hover:border-orange-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
+                  <ChatIcon className="w-6 h-6 text-orange-400" />
                 </div>
                 <div>
-                  <h4 className="text-white font-bold text-base mb-2">Sesizare încălcări ale termenilor</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Activități suspecte, înșelătorii sau încălcări grave ale regulamentului platformei</p>
+                  <h4 className="text-white font-bold text-base mb-2">Cum funcționează platforma</h4>
+                  <p className="text-gray-400 text-sm leading-relaxed">Ghid pentru funcționalități, best practices și cum să îți optimizezi profilul</p>
                 </div>
               </div>
             </div>
@@ -241,40 +239,53 @@ export default function SuportClientPage() {
                 </div>
                 <div>
                   <h4 className="text-white font-bold text-base mb-2">Feedback și sugestii</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Ideile tale ne ajută să construim o platformă mai bună pentru toată comunitatea</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">Ideile tale ne ajută să construim o platformă mai bună pentru toți partenerii noștri</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Întrebări despre servicii */}
+            <div className="group bg-linear-to-br from-teal-500/10 to-teal-600/5 backdrop-blur-sm rounded-xl border border-teal-500/20 p-5 hover:border-teal-500/40 transition-all hover:scale-[1.02]">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-teal-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <StarIcon className="w-6 h-6 text-teal-400" />
+                </div>
+                <div>
+                  <h4 className="text-white font-bold text-base mb-2">Servicii și zone de acoperire</h4>
+                  <p className="text-gray-400 text-sm leading-relaxed">Cum să adaugi sau modifici servicii, zone de acoperire și prețuri competitive</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Important Notice */}
-        <div className="bg-linear-to-r from-red-500/20 via-orange-500/20 to-yellow-500/20 rounded-xl border border-red-500/30 p-5 mb-6">
+        {/* Important Notice for Couriers */}
+        <div className="bg-linear-to-r from-emerald-500/20 via-blue-500/20 to-violet-500/20 rounded-xl border border-emerald-500/30 p-5 mb-6">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center shrink-0">
-              <BellIcon className="w-5 h-5 text-red-400" />
+            <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center shrink-0">
+              <CheckCircleIcon className="w-5 h-5 text-emerald-400" />
             </div>
             <div>
-              <h4 className="text-white font-bold mb-2">Protecția ta este prioritatea noastră</h4>
+              <h4 className="text-white font-bold mb-2">Suport dedicat partenerilor noștri</h4>
               <p className="text-gray-300 text-sm mb-3">
-                Dacă ai întâmpinat o situație neplăcută, te rugăm să ne contactezi imediat. Fiecare sesizare este tratată cu seriozitate și confidențialitate.
+                Ești un partener valoros al platformei noastre. Suntem aici să te sprijinim în orice situație.
               </p>
               <ul className="space-y-1.5 text-gray-300 text-sm">
                 <li className="flex items-start gap-2">
-                  <span className="text-red-400 mt-0.5">•</span>
-                  <span>Toate raportările sunt investigate în maxim 24 de ore</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-400 mt-0.5">•</span>
-                  <span>Identitatea ta rămâne protejată pe toată durata investigației</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-yellow-400 mt-0.5">•</span>
-                  <span>Curieri cu comportament inadecvat pot fi suspendați sau eliminați permanent</span>
-                </li>
-                <li className="flex items-start gap-2">
                   <span className="text-emerald-400 mt-0.5">•</span>
-                  <span>Oferim suport complet pentru recuperarea prejudiciilor în cazuri dovedite</span>
+                  <span>Răspundem la toate întrebările în maxim 24 de ore</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-400 mt-0.5">•</span>
+                  <span>Protejăm drepturile tale și asigurăm un mediu de lucru corect</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-violet-400 mt-0.5">•</span>
+                  <span>Oferim asistență în cazul unor situații dificile cu clienții</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-purple-400 mt-0.5">•</span>
+                  <span>Te ajutăm să îți îmbunătățești rating-ul și vizibilitatea pe platformă</span>
                 </li>
               </ul>
             </div>

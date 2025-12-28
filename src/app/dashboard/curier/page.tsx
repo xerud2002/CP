@@ -92,16 +92,6 @@ const mainNavTiles: NavTile[] = [
     borderColor: 'border-orange-500/20 hover:border-orange-500/40',
   },
   {
-    href: '/dashboard/curier/servicii',
-    icon: StarIcon,
-    title: 'Servicii',
-    description: 'Servicii active',
-    color: 'text-amber-400',
-    bgColor: 'bg-amber-500/10 hover:bg-amber-500/20',
-    borderColor: 'border-amber-500/20 hover:border-amber-500/40',
-    badgeKey: 'services',
-  },
-  {
     href: '/dashboard/curier/verificare',
     icon: CheckCircleIcon,
     title: 'Verificare',
@@ -112,7 +102,7 @@ const mainNavTiles: NavTile[] = [
   },
   {
     href: '/dashboard/curier/recenzii',
-    icon: ChatIcon,
+    icon: BellIcon,
     title: 'Recenzii',
     description: 'Feedback clienți',
     color: 'text-blue-400',
@@ -128,6 +118,15 @@ const mainNavTiles: NavTile[] = [
     bgColor: 'bg-pink-500/10 hover:bg-pink-500/20',
     borderColor: 'border-pink-500/20 hover:border-pink-500/40',
     badgeKey: 'profile',
+  },
+  {
+    href: '/dashboard/curier/suport',
+    icon: ChatIcon,
+    title: 'Suport',
+    description: 'Ajutor 24/7',
+    color: 'text-violet-400',
+    bgColor: 'bg-violet-500/10 hover:bg-violet-500/20',
+    borderColor: 'border-violet-500/20 hover:border-violet-500/40',
   },
 ];
 
@@ -525,7 +524,7 @@ const MainNavigation = memo(function MainNavigation({ badges, newOrdersCount }: 
   return (
     <section>
       <h2 className="text-xs sm:text-sm font-medium text-gray-400 uppercase tracking-wide mb-2 sm:mb-3">Meniu rapid</h2>
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3">
         {mainNavTiles.map((tile) => {
           const needsAttention = tile.badgeKey && badges[tile.badgeKey];
           const isComenziCard = tile.href === '/dashboard/curier/comenzi';

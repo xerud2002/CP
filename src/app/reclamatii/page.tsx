@@ -22,7 +22,7 @@ export default function ReclamatiiPage() {
       await new Promise(resolve => setTimeout(resolve, 1500));
       showSuccess('Reclamația ta a fost înregistrată. Echipa noastră va investiga cazul în 48 ore.');
       setFormData({ nume: '', email: '', orderNumber: '', tipReclamatie: '', descriere: '', documente: null });
-    } catch (error) {
+    } catch {
       showError('Eroare la trimiterea reclamației. Încearcă din nou.');
     } finally {
       setLoading(false);

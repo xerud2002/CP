@@ -266,7 +266,7 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-4 sm:p-5 transition-all duration-300 hover:scale-[1.02] active:scale-95 flex flex-col min-h-[120px] sm:min-h-[140px]`}
+              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-4 sm:p-5 transition-all duration-300 hover:scale-[1.02] active:scale-95 flex flex-col min-h-30 sm:min-h-35`}
             >
               {/* Hover gradient overlay */}
               <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>

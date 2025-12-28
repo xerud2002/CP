@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useCallback, useMemo, Suspense } from 'react';
-import { doc, getDoc, setDoc, serverTimestamp, deleteField } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp, deleteField } from 'firebase/firestore';
 import { db, storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ArrowLeftIcon, CheckCircleIcon } from '@/components/icons/DashboardIcons';
@@ -12,6 +12,8 @@ import { showSuccess, showError } from '@/lib/toast';
 import { showConfirm } from '@/components/ui/ConfirmModal';
 import { logError } from '@/lib/errorMessages';
 import { CourierProfile } from '@/types';
+import { serviceTypes } from '@/lib/constants';
+import { ServiceIcon } from '@/components/icons/ServiceIcons';
 
 import { getDocumentRequirements } from '@/utils/documentRequirements';
 
@@ -109,6 +111,7 @@ function VerificarePageContent() {
   const [uploadedDocuments, setUploadedDocuments] = useState<Record<string, UploadedDocument>>({});
   const [uploadingDoc, setUploadingDoc] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [savingServices, setSavingServices] = useState(false);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'curier')) {
@@ -133,6 +136,37 @@ function VerificarePageContent() {
       logError(error);
     }
   }, [user]);
+
+  // Toggle service selection and save to Firebase
+  const toggleService = async (serviceValue: string) => {
+    if (!user) return;
+    
+    const normalizedService = serviceValue.toLowerCase();
+    const isCurrentlySelected = activeServices.includes(normalizedService);
+    
+    // Prevent deselecting services with approved documents
+    if (isCurrentlySelected && isServiceLocked(serviceValue)) {
+      showError('Nu poți dezactiva acest serviciu deoarece ai documente verificate pentru el');
+      return;
+    }
+    
+    setSavingServices(true);
+    const newServices = isCurrentlySelected
+      ? activeServices.filter(s => s !== normalizedService)
+      : [...activeServices, normalizedService];
+    
+    try {
+      const userDocRef = doc(db, 'users', user.uid);
+      await updateDoc(userDocRef, { serviciiOferite: newServices });
+      setActiveServices(newServices);
+      showSuccess('Servicii actualizate!');
+    } catch (error) {
+      logError(error);
+      showError('Eroare la actualizarea serviciilor');
+    } finally {
+      setSavingServices(false);
+    }
+  };
 
   const loadDocuments = useCallback(async () => {
     if (!user) return;
@@ -253,7 +287,39 @@ function VerificarePageContent() {
     [profile, activeServices]
   );
   const requiredDocs = useMemo(() => documents.filter(d => d.required), [documents]);
-  const optionalDocs = useMemo(() => documents.filter(d => !d.required), [documents]);
+  
+  // Filter optional documents to show only those for active services OR approved documents
+  const optionalDocs = useMemo(() => {
+    return documents.filter(d => {
+      if (d.required) return false; // Skip required docs
+      
+      // Always show if document is already approved (verified)
+      const uploaded = uploadedDocuments[d.id];
+      if (uploaded && uploaded.status === 'approved') return true;
+      
+      // If document has no specific services, show it
+      if (!d.forServices || d.forServices.length === 0) return true;
+      
+      // Show only if at least one of its services is active
+      return d.forServices.some(service => 
+        activeServices.includes(service.toLowerCase())
+      );
+    });
+  }, [documents, activeServices, uploadedDocuments]);
+
+  // Check if a service has approved documents (cannot be deselected)
+  const isServiceLocked = useCallback((serviceId: string) => {
+    const normalizedService = serviceId.toLowerCase();
+    // Check if any approved document is required for this service
+    return Object.entries(uploadedDocuments).some(([docId, docData]) => {
+      if (docData.status !== 'approved') return false;
+      // Find the document requirement
+      const docReq = documents.find(d => d.id === docId);
+      if (!docReq || !docReq.forServices) return false;
+      // Check if this service is in the document's service list
+      return docReq.forServices.some(s => s.toLowerCase() === normalizedService);
+    });
+  }, [uploadedDocuments, documents]);
 
   if (loading || !profile) {
     return (
@@ -302,6 +368,73 @@ function VerificarePageContent() {
                 Cu cât documentele tale sunt la zi, cu atât mai rapid vei putea accepta comenzi și dezvolta afacerea ta pe platformă.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Services Selection Section */}
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-white/5 p-5 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-bold text-white">Servicii Active</h3>
+              <p className="text-sm text-gray-400">Selectează serviciile pe care le oferi pentru a vedea documentele necesare</p>
+            </div>
+            <div className="text-sm text-gray-400">
+              {activeServices.length} / {serviceTypes.length} active
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {serviceTypes.map((service) => {
+              const normalizedValue = service.id.toLowerCase();
+              const isLocked = isServiceLocked(service.id);
+              const isSelected = activeServices.includes(normalizedValue) || isLocked;
+              
+              return (
+                <button
+                  key={service.id}
+                  onClick={() => toggleService(service.id)}
+                  disabled={savingServices || isLocked}
+                  className={`group relative p-4 rounded-xl border-2 transition-all text-left ${
+                    isSelected
+                      ? `${service.bgColor} ${service.color.replace('text-', 'border-')} border-opacity-50`
+                      : 'bg-slate-700/30 border-white/5 hover:border-white/20'
+                  } ${
+                    isLocked ? 'opacity-75 cursor-not-allowed' : 'disabled:opacity-50'
+                  }`}
+                  title={isLocked ? 'Serviciu blocat - ai documente verificate' : ''}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`p-2 rounded-lg ${isSelected ? service.bgColor : 'bg-slate-600/50'}`}>
+                      <ServiceIcon service={service.id} className={`w-5 h-5 ${isSelected ? service.color : 'text-gray-400'}`} />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className={`font-semibold text-sm mb-1 ${isSelected ? 'text-white' : 'text-gray-300'}`}>
+                        {service.label}
+                      </h4>
+                      <p className="text-xs text-gray-500">{service.description}</p>
+                    </div>
+                    {isSelected && (
+                      <div className="absolute top-2 right-2">
+                        <div className={`w-5 h-5 rounded-full ${service.bgColor} flex items-center justify-center`}>
+                          <svg className={`w-3 h-3 ${service.color}`} fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                    )}
+                    {isLocked && (
+                      <div className="absolute bottom-2 right-2">
+                        <div className="w-5 h-5 rounded-full bg-emerald-500/30 flex items-center justify-center" title="Blocat - documente verificate">
+                          <svg className="w-3 h-3 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 

@@ -4,12 +4,6 @@ import React from 'react';
 import Image from 'next/image';
 import { countries } from '@/lib/constants';
 
-// Helper to get country data with lowercase code
-const getCountryData = (countryName: string | undefined) => {
-  const country = countries.find(c => c.name === countryName) || countries.find(c => c.code === 'RO')!;
-  return { ...country, code: country.code.toLowerCase() };
-};
-
 interface OrderRouteSectionProps {
   pickupCountry?: string;
   pickupRegion: string;

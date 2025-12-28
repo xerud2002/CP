@@ -56,7 +56,7 @@ const cpKeyFeatures = [
 
 export default function PlatformVsFacebook() {
   return (
-    <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden bg-gradient-to-b from-slate-900/50 via-slate-900 to-slate-900/50">
+    <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden bg-linear-to-b from-slate-900/50 via-slate-900 to-slate-900/50">
       {/* Background decorations */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
@@ -66,7 +66,7 @@ export default function PlatformVsFacebook() {
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-10 sm:mb-14">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/10 to-orange-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4 shadow-lg shadow-emerald-500/10">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-500/10 to-orange-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4 shadow-lg shadow-emerald-500/10">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -90,11 +90,11 @@ export default function PlatformVsFacebook() {
           {cpKeyFeatures.map((feature) => (
             <div 
               key={feature.id} 
-              className="group relative bg-gradient-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-xl rounded-xl p-5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1"
+              className="group relative bg-linear-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-xl rounded-xl p-5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1"
             >
               {/* CP Advantage */}
               <div className="flex items-start gap-4 mb-4 pb-4 border-b border-slate-700/50">
-                <div className="shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="shrink-0 w-12 h-12 rounded-lg bg-linear-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
                   {feature.icon}
                 </div>
                 <div>
@@ -114,7 +114,7 @@ export default function PlatformVsFacebook() {
 
               {/* FB Disadvantage */}
               <div className="flex items-start gap-4">
-                <div className="shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-red-500/10 to-red-600/5 border border-red-500/20 flex items-center justify-center">
+                <div className="shrink-0 w-12 h-12 rounded-lg bg-linear-to-br from-red-500/10 to-red-600/5 border border-red-500/20 flex items-center justify-center">
                   <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
@@ -139,7 +139,7 @@ export default function PlatformVsFacebook() {
 
         {/* Bottom CTA */}
         <div className="text-center">
-          <div className="inline-block p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-800/50 border border-orange-500/30 shadow-2xl shadow-orange-500/10">
+          <div className="inline-block p-6 sm:p-8 rounded-2xl bg-linear-to-br from-slate-800/90 to-slate-800/50 border border-orange-500/30 shadow-2xl shadow-orange-500/10">
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
               Te-ai săturat de <span className="text-red-400">țepari</span> și <span className="text-red-400">intermediari dubioși</span>?
             </h3>

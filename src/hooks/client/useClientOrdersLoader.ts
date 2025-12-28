@@ -64,7 +64,7 @@ export function useClientOrdersLoader({
           id: doc.id,
           ...doc.data()
         }))
-        .filter((order: any) => order.archived !== true) as Order[]; // Filter archived orders client-side
+        .filter((order) => (order as Order & { archived?: boolean }).archived !== true) as Order[]; // Filter archived orders client-side
       
       setOrders(ordersData);
       setLoading(false);

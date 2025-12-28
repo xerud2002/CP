@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef, Suspense, useMemo } from 'react';
-import { ArrowLeftIcon, CheckIcon } from '@/components/icons/DashboardIcons';
+import { ArrowLeftIcon, CheckIcon, UserIcon as DashboardUserIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -13,7 +13,6 @@ import { db, storage } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
 import { showError } from '@/lib/toast';
 import { countries } from '@/lib/constants';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 interface CourierProfile {
   // Personal Info
@@ -94,62 +93,6 @@ const countryTaxInfoPF: Record<string, {
   gr: { taxLabel: 'ΑΦΜ (AFM) Προσωπικό', taxPlaceholder: '123456789', regLabel: 'ΑΜΚΑ', regPlaceholder: '12345678901', bankType: 'iban', ibanPlaceholder: 'GR16 0110 1250 0000 0001 2300 695' },
   pt: { taxLabel: 'NIF Pessoal', taxPlaceholder: '123456789', regLabel: 'NISS', regPlaceholder: '12345678901', bankType: 'iban', ibanPlaceholder: 'PT50 0002 0123 1234 5678 9015 4' },
   ie: { taxLabel: 'PPS Number', taxPlaceholder: '1234567T', regLabel: 'Tax Reference Number (opțional)', regPlaceholder: '1234567T', bankType: 'iban', ibanPlaceholder: 'IE29 AIBK 9311 5212 3456 78' },
-};
-
-// Business type labels per country
-const getBusinessTypeLabels = (countryCode: string) => {
-  const labels: Record<string, { firma: { title: string; subtitle: string }; pf: { title: string; subtitle: string } }> = {
-    ro: { 
-      firma: { title: 'Firmă', subtitle: 'SRL, SA, PFA, II, IF' },
-      pf: { title: 'Persoană Fizică', subtitle: 'Fără firmă înregistrată' }
-    },
-    gb: { 
-      firma: { title: 'Limited Company', subtitle: 'Ltd, PLC, LLP' },
-      pf: { title: 'Sole Trader', subtitle: 'Self-employed individual' }
-    },
-    de: { 
-      firma: { title: 'Unternehmen', subtitle: 'GmbH, AG, UG' },
-      pf: { title: 'Einzelunternehmer', subtitle: 'Freiberufler/Selbstständig' }
-    },
-    it: { 
-      firma: { title: 'Società', subtitle: 'SRL, SPA, SRLS' },
-      pf: { title: 'Ditta Individuale', subtitle: 'Imprenditore individuale' }
-    },
-    es: { 
-      firma: { title: 'Sociedad', subtitle: 'SL, SA, SLU' },
-      pf: { title: 'Autónomo', subtitle: 'Trabajador autónomo' }
-    },
-    fr: { 
-      firma: { title: 'Société', subtitle: 'SARL, SAS, EURL' },
-      pf: { title: 'Auto-entrepreneur', subtitle: 'Micro-entreprise' }
-    },
-    at: { 
-      firma: { title: 'Gesellschaft', subtitle: 'GmbH, AG, OG' },
-      pf: { title: 'Einzelunternehmer', subtitle: 'EPU/Freiberufler' }
-    },
-    be: { 
-      firma: { title: 'Vennootschap', subtitle: 'BV, NV, CV' },
-      pf: { title: 'Zelfstandige', subtitle: 'Eenmanszaak' }
-    },
-    nl: { 
-      firma: { title: 'Bedrijf', subtitle: 'BV, NV, VOF' },
-      pf: { title: 'ZZP\'er', subtitle: 'Eenmanszaak' }
-    },
-    gr: { 
-      firma: { title: 'Εταιρεία', subtitle: 'ΕΠΕ, ΑΕ, ΙΚΕ' },
-      pf: { title: 'Ατομική Επιχείρηση', subtitle: 'Ελεύθερος επαγγελματίας' }
-    },
-    pt: { 
-      firma: { title: 'Sociedade', subtitle: 'Lda, SA, Unipessoal' },
-      pf: { title: 'Empresário Individual', subtitle: 'Trabalhador independente' }
-    },
-    ie: { 
-      firma: { title: 'Limited Company', subtitle: 'Ltd, PLC, DAC' },
-      pf: { title: 'Sole Trader', subtitle: 'Self-employed' }
-    },
-  };
-  
-  return labels[countryCode] || labels.ro;
 };
 
 const phonePrefixes = [
@@ -237,8 +180,8 @@ function ProfilCurierContent() {
   const [saving, setSaving] = useState(false);
   const [savedMessage, setSavedMessage] = useState('');
   
-  const [prefixDropdownOpen, setPrefixDropdownOpen] = useLocalStorage('courier_profile_prefix_dropdown', false);
-  const [countryDropdownOpen, setCountryDropdownOpen] = useLocalStorage('courier_profile_country_dropdown', false);
+  const [prefixDropdownOpen, setPrefixDropdownOpen] = useState(false);
+  const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [ordersCount, setOrdersCount] = useState(0);
   const [rating, setRating] = useState(5.0);
@@ -246,6 +189,7 @@ function ProfilCurierContent() {
   const [verificationStatus, setVerificationStatus] = useState<'verified' | 'pending' | 'none'>('none');
   const [insuranceStatus, setInsuranceStatus] = useState<'verified' | 'pending' | 'none'>('none');
   const prefixDropdownRef = useRef<HTMLDivElement>(null);
+  const prefixMenuRef = useRef<HTMLDivElement>(null);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -257,16 +201,19 @@ function ProfilCurierContent() {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (prefixDropdownRef.current && !prefixDropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      // Check both button container and dropdown menu for prefix
+      const clickedInsidePrefix = prefixDropdownRef.current?.contains(target) || prefixMenuRef.current?.contains(target);
+      if (!clickedInsidePrefix) {
         setPrefixDropdownOpen(false);
       }
-      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(target)) {
         setCountryDropdownOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [setPrefixDropdownOpen, setCountryDropdownOpen]);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
   // Load profile from Firebase
   useEffect(() => {
@@ -449,24 +396,38 @@ function ProfilCurierContent() {
       )}
 
       {/* Header */}
-      <div className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/dashboard/curier" className="text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 text-sm">
-              <ArrowLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="hidden sm:inline">Înapoi la Dashboard</span>
-            </Link>
+      <header className="bg-slate-900/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link 
+                href="/dashboard/curier" 
+                className="p-1.5 sm:p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+              >
+                <ArrowLeftIcon className="w-5 h-5" />
+              </Link>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-orange-500/20 flex items-center justify-center">
+                  <DashboardUserIcon className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" />
+                </div>
+                <div>
+                  <h1 className="text-base sm:text-lg font-bold text-white">Profil Curier</h1>
+                  <p className="text-xs text-gray-500 hidden sm:block">Editează datele tale</p>
+                </div>
+              </div>
+            </div>
             <button
               onClick={handleSave}
               disabled={saving}
-              className="btn-primary flex items-center gap-2"
+              className="btn-primary flex items-center gap-2 text-sm sm:text-base"
             >
               <SaveIcon />
-              {saving ? 'Se salvează...' : 'Salvează'}
+              <span className="hidden sm:inline">{saving ? 'Se salvează...' : 'Salvează'}</span>
+              <span className="sm:hidden">{saving ? '...' : 'Salvează'}</span>
             </button>
           </div>
         </div>
-      </div>
+      </header>
 
       <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
         {/* Profile Header Card */}
@@ -694,56 +655,6 @@ function ProfilCurierContent() {
           </div>
         </div>
 
-        {/* Business Type Selector - First Priority */}
-        <div className="bg-slate-800/50 rounded-xl sm:rounded-2xl border border-white/5 p-4 sm:p-6 mb-4 sm:mb-6">
-          <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
-            Activezi ca persoană fizică sau firmă? *
-          </h2>
-          <p className="text-xs sm:text-sm text-gray-400 mb-4">
-            Selectează tipul de activitate pentru a completa documentele corespunzătoare
-          </p>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            <button
-              type="button"
-              onClick={() => setProfile({ ...profile, tipBusiness: 'firma' })}
-              className={`p-4 sm:p-6 rounded-xl border-2 transition-all active:scale-[0.98] ${
-                profile.tipBusiness === 'firma'
-                  ? 'border-purple-500 bg-purple-500/10 shadow-lg shadow-purple-500/20'
-                  : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
-              }`}
-            >
-              <div className="flex flex-col items-center gap-2 sm:gap-3">
-                <span className="text-3xl sm:text-4xl">🏢</span>
-                <span className={`font-semibold text-sm sm:text-lg ${profile.tipBusiness === 'firma' ? 'text-purple-400' : 'text-gray-300'}`}>
-                  {getBusinessTypeLabels(profile.taraSediu).firma.title}
-                </span>
-                <span className="text-xs sm:text-sm text-gray-400 text-center leading-tight">
-                  {getBusinessTypeLabels(profile.taraSediu).firma.subtitle}
-                </span>
-              </div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setProfile({ ...profile, tipBusiness: 'pf' })}
-              className={`p-4 sm:p-6 rounded-xl border-2 transition-all active:scale-[0.98] ${
-                profile.tipBusiness === 'pf'
-                  ? 'border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20'
-                  : 'border-slate-600 hover:border-slate-500 bg-slate-700/30'
-              }`}
-            >
-              <div className="flex flex-col items-center gap-2 sm:gap-3">
-                <span className="text-3xl sm:text-4xl">👤</span>
-                <span className={`font-semibold text-sm sm:text-lg ${profile.tipBusiness === 'pf' ? 'text-blue-400' : 'text-gray-300'}`}>
-                  {getBusinessTypeLabels(profile.taraSediu).pf.title}
-                </span>
-                <span className="text-xs sm:text-sm text-gray-400 text-center leading-tight">
-                  {getBusinessTypeLabels(profile.taraSediu).pf.subtitle}
-                </span>
-              </div>
-            </button>
-          </div>
-        </div>
-
         {/* Tab Content */}
         <div className="space-y-6">
             {/* Personal Information & Business Data - Full Width Cards */}
@@ -778,8 +689,11 @@ function ProfilCurierContent() {
                     <div className="relative" ref={countryDropdownRef}>
                       <button
                         type="button"
-                        onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
-                        className="form-select w-full flex items-center gap-3 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCountryDropdownOpen(!countryDropdownOpen);
+                        }}
+                        className="form-input w-full flex items-center gap-3 cursor-pointer"
                       >
                         <Image
                           src={countries.find(c => c.code === profile.taraSediu)?.flag || '/img/flag/ro.svg'}
@@ -787,6 +701,7 @@ function ProfilCurierContent() {
                           width={24}
                           height={16}
                           className="rounded-sm shrink-0"
+                          style={{ width: 'auto', height: 'auto' }}
                         />
                         <span className="flex-1 text-left truncate">{countries.find(c => c.code === profile.taraSediu)?.name || 'România'}</span>
                         <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${countryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -814,6 +729,7 @@ function ProfilCurierContent() {
                                 width={24}
                                 height={16}
                                 className="rounded-sm shrink-0"
+                                style={{ width: 'auto', height: 'auto' }}
                               />
                               <span className="text-white text-sm sm:text-base">{c.name}</span>
                             </button>
@@ -916,8 +832,11 @@ function ProfilCurierContent() {
                     <div className="relative" ref={prefixDropdownRef}>
                       <button
                         type="button"
-                        onClick={() => setPrefixDropdownOpen(!prefixDropdownOpen)}
-                        className="form-select w-32 flex items-center gap-2 cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setPrefixDropdownOpen(!prefixDropdownOpen);
+                        }}
+                        className="form-input w-32 flex items-center gap-2 cursor-pointer"
                       >
                         <Image
                           src={phonePrefixes.find(p => p.code === profile.telefonPrefix)?.flag || '/img/flag/ro.svg'}
@@ -925,6 +844,7 @@ function ProfilCurierContent() {
                           width={20}
                           height={14}
                           className="rounded-sm shrink-0"
+                          style={{ width: 'auto', height: 'auto' }}
                         />
                         <span>{phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || '+40'}</span>
                         <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -933,7 +853,10 @@ function ProfilCurierContent() {
                       </button>
                       
                       {prefixDropdownOpen && (
-                        <div className="absolute z-50 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
+                        <div ref={prefixMenuRef} className="fixed z-9999 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar" style={{
+                          top: prefixDropdownRef.current ? `${prefixDropdownRef.current.getBoundingClientRect().bottom + 4}px` : '0',
+                          left: prefixDropdownRef.current ? `${prefixDropdownRef.current.getBoundingClientRect().left}px` : '0'
+                        }}>
                           {phonePrefixes.map((p) => (
                             <button
                               key={p.code}
@@ -952,6 +875,7 @@ function ProfilCurierContent() {
                                 width={20}
                                 height={14}
                                 className="rounded-sm shrink-0"
+                                style={{ width: 'auto', height: 'auto' }}
                               />
                               <span className="text-white text-sm">{p.name}</span>
                             </button>

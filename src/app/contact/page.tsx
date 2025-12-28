@@ -22,7 +22,7 @@ export default function ContactPage() {
       await new Promise(resolve => setTimeout(resolve, 1500));
       showSuccess('Mesajul tău a fost trimis! Îți vom răspunde în 24-48 ore.');
       setFormData({ nume: '', email: '', telefon: '', subiect: '', mesaj: '' });
-    } catch (error) {
+    } catch {
       showError('Eroare la trimiterea mesajului. Încearcă din nou.');
     } finally {
       setLoading(false);
