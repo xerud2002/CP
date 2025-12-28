@@ -76,40 +76,38 @@ export function useClientOrdersLoader({
     return () => unsubscribe();
   }, [userId]);
 
-  // Track unread messages
+  // Track unread messages - OPTIMIZED: Single query instead of N queries
   useEffect(() => {
     if (!userId || orders.length === 0) return;
 
-    const unsubscribes: Array<() => void> = [];
+    // Single query: get all messages where client is participant
+    const messagesQuery = query(
+      collection(db, 'mesaje'),
+      where('clientId', '==', userId)
+    );
 
-    orders.forEach(order => {
-      if (!order.id) return;
+    const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+      const counts: Record<string, number> = {};
+      const orderIds = orders.map(o => o.id).filter(Boolean);
       
-      const messagesQuery = query(
-        collection(db, 'mesaje'),
-        where('orderId', '==', order.id),
-        where('clientId', '==', userId)
-      );
-
-      const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-        // Count messages not sent by client and not read by client
-        const unreadCount = snapshot.docs.filter(doc => {
-          const data = doc.data();
-          return data.senderId !== userId && data.readByClient !== true;
-        }).length;
-        const orderId = order.id as string;
-        setUnreadCounts(prev => ({
-          ...prev,
-          [orderId]: unreadCount
-        }));
+      // Initialize all orders with 0
+      orderIds.forEach(id => { if (id) counts[id] = 0; });
+      
+      // Count unread per order
+      snapshot.docs.forEach(doc => {
+        const data = doc.data();
+        const orderId = data.orderId;
+        
+        // Only count if this order is in our list and message is unread
+        if (orderIds.includes(orderId) && data.senderId !== userId && data.readByClient !== true) {
+          counts[orderId] = (counts[orderId] || 0) + 1;
+        }
       });
-
-      unsubscribes.push(unsubscribe);
+      
+      setUnreadCounts(counts);
     });
 
-    return () => {
-      unsubscribes.forEach(unsub => unsub());
-    };
+    return () => unsubscribe();
   }, [userId, orders]);
 
   // Filter orders - normalize service names and check country, status, search

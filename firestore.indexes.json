@@ -1,6 +1,31 @@
 {
   "indexes": [
     {
+      "collectionGroup": "admin_messages",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "participants", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "mesaje",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "orderId", "order": "ASCENDING" },
+        { "fieldPath": "clientId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "comenzi",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid_client", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "comenzi",
       "queryScope": "COLLECTION",
       "fields": [
@@ -125,13 +150,6 @@
       "fields": [
         { "fieldPath": "uid_client", "order": "ASCENDING" },
         { "fieldPath": "status", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "recenzii",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "courierId", "order": "ASCENDING" }
       ]
     }
   ],
