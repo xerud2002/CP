@@ -189,7 +189,6 @@ function ProfilCurierContent() {
   const [verificationStatus, setVerificationStatus] = useState<'verified' | 'pending' | 'none'>('none');
   const [insuranceStatus, setInsuranceStatus] = useState<'verified' | 'pending' | 'none'>('none');
   const prefixDropdownRef = useRef<HTMLDivElement>(null);
-  const prefixMenuRef = useRef<HTMLDivElement>(null);
   const countryDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -200,19 +199,16 @@ function ProfilCurierContent() {
 
   // Close dropdowns when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node;
-      // Check both button container and dropdown menu for prefix
-      const clickedInsidePrefix = prefixDropdownRef.current?.contains(target) || prefixMenuRef.current?.contains(target);
-      if (!clickedInsidePrefix) {
+    function handleClickOutside(event: MouseEvent) {
+      if (prefixDropdownRef.current && !prefixDropdownRef.current.contains(event.target as Node)) {
         setPrefixDropdownOpen(false);
       }
-      if (countryDropdownRef.current && !countryDropdownRef.current.contains(target)) {
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
         setCountryDropdownOpen(false);
       }
-    };
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   // Load profile from Firebase
@@ -660,7 +656,7 @@ function ProfilCurierContent() {
             {/* Personal Information & Business Data - Full Width Cards */}
             <div className="space-y-6">
               {/* Business Information Section */}
-              <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
+              <div className="bg-slate-800/50 rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
                   <div className="p-2.5 bg-linear-to-br from-blue-500/30 to-blue-600/30 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/20">
                     <BuildingIcon />
@@ -689,10 +685,7 @@ function ProfilCurierContent() {
                     <div className="relative" ref={countryDropdownRef}>
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setCountryDropdownOpen(!countryDropdownOpen);
-                        }}
+                        onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
                         className="form-input w-full flex items-center gap-3 cursor-pointer"
                       >
                         <Image
@@ -710,7 +703,7 @@ function ProfilCurierContent() {
                       </button>
                       
                       {countryDropdownOpen && (
-                        <div className="absolute z-50 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
+                        <div className="absolute z-9999 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
                           {countries.map((c) => (
                             <button
                               key={c.code}
@@ -794,7 +787,7 @@ function ProfilCurierContent() {
               </div>
 
               {/* Personal Information Section */}
-              <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
+              <div className="bg-slate-800/50 rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
                   <div className="p-2.5 bg-linear-to-br from-orange-500/30 to-orange-600/30 rounded-xl border border-orange-500/30 shadow-lg shadow-orange-500/20">
                     <UserIcon />
@@ -832,10 +825,7 @@ function ProfilCurierContent() {
                     <div className="relative" ref={prefixDropdownRef}>
                       <button
                         type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setPrefixDropdownOpen(!prefixDropdownOpen);
-                        }}
+                        onClick={() => setPrefixDropdownOpen(!prefixDropdownOpen)}
                         className="form-input w-32 flex items-center gap-2 cursor-pointer"
                       >
                         <Image
@@ -853,10 +843,7 @@ function ProfilCurierContent() {
                       </button>
                       
                       {prefixDropdownOpen && (
-                        <div ref={prefixMenuRef} className="fixed z-9999 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar" style={{
-                          top: prefixDropdownRef.current ? `${prefixDropdownRef.current.getBoundingClientRect().bottom + 4}px` : '0',
-                          left: prefixDropdownRef.current ? `${prefixDropdownRef.current.getBoundingClientRect().left}px` : '0'
-                        }}>
+                        <div className="absolute z-9999 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
                           {phonePrefixes.map((p) => (
                             <button
                               key={p.code}

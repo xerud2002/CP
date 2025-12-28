@@ -10,7 +10,7 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 **Role Permissions**:
 - `client`: Create orders, chat with couriers, write reviews, manage own profile
 - `curier`: View all orders, message clients, update order status, manage services/coverage zones
-- `admin`: Full access to all data, user management, system settings (implementation in progress)
+- `admin`: Full access to all data, user management, system settings
 
 **⚠️ CRITICAL SECURITY**: Firestore rules check ownership but **don't filter results**—client queries MUST include `where('uid', '==', user.uid)`. This is enforced in `firestore.rules` but not auto-applied to queries.
 
@@ -39,18 +39,22 @@ Custom hooks in `src/hooks/{client|courier}/` handle data loading, real-time sub
 | `constants.ts` | **SINGLE SOURCE OF TRUTH**: `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
 | `cities.ts` | Cities by country and region: `oraseByCountryAndRegion`, `getOraseForRegion()`, `getAllOraseForCountry()` |
 | `AuthContext.tsx` | `useAuth()` hook: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
-| `toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian via `errorMessages.ts` |
+| `toast.ts` | `showSuccess()`, `showError()`, `showInfo()`, `showWarning()`, `showLoading()`, `showPromise()` — auto-translates Firebase errors to Romanian |
 | `errorMessages.ts` | Firebase error code → Romanian message mapping (e.g., `auth/user-not-found` → "Nu există cont cu acest email") |
-| `orderStatusHelpers.ts` | `canEditOrder()`, `canFinalizeOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
+| `orderStatusHelpers.ts` | `canEditOrder()`, `canDeleteOrder()`, `canFinalizeOrder()`, `canLeaveReview()`, `transitionToInLucru()`, `transitionToFinalizata()` |
 | `orderHelpers.ts` | `getNextOrderNumber()` (atomic transaction), `formatOrderNumber()` → "CP141122" |
 | `documentRequirements.ts` | Service type → required documents mapping (e.g., animals need health certificates) |
 | `rating.ts` | `calculateNewRating()` — weighted average algorithm for courier ratings |
 | `ServiceIcons.tsx` | `<ServiceIcon service="colete" />` — centralized icons, normalizes case-insensitive lookup |
-| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole`, `Review` |
+| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole`, `Review`, `CourierProfile` |
 | `useClientOrdersLoader.ts` | Real-time orders + unread message counts for clients |
 | `useOrdersLoader.ts` | Real-time order filtering for couriers (by service type, country) |
+| `useChatMessages.ts` | Shared hook for real-time messaging across client/courier |
+| `businessInfo.ts` | Country-specific tax ID formats (CUI, VAT, etc.) for 16 European countries |
+| `contact.ts` | Centralized contact info, social links, company info |
+| `faq.ts` | Centralized FAQ data with category filtering |
 
-**Architecture Docs** (root): `FIRESTORE_STRUCTURE.md`, `STATUS_TRANSITIONS.md`, `CHAT_SYSTEM.md`, `SERVICE_FLOW_ARCHITECTURE.md`. Read these before major changes to understand data flows and business rules.
+**Architecture Docs** (root): `COURIER_MESSAGING_SYSTEM.md` (messaging restrictions), `OPTIMIZATION_SUMMARY.md` (recent refactoring). Read these for context on messaging flows and code organization decisions.
 
 ## Critical Patterns
 
@@ -150,12 +154,13 @@ await addDoc(collection(db, 'comenzi'), {
 
 ### 7. Order Status — Use Helpers, Not Direct Checks
 ```tsx
-import { canEditOrder, transitionToFinalizata } from '@/utils/orderStatusHelpers';
+import { canEditOrder, canDeleteOrder, canFinalizeOrder, canLeaveReview } from '@/utils/orderStatusHelpers';
 
 // ✅ CORRECT
-if (canEditOrder(order.status)) {
-  // Show edit button
-}
+if (canEditOrder(order.status)) { /* Show edit button */ }
+if (canDeleteOrder(order.status)) { /* Show delete button */ }
+if (canFinalizeOrder(order.status)) { /* Show finalize button */ }
+if (canLeaveReview(order.status)) { /* Show review option */ }
 
 // ❌ WRONG - Business logic scattered across components
 if (order.status === 'noua' || order.status === 'in_lucru') {
@@ -216,6 +221,14 @@ const newRating = calculateNewRating(
 ```
 **Formula**: Weighted average that gives more weight to newer reviews while preserving historical data. Updates `profil_curier` document's `rating` and `reviewCount` fields.
 
+### Courier Messaging Restrictions
+Before a courier can send their **first message** on an order, these checks run (see `COURIER_MESSAGING_SYSTEM.md`):
+1. **Order exists** — verify the order hasn't been deleted
+2. **Courier verification** — if client accepts only "firme" (verified companies), courier must have `profil_curier.verified: true`
+3. **Offer limits** — client sets max couriers (1-3, 4-5, or unlimited); limit applies equally to all couriers
+
+After first message, couriers can continue conversation without restrictions.
+
 ## Order Status Flow
 ```
 noua → in_lucru → livrata
@@ -238,6 +251,7 @@ anulata  anulata
 | `profil_client` | doc ID = `uid` | Extended client profile (private) |
 | `recenzii` | `clientId` | Reviews of couriers (written by clients after `livrata` status) |
 | `counters/orderNumber` | — | Atomic counter for sequential order numbers |
+| `admin_messages` | `participants[]` | Admin-to-user direct messaging (contains `senderId`, `receiverId`, `participants`) |
 
 **Chat System**: Each client-courier pair has a **separate conversation** per order. A client messaging 3 couriers about one order = 3 distinct threads. Query MUST filter by `orderId`, `clientId`, AND `courierId` to ensure privacy (see `CHAT_SYSTEM.md`).
 
@@ -268,6 +282,8 @@ npm run lint       # ESLint check
 | `alert(error.message)` | `showError(error)` | Romanian translations |
 | `createdAt: new Date()` | `serverTimestamp()` | Server-side consistency |
 | Missing `onSnapshot` cleanup | `return () => unsubscribe()` | Prevents memory leaks |
+| Hardcoded contact info | Import from `contact.ts` | Single source of truth |
+| Duplicate chat logic | Use `useChatMessages` hook | Shared hook eliminates duplication |
 
 ## Conventions
 - **Language**: UI text in Romanian | Code/comments/commits in English
@@ -276,6 +292,7 @@ npm run lint       # ESLint check
 - **Constants**: Never duplicate. Always import from `@/lib/constants.ts`
 - **Types**: Import from `@/types/index.ts`. Never inline `interface` in components
 - **Firebase SDK**: Uses modular v11.1 syntax (`import { collection } from 'firebase/firestore'`), not legacy `firebase.firestore()`
+- **Shared Hooks**: Use `useChatMessages` for messaging, client/courier-specific hooks in `src/hooks/{client|courier}/`
 
 ## Development Workflow
 1. Read relevant `.md` docs in root for context on major changes
@@ -283,6 +300,7 @@ npm run lint       # ESLint check
 3. Use `showError(err)` for all user-facing errors
 4. Test status transitions with `orderStatusHelpers.ts` functions
 5. Verify Firestore rules in `firestore.rules` match query ownership filters
+6. Use `npm run dev` for local development (no emulators—live Firebase)
 
 ## File Organization — Role-Based Separation
 
@@ -295,6 +313,9 @@ courier/
   useOrdersLoader.ts          # Real-time filtering for couriers
   useOrderHandlers.ts         # Accept, message, finalize actions
   useUnreadMessages.ts        # Unread message tracking
+useChatMessages.ts            # Shared real-time messaging hook
+useAdminMessages.ts           # Admin-to-user messaging
+useAdminMessageThreads.ts     # Thread management for admin
 ```
 
 **Component Pattern** (in `src/components/orders/`):
@@ -309,6 +330,8 @@ shared/
   OrderDetailsModal.tsx       # Reusable across roles
   OrderRouteSection.tsx       # Display route info
   CountryFilter.tsx           # Reusable filter component
+  MessageList.tsx             # Reusable message display
+  MessageInput.tsx            # Reusable message input with file upload
 ```
 
 **Why**: Separation by role prevents logic bleeding. A client hook should never import courier logic. If code is truly shared, move it to `shared/` or utils.
@@ -493,3 +516,22 @@ If you see repeated 404 errors in the browser console for missing `public/img/fl
   3. Ensure the filename matches the country code in `constants.ts` (case-sensitive).
 
 **AI agents:** When adding new countries or updating `constants.ts`, always add the corresponding flag SVG to avoid asset errors.
+
+## Admin Messaging System
+
+Admin-to-user direct messaging via `admin_messages` collection:
+- **Participants**: Array containing both `senderId` and `receiverId` for security rule filtering
+- **Hooks**: `useAdminMessages.ts` for message CRUD, `useAdminMessageThreads.ts` for thread management
+- **Components**: `AdminMessageModal.tsx`, `AdminMessagesListModal.tsx` in `src/components/admin/`
+
+```tsx
+// Admin message document structure
+{
+  senderId: 'admin_uid',
+  receiverId: 'user_uid',
+  participants: ['admin_uid', 'user_uid'],  // Required for Firestore security rules
+  message: 'Text content',
+  createdAt: serverTimestamp(),
+  read: false
+}
+```
