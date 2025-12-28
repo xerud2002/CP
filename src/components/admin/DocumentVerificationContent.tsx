@@ -20,7 +20,7 @@ interface UploadedDocument {
 interface CourierDocuments {
   uid: string;
   nume: string;
-  denumire_firma?: string;
+  firma?: string;
   telefon: string;
   email?: string;
   documents: Record<string, UploadedDocument>;
@@ -84,7 +84,7 @@ export default function DocumentVerificationContent() {
           couriersData.push({
             uid: doc.id,
             nume: data.nume || 'Fără nume',
-            denumire_firma: data.denumire_firma,
+            firma: data.firma, // Company name from Firestore
             telefon: data.telefon || userData?.telefon || 'N/A',
             email: userData?.email || 'N/A',
             documents: data.documents,
@@ -244,8 +244,8 @@ export default function DocumentVerificationContent() {
     }
     
     if (filterStatus === 'approved') {
-      // Show couriers where ALL documents are approved
-      return docs.length > 0 && docs.every(doc => doc.status === 'approved');
+      // Show couriers with at least one approved document
+      return docs.some(doc => doc.status === 'approved');
     }
     
     if (filterStatus === 'rejected') {
@@ -316,10 +316,9 @@ export default function DocumentVerificationContent() {
                 <div className="p-4 border-b border-white/5">
                   <div className="flex items-center justify-between">
                     <div>
-                      {courier.denumire_firma && (
-                        <p className="text-sm font-medium text-orange-400 mb-0.5">{courier.denumire_firma}</p>
-                      )}
-                      <h3 className="text-lg font-semibold text-white">{courier.nume}</h3>
+                      <h3 className="text-lg font-semibold text-white">
+                        {courier.firma || courier.nume}
+                      </h3>
                       <div className="flex items-center gap-4 mt-1 text-sm text-gray-400">
                         <span>{courier.email}</span>
                         <span>•</span>
