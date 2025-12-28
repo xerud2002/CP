@@ -21,6 +21,7 @@ import {
 } from '@/components/icons/DashboardIcons';
 import { AdminMessagesListModal, AdminMessageModal } from '@/components/admin';
 import { User } from '@/types';
+import { getDocumentRequirements } from '@/utils/documentRequirements';
 
 // Lazy load below-fold components
 const HelpCard = lazy(() => import('@/components/HelpCard'));
@@ -78,7 +79,7 @@ interface NavTile {
   color: string;
   bgColor: string;
   borderColor: string;
-  badgeKey?: 'services' | 'profile';
+  badgeKey?: 'services' | 'profile' | 'verification';
 }
 
 const mainNavTiles: NavTile[] = [
@@ -99,6 +100,7 @@ const mainNavTiles: NavTile[] = [
     color: 'text-emerald-400',
     bgColor: 'bg-emerald-500/10 hover:bg-emerald-500/20',
     borderColor: 'border-emerald-500/20 hover:border-emerald-500/40',
+    badgeKey: 'verification',
   },
   {
     href: '/dashboard/curier/recenzii',
@@ -492,7 +494,7 @@ const SetupProgress = memo(function SetupProgress({ setupComplete, completedStep
 });
 
 // Main Navigation Grid
-const MainNavigation = memo(function MainNavigation({ badges, newOrdersCount }: { badges: Record<string, boolean>; newOrdersCount: number }) {
+const MainNavigation = memo(function MainNavigation({ badges, newOrdersCount, profilePercent, verificationPercent }: { badges: Record<string, boolean>; newOrdersCount: number; profilePercent: number; verificationPercent: number }) {
   // Color mappings for hover gradients
   const gradientMap: Record<string, string> = {
     'text-orange-400': 'from-orange-500/20 to-amber-500/20',
@@ -554,11 +556,32 @@ const MainNavigation = memo(function MainNavigation({ badges, newOrdersCount }: 
               
               {/* Setup Badge indicator - for other cards */}
               {!isComenziCard && needsAttention && (
-                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 sm:h-5 sm:w-5 z-10">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3.5 w-3.5 sm:h-5 sm:w-5 bg-orange-500 items-center justify-center">
-                    <span className="text-[7px] sm:text-[10px] font-bold text-white">!</span>
-                  </span>
+                <span className="absolute -top-1.5 -right-1.5 flex z-10">
+                  {tile.badgeKey === 'profile' ? (
+                    // Profile completion badge with percentage
+                    <>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-6 w-6 sm:h-7 sm:w-7 bg-orange-500 items-center justify-center border-2 border-slate-900">
+                        <span className="text-[8px] sm:text-[10px] font-bold text-white">{profilePercent}%</span>
+                      </span>
+                    </>
+                  ) : tile.badgeKey === 'verification' ? (
+                    // Verification documents badge with percentage
+                    <>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-6 w-6 sm:h-7 sm:w-7 bg-emerald-500 items-center justify-center border-2 border-slate-900">
+                        <span className="text-[8px] sm:text-[10px] font-bold text-white">{verificationPercent}%</span>
+                      </span>
+                    </>
+                  ) : (
+                    // Default badge with !
+                    <>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3.5 w-3.5 sm:h-5 sm:w-5 bg-orange-500 items-center justify-center">
+                        <span className="text-[7px] sm:text-[10px] font-bold text-white">!</span>
+                      </span>
+                    </>
+                  )}
                 </span>
               )}
               
@@ -918,6 +941,8 @@ export default function CurierDashboard() {
   const router = useRouter();
   const [hasNoServices, setHasNoServices] = useState(false);
   const [hasNoProfile, setHasNoProfile] = useState(false);
+  const [profileCompletionPercent, setProfileCompletionPercent] = useState(100);
+  const [requiredDocsPercent, setRequiredDocsPercent] = useState(100);
   const [userNume, setUserNume] = useState<string | null>(null);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
   const [rating, setRating] = useState(5.0);
@@ -982,15 +1007,31 @@ export default function CurierDashboard() {
         // Track approved and pending documents
         const approvedDocs: string[] = [];
         const pendingDocs: string[] = [];
+        let taraSediu = 'RO';
+        let tipBusiness = 'pf';
         
         if (profilSnap.exists()) {
           const profilData = profilSnap.data();
           if (profilData.nume) {
             setUserNume(profilData.nume);
           }
+          // Store country and business type for document requirements
+          taraSediu = profilData.tara_sediu || profilData.taraSediu || 'RO';
+          tipBusiness = profilData.tipBusiness || 'pf';
+          
           // Set rating and reviewCount (default 5.0 for new couriers)
           setRating(profilData.rating !== undefined ? profilData.rating : 5.0);
           setReviewCount(profilData.reviewCount !== undefined ? profilData.reviewCount : 0);
+          
+          // Calculate profile completion percentage
+          const fields = [
+            profilData.nume, profilData.telefon, profilData.email,
+            profilData.firma, profilData.sediu, profilData.cui, profilData.iban
+          ];
+          const filled = fields.filter(f => f && String(f).trim() !== '').length;
+          const completionPercent = Math.round((filled / fields.length) * 100);
+          setProfileCompletionPercent(completionPercent);
+          
           // Check if profile is complete (has name and phone at minimum)
           setHasNoProfile(!profilData.nume || !profilData.telefon);
           
@@ -1020,11 +1061,22 @@ export default function CurierDashboard() {
         
         if (!userSnapshot.empty) {
           const userData = userSnapshot.docs[0].data();
-          const services = userData.serviciiOferite;
+          const services = userData.serviciiOferite || [];
           setHasNoServices(!services || !Array.isArray(services) || services.length === 0);
           
           // Get verification status
           isVerified = userData.verified === true;
+          
+          // Calculate required documents completion percentage
+          const allDocs = getDocumentRequirements(taraSediu, services, tipBusiness);
+          const requiredDocs = allDocs.filter(d => d.required);
+          if (requiredDocs.length > 0) {
+            const approvedRequiredCount = requiredDocs.filter(d => approvedDocs.includes(d.id)).length;
+            const requiredPercent = Math.round((approvedRequiredCount / requiredDocs.length) * 100);
+            setRequiredDocsPercent(requiredPercent);
+          } else {
+            setRequiredDocsPercent(100); // No required docs = 100% complete
+          }
           
           // Fallback: if no name from profil_curier, try users collection
           if (!userNume && userData.nume) {
@@ -1032,6 +1084,7 @@ export default function CurierDashboard() {
           }
         } else {
           setHasNoServices(true);
+          setRequiredDocsPercent(0); // No services = show badge
         }
         
         // Set verification data
@@ -1318,9 +1371,12 @@ export default function CurierDashboard() {
   const setupComplete = completedStepsCount === 2;
 
   // Badges for quick menu (only active features)
+  // Show profile badge if profile is not 100% complete
+  // Show verification badge if required documents are not 100% approved
   const menuBadges = {
     services: hasNoServices,
-    profile: hasNoProfile,
+    profile: profileCompletionPercent < 100,
+    verification: requiredDocsPercent < 100,
   };
 
   return (
@@ -1342,7 +1398,7 @@ export default function CurierDashboard() {
         <SetupProgress setupComplete={setupComplete} completedSteps={completedStepsCount} totalSteps={2} />
 
         {/* Main Navigation - Quick access to all sections */}
-        <MainNavigation badges={menuBadges} newOrdersCount={newOrdersCount} />
+        <MainNavigation badges={menuBadges} newOrdersCount={newOrdersCount} profilePercent={profileCompletionPercent} verificationPercent={requiredDocsPercent} />
 
         {/* Stats and Activity Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-6">

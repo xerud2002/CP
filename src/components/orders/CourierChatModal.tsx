@@ -111,7 +111,18 @@ export default function CourierChatModal({ orderId, orderNumber, clientId, clien
         return;
       }
       
-      // Verifică statusul de verificare
+      // Verifică statusul de verificare din colecția users (setat de admin)
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const isVerifiedByAdmin = userDoc.exists() && userDoc.data().verified === true;
+      
+      // Dacă curierul NU este verificat de admin → BLOCAT complet
+      if (!isVerifiedByAdmin) {
+        showWarning('Contul tău nu este verificat. Așteaptă verificarea de către administrator pentru a putea trimite mesaje.');
+        setSending(false);
+        return;
+      }
+      
+      // Verifică și dacă clientul acceptă doar firme (verificare suplimentară)
       const isVerified = courierProfile.verified === true;
       
       // Dacă curierul NU este verificat ȘI clientul NU acceptă persoane private → BLOCAT

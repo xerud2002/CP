@@ -6,7 +6,7 @@ import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where,
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
-import { showSuccess, showError } from '@/lib/toast';
+import { showSuccess, showError, showWarning } from '@/lib/toast';
 import { logError } from '@/lib/errorMessages';
 
 interface Message {
@@ -248,6 +248,18 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
     
     setLoading(true);
     try {
+      // VERIFICARE: Dacă utilizatorul este curier, verifică dacă este verificat de admin
+      if (user.role === 'curier') {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const isVerifiedByAdmin = userDoc.exists() && userDoc.data().verified === true;
+        
+        if (!isVerifiedByAdmin) {
+          showWarning('Contul tău nu este verificat. Așteaptă verificarea de către administrator pentru a putea trimite mesaje.');
+          setLoading(false);
+          return;
+        }
+      }
+      
       const receiverId = user.role === 'client' ? (courierId || '') : (clientId || '');
       const finalCourierId = user.role === 'curier' ? user.uid : (courierId || '');
       const finalClientId = user.role === 'client' ? user.uid : (clientId || '');
