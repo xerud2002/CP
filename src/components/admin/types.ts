@@ -42,7 +42,7 @@ export function formatDate(timestamp: number | undefined): string {
 export function getDisplayName(user: User): string {
   // For couriers, prioritize company name
   if (user.role === 'curier') {
-    if (user.numeFirma) return user.numeFirma;
+    if (user.firma) return user.firma;
     // Fallback to personal name if no company name
     if (user.nume && user.prenume) return `${user.nume} ${user.prenume}`;
     if (user.nume) return user.nume;
