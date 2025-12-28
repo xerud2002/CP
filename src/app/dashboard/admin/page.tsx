@@ -29,7 +29,6 @@ import {
   SearchBar,
   UsersTable,
   OrdersTable,
-  CouriersGrid,
   StatsContent,
   SettingsContent,
   MonetizareContent,
@@ -225,30 +224,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleSuspendCourier = async (uid: string) => {
-    const confirmed = await showConfirm({
-      title: 'Suspendă curier',
-      message: 'Ești sigur că vrei să suspendi acest curier? Acesta va fi retrogradat la rol de client.',
-      confirmText: 'Suspendă',
-      cancelText: 'Anulează',
-      variant: 'warning'
-    });
-    if (!confirmed) {
-      return;
-    }
-    try {
-      await updateDoc(doc(db, 'users', uid), { 
-        role: 'client',
-        suspendedAt: serverTimestamp()
-      });
-      showSuccess('Curier suspendat cu succes!');
-      loadData();
-    } catch (error) {
-      console.error('Error suspending courier:', error);
-      showError('Eroare la suspendarea curierului.');
-    }
-  };
-
   const handleToggleVerification = async (uid: string, currentStatus: boolean | undefined) => {
     const newStatus = !currentStatus;
     try {
@@ -302,7 +277,6 @@ export default function AdminDashboard() {
   const tabs: TabItem[] = [
     { id: 'users', label: 'Utilizatori', icon: UsersIcon, badge: users.length },
     { id: 'orders', label: 'Comenzi', icon: PackageIcon, badge: pendingOrders },
-    { id: 'couriers', label: 'Curieri', icon: TruckIcon, badge: couriersCount },
     { id: 'archived', label: 'Arhivă', icon: PackageIcon },
     { id: 'documents', label: 'Documente', icon: DocumentCheckIcon, badge: pendingDocsCount > 0 ? pendingDocsCount : undefined },
     { id: 'stats', label: 'Statistici', icon: ChartIcon },
@@ -528,14 +502,6 @@ export default function AdminDashboard() {
 
           {/* Archived Orders Tab */}
           {activeTab === 'archived' && <ArchivedOrdersContent />}
-
-          {/* Couriers Tab */}
-          {activeTab === 'couriers' && (
-            <CouriersGrid 
-              couriers={users.filter(u => u.role === 'curier')}
-              onSuspend={handleSuspendCourier}
-            />
-          )}
 
           {/* Documents Verification Tab */}
           {activeTab === 'documents' && <DocumentVerificationContent />}
