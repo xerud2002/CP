@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useCallback } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';
 import { ArrowLeftIcon } from '@/components/icons/DashboardIcons';
 import OrderFilters from '@/components/orders/courier/filters/OrderFilters';
@@ -101,6 +103,23 @@ function ComenziCurierContent() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [viewedOrders, setViewedOrders] = useState<Set<string>>(new Set());
   const [expandedChatOrderId, setExpandedChatOrderId] = useState<string | null>(null);
+  const [isCourierVerified, setIsCourierVerified] = useState(false);
+
+  // Check if courier is verified by admin
+  useEffect(() => {
+    const checkVerification = async () => {
+      if (!user?.uid) return;
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          setIsCourierVerified(userDoc.data().verified === true);
+        }
+      } catch (error) {
+        logError(error, 'Error checking courier verification');
+      }
+    };
+    checkVerification();
+  }, [user?.uid]);
 
   // Update URL when filters change
   useEffect(() => {
@@ -289,6 +308,7 @@ function ComenziCurierContent() {
           hasActiveFilters={hasActiveFilters}
           loadingOrders={loadingOrders}
           currentUserId={user?.uid}
+          isCourierVerified={isCourierVerified}
           onToggleChat={handleToggleChat}
           onViewDetails={handleViewDetails}
           onDismissOrder={handleDismissOrder}

@@ -13,6 +13,7 @@ interface OrderListProps {
   hasActiveFilters: boolean;
   loadingOrders: boolean;
   currentUserId?: string;
+  isCourierVerified?: boolean;
   onToggleChat: (orderId: string | null) => void;
   onViewDetails: (order: Order) => void;
   onClearFilters: () => void;
@@ -28,6 +29,7 @@ function OrderList({
   hasActiveFilters,
   loadingOrders,
   currentUserId,
+  isCourierVerified = false,
   onToggleChat,
   onViewDetails,
   onClearFilters,
@@ -105,6 +107,7 @@ function OrderList({
                   isExpanded={isExpanded}
                   unreadCount={unreadCount}
                   currentUserId={currentUserId}
+                  isCourierVerified={isCourierVerified}
                   onToggleChat={() => onToggleChat(isExpanded ? null : order.id || null)}
                   onViewDetails={() => onViewDetails(order)}
                   onDismiss={() => order.id && onDismissOrder(order.id)}

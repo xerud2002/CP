@@ -17,6 +17,7 @@ interface OrderCardProps {
   isExpanded: boolean;
   unreadCount?: number; // Optional for future use
   currentUserId?: string;
+  isCourierVerified?: boolean;
   onToggleChat: () => void;
   onViewDetails: () => void;
   onDismiss: () => void;
@@ -28,6 +29,7 @@ function OrderCard({
   isExpanded,
   // unreadCount, // Currently unused but kept for future message indicator
   currentUserId,
+  isCourierVerified = false,
   onToggleChat,
   onViewDetails,
   onDismiss
@@ -169,10 +171,12 @@ function OrderCard({
             
             {/* Action Buttons */}
             <ActionButtonsGroup>
-              <MessageButton
-                onClick={onToggleChat}
-                title="Mesaje"
-              />
+              {isCourierVerified && (
+                <MessageButton
+                  onClick={onToggleChat}
+                  title="Mesaje"
+                />
+              )}
               <ViewButton
                 onClick={onViewDetails}
                 title="Vezi detalii"
