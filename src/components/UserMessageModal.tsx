@@ -154,19 +154,17 @@ export default function UserMessageModal({ onClose }: UserMessageModalProps) {
                   <div
                     className={`max-w-[70%] rounded-lg p-3 ${
                       isFromAdmin
-                        ? 'bg-linear-to-br from-orange-500 to-orange-600 text-white'
+                        ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
                         : isFromMe
                         ? 'bg-slate-700 text-white'
                         : 'bg-slate-700 text-white'
                     }`}
                   >
-                    {!isFromMe && (
-                      <p className="text-xs font-semibold mb-1 opacity-90">
-                        {msg.senderName}
-                      </p>
-                    )}
-                    <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.message}</p>
-                    <p className="text-xs mt-1 opacity-75">
+                    <p className={`text-xs font-semibold mb-1 ${isFromMe ? 'text-right text-emerald-400' : 'text-orange-300'}`}>
+                      {isFromMe ? 'Tu' : (msg.senderName || 'Administrator')}
+                    </p>
+                    <p className="text-sm whitespace-pre-wrap break-words">{msg.message}</p>
+                    <p className={`text-xs mt-1 opacity-75 ${isFromMe ? 'text-right' : ''}`}>
                       {msg.createdAt?.toDate?.()?.toLocaleString('ro-RO', {
                         day: '2-digit',
                         month: 'short',

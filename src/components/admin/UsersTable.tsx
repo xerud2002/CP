@@ -167,13 +167,104 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
   };
 
   return (
-    <div className="overflow-x-auto -mx-4 sm:mx-0">
-      <table className="w-full min-w-200">
+    <div>
+      {/* Mobile Card View */}
+      <div className="block md:hidden space-y-2">
+        {filteredAndSortedUsers.map((u) => {
+          const displayName = getDisplayName(u);
+          const phone = formatPhone(u.telefon);
+          const online = isUserOnline(u.lastSeen);
+          const lastSeenText = formatLastSeen(u.lastSeen);
+          
+          return (
+            <div key={u.uid} className="bg-slate-900/50 rounded-xl p-3 border border-white/5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg relative flex-shrink-0 ${
+                    u.role === 'admin' ? 'bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/25' :
+                    u.role === 'curier' ? 'bg-gradient-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
+                    'bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
+                  }`}>
+                    {displayName.charAt(0).toUpperCase()}
+                    {online && (
+                      <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-900" />
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-white font-medium text-sm truncate">{displayName}</p>
+                    <p className="text-gray-500 text-xs truncate">{u.email}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 flex-shrink-0">
+                  <SmallMessageButton onClick={() => onSendMessage(u)} title="Mesaj" />
+                  <SmallViewButton onClick={() => onViewDetails(u)} title="Detalii" />
+                  <SmallDeleteButton onClick={() => onDelete(u.uid)} title="Șterge" />
+                </div>
+              </div>
+              
+              <div className="flex flex-wrap items-center gap-2 mt-2.5 pt-2.5 border-t border-white/5">
+                <select
+                  value={u.role}
+                  onChange={(e) => onRoleChange(u.uid, e.target.value)}
+                  className={`px-2 py-1 rounded-lg text-xs font-medium border-0 cursor-pointer ${
+                    u.role === 'admin' ? 'bg-red-500/20 text-red-400' :
+                    u.role === 'curier' ? 'bg-orange-500/20 text-orange-400' :
+                    'bg-emerald-500/20 text-emerald-400'
+                  }`}
+                >
+                  <option value="client">Client</option>
+                  <option value="curier">Curier</option>
+                  <option value="admin">Admin</option>
+                </select>
+                
+                <div className="flex items-center gap-1">
+                  <span className={`w-1.5 h-1.5 rounded-full ${online ? 'bg-emerald-500' : 'bg-gray-600'}`} />
+                  <span className="text-gray-500 text-xs">{lastSeenText}</span>
+                </div>
+                
+                {phone && (
+                  <span className="text-gray-500 text-xs flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    {phone}
+                  </span>
+                )}
+                
+                {filter === 'curier' && (
+                  <button
+                    onClick={() => onToggleVerification(u.uid, u.verified)}
+                    className={`px-2 py-1 rounded-lg text-xs font-medium flex items-center gap-1 ${
+                      u.verified 
+                        ? 'bg-blue-500/20 text-blue-400' 
+                        : 'bg-amber-500/20 text-amber-400'
+                    }`}
+                  >
+                    {u.verified ? (
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    ) : (
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      
+      {/* Desktop Table View */}
+      <div className="hidden md:block overflow-x-auto -mx-3 sm:mx-0">
+      <table className="w-full min-w-[800px]">
         <thead>
           <tr className="border-b border-white/10 bg-slate-900/30">
-            <th className="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Utilizator</th>
-            <th className="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Email</th>
-            <th className="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">
+            <th className="text-left py-2.5 px-3 text-gray-400 font-medium text-xs uppercase tracking-wide">Utilizator</th>
+            <th className="text-left py-2.5 px-3 text-gray-400 font-medium text-xs uppercase tracking-wide">Email</th>
+            <th className="text-left py-2.5 px-3 text-gray-400 font-medium text-xs uppercase tracking-wide">
               <button 
                 onClick={() => handleSort('role')}
                 className="flex items-center gap-1.5 hover:text-white transition-colors group"
@@ -182,7 +273,7 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                 {getSortIcon('role')}
               </button>
             </th>
-            <th className="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">
+            <th className="text-left py-2.5 px-3 text-gray-400 font-medium text-xs uppercase tracking-wide">
               <button 
                 onClick={() => handleSort('regDate')}
                 className="flex items-center gap-1.5 hover:text-white transition-colors group"
@@ -191,7 +282,7 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                 {getSortIcon('regDate')}
               </button>
             </th>
-            <th className="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">
+            <th className="text-left py-2.5 px-3 text-gray-400 font-medium text-xs uppercase tracking-wide">
               <button 
                 onClick={() => handleSort('status')}
                 className="flex items-center gap-1.5 hover:text-white transition-colors group"
@@ -200,7 +291,7 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                 {getSortIcon('status')}
               </button>
             </th>
-            <th className="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">
+            <th className="text-left py-2.5 px-3 text-gray-400 font-medium text-xs uppercase tracking-wide">
               <button 
                 onClick={() => handleSort('lastSeen')}
                 className="flex items-center gap-1.5 hover:text-white transition-colors group"
@@ -210,9 +301,9 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
               </button>
             </th>
             {filter === 'curier' && (
-              <th className="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Verificare</th>
+              <th className="text-left py-2.5 px-3 text-gray-400 font-medium text-xs uppercase tracking-wide">Verificare</th>
             )}
-            <th className="text-right py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Acțiuni</th>
+            <th className="text-right py-2.5 px-3 text-gray-400 font-medium text-xs uppercase tracking-wide">Acțiuni</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-white/5">
@@ -225,17 +316,17 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
             
             return (
               <tr key={u.uid} className="hover:bg-white/2 transition-colors group">
-                <td className="py-3 px-4">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg relative ${
-                      u.role === 'admin' ? 'bg-linear-to-br from-red-500 to-red-600 shadow-red-500/25' :
-                      u.role === 'curier' ? 'bg-linear-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
-                      'bg-linear-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
+                <td className="py-2.5 px-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold text-xs shadow-lg relative ${
+                      u.role === 'admin' ? 'bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/25' :
+                      u.role === 'curier' ? 'bg-gradient-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
+                      'bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
                     }`}>
                       {displayName.charAt(0).toUpperCase()}
                       {/* Online indicator on avatar */}
                       {online && (
-                        <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-900" />
+                        <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-slate-900" />
                       )}
                     </div>
                     <div className="min-w-0">
@@ -253,14 +344,14 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                     </div>
                   </div>
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-2.5 px-3">
                   <span className="text-gray-300 text-sm">{u.email}</span>
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-2.5 px-3">
                   <select
                     value={u.role}
                     onChange={(e) => onRoleChange(u.uid, e.target.value)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium border-0 cursor-pointer transition-all ${
+                    className={`px-2 py-1 rounded-lg text-xs font-medium border-0 cursor-pointer transition-all ${
                       u.role === 'admin' ? 'bg-red-500/20 text-red-400' :
                       u.role === 'curier' ? 'bg-orange-500/20 text-orange-400' :
                       'bg-emerald-500/20 text-emerald-400'
@@ -271,14 +362,14 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                     <option value="admin">Admin</option>
                   </select>
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-2.5 px-3">
                   {regDate ? (
                     <span className="text-gray-400 text-sm">{regDate}</span>
                   ) : (
                     <span className="text-gray-600 text-sm">-</span>
                   )}
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-2.5 px-3">
                   <div className="flex items-center gap-1.5">
                     <span className={`w-2 h-2 rounded-full ${
                       online ? 'bg-emerald-500' : 'bg-gray-600'
@@ -290,14 +381,14 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                     </span>
                   </div>
                 </td>
-                <td className="py-3 px-4">
+                <td className="py-2.5 px-3">
                   <span className="text-gray-500 text-sm">{lastSeenText}</span>
                 </td>
                 {filter === 'curier' && (
-                  <td className="py-3 px-4">
+                  <td className="py-2.5 px-3">
                     <button
                       onClick={() => onToggleVerification(u.uid, u.verified)}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition-all flex items-center gap-1 ${
+                      className={`px-2 py-1 rounded-lg text-xs font-medium border transition-all flex items-center gap-1 ${
                         u.verified 
                           ? 'bg-blue-500/20 text-blue-400 border-blue-500/30 hover:bg-blue-500/30' 
                           : 'bg-amber-500/20 text-amber-400 border-amber-500/30 hover:bg-amber-500/30'
@@ -322,7 +413,7 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                     </button>
                   </td>
                 )}
-                <td className="py-3 px-4">
+                <td className="py-2.5 px-3">
                   <div className="flex items-center justify-end gap-1.5 opacity-70 group-hover:opacity-100 transition-opacity">
                     <SmallMessageButton
                       onClick={() => onSendMessage(u)}
@@ -343,12 +434,13 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
           })}
         </tbody>
       </table>
+      </div>
       {filteredAndSortedUsers.length === 0 && (
-        <div className="text-center py-16 text-gray-500">
-          <svg className="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center py-12 sm:py-16 text-gray-500">
+          <svg className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
-          <p>Nu există utilizatori în această categorie.</p>
+          <p className="text-sm">Nu există utilizatori în această categorie.</p>
         </div>
       )}
     </div>

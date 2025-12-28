@@ -6,22 +6,22 @@ import { SearchIcon } from '@/components/icons/DashboardIcons';
 // Stats Grid Component
 export function StatsGrid({ stats }: { stats: StatItem[] }) {
   return (
-    <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <section className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
       {stats.map((stat, index) => (
         <div
           key={index}
-          className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all group"
+          className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/5 hover:border-white/10 transition-all group"
         >
-          <div className="flex items-center gap-3 mb-3">
-            <div className={`w-10 h-10 rounded-lg ${stat.bgColor} flex items-center justify-center`}>
-              <stat.icon className={`w-5 h-5 ${stat.color}`} />
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg ${stat.bgColor} flex items-center justify-center flex-shrink-0`}>
+              <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${stat.color}`} />
             </div>
-            <span className="text-gray-400 text-sm">{stat.label}</span>
+            <span className="text-gray-400 text-xs sm:text-sm leading-tight">{stat.label}</span>
           </div>
           <div className="flex items-end justify-between">
-            <span className="text-2xl font-bold text-white">{stat.value}</span>
+            <span className="text-xl sm:text-2xl font-bold text-white">{stat.value}</span>
             {stat.trend && (
-              <span className={`text-xs ${stat.trendUp ? 'text-emerald-400' : 'text-red-400'}`}>
+              <span className={`text-[10px] sm:text-xs ${stat.trendUp ? 'text-emerald-400' : 'text-red-400'} hidden sm:block`}>
                 {stat.trend}
               </span>
             )}
@@ -32,35 +32,37 @@ export function StatsGrid({ stats }: { stats: StatItem[] }) {
   );
 }
 
-// Tab Navigation Component - Optimized for mobile
+// Tab Navigation Component - Optimized for mobile with horizontal scroll
 export function TabNavigation({ tabs, activeTab, onTabChange }: {
   tabs: TabItem[];
   activeTab: string;
   onTabChange: (tabId: string) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-1.5 sm:gap-2 bg-slate-800/30 p-1.5 sm:p-2 rounded-xl border border-white/5">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          onClick={() => onTabChange(tab.id)}
-          className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-lg text-sm sm:text-base font-medium transition-all ${
-            activeTab === tab.id
-              ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
-          }`}
-        >
-          <tab.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-          <span className="hidden xs:inline sm:inline truncate max-w-[80px] sm:max-w-none">{tab.label}</span>
-          {tab.badge !== undefined && tab.badge > 0 && (
-            <span className={`ml-0.5 sm:ml-1 px-1.5 sm:px-2 py-0.5 rounded-full text-xs ${
-              activeTab === tab.id ? 'bg-white/20' : 'bg-red-500/20 text-red-400'
-            }`}>
-              {tab.badge}
-            </span>
-          )}
-        </button>
-      ))}
+    <div className="-mx-3 sm:mx-0 px-3 sm:px-0">
+      <div className="flex gap-1 sm:gap-1.5 bg-slate-800/30 p-1 sm:p-1.5 rounded-xl border border-white/5 overflow-x-auto scrollbar-hide">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => onTabChange(tab.id)}
+            className={`flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+              activeTab === tab.id
+                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25'
+                : 'text-gray-400 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <tab.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+            <span className="hidden min-[400px]:inline">{tab.label}</span>
+            {tab.badge !== undefined && tab.badge > 0 && (
+              <span className={`ml-0.5 px-1 sm:px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs ${
+                activeTab === tab.id ? 'bg-white/20' : 'bg-red-500/20 text-red-400'
+              }`}>
+                {tab.badge}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

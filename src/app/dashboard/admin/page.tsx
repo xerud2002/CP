@@ -340,7 +340,7 @@ export default function AdminDashboard() {
       )}
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 space-y-4 sm:space-y-6">
         {/* Welcome Section */}
         <WelcomeSection userName={userName} />
 
@@ -351,17 +351,17 @@ export default function AdminDashboard() {
         <TabNavigation tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
 
         {/* Tab Content */}
-        <div className="bg-slate-800/30 rounded-2xl p-4 sm:p-6 border border-white/5">
+        <div className="bg-slate-800/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 border border-white/5">
           {/* Users Tab */}
           {activeTab === 'users' && (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {/* Header row with filters and search */}
-              <div className="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center">
-                {/* Role filter tabs */}
-                <div className="flex gap-1 bg-slate-900/50 p-1 rounded-xl">
+              <div className="flex flex-col gap-3 sm:gap-4">
+                {/* Role filter tabs - scrollable on mobile */}
+                <div className="flex gap-1 bg-slate-900/50 p-1 rounded-xl overflow-x-auto scrollbar-hide -mx-1 px-1">
                   <button
                     onClick={() => setUserFilter('all')}
-                    className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                       userFilter === 'all' 
                         ? 'bg-white/10 text-white shadow-inner' 
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -371,7 +371,7 @@ export default function AdminDashboard() {
                   </button>
                   <button
                     onClick={() => setUserFilter('client')}
-                    className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                       userFilter === 'client' 
                         ? 'bg-emerald-500/20 text-emerald-400 shadow-inner shadow-emerald-500/10' 
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -381,7 +381,7 @@ export default function AdminDashboard() {
                   </button>
                   <button
                     onClick={() => setUserFilter('curier')}
-                    className={`px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                       userFilter === 'curier' 
                         ? 'bg-orange-500/20 text-orange-400 shadow-inner shadow-orange-500/10' 
                         : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -392,7 +392,7 @@ export default function AdminDashboard() {
                 </div>
                 
                 {/* Search */}
-                <div className="w-full lg:w-72">
+                <div className="w-full sm:w-72">
                   <SearchBar 
                     value={searchQuery}
                     onChange={setSearchQuery}
@@ -401,15 +401,15 @@ export default function AdminDashboard() {
                 </div>
               </div>
               
-              {/* Secondary filters row */}
-              <div className="flex flex-wrap items-center gap-3 pb-2 border-b border-white/5">
+              {/* Secondary filters row - scrollable on mobile */}
+              <div className="flex flex-nowrap sm:flex-wrap items-center gap-2 sm:gap-3 pb-2 border-b border-white/5 overflow-x-auto scrollbar-hide -mx-1 px-1">
                 {/* Status filter */}
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-500 text-xs uppercase tracking-wide">Status:</span>
-                  <div className="flex gap-1 bg-slate-900/30 p-0.5 rounded-lg">
+                <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                  <span className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wide hidden sm:inline">Status:</span>
+                  <div className="flex gap-0.5 sm:gap-1 bg-slate-900/30 p-0.5 rounded-lg">
                     <button
                       onClick={() => setStatusFilter('all')}
-                      className={`px-2.5 py-1 rounded text-xs font-medium transition-all ${
+                      className={`px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-xs font-medium transition-all ${
                         statusFilter === 'all' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
                       }`}
                     >
@@ -417,33 +417,33 @@ export default function AdminDashboard() {
                     </button>
                     <button
                       onClick={() => setStatusFilter('online')}
-                      className={`px-2.5 py-1 rounded text-xs font-medium transition-all flex items-center gap-1 ${
+                      className={`px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-xs font-medium transition-all flex items-center gap-1 ${
                         statusFilter === 'online' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white'
                       }`}
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      Online
+                      <span className="hidden min-[400px]:inline">Online</span>
                     </button>
                     <button
                       onClick={() => setStatusFilter('offline')}
-                      className={`px-2.5 py-1 rounded text-xs font-medium transition-all flex items-center gap-1 ${
+                      className={`px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-xs font-medium transition-all flex items-center gap-1 ${
                         statusFilter === 'offline' ? 'bg-gray-600/30 text-gray-300' : 'text-gray-400 hover:text-white'
                       }`}
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-gray-500" />
-                      Offline
+                      <span className="hidden min-[400px]:inline">Offline</span>
                     </button>
                   </div>
                 </div>
                 
                 {/* Verification filter - Only show for couriers */}
                 {userFilter === 'curier' && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-500 text-xs uppercase tracking-wide">Verificare:</span>
-                    <div className="flex gap-1 bg-slate-900/30 p-0.5 rounded-lg">
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                    <span className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wide hidden sm:inline">Verificare:</span>
+                    <div className="flex gap-0.5 sm:gap-1 bg-slate-900/30 p-0.5 rounded-lg">
                       <button
                         onClick={() => setVerificationFilter('all')}
-                        className={`px-2.5 py-1 rounded text-xs font-medium transition-all ${
+                        className={`px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-xs font-medium transition-all ${
                           verificationFilter === 'all' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
                         }`}
                       >
@@ -451,25 +451,25 @@ export default function AdminDashboard() {
                       </button>
                       <button
                         onClick={() => setVerificationFilter('verified')}
-                        className={`px-2.5 py-1 rounded text-xs font-medium transition-all flex items-center gap-1 ${
+                        className={`px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-xs font-medium transition-all flex items-center gap-1 ${
                           verificationFilter === 'verified' ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-white'
                         }`}
                       >
                         <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                         </svg>
-                        Verificați
+                        <span className="hidden min-[400px]:inline">Verificați</span>
                       </button>
                       <button
                         onClick={() => setVerificationFilter('unverified')}
-                        className={`px-2.5 py-1 rounded text-xs font-medium transition-all flex items-center gap-1 ${
+                        className={`px-2 sm:px-2.5 py-1 rounded text-[10px] sm:text-xs font-medium transition-all flex items-center gap-1 ${
                           verificationFilter === 'unverified' ? 'bg-amber-500/20 text-amber-400' : 'text-gray-400 hover:text-white'
                         }`}
                       >
                         <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
-                        Neverificați
+                        <span className="hidden min-[400px]:inline">Neverificați</span>
                       </button>
                     </div>
                   </div>
