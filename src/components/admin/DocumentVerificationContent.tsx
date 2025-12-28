@@ -371,9 +371,41 @@ export default function DocumentVerificationContent() {
                       return true;
                     })
                     .map(([docKey, doc]) => (
-                    <div key={docKey} className="bg-slate-700/30 rounded-lg p-4 border border-white/5 flex flex-col h-full relative">
-                      {/* Action buttons - top right */}
-                      <div className="absolute top-3 right-3 flex gap-1.5">
+                    <div key={docKey} className="bg-slate-700/30 rounded-lg border border-white/5 flex flex-col h-full overflow-hidden">
+                      {/* Header with title and status */}
+                      <div className="p-4 pb-3 border-b border-white/5">
+                        <div className="flex items-start justify-between gap-2">
+                          <h4 className="text-sm font-medium text-white leading-tight flex-1">{getDocumentLabel(docKey)}</h4>
+                          <span className={`px-2 py-1 rounded text-xs font-medium border shrink-0 ${getStatusColor(doc.status)}`}>
+                            {getStatusText(doc.status)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-4 pt-3 flex-1">
+                        <div className="space-y-1.5 text-xs text-gray-400">
+                          <p className="truncate" title={doc.name}>Fișier: <span className="text-gray-300">{doc.name || '-'}</span></p>
+                          <p>
+                            Încărcat:{' '}
+                            <span className="text-gray-300">
+                            {doc.uploadedAt && typeof doc.uploadedAt === 'object' && 'toDate' in doc.uploadedAt 
+                              ? new Date(doc.uploadedAt.toDate()).toLocaleDateString('ro-RO') 
+                              : doc.uploadedAt instanceof Date 
+                                ? doc.uploadedAt.toLocaleDateString('ro-RO')
+                                : 'N/A'}
+                            </span>
+                          </p>
+                          {doc.rejectionReason && (
+                            <p className="text-red-400 mt-2">
+                              Motiv respingere: {doc.rejectionReason}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Action buttons - bottom */}
+                      <div className="px-4 py-3 border-t border-white/5 flex items-center justify-end gap-1">
                         <a
                           href={doc.url}
                           target="_blank"
@@ -381,7 +413,7 @@ export default function DocumentVerificationContent() {
                           className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
                           title="Vezi document"
                         >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                           </svg>
@@ -392,7 +424,7 @@ export default function DocumentVerificationContent() {
                             className="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all"
                             title="Aprobă"
                           >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           </button>
@@ -400,10 +432,10 @@ export default function DocumentVerificationContent() {
                         {doc.status !== 'rejected' && (
                           <button
                             onClick={() => handleRejectDocument(courier.uid, docKey)}
-                            className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
+                            className="p-2 text-gray-400 hover:text-orange-400 hover:bg-orange-500/10 rounded-lg transition-all"
                             title="Respinge"
                           >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                           </button>
@@ -413,36 +445,10 @@ export default function DocumentVerificationContent() {
                           className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
                           title="Șterge document"
                         >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
                         </button>
-                      </div>
-
-                      <div className="flex items-start justify-between gap-3 mb-3 pr-20">
-                        <h4 className="text-sm font-medium text-white leading-tight">{getDocumentLabel(docKey)}</h4>
-                        <span className={`px-2 py-1 rounded text-xs font-medium border shrink-0 ${getStatusColor(doc.status)}`}>
-                          {getStatusText(doc.status)}
-                        </span>
-                      </div>
-
-                      <div className="space-y-1.5 text-xs text-gray-400 mb-3 flex-1">
-                        <p className="truncate" title={doc.name}>Fișier: <span className="text-gray-300">{doc.name || '-'}</span></p>
-                        <p>
-                          Încărcat:{' '}
-                          <span className="text-gray-300">
-                          {doc.uploadedAt && typeof doc.uploadedAt === 'object' && 'toDate' in doc.uploadedAt 
-                            ? new Date(doc.uploadedAt.toDate()).toLocaleDateString('ro-RO') 
-                            : doc.uploadedAt instanceof Date 
-                              ? doc.uploadedAt.toLocaleDateString('ro-RO')
-                              : 'N/A'}
-                          </span>
-                        </p>
-                        {doc.rejectionReason && (
-                          <p className="text-red-400 mt-2">
-                            Motiv respingere: {doc.rejectionReason}
-                          </p>
-                        )}
                       </div>
                     </div>
                   ))}
