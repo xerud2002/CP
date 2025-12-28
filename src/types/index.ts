@@ -18,6 +18,7 @@ export interface User {
   nume?: string;
   prenume?: string;
   telefon?: string;
+  numeFirma?: string;
   createdAt?: Date;
   lastSeen?: Date;
   verified?: boolean;

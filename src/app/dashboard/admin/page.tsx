@@ -134,6 +134,7 @@ export default function AdminDashboard() {
           user.nume = profile.nume || user.nume;
           user.prenume = profile.prenume || user.prenume;
           user.telefon = profile.telefon || user.telefon;
+          user.numeFirma = profile.numeFirma; // Company name for couriers
         }
       });
 

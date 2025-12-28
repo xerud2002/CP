@@ -40,6 +40,17 @@ export function formatDate(timestamp: number | undefined): string {
 
 // Get display name helper
 export function getDisplayName(user: User): string {
+  // For couriers, prioritize company name
+  if (user.role === 'curier') {
+    if (user.numeFirma) return user.numeFirma;
+    // Fallback to personal name if no company name
+    if (user.nume && user.prenume) return `${user.nume} ${user.prenume}`;
+    if (user.nume) return user.nume;
+    if (user.displayName) return user.displayName;
+    return 'Curier';
+  }
+  
+  // For clients and admins, use personal name
   if (user.nume && user.prenume) {
     return `${user.nume} ${user.prenume}`;
   }
@@ -47,7 +58,6 @@ export function getDisplayName(user: User): string {
   if (user.prenume) return user.prenume;
   if (user.displayName) return user.displayName;
   // Return role-based default name
-  if (user.role === 'curier') return 'Curier';
   if (user.role === 'admin') return 'Administrator';
   return 'Client';
 }
