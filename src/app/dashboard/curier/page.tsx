@@ -600,54 +600,6 @@ const MainNavigation = memo(function MainNavigation({ badges, newOrdersCount, pr
   );
 });
 
-// Orders Summary Component - Replaces Quick Actions
-const OrdersSummary = memo(function OrdersSummary() {
-  return (
-    <section className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-3.5 sm:p-6 border border-white/5 h-full">
-      <div className="flex items-center justify-between mb-3 sm:mb-4">
-        <h3 className="text-sm sm:text-lg font-semibold text-white flex items-center gap-2">
-          <div className="p-1.5 bg-orange-500/20 rounded-lg">
-            <BoxIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400" />
-          </div>
-          Sumar comenzi
-        </h3>
-        <Link href="/dashboard/curier/comenzi" className="text-[11px] sm:text-sm text-orange-400 hover:text-orange-300 transition-colors">
-          Vezi toate →
-        </Link>
-      </div>
-      
-      <div className="grid grid-cols-2 gap-1.5 sm:gap-4 mb-3 sm:mb-4">
-        <div className="text-center p-2 sm:p-3 bg-orange-500/10 rounded-xl border border-orange-500/20">
-          <div className="flex items-center justify-center gap-1 mb-0.5">
-            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-            <p className="text-base sm:text-2xl font-bold text-orange-400">0</p>
-          </div>
-          <p className="text-[9px] sm:text-xs text-gray-400">Noi</p>
-        </div>
-        <div className="text-center p-2 sm:p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
-          <div className="flex items-center justify-center gap-1 mb-0.5">
-            <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-base sm:text-2xl font-bold text-emerald-400">0</p>
-          </div>
-          <p className="text-[9px] sm:text-xs text-gray-400">Livrate</p>
-        </div>
-      </div>
-      
-      <Link 
-        href="/dashboard/curier/comenzi"
-        className="flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-medium rounded-xl transition-colors text-xs sm:text-sm"
-      >
-        <BoxIcon className="w-4 h-4" />
-        Vezi comenzile
-      </Link>
-    </section>
-  );
-});
-
 // Recent Activity Component - Shows recent messages
 const RecentActivity = memo(function RecentActivity({ 
   recentMessages, 
@@ -1400,27 +1352,17 @@ export default function CurierDashboard() {
         {/* Main Navigation - Quick access to all sections */}
         <MainNavigation badges={menuBadges} newOrdersCount={newOrdersCount} profilePercent={profileCompletionPercent} verificationPercent={requiredDocsPercent} />
 
-        {/* Stats and Activity Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-6">
-          {/* Orders Summary - Takes 3 columns on large screens */}
-          <div className="lg:col-span-3">
-            <OrdersSummary />
-          </div>
-          
-          {/* Recent Activity - Takes 2 columns */}
-          <div className="lg:col-span-2">
-            <RecentActivity 
-              recentMessages={recentMessages} 
-              unreadCount={unreadCount}
-              onMessageClick={(orderId, orderNumber, clientId, clientName) => {
-                setSelectedChatOrder({ orderId, orderNumber, clientId, clientName });
-              }}
-              onAdminMessageClick={() => {
-                setShowAdminMessages(true);
-              }}
-            />
-          </div>
-        </div>
+        {/* Recent Activity */}
+        <RecentActivity 
+          recentMessages={recentMessages} 
+          unreadCount={unreadCount}
+          onMessageClick={(orderId, orderNumber, clientId, clientName) => {
+            setSelectedChatOrder({ orderId, orderNumber, clientId, clientName });
+          }}
+          onAdminMessageClick={() => {
+            setShowAdminMessages(true);
+          }}
+        />
 
         {/* Help Card - Lazy loaded */}
         <Suspense fallback={null}>
