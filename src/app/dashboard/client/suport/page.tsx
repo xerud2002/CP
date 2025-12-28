@@ -53,7 +53,7 @@ export default function SuportClientPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [showAdminMessageModal, setShowAdminMessageModal] = useState(false);
-  const { unreadCount } = useAdminMessages(user?.uid || '');
+  const { unreadCount } = useAdminMessages();
 
   useEffect(() => {
     if (!loading && (!user || user.role !== 'client')) {
