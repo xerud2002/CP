@@ -32,28 +32,28 @@ export function StatsGrid({ stats }: { stats: StatItem[] }) {
   );
 }
 
-// Tab Navigation Component
+// Tab Navigation Component - Optimized for mobile
 export function TabNavigation({ tabs, activeTab, onTabChange }: {
   tabs: TabItem[];
   activeTab: string;
   onTabChange: (tabId: string) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2 bg-slate-800/30 p-2 rounded-xl border border-white/5">
+    <div className="flex flex-wrap gap-1.5 sm:gap-2 bg-slate-800/30 p-1.5 sm:p-2 rounded-xl border border-white/5">
       {tabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => onTabChange(tab.id)}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 rounded-lg text-sm sm:text-base font-medium transition-all ${
             activeTab === tab.id
-              ? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25'
+              ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25'
               : 'text-gray-400 hover:text-white hover:bg-white/5'
           }`}
         >
-          <tab.icon className="w-5 h-5" />
-          <span className="hidden sm:inline">{tab.label}</span>
+          <tab.icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+          <span className="hidden xs:inline sm:inline truncate max-w-[80px] sm:max-w-none">{tab.label}</span>
           {tab.badge !== undefined && tab.badge > 0 && (
-            <span className={`ml-1 px-2 py-0.5 rounded-full text-xs ${
+            <span className={`ml-0.5 sm:ml-1 px-1.5 sm:px-2 py-0.5 rounded-full text-xs ${
               activeTab === tab.id ? 'bg-white/20' : 'bg-red-500/20 text-red-400'
             }`}>
               {tab.badge}

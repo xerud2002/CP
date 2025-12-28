@@ -304,7 +304,7 @@ export default function AdminDashboard() {
     { id: 'orders', label: 'Comenzi', icon: PackageIcon, badge: pendingOrders },
     { id: 'couriers', label: 'Curieri', icon: TruckIcon, badge: couriersCount },
     { id: 'archived', label: 'Arhivă', icon: PackageIcon },
-    { id: 'documents', label: 'Verificare Documente', icon: DocumentCheckIcon, badge: pendingDocsCount > 0 ? pendingDocsCount : undefined },
+    { id: 'documents', label: 'Documente', icon: DocumentCheckIcon, badge: pendingDocsCount > 0 ? pendingDocsCount : undefined },
     { id: 'stats', label: 'Statistici', icon: ChartIcon },
     { id: 'monetizare', label: 'Monetizare', icon: MoneyIcon },
     { id: 'settings', label: 'Setări', icon: CogIcon },
