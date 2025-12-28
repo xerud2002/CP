@@ -14,7 +14,7 @@ export default function HelpCard({
   showEmail = true,
   showWhatsApp = true,
   emailAddress = 'contact@curierulperfect.com',
-  whatsAppNumber = '407880312621',
+  whatsAppNumber = '447880312621',
   className = ''
 }: HelpCardProps) {
   return (

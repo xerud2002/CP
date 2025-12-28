@@ -28,7 +28,7 @@ const contactMethods = [
     title: 'WhatsApp',
     value: 'Mesaj rapid',
     description: 'Contact direct pentru urgențe',
-    action: 'https://wa.me/40XXXXXXXXX',
+    action: 'https://wa.me/447880312621',
     color: 'text-emerald-400',
     bg: 'bg-emerald-500/10',
     border: 'border-emerald-500/20',
