@@ -30,9 +30,8 @@ export default function LocationsStep({
 }: LocationsStepProps) {
   return (
     <div className="space-y-6">
-      {/* Ridicare - z-index mai mare pentru dropdown */}
-      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl overflow-visible relative z-20">
-        <div className="flex items-center gap-3 mb-6">
+      {/* Ridicare */}
+      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl relative z-20">\n        <div className="flex items-center gap-3 mb-6">
           <div className="w-12 h-12 rounded-xl bg-linear-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg">
             <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -45,15 +44,15 @@ export default function LocationsStep({
           </div>
         </div>
         
-        <div className="grid grid-cols-1 gap-4 overflow-visible">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-visible">
+        <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <CountryDropdown
               value={formData.tara_ridicare}
               onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, tara_ridicare: value, judet_ridicare: '', oras_ridicare: '', localitate_ridicare: '' }))}
               label="Țara"
             />
             
-            <div className="overflow-visible">
+            <div>
               <RegionDropdown
                 value={formData.judet_ridicare}
                 onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, judet_ridicare: value, oras_ridicare: '', localitate_ridicare: '' }))}
@@ -66,8 +65,8 @@ export default function LocationsStep({
           </div>
           
           {/* Oraș sau Localitate - alege una */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-visible">
-            <div className="overflow-visible">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="relative z-50">
               <CityDropdown
                 value={formData.oras_ridicare}
                 onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, oras_ridicare: value, localitate_ridicare: '' }))}
@@ -77,7 +76,7 @@ export default function LocationsStep({
               />
             </div>
             
-            <div>
+            <div className="relative z-10">
               <label className="block text-sm font-medium text-gray-300 mb-2">sau Localitate/Comună</label>
               <input
                 type="text"
@@ -111,8 +110,8 @@ export default function LocationsStep({
         </div>
       </div>
 
-      {/* Livrare - z-index mai mic pentru a fi sub dropdown-ul de la Ridicare */}
-      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl overflow-visible relative z-10">
+      {/* Livrare */}
+      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl relative z-10">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-12 h-12 rounded-xl bg-linear-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 flex items-center justify-center shadow-lg">
             <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -125,15 +124,15 @@ export default function LocationsStep({
           </div>
         </div>
         
-        <div className="grid grid-cols-1 gap-4 overflow-visible">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-visible">
+        <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <CountryDropdown
               value={formData.tara_livrare}
               onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, tara_livrare: value, judet_livrare: '', oras_livrare: '', localitate_livrare: '' }))}
               label="Țara"
             />
             
-            <div className="overflow-visible">
+            <div>
               <RegionDropdown
                 value={formData.judet_livrare}
                 onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, judet_livrare: value, oras_livrare: '', localitate_livrare: '' }))}
@@ -146,8 +145,8 @@ export default function LocationsStep({
           </div>
           
           {/* Oraș sau Localitate - alege una */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-visible">
-            <div className="overflow-visible">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="relative z-40">
               <CityDropdown
                 value={formData.oras_livrare}
                 onChange={(value) => setFormData((prev: FormDataType) => ({ ...prev, oras_livrare: value, localitate_livrare: '' }))}
@@ -157,7 +156,7 @@ export default function LocationsStep({
               />
             </div>
             
-            <div>
+            <div className="relative z-10">
               <label className="block text-sm font-medium text-gray-300 mb-2">sau Localitate/Comună</label>
               <input
                 type="text"
