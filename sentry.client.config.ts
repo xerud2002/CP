@@ -2,7 +2,7 @@
 import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN || 'https://8959524e816ec86f1d29a74cf2e0133c@o4510619933999104.ingest.de.sentry.io/4510619946451024',
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN || 'https://bab66b9334ea966739a27b6dc7e51c60@o4510619933999104.ingest.de.sentry.io/4510620059107408',
   
   // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
   // We recommend adjusting this value in production, or using tracesSampler for greater control
