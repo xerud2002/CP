@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
 
-export const alt = 'Curierul Perfect - Transport România Europa';
+export const alt = 'Curierul Perfect - Transport Romania Europa';
 export const size = {
   width: 1200,
   height: 630,
@@ -10,6 +10,14 @@ export const size = {
 export const contentType = 'image/png';
 
 export default async function Image() {
+  // Fetch the logo image and convert to base64 data URL
+  const logoResponse = await fetch(
+    new URL('/img/logo2.png', 'https://curierulperfect.com')
+  );
+  const logoArrayBuffer = await logoResponse.arrayBuffer();
+  const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64');
+  const logoDataUrl = `data:image/png;base64,${logoBase64}`;
+
   return new ImageResponse(
     (
       <div
@@ -76,133 +84,210 @@ export default async function Image() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '20px',
+              gap: '16px',
               marginBottom: '32px',
             }}
           >
-            <div
+            {/* Logo from website */}
+            <img
+              src={logoDataUrl}
+              alt="Curierul Perfect"
+              width={64}
+              height={64}
               style={{
-                width: '72px',
-                height: '72px',
-                borderRadius: '18px',
-                background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 20px 40px rgba(249, 115, 22, 0.3)',
+                width: '64px',
+                height: '64px',
+                objectFit: 'contain',
               }}
-            >
-              <svg
-                width="42"
-                height="42"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2.5"
+            />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span
+                style={{
+                  fontSize: '38px',
+                  fontWeight: 700,
+                  color: '#FF8C00',
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1,
+                }}
               >
-                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-                <path d="m3.3 7 8.7 5 8.7-5" />
-                <path d="M12 22V12" />
-              </svg>
+                CurierulPerfect
+              </span>
+              <span
+                style={{
+                  fontSize: '11px',
+                  color: '#6b7280',
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  marginTop: '4px',
+                  textAlign: 'center',
+                }}
+              >
+                - TRANSPORT EUROPA - ROMANIA -
+              </span>
             </div>
-            <span
-              style={{
-                fontSize: '42px',
-                fontWeight: 800,
-                color: 'white',
-                letterSpacing: '-0.02em',
-              }}
-            >
-              Curierul Perfect
-            </span>
           </div>
 
           {/* Main title with gradient */}
           <div
             style={{
-              fontSize: '64px',
-              fontWeight: 900,
+              fontSize: '54px',
+              fontWeight: 700,
               background: 'linear-gradient(to right, #ffffff 0%, #f97316 50%, #ffffff 100%)',
               backgroundClip: 'text',
               color: 'transparent',
               textAlign: 'center',
-              marginBottom: '16px',
+              marginBottom: '20px',
               lineHeight: 1.1,
             }}
           >
-            Transport România - Europa
+            Transport national si european
           </div>
 
-          {/* Subtitle with services */}
+          {/* Services grid - 2 rows */}
           <div
             style={{
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
-              gap: '16px',
-              marginBottom: '48px',
+              gap: '12px',
+              marginBottom: '40px',
             }}
           >
-            {['Colete', 'Mobilă', 'Persoane', 'Auto', 'Animale'].map((service, idx) => (
-              <div
-                key={idx}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
-              >
-                <span
+            {/* Row 1 */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              {['Colete', 'Plicuri', 'Persoane', 'Mobila'].map((service, idx) => (
+                <div
+                  key={idx}
                   style={{
-                    fontSize: '24px',
-                    color: '#94a3b8',
-                    fontWeight: 500,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
                   }}
                 >
-                  {service}
-                </span>
-                {idx < 4 && (
-                  <span style={{ color: '#f97316', fontSize: '24px' }}>•</span>
-                )}
-              </div>
-            ))}
+                  <span
+                    style={{
+                      fontSize: '22px',
+                      color: '#e2e8f0',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {service}
+                  </span>
+                  {idx < 3 && (
+                    <span style={{ color: '#f97316', fontSize: '20px', marginLeft: '6px' }}>•</span>
+                  )}
+                </div>
+              ))}
+            </div>
+            {/* Row 2 */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              {['Electronice', 'Animale', 'Platforma Auto', 'Tractari'].map((service, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: '22px',
+                      color: '#94a3b8',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {service}
+                  </span>
+                  {idx < 3 && (
+                    <span style={{ color: '#f97316', fontSize: '20px', marginLeft: '6px' }}>•</span>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Features row */}
+          {/* Features row with SVG icons */}
           <div
             style={{
               display: 'flex',
               gap: '24px',
             }}
           >
-            {[
-              { icon: '🚚', text: 'Curieri verificați', color: '#22c55e' },
-              { icon: '💰', text: 'Prețuri competitive', color: '#f97316' },
-              { icon: '⚡', text: 'Răspuns rapid', color: '#3b82f6' },
-            ].map((feature, idx) => (
-              <div
-                key={idx}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '14px 28px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  borderRadius: '50px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                }}
-              >
-                <span style={{ fontSize: '24px' }}>{feature.icon}</span>
-                <span
-                  style={{
-                    color: '#e2e8f0',
-                    fontSize: '18px',
-                    fontWeight: 600,
-                  }}
-                >
-                  {feature.text}
-                </span>
-              </div>
-            ))}
+            {/* Curieri verificati */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '14px 28px',
+                background: 'rgba(34, 197, 94, 0.1)',
+                borderRadius: '50px',
+                border: '1px solid rgba(34, 197, 94, 0.3)',
+              }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+              <span style={{ color: '#e2e8f0', fontSize: '18px', fontWeight: 600 }}>
+                Curieri verificati
+              </span>
+            </div>
+
+            {/* Preturi competitive */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '14px 28px',
+                background: 'rgba(249, 115, 22, 0.1)',
+                borderRadius: '50px',
+                border: '1px solid rgba(249, 115, 22, 0.3)',
+              }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                <line x1="7" y1="7" x2="7.01" y2="7"/>
+              </svg>
+              <span style={{ color: '#e2e8f0', fontSize: '18px', fontWeight: 600 }}>
+                Preturi competitive
+              </span>
+            </div>
+
+            {/* Raspuns rapid */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '14px 28px',
+                background: 'rgba(59, 130, 246, 0.1)',
+                borderRadius: '50px',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+              }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span style={{ color: '#e2e8f0', fontSize: '18px', fontWeight: 600 }}>
+                Raspuns rapid
+              </span>
+            </div>
           </div>
         </div>
 
@@ -214,7 +299,7 @@ export default async function Image() {
             left: 0,
             right: 0,
             height: '60px',
-            background: 'rgba(0, 0, 0, 0.3)',
+            background: 'rgba(0, 0, 0, 0.4)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -237,22 +322,26 @@ export default async function Image() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '8px',
             }}
           >
-            <span style={{ fontSize: '16px', color: '#22c55e' }}>✓</span>
-            <span style={{ fontSize: '16px', color: '#94a3b8' }}>Gratuit pentru clienți</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span style={{ fontSize: '16px', color: '#94a3b8' }}>Gratuit pentru toti</span>
           </div>
           <div style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.2)' }} />
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '8px',
             }}
           >
-            <span style={{ fontSize: '16px', color: '#22c55e' }}>✓</span>
-            <span style={{ fontSize: '16px', color: '#94a3b8' }}>16 țări europene</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span style={{ fontSize: '16px', color: '#94a3b8' }}>16 tari europene</span>
           </div>
         </div>
       </div>

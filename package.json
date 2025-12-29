@@ -11,6 +11,7 @@
     "lighthouse:mobile": "npm run build && npm run start & timeout /t 5 && lighthouse http://localhost:3000 --view --preset=mobile --chrome-flags=\"--headless\" && taskkill /IM node.exe /F"
   },
   "dependencies": {
+    "critters": "^0.0.23",
     "firebase": "^11.1.0",
     "next": "^16.0.10",
     "react": "^19.2.3",
