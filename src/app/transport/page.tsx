@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import { ServiceIcon } from '@/components/icons/ServiceIcons';
 
 export const metadata: Metadata = {
   title: 'Transport România - Europa | Colete, Mobilă, Persoane | Curierul Perfect',
@@ -215,17 +216,19 @@ export default function TransportPage() {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
-              { name: 'Colete & Pachete', icon: '📦', desc: 'De orice dimensiune' },
-              { name: 'Mobilă & Mutări', icon: '🛋️', desc: 'Complete sau parțiale' },
-              { name: 'Persoane', icon: '👥', desc: 'Microbuze confortabile' },
-              { name: 'Mașini', icon: '🚗', desc: 'Pe platformă' },
-              { name: 'Animale', icon: '🐕', desc: 'Cu acte în regulă' },
-              { name: 'Documente', icon: '📄', desc: 'Plicuri și acte' },
-              { name: 'Electronice', icon: '💻', desc: 'Ambalare atentă' },
-              { name: 'Paleți', icon: '📋', desc: 'Marfă comercială' },
+              { name: 'Colete & Pachete', icon: 'colete', desc: 'De orice dimensiune', color: 'text-blue-400', bg: 'bg-blue-500/20' },
+              { name: 'Mobilă & Mutări', icon: 'mobila', desc: 'Complete sau parțiale', color: 'text-amber-400', bg: 'bg-amber-500/20' },
+              { name: 'Persoane', icon: 'persoane', desc: 'Microbuze confortabile', color: 'text-emerald-400', bg: 'bg-emerald-500/20' },
+              { name: 'Mașini', icon: 'platforma', desc: 'Pe platformă', color: 'text-purple-400', bg: 'bg-purple-500/20' },
+              { name: 'Animale', icon: 'animale', desc: 'Cu acte în regulă', color: 'text-rose-400', bg: 'bg-rose-500/20' },
+              { name: 'Documente', icon: 'plicuri', desc: 'Plicuri și acte', color: 'text-cyan-400', bg: 'bg-cyan-500/20' },
+              { name: 'Electronice', icon: 'electronice', desc: 'Ambalare atentă', color: 'text-indigo-400', bg: 'bg-indigo-500/20' },
+              { name: 'Paleți', icon: 'paleti', desc: 'Marfă comercială', color: 'text-orange-400', bg: 'bg-orange-500/20' },
             ].map((service, idx) => (
-              <div key={idx} className="bg-slate-800/30 rounded-xl p-4 text-center">
-                <span className="text-3xl mb-2 block">{service.icon}</span>
+              <div key={idx} className="bg-slate-800/50 rounded-xl p-5 text-center border border-white/5 hover:border-white/10 transition-all">
+                <div className={`w-12 h-12 ${service.bg} rounded-xl flex items-center justify-center mx-auto mb-3`}>
+                  <ServiceIcon service={service.icon} className={`w-6 h-6 ${service.color}`} />
+                </div>
                 <h3 className="text-white font-medium text-sm">{service.name}</h3>
                 <p className="text-xs text-gray-500">{service.desc}</p>
               </div>
@@ -242,17 +245,47 @@ export default function TransportPage() {
           </h2>
           <div className="space-y-6">
             {[
-              { step: '1', title: 'Postează cererea', desc: 'Descrie ce vrei să trimiți, de unde și unde' },
-              { step: '2', title: 'Primești oferte', desc: 'Transportatorii verificați îți trimit oferte' },
-              { step: '3', title: 'Alegi și contactezi', desc: 'Selectează oferta potrivită și stabilești detaliile direct' },
+              { 
+                step: '1', 
+                title: 'Postează cererea', 
+                desc: 'Descrie ce vrei să trimiți, de unde și unde',
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                )
+              },
+              { 
+                step: '2', 
+                title: 'Primești oferte', 
+                desc: 'Transportatorii verificați îți trimit oferte',
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                )
+              },
+              { 
+                step: '3', 
+                title: 'Alegi și contactezi', 
+                desc: 'Selectează oferta potrivită și stabilești detaliile direct',
+                icon: (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                )
+              },
             ].map((item, idx) => (
-              <div key={idx} className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold shrink-0">
-                  {item.step}
+              <div key={idx} className="flex items-start gap-4 bg-slate-800/30 rounded-xl p-5 border border-white/5">
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-orange-500/20">
+                  {item.icon}
                 </div>
-                <div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-bold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded">PASUL {item.step}</span>
+                  </div>
                   <h3 className="text-lg font-semibold text-white">{item.title}</h3>
-                  <p className="text-gray-400">{item.desc}</p>
+                  <p className="text-gray-400 text-sm">{item.desc}</p>
                 </div>
               </div>
             ))}
