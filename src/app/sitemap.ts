@@ -64,12 +64,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'romania-austria',
   ];
 
-  const routePages: MetadataRoute.Sitemap = popularRoutes.map(route => ({
-    url: `${baseUrl}/transport/${route}`,
-    lastModified,
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }));
+  const routePages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/transport`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    ...popularRoutes.map(route => ({
+      url: `${baseUrl}/transport/${route}`,
+      lastModified,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    })),
+  ];
 
   return [...mainPages, ...servicePages, ...routePages];
 }
