@@ -84,7 +84,7 @@ export default function TransportPage() {
   return (
     <div className="min-h-screen bg-slate-950">
       {/* Hero */}
-      <section className="relative bg-gradient-to-b from-slate-900 to-slate-950 py-16 sm:py-24">
+      <section className="relative bg-linear-to-b from-slate-900 to-slate-950 py-16 sm:py-24">
         <div className="absolute inset-0 bg-[url('/img/grid.svg')] opacity-5" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl sm:text-5xl font-bold text-white mb-4">
@@ -277,7 +277,7 @@ export default function TransportPage() {
               },
             ].map((item, idx) => (
               <div key={idx} className="flex items-start gap-4 bg-slate-800/30 rounded-xl p-5 border border-white/5">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-orange-500/20">
+                <div className="w-12 h-12 bg-linear-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-orange-500/20">
                   {item.icon}
                 </div>
                 <div className="flex-1">

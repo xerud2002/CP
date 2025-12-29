@@ -13,7 +13,7 @@ export function StatsGrid({ stats }: { stats: StatItem[] }) {
           className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/5 hover:border-white/10 transition-all group"
         >
           <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg ${stat.bgColor} flex items-center justify-center flex-shrink-0`}>
+            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg ${stat.bgColor} flex items-center justify-center shrink-0`}>
               <stat.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${stat.color}`} />
             </div>
             <span className="text-gray-400 text-xs sm:text-sm leading-tight">{stat.label}</span>
@@ -45,13 +45,13 @@ export function TabNavigation({ tabs, activeTab, onTabChange }: {
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
-            className={`flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+            className={`flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
               activeTab === tab.id
-                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25'
+                ? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25'
                 : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
-            <tab.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+            <tab.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span className="hidden min-[400px]:inline">{tab.label}</span>
             {tab.badge !== undefined && tab.badge > 0 && (
               <span className={`ml-0.5 px-1 sm:px-1.5 py-0.5 rounded-full text-[10px] sm:text-xs ${

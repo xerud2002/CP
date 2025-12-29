@@ -439,7 +439,7 @@ export default function AdminDashboard() {
                 
                 {/* Verification filter - Only show for couriers */}
                 {userFilter === 'curier' && (
-                  <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                     <span className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wide hidden sm:inline">Verificare:</span>
                     <div className="flex gap-0.5 sm:gap-1 bg-slate-900/30 p-0.5 rounded-lg">
                       <button

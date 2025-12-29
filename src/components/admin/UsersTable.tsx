@@ -180,10 +180,10 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
             <div key={u.uid} className="bg-slate-900/50 rounded-xl p-3 border border-white/5">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg relative flex-shrink-0 ${
-                    u.role === 'admin' ? 'bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/25' :
-                    u.role === 'curier' ? 'bg-gradient-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
-                    'bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg relative shrink-0 ${
+                    u.role === 'admin' ? 'bg-linear-to-br from-red-500 to-red-600 shadow-red-500/25' :
+                    u.role === 'curier' ? 'bg-linear-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
+                    'bg-linear-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
                   }`}>
                     {displayName.charAt(0).toUpperCase()}
                     {online && (
@@ -195,7 +195,7 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                     <p className="text-gray-500 text-xs truncate">{u.email}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5 flex-shrink-0">
+                <div className="flex items-center gap-1.5 shrink-0">
                   <SmallMessageButton onClick={() => onSendMessage(u)} title="Mesaj" />
                   <SmallViewButton onClick={() => onViewDetails(u)} title="Detalii" />
                   <SmallDeleteButton onClick={() => onDelete(u.uid)} title="Șterge" />
@@ -259,7 +259,7 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
       
       {/* Desktop Table View */}
       <div className="hidden md:block overflow-x-auto -mx-3 sm:mx-0">
-      <table className="w-full min-w-[800px]">
+      <table className="w-full min-w-200">
         <thead>
           <tr className="border-b border-white/10 bg-slate-900/30">
             <th className="text-left py-2.5 px-3 text-gray-400 font-medium text-xs uppercase tracking-wide">Utilizator</th>
@@ -319,9 +319,9 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                 <td className="py-2.5 px-3">
                   <div className="flex items-center gap-2.5">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold text-xs shadow-lg relative ${
-                      u.role === 'admin' ? 'bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/25' :
-                      u.role === 'curier' ? 'bg-gradient-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
-                      'bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
+                      u.role === 'admin' ? 'bg-linear-to-br from-red-500 to-red-600 shadow-red-500/25' :
+                      u.role === 'curier' ? 'bg-linear-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
+                      'bg-linear-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
                     }`}>
                       {displayName.charAt(0).toUpperCase()}
                       {/* Online indicator on avatar */}

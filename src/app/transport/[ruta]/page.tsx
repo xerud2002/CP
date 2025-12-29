@@ -356,7 +356,7 @@ export default async function TransportRoutePage({ params }: { params: Promise<{
   return (
     <div className="min-h-screen bg-slate-950">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-slate-900 to-slate-950 py-16 sm:py-24">
+      <section className="relative bg-linear-to-b from-slate-900 to-slate-950 py-16 sm:py-24">
         <div className="absolute inset-0 bg-[url('/img/grid.svg')] opacity-5" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center">

@@ -20,7 +20,7 @@ export default function AdminHeader({ userName, onLogout, onRefresh, notificatio
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Left Side - Logo */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/25">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/25">
               <span className="text-white font-bold text-sm sm:text-lg">CP</span>
             </div>
             <div className="hidden sm:block">
@@ -48,7 +48,7 @@ export default function AdminHeader({ userName, onLogout, onRefresh, notificatio
             >
               <BellIcon className="w-5 h-5 sm:w-6 sm:h-6" />
               {notificationCount !== undefined && notificationCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-[18px] h-[18px] sm:min-w-[20px] sm:h-[20px] bg-red-500 rounded-full text-[10px] sm:text-xs font-medium text-white flex items-center justify-center px-1">
+                <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4.5 h-4.5 sm:min-w-5 sm:h-5 bg-red-500 rounded-full text-[10px] sm:text-xs font-medium text-white flex items-center justify-center px-1">
                   {notificationCount > 99 ? '99+' : notificationCount}
                 </span>
               )}
@@ -56,7 +56,7 @@ export default function AdminHeader({ userName, onLogout, onRefresh, notificatio
 
             {/* User Avatar */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg shadow-orange-500/25">
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-semibold text-xs sm:text-sm shadow-lg shadow-orange-500/25">
                 {userName.charAt(0).toUpperCase()}
               </div>
               <div className="hidden md:block">

@@ -119,7 +119,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
         <div className="flex gap-1.5 sm:gap-2 overflow-x-auto scrollbar-hide -mx-1 px-1 pb-1">
           <button
             onClick={() => setStatusFilter('all')}
-            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
               statusFilter === 'all' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -127,7 +127,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
           </button>
           <button
             onClick={() => setStatusFilter('noua')}
-            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
               statusFilter === 'noua' ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -135,7 +135,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
           </button>
           <button
             onClick={() => setStatusFilter('in_lucru')}
-            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
               statusFilter === 'in_lucru' ? 'bg-amber-500/20 text-amber-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -143,7 +143,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
           </button>
           <button
             onClick={() => setStatusFilter('acceptata')}
-            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
               statusFilter === 'acceptata' ? 'bg-cyan-500/20 text-cyan-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -151,7 +151,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
           </button>
           <button
             onClick={() => setStatusFilter('in_tranzit')}
-            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
               statusFilter === 'in_tranzit' ? 'bg-purple-500/20 text-purple-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -159,7 +159,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
           </button>
           <button
             onClick={() => setStatusFilter('livrata')}
-            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
               statusFilter === 'livrata' ? 'bg-emerald-500/20 text-emerald-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -167,7 +167,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
           </button>
           <button
             onClick={() => setStatusFilter('anulata')}
-            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
               statusFilter === 'anulata' ? 'bg-red-500/20 text-red-400' : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
@@ -214,7 +214,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
               </div>
               
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-semibold text-xs">
+                <div className="w-7 h-7 rounded-full bg-linear-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-semibold text-xs">
                   {clientName.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -287,7 +287,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
               <tr key={order.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                 <td className="py-3 px-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-lg bg-linear-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center">
                       <span className="text-orange-400 text-xs font-bold">#</span>
                     </div>
                     <span className="text-white font-mono font-semibold text-sm">
@@ -297,7 +297,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
                 </td>
                 <td className="py-3 px-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-semibold text-xs">
+                    <div className="w-8 h-8 rounded-full bg-linear-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-semibold text-xs">
                       {clientName.charAt(0).toUpperCase()}
                     </div>
                     <div>
