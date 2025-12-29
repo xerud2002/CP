@@ -43,7 +43,7 @@ export default function FAQPage() {
       category: 'Cont și date personale',
       questions: [
         { q: 'Trebuie să am cont pentru a comanda?', a: 'Da, ai nevoie de cont pentru a plasa comenzi, comunica cu curierii și urmări istoricul transporturilor.' },
-        { q: 'Cum îmi protejați datele?', a: 'Folosim criptare SSL, respectăm GDPR și nu vindem datele tale niciodată. Citește Politica de Confidențialitate pentru detalii.' },
+        { q: 'Cum îmi protejați datele?', a: 'Folosim criptare SSL și respectăm GDPR. Citește Politica de Confidențialitate pentru detalii.' },
         { q: 'Pot șterge contul?', a: 'Da, din setările contului sau contactând contact@curierulperfect.com. Datele vor fi șterse conform GDPR.' }
       ]
     }
