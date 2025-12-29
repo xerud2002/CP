@@ -9,28 +9,23 @@ const servicesData: Record<string, {
   description: string;
   longDescription: string;
   benefits: string[];
-  routes: { from: string; to: string; price: string }[];
+  popularRoutes: string[];
   faq: { q: string; a: string }[];
   color: string;
   borderColor: string;
 }> = {
   colete: {
     title: 'Transport Colete România - Europa',
-    description: 'Trimite colete rapid și sigur între România și orice țară europeană. Prețuri competitive, curieri verificați.',
+    description: 'Trimite colete rapid și sigur între România și orice țară europeană. Curieri verificați, servicii de încredere.',
     longDescription: 'Serviciul nostru de transport colete conectează România cu toată Europa. Indiferent dacă trimiți pachete mici sau cutii mari, curieri verificați asigură livrarea în siguranță.',
     benefits: [
       'Livrare în 24-72 ore în majoritatea țărilor',
       'Tracking în timp real',
-      'Asigurare inclusă până la 500€',
+      'Asigurare inclusă',
       'Ridicare de la domiciliu',
-      'Prețuri transparente, fără costuri ascunse',
+      'Fără costuri ascunse',
     ],
-    routes: [
-      { from: 'România', to: 'UK', price: 'de la 15€' },
-      { from: 'România', to: 'Germania', price: 'de la 12€' },
-      { from: 'România', to: 'Italia', price: 'de la 10€' },
-      { from: 'România', to: 'Spania', price: 'de la 18€' },
-    ],
+    popularRoutes: ['România - UK', 'România - Germania', 'România - Italia', 'România - Spania'],
     faq: [
       { q: 'Cât durează livrarea unui colet?', a: 'În funcție de destinație, livrarea durează între 24-72 ore pentru țările europene.' },
       { q: 'Ce dimensiuni poate avea coletul?', a: 'Acceptăm colete de orice dimensiune, de la plicuri până la cutii voluminoase.' },
@@ -50,16 +45,11 @@ const servicesData: Record<string, {
       'WiFi și prize USB la bord',
       'Bagaj generos inclus',
     ],
-    routes: [
-      { from: 'București', to: 'Londra', price: 'de la 89€' },
-      { from: 'Cluj', to: 'München', price: 'de la 59€' },
-      { from: 'Iași', to: 'Roma', price: 'de la 69€' },
-      { from: 'Timișoara', to: 'Madrid', price: 'de la 99€' },
-    ],
+    popularRoutes: ['București - Londra', 'Cluj - München', 'Iași - Roma', 'Timișoara - Madrid'],
     faq: [
-      { q: 'Câte kg de bagaj pot lua?', a: 'Fiecare pasager are dreptul la 30kg bagaj inclus în preț.' },
+      { q: 'Câte kg de bagaj pot lua?', a: 'Fiecare pasager are dreptul la 30kg bagaj inclus.' },
       { q: 'De unde se face îmbarcarea?', a: 'Ridicăm pasagerii de la adresa dorită în majoritatea orașelor.' },
-      { q: 'Copiii plătesc bilet întreg?', a: 'Copiii sub 3 ani călătoresc gratuit, iar cei între 3-12 ani au 50% reducere.' },
+      { q: 'Copiii plătesc bilet întreg?', a: 'Copiii sub 3 ani călătoresc gratuit, iar cei între 3-12 ani au reducere.' },
     ],
     color: 'from-rose-500/20 to-pink-500/20',
     borderColor: 'border-rose-500/30',
@@ -75,12 +65,7 @@ const servicesData: Record<string, {
       'Camioane dedicate sau grupaj',
       'Dezambalare și montare la destinație',
     ],
-    routes: [
-      { from: 'România', to: 'UK', price: 'de la 400€' },
-      { from: 'România', to: 'Germania', price: 'de la 350€' },
-      { from: 'România', to: 'Italia', price: 'de la 300€' },
-      { from: 'România', to: 'Franța', price: 'de la 450€' },
-    ],
+    popularRoutes: ['România - UK', 'România - Germania', 'România - Italia', 'România - Franța'],
     faq: [
       { q: 'Oferiți servicii de ambalare?', a: 'Da, echipa noastră poate ambala toate bunurile profesional cu materiale de calitate.' },
       { q: 'Cât durează o mutare internațională?', a: 'În funcție de distanță și volum, între 2-7 zile lucrătoare.' },
@@ -100,12 +85,7 @@ const servicesData: Record<string, {
       'Personal instruit în îngrijirea animalelor',
       'Documentație completă pentru transport',
     ],
-    routes: [
-      { from: 'România', to: 'UK', price: 'de la 150€' },
-      { from: 'România', to: 'Germania', price: 'de la 100€' },
-      { from: 'România', to: 'Italia', price: 'de la 80€' },
-      { from: 'România', to: 'Spania', price: 'de la 180€' },
-    ],
+    popularRoutes: ['România - UK', 'România - Germania', 'România - Italia', 'România - Spania'],
     faq: [
       { q: 'Ce documente sunt necesare?', a: 'Pașaport european pentru animale, vaccinări la zi și microcip obligatoriu.' },
       { q: 'Pot călători și eu cu animalul?', a: 'Da, oferim și transport combinat pasageri + animale.' },
@@ -125,12 +105,7 @@ const servicesData: Record<string, {
       'Transport ușă-la-ușă',
       'Documentație vamală completă',
     ],
-    routes: [
-      { from: 'România', to: 'UK', price: 'de la 600€' },
-      { from: 'România', to: 'Germania', price: 'de la 450€' },
-      { from: 'România', to: 'Italia', price: 'de la 350€' },
-      { from: 'România', to: 'Olanda', price: 'de la 550€' },
-    ],
+    popularRoutes: ['România - UK', 'România - Germania', 'România - Italia', 'România - Olanda'],
     faq: [
       { q: 'Transportați și mașini defecte?', a: 'Da, transportăm vehicule care nu pot circula, inclusiv accidentate.' },
       { q: 'Mașina este asigurată pe durata transportului?', a: 'Da, toate vehiculele sunt asigurate la valoarea declarată.' },
@@ -150,12 +125,7 @@ const servicesData: Record<string, {
       'Depanare la fața locului când e posibil',
       'Acoperire în toată Europa',
     ],
-    routes: [
-      { from: 'Oriunde în', to: 'UK', price: 'de la 200€' },
-      { from: 'Oriunde în', to: 'Germania', price: 'de la 150€' },
-      { from: 'Oriunde în', to: 'Italia', price: 'de la 120€' },
-      { from: 'Oriunde în', to: 'România', price: 'de la 50€' },
-    ],
+    popularRoutes: ['Oriunde în UK', 'Oriunde în Germania', 'Oriunde în Italia', 'Oriunde în România'],
     faq: [
       { q: 'Cât durează până ajunge echipa?', a: 'În zone urbane, sub 60 de minute. În zone rurale, sub 2 ore.' },
       { q: 'Tractați și vehicule grele?', a: 'Da, avem echipamente pentru autoturisme, dube și vehicule până la 3.5t.' },
@@ -175,12 +145,7 @@ const servicesData: Record<string, {
       'Transport climatizat',
       'Verificare la livrare',
     ],
-    routes: [
-      { from: 'România', to: 'UK', price: 'de la 50€' },
-      { from: 'România', to: 'Germania', price: 'de la 40€' },
-      { from: 'România', to: 'Italia', price: 'de la 35€' },
-      { from: 'România', to: 'Spania', price: 'de la 60€' },
-    ],
+    popularRoutes: ['România - UK', 'România - Germania', 'România - Italia', 'România - Spania'],
     faq: [
       { q: 'Cum sunt ambalate electronicele?', a: 'Folosim spumă antișoc, folie cu bule și cutii rigide speciale.' },
       { q: 'Ce se întâmplă dacă ajunge stricat?', a: 'Asigurarea acoperă valoarea declarată, despăgubire în maxim 7 zile.' },
@@ -200,12 +165,7 @@ const servicesData: Record<string, {
       'Manipulare confidențială',
       'Ridicare de la adresă',
     ],
-    routes: [
-      { from: 'România', to: 'UK', price: 'de la 25€' },
-      { from: 'România', to: 'Germania', price: 'de la 20€' },
-      { from: 'România', to: 'Italia', price: 'de la 18€' },
-      { from: 'România', to: 'Spania', price: 'de la 28€' },
-    ],
+    popularRoutes: ['România - UK', 'România - Germania', 'România - Italia', 'România - Spania'],
     faq: [
       { q: 'Cât de repede ajunge un plic?', a: 'Livrare expresă în 24-48 ore pentru majoritatea destinațiilor europene.' },
       { q: 'Primesc confirmare de livrare?', a: 'Da, primești notificare instant când documentul a fost livrat.' },
@@ -225,12 +185,7 @@ const servicesData: Record<string, {
       'Documentație completă',
       'Livrare la rampă sau la sol',
     ],
-    routes: [
-      { from: 'România', to: 'UK', price: 'de la 80€/palet' },
-      { from: 'România', to: 'Germania', price: 'de la 60€/palet' },
-      { from: 'România', to: 'Italia', price: 'de la 50€/palet' },
-      { from: 'România', to: 'Franța', price: 'de la 70€/palet' },
-    ],
+    popularRoutes: ['România - UK', 'România - Germania', 'România - Italia', 'România - Franța'],
     faq: [
       { q: 'Ce dimensiuni are un palet standard?', a: 'Palet EURO: 120x80cm, max 120cm înălțime, max 500kg.' },
       { q: 'Oferiți și ambalare?', a: 'Da, putem paletiză și ambala marfa dacă nu este pregătită.' },
@@ -272,16 +227,6 @@ export default function ServiciuPage() {
     "areaServed": {
       "@type": "Place",
       "name": "Europa"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": data.title,
-      "itemListElement": data.routes.map(route => ({
-        "@type": "Offer",
-        "name": `${route.from} - ${route.to}`,
-        "price": route.price,
-        "priceCurrency": "EUR"
-      }))
     }
   };
 
@@ -352,19 +297,17 @@ export default function ServiciuPage() {
           </div>
         </section>
 
-        {/* Prices Section */}
+        {/* Popular Routes Section */}
         <section className="py-16 px-4 bg-slate-800/30">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8">Prețuri orientative</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8">Rute populare</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {data.routes.map((route, idx) => (
+              {data.popularRoutes.map((route, idx) => (
                 <div key={idx} className={`bg-slate-800 border ${data.borderColor} rounded-xl p-5`}>
-                  <div className="text-gray-400 text-sm mb-2">{route.from} → {route.to}</div>
-                  <div className="text-2xl font-bold text-white">{route.price}</div>
+                  <div className="text-lg font-semibold text-white">{route}</div>
                 </div>
               ))}
             </div>
-            <p className="text-gray-500 text-sm mt-4">* Prețurile sunt orientative și pot varia în funcție de dimensiuni, greutate și urgență.</p>
           </div>
         </section>
 

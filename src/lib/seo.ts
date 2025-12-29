@@ -178,7 +178,6 @@ export const localBusinessSchema = {
   name: SITE_NAME,
   image: `${SITE_URL}/logo.png`,
   url: SITE_URL,
-  priceRange: '€€',
   address: {
     '@type': 'PostalAddress',
     addressCountry: 'RO',
