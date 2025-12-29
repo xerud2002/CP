@@ -41,10 +41,9 @@ src/hooks/useChatMessages.ts                    → Shared real-time messaging
 
 **Architecture Docs**: `COURIER_MESSAGING_SYSTEM.md` (messaging restrictions), `OPTIMIZATION_SUMMARY.md` (refactoring context)
 
-## Error Monitoring
-- **Sentry**: Integrated via `@sentry/react` for production error tracking
-- **Testing**: See `SENTRY_TESTING.md` for error capture scenarios
+## Error Handling
 - Use `showError(err)` from `lib/toast.ts` for user-facing errors (auto-translated to Romanian)
+- Use `logError()` from `lib/errorMessages.ts` for development debugging
 - Console logs automatically removed in production builds
 
 ## Critical Patterns
