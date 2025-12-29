@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { collection, query, where, onSnapshot, or } from 'firebase/firestore';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Order } from '@/types';
 
@@ -65,7 +65,6 @@ export function useUnreadMessages(userId: string | undefined, orders: Order[]) {
 
     // For larger order lists, fall back to individual listeners but with throttling
     const unsubscribers: (() => void)[] = [];
-    const batchSize = 10;
     
     // Process in batches to avoid too many concurrent listeners
     for (let i = 0; i < Math.min(validOrders.length, 30); i++) {
