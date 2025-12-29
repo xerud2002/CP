@@ -197,9 +197,15 @@ export function useChatMessages({
 
   // Memoize filtered messages for performance
   const sortedMessages = useMemo(() => 
-    [...messages].sort((a, b) => 
-      (a.createdAt?.toMillis() || 0) - (b.createdAt?.toMillis() || 0)
-    ), 
+    [...messages].sort((a, b) => {
+      const aTime = a.createdAt instanceof Date 
+        ? a.createdAt.getTime() 
+        : a.createdAt?.toMillis?.() || 0;
+      const bTime = b.createdAt instanceof Date 
+        ? b.createdAt.getTime() 
+        : b.createdAt?.toMillis?.() || 0;
+      return aTime - bTime;
+    }), 
     [messages]
   );
 
