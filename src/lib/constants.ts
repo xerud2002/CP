@@ -11,13 +11,17 @@ export const countries = [
   { code: 'DE', name: 'Germania', flag: '/img/flag/de.svg' },
   { code: 'GR', name: 'Grecia', flag: '/img/flag/gr.svg' },
   { code: 'IE', name: 'Irlanda', flag: '/img/flag/ie.svg' },
+  { code: 'NIR', name: 'Irlanda de Nord', flag: '/img/flag/nir.svg' },
   { code: 'IT', name: 'Italia', flag: '/img/flag/it.svg' },
+  { code: 'MD', name: 'Moldova', flag: '/img/flag/md.svg' },
   { code: 'NO', name: 'Norvegia', flag: '/img/flag/no.svg' },
   { code: 'NL', name: 'Olanda', flag: '/img/flag/nl.svg' },
   { code: 'PT', name: 'Portugalia', flag: '/img/flag/pt.svg' },
   { code: 'RO', name: 'România', flag: '/img/flag/ro.svg' },
+  { code: 'SC', name: 'Scoția', flag: '/img/flag/sc.svg' },
   { code: 'ES', name: 'Spania', flag: '/img/flag/es.svg' },
   { code: 'SE', name: 'Suedia', flag: '/img/flag/se.svg' },
+  { code: 'WLS', name: 'Țara Galilor', flag: '/img/flag/wls.svg' },
 ];
 
 // Simple countries list (without flag) for forms
@@ -41,6 +45,10 @@ export const judetByCountry: Record<string, string[]> = {
   DK: ["Capital Region", "Central Denmark Region", "North Denmark Region", "Region Zealand", "Region of Southern Denmark"],
   FI: ["Central Finland", "Central Ostrobothnia", "Etelä-Savo", "Kainuu", "Kanta-Häme", "Kymenlaakso", "Lapland", "North Karelia", "North Ostrobothnia", "North Savo", "Ostrobothnia", "Pirkanmaa", "Päijät-Häme", "Satakunta", "South Karelia", "South Ostrobothnia", "Uusimaa", "Varsinais-Suomi", "Åland"],
   IE: ["Carlow", "Cavan", "Clare", "Cork", "Donegal", "Dublin", "Galway", "Kerry", "Kildare", "Kilkenny", "Laois", "Leitrim", "Limerick", "Longford", "Louth", "Mayo", "Meath", "Monaghan", "Offaly", "Roscommon", "Sligo", "Tipperary", "Waterford", "Westmeath", "Wexford", "Wicklow"],
+  NIR: ["Antrim", "Armagh", "Down", "Fermanagh", "Londonderry", "Tyrone"],
+  SC: ["Aberdeenshire", "Angus", "Argyll and Bute", "City of Edinburgh", "Clackmannanshire", "Dumfries and Galloway", "Dundee City", "East Ayrshire", "East Dunbartonshire", "East Lothian", "East Renfrewshire", "Falkirk", "Fife", "Glasgow City", "Highland", "Inverclyde", "Midlothian", "Moray", "North Ayrshire", "North Lanarkshire", "Orkney Islands", "Perth and Kinross", "Renfrewshire", "Scottish Borders", "Shetland Islands", "South Ayrshire", "South Lanarkshire", "Stirling", "West Dunbartonshire", "West Lothian", "Western Isles"],
+  WLS: ["Anglesey", "Blaenau Gwent", "Bridgend", "Caerphilly", "Cardiff", "Carmarthenshire", "Ceredigion", "Conwy", "Denbighshire", "Flintshire", "Gwynedd", "Merthyr Tydfil", "Monmouthshire", "Neath Port Talbot", "Newport", "Pembrokeshire", "Powys", "Rhondda Cynon Taf", "Swansea", "Torfaen", "Vale of Glamorgan", "Wrexham"],
+  MD: ["Anenii Noi", "Bălți", "Basarabeasca", "Bender", "Briceni", "Cahul", "Călărași", "Cantemir", "Căușeni", "Chișinău", "Cimișlia", "Criuleni", "Dondușeni", "Drochia", "Dubăsari", "Edineț", "Fălești", "Florești", "Glodeni", "Hîncești", "Ialoveni", "Leova", "Nisporeni", "Ocnița", "Orhei", "Rezina", "Rîșcani", "Sîngerei", "Soroca", "Strășeni", "Șoldănești", "Ștefan Vodă", "Taraclia", "Telenești", "Ungheni"],
 };
 
 // Service Types - Unified definition across the app

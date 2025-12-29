@@ -7,7 +7,7 @@ import { countries } from '@/lib/constants';
 const ctaFeatures = [
   'Fără înregistrare',
   'Răspuns rapid',
-  '16 țări disponibile',
+  '20 țări disponibile',
 ];
 
 export default function TrustCoverage() {
@@ -30,7 +30,7 @@ export default function TrustCoverage() {
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-2">
             <span className="text-white">Transport național și european sigur în </span>
-            <span className="text-gradient">peste 16 țări</span>
+            <span className="text-gradient">peste 20 țări</span>
           </h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4">
             Livrări naționale și internaționale: colete, mobilă, transport persoane și animale - rețea extinsă de transportatori verificați pentru orice destinație

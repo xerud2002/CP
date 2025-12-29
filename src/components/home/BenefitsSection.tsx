@@ -59,7 +59,7 @@ const benefits = [
   {
     id: 6,
     title: 'Acoperire Națională și Europeană',
-    description: 'Transport național în toată România și internațional în peste 16 țări europene. De la UK la Spania, de la Germania la Italia - acoperire completă.',
+    description: 'Transport național în toată România și internațional în peste 20 țări europene. De la UK la Spania, de la Germania la Italia - acoperire completă.',
     color: 'amber',
     icon: (
       <svg className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
