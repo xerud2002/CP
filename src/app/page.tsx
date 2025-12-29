@@ -7,9 +7,6 @@ import {
   BenefitsSection,
   PlatformVsFacebook,
   ProcessTimeline,
-  BecomeCourierCTA,
-  TrustCoverage,
-  TrustBadges,
 } from '@/components/home';
 import { COMPANY_INFO, CONTACT_INFO, SOCIAL_LINKS } from '@/lib/contact';
 
