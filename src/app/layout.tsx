@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     template: "%s | Curierul Perfect"
   },
   description: "Platformă de transport național și european: colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Servicii rapide și sigure în România și Europa. Conectă-te cu curieri verificați.",
+  verification: {
+    google: 'bXTrL9PuFBb8dmi7E5pUmCszVdmkf0vD4COmHxHJJaY',
+  },
   keywords: [
     "transport național România",
     "transport colete Europa",
