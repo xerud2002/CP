@@ -807,9 +807,11 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
             <div className="bg-slate-800/30 backdrop-blur-sm border border-white/5 rounded-3xl p-8 sm:p-12">
               <div className="prose prose-invert prose-lg max-w-none">
                 {data.article.split('\n\n').map((paragraph, idx) => (
-                  <p key={idx} className="text-gray-300 leading-relaxed mb-6 first:text-xl first:text-gray-200 first:font-medium">
-                    {paragraph}
-                  </p>
+                  <p 
+                    key={idx} 
+                    className="text-gray-300 leading-relaxed mb-6 first:text-xl first:text-gray-200 first:font-medium"
+                    dangerouslySetInnerHTML={{ __html: paragraph }}
+                  />
                 ))}
               </div>
             </div>
