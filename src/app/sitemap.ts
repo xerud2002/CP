@@ -79,5 +79,75 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  return [...mainPages, ...servicePages, ...routePages];
+  // Static pages - important for user trust and SEO
+  const staticPages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/despre`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/cum-functioneaza`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/faq`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/devino-partener`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${baseUrl}/preturi`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.65,
+    },
+    {
+      url: `${baseUrl}/termeni`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/confidentialitate`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    },
+    {
+      url: `${baseUrl}/cookies`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/gdpr`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/reclamatii`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+  ];
+
+  return [...mainPages, ...servicePages, ...routePages, ...staticPages];
 }
