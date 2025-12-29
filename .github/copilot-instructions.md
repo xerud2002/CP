@@ -13,27 +13,31 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 ```
 /dashboard/client  → /comenzi, /profil, /recenzii, /suport
 /dashboard/curier  → /comenzi, /profil, /recenzii, /servicii, /verificare
+/dashboard/admin   → Admin panel (user management, verification, stats)
 /comanda           → Order creation wizard (no header/footer)
 ```
 
 ### Component & Hook Organization
 ```
 src/components/orders/{client|courier|shared}/  → Role-specific + reusable components
-src/hooks/{client|courier}/                      → Role-specific data hooks
-src/hooks/useChatMessages.ts                     → Shared real-time messaging
+src/components/admin/                           → Admin panel components
+src/hooks/{client|courier}/                     → Role-specific data hooks
+src/hooks/useChatMessages.ts                    → Shared real-time messaging
 ```
 
 ## Key Files (Single Source of Truth)
 
 | File | Purpose |
 |------|---------|
-| `constants.ts` | `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
-| `cities.ts` | `oraseByCountryAndRegion`, `getOraseForRegion()`, `getAllOraseForCountry()` |
-| `AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()` |
-| `toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian |
-| `orderStatusHelpers.ts` | `canEditOrder()`, `canDeleteOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
-| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole`, `CourierProfile` |
-| `contact.ts`, `faq.ts`, `businessInfo.ts` | Centralized contact info, FAQ data, country tax formats |
+| `lib/constants.ts` | `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
+| `lib/cities.ts` | `oraseByCountryAndRegion`, `getOraseForRegion()`, `getAllOraseForCountry()` |
+| `lib/toast.ts` | `showSuccess()`, `showError()`, `showInfo()`, `showWarning()` — auto-translates Firebase errors to Romanian |
+| `lib/contact.ts` | Centralized `CONTACT_INFO`, `SOCIAL_LINKS`, `COMPANY_INFO` |
+| `lib/faq.ts` | `FAQ_ITEMS` with category filtering |
+| `lib/businessInfo.ts` | `COUNTRY_TAX_INFO` — 16-country tax ID formats |
+| `contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
+| `utils/orderStatusHelpers.ts` | `canEditOrder()`, `canDeleteOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
+| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole`, `CourierProfile`, `DocumentRequirement` |
 
 **Architecture Docs**: `COURIER_MESSAGING_SYSTEM.md` (messaging restrictions), `OPTIMIZATION_SUMMARY.md` (refactoring context)
 
@@ -52,7 +56,7 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && (!user || user.role !== 'client')) {
+    if (!loading && (!user || user.role !== 'client')) { // or 'curier' for courier pages
       router.push('/login?role=client');
     }
   }, [user, loading, router]);
@@ -119,9 +123,10 @@ noua → in_lucru → livrata
 anulata  anulata
 ```
 - `noua`: New, editable/deletable by client
-- `in_lucru`: Locked (courier messaged), can be finalized
+- `in_lucru`: Locked (courier messaged), can be finalized by client
 - `livrata`: Complete, triggers review flow
-- Auto-transition: `noua` → `in_lucru` when courier sends first message
+- `anulata`: Cancelled (from `noua` or `in_lucru`)
+- Auto-transition: `noua` → `in_lucru` when courier sends first message (via `transitionToInLucru()`)
 
 ## Firestore Collections
 
@@ -141,12 +146,14 @@ anulata  anulata
 - Layout: `.card`, `.form-input`, `.spinner`
 - Brand colors: `text-orange-500` (CTA), `text-emerald-400` (success), `bg-slate-900` (dashboard bg)
 - Status styling: `orderStatusConfig[status].bg`, `.color`, `.label`
+- Service styling: Use `serviceTypes[].color`, `.bgColor`, `.borderColor` from `constants.ts`
 
 ## Commands
 ```bash
 npm run dev        # Dev server (localhost:3000)
 npm run build      # Production build
 npm run lint       # ESLint check
+npm run lighthouse # Lighthouse audit (desktop)
 ```
 **No emulators**: Project uses live Firebase services.
 
@@ -158,6 +165,7 @@ npm run lint       # ESLint check
 - **Types**: Import from `@/types/index.ts`, never inline interfaces
 - **Firebase SDK**: Modular v11 syntax (`import { collection } from 'firebase/firestore'`)
 - **NO PRICES**: Never display prices, currency symbols (€, $, RON), or "de la X" pricing anywhere in the UI or metadata
+- **Icons**: Use `src/components/icons/DashboardIcons.tsx` for consistent Heroicons styling
 
 ## Common Mistakes
 
@@ -169,6 +177,7 @@ npm run lint       # ESLint check
 | `alert(error.message)` | `showError(error)` |
 | `createdAt: new Date()` | `serverTimestamp()` |
 | Missing `onSnapshot` cleanup | `return () => unsubscribe()` |
+| Inline contact info | Import from `@/lib/contact.ts` |
 
 ## File Organization
 
@@ -187,6 +196,12 @@ Before first message, these checks run (see `COURIER_MESSAGING_SYSTEM.md`):
 1. **Order exists** — verify not deleted
 2. **Courier verification** — if client accepts only "firme", courier needs `verified: true`
 3. **Offer limits** — client sets max couriers (1-3, 4-5, or unlimited)
+
+## Migration Scripts
+Located in `scripts/` folder. Requires Firebase Admin SDK setup:
+1. Download service account key from Firebase Console → save as `scripts/serviceAccountKey.json`
+2. Run with `node scripts/<script>.js`
+See `scripts/README.md` for detailed instructions.
 
 ## Flags & Assets
 Country flags in `public/img/flag/{code}.svg` (lowercase, e.g., `ro.svg`, `de.svg`). When adding countries to `constants.ts`, add the corresponding flag SVG.
