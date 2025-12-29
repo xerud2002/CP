@@ -25,7 +25,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori verificați pentru colete, mobilă sau călătorii între România și Germania. Platformă gratuită de conectare.',
     heroTitle: 'Transport România - Germania',
     heroSubtitle: 'Conectăm clienți cu transportatori pe ruta România - Germania',
-    intro: 'Germania este una dintre cele mai populare destinații pentru transportul din România. Platforma Curierul Perfect te ajută să găsești transportatori verificați care operează pe această rută.',
+    intro: 'Germania este una dintre cele mai populare destinații pentru transportul din România, găzduind peste 800.000 de români. Platforma Curierul Perfect te ajută să găsești transportatori verificați care operează pe această rută frecventă. Fie că trebuie să trimiți colete personale către familie și prieteni, să muți mobila pentru o relocare în orașe precum Berlin, München sau Frankfurt, sau să găsești transport persoane pentru călătorii regulate, platforma noastră conectează gratuit clienți cu transportatori profesioniști. Germania oferă oportunități excelente de muncă și studii, iar nevoile de transport între cele două țări cresc constant. Transportatorii din platforma noastră acoperă toate marile orașe germane: Berlin, München, Frankfurt, Hamburg, Köln, Stuttgart, Dortmund, Düsseldorf și Bremen. Procesul este simplu și transparent: postezi cererea ta gratuit, primești oferte personalizate de la transportatori cu experiență, compari prețurile și serviciile, apoi alegi oferta care ți se potrivește cel mai bine. Comunicarea se face direct cu transportatorul, fără intermediari, ceea ce asigură flexibilitate maximă și costuri reduse. Transportatorii din rețeaua noastră sunt verificați și au recenzii reale de la clienți anteriori, oferindu-ți siguranța că bunurile tale vor fi transportate în condiții optime.',
     services: [
       { name: 'Colete & Pachete', description: 'Găsește transportatori pentru colete de orice dimensiune', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Conectare cu transportatori pentru mutări și mobilier', icon: 'mobila' },
@@ -62,7 +62,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Italia. Colete, mobilă, persoane. Platformă gratuită de conectare.',
     heroTitle: 'Transport România - Italia',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Italia',
-    intro: 'Italia găzduiește una dintre cele mai mari comunități românești din Europa. Platforma noastră te conectează cu transportatori verificați care operează între cele două țări.',
+    intro: 'Italia găzduiește una dintre cele mai mari comunități românești din Europa, cu peste 1,2 milioane de români stabiliți în orașe precum Roma, Milano, Torino și Bologna. Platforma Curierul Perfect facilitează conectarea cu transportatori verificați pentru această rută extrem de solicitată. Fie că trebuie să trimiți colete către familie în Italia, să muți mobila pentru o relocare permanentă sau să găsești transport persoane pentru călătorii regulate, avem soluții pentru toate nevoile tale. Transportatorii din rețeaua noastră acoperă întreg teritoriul italian, de la orașele din nord precum Milano și Torino, până la sudul Italiei cu Napoli, Bari și chiar insulele Sicilia și Sardinia. Procesul este simplu: postezi gratuit cererea ta detaliată, primești oferte personalizate de la transportatori cu experiență pe ruta România-Italia, compari serviciile și prețurile, apoi comunici direct cu transportatorul ales pentru a stabili toate detaliile. Nu există comisioane ascunse sau taxe de intermediere - platforma este complet gratuită pentru clienți. Transportatorii noștri efectuează curse regulate săptămânale pe această rută, asigurând flexibilitate maximă și timpi de livrare rapizi.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete de toate dimensiunile', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -98,7 +98,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Spania. Madrid, Barcelona, Valencia. Platformă gratuită de conectare.',
     heroTitle: 'Transport România - Spania',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Spania',
-    intro: 'Spania este o destinație populară pentru românii din Europa de Vest. Platforma noastră te ajută să găsești transportatori de încredere pentru această rută.',
+    intro: 'Spania este o destinație din ce în ce mai populară pentru românii care caută oportunități în Europa de Vest, cu peste 600.000 de români stabiliti permanent în orașe precum Madrid, Barcelona, Valencia și Sevilla. Platforma Curierul Perfect te conectează cu transportatori profesioniști care operează pe ruta România-Spania, oferind servicii complete pentru colete, mobilă, persoane și autoturisme. Distanța mare între cele două țări face ca alegerea transportatorului potrivit să fie esențială pentru un transport sigur și eficient. Transportatorii din platforma noastră au experiență vastă pe rute lungi și cunosc toate procedurile necesare pentru un transport fără probleme. Acoperim toate regiunile Spaniei: de la Catalonia cu Barcelona și Tarragona, la Comunitatea Madrid, Valencia, Andaluzia cu Sevilla și Malaga, Țara Bascilor, Galicia și chiar insulele Canare și Baleare. Procesul este transparent: postezi cererea gratuit cu toate detaliile despre transportul tău, primești oferte de la transportatori specializați pe ruta spre Spania, alegi oferta care îți convine după preț, recenzii și servicii oferite, apoi stabilești direct cu transportatorul detaliile finale despre ridicare și livrare.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete în toată Spania', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -134,7 +134,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Franța. Paris, Lyon, Marseille. Platformă gratuită.',
     heroTitle: 'Transport România - Franța',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Franța',
-    intro: 'Franța atrage tot mai mulți români pentru muncă și studii. Platforma noastră facilitează găsirea transportatorilor pentru această rută.',
+    intro: 'Franța atrage tot mai mulți români pentru oportunități de muncă, studii universitare și stil de viață, cu o comunitate în creștere rapidă în orașe precum Paris, Lyon, Marseille, Toulouse și Nice. Platforma Curierul Perfect simplifică procesul de găsire a transportatorilor pentru ruta România-Franța, conectând gratuit clienți cu profesioniști verificați. Fie că relocezi pentru studii la universitățile prestigioase din Paris sau Lyon, începi un nou loc de muncă în sectorul tech din Toulouse sau pur și simplu trimiți colete către prieteni și familie, avem transportatori pentru toate nevoile. Rețeaua noastră acoperă întreaga Franță: Île-de-France cu Paris și zonele înconjurătoare, regiunea Auvergne-Rhône-Alpes cu Lyon și Grenoble, sudul cu Marseille, Nice și Montpellier, vestul cu Bordeaux și Nantes, și estul cu Strasbourg și Mulhouse. Transportatorii din platforma noastră oferă servicii complete: colete de toate dimensiunile, transport mobilă pentru mutări complete, călătorii confortabile cu microbuze moderne și transport documente importante cu livrare rapidă. Postezi cererea gratuit, primești oferte personalizate bazate pe detaliile tale specifice, compari transparent prețurile și recenziile, apoi comunici direct cu transportatorul pentru finalizarea aranjamentelor.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete sigur', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -162,14 +162,14 @@ const routesData: Record<string, {
       { q: 'Pot trimite documente oficiale?', a: 'Da, mulți transportatori oferă servicii pentru documente importante. Discută detaliile când primești oferte.' },
     ],
   },
-  'romania-uk': {
-    country: 'Marea Britanie',
+  'romania-anglia': {
+    country: 'Anglia',
     flag: 'gb',
-    title: 'Transport România - UK | Colete, Mobilă, Persoane',
-    metaDescription: 'Găsește transportatori pentru ruta România - UK. Londra, Manchester, Birmingham. Platformă gratuită.',
-    heroTitle: 'Transport România - Marea Britanie',
-    heroSubtitle: 'Găsește transportatori pentru ruta România - UK',
-    intro: 'Marea Britanie rămâne o destinație importantă pentru românii din diaspora. Platforma noastră te conectează cu transportatori cu experiență post-Brexit.',
+    title: 'Transport România - Anglia | Colete, Mobilă, Persoane',
+    metaDescription: 'Găsește transportatori pentru ruta România - Anglia. Londra, Manchester, Birmingham. Platformă gratuită.',
+    heroTitle: 'Transport România - Anglia',
+    heroSubtitle: 'Găsește transportatori pentru ruta România - Anglia',
+    intro: 'Anglia rămâne cea mai populară destinație din Regatul Unit pentru românii din diaspora, cu peste 350.000 de români stabiliți în Londra, Manchester, Birmingham și alte orașe engleze. Post-Brexit, transportul între România și Anglia necesită transportatori cu experiență în procedurile vamale și documentația necesară. Platforma Curierul Perfect te conectează cu profesioniști care înțeleg noile reglementări și pot asigura un transport fără probleme. Transportatorii noștri acoperă întreaga Anglie: Londra și zonele din jur (Greater London, Essex, Kent, Surrey), orașe majore precum Manchester, Birmingham, Leeds, Liverpool, Bristol, Newcastle, Sheffield și Nottingham, plus regiunile de sud (Southampton, Brighton), vest (Bristol, Plymouth), est (Norwich, Cambridge) și nord (Newcastle, Sunderland). Serviciile disponibile includ: transport colete de toate dimensiunile cu tracking complet, mutări rezidențiale complete cu manipulare profesională a mobilei, călătorii regulate cu microbuze moderne și confortabile, transport autoturisme cu asigurare completă. Procesul este simplu și transparent: postezi gratuit cererea ta cu toate detaliile necesare, transportatorii cu experiență post-Brexit îți trimit oferte personalizate, compari prețurile, serviciile și recenziile altor clienți, apoi comunici direct pentru a stabili programul de ridicare și livrare.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete toate dimensiunile', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -179,7 +179,7 @@ const routesData: Record<string, {
     benefits: [
       'Platformă gratuită de conectare',
       'Transportatori cu experiență post-Brexit',
-      'Acoperire completă UK',
+      'Acoperire completă Anglia',
       'Recenzii reale',
       'Comunicare directă',
       'Tu alegi transportatorul',
@@ -189,8 +189,8 @@ const routesData: Record<string, {
       { ro: 'Cluj-Napoca', eu: 'Manchester' },
       { ro: 'Timișoara', eu: 'Birmingham' },
       { ro: 'Iași', eu: 'Leeds' },
-      { ro: 'Brașov', eu: 'Glasgow' },
-      { ro: 'Constanța', eu: 'Edinburgh' },
+      { ro: 'Brașov', eu: 'Liverpool' },
+      { ro: 'Constanța', eu: 'Bristol' },
     ],
     faq: [
       { q: 'Se aplică taxe vamale după Brexit?', a: 'Depinde de tipul și valoarea transportului. Transportatorii te pot consilia când discutați detaliile.' },
@@ -204,7 +204,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Austria. Viena, Graz, Salzburg. Platformă gratuită.',
     heroTitle: 'Transport România - Austria',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Austria',
-    intro: 'Austria, cu Viena la doar câteva ore de România, este o destinație foarte accesibilă. Platforma noastră te ajută să găsești transportatori pentru această rută.',
+    intro: 'Austria, cu Viena la doar câteva ore de România, este una dintre cele mai accesibile destinații din Vest. Proximitatea geografică face ca transportul să fie rapid și eficient, cu mulți transportatori efectuând curse regulate chiar și de mai multe ori pe săptămână. Platforma Curierul Perfect te conectează cu profesioniști care operează constant pe ruta România-Austria. Comunitatea românească din Austria este în creștere, concentrată în special în Viena, Graz, Salzburg, Linz și Innsbruck, iar nevoile de transport reflectă acest trend. De la transportul de colete personale și cadouri pentru familie, la mutări complete pentru cei care se mută permanent în Austria pentru job-uri sau studii, platforma noastră oferă soluții complete. Distanța relativ scurtă permite transportatori să ofere prețuri competitive și timpi de livrare rapizi, adesea în 1-2 zile. Transportatorii verificați din rețeaua noastră oferă servicii diverse: colete express pentru livrare rapidă, transport mobilă cu împachetare profesională, transport de marfă comercială pentru business-uri mici și mijlocii, călătorii regulate pentru persoane. Procesul este simplu: postezi cererea gratuit, descrii ce trebuie transportat și când, primești oferte rapid de la transportatori cu recenzii excelente, alegi în funcție de preț, disponibilitate și rating, apoi comunici direct pentru detalii finale.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -239,7 +239,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Belgia. Bruxelles, Antwerp, Gent. Platformă gratuită.',
     heroTitle: 'Transport România - Belgia',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Belgia',
-    intro: 'Belgia, cu comunitatea românească în creștere, devine o destinație tot mai solicitată. Platforma noastră te conectează cu transportatori pentru această rută.',
+    intro: 'Belgia, cu comunitatea românească în creștere și oportunități excelente în sectoare diverse, devine o destinație tot mai solicitată. Situată în inima Europei, Belgia oferă acces facil către toată Europa de Vest, iar transportul din România este bine dezvoltat datorită conexiunilor rutiere excelente. Platforma Curierul Perfect facilitează conectarea cu transportatori profesioniști pentru ruta România-Belgia. Cele trei regiuni ale Belgiei - Flandra, Valonia și Bruxelles-Capital - sunt acoperite complet de transportatorii noștri. Fie că trimiti colete în Bruxelles (capitala EU și sediul multor instituții internaționale), Antwerp (portul major și centru economic), Gent (oraș universitar), Liège (centru industrial), sau Bruges (destinație turistică), avem transportatori disponibili. Serviciile acoperă o gamă largă: colete și pachete de orice dimensiune, transport mobilă pentru relocari complete, călătorii regulate cu microbuze confortabile, transport documente importante cu tracking. Multe dintre transportatorii noștri vorbesc româna, facilitand comunicarea și înțelegerea nevoilor tale specifice. Postezi cererea gratuit, specifiți exact ce ai nevoie transportat, primești oferte competitive de la transportatori cu experiență, compari prețurile și recenziile, apoi alegi și comunici direct pentru finalizare.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -274,7 +274,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Olanda. Amsterdam, Rotterdam, Haga. Platformă gratuită.',
     heroTitle: 'Transport România - Olanda',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Olanda',
-    intro: 'Olanda atrage tot mai mulți români datorită oportunităților economice. Platforma noastră facilitează găsirea transportatorilor pentru această rută.',
+    intro: 'Olanda atrage tot mai mulți români datorită oportunităților economice excelente, sistemului social avansat și calității vieții ridicate. Cu peste 100.000 de români stabiliți în orașe precum Amsterdam, Rotterdam, Haga, Utrecht și Eindhoven, transportul între România și Olanda este în continuă creștere. Platforma Curierul Perfect simplifică procesul de găsire a transportatorilor profesioniști care operează pe această rută importantă. Olanda este cunoscută pentru economia deschisă și locuri de muncă în agricultură, logistică, IT și servicii, atrăgând români pentru muncă sezonieră sau permanentă. Transportatorii din rețeaua noastră acoperă toate provinciile: Noord-Holland cu Amsterdam, Zuid-Holland cu Rotterdam și Haga, Utrecht, Noord-Brabant cu Eindhoven, Limburg cu Maastricht, Gelderland cu Arnhem și restul țării. Serviciile disponibile includ: colete personale și comerciale cu tracking complet, transport mobilă pentru relocari rezidențiale, călătorii regulate cu plecare din mai multe orașe românești, transport marfă pentru afaceri care exportă sau importă. Mulți transportatori oferă și servicii de împachetare profesională și asigurare pentru bunuri valoroase. Procesul: postezi cererea gratuit cu toate detaliile, transportatorii experimențati pe ruta România-Olanda îți trimit oferte, compari prețuri și servicii, alegi și comunici direct pentru programare.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -309,7 +309,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Scoția. Edinburgh, Glasgow, Aberdeen. Platformă gratuită.',
     heroTitle: 'Transport România - Scoția',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Scoția',
-    intro: 'Scoția, cu peisaje spectaculoase și comunitate românească în creștere, este o destinație importantă. Platforma noastră te conectează cu transportatori pentru această rută.',
+    intro: 'Scoția, cu peisaje spectaculoase, universități prestigioase și oportunități în sectoare diverse, are o comunitate românească în creștere constantă. De la Edinburgh (capitala culturală și financiară) la Glasgow (cel mai mare city), Aberdeen (centrul industriei petroliere), și Dundee (city of design), românii găsesc oportunități excelente. Platforma Curierul Perfect te conectează cu transportatori specializati pe ruta România-Scoția care înțeleg procedurile post-Brexit. Transportul spre Scoția necesită transportatori cu experiență în trecerea graniqueței și documentația vamală necesară după ieșirea UK din UE. Transportatorii noștri sunt la zi cu toate reglementările și pot asigura un transport fără întârzieri sau probleme birocratice. Acoperim toate zonele Scoției: Lowlands cu Edinburgh și Glasgow, Highlands cu Inverness, nord-estul cu Aberdeen și Dundee, plus insulele Orkney și Shetland prin conexiuni cu ferry. Serviciile includ: colete de toate dimensiunile, transport mobilă pentru relocari complete, călătorii confortabile cu microbuze moderne, transport autoturisme cu asigurare full. Mulți români se mută în Scoția pentru studii (universitățile din Edinburgh, Glasgow, St Andrews sunt top-ranked) sau pentru joburi în IT, healthcare, hospitality. Postezi cererea gratuit, primești oferte de la transportatori cu experiență post-Brexit, compari și alegi based on recenzii și prețuri.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete sigur', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -345,7 +345,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Țara Galilor. Cardiff, Swansea, Newport. Platformă gratuită.',
     heroTitle: 'Transport România - Țara Galilor',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Țara Galilor',
-    intro: 'Țara Galilor oferă oportunități excelente pentru români în diferite domenii. Platforma noastră te ajută să găsești transportatori verificați pentru această rută.',
+    intro: 'Țara Galilor oferă oportunități excelente pentru români în domenii variate - de la agricultură și manufacturing la sănătate și IT. Cu orașe dinamice precum Cardiff (capitala și centrul economic), Swansea (al doilea oraș ca mărime), Newport (centru industrial) și Bangor (oraș universitar), Țara Galilor atrage tot mai mulți români. Platforma Curierul Perfect te ajută să găsești transportatori verificați pentru ruta România-Țara Galilor, care înțeleg procedurile post-Brexit specifice. Deși parte din UK, Țara Galilor are identitate distinctă și comunitate primitoră. Transportatorii din rețeaua noastră acoperă toate județele galeze: de la sudul industrializat (Cardiff, Newport, Swansea, Valleys) la vestul scenic (Pembrokeshire, Carmarthenshire), nordul (Gwynedd, Anglesey) și centrul rural (Powys, Ceredigion). Fie că te muți pentru loc de muncă în sectorul medical (NHS Wales angajează activ români), studii la universități din Cardiff sau Bangor, sau muncă în agricultură și fermele din Carmarthenshire, avem transportatori pentru toate nevoile. Serviciile disponibile: colete de orice dimensiune, transport mobilă pentru relocari complete, călătorii regulate cu microbuze, transport documente importante. Procesul este transparent: postezi gratuit cererea, primești oferte de la transportatori cu experiență pe rute britanice, compari prețurile și recenziile, alegi și stabilești detaliile direct cu transportatorul.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete toate dimensiunile', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -380,7 +380,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Irlanda de Nord. Belfast, Derry, Newry. Platformă gratuită.',
     heroTitle: 'Transport România - Irlanda de Nord',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Irlanda de Nord',
-    intro: 'Irlanda de Nord, parte din Regatul Unit cu statut special post-Brexit, este o destinație în creștere pentru români. Platforma noastră te conectează cu transportatori pentru această rută.',
+    intro: 'Irlanda de Nord, parte din Regatul Unit cu statut special post-Brexit datorită Protocolului Irlandei de Nord, este o destinație în creștere pentru români. Cu Belfast (capitala vibrantă și centrul economic), Derry/Londonderry (al doilea oraș), Newry, Lisburn, Armagh și Bangor, Irlanda de Nord oferă locuri de muncă în IT, sănătate, producție și servicii. Platforma Curierul Perfect te conectează cu transportatori care înțeleg regulile specifice aplicate Irlandei de Nord, diferite față de restul UK. Protocolul Irlandei de Nord înseamnă că există reguli vamale speciale între Marea Britanie și Irlanda de Nord, iar transportatorii noștri sunt familiarizați cu aceste proceduri pentru a asigura un transport fără probleme. Acoperim întreg teritoriul nord-irlandez: zona Belfast Metropolitan cu Belfast, Lisburn, Newtownabbey, regiunea de nord-vest cu Derry și Coleraine, nordul cu Ballymena și Antrim, estul cu Bangor și Downpatrick, sudul cu Newry, Armagh și Enniskillen. Serviciile disponibile: colete și pachete, transport mobilă pentru relocari, călătorii regulate, marfă comercială. Belfast este în dezvoltare rapidă cu sectorul tech în creștere, atrăgând români cu competențe IT. Postezi cererea gratuit, primești oferte de la transportatori cu cunoștințe despre reglementările specifice, compari și alegi oferta potrivită.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete sigur', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -415,7 +415,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Moldova. Chișinău, Bălți, Cahul. Platformă gratuită.',
     heroTitle: 'Transport România - Moldova',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Moldova',
-    intro: 'Moldova, țara vecină cu legături puternice cu România, beneficiază de o rețea extinsă de transport. Platforma noastră te conectează cu transportatori pentru această rută frecventă.',
+    intro: 'Moldova, țara vecină cu legături istorice, culturale și lingvistice puternice cu România, beneficiază de o rețea extinsă de transport cu curse extrem de frecvente. Distanța scurtă și lipsa barierelor lingvistice fac ca transportul să fie simplu și rapid. Platforma Curierul Perfect te conectează cu transportatori care efectuează curse zilnice între România și Moldova. Principalele rute includ: București-Chișinău (cea mai frecventată), Iași-Chișinău sau Bălți (extrem de scurtă, sub 2 ore), Galați-Cahul, Suceava-Edineț, Bacău-Soroca. Transportatorii acoperă întreaga Republikă Moldova: Chișinău (capitala și cel mai mare oraș), Bălți (nordul țării), Cahul și Cantemir (sudul Moldovei), Soroca și Edineț (nord-estul), Ungheni (granița cu România), Orhei, Hâncești, Comrat (Găgăuzia). Traficul între cele două țări este intens datorită familiilor cu membri în ambele țări, studenților moldoveni care studiază în România și schimburilor comerciale. Serviciile includ: colete personale frecvente (mulți trimit pachete săptămânal), transport mobilă, călătorii zilnice cu microbuze, produse alimentare proaspete (fructe, legume, specialități locale). Procedurile vamale sunt simplificate pentru cetățenii români și moldoveni. Postezi cererea, primești oferte rapid (adesea în câteva ore), alegi transportatorul.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete frecvent', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -451,7 +451,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Irlanda. Dublin, Cork, Galway. Platformă gratuită.',
     heroTitle: 'Transport România - Irlanda',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Irlanda',
-    intro: 'Irlanda continuă să fie o destinație populară pentru români, cu oportunități excelente de muncă. Platforma noastră te conectează cu transportatori pentru această rută.',
+    intro: 'Irlanda continuă să fie o destinație extrem de populară pentru români, cu oportunități excelente de muncă în tech, healthcare, construcții, hospitality și alte sectoare. Economia irlandeză puternică, salariile competitive și mediul multicultural atrag anual mii de români. Platforma Curierul Perfect facilitează conectarea cu transportatori profesioniști pe ruta România-Irlanda. Dublin (capitala și hub-ul tech european - sediul Google, Facebook, Amazon), Cork (al doilea city, centru pharma), Galway (oraș universitar pe coasta de vest), Limerick (manufacturing și tech), Waterford (sud-estul), și Drogheda (nordul) găzduiesc comunități românești semnificative. Transportatorii din rețeaua noastră acoperă toate provinciile irlandeze: Leinster (Dublin, Drogheda, Dundalk), Munster (Cork, Limerick, Waterford), Connacht (Galway, Sligo), Ulster (Donegal - partea din Republic of Ireland). Serviciile disponibile sunt complete: colete personale și comerciale cu tracking, transport mobilă pentru mutări rezidențiale, călătorii regulate confortabile, transport autoturisme. Mulți români se mută permanent în Irlanda pentru cariere long-term sau relocari familiale, necesitând transportatori de încredere. Postezi cererea gratuit cu toate detaliile, primești oferte de la transportatori cu experiență pe ruta România-Irlanda, compari prețuri și servicii, alegi și comunici direct.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete sigur', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -486,7 +486,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Norvegia. Oslo, Bergen, Trondheim. Platformă gratuită.',
     heroTitle: 'Transport România - Norvegia',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Norvegia',
-    intro: 'Norvegia, cu salariile atractive și peisaje spectaculoase, atrage mulți români. Platforma noastră facilitează găsirea transportatorilor pentru această rută nordică.',
+    intro: 'Norvegia, cu salariile dintre cele mai mari din Europa și peisaje spectaculoase, atrage mulți români pentru oportunități de muncă în construcții, oil & gas, hospitality, healthcare și alte sectoare. Standard de viață ridicat și sistemul social avansat fac Norvegia o destinație premium. Platforma Curierul Perfect te conectează cu transportatori specializați pe rutele nordice care înțeleg particularitățile transportului spre Norvegia. Distanța lungă și condițiile meteo specifice nordului (mai ales iarna) necesită transportatori experimentati cu vehicule echipate corespunzător. Transportatorii noștri acoperă toate regiunile Norvegiei: Oslo și Viken (sud-estul, zona capitală), Vestland cu Bergen (coasta de vest), Trøndelag cu Trondheim (centrul), Rogaland cu Stavanger (sud-vestul, zona petroului), Nordland, Troms și Finnmark (nordul extrem). Serviciile includ: colete de toate dimensiunile, transport mobilă pentru relocari, călătorii regulate (adesea cu opriri intermediare), transport echipamente speciale pentru lucrătorii din construcții sau industry. Mulți români lucrează sezonier în Norvegia, necesitând transport de bagaje și echipamente. Transportatorii pot oferi și stocare temporară pentru bunuri. Timpii de livrare variază între 3-5 zile depending on destinație și condiții meteo. Postezi cererea cu detalii despre destinație și tip transport, primești oferte de la transportatori cu experiență nordică, compari și alegi.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -521,7 +521,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Suedia. Stockholm, Göteborg, Malmö. Platformă gratuită.',
     heroTitle: 'Transport România - Suedia',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Suedia',
-    intro: 'Suedia oferă oportunități excelente și un stil de viață de calitate pentru români. Platforma noastră te conectează cu transportatori pentru această rută nordică.',
+    intro: 'Suedia oferă oportunități excelente și un stil de viață de calitate superioară pentru români, cu echilibru work-life remarcabil, sistem social avansat și societate multiculturală deschisă. De la Stockholm (capitala tech și financială - Spotify, Klarna, Ericsson au sediile aici) la Göteborg (al doilea city, centrul auto - Volvo), Malmö (sud, aproape de Danemarca via podul Oresund), Uppsala (oraș universitar prestigios), Linköping (și Örebro, centro importante, românii găsesc comunități și job-uri. Platforma Curierul Perfect te conectează cu transportatori experientati pe ruta România-Suedia care navighetează distanța lungă și condițiile nordice eficient. Transportatorii acoperă toate regiunile: Svealand (Stockholm, Uppsala, Västmanland), Götaland (Göteborg, Malmö, Linköping), Norrland (nordul vast cu cites precum Umeå și Luleå). Serviciile disponibile: colete și pachete cu tracking, transport mobilă pentru relocari complete, călătorii regulate confortabile, transport documente. Suedia atrage români pentru joburi în IT, healthcare (sjuksköterskor - asistente medicale sunt căutate), construcții, manufacturingautomotive. Mulți transportatori oferă servicii de împachetare și protecție suplimentară pentru transportul lung. Timpii de livrare: 2-4 zile depending on rută exactă. Postezi gratuit cererea detaliată, primești oferte de la transportatori cu experiență nordică, compari prețurile și recenziile, alegi și stabilești programul.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete sigur', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -556,7 +556,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Danemarca. Copenhaga, Aarhus, Odense. Platformă gratuită.',
     heroTitle: 'Transport România - Danemarca',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Danemarca',
-    intro: 'Danemarca, cunoscută pentru calitatea vieții ridicate, atrage tot mai mulți români. Platforma noastră te ajută să găsești transportatori pentru această rută.',
+    intro: 'Danemarca, cunoscută pentru calitatea vieții ridicate, sistemul hygge, și oportunități economice excelente, atrage tot mai mulți români. Cu Copenhaga (capitala cosmopolită și hub tech), Aarhus (al doilea city, centru universitar și cultural), Odense (orașul lui Hans Christian Andersen), Aalborg (nordul), și Esbjerg (coasta de vest, port major), Danemarca oferă diversitate de oportunități. Platforma Curierul Perfect facilitează conectarea cu transportatori verificați pe ruta România-Danemarca. Transportatorii din rețeaua noastră cunosc bine rutele prin Germania spre Danemarca și pot asigura transport efficient via autostrada sau ferry. Acoperim toate regiunile daneze: Hovedstaden (Copenhaga și area metropolită), Midtjylland (Aarhus, Silkeborg, centrul țării), Nordjylland (Aalborg, northern peninsula), Syddanmark (Odense, Esbjerg, sudul), Sjælland (insula cu Roskilde și Køge). Serviciile disponibile: colete personale și comerciale, transport mobilă pentru mutări, călătorii regulate, marfă business. Danemarca are cerere de lucrători în healthcare, construcții, agricultură, IT, atrăgând români pentru work sezonier sau permanent. Mulți transportatori fac curse săptămânale, asigurând disponibilitate constantă. Postezi cererea gratuit cu detalii despre ce trebuie transportat, primești oferte competitive, compari și alegi transportatorul potrivit.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -591,7 +591,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Finlanda. Helsinki, Tampere, Turku. Platformă gratuită.',
     heroTitle: 'Transport România - Finlanda',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Finlanda',
-    intro: 'Finlanda, cu sistemul educațional de top și oportunități IT, atrage tot mai mulți români. Platforma noastră facilitează găsirea transportatorilor pentru această rută nordică.',
+    intro: 'Finlanda, cu sistemul educațional de top mondial, industria tech puternică (Nokia, rovio - Angry Birds, Supercell), și calitatea vieții excepțională, atrage tot mai mulți români, special în domenii IT, engineering, healthcare și educație. Helsinki (capitala și centrul tech), Tampere (al doilea city, hub industrial și IT), Turku (coasta de sud-vest, cel mai vechi city), Oulu (nordul, centru tech și universitar), Jyväskylă și Lahti oferă oportunități diverse. Platforma Curierul Perfect te conectează cu transportatori specializati pe rutele nordice spre Finlanda, cea mai nordică destinație din platforma noastră. Distanța lungă și condițiile extreme de iarnă (temperaturi foarte scăzute, zăpadă abundentă) necesită transportatori cu vehicule echipate special și experiență vastă. Transportatorii acoperă toate regiunile: Uusimaa (Helsinki și south coast), Pirkanmaa (Tampere), Varsinais-Suomi (Turku), Pohjois-Pohjanmaa (Oulu, nordul), Laponia (extremul nord cu Rovaniemi). Serviciile includ: colete sigure, transport mobilă, călătorii (rare dar disponibile), transport echipamente electronice (Finlanda importă tech). Mulți români merg pentru jobs în IT (Helsinki are startups și companii mari), nursing (sistem healthcare puternic), engineering. Timpii de livrare: 3-5 zile sau mai mult depending on destinație nordică și season. Postezi cererea, primești oferte de la transportatori cu experiență finlandeză, alegi based on recenzii.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete sigur', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -626,7 +626,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Grecia. Atena, Salonic, Patras. Platformă gratuită.',
     heroTitle: 'Transport România - Grecia',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Grecia',
-    intro: 'Grecia, țara vecină cu legături istorice și culturale strânse, este o destinație populară. Platforma noastră te conectează cu transportatori pentru această rută.',
+    intro: 'Grecia, țara vecină cu legături istorice și culturale strânse cu România, este o destinație accesibilă și populară. Distanța relativ scurtă (Constanța-Salonic este doar câteva ore) face ca transportul să fie rapid și eficient. Platforma Curierul Perfect te conectează cu transportatori verificați pe ruta România-Grecia. Atena (capitala și metropola cu peste 3 milioane locuitori), Salonic (al doilea city, centrul nordului), Patras (portul major spre Italia), Heraklion (Creta), Larissa și Volos (Tesalia) sunt principale destinații. Transportatorii din rețeaua noastră acoperă întreaga Grecie continentală și pot asigura conexiuni spre insulele majore (Creta, Rhodos, Corfu, Mykonos, Santorini prin ferry ports). Serviciile disponibile: colete frecvente (mulți greci de origine română sau români în Grecia trimit regular), transport mobilă pentru relocari, călătorii confortabile, marfă comercială. Grecia este populară pentru turism dar și pentru relocari permanente datorită climei mediteraneene, costului de viață relativ scăzut, și stilului de viață relaxat. Mulți români deschid businesses în turism sau se mută pentru pensie. Timpii de livrare: 1-3 zile depending on destinație exactă. Postezi cererea gratuit, primești oferte rapid de la transportatori cu curse regulate, compari și alegi.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete frecvent', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -661,7 +661,7 @@ const routesData: Record<string, {
     metaDescription: 'Găsește transportatori pentru ruta România - Portugalia. Lisabona, Porto, Braga. Platformă gratuită.',
     heroTitle: 'Transport România - Portugalia',
     heroSubtitle: 'Găsește transportatori pentru ruta România - Portugalia',
-    intro: 'Portugalia, cu climă blândă și oportunități în creștere, devine tot mai populară printre români. Platforma noastră te ajută să găsești transportatori pentru această rută.',
+    intro: 'Portugalia, cu climă blândă, costuri de viață accesibile comparativ cu restul Europei de Vest, și oportunități în creștere, devine tot mai populară printre români. De la Lisabona (capitala vibrantă și centrul tech - Lisbon Web Summit, startups), Porto (nordul, centrul industrial și cultural, vinuri Port), Braga (city istoric și universitar), la Faro și Algarve (sudul turistic), românii găsesc comunități prietenoase. Platforma Curierul Perfect te ajută să găsești transportatori pentru ruta România-Portugalia, una dintre cele mai lungi din platforma noastră. Distanța considerabilă necesită transportatori experiențati pe rute lungi europene, cu vehicule în stare excellentă și planificare atentă. Transportatorii acoperă toate regiunile portugheze: Norte (Porto, Braga, Guimarães, Vila Real), Centro (Coimbra, Aveiro, Viseu), Lisboa e Vale do Tejo (Lisabona, Setúbal), Alentejo (interior sudul), Algarve (coasta sudică), plus insulele Madeira și Azore prin ferry connections. Serviciile disponibile: colete de orice dimensiune, transport mobilă pentru relocari complete (mulți români se mută permanent), călătorii pe distanță lungă cu opriri, transport autoturisme. Portugalia atrage pentru lifestyle relaxat, comunitate expat mare, clima plăcută tot anul. Timpii de livrare: 3-5 zile depending on rută și trafic. Postezi cererea detaliată, primești oferte de la transportatori cu experiență pe rute lungi, compari și alegi.',
     services: [
       { name: 'Colete & Pachete', description: 'Transport colete', icon: 'colete' },
       { name: 'Transport Mobilă', description: 'Găsește transportatori pentru mutări', icon: 'mobila' },
@@ -711,23 +711,142 @@ export async function generateMetadata({ params }: { params: Promise<{ ruta: str
     };
   }
 
+  // Route-specific keywords
+  const routeKeywords: Record<string, string[]> = {
+    'romania-germania': [
+      'transport România Germania',
+      'curier România Germania',
+      'transport colete România Germania',
+      'mutare România Germania',
+      'transport mobilă România Germania',
+      'transport persoane România Germania',
+      'microbuz România Germania',
+      'transport Berlin',
+      'transport München',
+      'transport Frankfurt',
+      'transport Hamburg',
+      'colete București Berlin',
+      'colete Cluj München',
+      'transport România Berlin',
+      'transport România München',
+    ],
+    'romania-italia': [
+      'transport România Italia',
+      'curier România Italia',
+      'transport colete România Italia',
+      'mutare România Italia',
+      'transport mobilă România Italia',
+      'transport persoane România Italia',
+      'microbuz România Italia',
+      'transport Roma',
+      'transport Milano',
+      'transport Torino',
+      'colete București Roma',
+      'colete Cluj Milano',
+      'transport România Roma',
+      'transport România Milano',
+    ],
+    'romania-spania': [
+      'transport România Spania',
+      'curier România Spania',
+      'transport colete România Spania',
+      'mutare România Spania',
+      'transport mobilă România Spania',
+      'transport persoane România Spania',
+      'microbuz România Spania',
+      'transport Madrid',
+      'transport Barcelona',
+      'transport Valencia',
+      'colete București Madrid',
+      'transport România Madrid',
+      'transport România Barcelona',
+    ],
+    'romania-uk': [
+      'transport România UK',
+      'transport România Anglia',
+      'curier România UK',
+      'transport colete România UK',
+      'mutare România Anglia',
+      'transport mobilă România UK',
+      'transport persoane România Londra',
+      'microbuz România UK',
+      'transport Londra',
+      'colete București Londra',
+      'transport România Londra',
+      'transport România Manchester',
+    ],
+    'romania-franta': [
+      'transport România Franța',
+      'curier România Franța',
+      'transport colete România Franța',
+      'mutare România Franța',
+      'transport mobilă România Franța',
+      'transport persoane România Franța',
+      'microbuz România Franța',
+      'transport Paris',
+      'transport Lyon',
+      'colete București Paris',
+      'transport România Paris',
+    ],
+    'romania-austria': [
+      'transport România Austria',
+      'curier România Austria',
+      'transport colete România Austria',
+      'mutare România Austria',
+      'transport mobilă România Austria',
+      'transport persoane România Austria',
+      'microbuz România Austria',
+      'transport Viena',
+      'colete București Viena',
+      'transport România Viena',
+    ],
+  };
+
+  const keywords = routeKeywords[ruta] || [
+    `transport România ${data.country}`,
+    `curier România ${data.country}`,
+    `transport colete România ${data.country}`,
+  ];
+
   return {
     title: data.title + ' | Curierul Perfect',
     description: data.metaDescription,
+    keywords,
     openGraph: {
       title: data.title,
       description: data.metaDescription,
       type: 'website',
       locale: 'ro_RO',
+      url: `https://curierulperfect.com/transport/${ruta}`,
       siteName: 'Curierul Perfect',
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: data.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: data.title,
       description: data.metaDescription,
+      images: ['/og-image.png'],
     },
     alternates: {
       canonical: `https://curierulperfect.com/transport/${ruta}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
   };
 }
@@ -740,8 +859,56 @@ export default async function TransportRoutePage({ params }: { params: Promise<{
     notFound();
   }
 
+  // Structured data for route
+  const routeSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: data.heroTitle,
+    description: data.metaDescription,
+    provider: {
+      '@type': 'Organization',
+      name: 'Curierul Perfect',
+      url: 'https://curierulperfect.com',
+    },
+    areaServed: [
+      {
+        '@type': 'Place',
+        name: 'România',
+      },
+      {
+        '@type': 'Place',
+        name: data.country,
+      },
+    ],
+    offers: {
+      '@type': 'AggregateOffer',
+      availability: 'https://schema.org/InStock',
+    },
+  };
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: data.faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-slate-950">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(routeSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       {/* Hero Section */}
       <section className="relative bg-linear-to-b from-slate-900 to-slate-950 py-16 sm:py-24">
         <div className="absolute inset-0 bg-[url('/img/grid.svg')] opacity-5" />

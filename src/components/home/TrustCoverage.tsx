@@ -16,7 +16,7 @@ const countryToRouteMap: Record<string, string> = {
   'IT': 'romania-italia',
   'ES': 'romania-spania',
   'FR': 'romania-franta',
-  'GB': 'romania-uk',
+  'GB': 'romania-anglia',
   'AT': 'romania-austria',
   'BE': 'romania-belgia',
   'NL': 'romania-olanda',

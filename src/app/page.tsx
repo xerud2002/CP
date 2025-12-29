@@ -70,9 +70,6 @@ export default function Home() {
         <HowItWorksSection />
         <BenefitsSection />
         <ProcessTimeline />
-        <TrustBadges />
-        <BecomeCourierCTA />
-        <TrustCoverage />
         
         {/* Floating Elements */}
         <WhatsAppButton />

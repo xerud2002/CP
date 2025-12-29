@@ -80,7 +80,7 @@ export default function HeroSection() {
               <div className="relative grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-3">
                 {/* Colete */}
                 <Link 
-                  href="/comanda?serviciu=colete"
+                  href="/servicii/colete"
                   className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-blue-500/30 hover:border-blue-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
@@ -95,7 +95,7 @@ export default function HeroSection() {
 
                 {/* Plicuri */}
                 <Link 
-                  href="/comanda?serviciu=plicuri"
+                  href="/servicii/plicuri"
                   className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-yellow-500/30 hover:border-yellow-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-yellow-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
@@ -110,7 +110,7 @@ export default function HeroSection() {
 
                 {/* Transport Persoane */}
                 <Link 
-                  href="/comanda?serviciu=persoane"
+                  href="/servicii/persoane"
                   className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-rose-500/30 hover:border-rose-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-rose-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
@@ -125,7 +125,7 @@ export default function HeroSection() {
 
                 {/* Electronice */}
                 <Link 
-                  href="/comanda?serviciu=electronice"
+                  href="/servicii/electronice"
                   className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-purple-500/30 hover:border-purple-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
@@ -140,7 +140,7 @@ export default function HeroSection() {
 
                 {/* Animale */}
                 <Link 
-                  href="/comanda?serviciu=animale"
+                  href="/servicii/animale"
                   className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-pink-500/30 hover:border-pink-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-pink-500/20 to-rose-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
@@ -155,7 +155,7 @@ export default function HeroSection() {
 
                 {/* Transport Platformă */}
                 <Link 
-                  href="/comanda?serviciu=platforma"
+                  href="/servicii/platforma"
                   className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-red-500/30 hover:border-red-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-red-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
@@ -170,7 +170,7 @@ export default function HeroSection() {
 
                 {/* Tractări Auto */}
                 <Link 
-                  href="/comanda?serviciu=tractari"
+                  href="/servicii/tractari"
                   className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-orange-500/30 hover:border-orange-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 to-red-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
@@ -185,7 +185,7 @@ export default function HeroSection() {
 
                 {/* Mutări Mobilă */}
                 <Link 
-                  href="/comanda?serviciu=mobila"
+                  href="/servicii/mobila"
                   className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-amber-500/30 hover:border-amber-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-amber-500/20 to-orange-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
@@ -200,7 +200,7 @@ export default function HeroSection() {
 
                 {/* Transport Paleți */}
                 <Link 
-                  href="/comanda?serviciu=paleti"
+                  href="/servicii/paleti"
                   className="group relative bg-slate-800/80 backdrop-blur-xl rounded-lg sm:rounded-xl border border-orange-500/30 hover:border-orange-400/50 p-2 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 to-amber-500/20 opacity-0 group-hover:opacity-100 rounded-lg sm:rounded-xl transition-opacity duration-300"></div>
