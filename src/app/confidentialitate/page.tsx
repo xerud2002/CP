@@ -194,8 +194,8 @@ export default function ConfidentialitatePage() {
             <p className="text-gray-300">
               <strong className="text-white">Email Privacy:</strong>{' '}
               <a href="mailto:privacy@curierulperfect.com" className="text-orange-400">privacy@curierulperfect.com</a><br/>
-              <strong className="text-white">Suport General:</strong>{' '}
-              <a href="mailto:support@curierulperfect.com" className="text-orange-400">support@curierulperfect.com</a><br/>
+              <strong className="text-white">Contact General:</strong>{' '}
+              <a href="mailto:contact@curierulperfect.com" className="text-orange-400">contact@curierulperfect.com</a><br/>
               <strong className="text-white">ANSPDCP:</strong>{' '}
               <a href="https://www.dataprotection.ro" target="_blank" rel="noopener noreferrer" className="text-orange-400">
                 www.dataprotection.ro
