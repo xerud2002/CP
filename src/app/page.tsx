@@ -10,8 +10,6 @@ import {
 } from '@/components/home';
 import { COMPANY_INFO, CONTACT_INFO, SOCIAL_LINKS } from '@/lib/contact';
 
-import SentryTestButton from '@/components/SentryTestButton';
-
 // Lazy load WhatsApp button - not critical for initial render
 const WhatsAppButton = dynamic(() => import('@/components/ui/WhatsAppButton'), {
   ssr: false,
