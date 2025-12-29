@@ -13,6 +13,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Verificare variabile de mediu
+    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
+      console.error('Missing SMTP environment variables:', {
+        hasHost: !!process.env.SMTP_HOST,
+        hasUser: !!process.env.SMTP_USER,
+        hasPassword: !!process.env.SMTP_PASSWORD,
+      });
+      return NextResponse.json(
+        { error: 'Configurație email incompletă. Contactează administratorul.' },
+        { status: 500 }
+      );
+    }
+
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -23,7 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Configurare transporter SMTP
-    const transporter = nodemailer.createTransport({
+    const smtpConfig = {
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '465'),
       secure: true, // SSL/TLS
@@ -31,7 +44,18 @@ export async function POST(request: NextRequest) {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
-    });
+    };
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('SMTP Config:', {
+        host: smtpConfig.host,
+        port: smtpConfig.port,
+        secure: smtpConfig.secure,
+        user: smtpConfig.auth.user,
+      });
+    }
+
+    const transporter = nodemailer.createTransport(smtpConfig);
 
     // Mapare subiect pentru email
     const subiecteMap: { [key: string]: string } = {
