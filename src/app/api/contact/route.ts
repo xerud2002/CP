@@ -25,16 +25,12 @@ export async function POST(request: NextRequest) {
     // Configurare transporter SMTP
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false, // Use STARTTLS
+      port: parseInt(process.env.SMTP_PORT || '465'),
+      secure: true, // SSL/TLS
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
-      tls: {
-        ciphers: 'SSLv3',
-        rejectUnauthorized: false
-      }
     });
 
     // Mapare subiect pentru email
