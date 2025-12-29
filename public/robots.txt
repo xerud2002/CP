@@ -6,8 +6,27 @@ Allow: /
 Allow: /comanda
 Allow: /servicii/
 Allow: /transport/
+Allow: /cum-functioneaza
+Allow: /faq
+Allow: /contact
 Disallow: /dashboard/
 Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+
+# Block AI crawlers (optional - protecting user content)
+User-agent: GPTBot
+Disallow: /dashboard/
+
+User-agent: CCBot
+Disallow: /dashboard/
+
+# Sitemap
+Sitemap: https://curierulperfect.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
 Disallow: /_next/static/
 Disallow: /review/
 
