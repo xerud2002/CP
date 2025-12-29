@@ -542,6 +542,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     title,
     description,
     keywords,
+    alternates: {
+      canonical: `https://curierulperfect.com/servicii/${serviciu}`,
+    },
     openGraph: {
       title,
       description,

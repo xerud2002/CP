@@ -17,7 +17,7 @@ const WhatsAppButton = dynamic(() => import('@/components/ui/WhatsAppButton'), {
 });
 
 // Structured data for SEO (static - defined outside component)
-const structuredData = {
+const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": COMPANY_INFO.name,
@@ -54,12 +54,32 @@ const structuredData = {
   }
 };
 
+// WebSite schema with search functionality - enables sitelinks searchbox in Google
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": COMPANY_INFO.name,
+  "url": COMPANY_INFO.url,
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://curierulperfect.com/comanda?serviciu={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+};
+
 export default function Home() {
   return (
     <>
       <script 
         type="application/ld+json" 
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script 
+        type="application/ld+json" 
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
       />
       <main className="min-h-screen relative bg-slate-900">
         <HeroSection />
