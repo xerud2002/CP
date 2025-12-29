@@ -38,12 +38,18 @@ export async function POST(request: NextRequest) {
     // Configurare transporter SMTP
     const smtpConfig = {
       host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '465'),
-      secure: true, // SSL/TLS
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: false, // Use STARTTLS
+      requireTLS: true,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
+      tls: {
+        rejectUnauthorized: false
+      },
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
     };
 
     if (process.env.NODE_ENV === 'development') {
