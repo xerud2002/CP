@@ -41,6 +41,12 @@ src/hooks/useChatMessages.ts                    → Shared real-time messaging
 
 **Architecture Docs**: `COURIER_MESSAGING_SYSTEM.md` (messaging restrictions), `OPTIMIZATION_SUMMARY.md` (refactoring context)
 
+## Error Monitoring
+- **Sentry**: Integrated via `@sentry/react` for production error tracking
+- **Testing**: See `SENTRY_TESTING.md` for error capture scenarios
+- Use `showError(err)` from `lib/toast.ts` for user-facing errors (auto-translated to Romanian)
+- Console logs automatically removed in production builds
+
 ## Critical Patterns
 
 ### 1. Dashboard Auth Template
@@ -116,6 +122,20 @@ useEffect(() => {
 }, [deps]);
 ```
 
+### 8. Message Threading — Order-Scoped Chats
+Each order has isolated chats per courier. Query mesaje collection:
+```tsx
+// ✅ CORRECT - Filter by all three
+const q = query(
+  collection(db, 'mesaje'),
+  where('orderId', '==', orderId),
+  where('clientId', '==', clientId),
+  where('courierId', '==', courierId),
+  orderBy('timestamp', 'asc')
+);
+// ❌ WRONG - Missing orderId filter exposes cross-order messages
+```
+
 ## Order Status Flow
 ```
 noua → in_lucru → livrata
@@ -150,12 +170,26 @@ anulata  anulata
 
 ## Commands
 ```bash
-npm run dev        # Dev server (localhost:3000)
-npm run build      # Production build
-npm run lint       # ESLint check
-npm run lighthouse # Lighthouse audit (desktop)
+npm run dev                # Dev server (localhost:3000)
+npm run build              # Production build
+npm run start              # Production server
+npm run lint               # ESLint check
+npm run lighthouse         # Lighthouse audit (desktop, auto-kills node process)
+npm run lighthouse:mobile  # Lighthouse audit (mobile preset)
 ```
 **No emulators**: Project uses live Firebase services.
+
+### Environment Variables
+Required in `.env.local`:
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+```
+Firebase config is singleton-initialized in `lib/firebase.ts` (checks `getApps().length`).
 
 ## Conventions
 - **Language**: UI text in Romanian | Code/comments/commits in English
@@ -166,6 +200,7 @@ npm run lighthouse # Lighthouse audit (desktop)
 - **Firebase SDK**: Modular v11 syntax (`import { collection } from 'firebase/firestore'`)
 - **NO PRICES**: Never display prices, currency symbols (€, $, RON), or "de la X" pricing anywhere in the UI or metadata
 - **Icons**: Use `src/components/icons/DashboardIcons.tsx` for consistent Heroicons styling
+- **Production**: `next.config.ts` removes `console.*` in production builds, optimizes CSS/images (AVIF/WebP)
 
 ## Common Mistakes
 
@@ -202,6 +237,20 @@ Located in `scripts/` folder. Requires Firebase Admin SDK setup:
 1. Download service account key from Firebase Console → save as `scripts/serviceAccountKey.json`
 2. Run with `node scripts/<script>.js`
 See `scripts/README.md` for detailed instructions.
+
+## Firebase Security
+- **Firestore Rules**: Read access for owners only (`resource.data.uid == request.auth.uid`), but rules **don't auto-filter**
+- **Couriers**: Can read ALL orders (for discovery), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
+- **Profiles**: `profil_curier` is publicly readable (for client reviews), `profil_client` is private
+- **Reviews**: Public read, write only by review author (`clientId == request.auth.uid`)
+- **Storage**: Courier verification documents in `courierDocs/{uid}/`, client profile photos in `clientPhotos/{uid}/`
+
+## Performance Optimizations
+- Images use Next.js Image component with Firebase Storage remote patterns
+- Static assets cached for 1 year (`max-age=31536000, immutable`)
+- Next.js static paths cached for 1 year
+- CSS optimized via `experimental.optimizeCss` in `next.config.ts`
+- Responsive image sizes: `[640, 750, 828, 1080, 1200]`
 
 ## Flags & Assets
 Country flags in `public/img/flag/{code}.svg` (lowercase, e.g., `ro.svg`, `de.svg`). When adding countries to `constants.ts`, add the corresponding flag SVG.
