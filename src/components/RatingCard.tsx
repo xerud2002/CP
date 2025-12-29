@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Image from 'next/image';
 import { getRatingClass, getRatingBgClass, formatRating, ratingColors } from '@/lib/rating';
 
@@ -20,7 +20,7 @@ const getRatingIcon = (rating: number): string => {
   return 'ico-turquoise.png';
 };
 
-export default function RatingCard({ 
+const RatingCard = memo(function RatingCard({ 
   rating, 
   reviewCount, 
   size = 'md',
@@ -98,4 +98,6 @@ export default function RatingCard({
       )}
     </div>
   );
-}
+});
+
+export default RatingCard;

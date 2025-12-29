@@ -1,0 +1,23 @@
+{
+  "name": "Curierul Perfect - Transport România Europa",
+  "short_name": "Curierul Perfect",
+  "description": "Platformă de transport național și european: colete, persoane, mobilă, electronice și mai mult",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#f97316",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "travel", "productivity"],
+  "lang": "ro",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

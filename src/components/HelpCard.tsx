@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 interface HelpCardProps {
   title?: string;
   subtitle?: string;
@@ -8,7 +10,7 @@ interface HelpCardProps {
   className?: string;
 }
 
-export default function HelpCard({
+const HelpCard = memo(function HelpCard({
   title = 'Ai nevoie de ajutor?',
   subtitle = 'Echipa noastră îți răspunde rapid',
   showEmail = true,
@@ -64,4 +66,6 @@ export default function HelpCard({
       </div>
     </section>
   );
-}
+});
+
+export default HelpCard;

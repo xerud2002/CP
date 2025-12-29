@@ -4,7 +4,7 @@
  */
 
 export const CONTACT_INFO = {
-  phone: '+40 XXX XXX XXX',
+  phone: '+40 788 031 262',
   email: 'contact@curierulperfect.com',
   whatsapp: '+447880312621',
   workingHours: 'Luni-Vineri, 09:00-18:00',

@@ -28,14 +28,15 @@ export function useClientOrderActions() {
     if (!confirmed) return;
 
     try {
-      console.log('🗂️ Arhivare comandă:', order.id);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🗂️ Arhivare comandă:', order.id);
+      }
       
       // Archive order
       await updateDoc(doc(db, 'comenzi', order.id), {
         archived: true,
         archivedAt: serverTimestamp()
       });
-      console.log('✅ Comandă arhivată');
 
       // Delete all messages associated with this order
       const messagesQuery = query(
@@ -44,16 +45,16 @@ export function useClientOrderActions() {
       );
       const messagesSnapshot = await getDocs(messagesQuery);
       
-      console.log(`📨 Găsite ${messagesSnapshot.size} mesaje de șters`);
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`📨 Găsite ${messagesSnapshot.size} mesaje de șters`);
+      }
       
       if (!messagesSnapshot.empty) {
         const batch = writeBatch(db);
         messagesSnapshot.docs.forEach((docSnap) => {
-          console.log('🗑️ Ștergere mesaj:', docSnap.id);
           batch.delete(docSnap.ref);
         });
         await batch.commit();
-        console.log('✅ Toate mesajele au fost șterse');
       }
 
       showSuccess('Comanda a fost arhivată! Va fi ștearsă definitiv după 30 zile.');

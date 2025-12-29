@@ -95,6 +95,7 @@ export const metadata: Metadata = {
     },
   },
   category: "transport",
+  manifest: '/manifest.json',
 };
 
 export const viewport: Viewport = {

@@ -3,7 +3,7 @@
  * Used by OrderChat, CourierChatModal, and other chat components
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   collection, 
   query, 
@@ -195,8 +195,22 @@ export function useChatMessages({
     return () => clearTimeout(timer);
   }, [markMessagesAsRead]);
 
+  // Memoize filtered messages for performance
+  const sortedMessages = useMemo(() => 
+    [...messages].sort((a, b) => 
+      (a.createdAt?.toMillis() || 0) - (b.createdAt?.toMillis() || 0)
+    ), 
+    [messages]
+  );
+
+  const unreadCount = useMemo(() => 
+    messages.filter(m => !m.read && m.senderId !== userId).length,
+    [messages, userId]
+  );
+
   return {
-    messages,
+    messages: sortedMessages,
+    unreadCount,
     loading,
     markMessagesAsRead
   };
