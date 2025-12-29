@@ -1,7 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { rateLimit } from '@/lib/rateLimit';
+
+// Rate limiter: 5 requests per 15 minutes per IP
+const contactRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  maxRequests: 5,
+  message: 'Ai trimis prea multe mesaje. Te rugăm să aștepți 15 minute înainte de a încerca din nou.',
+  keyPrefix: 'contact',
+});
 
 export async function POST(request: NextRequest) {
+  // Check rate limit first
+  const rateLimitResult = await contactRateLimit(request);
+  if (rateLimitResult) {
+    return rateLimitResult;
+  }
+
   try {
     const { nume, email, telefon, subiect, mesaj } = await request.json();
 
