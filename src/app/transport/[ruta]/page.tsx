@@ -1,9 +1,8 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
+import type { Metadata } from 'next';
 
 // Route data for SEO pages
 const routesData: Record<string, {
@@ -22,7 +21,7 @@ const routesData: Record<string, {
 }> = {
   'romania-germania': {
     country: 'Germania',
-    flag: 'DE',
+    flag: 'de',
     title: 'Transport România - Germania | Colete, Mobilă, Persoane',
     metaDescription: 'Transport România Germania rapid și sigur. Trimite colete, mobilă sau călătorește cu curieri verificați. Prețuri de la 12€. Livrare 24-48h.',
     heroTitle: 'Transport România - Germania',
@@ -66,7 +65,7 @@ const routesData: Record<string, {
   },
   'romania-italia': {
     country: 'Italia',
-    flag: 'IT',
+    flag: 'it',
     title: 'Transport România - Italia | Colete, Mobilă, Persoane',
     metaDescription: 'Transport România Italia rapid și ieftin. Colete, mobilă, persoane. Curse zilnice, curieri verificați. Prețuri de la 10€.',
     heroTitle: 'Transport România - Italia',
@@ -109,7 +108,7 @@ const routesData: Record<string, {
   },
   'romania-spania': {
     country: 'Spania',
-    flag: 'ES',
+    flag: 'es',
     title: 'Transport România - Spania | Colete, Mobilă, Persoane',
     metaDescription: 'Transport România Spania sigur și rapid. Colete, mobilă, persoane. Curse regulate, prețuri de la 18€. Curieri verificați.',
     heroTitle: 'Transport România - Spania',
@@ -152,7 +151,7 @@ const routesData: Record<string, {
   },
   'romania-franta': {
     country: 'Franța',
-    flag: 'FR',
+    flag: 'fr',
     title: 'Transport România - Franța | Colete, Mobilă, Persoane',
     metaDescription: 'Transport România Franța rapid. Colete, mobilă, persoane. Curse regulate Paris, Lyon, Marseille. Prețuri de la 15€.',
     heroTitle: 'Transport România - Franța',
@@ -195,7 +194,7 @@ const routesData: Record<string, {
   },
   'romania-uk': {
     country: 'Marea Britanie',
-    flag: 'GB',
+    flag: 'gb',
     title: 'Transport România - UK | Colete, Mobilă, Persoane',
     metaDescription: 'Transport România UK (Anglia) rapid și sigur. Colete, mobilă, persoane. Londra, Manchester, Birmingham. Prețuri de la 15€.',
     heroTitle: 'Transport România - Marea Britanie',
@@ -238,7 +237,7 @@ const routesData: Record<string, {
   },
   'romania-austria': {
     country: 'Austria',
-    flag: 'AT',
+    flag: 'at',
     title: 'Transport România - Austria | Colete, Mobilă, Persoane',
     metaDescription: 'Transport România Austria rapid. Colete, mobilă, persoane. Viena, Graz, Salzburg. Prețuri de la 12€. Livrare 24-48h.',
     heroTitle: 'Transport România - Austria',
@@ -281,7 +280,7 @@ const routesData: Record<string, {
   },
   'romania-belgia': {
     country: 'Belgia',
-    flag: 'BE',
+    flag: 'be',
     title: 'Transport România - Belgia | Colete, Mobilă, Persoane',
     metaDescription: 'Transport România Belgia sigur. Colete, mobilă, persoane. Bruxelles, Antwerp, Gent. Prețuri de la 14€.',
     heroTitle: 'Transport România - Belgia',
@@ -323,7 +322,7 @@ const routesData: Record<string, {
   },
   'romania-olanda': {
     country: 'Olanda',
-    flag: 'NL',
+    flag: 'nl',
     title: 'Transport România - Olanda | Colete, Mobilă, Persoane',
     metaDescription: 'Transport România Olanda rapid. Colete, mobilă, persoane. Amsterdam, Rotterdam, Haga. Prețuri de la 14€.',
     heroTitle: 'Transport România - Olanda',
@@ -365,26 +364,53 @@ const routesData: Record<string, {
   },
 };
 
+// Export for reuse in sitemap
+export const transportRoutes = Object.keys(routesData);
+
+// Generate static params for all routes
 export function generateStaticParams() {
-  return Object.keys(routesData).map((ruta) => ({ ruta }));
+  return transportRoutes.map((ruta) => ({ ruta }));
 }
 
-export default function TransportRoutePage() {
-  const params = useParams();
-  const ruta = params.ruta as string;
+// Generate metadata for SEO
+export async function generateMetadata({ params }: { params: Promise<{ ruta: string }> }): Promise<Metadata> {
+  const { ruta } = await params;
+  const data = routesData[ruta];
+  
+  if (!data) {
+    return {
+      title: 'Transport România - Europa | Curierul Perfect',
+      description: 'Transport colete, mobilă și persoane între România și Europa. Curieri verificați, prețuri transparente.',
+    };
+  }
+
+  return {
+    title: data.title + ' | Curierul Perfect',
+    description: data.metaDescription,
+    openGraph: {
+      title: data.title,
+      description: data.metaDescription,
+      type: 'website',
+      locale: 'ro_RO',
+      siteName: 'Curierul Perfect',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: data.title,
+      description: data.metaDescription,
+    },
+    alternates: {
+      canonical: `https://curierulperfect.com/transport/${ruta}`,
+    },
+  };
+}
+
+export default async function TransportRoutePage({ params }: { params: Promise<{ ruta: string }> }) {
+  const { ruta } = await params;
   const data = routesData[ruta];
 
   if (!data) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Rută negăsită</h1>
-          <Link href="/" className="text-orange-400 hover:text-orange-300">
-            Înapoi la pagina principală
-          </Link>
-        </div>
-      </div>
-    );
+    notFound();
   }
 
   return (
