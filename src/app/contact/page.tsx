@@ -18,12 +18,24 @@ export default function ContactPage() {
     setLoading(true);
 
     try {
-      // Simulare trimitere formular (va fi integrat cu backend/email)
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      showSuccess('Mesajul tău a fost trimis! Îți vom răspunde în 24-48 ore.');
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Eroare la trimiterea mesajului');
+      }
+
+      showSuccess('Mesajul tău a fost trimis! Îți vom răspunde în 24-48 ore. Verifică și inbox-ul pentru confirmare.');
       setFormData({ nume: '', email: '', telefon: '', subiect: '', mesaj: '' });
-    } catch {
-      showError('Eroare la trimiterea mesajului. Încearcă din nou.');
+    } catch (error) {
+      showError(error instanceof Error ? error.message : 'Eroare la trimiterea mesajului. Încearcă din nou.');
     } finally {
       setLoading(false);
     }
