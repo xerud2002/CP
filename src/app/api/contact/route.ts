@@ -25,12 +25,16 @@ export async function POST(request: NextRequest) {
     // Configurare transporter SMTP
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '465'),
-      secure: process.env.SMTP_SECURE === 'true',
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: false, // Use STARTTLS
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
+      tls: {
+        ciphers: 'SSLv3',
+        rejectUnauthorized: false
+      }
     });
 
     // Mapare subiect pentru email
@@ -145,8 +149,12 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Email send error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Full error details:', error);
+    }
     return NextResponse.json(
-      { error: 'Eroare la trimiterea email-ului. Te rugăm să încerci din nou.' },
+      { error: `Eroare la trimiterea email-ului: ${errorMessage}` },
       { status: 500 }
     );
   }
