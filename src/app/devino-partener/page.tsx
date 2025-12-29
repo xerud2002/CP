@@ -111,8 +111,8 @@ export default function DevinoPartenerPage() {
                     <circle cx="12" cy="12" r="3" className="fill-cyan-400"/>
                   </svg>
                 ), 
-                title: '16 Țări Europa', 
-                desc: 'Acoperim întreaga Europă - de la UK până în Grecia. Rute multiple, oportunități maxime.',
+                title: '20 Țări Europa', 
+                desc: 'Acoperim întreaga Europă - de la UK până în Grecia și Moldova. Rute multiple, oportunități maxime.',
                 color: 'cyan'
               },
               { 

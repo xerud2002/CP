@@ -9,7 +9,7 @@ export default function FAQPage() {
       questions: [
         { q: 'Ce este Curierul Perfect?', a: 'Curierul Perfect este o platformă care conectează clienți cu transportatori verificați pentru servicii de curierat și transport în România și Europa. Oferim servicii complete: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări.' },
         { q: 'Cât costă să folosesc platforma?', a: 'Platforma este 100% gratuită pentru clienți. Nu percepem comisioane - plătești doar prețul negociat direct cu transportatorul ales.' },
-        { q: 'În ce țări activați?', a: 'Acoperim 16 țări din Europa: România, Anglia, Germania, Franța, Italia, Spania, Belgia, Olanda, Austria, Portugalia, Grecia, Irlanda, Danemarca, Suedia, Norvegia și Finlanda.' }
+        { q: 'În ce țări activați?', a: 'Acoperim 20 țări din Europa: România, Anglia, Scoția, Țara Galilor, Irlanda de Nord, Germania, Franța, Italia, Spania, Belgia, Olanda, Austria, Portugalia, Grecia, Irlanda, Moldova, Danemarca, Suedia, Norvegia și Finlanda.' }
       ]
     },
     {

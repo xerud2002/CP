@@ -25,7 +25,7 @@
 - `src/app/dashboard/client/profil/page.tsx` - Now imports `COUNTRY_TAX_INFO`
 
 **Benefits:**
-- Eliminated duplicate 16-country tax info object
+- Eliminated duplicate 20-country tax info object
 - Reusable across client and courier profiles
 - Easy to add new countries or update tax formats
 

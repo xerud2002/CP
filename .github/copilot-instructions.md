@@ -34,7 +34,7 @@ src/hooks/useChatMessages.ts                    → Shared real-time messaging
 | `lib/toast.ts` | `showSuccess()`, `showError()`, `showInfo()`, `showWarning()` — auto-translates Firebase errors to Romanian |
 | `lib/contact.ts` | Centralized `CONTACT_INFO`, `SOCIAL_LINKS`, `COMPANY_INFO` |
 | `lib/faq.ts` | `FAQ_ITEMS` with category filtering |
-| `lib/businessInfo.ts` | `COUNTRY_TAX_INFO` — 16-country tax ID formats |
+| `lib/businessInfo.ts` | `COUNTRY_TAX_INFO` — 20-country tax ID formats |
 | `contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
 | `utils/orderStatusHelpers.ts` | `canEditOrder()`, `canDeleteOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
 | `types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole`, `CourierProfile`, `DocumentRequirement` |

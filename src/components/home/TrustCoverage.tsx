@@ -10,6 +10,29 @@ const ctaFeatures = [
   '20 țări disponibile',
 ];
 
+// Map country codes to transport route slugs
+const countryToRouteMap: Record<string, string> = {
+  'DE': 'romania-germania',
+  'IT': 'romania-italia',
+  'ES': 'romania-spania',
+  'FR': 'romania-franta',
+  'GB': 'romania-uk',
+  'AT': 'romania-austria',
+  'BE': 'romania-belgia',
+  'NL': 'romania-olanda',
+  'SC': 'romania-scotia',
+  'WLS': 'romania-tara-galilor',
+  'NIR': 'romania-irlanda-de-nord',
+  'MD': 'romania-moldova',
+  'IE': 'romania-irlanda',
+  'NO': 'romania-norvegia',
+  'SE': 'romania-suedia',
+  'DK': 'romania-danemarca',
+  'FI': 'romania-finlanda',
+  'GR': 'romania-grecia',
+  'PT': 'romania-portugalia',
+};
+
 export default function TrustCoverage() {
   return (
     <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden bg-linear-to-b from-slate-900/50 to-slate-900">
@@ -39,51 +62,57 @@ export default function TrustCoverage() {
 
         {/* Countries Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-2 sm:gap-3 mb-8 sm:mb-12 md:mb-16">
-          {countries.map((country, index) => (
-            <div 
-              key={country.code}
-              className="group relative"
-              style={{ 
-                animationDelay: `${index * 50}ms`,
-                animation: 'fadeInUp 0.6s ease-out forwards',
-                opacity: 0
-              }}
-            >
-              <div className="relative h-full bg-linear-to-br from-slate-800/60 to-slate-800/30 backdrop-blur-sm hover:from-slate-800/80 hover:to-slate-800/60 border border-white/5 hover:border-white/20 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer">
-                {/* Decorative corner */}
-                <div className="absolute top-0 right-0 w-16 h-16 bg-linear-to-br from-blue-500/10 to-transparent rounded-tr-lg sm:rounded-tr-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                
-                <div className="flex items-center gap-2 sm:gap-3 relative z-10">
-                  {/* Flag container */}
-                  <div className="relative shrink-0">
-                    <div className="absolute inset-0 bg-blue-500/20 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-md sm:rounded-lg bg-slate-700/50 border border-white/10 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
-                      <Image 
-                        src={country.flag} 
-                        alt={country.name} 
-                        width={24} 
-                        height={18} 
-                        className="rounded-sm object-cover sm:w-7 sm:h-5"
-                      />
+          {countries.map((country, index) => {
+            const routeSlug = countryToRouteMap[country.code];
+            const href = routeSlug ? `/transport/${routeSlug}` : '/transport';
+            
+            return (
+              <Link
+                key={country.code}
+                href={href}
+                className="group relative"
+                style={{ 
+                  animationDelay: `${index * 50}ms`,
+                  animation: 'fadeInUp 0.6s ease-out forwards',
+                  opacity: 0
+                }}
+              >
+                <div className="relative h-full bg-linear-to-br from-slate-800/60 to-slate-800/30 backdrop-blur-sm hover:from-slate-800/80 hover:to-slate-800/60 border border-white/5 hover:border-white/20 rounded-lg sm:rounded-xl p-2.5 sm:p-3 md:p-4 transition-all duration-300 active:scale-95 md:hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/10 cursor-pointer">
+                  {/* Decorative corner */}
+                  <div className="absolute top-0 right-0 w-16 h-16 bg-linear-to-br from-blue-500/10 to-transparent rounded-tr-lg sm:rounded-tr-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  
+                  <div className="flex items-center gap-2 sm:gap-3 relative z-10">
+                    {/* Flag container */}
+                    <div className="relative shrink-0">
+                      <div className="absolute inset-0 bg-blue-500/20 rounded-lg blur-md opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-md sm:rounded-lg bg-slate-700/50 border border-white/10 flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform">
+                        <Image 
+                          src={country.flag} 
+                          alt={country.name} 
+                          width={24} 
+                          height={18} 
+                          className="rounded-sm object-cover sm:w-7 sm:h-5"
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* Country info */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-white font-semibold text-xs sm:text-sm group-hover:text-blue-400 transition-colors truncate">
+                        {country.name}
+                      </h3>
+                      <p className="text-gray-500 text-[10px] sm:text-xs">Disponibil</p>
+                    </div>
+                    
+                    {/* Status indicator */}
+                    <div className="shrink-0">
+                      <div className="w-2 h-2 rounded-full bg-green-500 group-hover:shadow-lg group-hover:shadow-green-500/50 transition-shadow"></div>
                     </div>
                   </div>
-                  
-                  {/* Country info */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-semibold text-xs sm:text-sm group-hover:text-blue-400 transition-colors truncate">
-                      {country.name}
-                    </h3>
-                    <p className="text-gray-500 text-[10px] sm:text-xs">Disponibil</p>
-                  </div>
-                  
-                  {/* Status indicator */}
-                  <div className="shrink-0">
-                    <div className="w-2 h-2 rounded-full bg-green-500 group-hover:shadow-lg group-hover:shadow-green-500/50 transition-shadow"></div>
-                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Final CTA Card */}

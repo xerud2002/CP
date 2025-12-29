@@ -56,7 +56,7 @@ export default function CountryDropdown({ value, onChange, label, onCountryChang
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="form-select w-full flex items-center gap-3 cursor-pointer"
+          className="form-input w-full flex items-center gap-3 cursor-pointer"
           aria-label={label}
         >
           <Image 

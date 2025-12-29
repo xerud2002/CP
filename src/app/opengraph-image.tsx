@@ -341,7 +341,7 @@ export default async function Image() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-            <span style={{ fontSize: '16px', color: '#94a3b8' }}>16 tari europene</span>
+            <span style={{ fontSize: '16px', color: '#94a3b8' }}>20 tari europene</span>
           </div>
         </div>
       </div>

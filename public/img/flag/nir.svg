@@ -1,8 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
   <path fill="#fff" d="M0 0h640v480H0z"/>
-  <g stroke-width="1pt">
-    <path fill="#c8102e" d="M0 0v53.3L426.7 240 0 426.7V480h53.3L480 266.7 533.3 480H640v-53.3L213.3 240 640 53.3V0h-53.3L160 213.3 106.7 0z"/>
-    <path fill="#012169" d="M106.7 0L0 53.3v53.4L373.3 240v-53.4zm426.6 53.3V0L160 213.3v53.4zM0 426.7L106.7 480h53.3L0 320zm640 0V373.3L266.7 240v53.3z"/>
-    <path fill="#c8102e" d="M0 160v160h160L0 160zm480 0L640 320V160zm-213.3 0v320h106.6V160z"/>
+  <path fill="#c8102e" d="M240 0h160v480H240zM0 160h640v160H0z"/>
+  <g transform="translate(320,240)">
+    <circle r="80" fill="none" stroke="#fff" stroke-width="8"/>
+    <circle r="80" fill="none" stroke="#c8102e" stroke-width="4"/>
+    <g transform="translate(0,-15)">
+      <path fill="#fff" d="M-35-30 Q-35-35 -30-35 L30-35 Q35-35 35-30 L35 0 Q35 5 30 5 L5 5 L5 20 Q5 25 0 25 Q-5 25 -5 20 L-5 5 L-30 5 Q-35 5 -35 0 Z"/>
+      <circle cx="-25" cy="-20" r="4" fill="#c8102e"/>
+      <circle cx="-15" cy="-25" r="4" fill="#c8102e"/>
+      <circle cx="0" cy="-27" r="4" fill="#c8102e"/>
+      <circle cx="15" cy="-25" r="4" fill="#c8102e"/>
+      <circle cx="25" cy="-20" r="4" fill="#c8102e"/>
+    </g>
+    <g transform="translate(0,50)">
+      <polygon points="0,-15 -8,0 8,0" fill="#ffd700"/>
+      <circle cx="0" cy="-8" r="6" fill="#ffd700"/>
+      <circle cx="-12" cy="-5" r="5" fill="#ffd700"/>
+      <circle cx="12" cy="-5" r="5" fill="#ffd700"/>
+    </g>
   </g>
 </svg>

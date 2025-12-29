@@ -2,8 +2,23 @@
   <path fill="#0046ae" d="M0 0h213.3v480H0z"/>
   <path fill="#ffd200" d="M213.3 0h213.4v480H213.3z"/>
   <path fill="#cc092f" d="M426.7 0H640v480H426.7z"/>
-  <g transform="translate(320 240)">
-    <path fill="#a0522d" d="M-30-120h60v240h-60z"/>
-    <ellipse cx="0" cy="-120" fill="#228b22" rx="45" ry="30"/>
+  <g transform="translate(320,240) scale(1.2)">
+    <g fill="#8b4513">
+      <ellipse cx="0" cy="-65" rx="50" ry="25" fill="#a0522d"/>
+      <path d="M-20-65c0-15 8-25 20-25s20 10 20 25"/>
+      <path fill="#8b4513" d="M-5-40h10v80h-10z"/>
+    </g>
+    <g fill="#ffd700">
+      <ellipse cx="-25" cy="-75" rx="8" ry="12" fill="#cd853f"/>
+      <ellipse cx="25" cy="-75" rx="8" ry="12" fill="#cd853f"/>
+      <path fill="#8b0000" d="M-35-30c0-20 15-35 35-35s35 15 35 35v30h-70z"/>
+      <path fill="#ffd700" d="M-30-20c0-15 13-28 30-28s30 13 30 28v10h-60z"/>
+    </g>
+    <g fill="#c8102e">
+      <ellipse cx="0" cy="-10" rx="25" ry="20" fill="#c8102e"/>
+      <path d="M-20 0c0-10 8-18 20-18s20 8 20 18v15h-40z"/>
+    </g>
+    <path fill="#ffd700" d="M-2-15h4v30h-4z"/>
+    <path fill="#0046ae" d="M-15 10h30v5h-30z"/>
   </g>
 </svg>

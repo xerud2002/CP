@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
-  <path fill="#00ab4e" d="M0 240h640v240H0z"/>
   <path fill="#fff" d="M0 0h640v240H0z"/>
+  <path fill="#00ab4e" d="M0 240h640v240H0z"/>
+  <g transform="translate(170,115) scale(0.85)">
+    <path fill="#c8102e" d="M170 100c0-12 8-20 20-20s20 8 20 20v20h-40zm-30 30c-12 0-20-8-20-20s8-20 20-20h20v40zm90 0v-40h20c12 0 20 8 20 20s-8 20-20 20zm-30 30c0 12-8 20-20 20s-20-8-20-20v-20h40zm-40 50l-30-30h30v-20l30 30-30 30zm80 0l30-30h-30v-20l-30 30 30 30z"/>
+    <ellipse cx="170" cy="100" rx="15" ry="12" fill="#c8102e"/>
+    <path fill="#c8102e" d="M150 120h40v60h-40z"/>
+    <path fill="#c8102e" d="M140 160c0-15 10-25 25-25h10c15 0 25 10 25 25v15h-60z"/>
+  </g>
 </svg>

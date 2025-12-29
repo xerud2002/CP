@@ -94,7 +94,7 @@ function RegisterForm() {
           <p className="text-gray-400 text-lg mb-10 max-w-md">
             {isCurier 
               ? 'Alătură-te platformei 100% GRATUITE până pe 31 Martie 2026 și câștigă bani transportând colete, plicuri, persoane, mobilă, electronice, animale și oferind servicii de platformă și tractări auto pe rutele pe care le faci deja. Fără comisioane, contactezi clienții direct!'
-              : 'Conectează-te cu curieri de încredere pentru transport complet: colete, plicuri, persoane, mobilă, electronice, animale, platformă și tractări auto în peste 16 țări europene.'}
+              : 'Conectează-te cu curieri de încredere pentru transport complet: colete, plicuri, persoane, mobilă, electronice, animale, platformă și tractări auto în peste 20 țări europene.'}
           </p>
 
           {/* Features */}
