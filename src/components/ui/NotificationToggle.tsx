@@ -24,6 +24,16 @@ interface NotificationToggleProps {
 export function NotificationToggle({ userId, className = '' }: NotificationToggleProps) {
   const { isSupported, isEnabled, isLoading, enableNotifications, disableNotifications } = useNotifications(userId);
 
+  // Show loading state while checking support
+  if (isLoading) {
+    return (
+      <div className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700 text-slate-300 ${className}`}>
+        <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        <span className="text-sm">Se verifică...</span>
+      </div>
+    );
+  }
+
   // Show message if notifications not supported
   if (!isSupported) {
     return (
