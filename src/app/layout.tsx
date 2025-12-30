@@ -119,40 +119,79 @@ export const viewport: Viewport = {
   ],
 };
 
-// JSON-LD Structured Data
-const jsonLd = {
+// JSON-LD Structured Data - Organization + WebSite
+const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': 'https://curierulperfect.com/#organization',
   name: 'Curierul Perfect',
   url: 'https://curierulperfect.com',
-  logo: 'https://curierulperfect.com/logo.png',
-  description: 'Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări.',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://curierulperfect.com/icon.png',
+    width: 512,
+    height: 512,
+  },
+  description: 'Platformă curierat european: transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări între România și Europa.',
+  foundingDate: '2024',
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer service',
+    email: 'contact@curierulperfect.com',
     availableLanguage: ['Romanian', 'English'],
   },
   sameAs: [
     'https://www.facebook.com/curierulperfect',
     'https://www.instagram.com/curierulperfect',
+    'https://www.tiktok.com/@curierulperfect',
   ],
-  serviceArea: {
-    '@type': 'Place',
-    name: 'Europa',
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'RO',
   },
+  areaServed: [
+    { '@type': 'Country', name: 'Romania' },
+    { '@type': 'Country', name: 'Germany' },
+    { '@type': 'Country', name: 'United Kingdom' },
+    { '@type': 'Country', name: 'Italy' },
+    { '@type': 'Country', name: 'Spain' },
+    { '@type': 'Country', name: 'France' },
+    { '@type': 'Country', name: 'Austria' },
+    { '@type': 'Country', name: 'Belgium' },
+    { '@type': 'Country', name: 'Netherlands' },
+  ],
   hasOfferCatalog: {
     '@type': 'OfferCatalog',
     name: 'Servicii de Transport',
     itemListElement: [
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport colete' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport plicuri' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport persoane' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport mobilă' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport electronice' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport animale' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Platformă auto' } },
-      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Tractări auto' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport colete', url: 'https://curierulperfect.com/servicii/colete' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport persoane', url: 'https://curierulperfect.com/servicii/persoane' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport mobilă', url: 'https://curierulperfect.com/servicii/mobila' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport animale', url: 'https://curierulperfect.com/servicii/animale' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Platformă auto', url: 'https://curierulperfect.com/servicii/platforma' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Transport electronice', url: 'https://curierulperfect.com/servicii/electronice' } },
     ],
+  },
+};
+
+const webSiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://curierulperfect.com/#website',
+  url: 'https://curierulperfect.com',
+  name: 'Curierul Perfect',
+  description: 'Platformă de transport național și european pentru România',
+  publisher: {
+    '@id': 'https://curierulperfect.com/#organization',
+  },
+  inLanguage: 'ro-RO',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://curierulperfect.com/servicii?q={search_term_string}',
+    },
+    'query-input': 'required name=search_term_string',
   },
 };
 
@@ -172,7 +211,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://identitytoolkit.googleapis.com" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
