@@ -14,10 +14,10 @@ export function MessageButton({ onClick, title, disabled = false }: ActionButton
     <button 
       onClick={onClick}
       disabled={disabled}
-      className="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      className="p-1.5 xs:p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
       title={title}
     >
-      <ChatIcon className="w-5 h-5" />
+      <ChatIcon className="w-4 h-4 xs:w-5 xs:h-5" />
     </button>
   );
 }
@@ -28,10 +28,10 @@ export function ViewButton({ onClick, title, disabled = false }: ActionButtonPro
     <button 
       onClick={onClick}
       disabled={disabled}
-      className="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      className="p-1.5 xs:p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
       title={title}
     >
-      <EyeIcon className="w-5 h-5" />
+      <EyeIcon className="w-4 h-4 xs:w-5 xs:h-5" />
     </button>
   );
 }
@@ -42,10 +42,10 @@ export function DeleteButton({ onClick, title, disabled = false }: ActionButtonP
     <button 
       onClick={onClick}
       disabled={disabled}
-      className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      className="p-1.5 xs:p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
       title={title}
     >
-      <TrashIcon className="w-5 h-5" />
+      <TrashIcon className="w-4 h-4 xs:w-5 xs:h-5" />
     </button>
   );
 }
@@ -58,7 +58,7 @@ interface ActionButtonsGroupProps {
 
 export function ActionButtonsGroup({ children, className = '' }: ActionButtonsGroupProps) {
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
+    <div className={`flex items-center gap-1 xs:gap-2 ${className}`}>
       {children}
     </div>
   );
@@ -110,10 +110,10 @@ export function DismissButton({ onClick, title, disabled = false }: ActionButton
     <button 
       onClick={onClick}
       disabled={disabled}
-      className="p-2 text-gray-400 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      className="p-1.5 xs:p-2 text-gray-400 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
       title={title}
     >
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
       </svg>
     </button>

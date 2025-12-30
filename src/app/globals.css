@@ -1,6 +1,17 @@
 @import "tailwindcss";
 
 /* ========================================
+   CUSTOM BREAKPOINTS (Tailwind CSS 4)
+   ======================================== */
+
+/* Extra small devices - for foldables like Galaxy Z Fold (344px) */
+@custom-variant xs {
+  @media (min-width: 400px) {
+    @slot;
+  }
+}
+
+/* ========================================
    TEXT SELECTION STYLING
    ======================================== */
 

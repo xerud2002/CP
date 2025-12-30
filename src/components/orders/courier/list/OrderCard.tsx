@@ -128,12 +128,12 @@ function OrderCard({
   return (
     <div 
       id={`order-${order.id}`}
-      className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-3 sm:p-6 hover:border-white/10 transition-all"
+      className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-3 xs:p-4 sm:p-6 hover:border-white/10 transition-all"
     >
-      <div className="flex items-start gap-3 sm:gap-4">
+      <div className="flex items-start gap-2 xs:gap-3 sm:gap-4">
         {/* Service Icon */}
-        <div className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${serviceTypeConfig.bgColor} flex items-center justify-center shrink-0 ${serviceTypeConfig.color}`}>
-          <ServiceIcon service={order.tipColet || 'colete'} className="w-5 h-5 sm:w-6 sm:h-6" />
+        <div className={`relative w-9 h-9 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-xl ${serviceTypeConfig.bgColor} flex items-center justify-center shrink-0 ${serviceTypeConfig.color}`}>
+          <ServiceIcon service={order.tipColet || 'colete'} className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6" />
           {/* New Badge on Icon */}
           {isNew && (
             <span className="absolute -top-1 -right-1 flex h-5 w-5">
@@ -148,20 +148,20 @@ function OrderCard({
         {/* Order Details */}
         <div className="flex-1 min-w-0">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-2 sm:gap-0">
-            <div className="flex-1">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2 xs:mb-3 gap-2 sm:gap-0">
+            <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-white font-semibold text-sm sm:text-base">
+                <h3 className="text-white font-semibold text-xs xs:text-sm sm:text-base truncate">
                   {serviceTypeConfig.label}
                 </h3>
               </div>
-              <div className="flex items-center gap-2 text-xs text-gray-400">
+              <div className="flex items-center gap-1.5 xs:gap-2 text-[10px] xs:text-xs text-gray-400">
                 {order.orderNumber && (
                   <span>#{formatOrderNumber(order.orderNumber)}</span>
                 )}
                 {(order.timestamp || order.createdAt) && (
                   <span className="flex items-center gap-1">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 hidden xs:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span className="hidden xs:inline">{formatDateTime()}</span>
@@ -191,34 +191,34 @@ function OrderCard({
           </div>
           
           {/* Route */}
-          <div className="flex flex-wrap items-center gap-2 mb-3 text-xs sm:text-sm">
-            <div className="flex items-center gap-1.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-1 xs:gap-2 mb-2 xs:mb-3 text-[10px] xs:text-xs sm:text-sm">
+            <div className="flex items-center gap-1 xs:gap-1.5 min-w-0 max-w-[45%] xs:max-w-none">
               <Image 
                 src={`/img/flag/${getCountryCode(order.expeditorTara)}.svg`}
                 alt={order.expeditorTara || 'RO'}
-                width={20} 
-                height={15} 
-                className="rounded shrink-0"
+                width={16} 
+                height={12} 
+                className="rounded shrink-0 w-4 xs:w-5 h-3 xs:h-4"
                 unoptimized
               />
-              <span className="text-gray-300">
+              <span className="text-gray-300 truncate">
                 {capitalize(order.oras_ridicare || order.expeditorJudet)}
                 <span className="hidden sm:inline">, {capitalize(order.expeditorJudet)}</span>
               </span>
             </div>
-            <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3 h-3 xs:w-4 xs:h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
-            <div className="flex items-center gap-1.5 shrink-0">
+            <div className="flex items-center gap-1 xs:gap-1.5 min-w-0 max-w-[45%] xs:max-w-none">
               <Image 
                 src={`/img/flag/${getCountryCode(order.destinatarTara)}.svg`}
                 alt={order.destinatarTara || 'RO'}
-                width={20} 
-                height={15} 
-                className="rounded shrink-0"
+                width={16} 
+                height={12} 
+                className="rounded shrink-0 w-4 xs:w-5 h-3 xs:h-4"
                 unoptimized
               />
-              <span className="text-gray-300">
+              <span className="text-gray-300 truncate">
                 {capitalize(order.oras_livrare || order.destinatarJudet)}
                 <span className="hidden sm:inline">, {capitalize(order.destinatarJudet)}</span>
               </span>
@@ -226,8 +226,8 @@ function OrderCard({
           </div>
           
           {/* Meta Info */}
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-gray-400">
+          <div className="space-y-1.5 xs:space-y-2">
+            <div className="flex flex-wrap items-center gap-x-2 xs:gap-x-3 gap-y-1 text-[10px] xs:text-xs text-gray-400">
               {getServiceInfo() && <span className="font-medium">{getServiceInfo()}</span>}
               {/* Show descriere for non-vehicle orders (vehicle includes it in getServiceInfo) */}
               {order.descriere && !order.tip_vehicul && (
@@ -235,9 +235,9 @@ function OrderCard({
               )}
             </div>
             {order.optiuni && order.optiuni.length > 0 && (
-              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <div className="flex flex-wrap items-center gap-1 xs:gap-1.5 sm:gap-2">
                 {order.optiuni.map((option, index) => (
-                  <span key={index} className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded-md text-[10px] sm:text-xs border border-emerald-500/20 font-medium">
+                  <span key={index} className="px-1.5 xs:px-2 py-0.5 xs:py-1 bg-emerald-500/20 text-emerald-400 rounded-md text-[9px] xs:text-[10px] sm:text-xs border border-emerald-500/20 font-medium">
                     {capitalize(option)}
                   </span>
                 ))}

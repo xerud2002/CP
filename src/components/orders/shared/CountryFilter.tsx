@@ -38,12 +38,12 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
 
   return (
     <div ref={dropdownRef} className="relative">
-      <label className="block text-xs text-gray-400 mb-1.5">Țară</label>
+      <label className="block text-[10px] xs:text-xs text-gray-400 mb-1 xs:mb-1.5">Țară</label>
       <div className="relative">
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-3 py-3 sm:py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 active:bg-slate-700 transition-colors text-left text-sm min-h-12 sm:min-h-11 touch-manipulation"
+          className="w-full flex items-center gap-1.5 xs:gap-2 sm:gap-3 px-2.5 xs:px-3 py-2.5 xs:py-3 sm:py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 active:bg-slate-700 transition-colors text-left text-xs xs:text-sm min-h-10 xs:min-h-12 sm:min-h-11 touch-manipulation"
         >
           {value === 'all' ? (
             <>
