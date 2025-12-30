@@ -27,7 +27,7 @@ function OrderCard({
   order,
   isNew,
   isExpanded,
-  // unreadCount, // Currently unused but kept for future message indicator
+  unreadCount = 0,
   currentUserId,
   isCourierVerified = false,
   onToggleChat,
@@ -177,6 +177,7 @@ function OrderCard({
                 <MessageButton
                   onClick={onToggleChat}
                   title="Mesaje"
+                  unreadCount={unreadCount}
                 />
               )}
               <ViewButton

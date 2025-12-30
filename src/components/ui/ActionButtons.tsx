@@ -8,16 +8,28 @@ interface ActionButtonProps {
   disabled?: boolean;
 }
 
-// Green Message Button
-export function MessageButton({ onClick, title, disabled = false }: ActionButtonProps) {
+interface MessageButtonProps extends ActionButtonProps {
+  unreadCount?: number;
+}
+
+// Green Message Button with unread badge
+export function MessageButton({ onClick, title, disabled = false, unreadCount = 0 }: MessageButtonProps) {
   return (
     <button 
       onClick={onClick}
       disabled={disabled}
-      className="p-1.5 xs:p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+      className="relative p-1.5 xs:p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
       title={title}
     >
       <ChatIcon className="w-4 h-4 xs:w-5 xs:h-5" />
+      {unreadCount > 0 && (
+        <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 xs:h-[18px] xs:w-[18px]">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-4 w-4 xs:h-[18px] xs:w-[18px] bg-emerald-500 items-center justify-center">
+            <span className="text-white text-[9px] xs:text-[10px] font-bold">{unreadCount > 9 ? '9+' : unreadCount}</span>
+          </span>
+        </span>
+      )}
     </button>
   );
 }
