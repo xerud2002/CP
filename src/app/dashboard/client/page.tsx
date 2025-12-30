@@ -22,6 +22,7 @@ import {
 
 // Lazy load below-fold components
 const HelpCard = lazy(() => import('@/components/HelpCard'));
+const NotificationToggle = lazy(() => import('@/components/ui/NotificationToggle').then(m => ({ default: m.NotificationToggle })));
 
 // ============================================
 // TYPES & INTERFACES
@@ -685,6 +686,24 @@ export default function ClientDashboard() {
       <main className="relative z-10 max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Welcome Section */}
         <WelcomeSection userName={userName} />
+
+        {/* Push Notifications Toggle */}
+        <section className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-4 sm:p-6">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-orange-500/20 rounded-xl">
+                <BellIcon className="w-5 h-5 text-orange-400" />
+              </div>
+              <div>
+                <h3 className="text-sm sm:text-base font-semibold text-white">Notificări Push</h3>
+                <p className="text-xs text-gray-400">Primește alerte instant pentru mesaje și actualizări</p>
+              </div>
+            </div>
+            <Suspense fallback={<div className="px-4 py-2 rounded-lg bg-slate-700 text-slate-300 text-sm">Se încarcă...</div>}>
+              <NotificationToggle userId={user?.uid} />
+            </Suspense>
+          </div>
+        </section>
 
         {/* Main Navigation - Quick access to all sections */}
         <MainNavigation totalNotifications={totalNotifications} />
