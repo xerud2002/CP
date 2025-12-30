@@ -8,9 +8,9 @@ export default function Footer() {
     <footer className="bg-slate-900 border-t border-white/5">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
               {/* Logo Image */}
               <div className="relative w-11 h-11 group-hover:scale-105 transition-all">
@@ -108,30 +108,7 @@ export default function Footer() {
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                  Devino Partener
-                </Link>
-              </li>
-              <li>
-                <Link href="/preturi" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
-                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  Prețuri
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Support Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-5">Suport</h4>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/faq" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
-                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  Întrebări frecvente
+                  Devino curier
                 </Link>
               </li>
               <li>
@@ -142,12 +119,66 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
+            </ul>
+          </div>
+
+          {/* Services Links */}
+          <div>
+            <h4 className="text-white font-semibold mb-5">Servicii</h4>
+            <ul className="space-y-3">
               <li>
-                <Link href="/servicii" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="/servicii/colete" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                  Servicii transport
+                  Transport colete
+                </Link>
+              </li>
+              <li>
+                <Link href="/servicii/persoane" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Transport persoane
+                </Link>
+              </li>
+              <li>
+                <Link href="/servicii/mobila" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Mutări internaționale
+                </Link>
+              </li>
+              <li>
+                <Link href="/servicii/animale" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Transport animale
+                </Link>
+              </li>
+              <li>
+                <Link href="/servicii/platforma" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Platformă auto
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Support & Legal Links */}
+          <div>
+            <h4 className="text-white font-semibold mb-5">Suport & Legal</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/faq" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Întrebări frecvente
                 </Link>
               </li>
               <li>
@@ -158,13 +189,6 @@ export default function Footer() {
                   Reclamații
                 </Link>
               </li>
-            </ul>
-          </div>
-
-          {/* Legal Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-5">Legal</h4>
-            <ul className="space-y-3">
               <li>
                 <Link href="/termeni" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
