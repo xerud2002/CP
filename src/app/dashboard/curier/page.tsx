@@ -16,6 +16,7 @@ import {
   BoxIcon,
   CheckCircleIcon,
   BellIcon,
+  AdminMessageIcon,
   StarIcon,
   ChatIcon,
 } from '@/components/icons/DashboardIcons';
@@ -182,13 +183,13 @@ const DashboardHeader = memo(function DashboardHeader({ adminUnreadCount, onLogo
 
           {/* Right Side */}
           <div className="flex items-center gap-1 sm:gap-2">
-            {/* Notifications / Messages */}
+            {/* Admin Messages */}
             <button 
               onClick={onBellClick}
               className="relative p-2.5 sm:p-2 text-gray-400 hover:text-white transition-colors rounded-xl hover:bg-white/5 active:bg-white/10"
               title="Mesaje de la administrator"
             >
-              <BellIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+              <AdminMessageIcon className="w-5 h-5 sm:w-6 sm:h-6" />
               {(adminUnreadCount ?? 0) > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 min-w-4 h-4 sm:min-w-5 sm:h-5 px-1 bg-red-500 rounded-full text-[10px] sm:text-xs font-bold text-white flex items-center justify-center shadow-lg animate-pulse">
                   {(adminUnreadCount ?? 0) > 9 ? '9+' : adminUnreadCount}
