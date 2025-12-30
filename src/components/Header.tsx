@@ -36,11 +36,11 @@ export default function Header() {
       {/* Gradient line */}
       <div className={`h-0.5 bg-linear-to-r from-orange-500 via-emerald-500 to-orange-500 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
       
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 lg:px-8 h-16">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-3 sm:px-4 lg:px-8 h-14 sm:h-16">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 group touch-manipulation">
           {/* Logo Image */}
-          <div className="relative w-11 h-11 lg:w-12 lg:h-12 group-hover:scale-105 transition-all">
+          <div className="relative w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12 group-hover:scale-105 transition-all">
             <Image 
               src="/img/logo2.png" 
               alt="Curierul Perfect Logo" 
@@ -52,24 +52,24 @@ export default function Header() {
           </div>
           {/* Text */}
           <div className="flex flex-col">
-            <span className="text-xl lg:text-2xl font-black tracking-tight leading-none">
+            <span className="text-base sm:text-xl lg:text-2xl font-black tracking-tight leading-none">
               <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
             </span>
-            <span className="text-[10px] lg:text-xs text-gray-500 font-medium tracking-wider uppercase text-center">- TRANSPORT EUROPA -</span>
+            <span className="text-[9px] sm:text-[10px] lg:text-xs text-gray-500 font-medium tracking-wider uppercase text-center hidden xs:block">- TRANSPORT EUROPA -</span>
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-2">
+        {/* Desktop & Tablet Navigation */}
+        <nav className="hidden sm:flex items-center gap-1.5 md:gap-2">
           {!user ? (
             <>
               {/* Client Button */}
               <Link 
                 href="/login?role=client" 
-                className="group relative px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-green-500/50 transition-all duration-300 hover:bg-green-500/10"
+                className="group relative px-3 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-white/5 border border-white/10 hover:border-green-500/50 transition-all duration-300 hover:bg-green-500/10 touch-manipulation"
               >
-                <span className="flex items-center gap-2 text-gray-300 group-hover:text-green-400 transition-colors">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span className="flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-gray-300 group-hover:text-green-400 transition-colors">
+                  <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   <span className="font-medium">Client</span>
@@ -79,10 +79,10 @@ export default function Header() {
               {/* Partener Button - Primary */}
               <Link 
                 href="/login?role=curier" 
-                className="group relative px-5 py-2.5 rounded-xl bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5"
+                className="group relative px-3 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 touch-manipulation"
               >
-                <span className="flex items-center gap-2 text-white font-medium">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <span className="flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-white font-medium">
+                  <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                   </svg>
                   <span>Partener</span>

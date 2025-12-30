@@ -417,14 +417,8 @@ function ComandaForm() {
         console.error('Error clearing localStorage:', error);
       }
       
-      // Redirect imediat la dashboard
-      setTimeout(() => {
-        if (user) {
-          router.push('/dashboard/client/comenzi');
-        } else {
-          router.push('/');
-        }
-      }, 1000);
+      // Redirect la dashboard client
+      router.push('/dashboard/client/comenzi');
     } catch (error) {
       console.error('Error submitting order:', error);
       showError(error);

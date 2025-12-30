@@ -25,6 +25,23 @@ export default function DatePicker({
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Lock body scroll on mobile when open
+  useEffect(() => {
+    if (isMobile && isOpen) {
+      document.body.style.overflow = 'hidden';
+      return () => { document.body.style.overflow = ''; };
+    }
+  }, [isMobile, isOpen]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -104,7 +121,7 @@ export default function DatePicker({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-full px-4 py-3 bg-slate-700/50 border border-white/10 rounded-xl text-left text-white ${hoverBorder} transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 ${focusRing}`}
+          className={`w-full px-4 py-3 min-h-12 sm:min-h-11 bg-slate-700/50 border border-white/10 rounded-xl text-left text-white ${hoverBorder} transition-all duration-200 flex items-center justify-between focus:outline-none focus:ring-2 ${focusRing} touch-manipulation`}
         >
           <div className="flex items-center gap-3 min-w-0">
             <svg className={`w-5 h-5 ${iconColor} shrink-0`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -125,67 +142,152 @@ export default function DatePicker({
         </button>
 
         {isOpen && (
-          <div className="absolute z-50 mt-2 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
-            <div className="flex items-center justify-between p-4 border-b border-white/5">
-              <button
-                type="button"
-                onClick={handlePrevMonth}
-                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <span className="font-semibold text-white">{monthNames[month]} {year}</span>
-              <button
-                type="button"
-                onClick={handleNextMonth}
-                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-
-            <div className="grid grid-cols-7 gap-1 px-3 pt-3">
-              {dayNames.map(day => (
-                <div key={day} className="text-center text-xs font-medium text-gray-400 py-2">{day}</div>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-7 gap-1 p-3">
-              {Array.from({ length: getFirstDayOfMonth(month, year) }).map((_, i) => (
-                <div key={`empty-${i}`} className="h-10" />
-              ))}
-              {Array.from({ length: getDaysInMonth(month, year) }).map((_, i) => {
-                const day = i + 1;
-                const isDisabled = isDateDisabled(day, month, year);
-                const isSelected = value && 
-                  new Date(value).getDate() === day &&
-                  new Date(value).getMonth() === month &&
-                  new Date(value).getFullYear() === year;
-                
-                return (
+          <>
+            {/* Mobile: Full-screen modal */}
+            {isMobile ? (
+              <div className="fixed inset-0 z-100 flex flex-col bg-slate-900/98 backdrop-blur-xl">
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b border-white/10">
+                  <h3 className="text-lg font-semibold text-white">Alege data</h3>
                   <button
-                    key={day}
                     type="button"
-                    onClick={() => !isDisabled && handleDateSelect(day)}
-                    disabled={isDisabled}
-                    className={`h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isDisabled 
-                        ? 'text-gray-600 cursor-not-allowed' 
-                        : isSelected
-                          ? `${selectedBg} text-white shadow-lg`
-                          : 'text-white hover:bg-slate-700/50'
-                    }`}
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 -mr-2 text-gray-400 hover:text-white transition-colors touch-manipulation"
                   >
-                    {day}
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                   </button>
-                );
-              })}
-            </div>
-          </div>
+                </div>
+
+                {/* Month navigation */}
+                <div className="flex items-center justify-between p-4 border-b border-white/5">
+                  <button
+                    type="button"
+                    onClick={handlePrevMonth}
+                    className="p-3 hover:bg-slate-700/50 rounded-xl transition-colors text-gray-400 hover:text-white touch-manipulation active:scale-95"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <span className="text-xl font-bold text-white">{monthNames[month]} {year}</span>
+                  <button
+                    type="button"
+                    onClick={handleNextMonth}
+                    className="p-3 hover:bg-slate-700/50 rounded-xl transition-colors text-gray-400 hover:text-white touch-manipulation active:scale-95"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Day names */}
+                <div className="grid grid-cols-7 gap-1 px-4 pt-4">
+                  {dayNames.map(day => (
+                    <div key={day} className="text-center text-sm font-medium text-gray-400 py-2">{day}</div>
+                  ))}
+                </div>
+
+                {/* Calendar grid - larger touch targets */}
+                <div className="grid grid-cols-7 gap-1 p-4 flex-1">
+                  {Array.from({ length: getFirstDayOfMonth(month, year) }).map((_, i) => (
+                    <div key={`empty-${i}`} className="aspect-square" />
+                  ))}
+                  {Array.from({ length: getDaysInMonth(month, year) }).map((_, i) => {
+                    const day = i + 1;
+                    const isDisabled = isDateDisabled(day, month, year);
+                    const isSelected = value && 
+                      new Date(value).getDate() === day &&
+                      new Date(value).getMonth() === month &&
+                      new Date(value).getFullYear() === year;
+                    
+                    return (
+                      <button
+                        key={day}
+                        type="button"
+                        onClick={() => !isDisabled && handleDateSelect(day)}
+                        disabled={isDisabled}
+                        className={`aspect-square rounded-xl text-base font-semibold transition-all duration-200 touch-manipulation active:scale-95 ${
+                          isDisabled 
+                            ? 'text-gray-600 cursor-not-allowed' 
+                            : isSelected
+                              ? `${selectedBg} text-white shadow-lg`
+                              : 'text-white hover:bg-slate-700/50 active:bg-slate-700'
+                        }`}
+                      >
+                        {day}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              /* Desktop: Dropdown */
+              <div className="absolute z-50 mt-2 left-0 right-0 sm:left-auto sm:right-auto sm:w-80 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+                <div className="flex items-center justify-between p-4 border-b border-white/5">
+                  <button
+                    type="button"
+                    onClick={handlePrevMonth}
+                    className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <span className="font-semibold text-white">{monthNames[month]} {year}</span>
+                  <button
+                    type="button"
+                    onClick={handleNextMonth}
+                    className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-gray-400 hover:text-white"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-7 gap-1 px-3 pt-3">
+                  {dayNames.map(day => (
+                    <div key={day} className="text-center text-xs font-medium text-gray-400 py-2">{day}</div>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-7 gap-1 p-3">
+                  {Array.from({ length: getFirstDayOfMonth(month, year) }).map((_, i) => (
+                    <div key={`empty-${i}`} className="h-10" />
+                  ))}
+                  {Array.from({ length: getDaysInMonth(month, year) }).map((_, i) => {
+                    const day = i + 1;
+                    const isDisabled = isDateDisabled(day, month, year);
+                    const isSelected = value && 
+                      new Date(value).getDate() === day &&
+                      new Date(value).getMonth() === month &&
+                      new Date(value).getFullYear() === year;
+                    
+                    return (
+                      <button
+                        key={day}
+                        type="button"
+                        onClick={() => !isDisabled && handleDateSelect(day)}
+                        disabled={isDisabled}
+                        className={`h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
+                          isDisabled 
+                            ? 'text-gray-600 cursor-not-allowed' 
+                            : isSelected
+                              ? `${selectedBg} text-white shadow-lg`
+                              : 'text-white hover:bg-slate-700/50'
+                        }`}
+                      >
+                        {day}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
       {error && <p className="text-red-400 text-sm mt-1">{error}</p>}

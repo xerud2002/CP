@@ -1,353 +1,184 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
-import { showSuccess, showError } from '@/lib/toast';
 
 export default function GDPRPage() {
-  const [requestType, setRequestType] = useState<string>('');
-  const [email, setEmail] = useState('');
-  const [details, setDetails] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      showSuccess('Cererea ta GDPR a fost înregistrată. Vom răspunde în max. 30 zile.');
-      setRequestType('');
-      setEmail('');
-      setDetails('');
-    } catch {
-      showError('Eroare la trimiterea cererii. Încearcă din nou.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <main className="min-h-screen bg-slate-900">
-      <section className="py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-            Drepturile Tale <span className="text-gradient">GDPR</span>
-          </h1>
-          <p className="text-xl text-gray-300">
-            Ai control deplin asupra datelor tale personale
-          </p>
-          <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-2 rounded-lg mt-4">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      {/* Hero Section */}
+      <section className="py-16 sm:py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-10 left-10 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-72 h-72 bg-orange-500/5 rounded-full blur-3xl"></div>
+        </div>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-6">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
-            <span className="font-semibold">Conformi Regulamentului (UE) 2016/679</span>
+            Conform UK GDPR
           </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+            Drepturile Tale <span className="text-gradient">GDPR</span>
+          </h1>
+          <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto">
+            Ai control deplin asupra datelor tale personale
+          </p>
+          <p className="text-gray-500 text-sm mt-4">Ultima actualizare: 30 Decembrie 2025</p>
         </div>
       </section>
 
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {[
-              {
-                icon: '📖',
-                title: 'Dreptul de acces',
-                desc: 'Poți solicita o copie completă a datelor personale pe care le deținem despre tine',
-                action: 'Solicită acces'
-              },
-              {
-                icon: '✏️',
-                title: 'Dreptul la rectificare',
-                desc: 'Poți corecta orice date inexacte sau incomplete din contul tău',
-                action: 'Corectează date'
-              },
-              {
-                icon: '🗑️',
-                title: 'Dreptul la ștergere',
-                desc: '"Dreptul de a fi uitat" - poți cere ștergerea completă a datelor tale',
-                action: 'Șterge datele'
-              },
-              {
-                icon: '⛔',
-                title: 'Dreptul la restricționare',
-                desc: 'Poți limita modul în care folosim datele tale în anumite situații',
-                action: 'Restricționează'
-              },
-              {
-                icon: '📦',
-                title: 'Dreptul la portabilitate',
-                desc: 'Poți primi datele tale într-un format structurat și portabil',
-                action: 'Export date'
-              },
-              {
-                icon: '🚫',
-                title: 'Dreptul la opoziție',
-                desc: 'Poți te opui procesării datelor în scopuri de marketing sau alte scopuri',
-                action: 'Opune-te'
-              }
-            ].map((right, idx) => (
-              <div key={idx} className="card p-6 hover:border-orange-500/30 transition">
-                <div className="text-4xl mb-3">{right.icon}</div>
-                <h3 className="text-lg font-bold text-white mb-2">{right.title}</h3>
-                <p className="text-sm text-gray-400 mb-4">{right.desc}</p>
-                <button 
-                  onClick={() => setRequestType(right.title)}
-                  className="text-orange-400 hover:text-orange-300 text-sm font-semibold"
-                >
-                  {right.action} →
-                </button>
+      <section className="py-12 sm:py-16 px-4">
+        <div className="max-w-5xl mx-auto">
+          {/* Rights Cards */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12">
+            {/* Access */}
+            <div className="card p-6 hover:border-blue-500/30 transition group">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
               </div>
-            ))}
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 mb-12">
-            <div className="card p-8">
-              <h2 className="text-2xl font-bold text-white mb-6">Trimite cerere GDPR</h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-gray-300 mb-2">Tipul cererii *</label>
-                  <select
-                    required
-                    className="form-input w-full"
-                    value={requestType}
-                    onChange={(e) => setRequestType(e.target.value)}
-                  >
-                    <option value="">Selectează dreptul</option>
-                    <option value="Dreptul de acces">📖 Acces la date</option>
-                    <option value="Dreptul la rectificare">✏️ Rectificare date</option>
-                    <option value="Dreptul la ștergere">🗑️ Ștergere date (&quot;Dreptul de a fi uitat&quot;)</option>
-                    <option value="Dreptul la restricționare">⛔ Restricționare procesare</option>
-                    <option value="Dreptul la portabilitate">📦 Portabilitate date</option>
-                    <option value="Dreptul la opoziție">🚫 Opoziție procesare</option>
-                    <option value="Revocare consimțământ">❌ Revocare consimțământ</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-gray-300 mb-2">Email cont *</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="email@exemplu.ro"
-                    className="form-input w-full"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    Trebuie să fie emailul asociat contului tău
-                  </p>
-                </div>
-
-                <div>
-                  <label className="block text-gray-300 mb-2">Detalii suplimentare</label>
-                  <textarea
-                    rows={4}
-                    placeholder="Descrie cererea ta (opțional dar recomandat)..."
-                    className="form-input w-full resize-none"
-                    value={details}
-                    onChange={(e) => setDetails(e.target.value)}
-                  />
-                </div>
-
-                <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded text-sm text-gray-300">
-                  <p>
-                    <strong className="text-blue-400">Notă:</strong> Vei primi confirmare pe email și vom răspunde cererii 
-                    în maxim <strong className="text-white">30 zile</strong> conform GDPR.
-                  </p>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="btn-primary w-full py-3 disabled:opacity-50"
-                >
-                  {loading ? 'Se trimite...' : 'Trimite cererea GDPR'}
-                </button>
-              </form>
+              <h3 className="text-lg font-bold text-white mb-2">Dreptul de acces</h3>
+              <p className="text-sm text-gray-400">Poți solicita o copie completă a datelor personale pe care le deținem despre tine.</p>
             </div>
 
-            <div className="space-y-6">
-              <div className="card p-6">
-                <h3 className="text-xl font-bold text-white mb-4">Cum funcționează?</h3>
-                <div className="space-y-4">
-                  {[
-                    { step: '1', title: 'Trimiți cererea', desc: 'Completezi formularul cu tipul cererii GDPR' },
-                    { step: '2', title: 'Verificăm identitatea', desc: 'Confirmăm că ești proprietarul contului' },
-                    { step: '3', title: 'Procesăm cererea', desc: 'Echipa noastră analizează și pregătește răspunsul' },
-                    { step: '4', title: 'Primești răspuns', desc: 'Te contactăm în max. 30 zile cu soluția' }
-                  ].map((item) => (
-                    <div key={item.step} className="flex gap-4">
-                      <div className="shrink-0 w-10 h-10 bg-orange-500/10 rounded-full flex items-center justify-center">
-                        <span className="font-bold text-orange-400">{item.step}</span>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-white">{item.title}</h4>
-                        <p className="text-sm text-gray-400">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            {/* Rectification */}
+            <div className="card p-6 hover:border-emerald-500/30 transition group">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
               </div>
+              <h3 className="text-lg font-bold text-white mb-2">Dreptul la rectificare</h3>
+              <p className="text-sm text-gray-400">Poți corecta orice date inexacte sau incomplete din contul tău.</p>
+            </div>
 
-              <div className="card p-6 bg-emerald-500/5 border-emerald-500/20">
-                <h3 className="text-lg font-bold text-white mb-3">✅ Garanțiile noastre</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-400">•</span>
-                    Răspuns în max. 30 zile conform GDPR
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-400">•</span>
-                    Gratuit (prima cerere GDPR)
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-400">•</span>
-                    Confidențialitate deplină
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-400">•</span>
-                    Fără întrebări nedorite
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-emerald-400">•</span>
-                    Confirmări clare pe email
-                  </li>
-                </ul>
+            {/* Deletion */}
+            <div className="card p-6 hover:border-red-500/30 transition group">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-red-500/20 to-pink-500/20 border border-red-500/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
               </div>
+              <h3 className="text-lg font-bold text-white mb-2">Dreptul la ștergere</h3>
+              <p className="text-sm text-gray-400">&quot;Dreptul de a fi uitat&quot; - poți cere ștergerea completă a datelor tale.</p>
+            </div>
 
-              <div className="card p-6 bg-orange-500/5 border-orange-500/20">
-                <h3 className="text-lg font-bold text-white mb-3">📋 Ce date poți solicita?</h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-400">•</span>
-                    Date cont (nume, email, telefon)
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-400">•</span>
-                    Istoric comenzi complete
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-400">•</span>
-                    Mesaje chat cu curieri
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-400">•</span>
-                    Recenzii scrise/primite
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-400">•</span>
-                    Loguri activitate (login, acțiuni)
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-orange-400">•</span>
-                    Preferințe și setări
-                  </li>
-                </ul>
+            {/* Restriction */}
+            <div className="card p-6 hover:border-amber-500/30 transition group">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                </svg>
               </div>
+              <h3 className="text-lg font-bold text-white mb-2">Dreptul la restricționare</h3>
+              <p className="text-sm text-gray-400">Poți limita modul în care folosim datele tale în anumite situații.</p>
+            </div>
+
+            {/* Portability */}
+            <div className="card p-6 hover:border-purple-500/30 transition group">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">Dreptul la portabilitate</h3>
+              <p className="text-sm text-gray-400">Poți primi datele tale într-un format structurat și portabil.</p>
+            </div>
+
+            {/* Opposition */}
+            <div className="card p-6 hover:border-pink-500/30 transition group">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-pink-500/20 to-rose-500/20 border border-pink-500/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <svg className="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">Dreptul la opoziție</h3>
+              <p className="text-sm text-gray-400">Te poți opune procesării datelor în scopuri de marketing.</p>
             </div>
           </div>
 
-          <div className="card p-8 mb-12">
-            <h2 className="text-2xl font-bold text-white mb-6">Întrebări frecvente GDPR</h2>
-            <div className="space-y-4">
-              <details className="group">
-                <summary className="p-4 cursor-pointer flex justify-between items-center bg-slate-800/50 rounded-lg">
-                  <span className="font-semibold text-white">Cât durează să primesc datele mele?</span>
-                  <svg className="w-5 h-5 text-orange-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <div className="p-4 text-gray-300 text-sm">
-                  Maximum 30 zile conform GDPR. De obicei răspundem în 7-14 zile. Vei primi datele pe email în format JSON sau PDF.
-                </div>
-              </details>
-
-              <details className="group">
-                <summary className="p-4 cursor-pointer flex justify-between items-center bg-slate-800/50 rounded-lg">
-                  <span className="font-semibold text-white">Pot șterge contul fără să aștept 30 zile?</span>
-                  <svg className="w-5 h-5 text-orange-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <div className="p-4 text-gray-300 text-sm">
-                  Da! Poți șterge contul instant din setările contului. Cererea GDPR formală e necesară doar dacă vrei confirmări detaliate sau ai comenzi active.
-                </div>
-              </details>
-
-              <details className="group">
-                <summary className="p-4 cursor-pointer flex justify-between items-center bg-slate-800/50 rounded-lg">
-                  <span className="font-semibold text-white">Ce se întâmplă cu comenzile după ștergerea contului?</span>
-                  <svg className="w-5 h-5 text-orange-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <div className="p-4 text-gray-300 text-sm">
-                  Păstrăm datele comenzilor 5 ani pentru obligații fiscale (conform legii contabilității). Datele sunt anonimizate (nume → &quot;Utilizator #12345&quot;).
-                </div>
-              </details>
-
-              <details className="group">
-                <summary className="p-4 cursor-pointer flex justify-between items-center bg-slate-800/50 rounded-lg">
-                  <span className="font-semibold text-white">Pot reclama la ANSPDCP dacă nu sunt mulțumit?</span>
-                  <svg className="w-5 h-5 text-orange-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <div className="p-4 text-gray-300 text-sm">
-                  Da, ai dreptul la plângere la Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (ANSPDCP): 
-                  <a href="https://www.dataprotection.ro" target="_blank" rel="noopener noreferrer" className="text-orange-400 underline ml-1">
-                    www.dataprotection.ro
-                  </a>
-                </div>
-              </details>
-
-              <details className="group">
-                <summary className="p-4 cursor-pointer flex justify-between items-center bg-slate-800/50 rounded-lg">
-                  <span className="font-semibold text-white">Costă bani să-mi exercit drepturile GDPR?</span>
-                  <svg className="w-5 h-5 text-orange-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <div className="p-4 text-gray-300 text-sm">
-                  NU. Prima cerere GDPR e gratuită conform legii. Dacă faci cereri multiple excesive/nejustificate în timp scurt, putem percepe o taxă rezonabilă sau refuza (conform Art. 12 GDPR).
-                </div>
-              </details>
+          {/* How to exercise rights */}
+          <div className="card p-6 sm:p-8 mb-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-orange-500/20 flex items-center justify-center">
+                <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">Cum îți exerciți drepturile?</h2>
             </div>
-          </div>
-
-          <div className="card p-8 bg-linear-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20">
-            <h2 className="text-2xl font-bold text-white mb-4 text-center">Contact DPO</h2>
-            <p className="text-gray-300 mb-6 text-center">
-              Pentru orice întrebare despre datele tale sau drepturile GDPR:
+            <p className="text-gray-300 mb-6">
+              Pentru a-ți exercita oricare dintre drepturile GDPR, ne poți contacta prin email la{' '}
+              <a href="mailto:contact@curierulperfect.com" className="text-orange-400 hover:underline font-medium">
+                contact@curierulperfect.com
+              </a>. Vom răspunde în cel mai scurt timp posibil conform UK GDPR.
             </p>
-            <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
-              <a href="mailto:contact@curierulperfect.com" className="flex items-center gap-3 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition">
-                <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="font-semibold text-white">Gratuit</span>
+                </div>
+                <p className="text-sm text-gray-400">Prima cerere GDPR este gratuită conform legii.</p>
+              </div>
+              <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="font-semibold text-white">Răspuns rapid</span>
+                </div>
+                <p className="text-sm text-gray-400">Procesăm cererile în cel mai scurt timp posibil.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact DPO */}
+          <div className="card p-6 sm:p-8 bg-linear-to-br from-orange-500/5 to-purple-500/5 border-orange-500/20">
+            <div className="text-center mb-6">
+              <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-orange-500/20 to-purple-500/20 border border-orange-500/30 flex items-center justify-center mx-auto mb-4">
+                <svg className="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Contact</h2>
+              <p className="text-gray-400 text-sm">Pentru întrebări despre datele tale sau drepturile GDPR</p>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+              <a href="mailto:contact@curierulperfect.com" className="flex items-center gap-3 p-4 bg-slate-800/50 rounded-xl hover:bg-slate-800 transition border border-white/5">
+                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
                 <div>
-                  <p className="text-xs text-gray-500">Email DPO</p>
-                  <p className="text-white font-semibold">contact@curierulperfect.com</p>
+                  <p className="text-xs text-gray-500">Email</p>
+                  <p className="text-white font-semibold text-sm">contact@curierulperfect.com</p>
                 </div>
               </a>
-              <a href="https://www.dataprotection.ro" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 bg-slate-800/50 rounded-lg hover:bg-slate-800 transition">
-                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
+              <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 bg-slate-800/50 rounded-xl hover:bg-slate-800 transition border border-white/5">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
                 <div>
-                  <p className="text-xs text-gray-500">Autoritate</p>
-                  <p className="text-white font-semibold">ANSPDCP</p>
+                  <p className="text-xs text-gray-500">Autoritate UK</p>
+                  <p className="text-white font-semibold text-sm">ICO (ico.org.uk)</p>
                 </div>
               </a>
             </div>
           </div>
 
+          {/* Navigation */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Link href="/confidentialitate" className="btn-primary px-6 py-3">
+            <Link href="/confidentialitate" className="btn-primary px-6 py-3 text-center">
               Politica de Confidențialitate
             </Link>
-            <Link href="/cookies" className="btn-secondary px-6 py-3">
+            <Link href="/cookies" className="btn-secondary px-6 py-3 text-center">
               Politica Cookies
             </Link>
           </div>

@@ -56,7 +56,7 @@ export default function CountryDropdown({ value, onChange, label, onCountryChang
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="form-input w-full flex items-center gap-3 cursor-pointer"
+          className="form-input w-full flex items-center gap-2 sm:gap-3 cursor-pointer min-h-12 sm:min-h-11 touch-manipulation"
           aria-label={label}
         >
           <Image 
@@ -76,19 +76,33 @@ export default function CountryDropdown({ value, onChange, label, onCountryChang
           </svg>
         </button>
         {isOpen && (
-          <div className="absolute z-100 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
-            <div className="p-2 border-b border-white/10">
+          <div className="fixed sm:absolute inset-0 sm:inset-auto z-100 sm:mt-1 w-full sm:w-auto bg-slate-800 sm:border border-white/10 sm:rounded-lg shadow-xl max-h-screen sm:max-h-60 overflow-hidden flex flex-col">
+            <div className="p-3 sm:p-2 border-b border-white/10 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  setSearchQuery('');
+                }}
+                className="sm:hidden p-2 hover:bg-slate-700 rounded-lg transition-colors touch-manipulation"
+                aria-label="Închide"
+              >
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Caută..."
-                className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="flex-1 px-3 sm:px-3 py-3 sm:py-2 bg-slate-700 text-white rounded-lg text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 touch-manipulation"
                 onClick={(e) => e.stopPropagation()}
                 aria-label={`Caută ${label.toLowerCase()}`}
+                autoFocus
               />
             </div>
-            <div className="overflow-y-auto max-h-48 dropdown-scrollbar">
+            <div className="overflow-y-auto flex-1 sm:max-h-48 dropdown-scrollbar">
               {filteredCountries.length > 0 ? (
                 filteredCountries.map((c) => (
                   <button
@@ -100,7 +114,7 @@ export default function CountryDropdown({ value, onChange, label, onCountryChang
                       setIsOpen(false);
                       setSearchQuery('');
                     }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
+                    className={`w-full flex items-center gap-3 px-4 sm:px-3 py-4 sm:py-2.5 hover:bg-slate-700 active:bg-slate-600 transition-colors touch-manipulation ${
                       value === c.code ? 'bg-slate-700/50' : ''
                     }`}
                   >

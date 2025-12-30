@@ -43,7 +43,7 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center gap-3 px-3 py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 transition-colors text-left text-sm"
+          className="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-3 py-3 sm:py-2.5 bg-slate-900/80 border border-white/10 rounded-xl text-white hover:bg-slate-800 active:bg-slate-700 transition-colors text-left text-sm min-h-12 sm:min-h-11 touch-manipulation"
         >
           {value === 'all' ? (
             <>
@@ -73,18 +73,31 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
         </button>
         
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-in slide-in-from-top-2 duration-200">
-            <div className="p-2 border-b border-white/5">
+          <div className="fixed sm:absolute inset-0 sm:inset-auto sm:top-full sm:left-0 sm:right-0 sm:mt-2 bg-slate-900 sm:border border-white/10 sm:rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col">
+            <div className="p-3 sm:p-2 border-b border-white/5 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  setSearch('');
+                }}
+                className="sm:hidden p-2 hover:bg-slate-800 rounded-lg transition-colors touch-manipulation"
+                aria-label="Închide"
+              >
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
               <input
                 type="text"
                 placeholder="Caută țară..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-3 sm:py-2 bg-slate-800 border border-white/10 rounded-lg text-white text-base sm:text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 touch-manipulation"
                 autoFocus
               />
             </div>
-            <div className="max-h-[calc(70vh-4rem)] sm:max-h-85 overflow-y-auto custom-scrollbar">
+            <div className="flex-1 sm:max-h-[calc(70vh-4rem)] overflow-y-auto custom-scrollbar">
               <button
                 onClick={() => {
                   onChange('all');
@@ -117,7 +130,7 @@ export default function CountryFilter({ value, onChange }: CountryFilterProps) {
                     setIsOpen(false);
                     setSearch('');
                   }}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm transition-colors ${
+                  className={`w-full flex items-center gap-3 px-4 sm:px-3 py-4 sm:py-2.5 text-sm transition-colors touch-manipulation ${
                     value === country.code 
                       ? 'bg-blue-500/20 text-blue-400' 
                       : 'text-gray-300 hover:bg-slate-800'

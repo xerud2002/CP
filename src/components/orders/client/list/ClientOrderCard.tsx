@@ -129,11 +129,11 @@ function ClientOrderCard({
   return (
     <div 
       id={`order-${order.id}`}
-      className="bg-slate-800/50 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/5 p-3 sm:p-6 hover:border-white/10 transition-all"
+      className="bg-slate-800/50 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/5 p-3 sm:p-4 md:p-6 hover:border-white/10 transition-all touch-manipulation"
     >
       <div className="flex items-start gap-2.5 sm:gap-4">
         {/* Service Icon */}
-        <div className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl ${serviceConfig.bg} flex items-center justify-center shrink-0 ${serviceConfig.color}`}>
+        <div className={`relative w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg sm:rounded-xl ${serviceConfig.bg} flex items-center justify-center shrink-0 ${serviceConfig.color}`}>
           <ServiceIcon service={order.serviciu || 'colete'} />
           {((order.nrOferte ?? 0) > 0 || (order.nrMesajeNoi ?? 0) > 0) && (
             <span className="absolute -top-1 -right-1 flex h-5 w-5">

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { memo, lazy, Suspense } from 'react';
+import React, { memo, lazy, Suspense, useState } from 'react';
 import Image from 'next/image';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
 import { formatOrderNumber } from '@/utils/orderHelpers';
@@ -34,6 +34,8 @@ function OrderCard({
   onViewDetails,
   onDismiss
 }: OrderCardProps) {
+  const [showDismissConfirm, setShowDismissConfirm] = useState(false);
+  
   const serviceTypeConfig = serviceTypes.find(
     s => s.value.toLowerCase() === (order.tipColet || 'colete').toLowerCase()
   ) || serviceTypes[0];
@@ -182,7 +184,7 @@ function OrderCard({
                 title="Vezi detalii"
               />
               <DismissButton
-                onClick={onDismiss}
+                onClick={() => setShowDismissConfirm(true)}
                 title="Nu sunt interesat"
               />
             </ActionButtonsGroup>
@@ -256,6 +258,55 @@ function OrderCard({
               clientId={order.uid_client}
             />
           </Suspense>
+        </div>
+      )}
+
+      {/* Dismiss Confirmation Modal */}
+      {showDismissConfirm && (
+        <div className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl border border-white/10 shadow-2xl max-w-md w-full animate-in zoom-in-95 duration-200">
+            <div className="p-6 sm:p-8">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="p-3.5 bg-gradient-to-br from-orange-500/30 to-amber-500/20 rounded-xl border border-orange-500/20 shadow-lg shadow-orange-500/10">
+                  <svg className="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg sm:text-xl font-bold text-white">Ascunde comanda?</h3>
+                  <p className="text-sm text-gray-400 mt-1">Comanda #{formatOrderNumber(order.orderNumber || 0)}</p>
+                </div>
+                <button
+                  onClick={() => setShowDismissConfirm(false)}
+                  className="p-2 hover:bg-white/5 rounded-lg transition-colors text-gray-400 hover:text-white"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-gray-300 text-sm sm:text-base mb-6 leading-relaxed">
+                Ești sigur că vrei să ascunzi această comandă? Nu vei mai vedea această comandă în lista ta.
+              </p>
+              <div className="flex flex-col-reverse sm:flex-row gap-3">
+                <button
+                  onClick={() => setShowDismissConfirm(false)}
+                  className="flex-1 px-4 py-3.5 bg-slate-700/80 hover:bg-slate-600 text-white rounded-xl font-medium transition-all border border-white/5 touch-manipulation"
+                >
+                  Anulează
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDismissConfirm(false);
+                    onDismiss();
+                  }}
+                  className="flex-1 px-4 py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-xl font-medium transition-all shadow-lg shadow-orange-500/25 touch-manipulation"
+                >
+                  Da, ascunde
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

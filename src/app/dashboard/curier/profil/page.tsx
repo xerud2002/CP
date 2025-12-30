@@ -686,15 +686,14 @@ function ProfilCurierContent() {
                       <button
                         type="button"
                         onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
-                        className="form-input w-full flex items-center gap-3 cursor-pointer"
+                        className="form-input w-full flex items-center gap-2 sm:gap-3 cursor-pointer min-h-12 sm:min-h-11 touch-manipulation"
                       >
                         <Image
                           src={countries.find(c => c.code === profile.taraSediu)?.flag || '/img/flag/ro.svg'}
                           alt=""
-                          width={24}
-                          height={16}
-                          className="rounded-sm shrink-0"
-                          style={{ width: 'auto', height: 'auto' }}
+                          width={20}
+                          height={14}
+                          className="rounded-sm shrink-0 w-5 h-auto sm:w-6"
                         />
                         <span className="flex-1 text-left truncate">{countries.find(c => c.code === profile.taraSediu)?.name || 'România'}</span>
                         <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${countryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -703,7 +702,21 @@ function ProfilCurierContent() {
                       </button>
                       
                       {countryDropdownOpen && (
-                        <div className="absolute z-9999 mt-1 w-full bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
+                        <div className="fixed sm:absolute inset-0 sm:inset-auto z-100 sm:mt-1 w-full sm:w-auto bg-slate-800 sm:border border-white/10 sm:rounded-lg shadow-xl max-h-screen sm:max-h-60 overflow-hidden flex flex-col">
+                          <div className="p-3 sm:p-0 border-b sm:border-0 border-white/10 flex sm:hidden items-center justify-between">
+                            <span className="text-sm font-medium text-gray-300">Selectează țara</span>
+                            <button
+                              type="button"
+                              onClick={() => setCountryDropdownOpen(false)}
+                              className="p-2 hover:bg-slate-700 rounded-lg transition-colors touch-manipulation"
+                              aria-label="Închide"
+                            >
+                              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                          <div className="flex-1 overflow-y-auto dropdown-scrollbar">
                           {countries.map((c) => (
                             <button
                               key={c.code}
@@ -712,21 +725,21 @@ function ProfilCurierContent() {
                                 setProfile({ ...profile, taraSediu: c.code });
                                 setCountryDropdownOpen(false);
                               }}
-                              className={`w-full flex items-center gap-2 sm:gap-3 px-3 py-2.5 sm:py-3 hover:bg-slate-700 transition-colors ${
+                              className={`w-full flex items-center gap-3 px-4 sm:px-3 py-4 sm:py-2.5 hover:bg-slate-700 active:bg-slate-600 transition-colors touch-manipulation ${
                                 profile.taraSediu === c.code ? 'bg-slate-700/50' : ''
                               }`}
                             >
                               <Image
                                 src={c.flag}
                                 alt=""
-                                width={24}
-                                height={16}
-                                className="rounded-sm shrink-0"
-                                style={{ width: 'auto', height: 'auto' }}
+                                width={20}
+                                height={14}
+                                className="rounded-sm shrink-0 w-5 h-auto"
                               />
                               <span className="text-white text-sm sm:text-base">{c.name}</span>
                             </button>
                           ))}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -826,24 +839,37 @@ function ProfilCurierContent() {
                       <button
                         type="button"
                         onClick={() => setPrefixDropdownOpen(!prefixDropdownOpen)}
-                        className="form-input w-32 flex items-center gap-2 cursor-pointer"
+                        className="form-input w-28 sm:w-32 flex items-center gap-1.5 sm:gap-2 cursor-pointer min-h-12 sm:min-h-11 touch-manipulation"
                       >
                         <Image
                           src={phonePrefixes.find(p => p.code === profile.telefonPrefix)?.flag || '/img/flag/ro.svg'}
                           alt={`Steag ${phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || 'România'}`}
                           width={20}
                           height={14}
-                          className="rounded-sm shrink-0"
-                          style={{ width: 'auto', height: 'auto' }}
+                          className="rounded-sm shrink-0 w-5 h-auto"
                         />
-                        <span>{phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || '+40'}</span>
-                        <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span className="text-sm sm:text-base">{phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || '+40'}</span>
+                        <svg className="w-4 h-4 ml-auto text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </button>
                       
                       {prefixDropdownOpen && (
-                        <div className="absolute z-9999 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
+                        <div className="fixed sm:absolute inset-0 sm:inset-auto z-100 sm:mt-1 w-full sm:w-48 bg-slate-800 sm:border border-white/10 sm:rounded-lg shadow-xl max-h-screen sm:max-h-60 overflow-hidden flex flex-col">
+                          <div className="p-3 sm:p-0 border-b sm:border-0 border-white/10 flex sm:hidden items-center justify-between">
+                            <span className="text-sm font-medium text-gray-300">Selectează prefix</span>
+                            <button
+                              type="button"
+                              onClick={() => setPrefixDropdownOpen(false)}
+                              className="p-2 hover:bg-slate-700 rounded-lg transition-colors touch-manipulation"
+                              aria-label="Închide"
+                            >
+                              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                          <div className="flex-1 overflow-y-auto dropdown-scrollbar">
                           {phonePrefixes.map((p) => (
                             <button
                               key={p.code}
@@ -852,7 +878,7 @@ function ProfilCurierContent() {
                                 setProfile({ ...profile, telefonPrefix: p.code });
                                 setPrefixDropdownOpen(false);
                               }}
-                              className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-700 transition-colors ${
+                              className={`w-full flex items-center gap-3 px-4 sm:px-3 py-4 sm:py-2.5 hover:bg-slate-700 active:bg-slate-600 transition-colors touch-manipulation ${
                                 profile.telefonPrefix === p.code ? 'bg-slate-700/50' : ''
                               }`}
                             >
@@ -861,12 +887,12 @@ function ProfilCurierContent() {
                                 alt=""
                                 width={20}
                                 height={14}
-                                className="rounded-sm shrink-0"
-                                style={{ width: 'auto', height: 'auto' }}
+                                className="rounded-sm shrink-0 w-5 h-auto"
                               />
-                              <span className="text-white text-sm">{p.name}</span>
+                              <span className="text-white text-sm sm:text-base">{p.name}</span>
                             </button>
                           ))}
+                          </div>
                         </div>
                       )}
                     </div>

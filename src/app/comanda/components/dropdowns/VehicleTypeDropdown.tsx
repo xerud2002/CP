@@ -39,7 +39,7 @@ export default function VehicleTypeDropdown({ value, onChange }: VehicleTypeDrop
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="form-select w-full flex items-center justify-between"
+        className="form-select w-full flex items-center justify-between min-h-12 sm:min-h-11 touch-manipulation"
       >
         <span className="flex items-center gap-2">
           {selectedVehicle ? (
@@ -56,7 +56,22 @@ export default function VehicleTypeDropdown({ value, onChange }: VehicleTypeDrop
         </svg>
       </button>
       {isOpen && (
-        <div className="absolute z-50 w-full mt-2 bg-slate-800 border border-white/10 rounded-xl shadow-xl max-h-80 overflow-y-auto">
+        <div className="fixed sm:absolute inset-0 sm:inset-auto sm:top-full sm:left-0 sm:right-0 z-50 sm:mt-2 w-full sm:w-auto bg-slate-800 sm:border border-white/10 sm:rounded-xl shadow-xl max-h-screen sm:max-h-80 overflow-hidden flex flex-col">
+          <div className="p-3 sm:p-0 border-b sm:border-0 border-white/10 flex sm:hidden items-center">
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="p-2 hover:bg-slate-700 rounded-lg transition-colors touch-manipulation"
+              aria-label="Închide"
+            >
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <span className="flex-1 text-center text-sm font-medium text-gray-300">Tip vehicul</span>
+            <div className="w-9"></div>
+          </div>
+          <div className="flex-1 overflow-y-auto">
           {vehicleTypes.map((vehicle) => (
             <button
               key={vehicle.value}
@@ -65,12 +80,13 @@ export default function VehicleTypeDropdown({ value, onChange }: VehicleTypeDrop
                 onChange(vehicle.value);
                 setIsOpen(false);
               }}
-              className="w-full px-4 py-3 text-left hover:bg-white/5 transition-colors flex items-center gap-3 text-gray-300 hover:text-white"
+              className="w-full px-4 py-4 sm:py-3 text-left hover:bg-white/5 active:bg-white/10 transition-colors flex items-center gap-3 text-gray-300 hover:text-white touch-manipulation"
             >
               <span className="text-orange-400">{vehicle.icon}</span>
               <span>{vehicle.label}</span>
             </button>
           ))}
+          </div>
         </div>
       )}
     </div>

@@ -8,7 +8,7 @@ export default function TermeniPage() {
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             Termeni și <span className="text-gradient">Condiții</span>
           </h1>
-          <p className="text-gray-300">Ultima actualizare: Ianuarie 2025</p>
+          <p className="text-gray-300">Ultima actualizare: 29 Decembrie 2025</p>
         </div>
       </section>
 
@@ -163,8 +163,8 @@ export default function TermeniPage() {
           <div className="card p-8 mb-6">
             <h2 className="text-2xl font-bold text-white mb-4">13. Legea Aplicabilă</h2>
             <p className="text-gray-300">
-              Acești termeni sunt guvernați de legea română. Orice dispută va fi soluționată amiabil sau, 
-              în caz contrar, de instanțele competente din România.
+              Acești termeni sunt guvernați de legislația din Regatul Unit. Orice dispută va fi soluționată amiabil sau, 
+              în caz contrar, de instanțele competente din Regatul Unit.
             </p>
           </div>
 
@@ -172,8 +172,7 @@ export default function TermeniPage() {
             <h2 className="text-2xl font-bold text-white mb-4">14. Contact</h2>
             <p className="text-gray-300 mb-4">Pentru întrebări despre termeni și condiții:</p>
             <p className="text-gray-300">
-              <strong className="text-white">Email:</strong> <a href="mailto:contact@curierulperfect.com" className="text-orange-400">contact@curierulperfect.com</a><br/>
-              <strong className="text-white">Suport:</strong> <a href="mailto:contact@curierulperfect.com" className="text-orange-400">contact@curierulperfect.com</a>
+              <strong className="text-white">Email:</strong> <a href="mailto:contact@curierulperfect.com" className="text-orange-400">contact@curierulperfect.com</a>
             </p>
           </div>
         </div>
