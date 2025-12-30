@@ -1,6 +1,9 @@
 'use client';
 
-import { useNotifications } from '@/hooks/useNotifications';
+import { useState, useEffect, useCallback, Component, ReactNode } from 'react';
+import { doc, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { showSuccess, showError, showInfo } from '@/lib/toast';
 
 // Bell Icon SVG
 const BellIcon = ({ className }: { className?: string }) => (
@@ -16,15 +19,160 @@ const BellSlashIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+// Error Boundary for the notification toggle
+class NotificationErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700/50 text-slate-400">
+          <BellSlashIcon className="w-5 h-5" />
+          <span className="text-sm">Notificările nu sunt disponibile</span>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 interface NotificationToggleProps {
   userId: string | undefined;
   className?: string;
 }
 
-export function NotificationToggle({ userId, className = '' }: NotificationToggleProps) {
-  const { isSupported, isEnabled, isLoading, enableNotifications, disableNotifications } = useNotifications(userId);
+// Inline the notification logic to avoid import issues
+function NotificationToggleInner({ userId, className = '' }: NotificationToggleProps) {
+  const [isSupported, setIsSupported] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Show loading state while checking support
+  // Check support on mount
+  useEffect(() => {
+    async function checkStatus() {
+      try {
+        // Basic browser checks first
+        if (typeof window === 'undefined') {
+          setIsSupported(false);
+          setIsLoading(false);
+          return;
+        }
+
+        if (!('Notification' in window)) {
+          setIsSupported(false);
+          setIsLoading(false);
+          return;
+        }
+
+        if (!('serviceWorker' in navigator)) {
+          setIsSupported(false);
+          setIsLoading(false);
+          return;
+        }
+
+        // Dynamic import Firebase messaging to avoid SSR issues
+        const { isSupported: checkFirebaseSupport } = await import('firebase/messaging');
+        const supported = await checkFirebaseSupport();
+        setIsSupported(supported);
+
+        if (supported && userId) {
+          // Check if user has notifications enabled
+          const permission = Notification.permission;
+          if (permission === 'granted') {
+            const tokenDoc = await getDoc(doc(db, 'fcmTokens', userId));
+            setIsEnabled(tokenDoc.exists());
+          }
+        }
+      } catch (err) {
+        console.error('Error checking notification support:', err);
+        setIsSupported(false);
+        setError('Eroare la verificare');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    checkStatus();
+  }, [userId]);
+
+  const enableNotifications = useCallback(async () => {
+    if (!userId) {
+      showError('Trebuie să fii autentificat pentru notificări');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Request permission
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        showError('Permisiunea pentru notificări a fost refuzată');
+        setIsLoading(false);
+        return;
+      }
+
+      // Register service worker
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+      
+      // Get Firebase messaging
+      const { getMessaging, getToken } = await import('firebase/messaging');
+      const { default: app } = await import('@/lib/firebase');
+      const messaging = getMessaging(app);
+      
+      // Get token
+      const VAPID_KEY = 'BJktvHUoixcedi9A2QdNhRfOw5n4djYRbPPoP6CsVqve-dmIjiNVGwjwJvPGcWYwjxtqBAcyIGuxNq3BW-PsZiI';
+      const token = await getToken(messaging, {
+        vapidKey: VAPID_KEY,
+        serviceWorkerRegistration: registration
+      });
+
+      if (token) {
+        // Save token to Firestore
+        await setDoc(doc(db, 'fcmTokens', userId), {
+          token,
+          userId,
+          createdAt: new Date(),
+          platform: 'web',
+          userAgent: navigator.userAgent
+        });
+        setIsEnabled(true);
+        showSuccess('Notificările au fost activate!');
+      } else {
+        showError('Nu s-a putut obține token-ul pentru notificări');
+      }
+    } catch (err) {
+      console.error('Error enabling notifications:', err);
+      showError('Eroare la activarea notificărilor');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userId]);
+
+  const disableNotifications = useCallback(async () => {
+    if (!userId) return;
+    
+    setIsLoading(true);
+    try {
+      await deleteDoc(doc(db, 'fcmTokens', userId));
+      setIsEnabled(false);
+      showInfo('Notificările au fost dezactivate');
+    } catch (err) {
+      console.error('Error disabling notifications:', err);
+      showError('Eroare la dezactivarea notificărilor');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userId]);
+
+  // Show loading state
   if (isLoading) {
     return (
       <div className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700 text-slate-300 ${className}`}>
@@ -34,7 +182,17 @@ export function NotificationToggle({ userId, className = '' }: NotificationToggl
     );
   }
 
-  // Show message if notifications not supported
+  // Show error state
+  if (error) {
+    return (
+      <div className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700/50 text-slate-400 ${className}`}>
+        <BellSlashIcon className="w-5 h-5" />
+        <span className="text-sm">{error}</span>
+      </div>
+    );
+  }
+
+  // Show not supported message
   if (!isSupported) {
     return (
       <div className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700/50 text-slate-400 ${className}`}>
@@ -63,54 +221,23 @@ export function NotificationToggle({ userId, className = '' }: NotificationToggl
       } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
       title={isEnabled ? 'Dezactivează notificările' : 'Activează notificările'}
     >
-      {isLoading ? (
-        <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-      ) : isEnabled ? (
+      {isEnabled ? (
         <BellIcon className="w-5 h-5" />
       ) : (
         <BellSlashIcon className="w-5 h-5" />
       )}
       <span className="text-sm">
-        {isLoading ? 'Se procesează...' : isEnabled ? 'Notificări active' : 'Activează notificări'}
+        {isEnabled ? 'Notificări active' : 'Activează notificări'}
       </span>
     </button>
   );
 }
 
-// Compact version for header/navbar
-export function NotificationToggleCompact({ userId, className = '' }: NotificationToggleProps) {
-  const { isSupported, isEnabled, isLoading, enableNotifications, disableNotifications } = useNotifications(userId);
-
-  if (!isSupported) {
-    return null;
-  }
-
-  const handleToggle = async () => {
-    if (isEnabled) {
-      await disableNotifications();
-    } else {
-      await enableNotifications();
-    }
-  };
-
+// Export wrapped component with error boundary
+export function NotificationToggle(props: NotificationToggleProps) {
   return (
-    <button
-      onClick={handleToggle}
-      disabled={isLoading}
-      className={`p-2 rounded-lg transition-all ${
-        isEnabled
-          ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
-          : 'bg-slate-700 text-slate-400 hover:bg-slate-600 hover:text-slate-300'
-      } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}
-      title={isEnabled ? 'Dezactivează notificările' : 'Activează notificările'}
-    >
-      {isLoading ? (
-        <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-      ) : isEnabled ? (
-        <BellIcon className="w-5 h-5" />
-      ) : (
-        <BellSlashIcon className="w-5 h-5" />
-      )}
-    </button>
+    <NotificationErrorBoundary>
+      <NotificationToggleInner {...props} />
+    </NotificationErrorBoundary>
   );
 }
