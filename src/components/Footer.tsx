@@ -200,29 +200,6 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-
-        {/* Newsletter Section */}
-        <div className="mt-12 pt-12 border-t border-white/5">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
-              <h4 className="text-white font-semibold mb-1">Abonează-te la newsletter</h4>
-              <p className="text-gray-300 text-sm">Primește oferte exclusive pentru transport colete, mobilă, persoane și multe altele.</p>
-            </div>
-            <form className="flex w-full md:w-auto gap-2">
-              <input
-                type="email"
-                placeholder="adresa@email.com"
-                className="flex-1 md:w-64 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/50 transition-colors text-sm"
-              />
-              <button
-                type="submit"
-                className="btn-primary px-6 py-3 text-sm whitespace-nowrap"
-              >
-                Abonează-te
-              </button>
-            </form>
-          </div>
-        </div>
       </div>
 
       {/* Bottom Bar */}

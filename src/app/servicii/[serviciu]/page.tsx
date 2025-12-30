@@ -685,53 +685,53 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
 
       <main className="min-h-screen bg-slate-900">
         {/* Hero Section */}
-        <section className={`relative py-20 sm:py-24 px-4 overflow-hidden`}>
+        <section className={`relative py-12 sm:py-16 lg:py-24 px-4 overflow-hidden`}>
           {/* Background effects */}
           <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-800/50 to-slate-900"></div>
           <div className={`absolute inset-0 bg-linear-to-br ${data.color} opacity-30`}></div>
           <div className="absolute inset-0">
-            <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-linear-to-br from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-linear-to-br from-blue-500/10 to-transparent rounded-full blur-3xl"></div>
+            <div className="absolute top-1/4 right-1/4 w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-linear-to-br from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 left-1/4 w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-linear-to-br from-blue-500/10 to-transparent rounded-full blur-3xl"></div>
           </div>
 
           <div className="max-w-6xl mx-auto relative z-10">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-sm mb-8">
+            <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm mb-6 sm:mb-8 flex-wrap">
               <Link href="/" className="text-gray-400 hover:text-white transition-colors">Acasă</Link>
-              <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-              <span className="text-white font-medium">Servicii</span>
-              <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <Link href="/servicii" className="text-gray-400 hover:text-white transition-colors">Servicii</Link>
+              <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-              <span className="text-gray-400">{data.title.split(' - ')[0]}</span>
+              <span className="text-white font-medium truncate max-w-[120px] sm:max-w-none">{data.title.split(' - ')[0]}</span>
             </nav>
 
             <div className="flex flex-col lg:flex-row items-start gap-8">
               {/* Icon and title */}
               <div className="flex-1">
-                <div className="flex items-center gap-6 mb-6">
-                  <div className={`w-20 h-20 rounded-2xl bg-slate-800/80 backdrop-blur-sm border-2 ${data.borderColor} flex items-center justify-center shadow-2xl`}>
-                    <ServiceIcon service={serviciu} className="w-10 h-10" />
+                <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
+                  <div className={`w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-xl sm:rounded-2xl bg-slate-800/80 backdrop-blur-sm border-2 ${data.borderColor} flex items-center justify-center shadow-2xl shrink-0`}>
+                    <ServiceIcon service={serviciu} className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
                   </div>
                   <div>
-                    <p className="text-emerald-400 text-sm font-medium mb-2 flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <p className="text-emerald-400 text-xs sm:text-sm font-medium mb-1 sm:mb-2 flex items-center gap-1.5 sm:gap-2">
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                       Serviciu verificat
                     </p>
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">{data.title}</h1>
+                    <h1 className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight">{data.title}</h1>
                   </div>
                 </div>
-                <p className="text-xl text-gray-300 leading-relaxed mb-8 max-w-2xl">{data.longDescription}</p>
+                <p className="text-base sm:text-lg lg:text-xl text-gray-300 leading-relaxed mb-6 sm:mb-8 max-w-2xl">{data.longDescription}</p>
                 
                 {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <Link 
                     href={`/comanda?serviciu=${serviciu}`} 
-                    className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg shadow-orange-500/30 transition-all hover:scale-105 active:scale-95"
+                    className="group inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3 sm:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base font-semibold rounded-xl shadow-lg shadow-orange-500/30 transition-all hover:scale-105 active:scale-95"
                   >
                     Solicită ofertă gratuită
                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -740,9 +740,9 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                   </Link>
                   <Link
                     href="/cum-functioneaza"
-                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700 text-white font-medium rounded-xl border border-white/10 transition-all"
+                    className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3 sm:py-4 bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base font-medium rounded-xl border border-white/10 transition-all"
                   >
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     Cum funcționează
@@ -751,44 +751,44 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
               </div>
 
               {/* Stats card */}
-              <div className="lg:w-80 w-full">
-                <div className="bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl">
-                  <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
+              <div className="lg:w-80 w-full mt-6 lg:mt-0">
+                <div className="bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-2xl">
+                  <h3 className="text-white text-sm sm:text-base font-semibold mb-3 sm:mb-4 flex items-center gap-2">
                     <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                       <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
                     </svg>
                     De ce să alegi acest serviciu?
                   </h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-sm">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
-                        <svg className="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="space-y-2.5 sm:space-y-3">
+                    <div className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
+                        <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                         </svg>
                       </div>
                       <span className="text-gray-300">Transportatori verificați</span>
                     </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
-                        <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <div className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-500/20 flex items-center justify-center shrink-0">
+                        <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
                           <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z" />
                         </svg>
                       </div>
                       <span className="text-gray-300">Asigurare completă inclusă</span>
                     </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center shrink-0">
-                        <svg className="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                    <div className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-purple-500/20 flex items-center justify-center shrink-0">
+                        <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                         </svg>
                       </div>
                       <span className="text-gray-300">Răspuns rapid în 24h</span>
                     </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
-                        <svg className="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                    <div className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
+                        <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -802,10 +802,10 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* Article Section - Detailed Content */}
-        <section className="py-20 px-4 bg-linear-to-b from-slate-900 to-slate-800/50">
+        <section className="py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-900 to-slate-800/50">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-slate-800/30 backdrop-blur-sm border border-white/5 rounded-3xl p-8 sm:p-12">
-              <div className="prose prose-invert prose-lg max-w-none">
+            <div className="bg-slate-800/30 backdrop-blur-sm border border-white/5 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12">
+              <div className="prose prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none">
                 {data.article.split('\n\n').map((paragraph, idx) => (
                   <p 
                     key={idx} 
@@ -819,37 +819,37 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* Insurance & Verification Section */}
-        <section className="py-16 px-4 bg-linear-to-br from-emerald-500/10 to-blue-500/10">
+        <section className="py-12 sm:py-16 px-4 bg-linear-to-br from-emerald-500/10 to-blue-500/10">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-sm font-medium mb-4">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <div className="text-center mb-8 sm:mb-12">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 Transportatori Verificați și Asigurați
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">
                 Siguranța Ta Este Prioritatea Noastră
               </h2>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto">
                 Toți transportatorii din platforma noastră sunt verificați riguros și dețin asigurările necesare pentru protecția completă a bunurilor tale.
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               {data.insurance.map((item, idx) => (
-                <div key={idx} className="bg-slate-800/50 border border-emerald-500/20 rounded-2xl p-6 hover:border-emerald-500/40 transition-all group">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                      <svg className="w-6 h-6 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                <div key={idx} className="bg-slate-800/50 border border-emerald-500/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-emerald-500/40 transition-all group">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                      <svg className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-emerald-400 transition-colors">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-white mb-1.5 sm:mb-2 group-hover:text-emerald-400 transition-colors">
                         {item.title}
                       </h3>
-                      <p className="text-gray-400 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
                         {item.description}
                       </p>
                     </div>
@@ -888,13 +888,15 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* Benefits Section */}
-        <section className="py-20 px-4 bg-slate-900">
+        <section className="py-12 sm:py-16 lg:py-20 px-4 bg-slate-900">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">De ce să alegi Curierul Perfect?</h2>
-              <p className="text-gray-400 text-lg max-w-2xl mx-auto">Servicii complete cu toate avantajele de care ai nevoie pentru un transport sigur și eficient</p>
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">De ce să alegi Curierul Perfect?</h2>
+              <p className="text-gray-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">Servicii complete cu toate avantajele de care ai nevoie pentru un transport sigur și eficient</p>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            {/* Benefits list - cleaner design */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {data.benefits.map((benefit, idx) => {
                 // Function to select appropriate icon based on benefit text
                 const getIconForBenefit = (text: string) => {
@@ -902,100 +904,103 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                   
                   // Time/Speed related
                   if (lowerText.includes('24') || lowerText.includes('48') || lowerText.includes('rapid') || lowerText.includes('expresă') || lowerText.includes('livrare') || lowerText.includes('ore')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
                   }
                   // Tracking/GPS
                   if (lowerText.includes('tracking') || lowerText.includes('timp real') || lowerText.includes('monitorizare') || lowerText.includes('gps')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
                   }
                   // Insurance/Protection
                   if (lowerText.includes('asigurare') || lowerText.includes('protecție') || lowerText.includes('siguranță') || lowerText.includes('acoperit')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>;
                   }
                   // Home pickup/delivery
                   if (lowerText.includes('domiciliu') || lowerText.includes('ridicare') || lowerText.includes('adresa') || lowerText.includes('ușă')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>;
                   }
                   // Money/Pricing
                   if (lowerText.includes('cost') || lowerText.includes('preț') || lowerText.includes('tarif') || lowerText.includes('fără') || lowerText.includes('transparent')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
                   }
                   // Packing/Wrapping
                   if (lowerText.includes('ambalare') || lowerText.includes('împachetat') || lowerText.includes('cutii') || lowerText.includes('materiale')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>;
                   }
                   // Vehicles/Modern equipment
                   if (lowerText.includes('modern') || lowerText.includes('vehicul') || lowerText.includes('camion') || lowerText.includes('microbuz') || lowerText.includes('autocar') || lowerText.includes('platformă')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>;
                   }
                   // Climate control/Comfort
                   if (lowerText.includes('climat') || lowerText.includes('confort') || lowerText.includes('temperatură') || lowerText.includes('ac') || lowerText.includes('încălzire') || lowerText.includes('wifi')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" /></svg>;
                   }
                   // Documents/Papers
                   if (lowerText.includes('document') || lowerText.includes('vamă') || lowerText.includes('licență') || lowerText.includes('certificat') || lowerText.includes('permis')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>;
                   }
-                  // Professional/Experienced
-                  if (lowerText.includes('profesionist') || lowerText.includes('experien') || lowerText.includes('instruit') || lowerText.includes('calificat') || lowerText.includes('pregătit')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>;
+                  // Professional/Experienced (soferi)
+                  if (lowerText.includes('profesionist') || lowerText.includes('experien') || lowerText.includes('instruit') || lowerText.includes('calificat') || lowerText.includes('pregătit') || lowerText.includes('șoferi')) {
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>;
                   }
                   // Assistance/Support
                   if (lowerText.includes('asistență') || lowerText.includes('suport') || lowerText.includes('ajutor') || lowerText.includes('service') || lowerText.includes('disponibil') || lowerText.includes('24/7')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>;
                   }
                   // Baggage/Space
                   if (lowerText.includes('bagaj') || lowerText.includes('spațiu') || lowerText.includes('generos') || lowerText.includes('încăpător')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>;
+                  }
+                  // Daily/Regular routes (zilnice, curse)
+                  if (lowerText.includes('zilnic') || lowerText.includes('curse') || lowerText.includes('regular') || lowerText.includes('rute')) {
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
                   }
                   // Fixation/Securing
                   if (lowerText.includes('fixare') || lowerText.includes('securiz') || lowerText.includes('ching') || lowerText.includes('prinde')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>;
                   }
                   // Food/Water (for animals)
                   if (lowerText.includes('hrană') || lowerText.includes('apă') || lowerText.includes('pauze') || lowerText.includes('plimbare')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" /></svg>;
                   }
                   // Animals
                   if (lowerText.includes('animal') || lowerText.includes('câin') || lowerText.includes('pisic') || lowerText.includes('pet')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
                   }
                   // Intervention/Emergency
                   if (lowerText.includes('intervenție') || lowerText.includes('rapid') || lowerText.includes('urgență') || lowerText.includes('minut')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>;
                   }
                   // Unpacking/Mounting
                   if (lowerText.includes('dezambalare') || lowerText.includes('montare') || lowerText.includes('asamblare') || lowerText.includes('instalare')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>;
                   }
                   // Confidential/Privacy
                   if (lowerText.includes('confidențial') || lowerText.includes('sigil') || lowerText.includes('privat') || lowerText.includes('securitate')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>;
                   }
                   // Confirmation/Signature
                   if (lowerText.includes('confirmare') || lowerText.includes('semnătură') || lowerText.includes('primire') || lowerText.includes('notificare')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>;
                   }
                   // Pallets/Cargo
                   if (lowerText.includes('palet') || lowerText.includes('grupaj') || lowerText.includes('camion') || lowerText.includes('dedicat') || lowerText.includes('marfă')) {
-                    return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>;
+                    return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>;
                   }
                   
                   // Default checkmark icon
-                  return <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>;
+                  return <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>;
                 };
 
                 const icon = getIconForBenefit(benefit);
-                const colors = ['text-emerald-400', 'text-blue-400', 'text-purple-400', 'text-orange-400', 'text-yellow-400', 'text-cyan-400', 'text-pink-400'];
-                const bgColors = ['bg-emerald-500/20', 'bg-blue-500/20', 'bg-purple-500/20', 'bg-orange-500/20', 'bg-yellow-500/20', 'bg-cyan-500/20', 'bg-pink-500/20'];
-                const borderColors = ['border-emerald-500/30', 'border-blue-500/30', 'border-purple-500/30', 'border-orange-500/30', 'border-yellow-500/30', 'border-cyan-500/30', 'border-pink-500/30'];
+                const colors = ['text-emerald-400', 'text-blue-400', 'text-purple-400', 'text-orange-400', 'text-amber-400', 'text-cyan-400'];
+                const bgColors = ['bg-emerald-500/20', 'bg-blue-500/20', 'bg-purple-500/20', 'bg-orange-500/20', 'bg-amber-500/20', 'bg-cyan-500/20'];
                 
                 return (
-                  <div key={idx} className={`group bg-slate-800/50 backdrop-blur-sm border ${borderColors[idx % borderColors.length]} hover:border-opacity-60 rounded-2xl p-6 transition-all hover:scale-105 hover:shadow-2xl hover:shadow-black/20`}>
-                    <div className={`w-12 h-12 ${bgColors[idx % bgColors.length]} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <div key={idx} className="flex items-start gap-4 p-4 sm:p-5 rounded-xl bg-slate-800/40 border border-white/5 hover:border-white/10 transition-all">
+                    <div className={`w-10 h-10 sm:w-11 sm:h-11 ${bgColors[idx % bgColors.length]} rounded-xl flex items-center justify-center shrink-0`}>
                       <span className={colors[idx % colors.length]}>{icon}</span>
                     </div>
-                    <p className="text-gray-200 leading-relaxed font-medium">{benefit}</p>
+                    <p className="text-sm sm:text-base text-gray-200 leading-relaxed pt-2">{benefit}</p>
                   </div>
                 );
               })}
@@ -1004,19 +1009,19 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* Popular Routes Section */}
-        <section className="py-20 px-4 bg-linear-to-b from-slate-800/50 to-slate-900">
+        <section className="py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-800/50 to-slate-900">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Rute populare</h2>
-              <p className="text-gray-400 text-lg">Operăm pe cele mai solicitate trasee din Europa</p>
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">Rute populare</h2>
+              <p className="text-gray-400 text-sm sm:text-base lg:text-lg">Operăm pe cele mai solicitate trasee din Europa</p>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
               {data.popularRoutes.map((route, idx) => (
-                <div key={idx} className={`group relative bg-slate-800/50 backdrop-blur-sm border ${data.borderColor} hover:border-opacity-60 rounded-xl p-6 transition-all hover:scale-105 hover:shadow-xl overflow-hidden`}>
+                <div key={idx} className={`group relative bg-slate-800/50 backdrop-blur-sm border ${data.borderColor} hover:border-opacity-60 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 transition-all hover:scale-105 hover:shadow-xl overflow-hidden`}>
                   <div className={`absolute inset-0 bg-linear-to-br ${data.color} opacity-0 group-hover:opacity-100 transition-opacity`}></div>
                   <div className="relative flex items-center justify-between">
-                    <div className="text-lg font-semibold text-white group-hover:scale-105 transition-transform">{route}</div>
-                    <svg className="w-5 h-5 text-gray-400 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="text-xs sm:text-sm lg:text-lg font-semibold text-white group-hover:scale-105 transition-transform">{route}</div>
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-gray-400 group-hover:text-white group-hover:translate-x-1 transition-all shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                   </div>
@@ -1027,23 +1032,23 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* FAQ Section */}
-        <section className="py-20 px-4 bg-slate-900">
+        <section className="py-12 sm:py-16 lg:py-20 px-4 bg-slate-900">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Întrebări frecvente</h2>
-              <p className="text-gray-400 text-lg">Răspunsuri la cele mai comune întrebări despre acest serviciu</p>
+            <div className="text-center mb-8 sm:mb-12">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">Întrebări frecvente</h2>
+              <p className="text-gray-400 text-sm sm:text-base lg:text-lg">Răspunsuri la cele mai comune întrebări despre acest serviciu</p>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {data.faq.map((item, idx) => (
-                <details key={idx} className="group bg-slate-800/50 backdrop-blur-sm border border-white/10 hover:border-white/20 rounded-2xl overflow-hidden transition-all">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none hover:bg-slate-800/70 transition-colors">
-                    <h3 className="text-lg font-semibold text-white pr-4">{item.q}</h3>
-                    <svg className="w-6 h-6 text-orange-400 group-open:rotate-180 transition-transform shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <details key={idx} className="group bg-slate-800/50 backdrop-blur-sm border border-white/10 hover:border-white/20 rounded-xl sm:rounded-2xl overflow-hidden transition-all">
+                  <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer list-none hover:bg-slate-800/70 transition-colors">
+                    <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-white pr-3 sm:pr-4">{item.q}</h3>
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400 group-open:rotate-180 transition-transform shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </summary>
-                  <div className="px-6 pb-6 border-t border-white/5">
-                    <p className="text-gray-400 leading-relaxed pt-4">{item.a}</p>
+                  <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-t border-white/5">
+                    <p className="text-xs sm:text-sm lg:text-base text-gray-400 leading-relaxed pt-3 sm:pt-4">{item.a}</p>
                   </div>
                 </details>
               ))}
@@ -1052,58 +1057,58 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 px-4 relative overflow-hidden">
+        <section className="py-12 sm:py-16 lg:py-20 px-4 relative overflow-hidden">
           {/* Background effects */}
           <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 via-red-500/20 to-orange-500/20"></div>
           <div className="absolute inset-0">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-500/20 rounded-full blur-3xl"></div>
+            <div className="absolute top-0 right-0 w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-orange-500/20 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 bg-red-500/20 rounded-full blur-3xl"></div>
           </div>
           
           <div className="max-w-4xl mx-auto text-center relative z-10">
-            <div className="bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-3xl p-12 shadow-2xl">
-              <div className="w-16 h-16 bg-linear-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-orange-500/30">
-                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-linear-to-br from-orange-500 to-red-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg shadow-orange-500/30">
+                <svg className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Gata să plasezi o comandă?</h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Primești oferte personalizate de la curieri verificați în câteva minute. 100% gratuit, fără obligații.</p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-3 sm:mb-4">Gata să plasezi o comandă?</h2>
+              <p className="text-sm sm:text-base lg:text-xl text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Primești oferte personalizate de la curieri verificați în câteva minute. 100% gratuit, fără obligații.</p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
                 <Link 
                   href={`/comanda?serviciu=${serviciu}`} 
-                  className="group inline-flex items-center justify-center gap-2 px-10 py-5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-lg font-bold rounded-xl shadow-lg shadow-orange-500/40 transition-all hover:scale-105 active:scale-95 w-full sm:w-auto"
+                  className="group inline-flex items-center justify-center gap-2 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base lg:text-lg font-bold rounded-xl shadow-lg shadow-orange-500/40 transition-all hover:scale-105 active:scale-95 w-full sm:w-auto"
                 >
                   Plasează comandă acum
-                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-10 py-5 bg-slate-700/50 backdrop-blur-sm hover:bg-slate-700 text-white text-lg font-semibold rounded-xl border border-white/10 transition-all w-full sm:w-auto"
+                  className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-slate-700/50 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base lg:text-lg font-semibold rounded-xl border border-white/10 transition-all w-full sm:w-auto"
                 >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   Contactează-ne
                 </Link>
               </div>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+              <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-gray-400">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>Gratuit și fără obligații</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>Răspuns în 24 ore</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <span>Curieri verificați</span>
