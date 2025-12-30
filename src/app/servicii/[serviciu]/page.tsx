@@ -708,30 +708,30 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
               <span className="text-white font-medium truncate max-w-[120px] sm:max-w-none">{data.title.split(' - ')[0]}</span>
             </nav>
 
-            <div className="flex flex-col lg:flex-row items-start gap-8">
+            <div className="flex flex-col lg:flex-row items-start gap-6 sm:gap-8">
               {/* Icon and title */}
-              <div className="flex-1">
-                <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
-                  <div className={`w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-xl sm:rounded-2xl bg-slate-800/80 backdrop-blur-sm border-2 ${data.borderColor} flex items-center justify-center shadow-2xl shrink-0`}>
-                    <ServiceIcon service={serviciu} className="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10" />
+              <div className="flex-1 w-full">
+                <div className="flex items-start gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 xl:w-20 xl:h-20 rounded-lg sm:rounded-xl lg:rounded-2xl bg-slate-800/80 backdrop-blur-sm border-2 ${data.borderColor} flex items-center justify-center shadow-2xl shrink-0`}>
+                    <ServiceIcon service={serviciu} className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 xl:w-10 xl:h-10" />
                   </div>
-                  <div>
-                    <p className="text-emerald-400 text-xs sm:text-sm font-medium mb-1 sm:mb-2 flex items-center gap-1.5 sm:gap-2">
-                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-emerald-400 text-xs sm:text-sm font-medium mb-1 sm:mb-2 flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                       Serviciu verificat
                     </p>
-                    <h1 className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-bold text-white leading-tight">{data.title}</h1>
+                    <h1 className="text-lg sm:text-xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-white leading-tight break-words">{data.title}</h1>
                   </div>
                 </div>
-                <p className="text-base sm:text-lg lg:text-xl text-gray-300 leading-relaxed mb-6 sm:mb-8 max-w-2xl">{data.longDescription}</p>
+                <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-300 leading-relaxed mb-5 sm:mb-6 lg:mb-8 max-w-2xl">{data.longDescription}</p>
                 
                 {/* CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <Link 
                     href={`/comanda?serviciu=${serviciu}`} 
-                    className="group inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3 sm:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base font-semibold rounded-xl shadow-lg shadow-orange-500/30 transition-all hover:scale-105 active:scale-95"
+                    className="group inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 py-3 sm:py-3.5 lg:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl shadow-lg shadow-orange-500/30 transition-all hover:scale-105 active:scale-95 min-h-[48px]"
                   >
                     Solicită ofertă gratuită
                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -740,7 +740,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                   </Link>
                   <Link
                     href="/cum-functioneaza"
-                    className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3 sm:py-4 bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base font-medium rounded-xl border border-white/10 transition-all"
+                    className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 py-3 sm:py-3.5 lg:py-4 bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base font-medium rounded-lg sm:rounded-xl border border-white/10 transition-all min-h-[48px]"
                   >
                     <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -751,8 +751,8 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
               </div>
 
               {/* Stats card */}
-              <div className="lg:w-80 w-full mt-6 lg:mt-0">
-                <div className="bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-2xl">
+              <div className="lg:w-80 w-full">
+                <div className="bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-2xl">
                   <h3 className="text-white text-sm sm:text-base font-semibold mb-3 sm:mb-4 flex items-center gap-2">
                     <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
@@ -762,7 +762,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                   </h3>
                   <div className="space-y-2.5 sm:space-y-3">
                     <div className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm">
-                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
                         <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                         </svg>
@@ -802,14 +802,14 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* Article Section - Detailed Content */}
-        <section className="py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-900 to-slate-800/50">
+        <section className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-linear-to-b from-slate-900 to-slate-800/50">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-slate-800/30 backdrop-blur-sm border border-white/5 rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-12">
+            <div className="bg-slate-800/30 backdrop-blur-sm border border-white/5 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 xl:p-12">
               <div className="prose prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none">
                 {data.article.split('\n\n').map((paragraph, idx) => (
                   <p 
                     key={idx} 
-                    className="text-gray-300 leading-relaxed mb-6 first:text-xl first:text-gray-200 first:font-medium"
+                    className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4 sm:mb-5 lg:mb-6 first:text-base first:sm:text-lg first:lg:text-xl first:text-gray-200 first:font-medium first:leading-relaxed"
                     dangerouslySetInnerHTML={{ __html: paragraph }}
                   />
                 ))}
@@ -819,34 +819,34 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* Insurance & Verification Section */}
-        <section className="py-12 sm:py-16 px-4 bg-linear-to-br from-emerald-500/10 to-blue-500/10">
+        <section className="py-8 sm:py-12 lg:py-16 px-4 bg-linear-to-br from-emerald-500/10 to-blue-500/10">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-8 sm:mb-12">
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
-                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
+            <div className="text-center mb-6 sm:mb-8 lg:mb-12">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 Transportatori Verificați și Asigurați
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-3 sm:mb-4 px-2">
                 Siguranța Ta Este Prioritatea Noastră
               </h2>
-              <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto">
+              <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-300 max-w-3xl mx-auto px-4 leading-relaxed">
                 Toți transportatorii din platforma noastră sunt verificați riguros și dețin asigurările necesare pentru protecția completă a bunurilor tale.
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
               {data.insurance.map((item, idx) => (
-                <div key={idx} className="bg-slate-800/50 border border-emerald-500/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-emerald-500/40 transition-all group">
+                <div key={idx} className="bg-slate-800/50 border border-emerald-500/20 rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 hover:border-emerald-500/40 transition-all group active:scale-[0.98]">
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                       <svg className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-white mb-1.5 sm:mb-2 group-hover:text-emerald-400 transition-colors">
+                      <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-white mb-1.5 sm:mb-2 group-hover:text-emerald-400 transition-colors leading-tight">
                         {item.title}
                       </h3>
                       <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
@@ -888,15 +888,15 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* Benefits Section */}
-        <section className="py-12 sm:py-16 lg:py-20 px-4 bg-slate-900">
+        <section className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-slate-900">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">De ce să alegi Curierul Perfect?</h2>
-              <p className="text-gray-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">Servicii complete cu toate avantajele de care ai nevoie pentru un transport sigur și eficient</p>
+            <div className="text-center mb-6 sm:mb-8 lg:mb-12">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-3 sm:mb-4 px-2">De ce să alegi Curierul Perfect?</h2>
+              <p className="text-gray-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto px-4 leading-relaxed">Servicii complete cu toate avantajele de care ai nevoie pentru un transport sigur și eficient</p>
             </div>
             
             {/* Benefits list - cleaner design */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
               {data.benefits.map((benefit, idx) => {
                 // Function to select appropriate icon based on benefit text
                 const getIconForBenefit = (text: string) => {
@@ -996,11 +996,11 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                 const bgColors = ['bg-emerald-500/20', 'bg-blue-500/20', 'bg-purple-500/20', 'bg-orange-500/20', 'bg-amber-500/20', 'bg-cyan-500/20'];
                 
                 return (
-                  <div key={idx} className="flex items-start gap-4 p-4 sm:p-5 rounded-xl bg-slate-800/40 border border-white/5 hover:border-white/10 transition-all">
-                    <div className={`w-10 h-10 sm:w-11 sm:h-11 ${bgColors[idx % bgColors.length]} rounded-xl flex items-center justify-center shrink-0`}>
+                  <div key={idx} className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-slate-800/40 border border-white/5 hover:border-white/10 transition-all active:scale-[0.98]">
+                    <div className={`w-10 h-10 sm:w-11 sm:h-11 ${bgColors[idx % bgColors.length]} rounded-lg sm:rounded-xl flex items-center justify-center shrink-0`}>
                       <span className={colors[idx % colors.length]}>{icon}</span>
                     </div>
-                    <p className="text-sm sm:text-base text-gray-200 leading-relaxed pt-2">{benefit}</p>
+                    <p className="text-sm sm:text-base text-gray-200 leading-relaxed pt-1.5 sm:pt-2">{benefit}</p>
                   </div>
                 );
               })}
@@ -1009,15 +1009,15 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* Popular Routes Section */}
-        <section className="py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-800/50 to-slate-900">
+        <section className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-linear-to-b from-slate-800/50 to-slate-900">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">Rute populare</h2>
-              <p className="text-gray-400 text-sm sm:text-base lg:text-lg">Operăm pe cele mai solicitate trasee din Europa</p>
+            <div className="text-center mb-6 sm:mb-8 lg:mb-12">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-3 sm:mb-4 px-2">Rute populare</h2>
+              <p className="text-gray-400 text-sm sm:text-base lg:text-lg px-4">Operăm pe cele mai solicitate trasee din Europa</p>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4">
+            <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-4">
               {data.popularRoutes.map((route, idx) => (
-                <div key={idx} className={`group relative bg-slate-800/50 backdrop-blur-sm border ${data.borderColor} hover:border-opacity-60 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 transition-all hover:scale-105 hover:shadow-xl overflow-hidden`}>
+                <div key={idx} className={`group relative bg-slate-800/50 backdrop-blur-sm border ${data.borderColor} hover:border-opacity-60 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 transition-all hover:scale-105 hover:shadow-xl overflow-hidden active:scale-100 min-h-[56px] sm:min-h-[64px]`}>
                   <div className={`absolute inset-0 bg-linear-to-br ${data.color} opacity-0 group-hover:opacity-100 transition-opacity`}></div>
                   <div className="relative flex items-center justify-between">
                     <div className="text-xs sm:text-sm lg:text-lg font-semibold text-white group-hover:scale-105 transition-transform">{route}</div>
@@ -1032,22 +1032,22 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* FAQ Section */}
-        <section className="py-12 sm:py-16 lg:py-20 px-4 bg-slate-900">
+        <section className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-slate-900">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-8 sm:mb-12">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">Întrebări frecvente</h2>
-              <p className="text-gray-400 text-sm sm:text-base lg:text-lg">Răspunsuri la cele mai comune întrebări despre acest serviciu</p>
+            <div className="text-center mb-6 sm:mb-8 lg:mb-12">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-3 sm:mb-4 px-2">Întrebări frecvente</h2>
+              <p className="text-gray-400 text-sm sm:text-base lg:text-lg px-4 leading-relaxed">Răspunsuri la cele mai comune întrebări despre acest serviciu</p>
             </div>
             <div className="space-y-3 sm:space-y-4">
               {data.faq.map((item, idx) => (
                 <details key={idx} className="group bg-slate-800/50 backdrop-blur-sm border border-white/10 hover:border-white/20 rounded-xl sm:rounded-2xl overflow-hidden transition-all">
-                  <summary className="flex items-center justify-between p-4 sm:p-6 cursor-pointer list-none hover:bg-slate-800/70 transition-colors">
-                    <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-white pr-3 sm:pr-4">{item.q}</h3>
+                  <summary className="flex items-center justify-between p-4 sm:p-5 lg:p-6 cursor-pointer list-none hover:bg-slate-800/70 transition-colors active:bg-slate-800/80 min-h-[56px] sm:min-h-[64px]">
+                    <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-white pr-3 sm:pr-4 leading-snug">{item.q}</h3>
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400 group-open:rotate-180 transition-transform shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </summary>
-                  <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-t border-white/5">
+                  <div className="px-4 sm:px-5 lg:px-6 pb-4 sm:pb-5 lg:pb-6 border-t border-white/5">
                     <p className="text-xs sm:text-sm lg:text-base text-gray-400 leading-relaxed pt-3 sm:pt-4">{item.a}</p>
                   </div>
                 </details>
@@ -1057,7 +1057,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* CTA Section */}
-        <section className="py-12 sm:py-16 lg:py-20 px-4 relative overflow-hidden">
+        <section className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 relative overflow-hidden">
           {/* Background effects */}
           <div className="absolute inset-0 bg-linear-to-br from-orange-500/20 via-red-500/20 to-orange-500/20"></div>
           <div className="absolute inset-0">
@@ -1066,18 +1066,18 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
           </div>
           
           <div className="max-w-4xl mx-auto text-center relative z-10">
-            <div className="bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl">
+            <div className="bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-2xl lg:rounded-3xl p-5 sm:p-6 lg:p-8 xl:p-12 shadow-2xl">
               <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-linear-to-br from-orange-500 to-red-500 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg shadow-orange-500/30">
                 <svg className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-3 sm:mb-4">Gata să plasezi o comandă?</h2>
-              <p className="text-sm sm:text-base lg:text-xl text-gray-300 mb-6 sm:mb-8 max-w-2xl mx-auto">Primești oferte personalizate de la curieri verificați în câteva minute. 100% gratuit, fără obligații.</p>
+              <h2 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold text-white mb-3 sm:mb-4 px-2">Gata să plasezi o comandă?</h2>
+              <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-300 mb-5 sm:mb-6 lg:mb-8 max-w-2xl mx-auto px-2 sm:px-4 leading-relaxed">Primești oferte personalizate de la curieri verificați în câteva minute. 100% gratuit, fără obligații.</p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
                 <Link 
                   href={`/comanda?serviciu=${serviciu}`} 
-                  className="group inline-flex items-center justify-center gap-2 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base lg:text-lg font-bold rounded-xl shadow-lg shadow-orange-500/40 transition-all hover:scale-105 active:scale-95 w-full sm:w-auto"
+                  className="group inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-3.5 lg:py-4 xl:py-5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base lg:text-lg font-bold rounded-xl shadow-lg shadow-orange-500/40 transition-all hover:scale-105 active:scale-95 w-full sm:w-auto min-h-[48px] sm:min-h-[52px]"
                 >
                   Plasează comandă acum
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1086,7 +1086,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 lg:px-10 py-3 sm:py-4 lg:py-5 bg-slate-700/50 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base lg:text-lg font-semibold rounded-xl border border-white/10 transition-all w-full sm:w-auto"
+                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-3.5 lg:py-4 xl:py-5 bg-slate-700/50 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base lg:text-lg font-semibold rounded-xl border border-white/10 transition-all w-full sm:w-auto min-h-[48px] sm:min-h-[52px]"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -1094,7 +1094,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                   Contactează-ne
                 </Link>
               </div>
-              <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-gray-400">
+              <div className="mt-5 sm:mt-6 lg:mt-8 flex flex-col min-[500px]:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-gray-400 px-2">
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />

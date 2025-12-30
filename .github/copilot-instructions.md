@@ -13,7 +13,7 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 ```
 /dashboard/client  → /comenzi, /profil, /recenzii, /suport
 /dashboard/curier  → /comenzi, /profil, /recenzii, /servicii, /verificare
-/dashboard/admin   → Admin panel (user management, verification, stats)
+/dashboard/admin   → /utilizatori, /curieri, /comenzi, /verificare-documente, /setari, /mesaje
 /comanda           → Order creation wizard (no header/footer)
 ```
 
@@ -147,6 +147,8 @@ anulata  anulata
 - `anulata`: Cancelled (from `noua` or `in_lucru`)
 - Auto-transition: `noua` → `in_lucru` when courier sends first message (via `transitionToInLucru()`)
 
+**Legacy statuses** (`acceptata`, `in_tranzit`, `pending`, `accepted`, `in_transit`, `completed`, `cancelled`) still exist in `orderStatusConfig` for backwards compatibility but are not used in new orders.
+
 ## Firestore Collections
 
 | Collection | Owner Field | Key Notes |
@@ -219,11 +221,21 @@ Firebase config is singleton-initialized in `lib/firebase.ts` (checks `getApps()
 - `client/` — `useClientOrdersLoader.ts`, `useClientOrderActions.ts`
 - `courier/` — `useOrdersLoader.ts`, `useOrderHandlers.ts`, `useUnreadMessages.ts`
 - `useChatMessages.ts` — shared real-time messaging
+- `useAdminMessages.ts`, `useAdminMessageThreads.ts` — admin messaging system
+- `useUserActivity.ts` — track user last seen timestamps
+- `useLocalStorage.ts` — persistent local state
 
 **Components** (`src/components/orders/`):
 - `client/filters/`, `client/list/` — client-specific views
 - `courier/filters/`, `courier/list/`, `courier/details/` — courier-specific views
 - `shared/` — `OrderDetailsModal`, `MessageList`, `MessageInput`, `CountryFilter`
+
+**Admin Components** (`src/components/admin/`):
+- `AdminUI.tsx` — reusable UI components (`StatsGrid`, `TabNavigation`, `SearchBar`)
+- `UsersTable.tsx`, `CouriersGrid.tsx`, `OrdersTable.tsx` — data tables
+- `AdminMessageModal.tsx`, `AdminMessagesListModal.tsx` — admin messaging interface
+- `DocumentVerificationContent.tsx` — courier document review
+- `StatsContent.tsx`, `SettingsContent.tsx`, `MonetizareContent.tsx` — dashboard sections
 
 ## Courier Messaging Restrictions
 Before first message, these checks run (see `COURIER_MESSAGING_SYSTEM.md`):
@@ -231,11 +243,26 @@ Before first message, these checks run (see `COURIER_MESSAGING_SYSTEM.md`):
 2. **Courier verification** — if client accepts only "firme", courier needs `verified: true`
 3. **Offer limits** — client sets max couriers (1-3, 4-5, or unlimited)
 
+## Admin Features
+The admin dashboard provides comprehensive platform management:
+- **User Management** (`/utilizatori`): View/edit all users, filter by role, search functionality
+- **Courier Management** (`/curieri`): Grid view of verified couriers with ratings, coverage zones
+- **Orders** (`/comenzi`): View all orders, filter by status, access order messages
+- **Document Verification** (`/verificare-documente`): Review courier verification docs, approve/reject
+- **Settings** (`/setari`): Platform configuration, feature flags
+- **Messages** (`/mesaje`): Admin-to-user messaging system with thread management
+
+Admin access controlled via `isAdmin()` helper in `firestore.rules`. Uses `useAdminMessages()` and `useAdminMessageThreads()` hooks for messaging.
+
 ## Migration Scripts
 Located in `scripts/` folder. Requires Firebase Admin SDK setup:
 1. Download service account key from Firebase Console → save as `scripts/serviceAccountKey.json`
 2. Run with `node scripts/<script>.js`
 See `scripts/README.md` for detailed instructions.
+
+Available scripts:
+- `migrateOrderStatuses.js` — migrate old English status values to Romanian
+- `deleteOldArchivedOrders.js` — cleanup archived orders older than specified date
 
 ## Firebase Security
 - **Firestore Rules**: Read access for owners only (`resource.data.uid == request.auth.uid`), but rules **don't auto-filter**
