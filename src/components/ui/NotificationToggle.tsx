@@ -5,6 +5,11 @@ import { doc, setDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { showSuccess, showError, showInfo } from '@/lib/toast';
 
+// Spinner for loading states
+const Spinner = ({ className = '' }: { className?: string }) => (
+  <div className={`w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin ${className}`} />
+);
+
 // Bell Icon SVG
 const BellIcon = ({ className }: { className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -50,13 +55,21 @@ interface NotificationToggleProps {
 
 // Inline the notification logic to avoid import issues
 function NotificationToggleInner({ userId, className = '' }: NotificationToggleProps) {
+  const [mounted, setMounted] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Ensure component only runs on client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Check support on mount
   useEffect(() => {
+    if (!mounted) return;
+    
     async function checkStatus() {
       try {
         // Basic browser checks first
@@ -101,7 +114,17 @@ function NotificationToggleInner({ userId, className = '' }: NotificationToggleP
     }
 
     checkStatus();
-  }, [userId]);
+  }, [userId, mounted]);
+
+  // Show nothing until mounted (prevents hydration mismatch)
+  if (!mounted) {
+    return (
+      <div className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700 text-slate-300 ${className}`}>
+        <Spinner />
+        <span className="text-sm">Se încarcă...</span>
+      </div>
+    );
+  }
 
   const enableNotifications = useCallback(async () => {
     if (!userId) {
@@ -176,7 +199,7 @@ function NotificationToggleInner({ userId, className = '' }: NotificationToggleP
   if (isLoading) {
     return (
       <div className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700 text-slate-300 ${className}`}>
-        <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        <Spinner />
         <span className="text-sm">Se verifică...</span>
       </div>
     );
