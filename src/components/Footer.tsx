@@ -1,8 +1,13 @@
+
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+  const [currentYear, setCurrentYear] = useState<number | null>(null);
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
 
   return (
     <footer className="bg-slate-900 border-t border-white/5">
@@ -231,7 +236,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-gray-300 text-sm">
-              © {currentYear} Curierul Perfect. Toate drepturile rezervate.
+              © {currentYear ?? ''} Curierul Perfect. Toate drepturile rezervate.
             </p>
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2 text-gray-300 text-sm">

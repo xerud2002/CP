@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import {
   HeroSection,
   HowItWorksSection,
-  BenefitsSection,
   PlatformVsFacebook,
   ProcessTimeline,
 } from '@/components/home';
@@ -85,7 +84,6 @@ export default function Home() {
         <HeroSection />
         <PlatformVsFacebook />
         <HowItWorksSection />
-        <BenefitsSection />
         <ProcessTimeline />
         
         {/* Floating Elements */}

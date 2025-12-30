@@ -3,133 +3,196 @@
 const steps = [
   {
     id: 1,
-    label: 'PASUL 01',
+    number: '01',
     title: 'Descrie transportul',
-    description: 'Completezi datele despre ce vrei să transporți, de unde și unde - durează 2 minute.',
+    description: 'Completezi formularul în 2 minute. Spune-ne ce trimiți, de unde și unde - noi ne ocupăm de restul.',
     color: 'orange',
     icon: (
-      <svg className="w-7 h-7 sm:w-9 sm:h-9 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24">
+        <path 
+          stroke="currentColor" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          strokeWidth={1.5} 
+          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+        />
       </svg>
     ),
   },
   {
     id: 2,
-    label: 'PASUL 02',
+    number: '02',
     title: 'Primești oferte',
-    description: 'Curieri verificați văd comanda ta și îți trimit oferte cu prețuri clare și termene concrete.',
-    color: 'green',
+    description: 'Transportatori verificați îți trimit oferte personalizate. Vezi prețuri clare, fără surprize ascunse.',
+    color: 'emerald',
     icon: (
-      <svg className="w-7 h-7 sm:w-9 sm:h-9 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24">
+        <path 
+          stroke="currentColor" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          strokeWidth={1.5} 
+          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+        />
+        <circle cx="18" cy="5" r="3" fill="currentColor" className="text-emerald-400" />
       </svg>
     ),
   },
   {
     id: 3,
-    label: 'PASUL 03',
-    title: 'Alegi curierul',
-    description: 'Vezi rating-ul, recenziile și prețurile. Discuți detaliile și confirmi transportatorul preferat.',
+    number: '03',
+    title: 'Alegi transportatorul sau compania',
+    description: 'Compari recenzii, rating-uri și prețuri. Comunici direct și alegi opțiunea potrivită pentru tine.',
     color: 'blue',
     icon: (
-      <svg className="w-7 h-7 sm:w-9 sm:h-9 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24">
+        <path 
+          stroke="currentColor" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          strokeWidth={1.5} 
+          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+        />
       </svg>
     ),
   },
   {
     id: 4,
-    label: 'PASUL 04',
-    title: 'Transport finalizat',
-    description: 'După livrare, evaluezi curierul - ajuți următorii clienți să aleagă cu încredere.',
-    color: 'yellow',
+    number: '04',
+    title: 'Lași o recenzie',
+    description: 'Evaluezi experiența și ajuți comunitatea. Feedback-ul tău contează pentru alți utilizatori.',
+    color: 'amber',
     icon: (
-      <svg className="w-7 h-7 sm:w-9 sm:h-9 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24">
+        <path 
+          stroke="currentColor" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          strokeWidth={1.5} 
+          d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+        />
       </svg>
     ),
   },
 ];
 
-const colorClasses: Record<string, { bg: string; border: string; hoverBorder: string; label: string; line: string }> = {
+const colorClasses: Record<string, { 
+  bg: string; 
+  iconBg: string;
+  iconText: string;
+  border: string; 
+  number: string;
+  dot: string;
+  line: string;
+}> = {
   orange: {
-    bg: 'from-orange-500/20 to-orange-600/10',
-    border: 'border-orange-500/20',
-    hoverBorder: 'group-hover:border-orange-500/40',
-    label: 'bg-orange-500/10 text-orange-400',
-    line: 'from-orange-500/50',
+    bg: 'bg-orange-500/5',
+    iconBg: 'bg-orange-500/15',
+    iconText: 'text-orange-400',
+    border: 'border-orange-500/20 hover:border-orange-500/40',
+    number: 'text-orange-500',
+    dot: 'bg-orange-500',
+    line: 'via-orange-500/30',
   },
-  green: {
-    bg: 'from-green-500/20 to-green-600/10',
-    border: 'border-green-500/20',
-    hoverBorder: 'group-hover:border-green-500/40',
-    label: 'bg-green-500/10 text-green-400',
-    line: 'from-green-500/50',
+  emerald: {
+    bg: 'bg-emerald-500/5',
+    iconBg: 'bg-emerald-500/15',
+    iconText: 'text-emerald-400',
+    border: 'border-emerald-500/20 hover:border-emerald-500/40',
+    number: 'text-emerald-500',
+    dot: 'bg-emerald-500',
+    line: 'via-emerald-500/30',
   },
   blue: {
-    bg: 'from-blue-500/20 to-blue-600/10',
-    border: 'border-blue-500/20',
-    hoverBorder: 'group-hover:border-blue-500/40',
-    label: 'bg-blue-500/10 text-blue-400',
-    line: 'from-blue-500/50',
+    bg: 'bg-blue-500/5',
+    iconBg: 'bg-blue-500/15',
+    iconText: 'text-blue-400',
+    border: 'border-blue-500/20 hover:border-blue-500/40',
+    number: 'text-blue-500',
+    dot: 'bg-blue-500',
+    line: 'via-blue-500/30',
   },
-  yellow: {
-    bg: 'from-yellow-500/20 to-amber-600/10',
-    border: 'border-yellow-500/20',
-    hoverBorder: 'group-hover:border-yellow-500/40',
-    label: 'bg-yellow-500/10 text-yellow-400',
-    line: 'from-yellow-500/50',
+  amber: {
+    bg: 'bg-amber-500/5',
+    iconBg: 'bg-amber-500/15',
+    iconText: 'text-amber-400',
+    border: 'border-amber-500/20 hover:border-amber-500/40',
+    number: 'text-amber-500',
+    dot: 'bg-amber-500',
+    line: 'via-amber-500/30',
   },
 };
 
 export default function HowItWorksSection() {
   return (
-    <section className="below-fold py-12 sm:py-16 md:py-24 px-3 sm:px-4 relative overflow-hidden">
-      {/* Background decoration */}
+    <section className="below-fold py-16 sm:py-20 md:py-28 px-4 relative overflow-hidden">
+      {/* Subtle background gradient */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-orange-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
       </div>
       
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-orange-500/10 text-orange-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+        {/* Header */}
+        <div className="text-center mb-12 sm:mb-16">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 text-slate-300 text-sm font-medium mb-4">
+            <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
             Simplu și rapid
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 px-2">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             <span className="text-white">Cum </span>
             <span className="text-gradient">funcționează</span>
             <span className="text-white">?</span>
           </h2>
-          <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4">
-            Comandă transport sigur în doar 4 pași simpli - fără telefoane, fără negocieri, fără surprize.
+          <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
+            Transport în 4 pași simpli. Fără bătăi de cap, fără surprize.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+        {/* Steps Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
           {steps.map((step, index) => {
             const colors = colorClasses[step.color];
             const isLast = index === steps.length - 1;
             
             return (
               <div key={step.id} className="relative group">
-                {/* Connector line - hide on last item */}
+                {/* Connection line - desktop only */}
                 {!isLast && (
-                  <div className={`hidden md:block absolute top-10 left-[60%] w-full h-0.5 bg-linear-to-r ${colors.line} to-transparent`}></div>
+                  <div className="hidden lg:block absolute top-12 left-[60%] right-0 h-px">
+                    <div className={`h-full w-full bg-gradient-to-r from-transparent ${colors.line} to-transparent`}></div>
+                  </div>
                 )}
                 
-                <div className="text-center">
-                  <div className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 rounded-xl sm:rounded-2xl bg-linear-to-br ${colors.bg} border ${colors.border} flex items-center justify-center group-hover:scale-110 ${colors.hoverBorder} transition-all duration-300`}>
+                {/* Card */}
+                <div className={`relative h-full p-6 rounded-2xl ${colors.bg} border ${colors.border} transition-all duration-300 group-hover:translate-y-[-4px]`}>
+                  {/* Step Number - Top Right */}
+                  <div className={`absolute top-4 right-4 text-5xl font-black ${colors.number} opacity-10 select-none`}>
+                    {step.number}
+                  </div>
+                  
+                  {/* Icon */}
+                  <div className={`w-14 h-14 rounded-xl ${colors.iconBg} ${colors.iconText} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
                     {step.icon}
                   </div>
-                  <div className={`inline-block px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full ${colors.label} text-[10px] sm:text-xs font-bold mb-2 sm:mb-3`}>
-                    {step.label}
+                  
+                  {/* Content */}
+                  <div className="relative">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`w-2 h-2 rounded-full ${colors.dot}`}></span>
+                      <span className={`text-xs font-bold uppercase tracking-wider ${colors.number}`}>
+                        Pasul {step.number}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                      {step.description}
+                    </p>
                   </div>
-                  <h3 className="text-base sm:text-lg md:text-xl font-semibold text-white mb-1.5 sm:mb-2 px-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-400 text-xs sm:text-sm px-2">
-                    {step.description}
-                  </p>
                 </div>
               </div>
             );
