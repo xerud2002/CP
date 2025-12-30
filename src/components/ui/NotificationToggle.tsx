@@ -24,9 +24,14 @@ interface NotificationToggleProps {
 export function NotificationToggle({ userId, className = '' }: NotificationToggleProps) {
   const { isSupported, isEnabled, isLoading, enableNotifications, disableNotifications } = useNotifications(userId);
 
-  // Don't render if notifications not supported
+  // Show message if notifications not supported
   if (!isSupported) {
-    return null;
+    return (
+      <div className={`flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-700/50 text-slate-400 ${className}`}>
+        <BellSlashIcon className="w-5 h-5" />
+        <span className="text-sm">Notificările nu sunt disponibile în acest browser</span>
+      </div>
+    );
   }
 
   const handleToggle = async () => {
