@@ -52,7 +52,7 @@ export const transitionToFinalizata = async (
       finalizataAt: serverTimestamp(),
     };
 
-    // Store courier info if provided (for reviews)
+    // Store courier info if provided
     if (courierInfo) {
       updateData.courierId = courierInfo.courierId;
       updateData.courierName = courierInfo.courierName;
@@ -88,10 +88,4 @@ export const canFinalizeOrder = (status: string): boolean => {
   return status === 'in_lucru';
 };
 
-/**
- * Check if a review can be left for an order
- * Reviews are only allowed for orders with 'livrata' status
- */
-export const canLeaveReview = (status: string): boolean => {
-  return status === 'livrata';
-};
+

@@ -87,7 +87,7 @@ export function useClientOrderActions() {
 
     const confirmed = await showConfirm({
       title: 'Finalizare comandă',
-      message: `Confirmă finalizarea comenzii #${order.orderNumber || order.id}. Aceasta va permite curierului să primească recenzii.`,
+      message: `Confirmă finalizarea comenzii #${order.orderNumber || order.id}.`,
       confirmText: 'Finalizează',
       cancelText: 'Anulează',
       variant: 'info'

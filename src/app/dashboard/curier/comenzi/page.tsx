@@ -97,7 +97,7 @@ function ComenziCurierContent() {
     sortBy
   });
   const unreadCounts = useUnreadMessages(user?.uid, orders);
-  const { handleFinalizeOrder, handleRequestReview, handleDismissOrder } = useOrderHandlers(reloadOrders);
+  const { handleFinalizeOrder, handleDismissOrder } = useOrderHandlers(reloadOrders);
   
   // Local UI state
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -324,11 +324,6 @@ function ComenziCurierContent() {
               onFinalize={
                 selectedOrder.status === 'in_lucru' && selectedOrder.id && selectedOrder.status
                   ? () => handleFinalizeOrder(selectedOrder.id!, selectedOrder.status!)
-                  : undefined
-              }
-              onRequestReview={
-                selectedOrder.status === 'livrata' && selectedOrder.id
-                  ? () => handleRequestReview(selectedOrder.id!)
                   : undefined
               }
             />

@@ -7,7 +7,6 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import { db } from '@/lib/firebase';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
 import { serviceTypes } from '@/lib/constants';
-import RatingCard from '@/components/RatingCard';
 
 interface CourierProfileModalProps {
   courierId: string;
@@ -21,8 +20,6 @@ interface CourierProfile {
   telefon: string;
   email: string;
   verificat: boolean;
-  rating: number;
-  nrRecenzii: number;
   nrLivrari: number;
   serviciiOferite: string[];
   zoneAcoperire: string[];
@@ -49,12 +46,11 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Parallel fetch: profile, user, zones, reviews
-        const [profilDoc, userDoc, zonesSnapshot, reviewsSnapshot] = await Promise.all([
+        // Parallel fetch: profile, user, zones
+        const [profilDoc, userDoc, zonesSnapshot] = await Promise.all([
           getDoc(doc(db, 'profil_curier', courierId)),
           getDoc(doc(db, 'users', courierId)),
-          getDocs(query(collection(db, 'zona_acoperire'), where('uid', '==', courierId))),
-          getDocs(query(collection(db, 'recenzii'), where('courierId', '==', courierId)))
+          getDocs(query(collection(db, 'zona_acoperire'), where('uid', '==', courierId)))
         ]);
 
         const profilData = profilDoc.data();
@@ -70,22 +66,6 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
           else if (tara) zones.add(capitalize(tara));
         });
 
-        // Calculate rating from reviews
-        let totalRating = 0, reviewCount = 0;
-        reviewsSnapshot.forEach(doc => {
-          const rating = doc.data().rating;
-          if (rating) { totalRating += rating; reviewCount++; }
-        });
-
-        // Use profile rating if available, otherwise calculate from reviews
-        const finalRating = profilData?.rating !== undefined 
-          ? profilData.rating 
-          : (reviewCount > 0 ? totalRating / reviewCount : 0);
-        
-        const finalReviewCount = profilData?.reviewCount !== undefined
-          ? profilData.reviewCount
-          : reviewCount;
-
         // Calculate experience
         const createdAt = userData?.createdAt?.toDate() || profilData?.createdAt?.toDate();
         const yearsExp = createdAt 
@@ -98,8 +78,6 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
           telefon: profilData?.telefon || userData?.telefon || '',
           email: userData?.email || '',
           verificat: userData?.verified || profilData?.verificationStatus === 'verified' || false,
-          rating: finalRating,
-          nrRecenzii: finalReviewCount,
           nrLivrari: profilData?.nrLivrari || userData?.nrLivrari || 0,
           serviciiOferite: userData?.serviciiOferite || profilData?.serviciiOferite || [],
           zoneAcoperire: [...zones],
@@ -191,14 +169,8 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
             </div>
           ) : profile ? (
             <div className="space-y-5">
-              {/* Stats Row - Color-coded rating like daiostea.ro */}
-              <div className="grid grid-cols-2 gap-3">
-                <RatingCard 
-                  rating={profile.rating}
-                  reviewCount={profile.nrRecenzii}
-                  size="sm"
-                />
-
+              {/* Stats Row */}
+              <div className="grid grid-cols-1 gap-3">
                 <StatCard 
                   icon={<path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />}
                   iconColor="text-emerald-400"

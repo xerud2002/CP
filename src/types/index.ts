@@ -102,8 +102,6 @@ export interface CourierProfile {
   iban?: string;
   services: string[];
   status: 'active' | 'pending' | 'suspended';
-  rating?: number;
-  reviewCount?: number;
   verificationStatus?: 'verified' | 'pending' | 'none';
   insuranceStatus?: 'verified' | 'pending' | 'none';
   tipBusiness?: 'pf' | 'firma';

@@ -81,22 +81,8 @@
         { "fieldPath": "status", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
-    },
-    {
-      "collectionGroup": "recenzii",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "clientId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "recenzii",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "courierId", "order": "ASCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
+
+
     },
     {
       "collectionGroup": "mesaje",

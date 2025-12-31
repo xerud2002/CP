@@ -130,8 +130,6 @@ const defaultProfile: CourierProfile = {
   descriere: '',
   experienta: '',
   profileImage: '',
-  rating: 5.0,
-  reviewCount: 0,
 };
 
 // Icons
@@ -185,8 +183,6 @@ function ProfilCurierContent() {
   const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [ordersCount, setOrdersCount] = useState(0);
-  const [rating, setRating] = useState(5.0);
-  const [reviewCount, setReviewCount] = useState(0);
   const [verificationStatus, setVerificationStatus] = useState<'verified' | 'pending' | 'none'>('none');
   const [insuranceStatus, setInsuranceStatus] = useState<'verified' | 'pending' | 'none'>('none');
   const prefixDropdownRef = useRef<HTMLDivElement>(null);
@@ -223,24 +219,15 @@ function ProfilCurierContent() {
         
         if (docSnap.exists()) {
           const data = docSnap.data();
-          // Ensure rating is set to 5.0 if not present
           const profileData = { ...defaultProfile, ...data };
-          if (profileData.rating === undefined || profileData.rating === null) {
-            profileData.rating = 5.0;
-            profileData.reviewCount = 0;
-          }
           setProfile(profileData as CourierProfile);
           
-          // Set rating and review count
-          setRating(profileData.rating || 5.0);
-          setReviewCount(profileData.reviewCount || 0);
+          // Set verification status
           setVerificationStatus(profileData.verificationStatus || 'none');
           setInsuranceStatus(profileData.insuranceStatus || 'none');
         } else {
-          // Pre-fill email from auth and initialize rating
-          setProfile({ ...defaultProfile, email: user.email || '', rating: 5.0, reviewCount: 0 });
-          setRating(5.0);
-          setReviewCount(0);
+          // Pre-fill email from auth
+          setProfile({ ...defaultProfile, email: user.email || '' });
           setVerificationStatus('none');
           setInsuranceStatus('none');
         }
@@ -283,25 +270,7 @@ function ProfilCurierContent() {
         // Set initial rating and review count on first save
         ...(isFirstSave && { rating: 5.0, reviewCount: 1 })
       }, { merge: true });
-      
-      // If first save, create initial 5-star review
-      if (isFirstSave) {
-        const reviewsRef = collection(db, 'recenzii');
-        await addDoc(reviewsRef, {
-          courierId: user.uid,
-          clientId: 'system',
-          clientName: 'Curierul Perfect',
-          orderId: null,
-          rating: 5,
-          comment: 'Bun venit pe platformă! Aceasta este recenzia ta inițială de 5 stele. Continuă să oferi servicii excelente!',
-          createdAt: serverTimestamp(),
-          timestamp: serverTimestamp()
-        });
-        
-        // Update local state
-        setRating(5.0);
-        setReviewCount(1);
-      }
+
       
       showSavedMessage('Profilul a fost salvat cu succes!');
     } catch (error) {
@@ -484,30 +453,7 @@ function ProfilCurierContent() {
                     </div>
                     <div className="text-xs text-gray-400 font-medium">Comenzi</div>
                   </div>
-                  
-                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-yellow-500/30 transition-colors">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="p-1.5 bg-yellow-500/20 rounded-lg">
-                        <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      </div>
-                      <div className="text-2xl font-bold text-yellow-400">{rating.toFixed(1)}</div>
-                    </div>
-                    <div className="text-xs text-gray-400 font-medium">Rating</div>
-                  </div>
-                  
-                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-green-500/30 transition-colors">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="p-1.5 bg-green-500/20 rounded-lg">
-                        <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                        </svg>
-                      </div>
-                      <div className="text-2xl font-bold text-green-400">{reviewCount}</div>
-                    </div>
-                    <div className="text-xs text-gray-400 font-medium">Recenzii</div>
-                  </div>
+
                   
                   <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-emerald-500/30 transition-colors">
                     <div className="flex items-center gap-2 mb-1">
@@ -585,30 +531,7 @@ function ProfilCurierContent() {
                   </div>
                   <div className="text-xs text-gray-400 font-medium">Comenzi</div>
                 </div>
-                
-                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="p-1.5 bg-yellow-500/20 rounded-lg">
-                      <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    </div>
-                    <div className="text-xl font-bold text-yellow-400">{rating.toFixed(1)}</div>
-                  </div>
-                  <div className="text-xs text-gray-400 font-medium">Rating</div>
-                </div>
-                
-                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="p-1.5 bg-green-500/20 rounded-lg">
-                      <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                      </svg>
-                    </div>
-                    <div className="text-xl font-bold text-green-400">{reviewCount}</div>
-                  </div>
-                  <div className="text-xs text-gray-400 font-medium">Recenzii</div>
-                </div>
+
                 
                 <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
                   <div className="flex items-center gap-2 mb-1">

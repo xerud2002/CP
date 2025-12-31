@@ -6,10 +6,10 @@ import { db } from '@/lib/firebase';
 
 /**
  * Custom hook for order action handlers
- * Provides handlers for finalizing orders and requesting reviews
+ * Provides handlers for finalizing orders
  * 
  * @param reloadOrders - Callback to reload orders after actions
- * @returns {handleFinalizeOrder, handleRequestReview, handleDismissOrder}
+ * @returns {handleFinalizeOrder, handleDismissOrder}
  */
 export function useOrderHandlers(reloadOrders: () => void) {
   const { user } = useAuth();
@@ -37,15 +37,6 @@ export function useOrderHandlers(reloadOrders: () => void) {
   };
 
   /**
-   * Request review from client
-   * Note: Full email/push notification system will be implemented in future version
-   */
-  const handleRequestReview = (_orderId: string) => {
-    void _orderId; // Parameter reserved for future notification system
-    showWarning('Funcția de cerere recenzie va fi disponibilă în curând!');
-  };
-
-  /**
    * Dismiss order - hide it from courier's list
    * Adds courier's UID to dismissedBy array in order document
    */
@@ -70,7 +61,6 @@ export function useOrderHandlers(reloadOrders: () => void) {
 
   return {
     handleFinalizeOrder,
-    handleRequestReview,
     handleDismissOrder
   };
 }

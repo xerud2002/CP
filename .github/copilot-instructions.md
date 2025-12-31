@@ -11,8 +11,8 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 
 ### Route Structure
 ```
-/dashboard/client  → /comenzi, /profil, /recenzii, /suport
-/dashboard/curier  → /comenzi, /profil, /recenzii, /servicii, /verificare
+/dashboard/client  → /comenzi, /profil, /suport
+/dashboard/curier  → /comenzi, /profil, /servicii, /verificare
 /dashboard/admin   → /utilizatori, /curieri, /comenzi, /verificare-documente, /setari, /mesaje
 /comanda           → Order creation wizard (no header/footer)
 ```
@@ -141,7 +141,7 @@ anulata  anulata
 ```
 - `noua`: New, editable/deletable by client
 - `in_lucru`: Locked (courier messaged), can be finalized by client
-- `livrata`: Complete, triggers review flow
+- `livrata`: Complete
 - `anulata`: Cancelled (from `noua` or `in_lucru`)
 - Auto-transition: `noua` → `in_lucru` when courier sends first message (via `transitionToInLucru()`)
 
@@ -156,7 +156,6 @@ anulata  anulata
 | `zona_acoperire` | `uid` | Courier coverage zones (multi-record per courier) |
 | `profil_curier` | doc ID = `uid` | Extended courier profile (publicly readable) |
 | `profil_client` | doc ID = `uid` | Extended client profile (private) |
-| `recenzii` | `clientId` | Reviews of couriers (after `livrata` status) |
 
 **Chat System**: Each client-courier pair has a **separate conversation** per order. Query MUST filter by `orderId`, `clientId`, AND `courierId`.
 
@@ -246,7 +245,7 @@ Implement these checks in hooks/components before allowing message submission to
 ## Admin Features
 The admin dashboard provides comprehensive platform management:
 - **User Management** (`/utilizatori`): View/edit all users, filter by role, search functionality
-- **Courier Management** (`/curieri`): Grid view of verified couriers with ratings, coverage zones
+- **Courier Management** (`/curieri`): Grid view of verified couriers with coverage zones
 - **Orders** (`/comenzi`): View all orders, filter by status, access order messages
 - **Document Verification** (`/verificare-documente`): Review courier verification docs, approve/reject
 - **Settings** (`/setari`): Platform configuration, feature flags
@@ -267,8 +266,7 @@ Available scripts:
 - `migrateOrderStatuses.js` — migrate old English status values to Romanian (uses batched writes)
 - `deleteOldArchivedOrders.js` — cleanup archived orders older than specified date — queries must explicitly filter by owner
 - **Couriers**: Can read ALL orders (for discovery marketplace), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
-- **Profiles**: `profil_curier` is publicly readable (clients need to see ratings/reviews), `profil_client` is private to owner + admin
-- **Reviews**: `profil_curier` allows special update access for `rating` and `reviewCount` fields from any authenticated user (review system)
+- **Profiles**: `profil_curier` is publicly readable (clients need to see courier info), `profil_client` is private to owner + admin
 - **Coverage Zones**: `zona_acoperire` allows couriers to read all zones (for route planning), but write only own zones
 - **Storage**: Courier verification documents in `courierDocs/{uid}/`, client profile photos in `clientPhotos/{uid}/`
 - **Admin Access**: `isAdmin()` helper in rules checks `users/{uid}.role == 'admin'` for elevated permissions
@@ -276,8 +274,7 @@ Available scripts:
 See [firestore.rules](../firestore.rules) for complete security model.
 - **Firestore Rules**: Read access for owners only (`resource.data.uid == request.auth.uid`), but rules **don't auto-filter**
 - **Couriers**: Can read ALL orders (for discovery), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
-- **Profiles**: `profil_curier` is publicly readable (for client reviews), `profil_client` is private
-- **Reviews**: Public read, write only by review author (`clientId == request.auth.uid`)
+- **Profiles**: `profil_curier` is publicly readable (for courier info), `profil_client` is private
 - **Storage**: Courier verification documents in `courierDocs/{uid}/`, client profile photos in `clientPhotos/{uid}/`
 
 ## Performance Optimizations
@@ -361,63 +358,3 @@ export default async function Image() {
 - **No prices**: Never include pricing in metadata (per project policy)
 
 **Layout Metadata**: Each `layout.tsx` exports `generateMetadata()` or static `metadata` object. OG images auto-linked.
-
-## Review System Workflow
-
-**Current Flow**:
-1. Client finalizes order → status changes to `livrata`
-2. System stores `courierId` and `courierName` in order during finalization
-3. Client can leave review at `/review/[courierId]` (public page, no auth required)
-4. Review stored in `recenzii` collection with anonymous clientId
-5. Courier's `profil_curier` rating updated using `calculateNewRating()` helper
-
-**Key Files**:
-- `src/app/review/[courierId]/page.tsx` — Public review form
-- `src/lib/rating.ts` — `calculateNewRating()` weighted average formula
-- `src/utils/orderStatusHelpers.ts` — `canLeaveReview(status)`, `transitionToFinalizata()`
-
-**Triggering Reviews**:
-```tsx
-import { transitionToFinalizata } from '@/utils/orderStatusHelpers';
-
-// Client finalizes order
-const success = await transitionToFinalizata(orderId, currentStatus, {
-  courierId: selectedCourier.uid,
-  courierName: `${selectedCourier.nume} ${selectedCourier.prenume}`
-});
-
-if (success) {
-  // Optionally prompt: "Lasă o recenzie pentru curier la /review/{courierId}"
-}
-```
-
-**Rating Display**: Use `RatingCard` component (shows stars + review count) in courier profiles, order cards.
-
-**Missing Features** (Enhancement Opportunities):
-- ❌ No automated review prompt after order finalization
-- ❌ No direct link from finalized order to review page
-- ❌ No tracking of which orders have been reviewed
-- ❌ Reviews allow anonymous submissions (no auth gate)
-- ❌ No moderation/reporting system for inappropriate reviews
-
-**Suggested Improvements**:
-1. **Review Tracking**: Add `reviewedAt` timestamp to orders after review submission
-2. **Auto-Prompt**: Show review CTA in client dashboard for `livrata` orders without reviews
-3. **Deep Linking**: Add "Lasă Recenzie" button in finalized order details → `/review/{courierId}?orderId={orderId}`
-4. **Review Attribution**: Link reviews to orders (add `orderId` field in `recenzii` collection) for verification
-5. **Auth Requirement**: Require Firebase auth for review submission, use `clientId` instead of anonymous
-6. **One Review Per Order**: Check if order already reviewed before showing form
-
-**Implementation Example** (Review Prompt in Client Dashboard):
-```tsx
-import { canLeaveReview } from '@/utils/orderStatusHelpers';
-
-{canLeaveReview(order.status) && !order.reviewedAt && order.courierId && (
-  <Link 
-    href={`/review/${order.courierId}?orderId=${order.id}`}
-    className="btn-primary"
-  >
-    Lasă o Recenzie
-  </Link>
-)}
-```

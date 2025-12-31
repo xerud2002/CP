@@ -86,15 +86,6 @@ const mainNavTiles: NavTile[] = [
     borderColor: 'border-emerald-500/20 hover:border-emerald-500/40',
   },
   {
-    href: '/dashboard/client/recenzii',
-    icon: StarIcon,
-    title: 'Recenzii',
-    description: 'Evaluează serviciile',
-    color: 'text-violet-400',
-    bgColor: 'bg-violet-500/10 hover:bg-violet-500/20',
-    borderColor: 'border-violet-500/20 hover:border-violet-500/40',
-  },
-  {
     href: '/dashboard/client/suport',
     icon: ChatIcon,
     title: 'Suport',
@@ -220,8 +211,7 @@ function WelcomeSection({ userName }: { userName: string }) {
 // 1. Comandă Transport (orange) - badge "Popular" - link către /comanda pentru crearea comenzilor noi
 // 2. Comenzi (blue) - afișează notificări (oferte noi + mesaje noi) dacă există
 // 3. Profil (emerald) - gestionare date personale
-// 4. Recenzii (violet) - evaluare servicii curieri
-// 5. Suport (pink) - ajutor 24/7
+// 3. Suport (pink) - ajutor 24/7
 // Fiecare card are: iconă colorată, titlu, descriere scurtă, hover gradient overlay
 // Notificările apar DOAR pe cardul "Comenzi" când există oferte sau mesaje noi
 function MainNavigation({ totalNotifications }: { totalNotifications: number }) {
