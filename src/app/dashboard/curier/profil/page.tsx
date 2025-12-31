@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useRef, Suspense, useMemo } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { ArrowLeftIcon, CheckIcon, UserIcon as DashboardUserIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 
@@ -333,16 +333,6 @@ function ProfilCurierContent() {
       setSaving(false);
     }
   };
-
-  // Memoize completion percentage calculation to avoid recalculation on every render
-  const completionPercentage = useMemo(() => {
-    const fields = [
-      profile.nume, profile.telefon, profile.email,
-      profile.firma, profile.sediu, profile.cui, profile.iban
-    ];
-    const filled = fields.filter(f => f && f.trim() !== '').length;
-    return Math.round((filled / fields.length) * 100);
-  }, [profile.nume, profile.telefon, profile.email, profile.firma, profile.sediu, profile.cui, profile.iban]);
 
   if (loading || loadingProfile) {
     return (
