@@ -260,22 +260,21 @@ Located in `scripts/` folder. Requires Firebase Admin SDK setup:
 3. Install dependencies: `cd scripts && npm install firebase-admin`
 4. Run with `node scripts/<script>.js`
 
-See [scripts/README.md](../scripts/README.md) for detailed instructions.
+See `scripts/README.md` for detailed instructions.
 
 Available scripts:
 - `migrateOrderStatuses.js` — migrate old English status values to Romanian (uses batched writes)
-- `deleteOldArchivedOrders.js` — cleanup archived orders older than specified date — queries must explicitly filter by owner
-- **Couriers**: Can read ALL orders (for discovery marketplace), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
-- **Profiles**: `profil_curier` is publicly readable (clients need to see courier info), `profil_client` is private to owner + admin
+- `deleteOldArchivedOrders.js` — cleanup archived orders older than specified date
+
+## Firestore Security Model
+- **Firestore Rules**: Read access for owners only (`resource.data.uid == request.auth.uid`), but rules **don't auto-filter**
+- **Couriers**: Can read ALL orders (for discovery), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
+- **Profiles**: `profil_curier` is publicly readable (for courier info), `profil_client` is private
 - **Coverage Zones**: `zona_acoperire` allows couriers to read all zones (for route planning), but write only own zones
 - **Storage**: Courier verification documents in `courierDocs/{uid}/`, client profile photos in `clientPhotos/{uid}/`
 - **Admin Access**: `isAdmin()` helper in rules checks `users/{uid}.role == 'admin'` for elevated permissions
 
-See [firestore.rules](../firestore.rules) for complete security model.
-- **Firestore Rules**: Read access for owners only (`resource.data.uid == request.auth.uid`), but rules **don't auto-filter**
-- **Couriers**: Can read ALL orders (for discovery), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
-- **Profiles**: `profil_curier` is publicly readable (for courier info), `profil_client` is private
-- **Storage**: Courier verification documents in `courierDocs/{uid}/`, client profile photos in `clientPhotos/{uid}/`
+See `firestore.rules` for complete security model.
 
 ## Performance Optimizations
 - Images use Next.js Image component with Firebase Storage remote patterns
@@ -295,38 +294,6 @@ Note: Main app does NOT require emulators — it uses live Firebase services dir
 
 ## Flags & Assets
 Country flags in `public/img/flag/{code}.svg` (lowercase, e.g., `ro.svg`, `de.svg`). When adding countries to `constants.ts`, add the corresponding flag SVG.
-
-## Push Notifications (Firebase Cloud Messaging)
-
-**Service Worker**: `public/firebase-messaging-sw.js` handles background push notifications.
-
-**Setup Steps**:
-1. Import `useNotifications()` hook in user dashboard/profile pages
-2. Call `enableNotifications()` after user grants permission
-3. Tokens stored in `fcmTokens/{uid}` collection with metadata (userAgent, platform, createdAt)
-
-**Hook Usage**:
-```tsx
-import { useNotifications } from '@/hooks/useNotifications';
-
-const { isSupported, isEnabled, enableNotifications, disableNotifications } = useNotifications(user?.uid);
-
-// Show enable button if supported but not enabled
-{isSupported && !isEnabled && (
-  <button onClick={enableNotifications}>Activează Notificări</button>
-)}
-```
-
-**Service Worker Features**:
-- Background message handling with custom notification UI
-- Vibration pattern: `[200, 100, 200]`
-- Click-to-focus: Opens existing tab or creates new one
-- Custom notification data payload support (URL routing)
-- Logo/badge from `public/img/logo-favicon-*.png`
-
-**Foreground Handling**: Hook auto-shows toast for messages when app is open (`onForegroundMessage`).
-
-**Security**: Service worker hardcodes Firebase config (visible to clients) — use Firebase security rules to protect resources.
 
 ## SEO & Open Graph Images
 

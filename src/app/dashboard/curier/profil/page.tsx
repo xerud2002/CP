@@ -8,7 +8,7 @@ import { useEffect, useState, useRef, Suspense, useMemo } from 'react';
 import { ArrowLeftIcon, CheckIcon, UserIcon as DashboardUserIcon } from '@/components/icons/DashboardIcons';
 import HelpCard from '@/components/HelpCard';
 
-import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, collection, query, where, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 import { logError } from '@/lib/errorMessages';

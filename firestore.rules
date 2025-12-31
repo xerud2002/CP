@@ -126,13 +126,5 @@ service cloud.firestore {
       // Delete: only admin
       allow delete: if isAdmin();
     }
-    
-    // FCM tokens for push notifications
-    match /fcmTokens/{userId} {
-      // Users can read/write their own token
-      allow read, write: if isAuthenticated() && request.auth.uid == userId;
-      // Admin can read all tokens
-      allow read: if isAdmin();
-    }
   }
 }
