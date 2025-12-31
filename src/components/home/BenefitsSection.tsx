@@ -118,9 +118,9 @@ export default function BenefitsSection() {
             Avantajele platformei
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-2">
-            <span className="text-white">De ce să alegi </span>
-            <span className="text-gradient">Curierul Perfect</span>
-            <span className="text-white">?</span>
+            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De ce să alegi </span>
+            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>
+            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">?</span>
           </h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4">
             Soluție completă de transport național și european pentru orice tip de marfă sau pasageri între România și Europa
