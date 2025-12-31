@@ -499,28 +499,30 @@ function ProfilCurierContent() {
                 </div>
               </div>
               
-              {/* Completion Progress */}
-              <div className="mt-6 pt-6 border-t border-white/10">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-xl ${completionPercentage >= 80 ? 'bg-green-500/20' : completionPercentage >= 50 ? 'bg-yellow-500/20' : 'bg-orange-500/20'}`}>
-                      <svg className={`w-5 h-5 ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+              {/* Completion Progress - Hidden when 100% */}
+              {completionPercentage < 100 && (
+                <div className="mt-6 pt-6 border-t border-white/10">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-xl ${completionPercentage >= 80 ? 'bg-green-500/20' : completionPercentage >= 50 ? 'bg-yellow-500/20' : 'bg-orange-500/20'}`}>
+                        <svg className={`w-5 h-5 ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <span className="text-gray-200 font-semibold text-base">Profil completat</span>
                     </div>
-                    <span className="text-gray-200 font-semibold text-base">Profil completat</span>
+                    <span className={`font-bold text-2xl ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`}>
+                      {completionPercentage}%
+                    </span>
                   </div>
-                  <span className={`font-bold text-2xl ${completionPercentage >= 80 ? 'text-green-400' : completionPercentage >= 50 ? 'text-yellow-400' : 'text-orange-400'}`}>
-                    {completionPercentage}%
-                  </span>
+                  <div className="h-3 bg-slate-700/50 rounded-full overflow-hidden border border-slate-600/30 shadow-inner">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-700 ${completionPercentage >= 80 ? 'bg-linear-to-r from-green-500 to-emerald-500' : completionPercentage >= 50 ? 'bg-linear-to-r from-yellow-500 to-amber-500' : 'bg-linear-to-r from-orange-500 to-amber-500'} shadow-lg`}
+                      style={{ width: `${completionPercentage}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="h-3 bg-slate-700/50 rounded-full overflow-hidden border border-slate-600/30 shadow-inner">
-                  <div 
-                    className={`h-full rounded-full transition-all duration-700 ${completionPercentage >= 80 ? 'bg-linear-to-r from-green-500 to-emerald-500' : completionPercentage >= 50 ? 'bg-linear-to-r from-yellow-500 to-amber-500' : 'bg-linear-to-r from-orange-500 to-amber-500'} shadow-lg`}
-                    style={{ width: `${completionPercentage}%` }}
-                  />
-                </div>
-              </div>
+              )}
 
               {/* Quick Stats - Mobile */}
               <div className="grid grid-cols-3 gap-2 mt-6 lg:hidden">
