@@ -66,22 +66,37 @@ export default function Header() {
               {/* Client Button */}
               <Link 
                 href="/login?role=client" 
-                className="group relative px-3 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-white/5 border border-white/10 hover:border-green-500/50 transition-all duration-300 hover:bg-green-500/10 touch-manipulation"
+                className="group/client relative px-3 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl transition-all duration-300 shadow-md hover:shadow-lg touch-manipulation overflow-hidden"
               >
-                <span className="flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-gray-300 group-hover:text-green-400 transition-colors">
+                {/* Gradient background - subtle blue/cyan */}
+                <div className="absolute inset-0 bg-linear-to-r from-slate-700 via-slate-600 to-slate-700 group-hover/client:from-cyan-600 group-hover/client:via-blue-600 group-hover/client:to-cyan-600 transition-all duration-300"></div>
+                
+                {/* Border glow on hover */}
+                <div className="absolute inset-0 border border-slate-600/50 group-hover/client:border-cyan-500/50 rounded-lg md:rounded-xl transition-colors"></div>
+                
+                {/* Subtle glow effect */}
+                <div className="absolute -inset-0.5 bg-linear-to-r from-cyan-500 via-blue-500 to-cyan-500 rounded-lg md:rounded-xl blur opacity-0 group-hover/client:opacity-30 transition-opacity"></div>
+                
+                <span className="relative z-10 flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-gray-100 group-hover/client:text-white transition-colors font-medium">
                   <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
-                  <span className="font-medium">Client</span>
+                  <span>Client</span>
                 </span>
               </Link>
               
               {/* Partener Button - Primary */}
               <Link 
                 href="/login?role=curier" 
-                className="group relative px-3 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 transition-all duration-300 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5 touch-manipulation"
+                className="group/btn relative px-3 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 touch-manipulation overflow-hidden"
               >
-                <span className="flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-white font-medium">
+                {/* Animated gradient background */}
+                <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                
+                {/* Glow effect */}
+                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-lg md:rounded-xl blur-md opacity-40 group-hover/btn:opacity-60 transition-opacity"></div>
+                
+                <span className="relative z-10 flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-white font-medium">
                   <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                   </svg>
@@ -143,7 +158,7 @@ export default function Header() {
             <>
               <Link 
                 href="/login?role=client" 
-                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-gray-300 font-medium transition-all hover:bg-green-500/10 hover:border-green-500/50 hover:text-green-400"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-slate-800/80 backdrop-blur-sm border border-slate-700/60 text-gray-200 hover:text-white font-medium transition-all hover:bg-slate-700 hover:border-slate-600 shadow-md"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -153,13 +168,17 @@ export default function Header() {
               </Link>
               <Link 
                 href="/login?role=curier" 
-                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-linear-to-r from-orange-500 to-orange-600 text-white font-medium shadow-lg shadow-orange-500/25"
+                className="relative flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl font-medium overflow-hidden"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {/* Gradient background */}
+                <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500"></div>
+                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur opacity-50"></div>
+                
+                <svg className="relative z-10 w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                 </svg>
-                Intră ca Partener
+                <span className="relative z-10 text-white">Intră ca Partener</span>
               </Link>
             </>
           ) : (

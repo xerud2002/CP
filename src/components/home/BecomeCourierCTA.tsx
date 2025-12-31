@@ -135,16 +135,28 @@ export default function BecomeCourierCTA() {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center">
               <Link 
                 href="/register?role=curier" 
-                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12"
+                className="group/btn relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 text-white font-bold rounded-xl transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12 overflow-hidden"
               >
-                <span>Înregistrează-te Gratuit</span>
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                {/* Animated gradient background */}
+                <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                
+                {/* Shine effect */}
+                <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+                </div>
+                
+                {/* Glow effect */}
+                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+                
+                {/* Content */}
+                <span className="relative z-10">Înregistrează-te Gratuit</span>
+                <svg className="relative z-10 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </Link>
               <Link 
                 href="/despre-parteneri" 
-                className="group inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 bg-transparent hover:bg-green-500/10 text-green-400 font-semibold rounded-xl border-2 border-green-500/30 hover:border-green-500/50 transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12"
+                className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 rounded-xl font-semibold text-base sm:text-lg min-h-12 bg-slate-800/60 backdrop-blur-sm border-2 border-slate-700/60 text-gray-200 hover:text-white hover:bg-slate-700/80 hover:border-slate-600 transition-all active:scale-95 md:hover:scale-105 shadow-lg"
               >
                 <span>Află Mai Multe</span>
                 <svg className="w-5 h-5 group-hover:rotate-45 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>

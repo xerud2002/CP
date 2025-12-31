@@ -722,7 +722,14 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                       </svg>
                       Serviciu verificat
                     </p>
-                    <h1 className="text-lg sm:text-xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-white leading-tight wrap-break-word">{data.title}</h1>
+                    <h1 className="text-lg sm:text-xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold leading-tight wrap-break-word relative group">
+                      {/* Subtle glow effect */}
+                      <div className="absolute -inset-2 bg-linear-to-r from-orange-500/10 via-pink-500/10 to-purple-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      
+                      <span className="relative bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent drop-shadow-lg">
+                        {data.title}
+                      </span>
+                    </h1>
                   </div>
                 </div>
                 <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-300 leading-relaxed mb-5 sm:mb-6 lg:mb-8 max-w-2xl">{data.longDescription}</p>
@@ -731,10 +738,21 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <Link 
                     href={`/comanda?serviciu=${serviciu}`} 
-                    className="group inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 py-3 sm:py-3.5 lg:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl shadow-lg shadow-orange-500/30 transition-all hover:scale-105 active:scale-95 min-h-12"
+                    className="group/btn relative inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 py-3 sm:py-3.5 lg:py-4 text-white text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl transition-all hover:scale-105 active:scale-95 min-h-12 overflow-hidden"
                   >
-                    Solicită ofertă gratuită
-                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    {/* Animated gradient background */}
+                    <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                    
+                    {/* Shine effect */}
+                    <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity">
+                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+                    </div>
+                    
+                    {/* Glow effect */}
+                    <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-lg sm:rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+                    
+                    <span className="relative z-10">Solicită ofertă gratuită</span>
+                    <svg className="relative z-10 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </Link>
@@ -802,17 +820,348 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
         </section>
 
         {/* Article Section - Detailed Content */}
-        <section className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-linear-to-b from-slate-900 to-slate-800/50">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-slate-800/30 backdrop-blur-sm border border-white/5 rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 xl:p-12">
-              <div className="prose prose-invert prose-sm sm:prose-base lg:prose-lg max-w-none">
-                {data.article.split('\n\n').map((paragraph, idx) => (
-                  <p 
-                    key={idx} 
-                    className="text-gray-300 text-sm sm:text-base leading-relaxed mb-4 sm:mb-5 lg:mb-6 first:text-base first:sm:text-lg first:lg:text-xl first:text-gray-200 first:font-medium first:leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: paragraph }}
-                  />
-                ))}
+        <section className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-linear-to-b from-slate-900 to-slate-800/50 relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute top-0 left-0 w-full h-full opacity-30">
+            <div className="absolute top-20 right-10 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="max-w-4xl mx-auto relative z-10">
+            {/* Section Header */}
+            <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-white/10 text-emerald-400 text-sm font-medium mb-4">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Ghid Complet
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">
+                Tot Ce Trebuie Să Știi
+              </h2>
+              <p className="text-gray-400 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">
+                Informații detaliate despre serviciu, proces și recomandări pentru o experiență perfectă
+              </p>
+            </div>
+
+            {/* Content */}
+            <div className="space-y-6 sm:space-y-8">
+              {data.article.split('\n\n').map((paragraph, idx) => {
+                // Check if paragraph contains links - style them as highlight boxes
+                const hasLinks = paragraph.includes('<a href=');
+                const isFirstParagraph = idx === 0;
+                const paragraphLower = paragraph.toLowerCase();
+                
+                // Detect paragraph type for contextual icons and styling
+                const isVerification = paragraphLower.includes('verificare') || paragraphLower.includes('verificați') || paragraphLower.includes('validare');
+                const isProcess = paragraphLower.includes('proces') || paragraphLower.includes('începe cu') || paragraphLower.includes('platforma');
+                const isTransport = paragraphLower.includes('transport') || paragraphLower.includes('livrare') || paragraphLower.includes('ridicare');
+                const isDocumentation = paragraphLower.includes('documente') || paragraphLower.includes('vamale') || paragraphLower.includes('declarații');
+                const isTime = paragraphLower.includes('timp') || paragraphLower.includes('durată') || paragraphLower.includes('zile');
+                const isInsurance = paragraphLower.includes('asigur') || paragraphLower.includes('cmr') || paragraphLower.includes('protec');
+                
+                // First paragraph - Hero style
+                if (isFirstParagraph) {
+                  return (
+                    <div key={idx} className="relative bg-linear-to-br from-emerald-500/10 via-slate-800/80 to-blue-500/10 backdrop-blur-sm border-2 border-emerald-500/20 rounded-2xl p-6 sm:p-8 shadow-2xl overflow-hidden group">
+                      {/* Decorative corner */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-emerald-500/20 to-transparent rounded-bl-full opacity-50"></div>
+                      
+                      <div className="flex items-start gap-4 relative z-10">
+                        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-emerald-500/30 to-emerald-500/10 border-2 border-emerald-500/40 flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                          <svg className="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Introducere
+                          </div>
+                          <p 
+                            className="text-gray-100 text-base sm:text-lg leading-relaxed font-light"
+                            dangerouslySetInnerHTML={{ __html: paragraph }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Paragraphs with links - Call to action style
+                if (hasLinks) {
+                  return (
+                    <div key={idx} className="relative bg-linear-to-br from-blue-500/5 to-slate-800/40 backdrop-blur-sm border border-blue-500/20 rounded-xl p-5 sm:p-6 hover:border-blue-500/40 hover:shadow-xl transition-all group">
+                      {/* Left accent bar */}
+                      <div className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-linear-to-b from-blue-500 to-emerald-500 rounded-r-full"></div>
+                      
+                      <div className="flex items-start gap-3 ml-2">
+                        <div className="w-8 h-8 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center shrink-0 mt-1 group-hover:scale-110 transition-transform">
+                          <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          </svg>
+                        </div>
+                        <p 
+                          className="text-gray-300 text-sm sm:text-base leading-relaxed flex-1"
+                          dangerouslySetInnerHTML={{ __html: paragraph }}
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Verification/Safety paragraphs
+                if (isVerification) {
+                  return (
+                    <div key={idx} className="relative bg-slate-800/30 backdrop-blur-sm border border-emerald-500/10 rounded-xl p-5 sm:p-6 hover:border-emerald-500/30 transition-colors">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                          <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                          </svg>
+                        </div>
+                        <p 
+                          className="text-gray-300 text-sm sm:text-base leading-relaxed flex-1"
+                          dangerouslySetInnerHTML={{ __html: paragraph }}
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Process/Platform paragraphs
+                if (isProcess) {
+                  return (
+                    <div key={idx} className="relative bg-slate-800/30 backdrop-blur-sm border border-purple-500/10 rounded-xl p-5 sm:p-6 hover:border-purple-500/30 transition-colors">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
+                          <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                          </svg>
+                        </div>
+                        <p 
+                          className="text-gray-300 text-sm sm:text-base leading-relaxed flex-1"
+                          dangerouslySetInnerHTML={{ __html: paragraph }}
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Transport/Delivery paragraphs
+                if (isTransport) {
+                  return (
+                    <div key={idx} className="relative bg-slate-800/30 backdrop-blur-sm border border-orange-500/10 rounded-xl p-5 sm:p-6 hover:border-orange-500/30 transition-colors">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center shrink-0">
+                          <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                          </svg>
+                        </div>
+                        <p 
+                          className="text-gray-300 text-sm sm:text-base leading-relaxed flex-1"
+                          dangerouslySetInnerHTML={{ __html: paragraph }}
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Time/Duration paragraphs
+                if (isTime) {
+                  return (
+                    <div key={idx} className="relative bg-slate-800/30 backdrop-blur-sm border border-cyan-500/10 rounded-xl p-5 sm:p-6 hover:border-cyan-500/30 transition-colors">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
+                          <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p 
+                          className="text-gray-300 text-sm sm:text-base leading-relaxed flex-1"
+                          dangerouslySetInnerHTML={{ __html: paragraph }}
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Documentation paragraphs
+                if (isDocumentation) {
+                  return (
+                    <div key={idx} className="relative bg-slate-800/30 backdrop-blur-sm border border-amber-500/10 rounded-xl p-5 sm:p-6 hover:border-amber-500/30 transition-colors">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
+                          <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <p 
+                          className="text-gray-300 text-sm sm:text-base leading-relaxed flex-1"
+                          dangerouslySetInnerHTML={{ __html: paragraph }}
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Insurance/Protection paragraphs
+                if (isInsurance) {
+                  return (
+                    <div key={idx} className="relative bg-slate-800/30 backdrop-blur-sm border border-emerald-500/10 rounded-xl p-5 sm:p-6 hover:border-emerald-500/30 transition-colors">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                          <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                        </div>
+                        <p 
+                          className="text-gray-300 text-sm sm:text-base leading-relaxed flex-1"
+                          dangerouslySetInnerHTML={{ __html: paragraph }}
+                        />
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Default paragraph style
+                return (
+                  <div key={idx} className="relative bg-slate-800/20 backdrop-blur-sm border border-white/5 rounded-xl p-5 sm:p-6 hover:border-white/10 transition-colors">
+                    <div className="flex items-start gap-3">
+                      <div className="w-2 h-2 rounded-full bg-gray-500 mt-2 shrink-0"></div>
+                      <p 
+                        className="text-gray-300 text-sm sm:text-base leading-relaxed flex-1"
+                        dangerouslySetInnerHTML={{ __html: paragraph }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Call to Action */}
+            <div className="mt-10 sm:mt-12">
+              {/* Separator */}
+              <div className="flex items-center gap-4 mb-8">
+                <div className="flex-1 h-px bg-linear-to-r from-transparent via-white/20 to-transparent"></div>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-white/10">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span className="text-gray-400 text-sm font-medium">Pasul următor</span>
+                </div>
+                <div className="flex-1 h-px bg-linear-to-r from-transparent via-white/20 to-transparent"></div>
+              </div>
+
+              {/* CTA Card */}
+              <div className="relative group">
+                {/* Glow effect */}
+                <div className="absolute -inset-0.5 bg-linear-to-r from-emerald-500 to-blue-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                
+                <div className="relative bg-linear-to-br from-emerald-500/10 via-slate-800/90 to-blue-500/10 backdrop-blur-xl border-2 border-emerald-500/20 rounded-2xl p-6 sm:p-8 overflow-hidden">
+                  {/* Background pattern */}
+                  <div className="absolute top-0 right-0 w-64 h-64 opacity-5">
+                    <svg className="w-full h-full" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="currentColor" d="M45.7,-57.8C58.9,-45.5,69.3,-30.9,73.1,-14.8C76.9,1.3,74.1,18.9,65.8,33.6C57.5,48.3,43.7,60.1,27.9,66.4C12.1,72.7,-5.7,73.5,-22.3,68.9C-38.9,64.3,-54.3,54.3,-64.1,40.1C-73.9,25.9,-78.1,7.5,-75.8,-10.1C-73.5,-27.7,-64.7,-44.5,-51.8,-56.6C-38.9,-68.7,-22,-76.1,-4.8,-70.4C12.4,-64.7,32.5,-70.1,45.7,-57.8Z" transform="translate(100 100)" />
+                    </svg>
+                  </div>
+
+                  <div className="relative z-10 flex flex-col lg:flex-row items-center gap-6">
+                    {/* Left side - Icon and text */}
+                    <div className="flex items-start gap-4 flex-1">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-emerald-500/30 rounded-2xl blur-xl"></div>
+                        <div className="relative w-16 h-16 rounded-2xl bg-linear-to-br from-emerald-500/30 to-emerald-500/10 border-2 border-emerald-500/40 flex items-center justify-center shadow-lg">
+                          <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                      </div>
+                      
+                      <div className="flex-1 text-center lg:text-left">
+                        <h3 className="text-white font-bold text-xl sm:text-2xl mb-2">
+                          Gata să începi?
+                        </h3>
+                        <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+                          Postează cererea acum și primește oferte personalizate de la transportatori verificați în câteva ore
+                        </p>
+                        
+                        {/* Features list */}
+                        <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mt-4">
+                          <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                            <svg className="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            <span>100% gratuit</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                            <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            <span>Fără obligație</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                            <svg className="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            <span>Răspuns rapid</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right side - CTA Button */}
+                    <div className="flex flex-col gap-3">
+                      <a 
+                        href="/comanda" 
+                        className="relative group/btn inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-base overflow-hidden transition-all hover:scale-105 active:scale-95"
+                      >
+                        {/* Animated gradient background */}
+                        <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                        
+                        {/* Shine effect */}
+                        <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity">
+                          <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+                        </div>
+                        
+                        {/* Glow effect */}
+                        <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+                        
+                        {/* Content */}
+                        <span className="relative z-10 text-white">Solicită Transport</span>
+                        <svg className="relative z-10 w-5 h-5 text-white group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </a>
+                      
+                      <p className="text-center text-xs text-gray-500">
+                        ⚡ Completare în 2 minute
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust indicators */}
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Transportatori verificați</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>Transparență totală</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                  <span>Suport dedicat</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1077,10 +1426,21 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
                 <Link 
                   href={`/comanda?serviciu=${serviciu}`} 
-                  className="group inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-3.5 lg:py-4 xl:py-5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base lg:text-lg font-bold rounded-xl shadow-lg shadow-orange-500/40 transition-all hover:scale-105 active:scale-95 w-full sm:w-auto min-h-12 sm:min-h-13"
+                  className="group/btn relative inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-3.5 lg:py-4 xl:py-5 text-white text-sm sm:text-base lg:text-lg font-bold rounded-xl transition-all hover:scale-105 active:scale-95 w-full sm:w-auto min-h-12 sm:min-h-13 overflow-hidden"
                 >
-                  Plasează comandă acum
-                  <svg className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {/* Animated gradient background */}
+                  <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                  
+                  {/* Shine effect */}
+                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity">
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+                  </div>
+                  
+                  {/* Glow effect */}
+                  <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+                  
+                  <span className="relative z-10">Plasează comandă acum</span>
+                  <svg className="relative z-10 w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>

@@ -22,12 +22,17 @@ export default function HeroSection() {
             </div>
 
             {/* Main Title - Mobile first */}
-            <h1 className="text-[28px] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 md:mb-6 leading-[1.15] sm:leading-[1.1]">
-              <span className="text-white">Transport</span>
+            <h1 className="text-[28px] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 sm:mb-4 md:mb-6 leading-[1.15] sm:leading-[1.1] relative">
+              {/* Glow effect behind title */}
+              <div className="absolute -inset-4 bg-linear-to-r from-purple-500/20 via-pink-500/20 to-orange-500/20 blur-3xl opacity-30 animate-pulse"></div>
+              
+              <span className="relative text-white drop-shadow-lg">Transport</span>
               <br />
-              <span className="text-gradient">național și european</span>
+              <span className="relative bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x font-extrabold drop-shadow-2xl">
+                național și european
+              </span>
               <br />
-              <span className="text-white">rapid și sigur</span>
+              <span className="relative text-white drop-shadow-lg">rapid și sigur</span>
             </h1>
 
             {/* Subtitle - Mobile optimized */}
@@ -37,11 +42,34 @@ export default function HeroSection() {
 
             {/* CTA Buttons - Stack on mobile */}
             <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 md:gap-4 mb-5 sm:mb-6 md:mb-8">
-              <Link href="/comanda" className="btn-primary px-5 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base md:text-lg flex items-center justify-center w-full sm:w-auto min-h-12">
-                Plasează o comandă
+              <Link href="/comanda" className="relative group/btn inline-flex items-center justify-center px-5 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base md:text-lg w-full sm:w-auto min-h-12 rounded-xl font-bold overflow-hidden transition-all hover:scale-105 active:scale-95">
+                {/* Animated gradient background */}
+                <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                
+                {/* Shine effect */}
+                <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+                </div>
+                
+                {/* Glow effect */}
+                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+                
+                {/* Content */}
+                <span className="relative z-10 text-white">Plasează o comandă</span>
               </Link>
-              <Link href="/devino-partener" className="btn-secondary px-5 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base md:text-lg flex items-center justify-center w-full sm:w-auto min-h-12">
-                Devino Partener
+              <Link href="/devino-partener" className="relative group/btn inline-flex items-center justify-center px-5 sm:px-6 md:px-8 py-3 sm:py-3.5 md:py-4 text-sm sm:text-base md:text-lg w-full sm:w-auto min-h-12 rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
+                {/* Gradient emerald background */}
+                <div className="absolute inset-0 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 transition-transform group-hover/btn:scale-110"></div>
+                
+                {/* Shine effect */}
+                <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+                </div>
+                
+                {/* Glow */}
+                <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 rounded-xl blur-lg opacity-40 group-hover/btn:opacity-60 transition-opacity"></div>
+                
+                <span className="relative z-10 text-white">Devino Partener</span>
               </Link>
             </div>
 
