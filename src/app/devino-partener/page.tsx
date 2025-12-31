@@ -6,33 +6,33 @@ export default function DevinoPartenerPage() {
   return (
     <main className="min-h-screen bg-slate-900">
       {/* Hero */}
-      <section className="relative py-20 px-4 bg-linear-to-b from-slate-800 via-slate-900 to-slate-900 overflow-hidden">
+      <section className="relative py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-800 via-slate-900 to-slate-900 overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-linear-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 text-green-400 text-sm font-semibold mb-8 animate-pulse">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-linear-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 text-green-400 text-xs sm:text-sm font-semibold mb-6 sm:mb-8 animate-pulse">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
-            <span>100% GRATUIT pe perioadă nedeterminată - Fără Comisioane!</span>
+            <span className="text-center">100% GRATUIT - Fără Comisioane!</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">
             Devino Curier <span className="text-gradient">Partner</span>
           </h1>
-          <p className="text-xl sm:text-2xl text-gray-300 mb-4 leading-relaxed">
+          <p className="text-base sm:text-xl lg:text-2xl text-gray-300 mb-3 sm:mb-4 leading-relaxed max-w-2xl mx-auto">
             Alătură-te platformei #1 de transport pentru români din Europa
           </p>
-          <p className="text-lg text-gray-400 mb-10">
-            🚀 Zero comisioane permanent • 📦 Comenzi nelimitate • ⚡ Contactezi clienții direct • ✅ Acces instant după verificare
+          <p className="text-sm sm:text-base lg:text-lg text-gray-400 mb-8 sm:mb-10 max-w-xl mx-auto leading-relaxed">
+            🚀 Zero comisioane • 📦 Comenzi nelimitate • ⚡ Contact direct • ✅ Acces instant
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register?role=curier" className="btn-primary px-10 py-4 text-lg inline-flex items-center justify-center gap-3 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <Link href="/register?role=curier" className="btn-primary px-6 sm:px-10 py-3 sm:py-4 text-sm sm:text-lg inline-flex items-center justify-center gap-2 sm:gap-3 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all min-h-[48px]">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
               </svg>
               <span>Înregistrează-te Acum</span>
             </Link>
-            <Link href="/cum-functioneaza" className="btn-secondary px-10 py-4 text-lg inline-flex items-center justify-center gap-3">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Link href="/cum-functioneaza" className="btn-secondary px-6 sm:px-10 py-3 sm:py-4 text-sm sm:text-lg inline-flex items-center justify-center gap-2 sm:gap-3 min-h-[48px]">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <span>Cum funcționează?</span>
@@ -42,13 +42,13 @@ export default function DevinoPartenerPage() {
       </section>
 
       {/* Benefits */}
-      <section className="py-16 px-4">
+      <section className="py-10 sm:py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">De ce să alegi Curierul Perfect?</h2>
-            <p className="text-gray-400 text-lg">Avantaje reale pentru transportatori profesioniști</p>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">De ce să alegi Curierul Perfect?</h2>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-400">Avantaje reale pentru transportatori profesioniști</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {[
               { 
                 icon: (
@@ -128,12 +128,12 @@ export default function DevinoPartenerPage() {
                 color: 'orange'
               }
             ].map((benefit, idx) => (
-              <div key={idx} className={`card p-6 hover:border-${benefit.color}-500/30 transition-all group`}>
-                <div className={`w-14 h-14 rounded-xl bg-${benefit.color}-500/20 flex items-center justify-center mb-4 text-${benefit.color}-400 group-hover:scale-110 transition-transform`}>
+              <div key={idx} className={`card p-4 sm:p-6 hover:border-${benefit.color}-500/30 transition-all group`}>
+                <div className={`w-11 h-11 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-${benefit.color}-500/20 flex items-center justify-center mb-3 sm:mb-4 text-${benefit.color}-400 group-hover:scale-110 transition-transform`}>
                   {benefit.icon}
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">{benefit.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{benefit.desc}</p>
+                <h3 className="text-base sm:text-lg font-bold text-white mb-1.5 sm:mb-2">{benefit.title}</h3>
+                <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">{benefit.desc}</p>
               </div>
             ))}
           </div>
@@ -141,13 +141,13 @@ export default function DevinoPartenerPage() {
       </section>
 
       {/* Requirements */}
-      <section className="py-16 px-4 bg-linear-to-b from-slate-800/50 to-slate-900">
+      <section className="py-10 sm:py-16 px-4 bg-linear-to-b from-slate-800/50 to-slate-900">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Cerințe pentru înregistrare</h2>
-            <p className="text-gray-400 text-lg">Documentele necesare pentru verificare</p>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">Cerințe pentru înregistrare</h2>
+            <p className="text-sm sm:text-base lg:text-lg text-gray-400">Documentele necesare pentru verificare</p>
           </div>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3 sm:gap-4">
             {[
               { 
                 title: 'Carte de identitate / Pașaport', 
@@ -197,27 +197,27 @@ export default function DevinoPartenerPage() {
                 )
               }
             ].map((req, idx) => (
-              <div key={idx} className="card p-6 flex items-start gap-4 hover:border-orange-500/30 transition-colors group">
-                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center shrink-0 text-orange-400 group-hover:scale-110 transition-transform">
+              <div key={idx} className="card p-4 sm:p-6 flex items-start gap-3 sm:gap-4 hover:border-orange-500/30 transition-colors group">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center shrink-0 text-orange-400 group-hover:scale-110 transition-transform">
                   {req.icon}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-1.5">{req.title}</h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{req.desc}</p>
+                  <h3 className="font-semibold text-white text-sm sm:text-base mb-1 sm:mb-1.5">{req.title}</h3>
+                  <p className="text-gray-400 text-xs sm:text-sm leading-relaxed">{req.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-          <div className="mt-8 card p-6 bg-blue-500/5 border-blue-500/20">
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
-                <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="mt-6 sm:mt-8 card p-4 sm:p-6 bg-blue-500/5 border-blue-500/20">
+            <div className="flex items-start gap-3 sm:gap-4">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
               <div>
-                <h4 className="font-semibold text-white mb-2">📋 Notă importantă</h4>
-                <p className="text-gray-300 text-sm leading-relaxed">
+                <h4 className="font-semibold text-white text-sm sm:text-base mb-1.5 sm:mb-2">📋 Notă importantă</h4>
+                <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">
                   Toate documentele sunt verificate de echipa noastră pentru a asigura siguranța clienților. 
                   Procesul durează 24-48 ore lucrătoare. Vei primi email de confirmare când contul e aprobat.
                 </p>

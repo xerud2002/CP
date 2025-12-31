@@ -6,23 +6,23 @@ export default function DesprePage() {
   return (
     <main className="min-h-screen bg-slate-900">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
+      <section className="relative py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
             Despre <span className="text-gradient">Curierul Perfect</span>
           </h1>
-          <p className="text-xl text-gray-300 leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
             Conectăm românii din diaspora cu transportatori de încredere pentru servicii complete de curierat și transport în toată Europa.
           </p>
         </div>
       </section>
 
       {/* Story Section */}
-      <section className="py-16 px-4">
+      <section className="py-10 sm:py-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="card p-8">
-            <h2 className="text-3xl font-bold text-white mb-6">Povestea noastră</h2>
-            <div className="space-y-4 text-gray-300 leading-relaxed">
+          <div className="card p-5 sm:p-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Povestea noastră</h2>
+            <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-gray-300 leading-relaxed">
               <p>
                 Curierul Perfect s-a născut din experiența personală a românilor care s-au confruntat cu dificultăți în găsirea de servicii de transport fiabile între România și țările din Europa de Vest.
               </p>
@@ -38,32 +38,32 @@ export default function DesprePage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-16 px-4 bg-slate-800/50">
+      <section className="py-10 sm:py-16 px-4 bg-slate-800/50">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
             {/* Mission */}
-            <div className="card p-8">
-              <div className="w-16 h-16 rounded-2xl bg-orange-500/20 flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="card p-5 sm:p-8">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-orange-500/20 flex items-center justify-center mb-4 sm:mb-6">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Misiunea noastră</h3>
-              <p className="text-gray-300 leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Misiunea noastră</h3>
+              <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
                 Să facilităm transportul între România și Europa prin conectarea directă între clienți și curieri verificați, oferind un proces simplu, transparent și sigur pentru toate părțile implicate.
               </p>
             </div>
 
             {/* Vision */}
-            <div className="card p-8">
-              <div className="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="card p-5 sm:p-8">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-green-500/20 flex items-center justify-center mb-4 sm:mb-6">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Viziunea noastră</h3>
-              <p className="text-gray-300 leading-relaxed">
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Viziunea noastră</h3>
+              <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
                 Să devenim platforma #1 de transport și curierat pentru comunitatea românească din diaspora, acoperind toate rutele importante din Europa cu servicii de calitate superioară.
               </p>
             </div>
@@ -72,10 +72,10 @@ export default function DesprePage() {
       </section>
 
       {/* Values */}
-      <section className="py-16 px-4">
+      <section className="py-10 sm:py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-12">Valorile noastre</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8 sm:mb-12">Valorile noastre</h2>
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             {[
               {
                 icon: (
@@ -120,14 +120,14 @@ export default function DesprePage() {
                 desc: 'Echipă dedicată pentru ajutor permanent'
               }
             ].map((value, idx) => (
-              <div key={idx} className="card p-6 hover:border-orange-500/30 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div key={idx} className="card p-4 sm:p-6 hover:border-orange-500/30 transition-colors">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-orange-500/20 flex items-center justify-center mb-3 sm:mb-4">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {value.icon}
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">{value.title}</h3>
-                <p className="text-gray-400 text-sm">{value.desc}</p>
+                <h3 className="text-base sm:text-lg font-semibold text-white mb-1.5 sm:mb-2">{value.title}</h3>
+                <p className="text-gray-400 text-xs sm:text-sm">{value.desc}</p>
               </div>
             ))}
           </div>
@@ -135,17 +135,17 @@ export default function DesprePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4">
+      <section className="py-10 sm:py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">Gata să începi?</h2>
-          <p className="text-gray-300 mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Gata să începi?</h2>
+          <p className="text-sm sm:text-base text-gray-300 mb-6 sm:mb-8 max-w-md mx-auto">
             Încearcă Curierul Perfect pentru transportul tău în România și Europa.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/comanda" className="btn-primary px-8 py-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+            <Link href="/comanda" className="btn-primary px-6 sm:px-8 py-3 sm:py-4 min-h-[48px] flex items-center justify-center text-sm sm:text-base">
               Plasează o comandă
             </Link>
-            <Link href="/register?role=curier" className="btn-secondary px-8 py-4">
+            <Link href="/register?role=curier" className="btn-secondary px-6 sm:px-8 py-3 sm:py-4 min-h-[48px] flex items-center justify-center text-sm sm:text-base">
               Devino Partener
             </Link>
           </div>
