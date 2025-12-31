@@ -148,8 +148,8 @@ export default function ProcessTimeline() {
             Procesul complet
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-white">De la comandă la </span>
-            <span className="text-gradient">livrare</span>
+            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De la comandă la </span>
+            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">livrare</span>
           </h2>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
             Urmărește fiecare pas - transparent, simplu și eficient
