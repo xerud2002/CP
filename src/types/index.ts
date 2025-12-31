@@ -24,14 +24,6 @@ export interface User {
   verified?: boolean;
 }
 
-export interface CoverageZone {
-  id?: string;
-  uid: string;
-  tara: string;
-  judet: string;
-  addedAt?: Date;
-}
-
 export interface Order {
   id?: string;
   orderNumber?: number;

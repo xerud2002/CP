@@ -33,27 +33,6 @@ service cloud.firestore {
       allow write: if isAuthenticated() && (userId == request.auth.uid || isAdmin());
     }
     
-    // Courier coverage zones
-    match /zona_acoperire/{docId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
-    }
-    
-    // Courier pricing
-    match /tarife_curier/{docId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
-    }
-    
-    // Person transport routes
-    match /transport_persoane/{docId} {
-      allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
-      allow update, delete: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
-    }
-    
     // Orders - simplified without status checks
     match /comenzi/{docId} {
       // Clients read own orders, couriers read all orders, admin reads everything

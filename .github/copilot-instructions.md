@@ -73,10 +73,10 @@ export default function Page() {
 ### 2. Firestore Owner Filter (REQUIRED)
 ```tsx
 // ✅ CORRECT
-const q = query(collection(db, 'zona_acoperire'), where('uid', '==', user.uid), orderBy('addedAt', 'desc'));
+const q = query(collection(db, 'comenzi'), where('uid_client', '==', user.uid), orderBy('createdAt', 'desc'));
 
 // ❌ WRONG - Exposes other users' data
-const q = query(collection(db, 'zona_acoperire'), orderBy('addedAt', 'desc'));
+const q = query(collection(db, 'comenzi'), orderBy('createdAt', 'desc'));
 ```
 
 ### 3. Service Name Normalization
@@ -153,9 +153,9 @@ anulata  anulata
 |------------|-------------|-----------|
 | `comenzi` | `uid_client` | Orders with `orderNumber`, `status`, `courierId` |
 | `mesaje` | `clientId` + `courierId` | **1-to-1 chat per order** — filter by `orderId`, `clientId`, AND `courierId` |
-| `zona_acoperire` | `uid` | Courier coverage zones (multi-record per courier) |
 | `profil_curier` | doc ID = `uid` | Extended courier profile (publicly readable) |
 | `profil_client` | doc ID = `uid` | Extended client profile (private) |
+| `users` | doc ID = `uid` | Base user profile with role, email, serviciiOferite |
 
 **Chat System**: Each client-courier pair has a **separate conversation** per order. Query MUST filter by `orderId`, `clientId`, AND `courierId`.
 
@@ -270,7 +270,6 @@ Available scripts:
 - **Firestore Rules**: Read access for owners only (`resource.data.uid == request.auth.uid`), but rules **don't auto-filter**
 - **Couriers**: Can read ALL orders (for discovery), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
 - **Profiles**: `profil_curier` is publicly readable (for courier info), `profil_client` is private
-- **Coverage Zones**: `zona_acoperire` allows couriers to read all zones (for route planning), but write only own zones
 - **Storage**: Courier verification documents in `courierDocs/{uid}/`, client profile photos in `clientPhotos/{uid}/`
 - **Admin Access**: `isAdmin()` helper in rules checks `users/{uid}.role == 'admin'` for elevated permissions
 

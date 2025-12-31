@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
 import { serviceTypes } from '@/lib/constants';
@@ -22,7 +22,6 @@ interface CourierProfile {
   verificat: boolean;
   nrLivrari: number;
   serviciiOferite: string[];
-  zoneAcoperire: string[];
   aniExperienta: number;
   profileImage?: string;
 }
@@ -46,25 +45,14 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Parallel fetch: profile, user, zones
-        const [profilDoc, userDoc, zonesSnapshot] = await Promise.all([
+        // Parallel fetch: profile, user
+        const [profilDoc, userDoc] = await Promise.all([
           getDoc(doc(db, 'profil_curier', courierId)),
-          getDoc(doc(db, 'users', courierId)),
-          getDocs(query(collection(db, 'zona_acoperire'), where('uid', '==', courierId)))
+          getDoc(doc(db, 'users', courierId))
         ]);
 
         const profilData = profilDoc.data();
         const userData = userDoc.data();
-
-        // Process zones
-        const zones = new Set<string>();
-        zonesSnapshot.forEach(doc => {
-          const { oras, judet, tara } = doc.data();
-          if (oras && judet) zones.add(`${capitalize(oras)}, ${capitalize(judet)}`);
-          else if (judet) zones.add(capitalize(judet));
-          else if (oras) zones.add(capitalize(oras));
-          else if (tara) zones.add(capitalize(tara));
-        });
 
         // Calculate experience
         const createdAt = userData?.createdAt?.toDate() || profilData?.createdAt?.toDate();
@@ -80,7 +68,6 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
           verificat: userData?.verified || profilData?.verificationStatus === 'verified' || false,
           nrLivrari: profilData?.nrLivrari || userData?.nrLivrari || 0,
           serviciiOferite: userData?.serviciiOferite || profilData?.serviciiOferite || [],
-          zoneAcoperire: [...zones],
           aniExperienta: yearsExp,
           profileImage: profilData?.profileImage || profilData?.logo || profilData?.logoUrl
         });
@@ -197,24 +184,6 @@ export default function CourierProfileModal({ courierId, companyName, onClose }:
                         <span className="text-gray-300 text-xs">{getServiceLabel(service)}</span>
                       </div>
                     ))}
-                  </div>
-                </Section>
-              )}
-
-              {/* Coverage Zones */}
-              {profile.zoneAcoperire.length > 0 && (
-                <Section title="Zone de acoperire">
-                  <div className="flex flex-wrap gap-2">
-                    {profile.zoneAcoperire.slice(0, 8).map((zone, i) => (
-                      <span key={i} className="px-2.5 py-1 bg-blue-500/10 text-blue-400 text-xs rounded-full border border-blue-500/20">
-                        {zone}
-                      </span>
-                    ))}
-                    {profile.zoneAcoperire.length > 8 && (
-                      <span className="px-2.5 py-1 bg-slate-700/50 text-gray-400 text-xs rounded-full">
-                        +{profile.zoneAcoperire.length - 8} altele
-                      </span>
-                    )}
                   </div>
                 </Section>
               )}

@@ -251,8 +251,8 @@ export default function SuportCurierPage() {
                   <StarIcon className="w-6 h-6 text-teal-400" />
                 </div>
                 <div>
-                  <h4 className="text-white font-bold text-base mb-2">Servicii și zone de acoperire</h4>
-                  <p className="text-gray-400 text-sm leading-relaxed">Cum să adaugi sau modifici servicii, zone de acoperire și prețuri competitive</p>
+                  <h4 className="text-white font-bold text-base mb-2">Servicii și documente</h4>
+                  <p className="text-gray-400 text-sm leading-relaxed">Cum să adaugi sau modifici servicii, documente și să îți optimizezi profilul</p>
                 </div>
               </div>
             </div>
