@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Devino Curier Partener - Curierul Perfect',
-  description: 'Alătură-te platformei #1 de transport pentru români din Europa. Zero comisioane, comenzi nelimitate, acces instant. Înregistrare gratuită!',
+  description: 'Alătură-te platformei de transport național și european. Zero comisioane, comenzi nelimitate, acces instant. Înregistrare gratuită!',
   alternates: {
     canonical: 'https://curierulperfect.ro/devino-partener',
   },

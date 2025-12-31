@@ -33,11 +33,11 @@ export default function Footer() {
                 <span className="text-xl font-black leading-none">
                   <span className="group-hover:opacity-80 transition-opacity" style={{color: '#FF8C00'}}>CurierulPerfect</span>
                 </span>
-                <span className="text-[10px] text-gray-600 font-medium tracking-wider uppercase mt-0.5 text-center">- TRANSPORT EUROPA -</span>
+                <span className="text-[10px] text-gray-600 font-medium tracking-wider uppercase mt-0.5 text-center">- TRANSPORT NAȚIONAL & EUROPEAN -</span>
               </div>
             </Link>
             <p className="text-gray-300 text-sm leading-relaxed mb-6 max-w-sm">
-              Platforma #1 care conectează românii din diaspora cu transportatori verificați pentru colete, mobilă, persoane, animale și mutări complete în toată Europa.
+              Conectăm clienții cu transportatori verificați pentru transport național și european. Recenzii reale, comunicare directă, fără intermediari.
             </p>
             
             {/* Social Media */}
@@ -131,13 +131,21 @@ export default function Footer() {
           {/* Services Links */}
           <div>
             <h4 className="text-white font-semibold mb-5">Servicii</h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5">
               <li>
                 <Link href="/servicii/colete" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                   Transport colete
+                </Link>
+              </li>
+              <li>
+                <Link href="/servicii/plicuri" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Transport plicuri
                 </Link>
               </li>
               <li>
@@ -153,7 +161,15 @@ export default function Footer() {
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                  Mutări internaționale
+                  Mobilă & mutări
+                </Link>
+              </li>
+              <li>
+                <Link href="/servicii/electronice" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Transport electronice
                 </Link>
               </li>
               <li>
@@ -169,7 +185,23 @@ export default function Footer() {
                   <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                  Platformă auto
+                  Transport platformă
+                </Link>
+              </li>
+              <li>
+                <Link href="/servicii/tractari" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Tractări auto
+                </Link>
+              </li>
+              <li>
+                <Link href="/servicii/paleti" className="text-gray-300 hover:text-orange-400 transition-colors text-sm flex items-center gap-2 group">
+                  <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                  Transport paleți
                 </Link>
               </li>
             </ul>

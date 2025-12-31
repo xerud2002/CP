@@ -109,23 +109,23 @@ export default function PlatformVsFacebook() {
                 </div>
               </div>
 
-              {/* Alternative comparison - softer tone */}
+              {/* Alternative comparison - warning tone */}
               <div className="flex items-start gap-3 sm:gap-4">
-                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-linear-to-br from-slate-600/30 to-slate-700/20 border border-slate-500/20 flex items-center justify-center">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-600/10 border border-amber-500/30 flex items-center justify-center">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 sm:mb-1.5">
-                    <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                     </svg>
-                    <h4 className="text-sm sm:text-base font-medium text-slate-400">
+                    <h4 className="text-sm sm:text-base font-medium text-amber-400">
                       {feature.fbAlt}
                     </h4>
                   </div>
-                  <p className="text-slate-500 text-xs sm:text-sm leading-relaxed">
+                  <p className="text-amber-200/60 text-xs sm:text-sm leading-relaxed">
                     {feature.fbDescription}
                   </p>
                 </div>
@@ -142,7 +142,7 @@ export default function PlatformVsFacebook() {
             </h3>
             <p className="text-gray-400 text-sm sm:text-base mb-5 max-w-2xl mx-auto leading-relaxed">
               Descoperă o experiență superioară: platformă dedicată cu 
-              <span className="text-emerald-400 font-semibold"> curieri verificați profesional, transparență totală a prețurilor și protecție completă</span> pentru fiecare comandă.
+              <span className="text-emerald-400 font-semibold"> transportatori verificați profesional, recenzii reale și comunicare directă</span> pentru fiecare comandă.
             </p>
             <Link href="/comanda" className="btn-primary px-8 py-3.5 text-base inline-flex items-center gap-2">
               Comandă în siguranță acum

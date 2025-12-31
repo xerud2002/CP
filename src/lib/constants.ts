@@ -81,7 +81,7 @@ export const serviceTypes = [
     value: 'Persoane',
     name: 'Transport Persoane', 
     label: 'Transport Persoane',
-    description: 'Pasageri - călătorii în Europa',
+    description: 'Pasageri - călătorii în România și Europa',
     color: 'text-pink-400',
     bgColor: 'bg-pink-500/20',
     borderColor: 'border-pink-500/30',

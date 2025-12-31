@@ -82,8 +82,8 @@ export default function Home() {
       />
       <main className="min-h-screen relative bg-slate-900">
         <HeroSection />
-        <PlatformVsFacebook />
         <HowItWorksSection />
+        <PlatformVsFacebook />
         <ProcessTimeline />
         
         {/* Floating Elements */}

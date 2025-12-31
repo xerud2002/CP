@@ -18,7 +18,7 @@ const timelineSteps = [
   {
     id: 2,
     title: 'Primești oferte',
-    description: 'Transportatorii disponibili pe ruta ta văd cererea și îți trimit oferte personalizate cu prețuri competitive.',
+    description: 'Transportatorii disponibili pe ruta ta văd cererea și îți trimit oferte personalizate.',
     timeLabel: '2-24 ore',
     color: 'emerald',
     icon: (
@@ -30,7 +30,7 @@ const timelineSteps = [
   {
     id: 3,
     title: 'Compari și alegi',
-    description: 'Vezi toate ofertele, compari prețurile, citești recenziile și alegi transportatorul perfect pentru tine.',
+    description: 'Vezi toate ofertele, citești recenziile și alegi transportatorul potrivit pentru tine.',
     timeLabel: '5-10 min',
     color: 'blue',
     icon: (
@@ -158,73 +158,103 @@ export default function ProcessTimeline() {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Vertical line - desktop only */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2">
-            <div className="h-full w-full bg-linear-to-b from-orange-500/50 via-emerald-500/50 to-rose-500/50"></div>
+          {/* Vertical line - tablet and desktop - centered */}
+          <div className="hidden sm:block absolute left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2">
+            <div className="h-full w-full bg-gradient-to-b from-orange-500/40 via-blue-500/40 to-rose-500/40"></div>
           </div>
 
           {/* Mobile vertical line */}
-          <div className="md:hidden absolute left-8 top-0 bottom-0 w-px">
-            <div className="h-full w-full bg-linear-to-b from-orange-500/30 via-emerald-500/30 to-rose-500/30"></div>
+          <div className="sm:hidden absolute left-6 top-0 bottom-0 w-0.5">
+            <div className="h-full w-full bg-gradient-to-b from-orange-500/30 via-blue-500/30 to-rose-500/30"></div>
           </div>
 
           {/* Steps */}
-          <div className="space-y-8 md:space-y-12">
+          <div className="space-y-4 sm:space-y-0">
             {timelineSteps.map((step, index) => {
               const colors = colorClasses[step.color];
               const isLeft = index % 2 === 0;
               
               return (
-                <div key={step.id} className="relative flex justify-center">
-                  {/* Centered card with icon and content, subtle zig-zag */}
-                  <div className={`hidden md:flex w-full max-w-2xl mx-auto ${isLeft ? '' : 'flex-row-reverse'}`}>
-                    <div className="relative flex items-center w-full bg-slate-900/80 border border-slate-800 rounded-2xl shadow-lg px-6 py-6 gap-6">
-                      {/* Vertical line behind icon */}
-                      <div className="absolute left-8 top-0 bottom-0 w-px z-0">
-                        <div className="h-full w-full bg-linear-to-b from-orange-500/50 via-emerald-500/50 to-rose-500/50"></div>
-                      </div>
-                      {/* Icon */}
-                      <div className="relative z-10 w-16 h-16 flex items-center justify-center rounded-2xl border-2 border-slate-800 bg-slate-900/60 shadow-md mr-4">
-                        <div className={`w-14 h-14 rounded-2xl ${colors.iconBg} ${colors.iconText} flex items-center justify-center`}>{step.icon}</div>
-                        <div className={`absolute -top-1 -right-1 w-6 h-6 rounded-full ${colors.dot} flex items-center justify-center text-white text-xs font-bold shadow-lg`}>{step.id}</div>
-                      </div>
-                      {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border ${colors.badge} mb-3`}>
-                          <svg className={`w-3.5 h-3.5 ${colors.badgeText}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          <span className={`text-xs font-semibold ${colors.badgeText}`}>{step.timeLabel}</span>
+                <div key={step.id} className="relative">
+                  {/* Tablet & Desktop Layout - Alternating sides */}
+                  <div className={`hidden sm:grid grid-cols-[1fr_auto_1fr] items-center gap-4 md:gap-8`}>
+                    {/* Left side content */}
+                    <div className={`${isLeft ? 'text-right' : ''}`}>
+                      {isLeft && (
+                        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-4 md:p-6 ml-auto max-w-md">
+                          <div className={`inline-flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full border ${colors.badge} mb-2 md:mb-3`}>
+                            <svg className={`w-3 md:w-3.5 h-3 md:h-3.5 ${colors.badgeText}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className={`text-[10px] md:text-xs font-semibold ${colors.badgeText}`}>{step.timeLabel}</span>
+                          </div>
+                          <h3 className="text-base md:text-xl font-bold text-white mb-1.5 md:mb-2">{step.title}</h3>
+                          <p className="text-slate-400 text-xs md:text-sm leading-relaxed">{step.description}</p>
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-white mb-2">{step.title}</h3>
-                        <p className="text-slate-400 text-sm md:text-base leading-relaxed max-w-sm">{step.description}</p>
+                      )}
+                    </div>
+                    
+                    {/* Center icon on the line */}
+                    <div className="relative z-10 flex flex-col items-center">
+                      {/* Outer glow ring */}
+                      <div className={`absolute inset-0 w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl ${colors.iconBg} opacity-20 blur-md`}></div>
+                      {/* Icon container */}
+                      <div className={`relative w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl ${colors.iconBg} ${colors.iconText} flex items-center justify-center shadow-xl border-2 border-white/10`}>
+                        <div className="w-6 h-6 md:w-7 md:h-7">
+                          {step.icon}
+                        </div>
                       </div>
+                      {/* Step number badge */}
+                      <div className={`absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 w-5 h-5 md:w-7 md:h-7 rounded-full ${colors.dot} flex items-center justify-center text-white text-[10px] md:text-xs font-bold shadow-lg border-2 border-slate-900`}>
+                        {step.id}
+                      </div>
+                    </div>
+                    
+                    {/* Right side content */}
+                    <div className={`${!isLeft ? '' : ''}`}>
+                      {!isLeft && (
+                        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl sm:rounded-2xl p-4 md:p-6 mr-auto max-w-md">
+                          <div className={`inline-flex items-center gap-1.5 md:gap-2 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full border ${colors.badge} mb-2 md:mb-3`}>
+                            <svg className={`w-3 md:w-3.5 h-3 md:h-3.5 ${colors.badgeText}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className={`text-[10px] md:text-xs font-semibold ${colors.badgeText}`}>{step.timeLabel}</span>
+                          </div>
+                          <h3 className="text-base md:text-xl font-bold text-white mb-1.5 md:mb-2">{step.title}</h3>
+                          <p className="text-slate-400 text-xs md:text-sm leading-relaxed">{step.description}</p>
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   {/* Mobile Layout */}
-                  <div className="md:hidden flex items-start gap-5">
+                  <div className="sm:hidden flex items-start gap-4">
                     {/* Icon */}
                     <div className="relative z-10 shrink-0">
-                      <div className={`w-14 h-14 rounded-xl ${colors.iconBg} ${colors.iconText} flex items-center justify-center shadow-lg`}>
-                        {step.icon}
+                      {/* Outer glow */}
+                      <div className={`absolute inset-0 w-11 h-11 rounded-xl ${colors.iconBg} opacity-20 blur-sm`}></div>
+                      {/* Icon container */}
+                      <div className={`relative w-11 h-11 rounded-xl ${colors.iconBg} ${colors.iconText} flex items-center justify-center shadow-lg border border-white/10`}>
+                        <div className="w-5 h-5">
+                          {step.icon}
+                        </div>
                       </div>
                       {/* Step number badge */}
-                      <div className={`absolute -top-1 -right-1 w-5 h-5 rounded-full ${colors.dot} flex items-center justify-center text-white text-[10px] font-bold shadow`}>
+                      <div className={`absolute -top-1 -right-1 w-5 h-5 rounded-full ${colors.dot} flex items-center justify-center text-white text-[10px] font-bold shadow border-2 border-slate-900`}>
                         {step.id}
                       </div>
                     </div>
                     
                     {/* Content */}
-                    <div className="flex-1 pt-1">
-                      <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${colors.badge} mb-2`}>
-                        <svg className={`w-3 h-3 ${colors.badgeText}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <div className="flex-1 pt-0.5 pb-5">
+                      <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border ${colors.badge} mb-1.5`}>
+                        <svg className={`w-2.5 h-2.5 ${colors.badgeText}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span className={`text-[11px] font-semibold ${colors.badgeText}`}>{step.timeLabel}</span>
+                        <span className={`text-[10px] font-semibold ${colors.badgeText}`}>{step.timeLabel}</span>
                       </div>
-                      <h3 className="text-lg font-bold text-white mb-1.5">{step.title}</h3>
-                      <p className="text-slate-400 text-sm leading-relaxed">{step.description}</p>
+                      <h3 className="text-base font-bold text-white mb-1">{step.title}</h3>
+                      <p className="text-slate-400 text-xs leading-relaxed">{step.description}</p>
                     </div>
                   </div>
                 </div>

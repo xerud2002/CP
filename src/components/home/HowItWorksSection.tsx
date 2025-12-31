@@ -1,11 +1,10 @@
 'use client';
 
-const steps = [
+const missionPoints = [
   {
     id: 1,
-    number: '01',
-    title: 'Descrie transportul',
-    description: 'Completezi formularul în 2 minute. Spune-ne ce trimiți, de unde și unde - noi ne ocupăm de restul.',
+    title: 'Conectăm clienții cu transportatori de încredere',
+    description: 'Platforma noastră pune în legătură directă clienții cu companii de transport verificate, eliminând intermediarii și simplificând procesul.',
     color: 'orange',
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24">
@@ -14,36 +13,16 @@ const steps = [
           strokeLinecap="round" 
           strokeLinejoin="round" 
           strokeWidth={1.5} 
-          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
         />
       </svg>
     ),
   },
   {
     id: 2,
-    number: '02',
-    title: 'Primești oferte',
-    description: 'Transportatori verificați îți trimit oferte personalizate. Vezi prețuri clare, fără surprize ascunse.',
+    title: 'Protejăm împotriva fraudei',
+    description: 'Fiecare transportator trece printr-un proces de verificare. Monitorizăm activitatea și eliminăm operatorii neseriosi pentru siguranța ta.',
     color: 'emerald',
-    icon: (
-      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24">
-        <path 
-          stroke="currentColor" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-          strokeWidth={1.5} 
-          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-        />
-        <circle cx="18" cy="5" r="3" fill="currentColor" className="text-emerald-400" />
-      </svg>
-    ),
-  },
-  {
-    id: 3,
-    number: '03',
-    title: 'Alegi transportatorul sau compania',
-    description: 'Compari recenzii, rating-uri și prețuri. Comunici direct și alegi opțiunea potrivită pentru tine.',
-    color: 'blue',
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24">
         <path 
@@ -57,11 +36,10 @@ const steps = [
     ),
   },
   {
-    id: 4,
-    number: '04',
-    title: 'Lași o recenzie',
-    description: 'Evaluezi experiența și ajuți comunitatea. Feedback-ul tău contează pentru alți utilizatori.',
-    color: 'amber',
+    id: 3,
+    title: 'Transparență prin recenzii reale',
+    description: 'Citește experiențele altor clienți înainte să alegi. Recenziile oneste te ajută să iei decizia corectă și mențin calitatea serviciilor.',
+    color: 'blue',
     icon: (
       <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24">
         <path 
@@ -81,45 +59,28 @@ const colorClasses: Record<string, {
   iconBg: string;
   iconText: string;
   border: string; 
-  number: string;
   dot: string;
-  line: string;
 }> = {
   orange: {
     bg: 'bg-orange-500/5',
     iconBg: 'bg-orange-500/15',
     iconText: 'text-orange-400',
     border: 'border-orange-500/20 hover:border-orange-500/40',
-    number: 'text-orange-500',
     dot: 'bg-orange-500',
-    line: 'via-orange-500/30',
   },
   emerald: {
     bg: 'bg-emerald-500/5',
     iconBg: 'bg-emerald-500/15',
     iconText: 'text-emerald-400',
     border: 'border-emerald-500/20 hover:border-emerald-500/40',
-    number: 'text-emerald-500',
     dot: 'bg-emerald-500',
-    line: 'via-emerald-500/30',
   },
   blue: {
     bg: 'bg-blue-500/5',
     iconBg: 'bg-blue-500/15',
     iconText: 'text-blue-400',
     border: 'border-blue-500/20 hover:border-blue-500/40',
-    number: 'text-blue-500',
     dot: 'bg-blue-500',
-    line: 'via-blue-500/30',
-  },
-  amber: {
-    bg: 'bg-amber-500/5',
-    iconBg: 'bg-amber-500/15',
-    iconText: 'text-amber-400',
-    border: 'border-amber-500/20 hover:border-amber-500/40',
-    number: 'text-amber-500',
-    dot: 'bg-amber-500',
-    line: 'via-amber-500/30',
   },
 };
 
@@ -137,66 +98,70 @@ export default function HowItWorksSection() {
         <div className="text-center mb-12 sm:mb-16">
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50 text-slate-300 text-sm font-medium mb-4">
             <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
-            Simplu și rapid
+            De ce existăm
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-white">Cum </span>
-            <span className="text-gradient">funcționează</span>
-            <span className="text-white">?</span>
+            <span className="text-white">Misiunea </span>
+            <span className="text-gradient">noastră</span>
           </h2>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-            Transport în 4 pași simpli. Fără bătăi de cap, fără surprize.
+            Construim o piață de transport sigură și transparentă, unde calitatea serviciilor este garantată de comunitate.
           </p>
         </div>
 
-        {/* Steps Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
-          {steps.map((step, index) => {
-            const colors = colorClasses[step.color];
-            const isLast = index === steps.length - 1;
+        {/* Mission Points Grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {missionPoints.map((point) => {
+            const colors = colorClasses[point.color];
             
             return (
-              <div key={step.id} className="relative group">
-                {/* Connection line - desktop only */}
-                {!isLast && (
-                  <div className="hidden lg:block absolute top-12 left-[60%] right-0 h-px">
-                    <div className={`h-full w-full bg-linear-to-r from-transparent ${colors.line} to-transparent`}></div>
-                  </div>
-                )}
-                
+              <div key={point.id} className="relative group">
                 {/* Card */}
-                <div className={`relative h-full p-6 rounded-2xl ${colors.bg} border ${colors.border} transition-all duration-300 group-hover:-translate-y-1`}>
-                  {/* Step Number - Top Right */}
-                  <div className={`absolute top-4 right-4 text-5xl font-black ${colors.number} opacity-10 select-none`}>
-                    {step.number}
-                  </div>
-                  
+                <div className={`relative h-full p-6 sm:p-8 rounded-2xl ${colors.bg} border ${colors.border} transition-all duration-300 group-hover:-translate-y-1`}>
                   {/* Icon */}
                   <div className={`w-14 h-14 rounded-xl ${colors.iconBg} ${colors.iconText} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                    {step.icon}
+                    {point.icon}
                   </div>
                   
                   {/* Content */}
                   <div className="relative">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className={`w-2 h-2 rounded-full ${colors.dot}`}></span>
-                      <span className={`text-xs font-bold uppercase tracking-wider ${colors.number}`}>
-                        Pasul {step.number}
-                      </span>
-                    </div>
                     <h3 className="text-xl font-bold text-white mb-3">
-                      {step.title}
+                      {point.title}
                     </h3>
                     <p className="text-slate-400 text-sm leading-relaxed">
-                      {step.description}
+                      {point.description}
                     </p>
                   </div>
                 </div>
               </div>
             );
           })}
+        </div>
+
+        {/* Additional info */}
+        <div className="mt-12 sm:mt-16 text-center">
+          <div className="inline-flex flex-wrap justify-center gap-6 sm:gap-8 text-sm text-slate-400">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Transportatori verificați</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Recenzii autentice</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Comunicare directă</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -14,8 +14,8 @@ const benefits = [
   },
   {
     id: 2,
-    title: 'Prețuri Competitive',
-    description: 'Primești multiple oferte și alegi cea mai bună. Fără comisioane ascunse - plătești exact prețul negociat cu transportatorul.',
+    title: 'Oferte Multiple',
+    description: 'Primești mai multe oferte și alegi transportatorul potrivit. Comunici direct și negociezi detaliile fără intermediari.'
     color: 'green',
     icon: (
       <svg className="w-6 h-6 sm:w-7 sm:h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>

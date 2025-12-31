@@ -27,6 +27,6 @@ export const COMPANY_INFO = {
   name: 'Curierul Perfect',
   url: 'https://curierulperfect.com',
   logo: 'https://curierulperfect.com/logo.png',
-  description: 'Curierul Perfect - Platformă de transport și curierat în România și Europa. Servicii de transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Compară oferte, alege curierul potrivit și primești livrări rapide și sigure.',
-  areaServed: 'Europa',
+  description: 'Curierul Perfect - Platformă de transport național și european. Servicii de transport colete, plicuri, persoane, mobilă, electronice, animale, platformă auto și tractări. Compară oferte, alege transportatorul potrivit și primește livrări rapide și sigure în România și Europa.',
+  areaServed: 'România și Europa',
 } as const;

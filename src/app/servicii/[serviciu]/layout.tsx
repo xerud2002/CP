@@ -13,7 +13,7 @@ const servicesMetadata: Record<string, { title: string; description: string; key
   },
   mobila: {
     title: 'Transport Mobilă și Mutări Internaționale România - Europa',
-    description: 'Mutări complete România-Europa. Transport mobilă, electrocasnice, ambalare profesională. Asigurare inclusă.',
+    description: 'Mutări complete România-Europa. Transport mobilă, electrocasnice. Transportatori verificați cu recenzii reale.',
     keywords: ['mutari internationale', 'transport mobila romania', 'mutari romania anglia', 'transport mobilier europa', 'mutari romania germania'],
   },
   animale: {
@@ -33,7 +33,7 @@ const servicesMetadata: Record<string, { title: string; description: string; key
   },
   electronice: {
     title: 'Transport Electronice și Electrocasnice România - Europa',
-    description: 'Transport sigur TV, electrocasnice, echipamente IT. Ambalare profesională, asigurare inclusă.',
+    description: 'Transport sigur TV, electrocasnice, echipamente IT. Transportatori verificați.',
     keywords: ['transport electronice', 'transport electrocasnice', 'transport tv europa', 'curier electronice', 'transport it'],
   },
   plicuri: {
