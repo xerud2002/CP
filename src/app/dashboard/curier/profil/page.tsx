@@ -435,56 +435,66 @@ function ProfilCurierContent() {
                 </div>
 
                 {/* Quick Stats - Desktop */}
-                <div className="hidden lg:flex gap-3">
-                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-orange-500/30 transition-colors">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className="p-1.5 bg-orange-500/20 rounded-lg">
-                        <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                <div className="hidden lg:flex gap-2">
+                  {/* Comenzi */}
+                  <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl px-4 py-3 border border-slate-700/50 hover:border-orange-500/40 transition-all group min-w-[80px]">
+                    <div className="flex flex-col items-center">
+                      <div className="p-2 bg-orange-500/20 rounded-lg mb-1.5 group-hover:bg-orange-500/30 transition-colors">
+                        <svg className="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
                       </div>
-                      <div className="text-2xl font-bold text-white">{ordersCount}</div>
+                      <div className="text-xl font-bold text-white">{ordersCount}</div>
+                      <div className="text-[11px] text-gray-400 font-medium">Comenzi</div>
                     </div>
-                    <div className="text-xs text-gray-400 font-medium">Comenzi</div>
                   </div>
 
-                  
-                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-emerald-500/30 transition-colors">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className={`p-2 rounded-lg ${
-                        verificationStatus === 'verified' ? 'bg-emerald-500/20' :
-                        verificationStatus === 'pending' ? 'bg-yellow-500/20' :
-                        'bg-red-500/20'
+                  {/* Verificat */}
+                  <div className={`bg-slate-800/60 backdrop-blur-sm rounded-xl px-4 py-3 border transition-all group min-w-[80px] ${
+                    verificationStatus === 'verified' ? 'border-emerald-500/30 hover:border-emerald-500/50' :
+                    verificationStatus === 'pending' ? 'border-yellow-500/30 hover:border-yellow-500/50' :
+                    'border-red-500/30 hover:border-red-500/50'
+                  }`}>
+                    <div className="flex flex-col items-center">
+                      <div className={`p-2 rounded-lg mb-1.5 transition-colors ${
+                        verificationStatus === 'verified' ? 'bg-emerald-500/20 group-hover:bg-emerald-500/30' :
+                        verificationStatus === 'pending' ? 'bg-yellow-500/20 group-hover:bg-yellow-500/30' :
+                        'bg-red-500/20 group-hover:bg-red-500/30'
                       }`}>
                         <svg className={`w-5 h-5 ${
                           verificationStatus === 'verified' ? 'text-emerald-400' :
                           verificationStatus === 'pending' ? 'text-yellow-400' :
                           'text-red-400'
-                        }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
+                      <div className="text-[11px] text-gray-400 font-medium">Verificat</div>
                     </div>
-                    <div className="text-xs text-gray-400 font-medium">Verificat</div>
                   </div>
                   
-                  <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/5 hover:border-blue-500/30 transition-colors">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className={`p-2 rounded-lg ${
-                        insuranceStatus === 'verified' ? 'bg-emerald-500/20' :
-                        insuranceStatus === 'pending' ? 'bg-yellow-500/20' :
-                        'bg-red-500/20'
+                  {/* Asigurare */}
+                  <div className={`bg-slate-800/60 backdrop-blur-sm rounded-xl px-4 py-3 border transition-all group min-w-[80px] ${
+                    insuranceStatus === 'verified' ? 'border-emerald-500/30 hover:border-emerald-500/50' :
+                    insuranceStatus === 'pending' ? 'border-yellow-500/30 hover:border-yellow-500/50' :
+                    'border-pink-500/30 hover:border-pink-500/50'
+                  }`}>
+                    <div className="flex flex-col items-center">
+                      <div className={`p-2 rounded-lg mb-1.5 transition-colors ${
+                        insuranceStatus === 'verified' ? 'bg-emerald-500/20 group-hover:bg-emerald-500/30' :
+                        insuranceStatus === 'pending' ? 'bg-yellow-500/20 group-hover:bg-yellow-500/30' :
+                        'bg-pink-500/20 group-hover:bg-pink-500/30'
                       }`}>
                         <svg className={`w-5 h-5 ${
                           insuranceStatus === 'verified' ? 'text-emerald-400' :
                           insuranceStatus === 'pending' ? 'text-yellow-400' :
-                          'text-red-400'
-                        }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 3.75H6.912a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M12 3v8.25m0 0l-3-3m3 3l3-3" />
+                          'text-pink-400'
+                        }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                         </svg>
                       </div>
+                      <div className="text-[11px] text-gray-400 font-medium">Asigurare</div>
                     </div>
-                    <div className="text-xs text-gray-400 font-medium">Asigurare</div>
                   </div>
                 </div>
               </div>
@@ -513,23 +523,28 @@ function ProfilCurierContent() {
               </div>
 
               {/* Quick Stats - Mobile */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6 lg:hidden">
-                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="p-1.5 bg-orange-500/20 rounded-lg">
+              <div className="grid grid-cols-3 gap-2 mt-6 lg:hidden">
+                {/* Comenzi */}
+                <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl px-3 py-3 border border-slate-700/50">
+                  <div className="flex flex-col items-center">
+                    <div className="p-2 bg-orange-500/20 rounded-lg mb-1.5">
                       <svg className="w-4 h-4 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                       </svg>
                     </div>
-                    <div className="text-xl font-bold text-white">{ordersCount}</div>
+                    <div className="text-lg font-bold text-white">{ordersCount}</div>
+                    <div className="text-[10px] text-gray-400 font-medium">Comenzi</div>
                   </div>
-                  <div className="text-xs text-gray-400 font-medium">Comenzi</div>
                 </div>
 
-                
-                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className={`p-2 rounded-lg ${
+                {/* Verificat */}
+                <div className={`bg-slate-800/60 backdrop-blur-sm rounded-xl px-3 py-3 border ${
+                  verificationStatus === 'verified' ? 'border-emerald-500/30' :
+                  verificationStatus === 'pending' ? 'border-yellow-500/30' :
+                  'border-red-500/30'
+                }`}>
+                  <div className="flex flex-col items-center">
+                    <div className={`p-2 rounded-lg mb-1.5 ${
                       verificationStatus === 'verified' ? 'bg-emerald-500/20' :
                       verificationStatus === 'pending' ? 'bg-yellow-500/20' :
                       'bg-red-500/20'
@@ -538,31 +553,36 @@ function ProfilCurierContent() {
                         verificationStatus === 'verified' ? 'text-emerald-400' :
                         verificationStatus === 'pending' ? 'text-yellow-400' :
                         'text-red-400'
-                      }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
+                    <div className="text-[10px] text-gray-400 font-medium">Verificat</div>
                   </div>
-                  <div className="text-xs text-gray-400 font-medium">Verificat</div>
                 </div>
                 
-                <div className="bg-slate-700/30 backdrop-blur-sm rounded-xl px-3 py-3 border border-white/5">
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className={`p-2 rounded-lg ${
+                {/* Asigurare */}
+                <div className={`bg-slate-800/60 backdrop-blur-sm rounded-xl px-3 py-3 border ${
+                  insuranceStatus === 'verified' ? 'border-emerald-500/30' :
+                  insuranceStatus === 'pending' ? 'border-yellow-500/30' :
+                  'border-pink-500/30'
+                }`}>
+                  <div className="flex flex-col items-center">
+                    <div className={`p-2 rounded-lg mb-1.5 ${
                       insuranceStatus === 'verified' ? 'bg-emerald-500/20' :
                       insuranceStatus === 'pending' ? 'bg-yellow-500/20' :
-                      'bg-red-500/20'
+                      'bg-pink-500/20'
                     }`}>
                       <svg className={`w-4 h-4 ${
                         insuranceStatus === 'verified' ? 'text-emerald-400' :
                         insuranceStatus === 'pending' ? 'text-yellow-400' :
-                        'text-red-400'
-                      }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 3.75H6.912a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M12 3v8.25m0 0l-3-3m3 3l3-3" />
+                        'text-pink-400'
+                      }`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
                       </svg>
                     </div>
+                    <div className="text-[10px] text-gray-400 font-medium">Asigurare</div>
                   </div>
-                  <div className="text-xs text-gray-400 font-medium">Asigurare</div>
                 </div>
               </div>
             </div>
