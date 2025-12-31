@@ -298,3 +298,126 @@ Note: Main app does NOT require emulators — it uses live Firebase services dir
 
 ## Flags & Assets
 Country flags in `public/img/flag/{code}.svg` (lowercase, e.g., `ro.svg`, `de.svg`). When adding countries to `constants.ts`, add the corresponding flag SVG.
+
+## Push Notifications (Firebase Cloud Messaging)
+
+**Service Worker**: `public/firebase-messaging-sw.js` handles background push notifications.
+
+**Setup Steps**:
+1. Import `useNotifications()` hook in user dashboard/profile pages
+2. Call `enableNotifications()` after user grants permission
+3. Tokens stored in `fcmTokens/{uid}` collection with metadata (userAgent, platform, createdAt)
+
+**Hook Usage**:
+```tsx
+import { useNotifications } from '@/hooks/useNotifications';
+
+const { isSupported, isEnabled, enableNotifications, disableNotifications } = useNotifications(user?.uid);
+
+// Show enable button if supported but not enabled
+{isSupported && !isEnabled && (
+  <button onClick={enableNotifications}>Activează Notificări</button>
+)}
+```
+
+**Service Worker Features**:
+- Background message handling with custom notification UI
+- Vibration pattern: `[200, 100, 200]`
+- Click-to-focus: Opens existing tab or creates new one
+- Custom notification data payload support (URL routing)
+- Logo/badge from `public/img/logo-favicon-*.png`
+
+**Foreground Handling**: Hook auto-shows toast for messages when app is open (`onForegroundMessage`).
+
+**Security**: Service worker hardcodes Firebase config (visible to clients) — use Firebase security rules to protect resources.
+
+## SEO & Open Graph Images
+
+**Dynamic OG Images**: Each route with `opengraph-image.tsx` generates custom 1200×630 social share images using Next.js `ImageResponse`.
+
+**Pattern**:
+```tsx
+// In src/app/[route]/opengraph-image.tsx
+export const alt = 'Descriptive alt text';
+export const size = { width: 1200, height: 630 };
+export const contentType = 'image/png';
+
+export default async function Image() {
+  return new ImageResponse(/* JSX with brand colors, logo, gradients */);
+}
+```
+
+**SEO Helpers** (`lib/seo.ts`):
+- `defaultMetadata`: Site-wide defaults with keywords, structured data
+- `generatePageMetadata(title, description, options)`: Per-page overrides
+- `generateRouteMetadata(route)`: Transport route-specific SEO
+- `generateServiceMetadata(service)`: Service page SEO
+
+**Conventions**:
+- Use `title.template` for auto-appending site name: `%s | Curierul Perfect`
+- Include Romanian locale: `locale: 'ro_RO'`
+- Set `metadataBase` for absolute URL resolution
+- Keywords: Focus on "transport România Europa", service types, country names
+- **No prices**: Never include pricing in metadata (per project policy)
+
+**Layout Metadata**: Each `layout.tsx` exports `generateMetadata()` or static `metadata` object. OG images auto-linked.
+
+## Review System Workflow
+
+**Current Flow**:
+1. Client finalizes order → status changes to `livrata`
+2. System stores `courierId` and `courierName` in order during finalization
+3. Client can leave review at `/review/[courierId]` (public page, no auth required)
+4. Review stored in `recenzii` collection with anonymous clientId
+5. Courier's `profil_curier` rating updated using `calculateNewRating()` helper
+
+**Key Files**:
+- `src/app/review/[courierId]/page.tsx` — Public review form
+- `src/lib/rating.ts` — `calculateNewRating()` weighted average formula
+- `src/utils/orderStatusHelpers.ts` — `canLeaveReview(status)`, `transitionToFinalizata()`
+
+**Triggering Reviews**:
+```tsx
+import { transitionToFinalizata } from '@/utils/orderStatusHelpers';
+
+// Client finalizes order
+const success = await transitionToFinalizata(orderId, currentStatus, {
+  courierId: selectedCourier.uid,
+  courierName: `${selectedCourier.nume} ${selectedCourier.prenume}`
+});
+
+if (success) {
+  // Optionally prompt: "Lasă o recenzie pentru curier la /review/{courierId}"
+}
+```
+
+**Rating Display**: Use `RatingCard` component (shows stars + review count) in courier profiles, order cards.
+
+**Missing Features** (Enhancement Opportunities):
+- ❌ No automated review prompt after order finalization
+- ❌ No direct link from finalized order to review page
+- ❌ No tracking of which orders have been reviewed
+- ❌ Reviews allow anonymous submissions (no auth gate)
+- ❌ No moderation/reporting system for inappropriate reviews
+
+**Suggested Improvements**:
+1. **Review Tracking**: Add `reviewedAt` timestamp to orders after review submission
+2. **Auto-Prompt**: Show review CTA in client dashboard for `livrata` orders without reviews
+3. **Deep Linking**: Add "Lasă Recenzie" button in finalized order details → `/review/{courierId}?orderId={orderId}`
+4. **Review Attribution**: Link reviews to orders (add `orderId` field in `recenzii` collection) for verification
+5. **Auth Requirement**: Require Firebase auth for review submission, use `clientId` instead of anonymous
+6. **One Review Per Order**: Check if order already reviewed before showing form
+
+**Implementation Example** (Review Prompt in Client Dashboard):
+```tsx
+import { canLeaveReview } from '@/utils/orderStatusHelpers';
+
+{canLeaveReview(order.status) && !order.reviewedAt && order.courierId && (
+  <Link 
+    href={`/review/${order.courierId}?orderId=${order.id}`}
+    className="btn-primary"
+  >
+    Lasă o Recenzie
+  </Link>
+)}
+```
