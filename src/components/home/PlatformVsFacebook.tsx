@@ -144,9 +144,16 @@ export default function PlatformVsFacebook() {
               Descoperă o experiență superioară: platformă dedicată cu 
               <span className="text-emerald-400 font-semibold"> transportatori verificați profesional, recenzii reale și comunicare directă</span> pentru fiecare comandă.
             </p>
-            <Link href="/comanda" className="btn-primary px-8 py-3.5 text-base inline-flex items-center gap-2">
-              Comandă în siguranță acum
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <Link href="/comanda" className="relative group/btn inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
+              {/* Gradient background */}
+              <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+              {/* Glow effect */}
+              <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+              {/* Content */}
+              <span className="relative z-10 text-white">Comandă în siguranță acum</span>
+              <svg className="w-5 h-5 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </Link>

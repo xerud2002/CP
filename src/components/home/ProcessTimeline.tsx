@@ -267,10 +267,17 @@ export default function ProcessTimeline() {
         <div className="mt-14 sm:mt-16 text-center">
           <Link 
             href="/comanda"
-            className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-base"
+            className="relative group/btn inline-flex items-center justify-center gap-2.5 px-8 py-4 text-base rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95"
           >
-            <span>Solicită oferte gratuit</span>
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            {/* Gradient background */}
+            <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+            {/* Shine effect */}
+            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+            {/* Glow effect */}
+            <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+            {/* Content */}
+            <span className="relative z-10 text-white">Solicită oferte gratuit</span>
+            <svg className="w-5 h-5 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </Link>
