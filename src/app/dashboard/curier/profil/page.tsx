@@ -37,9 +37,6 @@ interface CourierProfile {
   descriere: string;
   experienta: string;
   profileImage: string;
-  // Rating & Reviews
-  rating?: number;
-  reviewCount?: number;
   // Verification Status
   verificationStatus?: 'verified' | 'pending' | 'none';
   insuranceStatus?: 'verified' | 'pending' | 'none';
@@ -262,13 +259,10 @@ function ProfilCurierContent() {
       
       // Check if this is the first time saving the profile (profile completion)
       const existingDoc = await getDoc(docRef);
-      const isFirstSave = !existingDoc.exists();
       
       await setDoc(docRef, {
         ...profile,
         updatedAt: serverTimestamp(),
-        // Set initial rating and review count on first save
-        ...(isFirstSave && { rating: 5.0, reviewCount: 1 })
       }, { merge: true });
 
       

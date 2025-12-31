@@ -104,15 +104,6 @@ const mainNavTiles: NavTile[] = [
     badgeKey: 'verification',
   },
   {
-    href: '/dashboard/curier/recenzii',
-    icon: BellIcon,
-    title: 'Recenzii',
-    description: 'Feedback clienți',
-    color: 'text-blue-400',
-    bgColor: 'bg-blue-500/10 hover:bg-blue-500/20',
-    borderColor: 'border-blue-500/20 hover:border-blue-500/40',
-  },
-  {
     href: '/dashboard/curier/profil',
     icon: UserIcon,
     title: 'Profil',
@@ -237,7 +228,7 @@ const DashboardHeader = memo(function DashboardHeader({ adminUnreadCount, onLogo
 });
 
 // Welcome Section Component - Simplified
-const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, rating, reviewCount, verificationData }: { userName: string; hasNewOrders: boolean; rating: number; reviewCount: number; verificationData?: CourierVerificationData }) {
+const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, verificationData }: { userName: string; hasNewOrders: boolean; verificationData?: CourierVerificationData }) {
   const greeting = getGreeting();
 
   return (
@@ -293,30 +284,6 @@ const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, ra
               <span className="text-lg sm:text-2xl font-bold text-white">0</span>
             </div>
             <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Comenzi</span>
-          </div>
-
-          <div className="flex flex-col items-center p-2 sm:p-3 bg-slate-800/40 backdrop-blur-sm rounded-xl border border-yellow-500/20">
-            <div className="flex items-center gap-1.5 mb-0.5">
-              <div className="p-1.5 bg-yellow-500/20 rounded-lg">
-                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              </div>
-              <span className="text-lg sm:text-2xl font-bold text-white">{rating.toFixed(1)}</span>
-            </div>
-            <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Rating</span>
-          </div>
-
-          <div className="flex flex-col items-center p-2 sm:p-3 bg-slate-800/40 backdrop-blur-sm rounded-xl border border-emerald-500/20">
-            <div className="flex items-center gap-1.5 mb-0.5">
-              <div className="p-1.5 bg-emerald-500/20 rounded-lg">
-                <svg className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <span className="text-lg sm:text-2xl font-bold text-white">{reviewCount}</span>
-            </div>
-            <span className="text-[10px] sm:text-xs text-gray-400 font-medium">Recenzii</span>
           </div>
         </div>
 
@@ -784,7 +751,7 @@ const OnboardingModal = memo(function OnboardingModal({ onClose }: { onClose: ()
       title: 'Gata de Start!',
       subtitle: 'Următorii pași',
       content: 'Completează profilul și activează serviciile tale.',
-      items: ['Adaugă descriere & experiență', 'Selectează serviciile oferite', 'Răspunde rapid la mesaje', 'Construiește recenzii pozitive'],
+      items: ['Adaugă descriere & experiență', 'Selectează serviciile oferite', 'Răspunde rapid la mesaje', 'Construiește reputația'],
       cta: 'Începe Acum!',
     },
   ];
@@ -898,8 +865,6 @@ export default function CurierDashboard() {
   const [requiredDocsPercent, setRequiredDocsPercent] = useState(100);
   const [userNume, setUserNume] = useState<string | null>(null);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
-  const [rating, setRating] = useState(5.0);
-  const [reviewCount, setReviewCount] = useState(0);
   const [recentMessages, setRecentMessages] = useState<RecentMessage[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -972,10 +937,6 @@ export default function CurierDashboard() {
           taraSediu = profilData.tara_sediu || profilData.taraSediu || 'RO';
           tipBusiness = profilData.tipBusiness || 'pf';
           
-          // Set rating and reviewCount (default 5.0 for new couriers)
-          setRating(profilData.rating !== undefined ? profilData.rating : 5.0);
-          setReviewCount(profilData.reviewCount !== undefined ? profilData.reviewCount : 0);
-          
           // Calculate profile completion percentage
           const fields = [
             profilData.nume, profilData.telefon, profilData.email,
@@ -1001,9 +962,6 @@ export default function CurierDashboard() {
           }
         } else {
           setHasNoProfile(true);
-          // Set default rating for new couriers
-          setRating(5.0);
-          setReviewCount(0);
         }
         
         // Check services and verification status from users collection
@@ -1345,7 +1303,7 @@ export default function CurierDashboard() {
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-3 sm:space-y-6">
         {/* Welcome Section */}
-        <WelcomeSection userName={userName} hasNewOrders={false} rating={rating} reviewCount={reviewCount} verificationData={verificationData} />
+        <WelcomeSection userName={userName} hasNewOrders={false} verificationData={verificationData} />
 
         {/* Setup Progress - Only 2 steps: Profile and Services (Zones/Calendar disabled) */}
         <SetupProgress setupComplete={setupComplete} completedSteps={completedStepsCount} totalSteps={2} />
