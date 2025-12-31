@@ -197,7 +197,7 @@ export default function ConfidentialitatePage() {
                 { who: 'Autorități', what: 'Doar dacă legea o cere (investigații legale)' },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/30 border border-white/5">
-                  <span className="text-orange-400 font-semibold text-sm min-w-[100px]">{item.who}:</span>
+                  <span className="text-orange-400 font-semibold text-sm min-w-25">{item.who}:</span>
                   <span className="text-gray-300 text-sm">{item.what}</span>
                 </div>
               ))}

@@ -142,10 +142,10 @@ export default function DesprePage() {
             Încearcă Curierul Perfect pentru transportul tău în România și Europa.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link href="/comanda" className="btn-primary px-6 sm:px-8 py-3 sm:py-4 min-h-[48px] flex items-center justify-center text-sm sm:text-base">
+            <Link href="/comanda" className="btn-primary px-6 sm:px-8 py-3 sm:py-4 min-h-12 flex items-center justify-center text-sm sm:text-base">
               Plasează o comandă
             </Link>
-            <Link href="/register?role=curier" className="btn-secondary px-6 sm:px-8 py-3 sm:py-4 min-h-[48px] flex items-center justify-center text-sm sm:text-base">
+            <Link href="/register?role=curier" className="btn-secondary px-6 sm:px-8 py-3 sm:py-4 min-h-12 flex items-center justify-center text-sm sm:text-base">
               Devino Partener
             </Link>
           </div>

@@ -26,10 +26,6 @@ interface CourierProfile {
   profileImage?: string;
 }
 
-// Helper: Capitalize each word
-const capitalize = (str: string) => 
-  str?.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ') || '';
-
 // Helper: Get service label from constants
 const getServiceLabel = (serviceId: string) => {
   const normalized = serviceId.toLowerCase();

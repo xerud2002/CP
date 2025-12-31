@@ -23,9 +23,9 @@ export function MessageButton({ onClick, title, disabled = false, unreadCount = 
     >
       <ChatIcon className="w-4 h-4 xs:w-5 xs:h-5" />
       {unreadCount > 0 && (
-        <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 xs:h-[18px] xs:w-[18px]">
+        <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 xs:h-4.5 xs:w-4.5">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-4 w-4 xs:h-[18px] xs:w-[18px] bg-emerald-500 items-center justify-center">
+          <span className="relative inline-flex rounded-full h-4 w-4 xs:h-4.5 xs:w-4.5 bg-emerald-500 items-center justify-center">
             <span className="text-white text-[9px] xs:text-[10px] font-bold">{unreadCount > 9 ? '9+' : unreadCount}</span>
           </span>
         </span>

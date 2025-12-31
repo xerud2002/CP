@@ -266,9 +266,6 @@ function ProfilCurierContent() {
     try {
       const docRef = doc(db, 'profil_curier', user.uid);
       
-      // Check if this is the first time saving the profile (profile completion)
-      const existingDoc = await getDoc(docRef);
-      
       await setDoc(docRef, {
         ...profile,
         updatedAt: serverTimestamp(),
@@ -436,7 +433,7 @@ function ProfilCurierContent() {
                 {/* Quick Stats - Desktop */}
                 <div className="hidden lg:flex gap-2">
                   {/* Comenzi */}
-                  <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl px-4 py-3 border border-slate-700/50 hover:border-orange-500/40 transition-all group min-w-[80px]">
+                  <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl px-4 py-3 border border-slate-700/50 hover:border-orange-500/40 transition-all group min-w-20">
                     <div className="flex flex-col items-center">
                       <div className="p-2 bg-orange-500/20 rounded-lg mb-1.5 group-hover:bg-orange-500/30 transition-colors">
                         <svg className="w-5 h-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -449,7 +446,7 @@ function ProfilCurierContent() {
                   </div>
 
                   {/* Verificat */}
-                  <div className={`bg-slate-800/60 backdrop-blur-sm rounded-xl px-4 py-3 border transition-all group min-w-[80px] ${
+                  <div className={`bg-slate-800/60 backdrop-blur-sm rounded-xl px-4 py-3 border transition-all group min-w-20 ${
                     verificationStatus === 'verified' ? 'border-emerald-500/30 hover:border-emerald-500/50' :
                     verificationStatus === 'pending' ? 'border-yellow-500/30 hover:border-yellow-500/50' :
                     'border-red-500/30 hover:border-red-500/50'
@@ -473,7 +470,7 @@ function ProfilCurierContent() {
                   </div>
                   
                   {/* Asigurare */}
-                  <div className={`bg-slate-800/60 backdrop-blur-sm rounded-xl px-4 py-3 border transition-all group min-w-[80px] ${
+                  <div className={`bg-slate-800/60 backdrop-blur-sm rounded-xl px-4 py-3 border transition-all group min-w-20 ${
                     insuranceStatus === 'verified' ? 'border-emerald-500/30 hover:border-emerald-500/50' :
                     insuranceStatus === 'pending' ? 'border-yellow-500/30 hover:border-yellow-500/50' :
                     'border-pink-500/30 hover:border-pink-500/50'

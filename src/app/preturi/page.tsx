@@ -134,10 +134,10 @@ export default function PreturiPage() {
             Creează o comandă GRATUIT și primește oferte competitive de la curieri verificați
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link href="/comanda" className="btn-primary px-6 sm:px-8 py-3 text-base sm:text-lg min-h-[48px] flex items-center justify-center">
+            <Link href="/comanda" className="btn-primary px-6 sm:px-8 py-3 text-base sm:text-lg min-h-12 flex items-center justify-center">
               Plasează comandă acum
             </Link>
-            <Link href="/cum-functioneaza" className="btn-secondary px-6 sm:px-8 py-3 text-base sm:text-lg min-h-[48px] flex items-center justify-center">
+            <Link href="/cum-functioneaza" className="btn-secondary px-6 sm:px-8 py-3 text-base sm:text-lg min-h-12 flex items-center justify-center">
               Vezi cum funcționează
             </Link>
           </div>

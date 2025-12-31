@@ -162,12 +162,12 @@ export default function HowItWorksSection() {
                 {/* Connection line - desktop only */}
                 {!isLast && (
                   <div className="hidden lg:block absolute top-12 left-[60%] right-0 h-px">
-                    <div className={`h-full w-full bg-gradient-to-r from-transparent ${colors.line} to-transparent`}></div>
+                    <div className={`h-full w-full bg-linear-to-r from-transparent ${colors.line} to-transparent`}></div>
                   </div>
                 )}
                 
                 {/* Card */}
-                <div className={`relative h-full p-6 rounded-2xl ${colors.bg} border ${colors.border} transition-all duration-300 group-hover:translate-y-[-4px]`}>
+                <div className={`relative h-full p-6 rounded-2xl ${colors.bg} border ${colors.border} transition-all duration-300 group-hover:-translate-y-1`}>
                   {/* Step Number - Top Right */}
                   <div className={`absolute top-4 right-4 text-5xl font-black ${colors.number} opacity-10 select-none`}>
                     {step.number}

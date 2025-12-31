@@ -45,12 +45,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { slug: 'paleti', priority: 0.75 },
   ];
 
-  const servicePages: MetadataRoute.Sitemap = services.map(service => ({
-    url: `${baseUrl}/servicii/${service.slug}`,
-    lastModified,
-    changeFrequency: 'weekly',
-    priority: service.priority,
-  }));
+  const servicePages: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/servicii`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    ...services.map(service => ({
+      url: `${baseUrl}/servicii/${service.slug}`,
+      lastModified,
+      changeFrequency: 'weekly' as const,
+      priority: service.priority,
+    })),
+  ];
 
   // Route pages for popular corridors
   const popularRoutes = [

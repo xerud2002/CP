@@ -705,7 +705,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
               <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-              <span className="text-white font-medium truncate max-w-[120px] sm:max-w-none">{data.title.split(' - ')[0]}</span>
+              <span className="text-white font-medium truncate max-w-30 sm:max-w-none">{data.title.split(' - ')[0]}</span>
             </nav>
 
             <div className="flex flex-col lg:flex-row items-start gap-6 sm:gap-8">
@@ -722,7 +722,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                       </svg>
                       Serviciu verificat
                     </p>
-                    <h1 className="text-lg sm:text-xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-white leading-tight break-words">{data.title}</h1>
+                    <h1 className="text-lg sm:text-xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold text-white leading-tight wrap-break-word">{data.title}</h1>
                   </div>
                 </div>
                 <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-300 leading-relaxed mb-5 sm:mb-6 lg:mb-8 max-w-2xl">{data.longDescription}</p>
@@ -731,7 +731,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <Link 
                     href={`/comanda?serviciu=${serviciu}`} 
-                    className="group inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 py-3 sm:py-3.5 lg:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl shadow-lg shadow-orange-500/30 transition-all hover:scale-105 active:scale-95 min-h-[48px]"
+                    className="group inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 py-3 sm:py-3.5 lg:py-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl shadow-lg shadow-orange-500/30 transition-all hover:scale-105 active:scale-95 min-h-12"
                   >
                     Solicită ofertă gratuită
                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -740,7 +740,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                   </Link>
                   <Link
                     href="/cum-functioneaza"
-                    className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 py-3 sm:py-3.5 lg:py-4 bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base font-medium rounded-lg sm:rounded-xl border border-white/10 transition-all min-h-[48px]"
+                    className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 py-3 sm:py-3.5 lg:py-4 bg-slate-800/80 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base font-medium rounded-lg sm:rounded-xl border border-white/10 transition-all min-h-12"
                   >
                     <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1017,7 +1017,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
             </div>
             <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-4">
               {data.popularRoutes.map((route, idx) => (
-                <div key={idx} className={`group relative bg-slate-800/50 backdrop-blur-sm border ${data.borderColor} hover:border-opacity-60 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 transition-all hover:scale-105 hover:shadow-xl overflow-hidden active:scale-100 min-h-[56px] sm:min-h-[64px]`}>
+                <div key={idx} className={`group relative bg-slate-800/50 backdrop-blur-sm border ${data.borderColor} hover:border-opacity-60 rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 transition-all hover:scale-105 hover:shadow-xl overflow-hidden active:scale-100 min-h-14 sm:min-h-16`}>
                   <div className={`absolute inset-0 bg-linear-to-br ${data.color} opacity-0 group-hover:opacity-100 transition-opacity`}></div>
                   <div className="relative flex items-center justify-between">
                     <div className="text-xs sm:text-sm lg:text-lg font-semibold text-white group-hover:scale-105 transition-transform">{route}</div>
@@ -1041,7 +1041,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
             <div className="space-y-3 sm:space-y-4">
               {data.faq.map((item, idx) => (
                 <details key={idx} className="group bg-slate-800/50 backdrop-blur-sm border border-white/10 hover:border-white/20 rounded-xl sm:rounded-2xl overflow-hidden transition-all">
-                  <summary className="flex items-center justify-between p-4 sm:p-5 lg:p-6 cursor-pointer list-none hover:bg-slate-800/70 transition-colors active:bg-slate-800/80 min-h-[56px] sm:min-h-[64px]">
+                  <summary className="flex items-center justify-between p-4 sm:p-5 lg:p-6 cursor-pointer list-none hover:bg-slate-800/70 transition-colors active:bg-slate-800/80 min-h-14 sm:min-h-16">
                     <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-white pr-3 sm:pr-4 leading-snug">{item.q}</h3>
                     <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400 group-open:rotate-180 transition-transform shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -1077,7 +1077,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
                 <Link 
                   href={`/comanda?serviciu=${serviciu}`} 
-                  className="group inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-3.5 lg:py-4 xl:py-5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base lg:text-lg font-bold rounded-xl shadow-lg shadow-orange-500/40 transition-all hover:scale-105 active:scale-95 w-full sm:w-auto min-h-[48px] sm:min-h-[52px]"
+                  className="group inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-3.5 lg:py-4 xl:py-5 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white text-sm sm:text-base lg:text-lg font-bold rounded-xl shadow-lg shadow-orange-500/40 transition-all hover:scale-105 active:scale-95 w-full sm:w-auto min-h-12 sm:min-h-13"
                 >
                   Plasează comandă acum
                   <svg className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1086,7 +1086,7 @@ export default async function ServiciuPage({ params }: { params: Promise<Params>
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-3.5 lg:py-4 xl:py-5 bg-slate-700/50 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base lg:text-lg font-semibold rounded-xl border border-white/10 transition-all w-full sm:w-auto min-h-[48px] sm:min-h-[52px]"
+                  className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 lg:px-8 xl:px-10 py-3 sm:py-3.5 lg:py-4 xl:py-5 bg-slate-700/50 backdrop-blur-sm hover:bg-slate-700 text-white text-sm sm:text-base lg:text-lg font-semibold rounded-xl border border-white/10 transition-all w-full sm:w-auto min-h-12 sm:min-h-13"
                 >
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

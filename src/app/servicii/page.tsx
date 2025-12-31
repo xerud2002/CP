@@ -118,7 +118,7 @@ export default function ServiciiPage() {
             <p className="text-gray-400 text-sm sm:text-base mb-4 sm:mb-6 max-w-lg mx-auto leading-relaxed px-2">
               Postează cererea ta gratuit și primește oferte de la curieri verificați în câteva ore.
             </p>
-            <Link href="/comanda" className="btn-primary px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold inline-flex items-center justify-center gap-2 min-h-[44px] active:scale-95 transition-transform">
+            <Link href="/comanda" className="btn-primary px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base font-semibold inline-flex items-center justify-center gap-2 min-h-11 active:scale-95 transition-transform">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
