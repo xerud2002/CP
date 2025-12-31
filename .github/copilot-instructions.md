@@ -39,8 +39,6 @@ src/hooks/useChatMessages.ts                    → Shared real-time messaging
 | `utils/orderStatusHelpers.ts` | `canEditOrder()`, `canDeleteOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
 | `types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole`, `CourierProfile`, `DocumentRequirement` |
 
-**Architecture Docs**: `COURIER_MESSAGING_SYSTEM.md` (messaging restrictions), `OPTIMIZATION_SUMMARY.md` (refactoring context)
-
 ## Error Handling
 - Use `showError(err)` from `lib/toast.ts` for user-facing errors (auto-translated to Romanian)
 - Use `logError()` from `lib/errorMessages.ts` for development debugging
@@ -238,10 +236,12 @@ Firebase config is singleton-initialized in `lib/firebase.ts` (checks `getApps()
 - `StatsContent.tsx`, `SettingsContent.tsx`, `MonetizareContent.tsx` — dashboard sections
 
 ## Courier Messaging Restrictions
-Before first message, these checks run (see `COURIER_MESSAGING_SYSTEM.md`):
-1. **Order exists** — verify not deleted
-2. **Courier verification** — if client accepts only "firme", courier needs `verified: true`
-3. **Offer limits** — client sets max couriers (1-3, 4-5, or unlimited)
+Before a courier can send the first message on an order, validate:
+1. **Order exists** — verify the order hasn't been deleted
+2. **Courier verification** — if client accepts only "firme", courier needs `verified: true` in profile
+3. **Offer limits** — respect client's max couriers setting (1-3, 4-5, or unlimited)
+
+Implement these checks in hooks/components before allowing message submission to prevent validation errors.
 
 ## Admin Features
 The admin dashboard provides comprehensive platform management:
@@ -256,15 +256,24 @@ Admin access controlled via `isAdmin()` helper in `firestore.rules`. Uses `useAd
 
 ## Migration Scripts
 Located in `scripts/` folder. Requires Firebase Admin SDK setup:
-1. Download service account key from Firebase Console → save as `scripts/serviceAccountKey.json`
-2. Run with `node scripts/<script>.js`
-See `scripts/README.md` for detailed instructions.
+1. Download service account key from Firebase Console → Project Settings → Service Accounts → Generate New Private Key
+2. Save as `scripts/serviceAccountKey.json`
+3. Install dependencies: `cd scripts && npm install firebase-admin`
+4. Run with `node scripts/<script>.js`
+
+See [scripts/README.md](../scripts/README.md) for detailed instructions.
 
 Available scripts:
-- `migrateOrderStatuses.js` — migrate old English status values to Romanian
-- `deleteOldArchivedOrders.js` — cleanup archived orders older than specified date
+- `migrateOrderStatuses.js` — migrate old English status values to Romanian (uses batched writes)
+- `deleteOldArchivedOrders.js` — cleanup archived orders older than specified date — queries must explicitly filter by owner
+- **Couriers**: Can read ALL orders (for discovery marketplace), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
+- **Profiles**: `profil_curier` is publicly readable (clients need to see ratings/reviews), `profil_client` is private to owner + admin
+- **Reviews**: `profil_curier` allows special update access for `rating` and `reviewCount` fields from any authenticated user (review system)
+- **Coverage Zones**: `zona_acoperire` allows couriers to read all zones (for route planning), but write only own zones
+- **Storage**: Courier verification documents in `courierDocs/{uid}/`, client profile photos in `clientPhotos/{uid}/`
+- **Admin Access**: `isAdmin()` helper in rules checks `users/{uid}.role == 'admin'` for elevated permissions
 
-## Firebase Security
+See [firestore.rules](../firestore.rules) for complete security model.
 - **Firestore Rules**: Read access for owners only (`resource.data.uid == request.auth.uid`), but rules **don't auto-filter**
 - **Couriers**: Can read ALL orders (for discovery), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
 - **Profiles**: `profil_curier` is publicly readable (for client reviews), `profil_client` is private
@@ -276,6 +285,15 @@ Available scripts:
 - Static assets cached for 1 year (`max-age=31536000, immutable`)
 - Next.js static paths cached for 1 year
 - CSS optimized via `experimental.optimizeCss` in `next.config.ts`
+
+## Firebase Functions (Optional)
+Backend functions in `functions/` folder using TypeScript:
+- **Setup**: `cd functions && npm install`
+- **Local**: `firebase emulators:start --only functions`
+- **Deploy**: `firebase deploy --only functions`
+- **Entry**: `functions/src/index.ts` exports Cloud Functions
+
+Note: Main app does NOT require emulators — it uses live Firebase services directly.
 - Responsive image sizes: `[640, 750, 828, 1080, 1200]`
 
 ## Flags & Assets
