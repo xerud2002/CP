@@ -45,7 +45,7 @@ export default function ContactPage() {
     <main className="min-h-screen bg-slate-900">
       <section className="py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">
             Contactează-ne
           </h1>
           <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-lg mx-auto">
@@ -124,9 +124,16 @@ export default function ContactPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full py-3 min-h-12 text-sm sm:text-base disabled:opacity-50"
+                className="relative group/btn w-full py-3 min-h-12 text-sm sm:text-base rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
               >
-                {loading ? 'Se trimite...' : 'Trimite mesajul'}
+                {/* Gradient background */}
+                <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                {/* Shine effect */}
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+                {/* Glow effect */}
+                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+                {/* Content */}
+                <span className="relative z-10 text-white">{loading ? 'Se trimite...' : 'Trimite mesajul'}</span>
               </button>
             </form>
           </div>

@@ -15,8 +15,8 @@ export default function DevinoPartenerPage() {
             </svg>
             <span className="text-center">100% GRATUIT - Fără Comisioane!</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">
-            Devino Curier <span className="text-gradient">Partner</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
+            <span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">Devino Curier</span> <span className="bg-linear-to-r from-emerald-400 via-teal-400 to-green-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]">Partner</span>
           </h1>
           <p className="text-base sm:text-xl lg:text-2xl text-gray-300 mb-3 sm:mb-4 leading-relaxed max-w-2xl mx-auto">
             Alătură-te platformei #1 de transport pentru români din Europa
@@ -25,11 +25,18 @@ export default function DevinoPartenerPage() {
             🚀 Zero comisioane • 📦 Comenzi nelimitate • ⚡ Contact direct • ✅ Acces instant
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link href="/register?role=curier" className="btn-primary px-6 sm:px-10 py-3 sm:py-4 text-sm sm:text-lg inline-flex items-center justify-center gap-2 sm:gap-3 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all min-h-12">
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Link href="/register?role=curier" className="relative group/btn inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-10 py-3 sm:py-4 text-sm sm:text-lg min-h-12 rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
+              {/* Gradient emerald background */}
+              <div className="absolute inset-0 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 transition-transform group-hover/btn:scale-110"></div>
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+              {/* Glow effect */}
+              <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+              {/* Content */}
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
               </svg>
-              <span>Înregistrează-te Acum</span>
+              <span className="relative z-10 text-white">Înregistrează-te Acum</span>
             </Link>
             <Link href="/cum-functioneaza" className="btn-secondary px-6 sm:px-10 py-3 sm:py-4 text-sm sm:text-lg inline-flex items-center justify-center gap-2 sm:gap-3 min-h-12">
               <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

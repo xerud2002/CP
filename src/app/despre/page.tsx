@@ -8,8 +8,8 @@ export default function DesprePage() {
       {/* Hero Section */}
       <section className="relative py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
-            Despre <span className="text-gradient">Curierul Perfect</span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
+            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Despre</span> <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>
           </h1>
           <p className="text-base sm:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
             Conectăm clienții cu transportatori de încredere pentru servicii complete de transport în România și Europa.
@@ -142,11 +142,25 @@ export default function DesprePage() {
             Încearcă Curierul Perfect pentru transportul tău în România și Europa.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link href="/comanda" className="btn-primary px-6 sm:px-8 py-3 sm:py-4 min-h-12 flex items-center justify-center text-sm sm:text-base">
-              Plasează o comandă
+            <Link href="/comanda" className="relative group/btn inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 min-h-12 text-sm sm:text-base rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
+              {/* Gradient background */}
+              <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+              {/* Glow effect */}
+              <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+              {/* Content */}
+              <span className="relative z-10 text-white">Plasează o comandă</span>
             </Link>
-            <Link href="/register?role=curier" className="btn-secondary px-6 sm:px-8 py-3 sm:py-4 min-h-12 flex items-center justify-center text-sm sm:text-base">
-              Devino Partener
+            <Link href="/register?role=curier" className="relative group/btn inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 min-h-12 text-sm sm:text-base rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
+              {/* Gradient emerald background */}
+              <div className="absolute inset-0 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 transition-transform group-hover/btn:scale-110"></div>
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+              {/* Glow effect */}
+              <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+              {/* Content */}
+              <span className="relative z-10 text-white">Devino Partener</span>
             </Link>
           </div>
         </div>

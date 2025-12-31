@@ -6,8 +6,8 @@ export default function CumFunctioneazaPage() {
       {/* Hero */}
       <section className="relative py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
-            Cum funcționează <span className="text-gradient">Curierul Perfect</span>?
+          <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Cum funcționează</span> <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>?
           </h1>
           <p className="text-xl text-gray-300">
             Un proces simplu în 5 pași pentru transport sigur și rapid în toată Europa
@@ -147,9 +147,16 @@ export default function CumFunctioneazaPage() {
           </div>
 
           <div className="mt-8 text-center">
-            <Link href="/register?role=curier" className="btn-primary px-8 py-3 inline-flex items-center gap-2">
-              <span>Devino Partener Curier</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Link href="/register?role=curier" className="relative group/btn inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
+              {/* Gradient emerald background */}
+              <div className="absolute inset-0 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 transition-transform group-hover/btn:scale-110"></div>
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+              {/* Glow effect */}
+              <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+              {/* Content */}
+              <span className="relative z-10 text-white">Devino Partener Curier</span>
+              <svg className="w-5 h-5 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </Link>
@@ -211,9 +218,16 @@ export default function CumFunctioneazaPage() {
           <p className="text-gray-300 mb-8 text-lg">
             Platformă de încredere pentru transport în Europa.
           </p>
-          <Link href="/comanda" className="btn-primary px-10 py-4 text-lg inline-flex items-center gap-3">
-            <span>Plasează prima comandă</span>
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <Link href="/comanda" className="relative group/btn inline-flex items-center justify-center gap-3 px-10 py-4 text-lg rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
+            {/* Gradient background */}
+            <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+            {/* Shine effect */}
+            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+            {/* Glow effect */}
+            <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+            {/* Content */}
+            <span className="relative z-10 text-white">Plasează prima comandă</span>
+            <svg className="w-6 h-6 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
           </Link>
