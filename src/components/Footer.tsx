@@ -143,10 +143,15 @@ export default function Footer() {
                   Transport paleți
                 </Link>
               </li>
+              <li>
+                <Link href="/transport" className="text-gray-300 hover:text-orange-400 transition-colors text-sm">
+                  Rute transport
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Support & Legal Links */}
+          {/* Support & Legal Links */
           <div>
             <h4 className="text-white font-semibold mb-5">Suport & Legal</h4>
             <ul className="space-y-3">

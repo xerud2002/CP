@@ -9,6 +9,9 @@ export const metadata: Metadata = {
     description: 'Creează o comandă de transport pentru colete, plicuri, persoane sau alte servicii în Europa.',
     type: 'website',
   },
+  alternates: {
+    canonical: 'https://curierulperfect.com/comanda',
+  },
   robots: {
     index: true,
     follow: true,

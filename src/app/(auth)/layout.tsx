@@ -22,6 +22,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ro_RO",
   },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function AuthLayout({

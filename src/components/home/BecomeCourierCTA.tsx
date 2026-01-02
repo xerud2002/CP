@@ -155,7 +155,7 @@ export default function BecomeCourierCTA() {
                 </svg>
               </Link>
               <Link 
-                href="/despre-parteneri" 
+                href="/devino-partener" 
                 className="group relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 rounded-xl font-semibold text-base sm:text-lg min-h-12 bg-slate-800/60 backdrop-blur-sm border-2 border-slate-700/60 text-gray-200 hover:text-white hover:bg-slate-700/80 hover:border-slate-600 transition-all active:scale-95 md:hover:scale-105 shadow-lg"
               >
                 <span>Află Mai Multe</span>
