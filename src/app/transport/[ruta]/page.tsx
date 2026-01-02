@@ -845,7 +845,7 @@ export async function generateMetadata({ params }: { params: Promise<{ ruta: str
   ];
 
   return {
-    title: data.title + ' | Curierul Perfect',
+    title: data.title,
     description: data.metaDescription,
     keywords,
     openGraph: {

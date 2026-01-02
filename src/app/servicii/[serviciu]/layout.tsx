@@ -2,47 +2,47 @@ import { Metadata } from 'next';
 
 const servicesMetadata: Record<string, { title: string; description: string; keywords: string[] }> = {
   colete: {
-    title: 'Transport Colete România - Europa | Curierul Perfect',
+    title: 'Transport Colete România - Europa',
     description: 'Trimite colete rapid și sigur între România și UK, Germania, Italia, Spania. Curieri verificați, tracking în timp real. Livrare în 24-72h.',
     keywords: ['transport colete romania', 'trimite colete uk', 'curier romania germania', 'transport colete europa', 'colete romania anglia'],
   },
   persoane: {
-    title: 'Transport Persoane România - Europa | Curse Zilnice',
+    title: 'Transport Persoane România - Europa',
     description: 'Transport persoane România-Europa. Curse zilnice către UK, Germania, Italia. Microbuze moderne, WiFi, bagaj 30kg inclus.',
     keywords: ['transport persoane romania', 'curse romania anglia', 'transport persoane germania', 'microbuz romania uk', 'curse romania italia'],
   },
   mobila: {
-    title: 'Transport Mobilă și Mutări Internaționale România - Europa',
+    title: 'Mutări Internaționale România - Europa',
     description: 'Mutări complete România-Europa. Transport mobilă, electrocasnice. Transportatori verificați cu recenzii reale.',
     keywords: ['mutari internationale', 'transport mobila romania', 'mutari romania anglia', 'transport mobilier europa', 'mutari romania germania'],
   },
   animale: {
-    title: 'Transport Animale de Companie România - Europa',
+    title: 'Transport Animale România - Europa',
     description: 'Transport autorizat animale de companie. Vehicule climatizate, îngrijire pe drum. Transport câini și pisici în UK, Germania.',
     keywords: ['transport animale romania', 'transport caini uk', 'transport pisici europa', 'transport animale companie', 'curier animale'],
   },
   platforma: {
-    title: 'Transport Auto pe Platformă România - Europa',
+    title: 'Transport Auto pe Platformă Europa',
     description: 'Transport mașini pe platformă în toată Europa. Vehicule de lux, defecte sau utilaje. Asigurare completă.',
     keywords: ['transport auto platforma', 'transport masini europa', 'platforma auto romania', 'transport vehicule', 'transport auto uk'],
   },
   tractari: {
-    title: 'Tractări Auto și Asistență Rutieră Europa | 24/7',
+    title: 'Tractări Auto și Asistență Rutieră',
     description: 'Tractări auto și asistență rutieră 24/7 în toată Europa. Intervenție rapidă, depanare la fața locului.',
     keywords: ['tractari auto', 'asistenta rutiera europa', 'tractari romania', 'depanare auto', 'tractari 24/7'],
   },
   electronice: {
-    title: 'Transport Electronice și Electrocasnice România - Europa',
+    title: 'Transport Electronice România - Europa',
     description: 'Transport sigur TV, electrocasnice, echipamente IT. Transportatori verificați.',
     keywords: ['transport electronice', 'transport electrocasnice', 'transport tv europa', 'curier electronice', 'transport it'],
   },
   plicuri: {
-    title: 'Transport Plicuri și Documente Expres România - Europa',
+    title: 'Curierat Documente Expres Europa',
     description: 'Curierat expres documente în 24-48h. Confirmare livrare, tracking în timp real.',
     keywords: ['curierat documente', 'transport plicuri', 'curier expres', 'transport documente europa', 'curierat rapid'],
   },
   paleti: {
-    title: 'Transport Paleți și Marfă Paletizată România - Europa',
+    title: 'Transport Paleți România - Europa',
     description: 'Transport paleți de la 1 palet la camioane complete. Grupaj economic, documentație completă.',
     keywords: ['transport paleti', 'transport marfa paletizata', 'grupaj romania', 'transport paleti europa', 'logistica'],
   },

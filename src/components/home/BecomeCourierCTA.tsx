@@ -102,7 +102,7 @@ export default function BecomeCourierCTA() {
             {/* Title */}
             <div className="text-center mb-5 sm:mb-6">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-3 sm:mb-4 px-2">
-                <span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">Vrei să fii </span><span className="bg-linear-to-r from-emerald-400 via-teal-400 to-green-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]">Partener de Transport</span><span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">?</span>
+                <span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">Vrei să fii </span><span className="bg-linear-to-r from-emerald-400 via-teal-400 to-green-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]">Partener de Transport</span><span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">?</span>
               </h2>
               <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-2">
                 Găsește clienți pe rutele tale existente. Selectezi zonele pe care le acoperi și serviciile oferite, iar noi îți aducem comenzi pe drumul tău.
