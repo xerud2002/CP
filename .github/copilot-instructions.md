@@ -10,20 +10,16 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 **⚠️ CRITICAL SECURITY**: Firestore rules check ownership but **don't filter results**—client queries MUST include `where('uid', '==', user.uid)`.
 
 ### Route Structure
-```
-/dashboard/client  → /comenzi, /profil, /suport
-/dashboard/curier  → /comenzi, /profil, /servicii, /verificare
-/dashboard/admin   → /utilizatori, /curieri, /comenzi, /verificare-documente, /setari, /mesaje
-/comanda           → Order creation wizard (no header/footer)
-```
+- `/dashboard/client` → `/comenzi`, `/profil`, `/suport`
+- `/dashboard/curier` → `/comenzi`, `/profil`, `/servicii`, `/verificare`
+- `/dashboard/admin` → `/utilizatori`, `/curieri`, `/comenzi`, `/verificare-documente`, `/setari`, `/mesaje`
+- `/comanda` → Order creation wizard (no header/footer)
 
-### Component & Hook Organization
-```
-src/components/orders/{client|courier|shared}/  → Role-specific + reusable components
-src/components/admin/                           → Admin panel components
-src/hooks/{client|courier}/                     → Role-specific data hooks
-src/hooks/useChatMessages.ts                    → Shared real-time messaging
-```
+### Code Organization
+- `src/components/orders/{client|courier|shared}/` → Role-specific + reusable components
+- `src/components/admin/` → Admin panel components
+- `src/hooks/{client|courier}/` → Role-specific data hooks
+- `src/hooks/useChatMessages.ts` → Shared real-time messaging
 
 ## Key Files (Single Source of Truth)
 
@@ -31,23 +27,15 @@ src/hooks/useChatMessages.ts                    → Shared real-time messaging
 |------|---------|
 | `lib/constants.ts` | `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
 | `lib/cities.ts` | `oraseByCountryAndRegion`, `getOraseForRegion()`, `getAllOraseForCountry()` |
-| `lib/toast.ts` | `showSuccess()`, `showError()`, `showInfo()`, `showWarning()` — auto-translates Firebase errors to Romanian |
-| `lib/contact.ts` | Centralized `CONTACT_INFO`, `SOCIAL_LINKS`, `COMPANY_INFO` |
-| `lib/faq.ts` | `FAQ_ITEMS` with category filtering |
-| `lib/businessInfo.ts` | `COUNTRY_TAX_INFO` — 20-country tax ID formats |
-| `contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
+| `lib/toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian |
+| `lib/contact.ts` | `CONTACT_INFO`, `SOCIAL_LINKS`, `COMPANY_INFO` |
+| `contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()` |
 | `utils/orderStatusHelpers.ts` | `canEditOrder()`, `canDeleteOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
-| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `CoverageZone`, `UserRole`, `CourierProfile`, `DocumentRequirement` |
-
-## Error Handling
-- Use `showError(err)` from `lib/toast.ts` for user-facing errors (auto-translated to Romanian)
-- Use `logError()` from `lib/errorMessages.ts` for development debugging
-- Console logs automatically removed in production builds
+| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `UserRole`, `CourierProfile` |
 
 ## Critical Patterns
 
-### 1. Dashboard Auth Template
-All `/dashboard/*` pages MUST use this pattern:
+### 1. Dashboard Auth Guard (REQUIRED for all /dashboard/* pages)
 ```tsx
 'use client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -57,80 +45,52 @@ import { useEffect } from 'react';
 export default function Page() {
   const { user, loading } = useAuth();
   const router = useRouter();
-
   useEffect(() => {
-    if (!loading && (!user || user.role !== 'client')) { // or 'curier' for courier pages
-      router.push('/login?role=client');
-    }
+    if (!loading && (!user || user.role !== 'client')) router.push('/login?role=client');
   }, [user, loading, router]);
-
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="spinner" /></div>;
   if (!user) return null;
   // ... protected content
 }
 ```
 
-### 2. Firestore Owner Filter (REQUIRED)
+### 2. Firestore Owner Filter (SECURITY-CRITICAL)
 ```tsx
-// ✅ CORRECT
+// ✅ CORRECT — always filter by owner
 const q = query(collection(db, 'comenzi'), where('uid_client', '==', user.uid), orderBy('createdAt', 'desc'));
-
-// ❌ WRONG - Exposes other users' data
+// ❌ WRONG — exposes other users' data
 const q = query(collection(db, 'comenzi'), orderBy('createdAt', 'desc'));
 ```
 
-### 3. Service Name Normalization
-Orders store lowercase (`'colete'`), profiles may use capitalized (`'Colete'`):
+### 3. Message Threading (Order-Scoped)
 ```tsx
-const userServices = user.serviciiOferite?.map(s => s.toLowerCase().trim()) || [];
-const matchesService = userServices.includes(order.serviciu.toLowerCase().trim());
+// ✅ Filter by ALL THREE fields — each order has isolated chats per courier
+const q = query(collection(db, 'mesaje'), where('orderId', '==', orderId), where('clientId', '==', clientId), where('courierId', '==', courierId), orderBy('timestamp', 'asc'));
 ```
 
-### 4. Error Handling — Centralized Toasts
-```tsx
-import { showSuccess, showError } from '@/lib/toast';
-try {
-  await updateDoc(docRef, data);
-  showSuccess('Salvat!');
-} catch (err) {
-  showError(err);  // Auto-translates Firebase codes to Romanian
-}
-```
-
-### 5. Timestamps — Server-Side Only
+### 4. Timestamps & Error Handling
 ```tsx
 import { serverTimestamp } from 'firebase/firestore';
-await addDoc(collection(db, 'comenzi'), { ...data, createdAt: serverTimestamp() });
-// ❌ NEVER: createdAt: new Date()
+import { showSuccess, showError } from '@/lib/toast';
+try {
+  await addDoc(collection(db, 'comenzi'), { ...data, createdAt: serverTimestamp() }); // ✅ NEVER use new Date()
+  showSuccess('Salvat!');
+} catch (err) { showError(err); } // Auto-translates Firebase errors to Romanian
 ```
 
-### 6. Order Status — Use Helpers
+### 5. Order Status Logic — Use Helpers
 ```tsx
-import { canEditOrder, canDeleteOrder, canFinalizeOrder } from '@/utils/orderStatusHelpers';
-if (canEditOrder(order.status)) { /* Show edit button */ }
-// ❌ NEVER: if (order.status === 'noua') — business logic must stay in helpers
+import { canEditOrder, transitionToInLucru } from '@/utils/orderStatusHelpers';
+if (canEditOrder(order.status)) { /* show edit */ } // ✅ Business logic in helpers
+// ❌ NEVER: if (order.status === 'noua') — logic must stay in helpers
 ```
 
-### 7. Real-time Subscriptions — Always Cleanup
+### 6. Real-time Subscriptions — Always Cleanup
 ```tsx
 useEffect(() => {
   const unsubscribe = onSnapshot(query(...), snap => { /* ... */ });
-  return () => unsubscribe();  // MUST cleanup
+  return () => unsubscribe(); // MUST cleanup
 }, [deps]);
-```
-
-### 8. Message Threading — Order-Scoped Chats
-Each order has isolated chats per courier. Query mesaje collection:
-```tsx
-// ✅ CORRECT - Filter by all three
-const q = query(
-  collection(db, 'mesaje'),
-  where('orderId', '==', orderId),
-  where('clientId', '==', clientId),
-  where('courierId', '==', courierId),
-  orderBy('timestamp', 'asc')
-);
-// ❌ WRONG - Missing orderId filter exposes cross-order messages
 ```
 
 ## Order Status Flow
@@ -139,66 +99,35 @@ noua → in_lucru → livrata
   ↓        ↓
 anulata  anulata
 ```
-- `noua`: New, editable/deletable by client
-- `in_lucru`: Locked (courier messaged), can be finalized by client
-- `livrata`: Complete
-- `anulata`: Cancelled (from `noua` or `in_lucru`)
-- Auto-transition: `noua` → `in_lucru` when courier sends first message (via `transitionToInLucru()`)
-
-**Legacy statuses** (`acceptata`, `in_tranzit`, `pending`, `accepted`, `in_transit`, `completed`, `cancelled`) still exist in `orderStatusConfig` for backwards compatibility but are not used in new orders.
+- `noua`: New, editable/deletable | `in_lucru`: Locked (courier messaged) | `livrata`: Complete | `anulata`: Cancelled
+- Auto-transition: `noua` → `in_lucru` when courier sends first message
 
 ## Firestore Collections
 
-| Collection | Owner Field | Key Notes |
-|------------|-------------|-----------|
+| Collection | Owner Field | Notes |
+|------------|-------------|-------|
 | `comenzi` | `uid_client` | Orders with `orderNumber`, `status`, `courierId` |
-| `mesaje` | `clientId` + `courierId` | **1-to-1 chat per order** — filter by `orderId`, `clientId`, AND `courierId` |
-| `profil_curier` | doc ID = `uid` | Extended courier profile (publicly readable) |
-| `profil_client` | doc ID = `uid` | Extended client profile (private) |
-| `users` | doc ID = `uid` | Base user profile with role, email, serviciiOferite |
-
-**Chat System**: Each client-courier pair has a **separate conversation** per order. Query MUST filter by `orderId`, `clientId`, AND `courierId`.
-
-## Styling
-- Buttons: `.btn-primary`, `.btn-secondary`
-- Layout: `.card`, `.form-input`, `.spinner`
-- Brand colors: `text-orange-500` (CTA), `text-emerald-400` (success), `bg-slate-900` (dashboard bg)
-- Status styling: `orderStatusConfig[status].bg`, `.color`, `.label`
-- Service styling: Use `serviceTypes[].color`, `.bgColor`, `.borderColor` from `constants.ts`
+| `mesaje` | `clientId` + `courierId` | 1-to-1 chat per order — filter by `orderId`, `clientId`, AND `courierId` |
+| `profil_curier` | doc ID = `uid` | Publicly readable (clients see courier info) |
+| `profil_client` | doc ID = `uid` | Private |
+| `users` | doc ID = `uid` | Base profile with `role`, `email`, `serviciiOferite` |
 
 ## Commands
 ```bash
-npm run dev                # Dev server (localhost:3000)
-npm run build              # Production build
-npm run start              # Production server
-npm run lint               # ESLint check
-npm run lighthouse         # Lighthouse audit (desktop, auto-kills node process)
-npm run lighthouse:mobile  # Lighthouse audit (mobile preset)
+npm run dev          # Dev server (localhost:3000)
+npm run build        # Production build
+npm run lint         # ESLint check
 ```
-**No emulators**: Project uses live Firebase services.
-
-### Environment Variables
-Required in `.env.local`:
-```bash
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
-```
-Firebase config is singleton-initialized in `lib/firebase.ts` (checks `getApps().length`).
+**No emulators** — project uses live Firebase services. See `.env.local` for required Firebase config.
 
 ## Conventions
-- **Language**: UI text in Romanian | Code/comments/commits in English
-- **Client components**: All dashboard pages need `'use client'` directive
-- **Path alias**: `@/*` → `./src/*` — never use relative paths like `../../../`
-- **Constants**: Always import from `@/lib/constants.ts`, never duplicate
-- **Types**: Import from `@/types/index.ts`, never inline interfaces
-- **Firebase SDK**: Modular v11 syntax (`import { collection } from 'firebase/firestore'`)
-- **NO PRICES**: Never display prices, currency symbols (€, $, RON), or "de la X" pricing anywhere in the UI or metadata
-- **Icons**: Use `src/components/icons/DashboardIcons.tsx` for consistent Heroicons styling
-- **Production**: `next.config.ts` removes `console.*` in production builds, optimizes CSS/images (AVIF/WebP)
+- **Language**: UI in Romanian | Code/comments in English
+- **Imports**: Use `@/*` alias (`@/lib/toast`), never `../../../`
+- **Constants**: Import from `lib/constants.ts`, never duplicate
+- **Types**: Import from `types/index.ts`, never inline interfaces
+- **Firebase**: Modular v11 syntax (`import { collection } from 'firebase/firestore'`)
+- **NO PRICES**: Never display prices, currency symbols (€, $, RON), or "de la X" pricing
+- **Production**: `next.config.ts` removes `console.*` in production builds
 
 ## Common Mistakes
 
@@ -206,121 +135,33 @@ Firebase config is singleton-initialized in `lib/firebase.ts` (checks `getApps()
 |----------|----------|
 | Query without owner filter | `where('uid', '==', user.uid)` |
 | `if (status === 'in_lucru')` | `canEditOrder(status)` |
-| Inline service icons/colors | Import from `constants.ts` |
+| Inline service colors | Import from `constants.ts` |
 | `alert(error.message)` | `showError(error)` |
 | `createdAt: new Date()` | `serverTimestamp()` |
 | Missing `onSnapshot` cleanup | `return () => unsubscribe()` |
-| Inline contact info | Import from `@/lib/contact.ts` |
 
-## File Organization
-
-**Hooks** (`src/hooks/`):
-- `client/` — `useClientOrdersLoader.ts`, `useClientOrderActions.ts`
-- `courier/` — `useOrdersLoader.ts`, `useOrderHandlers.ts`, `useUnreadMessages.ts`
-- `useChatMessages.ts` — shared real-time messaging
-- `useAdminMessages.ts`, `useAdminMessageThreads.ts` — admin messaging system
-- `useUserActivity.ts` — track user last seen timestamps
-- `useLocalStorage.ts` — persistent local state
-
-**Components** (`src/components/orders/`):
-- `client/filters/`, `client/list/` — client-specific views
-- `courier/filters/`, `courier/list/`, `courier/details/` — courier-specific views
-- `shared/` — `OrderDetailsModal`, `MessageList`, `MessageInput`, `CountryFilter`
-
-**Admin Components** (`src/components/admin/`):
-- `AdminUI.tsx` — reusable UI components (`StatsGrid`, `TabNavigation`, `SearchBar`)
-- `UsersTable.tsx`, `CouriersGrid.tsx`, `OrdersTable.tsx` — data tables
-- `AdminMessageModal.tsx`, `AdminMessagesListModal.tsx` — admin messaging interface
-- `DocumentVerificationContent.tsx` — courier document review
-- `StatsContent.tsx`, `SettingsContent.tsx`, `MonetizareContent.tsx` — dashboard sections
-
-## Courier Messaging Restrictions
-Before a courier can send the first message on an order, validate:
-1. **Order exists** — verify the order hasn't been deleted
-2. **Courier verification** — if client accepts only "firme", courier needs `verified: true` in profile
-3. **Offer limits** — respect client's max couriers setting (1-3, 4-5, or unlimited)
-
-Implement these checks in hooks/components before allowing message submission to prevent validation errors.
-
-## Admin Features
-The admin dashboard provides comprehensive platform management:
-- **User Management** (`/utilizatori`): View/edit all users, filter by role, search functionality
-- **Courier Management** (`/curieri`): Grid view of verified couriers with coverage zones
-- **Orders** (`/comenzi`): View all orders, filter by status, access order messages
-- **Document Verification** (`/verificare-documente`): Review courier verification docs, approve/reject
-- **Settings** (`/setari`): Platform configuration, feature flags
-- **Messages** (`/mesaje`): Admin-to-user messaging system with thread management
-
-Admin access controlled via `isAdmin()` helper in `firestore.rules`. Uses `useAdminMessages()` and `useAdminMessageThreads()` hooks for messaging.
-
-## Migration Scripts
-Located in `scripts/` folder. Requires Firebase Admin SDK setup:
-1. Download service account key from Firebase Console → Project Settings → Service Accounts → Generate New Private Key
-2. Save as `scripts/serviceAccountKey.json`
-3. Install dependencies: `cd scripts && npm install firebase-admin`
-4. Run with `node scripts/<script>.js`
-
-See `scripts/README.md` for detailed instructions.
-
-Available scripts:
-- `migrateOrderStatuses.js` — migrate old English status values to Romanian (uses batched writes)
-- `deleteOldArchivedOrders.js` — cleanup archived orders older than specified date
-
-## Firestore Security Model
-- **Firestore Rules**: Read access for owners only (`resource.data.uid == request.auth.uid`), but rules **don't auto-filter**
-- **Couriers**: Can read ALL orders (for discovery), but update only assigned orders (`resource.data.courierId == request.auth.uid`)
-- **Profiles**: `profil_curier` is publicly readable (for courier info), `profil_client` is private
-- **Storage**: Courier verification documents in `courierDocs/{uid}/`, client profile photos in `clientPhotos/{uid}/`
-- **Admin Access**: `isAdmin()` helper in rules checks `users/{uid}.role == 'admin'` for elevated permissions
-
-See `firestore.rules` for complete security model.
-
-## Performance Optimizations
-- Images use Next.js Image component with Firebase Storage remote patterns
-- Static assets cached for 1 year (`max-age=31536000, immutable`)
-- Next.js static paths cached for 1 year
-- CSS optimized via `experimental.optimizeCss` in `next.config.ts`
-
-## Firebase Functions (Optional)
-Backend functions in `functions/` folder using TypeScript:
-- **Setup**: `cd functions && npm install`
-- **Local**: `firebase emulators:start --only functions`
-- **Deploy**: `firebase deploy --only functions`
-- **Entry**: `functions/src/index.ts` exports Cloud Functions
-
-Note: Main app does NOT require emulators — it uses live Firebase services directly.
-- Responsive image sizes: `[640, 750, 828, 1080, 1200]`
-
-## Flags & Assets
-Country flags in `public/img/flag/{code}.svg` (lowercase, e.g., `ro.svg`, `de.svg`). When adding countries to `constants.ts`, add the corresponding flag SVG.
-
-## SEO & Open Graph Images
-
-**Dynamic OG Images**: Each route with `opengraph-image.tsx` generates custom 1200×630 social share images using Next.js `ImageResponse`.
-
-**Pattern**:
+## Service Name Normalization
+Orders store lowercase (`'colete'`), profiles may use capitalized (`'Colete'`):
 ```tsx
-// In src/app/[route]/opengraph-image.tsx
-export const alt = 'Descriptive alt text';
-export const size = { width: 1200, height: 630 };
-export const contentType = 'image/png';
-
-export default async function Image() {
-  return new ImageResponse(/* JSX with brand colors, logo, gradients */);
-}
+const userServices = user.serviciiOferite?.map(s => s.toLowerCase().trim()) || [];
+const matchesService = userServices.includes(order.serviciu.toLowerCase().trim());
 ```
 
-**SEO Helpers** (`lib/seo.ts`):
-- `defaultMetadata`: Site-wide defaults with keywords, structured data
-- `generatePageMetadata(title, description, options)`: Per-page overrides
-- `generateRouteMetadata(route)`: Transport route-specific SEO
-- `generateServiceMetadata(service)`: Service page SEO
+## Styling
+- Buttons: `.btn-primary`, `.btn-secondary` | Layout: `.card`, `.form-input`, `.spinner`
+- Brand: `text-orange-500` (CTA), `text-emerald-400` (success), `bg-slate-900` (dashboard)
+- Status: `orderStatusConfig[status].bg`, `.color`, `.label` from `constants.ts`
+- Service: `serviceTypes[].color`, `.bgColor`, `.borderColor` from `constants.ts`
 
-**Conventions**:
-- Use `title.template` for auto-appending site name: `%s | Curierul Perfect`
-- Include Romanian locale: `locale: 'ro_RO'`
-- Set `metadataBase` for absolute URL resolution
-- Keywords: Focus on "transport România Europa", service types, country names
-- **No prices**: Never include pricing in metadata (per project policy)
+## SEO & OG Images
+Dynamic OG images via `opengraph-image.tsx` (1200×630). SEO helpers in `lib/seo.ts`:
+- `generatePageMetadata(title, description)` for per-page overrides
+- Always include `locale: 'ro_RO'` and Romanian keywords
 
-**Layout Metadata**: Each `layout.tsx` exports `generateMetadata()` or static `metadata` object. OG images auto-linked.
+## Migration Scripts
+Located in `scripts/` folder. Requires Firebase Admin SDK:
+1. Save service account key as `scripts/serviceAccountKey.json`
+2. Run: `cd scripts && npm install firebase-admin && node <script>.js`
+
+## Flags & Assets
+Country flags: `public/img/flag/{code}.svg` (lowercase: `ro.svg`, `de.svg`). When adding countries to `constants.ts`, add corresponding flag SVG.
