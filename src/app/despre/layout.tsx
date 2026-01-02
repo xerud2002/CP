@@ -4,12 +4,12 @@ export const metadata: Metadata = {
   title: 'Despre Noi - Curierul Perfect',
   description: 'Află povestea Curierul Perfect - platforma care conectează clienții cu transportatori verificați pentru servicii de transport național și european.',
   alternates: {
-    canonical: 'https://curierulperfect.ro/despre',
+    canonical: 'https://curierulperfect.com/despre',
   },
   openGraph: {
     title: 'Despre Curierul Perfect',
     description: 'Platformă de transport național și european cu transportatori verificați.',
-    url: 'https://curierulperfect.ro/despre',
+    url: 'https://curierulperfect.com/despre',
     type: 'website',
     locale: 'ro_RO',
     siteName: 'Curierul Perfect',

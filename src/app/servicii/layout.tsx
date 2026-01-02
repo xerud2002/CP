@@ -4,12 +4,12 @@ export const metadata: Metadata = {
   title: 'Servicii Transport | Curierul Perfect',
   description: 'Descoperă toate serviciile de transport oferite: colete, persoane, mobilă, electronice, animale, platformă, tractări și perisabile. Transport sigur România - Europa.',
   alternates: {
-    canonical: 'https://curierulperfect.ro/servicii',
+    canonical: 'https://curierulperfect.com/servicii',
   },
   openGraph: {
     title: 'Servicii Transport | Curierul Perfect',
     description: 'Descoperă toate serviciile de transport disponibile pe platforma Curierul Perfect.',
-    url: 'https://curierulperfect.ro/servicii',
+    url: 'https://curierulperfect.com/servicii',
     type: 'website',
     locale: 'ro_RO',
     siteName: 'Curierul Perfect',

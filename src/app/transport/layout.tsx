@@ -4,12 +4,12 @@ export const metadata: Metadata = {
   title: 'Transport România - Europa | Curierul Perfect',
   description: 'Găsește transportatori verificați pentru rute între România și Europa. Colete, persoane, mobilă - peste 20 de țări acoperite.',
   alternates: {
-    canonical: 'https://curierulperfect.ro/transport',
+    canonical: 'https://curierulperfect.com/transport',
   },
   openGraph: {
     title: 'Transport România - Europa | Curierul Perfect',
     description: 'Transportatori verificați pentru toate rutele dintre România și Europa.',
-    url: 'https://curierulperfect.ro/transport',
+    url: 'https://curierulperfect.com/transport',
     type: 'website',
     locale: 'ro_RO',
     siteName: 'Curierul Perfect',
