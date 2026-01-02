@@ -151,7 +151,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Support & Legal Links */
+          {/* Support & Legal Links */}
           <div>
             <h4 className="text-white font-semibold mb-5">Suport & Legal</h4>
             <ul className="space-y-3">
