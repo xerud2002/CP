@@ -136,7 +136,6 @@ export const organizationSchema = {
   },
   sameAs: [
     'https://www.facebook.com/curierulperfect',
-    'https://www.instagram.com/curierulperfect',
   ],
   serviceArea: {
     '@type': 'Place',

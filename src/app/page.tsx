@@ -30,8 +30,7 @@ const organizationSchema = {
     "availableLanguage": ["Romanian", "English"]
   },
   "sameAs": [
-    SOCIAL_LINKS.facebook,
-    SOCIAL_LINKS.instagram
+    SOCIAL_LINKS.facebook
   ],
   "areaServed": {
     "@type": "Place",

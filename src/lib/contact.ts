@@ -17,7 +17,6 @@ export const CONTACT_INFO = {
  */
 export const SOCIAL_LINKS = {
   facebook: 'https://www.facebook.com/curierulperfect',
-  instagram: 'https://www.instagram.com/curierulperfect',
 } as const;
 
 /**

@@ -142,8 +142,6 @@ const organizationSchema = {
   },
   sameAs: [
     'https://www.facebook.com/curierulperfect',
-    'https://www.instagram.com/curierulperfect',
-    'https://www.tiktok.com/@curierulperfect',
   ],
   address: {
     '@type': 'PostalAddress',
