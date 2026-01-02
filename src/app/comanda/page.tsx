@@ -727,6 +727,25 @@ function ComandaForm() {
               </button>
             )}
           </div>
+
+          {/* Helper Links for SEO */}
+          <div className="mt-8 pt-6 border-t border-white/10">
+            <p className="text-sm text-gray-400 text-center mb-3">Ai nevoie de ajutor?</p>
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
+              <Link href="/cum-functioneaza" className="text-gray-300 hover:text-orange-400 transition-colors">
+                Cum funcționează
+              </Link>
+              <Link href="/faq" className="text-gray-300 hover:text-orange-400 transition-colors">
+                Întrebări frecvente
+              </Link>
+              <Link href="/contact" className="text-gray-300 hover:text-orange-400 transition-colors">
+                Contact
+              </Link>
+              <Link href="/termeni" className="text-gray-300 hover:text-orange-400 transition-colors">
+                Termeni și condiții
+              </Link>
+            </div>
+          </div>
         </form>
       </main>
     </div>
