@@ -64,6 +64,27 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  // Redirects for legacy URLs (fix 404s in Google Search Console)
+  async redirects() {
+    return [
+      {
+        source: '/index.php',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/login-courier.html',
+        destination: '/login?role=curier',
+        permanent: true,
+      },
+      {
+        source: '/login-client.html',
+        destination: '/login?role=client',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
