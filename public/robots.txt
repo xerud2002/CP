@@ -1,44 +1,63 @@
 # robots.txt for Curierul Perfect
 # https://curierulperfect.com
 
+# Default rules for all crawlers
 User-agent: *
 Allow: /
+
+# Public pages - explicitly allowed
 Allow: /comanda
 Allow: /servicii/
 Allow: /transport/
 Allow: /cum-functioneaza
 Allow: /faq
+Allow: /despre
 Allow: /contact
+Allow: /devino-partener
+Allow: /preturi
+Allow: /termeni
+Allow: /confidentialitate
+Allow: /gdpr
+Allow: /cookies
+Allow: /reclamatii
+
+# Private/auth pages - disallow indexing
 Disallow: /dashboard/
 Disallow: /api/
 Disallow: /login
 Disallow: /register
 Disallow: /forgot-password
 
-# Block AI crawlers (optional - protecting user content)
-User-agent: GPTBot
-Disallow: /dashboard/
-
-User-agent: CCBot
-Disallow: /dashboard/
-
-# Sitemap
-Sitemap: https://curierulperfect.com/sitemap.xml
-
-# Crawl-delay for polite crawling
-Crawl-delay: 1
+# Static assets that don't need indexing
 Disallow: /_next/static/
-Disallow: /review/
+Disallow: /*.json$
 
 # Googlebot specific
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 1
 
-# Bingbot specific
+# Bingbot specific  
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 2
 
-# Sitemap locations
+# Block AI training crawlers from private content
+User-agent: GPTBot
+Disallow: /dashboard/
+Disallow: /api/
+
+User-agent: CCBot
+Disallow: /dashboard/
+Disallow: /api/
+
+User-agent: anthropic-ai
+Disallow: /dashboard/
+Disallow: /api/
+
+User-agent: Google-Extended
+Disallow: /dashboard/
+Disallow: /api/
+
+# Sitemap location
 Sitemap: https://curierulperfect.com/sitemap.xml
