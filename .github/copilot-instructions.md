@@ -12,26 +12,28 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 ### Route Structure
 - `/dashboard/client` → `/comenzi`, `/profil`, `/suport`
 - `/dashboard/curier` → `/comenzi`, `/profil`, `/servicii`, `/verificare`
-- `/dashboard/admin` → `/utilizatori`, `/curieri`, `/comenzi`, `/verificare-documente`, `/setari`, `/mesaje`
+- `/dashboard/admin` → Single-page tabbed UI with: `utilizatori`, `curieri`, `comenzi`, `arhiva`, `verificare-documente`, `setari`, `mesaje`, `monetizare`
 - `/comanda` → Order creation wizard (no header/footer)
+- `/api/contact` → Server-side email via Nodemailer (SMTP config in `.env.local`)
 
 ### Code Organization
 - `src/components/orders/{client|courier|shared}/` → Role-specific + reusable components
-- `src/components/admin/` → Admin panel components
+- `src/components/admin/` → Admin panel components (`AdminUI.tsx`, `OrdersTable.tsx`, `UsersTable.tsx`, etc.)
 - `src/hooks/{client|courier}/` → Role-specific data hooks
 - `src/hooks/useChatMessages.ts` → Shared real-time messaging
+- `functions/` → Firebase Cloud Functions (placeholder, currently empty)
 
 ## Key Files (Single Source of Truth)
 
 | File | Purpose |
 |------|---------|
-| `lib/constants.ts` | `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig` |
+| `lib/constants.ts` | `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig`, `serviceNames` |
 | `lib/cities.ts` | `oraseByCountryAndRegion`, `getOraseForRegion()`, `getAllOraseForCountry()` |
 | `lib/toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian |
 | `lib/contact.ts` | `CONTACT_INFO`, `SOCIAL_LINKS`, `COMPANY_INFO` |
 | `contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()` |
 | `utils/orderStatusHelpers.ts` | `canEditOrder()`, `canDeleteOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
-| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `UserRole`, `CourierProfile` |
+| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `UserRole`, `CourierProfile`, `DocumentRequirement` |
 
 ## Critical Patterns
 
@@ -102,6 +104,19 @@ anulata  anulata
 - `noua`: New, editable/deletable | `in_lucru`: Locked (courier messaged) | `livrata`: Complete | `anulata`: Cancelled
 - Auto-transition: `noua` → `in_lucru` when courier sends first message
 
+### Order Archiving
+Orders can be soft-deleted (archived) instead of permanently deleted:
+```tsx
+// Archive an order (soft delete)
+await updateDoc(doc(db, 'comenzi', orderId), {
+  archived: true,
+  archivedAt: serverTimestamp()
+});
+// Exclude archived from queries (client-side filtering)
+orders.filter(order => order.archived !== true);
+```
+Admin panel has a dedicated "Arhivă" tab to view/restore archived orders.
+
 ## Firestore Collections
 
 | Collection | Owner Field | Notes |
@@ -117,8 +132,11 @@ anulata  anulata
 npm run dev          # Dev server (localhost:3000)
 npm run build        # Production build
 npm run lint         # ESLint check
+npm run lighthouse   # Desktop performance audit (builds, starts, runs Lighthouse)
 ```
-**No emulators** — project uses live Firebase services. See `.env.local` for required Firebase config.
+**No emulators** — project uses live Firebase services. See `.env.local` for required Firebase config:
+- `NEXT_PUBLIC_FIREBASE_*` — Client-side Firebase config
+- `SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_PORT` — Contact form email
 
 ## Conventions
 - **Language**: UI in Romanian | Code/comments in English

@@ -215,7 +215,7 @@ export default function ProfilClientPage() {
       <main className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Personal Info */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-4 sm:p-6">
+          <div className={`bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-4 sm:p-6 relative ${prefixDropdownOpen ? 'z-20' : 'z-10'}`}>
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <UserIcon className="w-5 h-5 text-emerald-400" />
               Informații Personale
@@ -262,8 +262,7 @@ export default function ProfilClientPage() {
                         alt={`Steag ${phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || 'România'}`}
                         width={20}
                         height={14}
-                        className="rounded-sm shrink-0"
-                        style={{ width: 'auto', height: 'auto' }}
+                        className="rounded-sm shrink-0 object-contain"
                       />
                       <span>{phonePrefixes.find(p => p.code === profile.telefonPrefix)?.name || '+40'}</span>
                       <svg className="w-4 h-4 ml-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -272,10 +271,7 @@ export default function ProfilClientPage() {
                     </button>
                     
                     {prefixDropdownOpen && (
-                      <div ref={prefixMenuRef} className="fixed z-9999 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto" style={{
-                        top: prefixDropdownRef.current ? `${prefixDropdownRef.current.getBoundingClientRect().bottom + 4}px` : '0',
-                        left: prefixDropdownRef.current ? `${prefixDropdownRef.current.getBoundingClientRect().left}px` : '0'
-                      }}>
+                      <div ref={prefixMenuRef} className="absolute z-50 mt-1 w-32 bg-slate-800 border border-white/10 rounded-lg shadow-xl max-h-60 overflow-y-auto dropdown-scrollbar">
                         {phonePrefixes.map((p) => (
                           <button
                             key={p.code}
@@ -284,7 +280,7 @@ export default function ProfilClientPage() {
                               setProfile({ ...profile, telefonPrefix: p.code });
                               setPrefixDropdownOpen(false);
                             }}
-                            className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-slate-700 transition-colors ${
+                            className={`w-full flex items-center gap-2 px-3 py-2.5 hover:bg-slate-700 transition-colors ${
                               profile.telefonPrefix === p.code ? 'bg-slate-700/50' : ''
                             }`}
                           >
@@ -293,8 +289,7 @@ export default function ProfilClientPage() {
                               alt=""
                               width={20}
                               height={14}
-                              className="rounded-sm shrink-0"
-                              style={{ width: 'auto', height: 'auto' }}
+                              className="rounded-sm shrink-0 object-contain"
                             />
                             <span className="text-white text-sm">{p.name}</span>
                           </button>
@@ -326,7 +321,7 @@ export default function ProfilClientPage() {
           </div>
 
           {/* Address */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-4 sm:p-6">
+          <div className={`bg-slate-800/50 backdrop-blur-sm rounded-xl border border-white/5 p-4 sm:p-6 relative ${countryDropdownOpen || judetDropdownOpen ? 'z-20' : 'z-10'}`}>
             <h2 className="text-lg font-semibold text-white mb-4">Adresă</h2>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -347,8 +342,7 @@ export default function ProfilClientPage() {
                       alt={`Flag of ${currentCountryName}`}
                       width={24}
                       height={16}
-                      className="rounded-sm shrink-0"
-                      style={{ width: 'auto', height: 'auto' }}
+                      className="rounded-sm shrink-0 object-contain"
                     />
                     <span className="flex-1 text-left truncate">{currentCountryName}</span>
                     <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${countryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -391,8 +385,7 @@ export default function ProfilClientPage() {
                                 alt={`Flag of ${c.name}`}
                                 width={24}
                                 height={16}
-                                className="rounded-sm shrink-0"
-                                style={{ width: 'auto', height: 'auto' }}
+                                className="rounded-sm shrink-0 object-contain"
                               />
                               <span className="text-white text-sm">{c.name}</span>
                             </button>
@@ -425,8 +418,7 @@ export default function ProfilClientPage() {
                       alt={`Steagul ${currentCountryName}`}
                       width={20}
                       height={14}
-                      className="rounded-sm shrink-0"
-                      style={{ width: 'auto', height: 'auto' }}
+                      className="rounded-sm shrink-0 object-contain"
                     />
                     <span className="flex-1 text-left truncate">{profile.judet || 'Selectează județ/regiune'}</span>
                     <svg className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${judetDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -470,8 +462,7 @@ export default function ProfilClientPage() {
                                 alt={`Steagul ${currentCountryName}`}
                                 width={20}
                                 height={14}
-                                className="rounded-sm shrink-0"
-                                style={{ width: 'auto', height: 'auto' }}
+                                className="rounded-sm shrink-0 object-contain"
                               />
                               <span className="text-white text-sm">{judet}</span>
                             </button>
