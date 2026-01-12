@@ -16,7 +16,7 @@ export default function DevinoPartenerPage() {
             <span className="text-center">100% GRATUIT - Fără Comisioane!</span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
-            <span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">Devino Curier</span> <span className="bg-linear-to-r from-emerald-400 via-teal-400 to-green-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]">Partner</span>
+            <span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">Devino Curier</span> <span className="bg-linear-to-r from-emerald-400 via-teal-400 to-green-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]">Partner</span>
           </h1>
           <p className="text-base sm:text-xl lg:text-2xl text-gray-300 mb-3 sm:mb-4 leading-relaxed max-w-2xl mx-auto">
             Alătură-te platformei #1 de transport pentru români din Europa

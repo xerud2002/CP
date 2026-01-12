@@ -86,7 +86,7 @@ const colorClasses: Record<string, {
   line: string;
 }> = {
   orange: {
-    iconBg: 'bg-gradient-to-br from-orange-500 to-orange-600',
+    iconBg: 'bg-linear-to-br from-orange-500 to-orange-600',
     iconText: 'text-white',
     badge: 'bg-orange-500/15 border-orange-500/30',
     badgeText: 'text-orange-400',
@@ -94,7 +94,7 @@ const colorClasses: Record<string, {
     line: 'from-orange-500',
   },
   emerald: {
-    iconBg: 'bg-gradient-to-br from-emerald-500 to-emerald-600',
+    iconBg: 'bg-linear-to-br from-emerald-500 to-emerald-600',
     iconText: 'text-white',
     badge: 'bg-emerald-500/15 border-emerald-500/30',
     badgeText: 'text-emerald-400',
@@ -102,7 +102,7 @@ const colorClasses: Record<string, {
     line: 'from-emerald-500',
   },
   blue: {
-    iconBg: 'bg-gradient-to-br from-blue-500 to-blue-600',
+    iconBg: 'bg-linear-to-br from-blue-500 to-blue-600',
     iconText: 'text-white',
     badge: 'bg-blue-500/15 border-blue-500/30',
     badgeText: 'text-blue-400',
@@ -110,7 +110,7 @@ const colorClasses: Record<string, {
     line: 'from-blue-500',
   },
   violet: {
-    iconBg: 'bg-gradient-to-br from-violet-500 to-violet-600',
+    iconBg: 'bg-linear-to-br from-violet-500 to-violet-600',
     iconText: 'text-white',
     badge: 'bg-violet-500/15 border-violet-500/30',
     badgeText: 'text-violet-400',
@@ -118,7 +118,7 @@ const colorClasses: Record<string, {
     line: 'from-violet-500',
   },
   amber: {
-    iconBg: 'bg-gradient-to-br from-amber-500 to-amber-600',
+    iconBg: 'bg-linear-to-br from-amber-500 to-amber-600',
     iconText: 'text-white',
     badge: 'bg-amber-500/15 border-amber-500/30',
     badgeText: 'text-amber-400',
@@ -126,7 +126,7 @@ const colorClasses: Record<string, {
     line: 'from-amber-500',
   },
   rose: {
-    iconBg: 'bg-gradient-to-br from-rose-500 to-rose-600',
+    iconBg: 'bg-linear-to-br from-rose-500 to-rose-600',
     iconText: 'text-white',
     badge: 'bg-rose-500/15 border-rose-500/30',
     badgeText: 'text-rose-400',
@@ -149,7 +149,7 @@ export default function ProcessTimeline() {
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De la comandă la </span>
-            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">livrare</span>
+            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">livrare</span>
           </h2>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
             Urmărește fiecare pas - transparent, simplu și eficient
@@ -160,12 +160,12 @@ export default function ProcessTimeline() {
         <div className="relative">
           {/* Vertical line - tablet and desktop - centered */}
           <div className="hidden sm:block absolute left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2">
-            <div className="h-full w-full bg-gradient-to-b from-orange-500/40 via-blue-500/40 to-rose-500/40"></div>
+            <div className="h-full w-full bg-linear-to-b from-orange-500/40 via-blue-500/40 to-rose-500/40"></div>
           </div>
 
           {/* Mobile vertical line */}
           <div className="sm:hidden absolute left-6 top-0 bottom-0 w-0.5">
-            <div className="h-full w-full bg-gradient-to-b from-orange-500/30 via-blue-500/30 to-rose-500/30"></div>
+            <div className="h-full w-full bg-linear-to-b from-orange-500/30 via-blue-500/30 to-rose-500/30"></div>
           </div>
 
           {/* Steps */}

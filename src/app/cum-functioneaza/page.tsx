@@ -7,7 +7,7 @@ export default function CumFunctioneazaPage() {
       <section className="relative py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Cum funcționează</span> <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>?
+            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Cum funcționează</span> <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>?
           </h1>
           <p className="text-xl text-gray-300">
             Un proces simplu în 5 pași pentru transport sigur și rapid în toată Europa

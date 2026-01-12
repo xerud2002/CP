@@ -13,28 +13,31 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 - `/dashboard/client` → `/comenzi`, `/profil`, `/suport`
 - `/dashboard/curier` → `/comenzi`, `/profil`, `/servicii`, `/verificare`
 - `/dashboard/admin` → Single-page tabbed UI with: `utilizatori`, `curieri`, `comenzi`, `arhiva`, `verificare-documente`, `setari`, `mesaje`, `monetizare`
-- `/comanda` → Order creation wizard (no header/footer)
+- `/comanda` → Order creation wizard (no header/footer, see `app/comanda/layout.tsx`)
 - `/api/contact` → Server-side email via Nodemailer (SMTP config in `.env.local`)
 
 ### Code Organization
 - `src/components/orders/{client|courier|shared}/` → Role-specific + reusable components
-- `src/components/admin/` → Admin panel components (`AdminUI.tsx`, `OrdersTable.tsx`, `UsersTable.tsx`, etc.)
+- `src/components/admin/` → Admin panel components (17 files: `AdminUI.tsx`, `OrdersTable.tsx`, `UsersTable.tsx`, `CouriersGrid.tsx`, etc.)
 - `src/hooks/{client|courier}/` → Role-specific data hooks
-- `src/hooks/useChatMessages.ts` → Shared real-time messaging
+- `src/hooks/useChatMessages.ts` → Shared real-time messaging (order-scoped 1-to-1 chats)
+- `src/hooks/useAdminMessages.ts` → Admin messaging system
 - `functions/` → Firebase Cloud Functions (placeholder, currently empty)
 
 ## Key Files (Single Source of Truth)
 
 | File | Purpose |
 |------|---------|
-| `lib/constants.ts` | `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig`, `serviceNames` |
+| `lib/constants.ts` | `countries` (24), `judetByCountry`, `serviceTypes` (10), `orderStatusConfig`, `serviceNames` |
 | `lib/cities.ts` | `oraseByCountryAndRegion` (20-30 major cities per region), `getOraseForRegion()`, `getAllOraseForCountry()` |
-| `lib/errorMessages.ts` | Firebase error code → Romanian message mapping (auth, firestore, storage) |
-| `lib/toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian |
+| `lib/errorMessages.ts` | Firebase error code → Romanian message mapping (auth, firestore, storage) — 40+ errors |
+| `lib/toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors via `getErrorMessage()` |
 | `lib/contact.ts` | `CONTACT_INFO`, `SOCIAL_LINKS`, `COMPANY_INFO` |
-| `contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()` |
+| `lib/firebase.ts` | Firebase v11 initialization — exports `auth`, `db`, `storage` (modular imports only) |
+| `contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
 | `utils/orderStatusHelpers.ts` | `canEditOrder()`, `canDeleteOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
-| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `UserRole`, `CourierProfile`, `DocumentRequirement` |
+| `types/index.ts` | TypeScript interfaces: `User`, `Order`, `UserRole`, `CourierProfile`, `DocumentRequirement`, `ChatMessage` |
+| `next.config.ts` | Production config: `removeConsole`, `optimizeCss`, image optimization, cache headers |
 
 ## Critical Patterns
 

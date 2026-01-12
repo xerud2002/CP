@@ -74,7 +74,7 @@ export default function PlatformVsFacebook() {
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 px-2">
             <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De ce să alegi </span>
-            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>
+            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>
             <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">?</span>
           </h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4">
@@ -111,7 +111,7 @@ export default function PlatformVsFacebook() {
 
               {/* Alternative comparison - warning tone */}
               <div className="flex items-start gap-3 sm:gap-4">
-                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-600/10 border border-amber-500/30 flex items-center justify-center">
+                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-linear-to-br from-amber-500/20 to-orange-600/10 border border-amber-500/30 flex items-center justify-center">
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                   </svg>
@@ -138,7 +138,7 @@ export default function PlatformVsFacebook() {
         <div className="text-center">
           <div className="inline-block p-6 sm:p-8 rounded-2xl bg-linear-to-br from-slate-800/90 to-slate-800/50 border border-orange-500/30 shadow-2xl shadow-orange-500/10">
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-              Caută <span className="text-orange-400">siguranță</span> și <span className="text-orange-400">profesionalism</span> pentru transporturile tale?
+              Caută <span className="text-orange-400">siguranță</span> și <span className="text-orange-400">profesionalism</span> pentru transporturile tale!
             </h3>
             <p className="text-gray-400 text-sm sm:text-base mb-5 max-w-2xl mx-auto leading-relaxed">
               Descoperă o experiență superioară: platformă dedicată cu 

@@ -9,7 +9,7 @@ export default function DesprePage() {
       <section className="relative py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
-            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Despre</span> <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>
+            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Despre</span> <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>
           </h1>
           <p className="text-base sm:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
             Conectăm clienții cu transportatori de încredere pentru servicii complete de transport în România și Europa.
