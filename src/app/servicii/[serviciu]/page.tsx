@@ -552,20 +552,11 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       locale: 'ro_RO',
       url: `https://curierulperfect.com/servicii/${serviciu}`,
       siteName: 'Curierul Perfect',
-      images: [
-        {
-          url: '/og-image.png',
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: ['/og-image.png'],
     },
     robots: {
       index: true,

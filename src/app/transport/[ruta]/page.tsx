@@ -855,20 +855,11 @@ export async function generateMetadata({ params }: { params: Promise<{ ruta: str
       locale: 'ro_RO',
       url: `https://curierulperfect.com/transport/${ruta}`,
       siteName: 'Curierul Perfect',
-      images: [
-        {
-          url: '/og-image.png',
-          width: 1200,
-          height: 630,
-          alt: data.title,
-        },
-      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: data.title,
       description: data.metaDescription,
-      images: ['/og-image.png'],
     },
     alternates: {
       canonical: `https://curierulperfect.com/transport/${ruta}`,

@@ -44,18 +44,9 @@ export const defaultMetadata: Metadata = {
     locale: 'ro_RO',
     url: SITE_URL,
     siteName: SITE_NAME,
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: `${SITE_NAME} - Transport Național și European`,
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['/og-image.png'],
   },
   robots: {
     index: true,

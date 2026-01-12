@@ -7,7 +7,7 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 
 **Multi-tenant SaaS** with roles: `client` | `curier` | `admin`. Owner-based Firestore security via `uid` fields.
 
-**⚠️ CRITICAL SECURITY**: Firestore rules check ownership but **don't filter results**—client queries MUST include `where('uid', '==', user.uid)`.
+**⚠️ CRITICAL SECURITY**: Firestore rules check ownership but **don't filter results**—client queries MUST include `where('uid_client', '==', user.uid)` for orders. See `firestore.rules` lines 41-47 for read permissions requiring client-side filtering.
 
 ### Route Structure
 - `/dashboard/client` → `/comenzi`, `/profil`, `/suport`
@@ -28,7 +28,8 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 | File | Purpose |
 |------|---------|
 | `lib/constants.ts` | `countries`, `judetByCountry`, `serviceTypes`, `orderStatusConfig`, `serviceNames` |
-| `lib/cities.ts` | `oraseByCountryAndRegion`, `getOraseForRegion()`, `getAllOraseForCountry()` |
+| `lib/cities.ts` | `oraseByCountryAndRegion` (20-30 major cities per region), `getOraseForRegion()`, `getAllOraseForCountry()` |
+| `lib/errorMessages.ts` | Firebase error code → Romanian message mapping (auth, firestore, storage) |
 | `lib/toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors to Romanian |
 | `lib/contact.ts` | `CONTACT_INFO`, `SOCIAL_LINKS`, `COMPANY_INFO` |
 | `contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()` |
@@ -58,8 +59,11 @@ export default function Page() {
 
 ### 2. Firestore Owner Filter (SECURITY-CRITICAL)
 ```tsx
-// ✅ CORRECT — always filter by owner
+// ✅ CORRECT — always filter by owner (field name varies by collection)
 const q = query(collection(db, 'comenzi'), where('uid_client', '==', user.uid), orderBy('createdAt', 'desc'));
+// For profil_curier/profil_client: doc ID = user.uid (no filter needed, direct doc access)
+// For users collection: doc ID = user.uid
+// For mesaje: filter by orderId + clientId + courierId (see Message Threading pattern)
 // ❌ WRONG — exposes other users' data
 const q = query(collection(db, 'comenzi'), orderBy('createdAt', 'desc'));
 ```
@@ -77,8 +81,9 @@ import { showSuccess, showError } from '@/lib/toast';
 try {
   await addDoc(collection(db, 'comenzi'), { ...data, createdAt: serverTimestamp() }); // ✅ NEVER use new Date()
   showSuccess('Salvat!');
-} catch (err) { showError(err); } // Auto-translates Firebase errors to Romanian
+} catch (err) { showError(err); } // Auto-translates Firebase errors to Romanian via lib/errorMessages.ts
 ```
+**Error Translation**: `showError()` automatically maps Firebase error codes to Romanian messages (e.g., `auth/user-not-found` → "Nu există niciun cont cu această adresă de email."). See `lib/errorMessages.ts` for full mapping.
 
 ### 5. Order Status Logic — Use Helpers
 ```tsx
@@ -143,7 +148,12 @@ npm run lighthouse   # Desktop performance audit (builds, starts, runs Lighthous
 - **Imports**: Use `@/*` alias (`@/lib/toast`), never `../../../`
 - **Constants**: Import from `lib/constants.ts`, never duplicate
 - **Types**: Import from `types/index.ts`, never inline interfaces
-- **Firebase**: Modular v11 syntax (`import { collection } from 'firebase/firestore'`)
+- **Firebase**: Modular v11 syntax — always import from submodules:
+  ```tsx
+  import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+  import { db } from '@/lib/firebase'; // Initialized instance
+  ```
+  NEVER use compatibility or compat imports.
 - **NO PRICES**: Never display prices, currency symbols (€, $, RON), or "de la X" pricing
 - **Production**: `next.config.ts` removes `console.*` in production builds
 
@@ -159,10 +169,12 @@ npm run lighthouse   # Desktop performance audit (builds, starts, runs Lighthous
 | Missing `onSnapshot` cleanup | `return () => unsubscribe()` |
 
 ## Service Name Normalization
-Orders store lowercase (`'colete'`), profiles may use capitalized (`'Colete'`):
+Orders store lowercase IDs (`'colete'`, `'plicuri'`), but `serviceTypes` in `constants.ts` uses mixed case in `value` field. Always normalize when comparing:
 ```tsx
+// ✅ CORRECT — normalize both sides
 const userServices = user.serviciiOferite?.map(s => s.toLowerCase().trim()) || [];
 const matchesService = userServices.includes(order.serviciu.toLowerCase().trim());
+// Common in: useOrdersLoader.ts, CouriersGrid.tsx, courier dashboard filters
 ```
 
 ## Styling
