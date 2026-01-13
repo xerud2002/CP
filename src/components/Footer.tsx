@@ -82,6 +82,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/preturi" className="text-gray-300 hover:text-orange-400 transition-colors text-sm">
+                  Prețuri
+                </Link>
+              </li>
+              <li>
                 <Link href="/devino-partener" className="text-gray-300 hover:text-orange-400 transition-colors text-sm">
                   Devino curier
                 </Link>

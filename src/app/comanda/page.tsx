@@ -735,6 +735,12 @@ function ComandaForm() {
               <Link href="/cum-functioneaza" className="text-gray-300 hover:text-orange-400 transition-colors">
                 Cum funcționează
               </Link>
+              <Link href="/preturi" className="text-gray-300 hover:text-orange-400 transition-colors">
+                Prețuri
+              </Link>
+              <Link href="/servicii" className="text-gray-300 hover:text-orange-400 transition-colors">
+                Servicii
+              </Link>
               <Link href="/faq" className="text-gray-300 hover:text-orange-400 transition-colors">
                 Întrebări frecvente
               </Link>
