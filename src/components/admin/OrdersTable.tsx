@@ -214,7 +214,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
               </div>
               
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-7 h-7 rounded-full bg-linear-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-semibold text-xs">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-semibold text-xs">
                   {clientName.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -287,7 +287,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
               <tr key={order.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                 <td className="py-3 px-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-linear-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center">
                       <span className="text-orange-400 text-xs font-bold">#</span>
                     </div>
                     <span className="text-white font-mono font-semibold text-sm">
@@ -297,7 +297,7 @@ export default function OrdersTable({ orders, onStatusChange, onViewDetails }: O
                 </td>
                 <td className="py-3 px-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-linear-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-semibold text-xs">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center text-white font-semibold text-xs">
                       {clientName.charAt(0).toUpperCase()}
                     </div>
                     <div>

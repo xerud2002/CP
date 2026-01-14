@@ -47,7 +47,7 @@ export function TabNavigation({ tabs, activeTab, onTabChange }: {
             onClick={() => onTabChange(tab.id)}
             className={`flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap shrink-0 ${
               activeTab === tab.id
-                ? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25'
+                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/25'
                 : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >

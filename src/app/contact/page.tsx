@@ -43,9 +43,9 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-slate-900">
-      <section className="py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
+      <section className="py-12 sm:py-16 lg:py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] [filter:drop-shadow(0_0_30px_rgba(251,146,60,0.5))]">
             Contactează-ne
           </h1>
           <p className="text-base sm:text-lg lg:text-xl text-gray-300 max-w-lg mx-auto">
@@ -127,11 +127,11 @@ export default function ContactPage() {
                 className="relative group/btn w-full py-3 min-h-12 text-sm sm:text-base rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
               >
                 {/* Gradient background */}
-                <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
                 {/* Shine effect */}
-                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
                 {/* Glow effect */}
-                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
                 {/* Content */}
                 <span className="relative z-10 text-white">{loading ? 'Se trimite...' : 'Trimite mesajul'}</span>
               </button>
@@ -187,7 +187,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="card p-4 sm:p-6 bg-linear-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20">
+            <div className="card p-4 sm:p-6 bg-gradient-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20">
               <h3 className="font-bold text-white text-sm sm:text-base mb-3">Social Media</h3>
               <div className="flex gap-2 sm:gap-3">
                 <a href="https://www.facebook.com/profile.php?id=61571831621426" target="_blank" rel="noopener noreferrer" className="p-2.5 sm:p-3 bg-white/5 hover:bg-white/10 rounded-lg transition min-w-11 min-h-11 flex items-center justify-center" aria-label="Facebook">

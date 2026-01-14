@@ -56,7 +56,7 @@ const cpKeyFeatures = [
 
 export default function PlatformVsFacebook() {
   return (
-    <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden bg-linear-to-b from-slate-900/50 via-slate-900 to-slate-900/50">
+    <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative overflow-hidden bg-gradient-to-b from-slate-900/50 via-slate-900 to-slate-900/50">
       {/* Background decorations */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
@@ -66,16 +66,16 @@ export default function PlatformVsFacebook() {
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-10 md:mb-14">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-500/10 to-orange-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4 shadow-lg shadow-emerald-500/10">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/10 to-orange-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4 shadow-lg shadow-emerald-500/10">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             Avantajele platformei
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 px-2">
-            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De ce să alegi </span>
-            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>
-            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">?</span>
+            <span className="bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De ce să alegi </span>
+            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] [filter:drop-shadow(0_0_30px_rgba(251,146,60,0.5))]">Curierul Perfect</span>
+            <span className="bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">?</span>
           </h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4">
             O platformă profesională dedicată vs. alternative improvizate
@@ -87,11 +87,11 @@ export default function PlatformVsFacebook() {
           {cpKeyFeatures.map((feature) => (
             <div 
               key={feature.id} 
-              className="group relative bg-linear-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-xl rounded-xl p-4 sm:p-5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 sm:hover:-translate-y-1"
+              className="group relative bg-gradient-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-xl rounded-xl p-4 sm:p-5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 sm:hover:-translate-y-1"
             >
               {/* CP Advantage */}
               <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4 pb-3 sm:pb-4 border-b border-slate-700/50">
-                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-linear-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
                   {feature.icon}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -111,7 +111,7 @@ export default function PlatformVsFacebook() {
 
               {/* Alternative comparison - warning tone */}
               <div className="flex items-start gap-3 sm:gap-4">
-                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-linear-to-br from-amber-500/20 to-orange-600/10 border border-amber-500/30 flex items-center justify-center">
+                <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-600/10 border border-amber-500/30 flex items-center justify-center">
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                   </svg>
@@ -136,7 +136,7 @@ export default function PlatformVsFacebook() {
 
         {/* Bottom CTA */}
         <div className="text-center">
-          <div className="inline-block p-6 sm:p-8 rounded-2xl bg-linear-to-br from-slate-800/90 to-slate-800/50 border border-orange-500/30 shadow-2xl shadow-orange-500/10">
+          <div className="inline-block p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-800/50 border border-orange-500/30 shadow-2xl shadow-orange-500/10">
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
               Caută <span className="text-orange-400">siguranță</span> și <span className="text-orange-400">profesionalism</span> pentru transporturile tale!
             </h3>
@@ -146,11 +146,11 @@ export default function PlatformVsFacebook() {
             </p>
             <Link href="/comanda" className="relative group/btn inline-flex items-center justify-center gap-2 px-8 py-3.5 text-base rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
               {/* Gradient background */}
-              <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
               {/* Shine effect */}
-              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
               {/* Glow effect */}
-              <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
               {/* Content */}
               <span className="relative z-10 text-white">Comandă în siguranță acum</span>
               <svg className="w-5 h-5 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>

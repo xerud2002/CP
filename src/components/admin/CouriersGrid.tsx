@@ -41,11 +41,11 @@ export default function CouriersGrid({ couriers, onSuspend }: CouriersGridProps)
         const services = getServices(courier);
         
         return (
-          <div key={courier.uid} className="bg-linear-to-br from-slate-800/80 to-slate-800/40 rounded-xl p-5 border border-white/5 hover:border-orange-500/30 transition-all hover:shadow-lg hover:shadow-orange-500/10 group">
+          <div key={courier.uid} className="bg-gradient-to-br from-slate-800/80 to-slate-800/40 rounded-xl p-5 border border-white/5 hover:border-orange-500/30 transition-all hover:shadow-lg hover:shadow-orange-500/10 group">
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-linear-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-orange-500/25 group-hover:scale-105 transition-transform relative">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-orange-500/25 group-hover:scale-105 transition-transform relative">
                   {courierName.charAt(0).toUpperCase()}
                   {courier.verified && (
                     <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center border-2 border-slate-800" title="Verificat">

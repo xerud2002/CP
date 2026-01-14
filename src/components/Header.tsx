@@ -34,7 +34,7 @@ export default function Header() {
         : 'bg-transparent backdrop-blur-sm'
     }`}>
       {/* Gradient line */}
-      <div className={`h-0.5 bg-linear-to-r from-orange-500 via-emerald-500 to-orange-500 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
+      <div className={`h-0.5 bg-gradient-to-r from-orange-500 via-emerald-500 to-orange-500 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
       
       <div className="max-w-7xl mx-auto flex justify-between items-center px-3 sm:px-4 lg:px-8 h-14 sm:h-16">
         {/* Logo */}
@@ -69,13 +69,13 @@ export default function Header() {
                 className="group/client relative px-3 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl transition-all duration-300 shadow-md hover:shadow-lg touch-manipulation overflow-hidden"
               >
                 {/* Gradient background - subtle blue/cyan */}
-                <div className="absolute inset-0 bg-linear-to-r from-slate-700 via-slate-600 to-slate-700 group-hover/client:from-cyan-600 group-hover/client:via-blue-600 group-hover/client:to-cyan-600 transition-all duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 group-hover/client:from-cyan-600 group-hover/client:via-blue-600 group-hover/client:to-cyan-600 transition-all duration-300"></div>
                 
                 {/* Border glow on hover */}
                 <div className="absolute inset-0 border border-slate-600/50 group-hover/client:border-cyan-500/50 rounded-lg md:rounded-xl transition-colors"></div>
                 
                 {/* Subtle glow effect */}
-                <div className="absolute -inset-0.5 bg-linear-to-r from-cyan-500 via-blue-500 to-cyan-500 rounded-lg md:rounded-xl blur opacity-0 group-hover/client:opacity-30 transition-opacity"></div>
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 rounded-lg md:rounded-xl blur opacity-0 group-hover/client:opacity-30 transition-opacity"></div>
                 
                 <span className="relative z-10 flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-gray-100 group-hover/client:text-white transition-colors font-medium">
                   <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,10 +91,10 @@ export default function Header() {
                 className="group/btn relative px-3 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 touch-manipulation overflow-hidden"
               >
                 {/* Animated gradient background */}
-                <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
                 
                 {/* Glow effect */}
-                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-lg md:rounded-xl blur-md opacity-40 group-hover/btn:opacity-60 transition-opacity"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-lg md:rounded-xl blur-md opacity-40 group-hover/btn:opacity-60 transition-opacity"></div>
                 
                 <span className="relative z-10 flex items-center gap-1.5 md:gap-2 text-sm md:text-base text-white font-medium">
                   <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,7 +109,7 @@ export default function Header() {
               {/* Dashboard Button */}
               <Link 
                 href={`/dashboard/${user.role}`}
-                className="group px-5 py-2.5 rounded-xl bg-linear-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 hover:-translate-y-0.5"
+                className="group px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 hover:-translate-y-0.5"
               >
                 <span className="flex items-center gap-2 text-white font-medium">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -172,8 +172,8 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {/* Gradient background */}
-                <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500"></div>
-                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur opacity-50"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur opacity-50"></div>
                 
                 <svg className="relative z-10 w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -185,7 +185,7 @@ export default function Header() {
             <>
               <Link 
                 href={`/dashboard/${user.role}`}
-                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-linear-to-r from-green-500 to-green-600 text-white font-medium shadow-lg shadow-green-500/25"
+                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-medium shadow-lg shadow-green-500/25"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

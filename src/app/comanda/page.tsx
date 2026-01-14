@@ -463,7 +463,7 @@ function ComandaForm() {
   // Loading state
   if (loading || !user) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Se încarcă...</p>
@@ -473,7 +473,7 @@ function ComandaForm() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       {/* Header */}
       <header className="bg-slate-900/90 backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 shadow-2xl shadow-black/20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -488,7 +488,7 @@ function ComandaForm() {
                 </svg>
               </Link>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-linear-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg shadow-orange-500/20">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg shadow-orange-500/20">
                   <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
@@ -514,7 +514,7 @@ function ComandaForm() {
               <span className="text-xs sm:text-sm font-medium text-gray-400">Pas <span className="text-white">{step}</span>/5</span>
               <div className="w-20 sm:w-32 h-2 bg-slate-800 rounded-full overflow-hidden shadow-inner">
                 <div 
-                  className="h-full bg-linear-to-r from-orange-500 via-amber-500 to-green-500 transition-all duration-500 ease-out shadow-lg"
+                  className="h-full bg-gradient-to-r from-orange-500 via-amber-500 to-green-500 transition-all duration-500 ease-out shadow-lg"
                   style={{ width: `${(step / 5) * 100}%` }}
                 />
               </div>
@@ -527,9 +527,9 @@ function ComandaForm() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Step 1: Selectare Serviciu */}
           {step === 1 && (
-            <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-yellow-500/20 border border-orange-500/30 flex items-center justify-center shadow-lg">
                   <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                   </svg>
@@ -548,11 +548,11 @@ function ComandaForm() {
                     onClick={() => setSelectedService(service.id)}
                     className={`group relative p-5 rounded-xl border-2 text-left transition-all duration-300 hover:scale-[1.02] active:scale-95 ${
                       selectedService === service.id
-                        ? 'border-orange-500 bg-linear-to-br from-orange-500/20 to-amber-500/10 shadow-lg shadow-orange-500/20'
+                        ? 'border-orange-500 bg-gradient-to-br from-orange-500/20 to-amber-500/10 shadow-lg shadow-orange-500/20'
                         : 'border-white/10 hover:border-white/20 bg-slate-700/40 hover:bg-slate-700/60'
                     }`}
                   >
-                    <div className={`w-14 h-14 rounded-xl bg-linear-to-br ${service.color} flex items-center justify-center mb-3 text-white shadow-lg transition-transform group-hover:scale-110`}>
+                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-3 text-white shadow-lg transition-transform group-hover:scale-110`}>
                       {service.icon}
                     </div>
                     <h3 className="font-bold text-white mb-1.5 group-hover:text-orange-400 transition-colors">{service.name}</h3>
@@ -581,9 +581,9 @@ function ComandaForm() {
 
           {/* Step 2: Date Personale */}
           {step === 2 && (
-            <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+            <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center shadow-lg">
                   <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
@@ -698,7 +698,7 @@ function ComandaForm() {
               <button
                 type="button"
                 onClick={handleNextStep}
-                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-linear-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl font-bold transition-all duration-300 shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 hover:scale-[1.02] active:scale-95"
+                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl font-bold transition-all duration-300 shadow-lg shadow-orange-500/40 hover:shadow-orange-500/60 hover:scale-[1.02] active:scale-95"
               >
                 <span>Continuă</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -709,7 +709,7 @@ function ComandaForm() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl font-bold transition-all duration-300 shadow-xl shadow-green-500/40 hover:shadow-green-500/60 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-95"
+                className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl font-bold transition-all duration-300 shadow-xl shadow-green-500/40 hover:shadow-green-500/60 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-95"
               >
                 {submitting ? (
                   <>
@@ -761,7 +761,7 @@ function ComandaForm() {
 export default function ComandaPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-400">Se încarcă...</p>

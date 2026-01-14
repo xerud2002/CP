@@ -103,8 +103,8 @@ export default function HowItWorksSection() {
             De ce existăm
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Misiunea </span>
-            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">noastră</span>
+            <span className="bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Misiunea </span>
+            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] [filter:drop-shadow(0_0_30px_rgba(251,146,60,0.5))]">noastră</span>
           </h2>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
             Construim o piață de transport sigură și transparentă, unde calitatea serviciilor este garantată de comunitate.

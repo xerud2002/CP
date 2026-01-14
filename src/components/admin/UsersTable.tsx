@@ -181,9 +181,9 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2.5 min-w-0 flex-1">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg relative shrink-0 ${
-                    u.role === 'admin' ? 'bg-linear-to-br from-red-500 to-red-600 shadow-red-500/25' :
-                    u.role === 'curier' ? 'bg-linear-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
-                    'bg-linear-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
+                    u.role === 'admin' ? 'bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/25' :
+                    u.role === 'curier' ? 'bg-gradient-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
+                    'bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
                   }`}>
                     {displayName.charAt(0).toUpperCase()}
                     {online && (
@@ -319,9 +319,9 @@ export default function UsersTable({ users, onRoleChange, onDelete, onViewDetail
                 <td className="py-2.5 px-3">
                   <div className="flex items-center gap-2.5">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-semibold text-xs shadow-lg relative ${
-                      u.role === 'admin' ? 'bg-linear-to-br from-red-500 to-red-600 shadow-red-500/25' :
-                      u.role === 'curier' ? 'bg-linear-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
-                      'bg-linear-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
+                      u.role === 'admin' ? 'bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/25' :
+                      u.role === 'curier' ? 'bg-gradient-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
+                      'bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
                     }`}>
                       {displayName.charAt(0).toUpperCase()}
                       {/* Online indicator on avatar */}

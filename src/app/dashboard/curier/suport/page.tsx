@@ -120,7 +120,7 @@ export default function SuportCurierPage() {
                 className={`group ${method.bg} ${method.hoverBg} backdrop-blur-sm rounded-xl border ${method.border} ${method.hoverBorder} p-4 sm:p-6 text-center hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden`}
               >
                 {/* Gradient overlay on hover */}
-                <div className={`absolute inset-0 bg-linear-to-br ${method.bg.replace('/10', '/20')} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-br ${method.bg.replace('/10', '/20')} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
                 
                 {isAdminMessage && unreadCount > 0 && (
                   <span className="absolute -top-2 -right-2 flex h-6 w-6 z-10">
@@ -145,11 +145,11 @@ export default function SuportCurierPage() {
 
         {/* Support Info */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6 text-center bg-linear-to-r from-blue-400 via-purple-400 to-violet-400 bg-clip-text text-transparent">Cum te putem ajuta?</h3>
+          <h3 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 via-purple-400 to-violet-400 bg-clip-text text-transparent">Cum te putem ajuta?</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Asistență pentru comenzi */}
-            <div className="group bg-linear-to-br from-emerald-500/10 to-emerald-600/5 backdrop-blur-sm rounded-xl border border-emerald-500/20 p-5 hover:border-emerald-500/40 transition-all hover:scale-[1.02]">
+            <div className="group bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 backdrop-blur-sm rounded-xl border border-emerald-500/20 p-5 hover:border-emerald-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <PackageIcon className="w-6 h-6 text-emerald-400" />
@@ -162,7 +162,7 @@ export default function SuportCurierPage() {
             </div>
 
             {/* Verificare cont */}
-            <div className="group bg-linear-to-br from-blue-500/10 to-blue-600/5 backdrop-blur-sm rounded-xl border border-blue-500/20 p-5 hover:border-blue-500/40 transition-all hover:scale-[1.02]">
+            <div className="group bg-gradient-to-br from-blue-500/10 to-blue-600/5 backdrop-blur-sm rounded-xl border border-blue-500/20 p-5 hover:border-blue-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <CheckCircleIcon className="w-6 h-6 text-blue-400" />
@@ -175,7 +175,7 @@ export default function SuportCurierPage() {
             </div>
 
             {/* Raportare comportament client */}
-            <div className="group bg-linear-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm rounded-xl border border-red-500/20 p-5 hover:border-red-500/40 transition-all hover:scale-[1.02]">
+            <div className="group bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm rounded-xl border border-red-500/20 p-5 hover:border-red-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <BellIcon className="w-6 h-6 text-red-400" />
@@ -188,7 +188,7 @@ export default function SuportCurierPage() {
             </div>
 
             {/* Plăți și comisioane */}
-            <div className="group bg-linear-to-br from-yellow-500/10 to-yellow-600/5 backdrop-blur-sm rounded-xl border border-yellow-500/20 p-5 hover:border-yellow-500/40 transition-all hover:scale-[1.02]">
+            <div className="group bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 backdrop-blur-sm rounded-xl border border-yellow-500/20 p-5 hover:border-yellow-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,7 +203,7 @@ export default function SuportCurierPage() {
             </div>
 
             {/* Cum funcționează platforma */}
-            <div className="group bg-linear-to-br from-orange-500/10 to-orange-600/5 backdrop-blur-sm rounded-xl border border-orange-500/20 p-5 hover:border-orange-500/40 transition-all hover:scale-[1.02]">
+            <div className="group bg-gradient-to-br from-orange-500/10 to-orange-600/5 backdrop-blur-sm rounded-xl border border-orange-500/20 p-5 hover:border-orange-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <ChatIcon className="w-6 h-6 text-orange-400" />
@@ -216,7 +216,7 @@ export default function SuportCurierPage() {
             </div>
 
             {/* Probleme tehnice */}
-            <div className="group bg-linear-to-br from-purple-500/10 to-purple-600/5 backdrop-blur-sm rounded-xl border border-purple-500/20 p-5 hover:border-purple-500/40 transition-all hover:scale-[1.02]">
+            <div className="group bg-gradient-to-br from-purple-500/10 to-purple-600/5 backdrop-blur-sm rounded-xl border border-purple-500/20 p-5 hover:border-purple-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -232,7 +232,7 @@ export default function SuportCurierPage() {
             </div>
 
             {/* Feedback și sugestii */}
-            <div className="group bg-linear-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-xl border border-pink-500/20 p-5 hover:border-pink-500/40 transition-all hover:scale-[1.02]">
+            <div className="group bg-gradient-to-br from-pink-500/10 to-pink-600/5 backdrop-blur-sm rounded-xl border border-pink-500/20 p-5 hover:border-pink-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <StarIcon className="w-6 h-6 text-pink-400" />
@@ -245,7 +245,7 @@ export default function SuportCurierPage() {
             </div>
 
             {/* Întrebări despre servicii */}
-            <div className="group bg-linear-to-br from-teal-500/10 to-teal-600/5 backdrop-blur-sm rounded-xl border border-teal-500/20 p-5 hover:border-teal-500/40 transition-all hover:scale-[1.02]">
+            <div className="group bg-gradient-to-br from-teal-500/10 to-teal-600/5 backdrop-blur-sm rounded-xl border border-teal-500/20 p-5 hover:border-teal-500/40 transition-all hover:scale-[1.02]">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-teal-500/20 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <StarIcon className="w-6 h-6 text-teal-400" />
@@ -260,7 +260,7 @@ export default function SuportCurierPage() {
         </div>
 
         {/* Important Notice for Couriers */}
-        <div className="bg-linear-to-r from-emerald-500/20 via-blue-500/20 to-violet-500/20 rounded-xl border border-emerald-500/30 p-5 mb-6">
+        <div className="bg-gradient-to-r from-emerald-500/20 via-blue-500/20 to-violet-500/20 rounded-xl border border-emerald-500/30 p-5 mb-6">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 bg-emerald-500/20 rounded-full flex items-center justify-center shrink-0">
               <CheckCircleIcon className="w-5 h-5 text-emerald-400" />

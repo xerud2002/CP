@@ -16,7 +16,7 @@ export default function ServiciiPage() {
   return (
     <main className="min-h-screen bg-slate-900">
       {/* Hero Section */}
-      <section className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900 relative overflow-hidden">
+      <section className="py-8 sm:py-12 lg:py-16 xl:py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-10 left-10 w-48 sm:w-72 h-48 sm:h-72 bg-orange-500/5 rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-48 sm:w-72 h-48 sm:h-72 bg-emerald-500/5 rounded-full blur-3xl"></div>
@@ -47,7 +47,7 @@ export default function ServiciiPage() {
                 href={`/servicii/${service.id}`}
                 className={`card p-4 sm:p-5 lg:p-6 hover:${service.borderColor} transition group block active:scale-[0.98]`}
               >
-                <div className={`w-11 h-11 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-lg sm:rounded-xl bg-linear-to-br ${service.bgColor} border ${service.borderColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform`}>
+                <div className={`w-11 h-11 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-lg sm:rounded-xl bg-gradient-to-br ${service.bgColor} border ${service.borderColor} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform`}>
                   <ServiceIcon service={service.id} className={`w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 ${service.color}`} />
                 </div>
                 <h3 className="text-sm sm:text-base lg:text-lg font-bold text-white mb-1.5 sm:mb-2 leading-tight">{service.label}</h3>
@@ -113,7 +113,7 @@ export default function ServiciiPage() {
           </div>
 
           {/* CTA */}
-          <div className="card p-5 sm:p-6 lg:p-8 bg-linear-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20 text-center">
+          <div className="card p-5 sm:p-6 lg:p-8 bg-gradient-to-br from-orange-500/10 to-purple-500/10 border-orange-500/20 text-center">
             <h2 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold text-white mb-2 sm:mb-3">Ai nevoie de transport?</h2>
             <p className="text-gray-400 text-sm sm:text-base mb-4 sm:mb-6 max-w-lg mx-auto leading-relaxed px-2">
               Postează cererea ta gratuit și primește oferte de la curieri verificați în câteva ore.

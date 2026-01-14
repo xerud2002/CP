@@ -232,10 +232,10 @@ const WelcomeSection = memo(function WelcomeSection({ userName, hasNewOrders, ve
   const greeting = getGreeting();
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-900/70 via-slate-800/50 to-slate-900/70 backdrop-blur-sm border border-orange-500/10 p-4 sm:p-6">
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/70 via-slate-800/50 to-slate-900/70 backdrop-blur-sm border border-orange-500/10 p-4 sm:p-6">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-linear-to-br from-orange-500/8 to-amber-500/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-linear-to-tr from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-orange-500/8 to-amber-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
 
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2 mb-4">
@@ -410,7 +410,7 @@ const SetupProgress = memo(function SetupProgress({ setupComplete, completedStep
   const steps = getSetupSteps(completedSteps >= 1, completedSteps >= 2);
   
   return (
-    <section className="bg-linear-to-br from-amber-500/10 to-orange-500/10 rounded-xl sm:rounded-2xl border border-amber-500/20 p-4 sm:p-6">
+    <section className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-xl sm:rounded-2xl border border-amber-500/20 p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
@@ -429,7 +429,7 @@ const SetupProgress = memo(function SetupProgress({ setupComplete, completedStep
       {/* Progress bar */}
       <div className="h-2 bg-slate-700 rounded-full mb-4 overflow-hidden">
         <div 
-          className="h-full bg-linear-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-500"
+          className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -507,10 +507,10 @@ const MainNavigation = memo(function MainNavigation({ badges, newOrdersCount, pr
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
+              className={`group relative bg-gradient-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-3 sm:p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-black/20 active:scale-95`}
             >
               {/* Hover gradient overlay */}
-              <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
+              <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
               
               {/* New Orders Badge - only for Comenzi card */}
               {hasNewOrders && (
@@ -668,7 +668,7 @@ const RecentActivity = memo(function RecentActivity({
                     !msg.read ? 'bg-orange-500/30' : 'bg-slate-700'
                   }`}>
                     {msg.senderRole === 'admin' ? (
-                      <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-purple-500 to-pink-500">
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500">
                         <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>

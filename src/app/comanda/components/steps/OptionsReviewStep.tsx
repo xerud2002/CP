@@ -46,9 +46,9 @@ export default function OptionsReviewStep({
   return (
     <div className="space-y-6">
       {/* Tip ofertanți */}
-      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+      <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
         <div className="flex items-center gap-3 mb-6">
-          <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${currentServiceInfo?.color || 'from-blue-500 to-cyan-500'} bg-opacity-20 border ${selectedService === 'plicuri' ? 'border-yellow-500/30' : selectedService === 'persoane' ? 'border-rose-500/30' : 'border-blue-500/30'} flex items-center justify-center shadow-lg`}>
+          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${currentServiceInfo?.color || 'from-blue-500 to-cyan-500'} bg-opacity-20 border ${selectedService === 'plicuri' ? 'border-yellow-500/30' : selectedService === 'persoane' ? 'border-rose-500/30' : 'border-blue-500/30'} flex items-center justify-center shadow-lg`}>
             <div className={selectedService === 'plicuri' ? 'text-yellow-400' : selectedService === 'persoane' ? 'text-rose-400' : 'text-blue-400'}>
               {currentServiceInfo?.icon || (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -197,9 +197,9 @@ export default function OptionsReviewStep({
       </div>
 
       {/* Opțiuni suplimentare */}
-      <div className="bg-linear-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
+      <div className="bg-gradient-to-br from-slate-800/90 via-slate-800/80 to-slate-900/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 shadow-2xl">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500/20 to-green-500/20 border border-emerald-500/30 flex items-center justify-center shadow-lg">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-green-500/20 border border-emerald-500/30 flex items-center justify-center shadow-lg">
             <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>

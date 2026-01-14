@@ -366,10 +366,10 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
   };
 
   return (
-    <div className={`flex flex-col h-full ${compact ? '' : 'bg-linear-to-br from-slate-900/60 to-slate-900/80 rounded-2xl border border-slate-700/50 shadow-xl backdrop-blur-sm'}`}>
+    <div className={`flex flex-col h-full ${compact ? '' : 'bg-gradient-to-br from-slate-900/60 to-slate-900/80 rounded-2xl border border-slate-700/50 shadow-xl backdrop-blur-sm'}`}>
       {/* Header with improved design - Only show if not compact */}
       {!compact && (
-        <div className="px-3 py-2.5 border-b border-slate-700/50 bg-linear-to-r from-slate-800/60 to-slate-800/40 rounded-t-2xl">
+        <div className="px-3 py-2.5 border-b border-slate-700/50 bg-gradient-to-r from-slate-800/60 to-slate-800/40 rounded-t-2xl">
           <div className="flex items-center gap-2">
             <div className="p-1.5 bg-blue-500/20 rounded-lg border border-blue-500/30">
               <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -406,7 +406,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
       >
         {messages.length === 0 ? (
           <div className="text-center py-8">
-            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-linear-to-br from-slate-800 to-slate-800/80 border border-slate-700/50 flex items-center justify-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-slate-800 to-slate-800/80 border border-slate-700/50 flex items-center justify-center">
               <svg className="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
@@ -430,8 +430,8 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                     <div className="flex items-center gap-1.5 px-1">
                       <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold ${
                         isClient 
-                          ? 'bg-linear-to-br from-emerald-500 to-emerald-600 text-white'
-                          : 'bg-linear-to-br from-orange-500 to-orange-600 text-white'
+                          ? 'bg-gradient-to-br from-emerald-500 to-emerald-600 text-white'
+                          : 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
                       }`}>
                         {msg.senderName.charAt(0).toUpperCase()}
                       </div>
@@ -476,10 +476,10 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
                     <div
                       className={`px-3 py-2 rounded-xl shadow-sm relative ${
                         isOwnMessage
-                          ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white rounded-br-md'
+                          ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-br-md'
                           : isClient
-                          ? 'bg-linear-to-br from-emerald-500/20 to-emerald-600/20 text-emerald-50 border border-emerald-500/30 rounded-bl-md backdrop-blur-sm'
-                          : 'bg-linear-to-br from-orange-500/20 to-orange-600/20 text-orange-50 border border-orange-500/30 rounded-bl-md backdrop-blur-sm'
+                          ? 'bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 text-emerald-50 border border-emerald-500/30 rounded-bl-md backdrop-blur-sm'
+                          : 'bg-gradient-to-br from-orange-500/20 to-orange-600/20 text-orange-50 border border-orange-500/30 rounded-bl-md backdrop-blur-sm'
                       }`}
                     >
                       {/* Non-image attachment with improved styling */}
@@ -530,10 +530,10 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
       </div>
 
       {/* Input form with enhanced design */}
-      <form onSubmit={handleSendMessage} className="p-2 sm:p-3 border-t border-slate-700/50 bg-linear-to-b from-slate-800/50 to-slate-800 shrink-0">
+      <form onSubmit={handleSendMessage} className="p-2 sm:p-3 border-t border-slate-700/50 bg-gradient-to-b from-slate-800/50 to-slate-800 shrink-0">
         {/* File preview with improved styling */}
         {selectedFile && (
-          <div className="mb-2 p-2 bg-linear-to-r from-slate-700/60 to-slate-700/40 border border-slate-600/50 rounded-lg flex items-center justify-between animate-in slide-in-from-bottom-2 fade-in backdrop-blur-sm">
+          <div className="mb-2 p-2 bg-gradient-to-r from-slate-700/60 to-slate-700/40 border border-slate-600/50 rounded-lg flex items-center justify-between animate-in slide-in-from-bottom-2 fade-in backdrop-blur-sm">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <div className="p-1.5 bg-orange-500/20 rounded-lg border border-orange-500/30">
                 <svg className="w-3.5 h-3.5 text-orange-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -575,7 +575,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={loading || uploadingFile}
-            className="flex items-center justify-center w-9 h-9 bg-linear-to-br from-slate-700 to-slate-700/80 hover:from-slate-600 hover:to-slate-600/80 border border-slate-600/50 hover:border-slate-500 text-gray-400 hover:text-orange-400 rounded-lg cursor-pointer transition-all hover:scale-105 active:scale-95 shadow-sm group disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed shrink-0"
+            className="flex items-center justify-center w-9 h-9 bg-gradient-to-br from-slate-700 to-slate-700/80 hover:from-slate-600 hover:to-slate-600/80 border border-slate-600/50 hover:border-slate-500 text-gray-400 hover:text-orange-400 rounded-lg cursor-pointer transition-all hover:scale-105 active:scale-95 shadow-sm group disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed shrink-0"
             title="Atașează fișier"
           >
             <svg className="w-4 h-4 group-hover:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -597,7 +597,7 @@ export default function OrderChat({ orderId, orderNumber, courierId, clientId, c
           <button
             type="submit"
             disabled={loading || uploadingFile || (!newMessage.trim() && !selectedFile)}
-            className="px-3 sm:px-4 py-2 bg-linear-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20 disabled:hover:scale-100 flex items-center gap-1.5 text-sm shrink-0 group"
+            className="px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20 disabled:hover:scale-100 flex items-center gap-1.5 text-sm shrink-0 group"
           >
             {(loading || uploadingFile) ? (
               <>

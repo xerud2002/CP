@@ -32,7 +32,7 @@ export default function ReclamatiiPage() {
   return (
     <main className="min-h-screen bg-slate-900">
       {/* Hero Section */}
-      <section className="py-16 sm:py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900 relative overflow-hidden">
+      <section className="py-16 sm:py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-10 left-10 w-72 h-72 bg-red-500/5 rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-72 h-72 bg-orange-500/5 rounded-full blur-3xl"></div>
@@ -58,28 +58,28 @@ export default function ReclamatiiPage() {
           {/* Process Steps */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
             <div className="card p-5 text-center group hover:border-orange-500/30 transition">
-              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                 <span className="font-bold text-orange-400 text-lg">1</span>
               </div>
               <h3 className="font-semibold text-white mb-1">Primim cererea</h3>
               <p className="text-xs text-gray-500">Instant</p>
             </div>
             <div className="card p-5 text-center group hover:border-blue-500/30 transition">
-              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                 <span className="font-bold text-blue-400 text-lg">2</span>
               </div>
               <h3 className="font-semibold text-white mb-1">Investigăm</h3>
               <p className="text-xs text-gray-500">24-48 ore</p>
             </div>
             <div className="card p-5 text-center group hover:border-purple-500/30 transition">
-              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 border border-purple-500/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                 <span className="font-bold text-purple-400 text-lg">3</span>
               </div>
               <h3 className="font-semibold text-white mb-1">Propunem soluție</h3>
               <p className="text-xs text-gray-500">48-72 ore</p>
             </div>
             <div className="card p-5 text-center group hover:border-emerald-500/30 transition">
-              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                 <span className="font-bold text-emerald-400 text-lg">4</span>
               </div>
               <h3 className="font-semibold text-white mb-1">Rezolvăm</h3>
@@ -290,7 +290,7 @@ export default function ReclamatiiPage() {
               </div>
 
               {/* Contact */}
-              <div className="card p-5 bg-linear-to-br from-orange-500/5 to-purple-500/5 border-orange-500/20">
+              <div className="card p-5 bg-gradient-to-br from-orange-500/5 to-purple-500/5 border-orange-500/20">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
                     <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -178,10 +178,10 @@ function WelcomeSection({ userName }: { userName: string }) {
   const greeting = getGreeting();
 
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-900/70 via-slate-800/50 to-slate-900/70 backdrop-blur-sm border border-orange-500/10 p-4 sm:p-6">
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/70 via-slate-800/50 to-slate-900/70 backdrop-blur-sm border border-orange-500/10 p-4 sm:p-6">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-linear-to-br from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-linear-to-tr from-orange-500/8 to-amber-500/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-br from-emerald-500/8 to-emerald-600/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-tr from-orange-500/8 to-amber-500/5 rounded-full blur-3xl" />
 
       <div className="relative z-10">
         <div className="flex items-center justify-between gap-2">
@@ -256,10 +256,10 @@ function MainNavigation({ totalNotifications }: { totalNotifications: number }) 
             <Link
               key={tile.href}
               href={tile.href}
-              className={`group relative bg-linear-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-4 sm:p-5 transition-all duration-300 hover:scale-[1.02] active:scale-95 flex flex-col min-h-30 sm:min-h-35`}
+              className={`group relative bg-gradient-to-br from-slate-800/90 via-slate-850/85 to-slate-900/90 backdrop-blur-xl rounded-xl border ${borderColor} p-4 sm:p-5 transition-all duration-300 hover:scale-[1.02] active:scale-95 flex flex-col min-h-30 sm:min-h-35`}
             >
               {/* Hover gradient overlay */}
-              <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
+              <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}></div>
               
               {/* Badge */}
               {tile.badge && (

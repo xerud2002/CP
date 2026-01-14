@@ -72,7 +72,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
     <div className="space-y-6">
       {/* Revenue Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-linear-to-br from-emerald-500/20 to-emerald-600/10 rounded-xl p-5 border border-emerald-500/20">
+        <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 rounded-xl p-5 border border-emerald-500/20">
           <div className="flex items-center justify-between mb-3">
             <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
               <MoneyIcon className="w-6 h-6 text-emerald-400" />
@@ -86,7 +86,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           <p className="text-gray-500 text-xs mt-1">Din {totalLeads} lead-uri finalizate</p>
         </div>
 
-        <div className="bg-linear-to-br from-orange-500/20 to-orange-600/10 rounded-xl p-5 border border-orange-500/20">
+        <div className="bg-gradient-to-br from-orange-500/20 to-orange-600/10 rounded-xl p-5 border border-orange-500/20">
           <div className="flex items-center justify-between mb-3">
             <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center">
               <PackageIcon className="w-6 h-6 text-orange-400" />
@@ -97,7 +97,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           <p className="text-gray-500 text-xs mt-1">Comenzi finalizate (livrate)</p>
         </div>
 
-        <div className="bg-linear-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-5 border border-purple-500/20">
+        <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-5 border border-purple-500/20">
           <div className="flex items-center justify-between mb-3">
             <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
               <UsersIcon className="w-6 h-6 text-purple-400" />
@@ -108,7 +108,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           <p className="text-gray-500 text-xs mt-1">Care pot primi lead-uri</p>
         </div>
 
-        <div className="bg-linear-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-5 border border-blue-500/20">
+        <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-5 border border-blue-500/20">
           <div className="flex items-center justify-between mb-3">
             <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
               <ChartIcon className="w-6 h-6 text-blue-400" />
@@ -146,7 +146,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
 
         <div className={`grid grid-cols-1 md:grid-cols-4 gap-4 overflow-hidden transition-all duration-300 ${isLeadWorkflowOpen ? 'mt-4 max-h-125 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="p-4 bg-slate-700/30 rounded-xl text-center">
-            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500/30 to-blue-600/20 flex items-center justify-center mx-auto mb-3 border border-blue-500/30 shadow-lg shadow-blue-500/10">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/30 to-blue-600/20 flex items-center justify-center mx-auto mb-3 border border-blue-500/30 shadow-lg shadow-blue-500/10">
               <span className="text-xl font-bold text-blue-400">1</span>
             </div>
             <h4 className="text-white font-medium mb-1">Client postează</h4>
@@ -154,7 +154,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </div>
 
           <div className="p-4 bg-slate-700/30 rounded-xl text-center">
-            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-orange-500/30 to-orange-600/20 flex items-center justify-center mx-auto mb-3 border border-orange-500/30 shadow-lg shadow-orange-500/10">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500/30 to-orange-600/20 flex items-center justify-center mx-auto mb-3 border border-orange-500/30 shadow-lg shadow-orange-500/10">
               <span className="text-xl font-bold text-orange-400">2</span>
             </div>
             <h4 className="text-white font-medium mb-1">Curier vede comanda</h4>
@@ -162,7 +162,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </div>
 
           <div className="p-4 bg-slate-700/30 rounded-xl text-center">
-            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-emerald-500/30 to-emerald-600/20 flex items-center justify-center mx-auto mb-3 border border-emerald-500/30 shadow-lg shadow-emerald-500/10">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/30 to-emerald-600/20 flex items-center justify-center mx-auto mb-3 border border-emerald-500/30 shadow-lg shadow-emerald-500/10">
               <span className="text-xl font-bold text-emerald-400">3</span>
             </div>
             <h4 className="text-white font-medium mb-1">Plătește lead-ul</h4>
@@ -170,7 +170,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </div>
 
           <div className="p-4 bg-slate-700/30 rounded-xl text-center">
-            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
               <span className="text-xl font-bold text-purple-400">4</span>
             </div>
             <h4 className="text-white font-medium mb-1">Contactează clientul</h4>
@@ -218,7 +218,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
                 className={`relative overflow-hidden rounded-2xl border ${service.borderColor} ${service.bgColor} p-5 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-${service.id === 'colete' ? 'blue' : service.id === 'plicuri' ? 'yellow' : service.id === 'persoane' ? 'pink' : service.id === 'electronice' ? 'purple' : service.id === 'animale' ? 'emerald' : service.id === 'platforma' ? 'red' : service.id === 'tractari' ? 'orange' : service.id === 'mobila' ? 'amber' : 'cyan'}-500/10`}
               >
                 {/* Background gradient effect */}
-                <div className={`absolute inset-0 bg-linear-to-br ${service.gradient} opacity-5`} />
+                <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-5`} />
                 
                 <div className="relative">
                   {/* Header with icon and title */}
@@ -307,7 +307,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
         <div className={`overflow-hidden transition-all duration-300 ${isSubscriptionOpen ? 'mt-4 max-h-500 opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="p-4 bg-purple-500/10 rounded-xl text-center border border-purple-500/20">
-            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
               <span className="text-xl font-bold text-purple-400">1</span>
             </div>
             <h4 className="text-white font-medium mb-1">Alege planul</h4>
@@ -315,7 +315,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </div>
 
           <div className="p-4 bg-purple-500/10 rounded-xl text-center border border-purple-500/20">
-            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
               <span className="text-xl font-bold text-purple-400">2</span>
             </div>
             <h4 className="text-white font-medium mb-1">Plătește abonamentul</h4>
@@ -323,7 +323,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </div>
 
           <div className="p-4 bg-purple-500/10 rounded-xl text-center border border-purple-500/20">
-            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
               <span className="text-xl font-bold text-purple-400">3</span>
             </div>
             <h4 className="text-white font-medium mb-1">Acces complet</h4>
@@ -331,7 +331,7 @@ export default function MonetizareContent({ users, orders }: MonetizareContentPr
           </div>
 
           <div className="p-4 bg-purple-500/10 rounded-xl text-center border border-purple-500/20">
-            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/30 to-purple-600/20 flex items-center justify-center mx-auto mb-3 border border-purple-500/30 shadow-lg shadow-purple-500/10">
               <span className="text-xl font-bold text-purple-400">4</span>
             </div>
             <h4 className="text-white font-medium mb-1">Lead-uri nelimitate</h4>

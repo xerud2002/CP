@@ -65,7 +65,7 @@ export default function TrustBadges() {
   ];
 
   return (
-    <section className="below-fold py-12 sm:py-16 px-3 sm:px-4 bg-linear-to-b from-slate-900 to-slate-900/95 relative overflow-hidden">
+    <section className="below-fold py-12 sm:py-16 px-3 sm:px-4 bg-gradient-to-b from-slate-900 to-slate-900/95 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none opacity-40">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
@@ -75,7 +75,7 @@ export default function TrustBadges() {
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-500/10 to-orange-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4 shadow-lg shadow-emerald-500/10">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/10 to-orange-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium mb-4 shadow-lg shadow-emerald-500/10">
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
             </svg>
@@ -94,11 +94,11 @@ export default function TrustBadges() {
           {badges.map((badge) => (
             <div
               key={badge.id}
-              className="group relative bg-linear-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-xl rounded-xl p-5 sm:p-6 border border-slate-700/50 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1"
+              className="group relative bg-gradient-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-xl rounded-xl p-5 sm:p-6 border border-slate-700/50 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1"
             >
               {/* Icon */}
               <div className="flex items-start gap-4">
-                <div className="shrink-0 w-14 h-14 rounded-lg bg-linear-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                <div className="shrink-0 w-14 h-14 rounded-lg bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
                   {badge.icon}
                 </div>
                 <div className="flex-1">

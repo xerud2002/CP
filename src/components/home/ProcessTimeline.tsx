@@ -86,7 +86,7 @@ const colorClasses: Record<string, {
   line: string;
 }> = {
   orange: {
-    iconBg: 'bg-linear-to-br from-orange-500 to-orange-600',
+    iconBg: 'bg-gradient-to-br from-orange-500 to-orange-600',
     iconText: 'text-white',
     badge: 'bg-orange-500/15 border-orange-500/30',
     badgeText: 'text-orange-400',
@@ -94,7 +94,7 @@ const colorClasses: Record<string, {
     line: 'from-orange-500',
   },
   emerald: {
-    iconBg: 'bg-linear-to-br from-emerald-500 to-emerald-600',
+    iconBg: 'bg-gradient-to-br from-emerald-500 to-emerald-600',
     iconText: 'text-white',
     badge: 'bg-emerald-500/15 border-emerald-500/30',
     badgeText: 'text-emerald-400',
@@ -102,7 +102,7 @@ const colorClasses: Record<string, {
     line: 'from-emerald-500',
   },
   blue: {
-    iconBg: 'bg-linear-to-br from-blue-500 to-blue-600',
+    iconBg: 'bg-gradient-to-br from-blue-500 to-blue-600',
     iconText: 'text-white',
     badge: 'bg-blue-500/15 border-blue-500/30',
     badgeText: 'text-blue-400',
@@ -110,7 +110,7 @@ const colorClasses: Record<string, {
     line: 'from-blue-500',
   },
   violet: {
-    iconBg: 'bg-linear-to-br from-violet-500 to-violet-600',
+    iconBg: 'bg-gradient-to-br from-violet-500 to-violet-600',
     iconText: 'text-white',
     badge: 'bg-violet-500/15 border-violet-500/30',
     badgeText: 'text-violet-400',
@@ -118,7 +118,7 @@ const colorClasses: Record<string, {
     line: 'from-violet-500',
   },
   amber: {
-    iconBg: 'bg-linear-to-br from-amber-500 to-amber-600',
+    iconBg: 'bg-gradient-to-br from-amber-500 to-amber-600',
     iconText: 'text-white',
     badge: 'bg-amber-500/15 border-amber-500/30',
     badgeText: 'text-amber-400',
@@ -126,7 +126,7 @@ const colorClasses: Record<string, {
     line: 'from-amber-500',
   },
   rose: {
-    iconBg: 'bg-linear-to-br from-rose-500 to-rose-600',
+    iconBg: 'bg-gradient-to-br from-rose-500 to-rose-600',
     iconText: 'text-white',
     badge: 'bg-rose-500/15 border-rose-500/30',
     badgeText: 'text-rose-400',
@@ -137,7 +137,7 @@ const colorClasses: Record<string, {
 
 export default function ProcessTimeline() {
   return (
-    <section className="below-fold py-16 sm:py-20 md:py-28 px-4 bg-linear-to-b from-slate-900 via-slate-900/95 to-slate-900 relative overflow-hidden">
+    <section className="below-fold py-16 sm:py-20 md:py-28 px-4 bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-900 relative overflow-hidden">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-16">
@@ -148,8 +148,8 @@ export default function ProcessTimeline() {
             Procesul complet
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De la comandă la </span>
-            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">livrare</span>
+            <span className="bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De la comandă la </span>
+            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] [filter:drop-shadow(0_0_30px_rgba(251,146,60,0.5))]">livrare</span>
           </h2>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
             Urmărește fiecare pas - transparent, simplu și eficient
@@ -160,12 +160,12 @@ export default function ProcessTimeline() {
         <div className="relative">
           {/* Vertical line - tablet and desktop - centered */}
           <div className="hidden sm:block absolute left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2">
-            <div className="h-full w-full bg-linear-to-b from-orange-500/40 via-blue-500/40 to-rose-500/40"></div>
+            <div className="h-full w-full bg-gradient-to-b from-orange-500/40 via-blue-500/40 to-rose-500/40"></div>
           </div>
 
           {/* Mobile vertical line */}
           <div className="sm:hidden absolute left-6 top-0 bottom-0 w-0.5">
-            <div className="h-full w-full bg-linear-to-b from-orange-500/30 via-blue-500/30 to-rose-500/30"></div>
+            <div className="h-full w-full bg-gradient-to-b from-orange-500/30 via-blue-500/30 to-rose-500/30"></div>
           </div>
 
           {/* Steps */}
@@ -270,11 +270,11 @@ export default function ProcessTimeline() {
             className="relative group/btn inline-flex items-center justify-center gap-2.5 px-8 py-4 text-base rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95"
           >
             {/* Gradient background */}
-            <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
             {/* Shine effect */}
-            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
             {/* Glow effect */}
-            <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
             {/* Content */}
             <span className="relative z-10 text-white">Solicită oferte gratuit</span>
             <svg className="w-5 h-5 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>

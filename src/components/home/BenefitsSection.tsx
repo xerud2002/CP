@@ -111,16 +111,16 @@ const colorClasses: Record<string, { border: string; hoverBorder: string; bg: st
 
 export default function BenefitsSection() {
   return (
-    <section className="below-fold py-12 sm:py-16 px-3 sm:px-4 bg-linear-to-b from-slate-900 to-slate-900/50">
+    <section className="below-fold py-12 sm:py-16 px-3 sm:px-4 bg-gradient-to-b from-slate-900 to-slate-900/50">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8 sm:mb-12">
           <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-blue-500/10 text-blue-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
             Avantajele platformei
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-2">
-            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De ce să alegi </span>
-            <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>
-            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">?</span>
+            <span className="bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">De ce să alegi </span>
+            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] [filter:drop-shadow(0_0_30px_rgba(251,146,60,0.5))]">Curierul Perfect</span>
+            <span className="bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">?</span>
           </h2>
           <p className="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto px-4">
             Soluție completă de transport național și european pentru orice tip de marfă sau pasageri între România și Europa
@@ -136,7 +136,7 @@ export default function BenefitsSection() {
                 key={benefit.id}
                 className={`group relative bg-slate-800/40 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border ${colors.border} ${colors.hoverBorder} transition-all duration-300 active:scale-95 sm:hover:scale-105`}
               >
-                <div className={`absolute inset-0 bg-linear-to-br ${colors.bg} to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-br ${colors.bg} to-transparent rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity`}></div>
                 <div className="relative">
                   <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl ${colors.iconBg} flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-110 transition-transform`}>
                     {benefit.icon}

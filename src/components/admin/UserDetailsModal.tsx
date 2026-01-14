@@ -37,9 +37,9 @@ export default function UserDetailsModal({ user, onClose }: UserDetailsModalProp
           {/* User Avatar & Name */}
           <div className="flex items-center gap-4">
             <div className={`w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg ${
-              user.role === 'admin' ? 'bg-linear-to-br from-red-500 to-red-600 shadow-red-500/25' :
-              user.role === 'curier' ? 'bg-linear-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
-              'bg-linear-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
+              user.role === 'admin' ? 'bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/25' :
+              user.role === 'curier' ? 'bg-gradient-to-br from-orange-400 to-orange-600 shadow-orange-500/25' :
+              'bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-emerald-500/25'
             }`}>
               {displayName.charAt(0).toUpperCase()}
             </div>

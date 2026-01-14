@@ -6,17 +6,17 @@ export default function DevinoPartenerPage() {
   return (
     <main className="min-h-screen bg-slate-900">
       {/* Hero */}
-      <section className="relative py-12 sm:py-16 lg:py-20 px-4 bg-linear-to-b from-slate-800 via-slate-900 to-slate-900 overflow-hidden">
+      <section className="relative py-12 sm:py-16 lg:py-20 px-4 bg-gradient-to-b from-slate-800 via-slate-900 to-slate-900 overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-linear-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 text-green-400 text-xs sm:text-sm font-semibold mb-6 sm:mb-8 animate-pulse">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 text-green-400 text-xs sm:text-sm font-semibold mb-6 sm:mb-8 animate-pulse">
             <svg className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
             </svg>
             <span className="text-center">100% GRATUIT - Fără Comisioane!</span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
-            <span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">Devino Curier</span> <span className="bg-linear-to-r from-emerald-400 via-teal-400 to-green-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]">Partner</span>
+            <span className="bg-gradient-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">Devino Curier</span> <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-green-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] [filter:drop-shadow(0_0_30px_rgba(52,211,153,0.5))]">Partner</span>
           </h1>
           <p className="text-base sm:text-xl lg:text-2xl text-gray-300 mb-3 sm:mb-4 leading-relaxed max-w-2xl mx-auto">
             Alătură-te platformei #1 de transport pentru români din Europa
@@ -27,11 +27,11 @@ export default function DevinoPartenerPage() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link href="/register?role=curier" className="relative group/btn inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-10 py-3 sm:py-4 text-sm sm:text-lg min-h-12 rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
               {/* Gradient emerald background */}
-              <div className="absolute inset-0 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 transition-transform group-hover/btn:scale-110"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-green-500 transition-transform group-hover/btn:scale-110"></div>
               {/* Shine effect */}
-              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
               {/* Glow effect */}
-              <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-green-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
               {/* Content */}
               <svg className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -148,7 +148,7 @@ export default function DevinoPartenerPage() {
       </section>
 
       {/* Requirements */}
-      <section className="py-10 sm:py-16 px-4 bg-linear-to-b from-slate-800/50 to-slate-900">
+      <section className="py-10 sm:py-16 px-4 bg-gradient-to-b from-slate-800/50 to-slate-900">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4">Cerințe pentru înregistrare</h2>
@@ -205,7 +205,7 @@ export default function DevinoPartenerPage() {
               }
             ].map((req, idx) => (
               <div key={idx} className="card p-4 sm:p-6 flex items-start gap-3 sm:gap-4 hover:border-orange-500/30 transition-colors group">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center shrink-0 text-orange-400 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/20 flex items-center justify-center shrink-0 text-orange-400 group-hover:scale-110 transition-transform">
                   {req.icon}
                 </div>
                 <div>
@@ -295,14 +295,14 @@ export default function DevinoPartenerPage() {
             ].map((item, idx) => (
               <div key={idx} className="relative">
                 {idx < 3 && (
-                  <div className="absolute left-9 top-20 w-0.5 h-12 bg-linear-to-b from-orange-500/50 to-transparent hidden sm:block" />
+                  <div className="absolute left-9 top-20 w-0.5 h-12 bg-gradient-to-b from-orange-500/50 to-transparent hidden sm:block" />
                 )}
                 <div className="flex flex-col sm:flex-row gap-6 items-start">
                   <div className="relative shrink-0">
-                    <div className="w-18 h-18 rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-orange-500/30">
+                    <div className="w-18 h-18 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-orange-500/30">
                       {item.step}
                     </div>
-                    <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-xl bg-linear-to-br from-green-500/20 to-green-600/20 border-2 border-green-500/30 flex items-center justify-center text-green-400">
+                    <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-green-600/20 border-2 border-green-500/30 flex items-center justify-center text-green-400">
                       {item.icon}
                     </div>
                   </div>
@@ -326,7 +326,7 @@ export default function DevinoPartenerPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 px-4 bg-linear-to-b from-slate-900 to-slate-800/50">
+      <section className="py-16 px-4 bg-gradient-to-b from-slate-900 to-slate-800/50">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Întrebări frecvente</h2>
@@ -461,7 +461,7 @@ export default function DevinoPartenerPage() {
             ].map((testimonial, idx) => (
               <div key={idx} className="card p-6 hover:border-orange-500/30 transition-colors">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold">
                     {testimonial.avatar}
                   </div>
                   <div>
@@ -486,7 +486,7 @@ export default function DevinoPartenerPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 px-4 bg-linear-to-b from-slate-800/50 to-slate-900">
+      <section className="py-20 px-4 bg-gradient-to-b from-slate-800/50 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-semibold mb-6">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">

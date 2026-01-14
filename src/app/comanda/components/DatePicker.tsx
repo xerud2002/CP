@@ -111,8 +111,8 @@ export default function DatePicker({
   const hoverBorder = accentColor === 'orange' ? 'hover:border-orange-500/50' : 'hover:border-blue-500/50';
   const focusRing = accentColor === 'orange' ? 'focus:ring-orange-500/50' : 'focus:ring-blue-500/50';
   const selectedBg = accentColor === 'orange' 
-    ? 'bg-linear-to-br from-orange-600 to-amber-600' 
-    : 'bg-linear-to-br from-blue-600 to-cyan-600';
+    ? 'bg-gradient-to-br from-orange-600 to-amber-600' 
+    : 'bg-gradient-to-br from-blue-600 to-cyan-600';
 
   return (
     <div>

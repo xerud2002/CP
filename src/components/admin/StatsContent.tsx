@@ -80,7 +80,7 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
     <div className="space-y-6">
       {/* Quick Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="bg-linear-to-br from-emerald-500/20 to-emerald-600/10 rounded-xl p-4 border border-emerald-500/20">
+        <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 rounded-xl p-4 border border-emerald-500/20">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
               <UsersIcon className="w-4 h-4 text-emerald-400" />
@@ -89,7 +89,7 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
           </div>
           <div className="text-2xl font-bold text-emerald-400">{clientsCount}</div>
         </div>
-        <div className="bg-linear-to-br from-orange-500/20 to-orange-600/10 rounded-xl p-4 border border-orange-500/20">
+        <div className="bg-gradient-to-br from-orange-500/20 to-orange-600/10 rounded-xl p-4 border border-orange-500/20">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center">
               <TruckIcon className="w-4 h-4 text-orange-400" />
@@ -98,7 +98,7 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
           </div>
           <div className="text-2xl font-bold text-orange-400">{couriersCount}</div>
         </div>
-        <div className="bg-linear-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-4 border border-blue-500/20">
+        <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-xl p-4 border border-blue-500/20">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
               <PackageIcon className="w-4 h-4 text-blue-400" />
@@ -107,7 +107,7 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
           </div>
           <div className="text-2xl font-bold text-blue-400">{orders.length}</div>
         </div>
-        <div className="bg-linear-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-4 border border-purple-500/20">
+        <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-xl p-4 border border-purple-500/20">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
               <ChartIcon className="w-4 h-4 text-purple-400" />
@@ -116,7 +116,7 @@ export default function StatsContent({ users, orders }: StatsContentProps) {
           </div>
           <div className="text-2xl font-bold text-purple-400">{recentOrders}</div>
         </div>
-        <div className="bg-linear-to-br from-pink-500/20 to-pink-600/10 rounded-xl p-4 border border-pink-500/20">
+        <div className="bg-gradient-to-br from-pink-500/20 to-pink-600/10 rounded-xl p-4 border border-pink-500/20">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-8 h-8 rounded-lg bg-pink-500/20 flex items-center justify-center">
               <ChartIcon className="w-4 h-4 text-pink-400" />

@@ -393,7 +393,7 @@ function ProfilCurierContent() {
             <div className="relative group shrink-0">
               <div 
                 onClick={handleImageClick}
-                className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-2xl bg-linear-to-br from-orange-500/20 to-amber-600/20 flex items-center justify-center cursor-pointer overflow-hidden border-2 border-slate-700/50 group-hover:border-orange-500/50 transition-all duration-300 shadow-2xl group-hover:shadow-orange-500/20"
+                className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-2xl bg-gradient-to-br from-orange-500/20 to-amber-600/20 flex items-center justify-center cursor-pointer overflow-hidden border-2 border-slate-700/50 group-hover:border-orange-500/50 transition-all duration-300 shadow-2xl group-hover:shadow-orange-500/20"
               >
                 <Image 
                   src={profile.profileImage || '/img/default-avatar.png'} 
@@ -406,7 +406,7 @@ function ProfilCurierContent() {
               </div>
               <button 
                 onClick={handleImageClick}
-                className="absolute -bottom-2 -right-2 p-3 bg-linear-to-br from-orange-500 to-orange-600 rounded-xl border-3 border-slate-800 hover:from-orange-400 hover:to-orange-500 transition-all shadow-xl hover:scale-110 active:scale-95"
+                className="absolute -bottom-2 -right-2 p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl border-3 border-slate-800 hover:from-orange-400 hover:to-orange-500 transition-all shadow-xl hover:scale-110 active:scale-95"
                 title="Schimbă imaginea"
               >
                 <CameraIcon />
@@ -613,7 +613,7 @@ function ProfilCurierContent() {
               {/* Business Information Section */}
               <div className="bg-slate-800/50 rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                  <div className="p-2.5 bg-linear-to-br from-blue-500/30 to-blue-600/30 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/20">
+                  <div className="p-2.5 bg-gradient-to-br from-blue-500/30 to-blue-600/30 rounded-xl border border-blue-500/30 shadow-lg shadow-blue-500/20">
                     <BuildingIcon />
                   </div>
                   <span>{profile.tipBusiness === 'firma' ? 'Date Firmă' : 'Date Business'}</span>
@@ -757,7 +757,7 @@ function ProfilCurierContent() {
               {/* Personal Information Section */}
               <div className="bg-slate-800/50 rounded-2xl border border-white/10 p-6 sm:p-8 shadow-xl">
                 <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
-                  <div className="p-2.5 bg-linear-to-br from-orange-500/30 to-orange-600/30 rounded-xl border border-orange-500/30 shadow-lg shadow-orange-500/20">
+                  <div className="p-2.5 bg-gradient-to-br from-orange-500/30 to-orange-600/30 rounded-xl border border-orange-500/30 shadow-lg shadow-orange-500/20">
                     <UserIcon />
                   </div>
                   Informații Personale

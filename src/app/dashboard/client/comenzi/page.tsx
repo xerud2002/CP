@@ -138,7 +138,7 @@ function ComenziClientContent() {
               <ArrowLeftIcon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
             </Link>
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="p-2.5 sm:p-3 bg-linear-to-br from-blue-500/20 to-cyan-500/20 rounded-xl border border-blue-500/20">
+              <div className="p-2.5 sm:p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl border border-blue-500/20">
                 <PackageIcon className="w-6 h-6 sm:w-7 sm:h-7 text-blue-400" />
               </div>
               <div>
@@ -155,11 +155,11 @@ function ComenziClientContent() {
         {/* Add New Order CTA */}
         <Link
           href="/comanda"
-          className="group block mb-6 bg-linear-to-r from-orange-500/10 via-amber-500/5 to-green-500/10 hover:from-orange-500/20 hover:via-amber-500/10 hover:to-green-500/20 backdrop-blur-sm rounded-xl border border-orange-500/20 hover:border-orange-500/40 p-4 sm:p-5 transition-all duration-300"
+          className="group block mb-6 bg-gradient-to-r from-orange-500/10 via-amber-500/5 to-green-500/10 hover:from-orange-500/20 hover:via-amber-500/10 hover:to-green-500/20 backdrop-blur-sm rounded-xl border border-orange-500/20 hover:border-orange-500/40 p-4 sm:p-5 transition-all duration-300"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-linear-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-orange-500/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
@@ -208,7 +208,7 @@ function ComenziClientContent() {
             </p>
             <Link
               href="/comanda"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-orange-500/25"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-orange-500/25"
             >
               <PackageIcon className="w-5 h-5" />
               Creează Prima Comandă

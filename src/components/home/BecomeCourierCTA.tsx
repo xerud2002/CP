@@ -70,29 +70,29 @@ const trustIndicators = [
 
 export default function BecomeCourierCTA() {
   return (
-    <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+    <section className="below-fold py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       {/* Background effects */}
-      <div className="absolute inset-0 bg-linear-to-b from-slate-900 via-slate-900/95 to-slate-900 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-900 pointer-events-none"></div>
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 bg-orange-500/10 rounded-full blur-3xl"></div>
         <div className="absolute top-1/4 right-1/4 w-100 h-100 bg-green-500/5 rounded-full blur-3xl"></div>
       </div>
 
       <div className="max-w-5xl mx-auto relative z-10">
-        <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-linear-to-br from-slate-800/90 via-slate-800/70 to-slate-800/90 backdrop-blur-xl border border-white/10 shadow-2xl">
+        <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-800/90 via-slate-800/70 to-slate-800/90 backdrop-blur-xl border border-white/10 shadow-2xl">
           {/* Animated gradient overlay */}
-          <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-green-500/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-green-500/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
           
           {/* Decorative elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-linear-to-tr from-green-500/10 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-green-500/10 to-transparent rounded-full blur-3xl"></div>
           
           <div className="relative p-5 sm:p-6 md:p-10 lg:p-14">
             {/* Icon with animation */}
             <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 mx-auto mb-5 sm:mb-6 md:mb-8 group">
-              <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-orange-600 rounded-2xl animate-pulse"></div>
-              <div className="absolute inset-0 bg-linear-to-br from-orange-500 to-orange-600 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-              <div className="relative w-full h-full rounded-2xl bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-2xl shadow-orange-500/40 group-hover:scale-110 transition-transform duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl animate-pulse"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+              <div className="relative w-full h-full rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-2xl shadow-orange-500/40 group-hover:scale-110 transition-transform duration-300">
                 <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8 17h8M8 17a2 2 0 11-4 0m4 0a2 2 0 10-4 0m12 0a2 2 0 11-4 0m4 0a2 2 0 10-4 0M3 9h13a2 2 0 012 2v4H3V9zm13 0V5a2 2 0 00-2-2H5a2 2 0 00-2 2v4h13z" />
                 </svg>
@@ -102,7 +102,7 @@ export default function BecomeCourierCTA() {
             {/* Title */}
             <div className="text-center mb-5 sm:mb-6">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-3 sm:mb-4 px-2">
-                <span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">Vrei să fii </span><span className="bg-linear-to-r from-emerald-400 via-teal-400 to-green-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(52,211,153,0.5)]">Partener de Transport</span><span className="bg-linear-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">?</span>
+                <span className="bg-gradient-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">Vrei să fii </span><span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-green-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] [filter:drop-shadow(0_0_30px_rgba(52,211,153,0.5))]">Partener de Transport</span><span className="bg-gradient-to-r from-white via-emerald-100 to-white bg-clip-text text-transparent">?</span>
               </h2>
               <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed px-2">
                 Găsește clienți pe rutele tale existente. Selectezi zonele pe care le acoperi și serviciile oferite, iar noi îți aducem comenzi pe drumul tău.
@@ -116,9 +116,9 @@ export default function BecomeCourierCTA() {
                 
                 return (
                   <div key={benefit.id} className={`group relative bg-slate-700/30 hover:bg-slate-700/50 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 border border-white/5 ${colors.hoverBorder} transition-all duration-300 active:scale-95 md:hover:-translate-y-1`}>
-                    <div className={`absolute inset-0 bg-linear-to-br from-transparent to-transparent ${colors.hoverGradient} rounded-xl sm:rounded-2xl transition-all duration-300`}></div>
+                    <div className={`absolute inset-0 bg-gradient-to-br from-transparent to-transparent ${colors.hoverGradient} rounded-xl sm:rounded-2xl transition-all duration-300`}></div>
                     <div className="relative">
-                      <div className={`w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-lg sm:rounded-xl bg-linear-to-br ${colors.iconBg} border ${colors.border} flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg ${colors.shadow}`}>
+                      <div className={`w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 sm:mb-4 rounded-lg sm:rounded-xl bg-gradient-to-br ${colors.iconBg} border ${colors.border} flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg ${colors.shadow}`}>
                         {benefit.icon}
                       </div>
                       <h3 className="text-white font-bold text-base sm:text-lg mb-1.5 sm:mb-2 text-center">{benefit.title}</h3>
@@ -138,15 +138,15 @@ export default function BecomeCourierCTA() {
                 className="group/btn relative inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-3.5 md:py-4 text-white font-bold rounded-xl transition-all active:scale-95 md:hover:scale-105 text-base sm:text-lg min-h-12 overflow-hidden"
               >
                 {/* Animated gradient background */}
-                <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
                 
                 {/* Shine effect */}
                 <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity">
-                  <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
                 </div>
                 
                 {/* Glow effect */}
-                <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
                 
                 {/* Content */}
                 <span className="relative z-10">Înregistrează-te Gratuit</span>

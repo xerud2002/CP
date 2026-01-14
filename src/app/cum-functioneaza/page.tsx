@@ -4,10 +4,10 @@ export default function CumFunctioneazaPage() {
   return (
     <main className="min-h-screen bg-slate-900">
       {/* Hero */}
-      <section className="relative py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
+      <section className="relative py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">
-            <span className="bg-linear-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Cum funcționează</span> <span className="bg-linear-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-size-[200%_auto] drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">Curierul Perfect</span>?
+            <span className="bg-gradient-to-r from-white via-orange-100 to-white bg-clip-text text-transparent">Cum funcționează</span> <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] [filter:drop-shadow(0_0_30px_rgba(251,146,60,0.5))]">Curierul Perfect</span>?
           </h1>
           <p className="text-xl text-gray-300">
             Un proces simplu în 5 pași pentru transport sigur și rapid în toată Europa
@@ -73,7 +73,7 @@ export default function CumFunctioneazaPage() {
             <div key={idx} className="relative mb-12 last:mb-0">
               {/* Connector line */}
               {idx < 4 && (
-                <div className="absolute left-10 top-24 w-0.5 h-12 bg-linear-to-b from-white/20 to-transparent hidden md:block" />
+                <div className="absolute left-10 top-24 w-0.5 h-12 bg-gradient-to-b from-white/20 to-transparent hidden md:block" />
               )}
               
               <div className="flex flex-col md:flex-row gap-6 items-start">
@@ -84,7 +84,7 @@ export default function CumFunctioneazaPage() {
                       {item.icon}
                     </svg>
                   </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-xs font-bold">
                     {item.step}
                   </div>
                 </div>
@@ -149,11 +149,11 @@ export default function CumFunctioneazaPage() {
           <div className="mt-8 text-center">
             <Link href="/register?role=curier" className="relative group/btn inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
               {/* Gradient emerald background */}
-              <div className="absolute inset-0 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 transition-transform group-hover/btn:scale-110"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-teal-500 to-green-500 transition-transform group-hover/btn:scale-110"></div>
               {/* Shine effect */}
-              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
               {/* Glow effect */}
-              <div className="absolute -inset-1 bg-linear-to-r from-emerald-500 via-teal-500 to-green-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-green-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
               {/* Content */}
               <span className="relative z-10 text-white">Devino Partener Curier</span>
               <svg className="w-5 h-5 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,7 +212,7 @@ export default function CumFunctioneazaPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 bg-linear-to-br from-orange-500/10 to-orange-600/5">
+      <section className="py-16 px-4 bg-gradient-to-br from-orange-500/10 to-orange-600/5">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-6">Simplu, Rapid, Sigur</h2>
           <p className="text-gray-300 mb-8 text-lg">
@@ -220,11 +220,11 @@ export default function CumFunctioneazaPage() {
           </p>
           <Link href="/comanda" className="relative group/btn inline-flex items-center justify-center gap-3 px-10 py-4 text-lg rounded-xl font-semibold overflow-hidden transition-all hover:scale-105 active:scale-95">
             {/* Gradient background */}
-            <div className="absolute inset-0 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 transition-transform group-hover/btn:scale-110"></div>
             {/* Shine effect */}
-            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
             {/* Glow effect */}
-            <div className="absolute -inset-1 bg-linear-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-xl blur-lg opacity-50 group-hover/btn:opacity-75 transition-opacity"></div>
             {/* Content */}
             <span className="relative z-10 text-white">Plasează prima comandă</span>
             <svg className="w-6 h-6 relative z-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

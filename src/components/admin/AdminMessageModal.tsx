@@ -119,8 +119,8 @@ export default function AdminMessageModal({ user: targetUser, onClose }: AdminMe
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold shadow-lg ${
               targetUser.role === 'curier' 
-                ? 'bg-linear-to-br from-orange-400 to-orange-600' 
-                : 'bg-linear-to-br from-emerald-400 to-emerald-600'
+                ? 'bg-gradient-to-br from-orange-400 to-orange-600' 
+                : 'bg-gradient-to-br from-emerald-400 to-emerald-600'
             }`}>
               {targetUserName.charAt(0).toUpperCase()}
             </div>
@@ -157,7 +157,7 @@ export default function AdminMessageModal({ user: targetUser, onClose }: AdminMe
                   <div
                     className={`max-w-[70%] rounded-2xl px-4 py-2.5 ${
                       isAdmin
-                        ? 'bg-linear-to-br from-orange-500 to-orange-600 text-white'
+                        ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
                         : 'bg-slate-700/50 text-gray-100'
                     }`}
                   >
@@ -193,7 +193,7 @@ export default function AdminMessageModal({ user: targetUser, onClose }: AdminMe
             <button
               onClick={handleSendMessage}
               disabled={!newMessage.trim() || sending}
-              className="px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-orange-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed h-fit"
+              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-orange-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed h-fit"
             >
               {sending ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

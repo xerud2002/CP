@@ -340,7 +340,7 @@ function VerificarePageContent() {
             <Link href="/dashboard/curier" className="p-2 hover:bg-slate-800/80 rounded-xl">
               <ArrowLeftIcon className="w-5 h-5 text-gray-400" />
             </Link>
-            <div className="p-2.5 bg-linear-to-br from-green-500/20 to-green-500/20 rounded-xl border border-green-500/20">
+            <div className="p-2.5 bg-gradient-to-br from-green-500/20 to-green-500/20 rounded-xl border border-green-500/20">
               <CheckCircleIcon className="w-6 h-6 text-green-400" />
             </div>
             <div>
@@ -353,7 +353,7 @@ function VerificarePageContent() {
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
         {/* Why Verification is Important */}
-        <div className="bg-linear-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl rounded-2xl border border-green-500/30 p-6 mb-6">
+        <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 backdrop-blur-xl rounded-2xl border border-green-500/30 p-6 mb-6">
           <div className="flex items-start gap-4">
             <div className="p-3 bg-green-500/20 rounded-xl border border-green-500/30 shrink-0">
               <svg className="w-6 h-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

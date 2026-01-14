@@ -1,7 +1,7 @@
 export default function TermeniPage() {
   return (
     <main className="min-h-screen bg-slate-900">
-      <section className="py-20 px-4 bg-linear-to-b from-slate-800 to-slate-900">
+      <section className="py-20 px-4 bg-gradient-to-b from-slate-800 to-slate-900">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6">
             Termeni și <span className="text-gradient">Condiții</span>
@@ -172,7 +172,7 @@ export default function TermeniPage() {
             </p>
           </div>
 
-          <div className="card p-8 bg-linear-to-br from-orange-500/10 to-amber-500/5 border-orange-500/30">
+          <div className="card p-8 bg-gradient-to-br from-orange-500/10 to-amber-500/5 border-orange-500/30">
             <h2 className="text-2xl font-bold text-white mb-4">14. Ai întrebări sau probleme?</h2>
             <p className="text-gray-300 mb-4">
               Dacă ceva din documentul ăsta nu-i clar, sau ai patanias cu o comandă, scrie-ne:

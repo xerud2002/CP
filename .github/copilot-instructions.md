@@ -7,33 +7,40 @@ Romanian courier marketplace: clients post delivery requests, couriers bid/chat,
 
 **Multi-tenant SaaS** with roles: `client` | `curier` | `admin`. Owner-based Firestore security via `uid` fields.
 
-**⚠️ CRITICAL SECURITY**: Firestore rules check ownership but **don't filter results**—client queries MUST include `where('uid_client', '==', user.uid)` for orders. See `firestore.rules` (lines 41-47) for read permissions requiring client-side filtering.
+**⚠️ CRITICAL SECURITY**: Firestore rules check ownership but **don't filter results**—client queries MUST include `where('uid_client', '==', user.uid)` for orders. See [firestore.rules](../firestore.rules#L41-L47) for read permissions requiring client-side filtering.
+
+**Data Model**: 5 core collections—`users` (base profile), `profil_client`/`profil_curier` (extended profiles), `comenzi` (orders), `mesaje` (1-to-1 chats). All use document ID = `uid` except orders (auto-generated) and messages (composite key via `orderId` + `clientId` + `courierId`).
 
 ### Route Structure
 - `/dashboard/client` → `/comenzi`, `/profil`, `/suport`
 - `/dashboard/curier` → `/comenzi`, `/profil`, `/servicii`, `/verificare`
-- `/dashboard/admin` → Single-page tabbed UI (see `src/components/admin/AdminUI.tsx`)
-- `/comanda` → Order creation wizard (no header/footer, custom layout)
+- `/dashboard/admin` → Single-page tabbed UI (see [AdminUI.tsx](../src/components/admin/AdminUI.tsx))
+- `/comanda` → Order creation wizard (no header/footer, custom layout via [layout.tsx](../src/app/comanda/layout.tsx))
 - `/api/contact` → Server-side email via Nodemailer (SMTP config in `.env.local`)
 
 ### Code Organization
-- `src/components/orders/{client|courier|shared}/` → Role-specific + reusable components
-- `src/components/admin/` → Admin panel components (17 files)
-- `src/hooks/{client|courier}/` → Role-specific data hooks
-- `src/hooks/useChatMessages.ts` → Shared real-time messaging (order-scoped 1-to-1 chats)
-- `functions/` → Firebase Cloud Functions (placeholder)
+- [src/components/orders/{client|courier|shared}/](../src/components/orders/) → Role-specific + reusable components
+- [src/components/admin/](../src/components/admin/) → Admin panel components (17 files)
+- [src/hooks/{client|courier}/](../src/hooks/) → Role-specific data hooks (e.g., `useClientOrdersLoader`, `useCourierOrders`)
+- [src/hooks/useChatMessages.ts](../src/hooks/useChatMessages.ts) → Shared real-time messaging (order-scoped 1-to-1 chats)
+- `functions/` → Firebase Cloud Functions (placeholder for server-side logic)
+
+**Lazy Loading**: Heavy components use React `lazy()` + `Suspense` (see [dashboard/client/comenzi/page.tsx](../src/app/dashboard/client/comenzi/page.tsx#L16-L17) for `OrderDetailsModal`, `HelpCard`)
+
+**Filter Persistence**: Dashboard filters auto-save to `localStorage` (keys: `clientOrderFilter_country`, `clientOrderFilter_service`, etc.)
 
 ## Key Files (Single Source of Truth)
 
 | File | Purpose |
 |------|---------|
-| `src/lib/constants.ts` | `countries` (24), `judetByCountry`, `serviceTypes` (10), `orderStatusConfig` |
-| `src/lib/cities.ts` | `oraseByCountryAndRegion`, `getOraseForRegion()`, `getAllOraseForCountry()` |
-| `src/lib/errorMessages.ts` | Firebase error → Romanian message mapping (40+ errors) |
-| `src/lib/toast.ts` | `showSuccess()`, `showError()` — auto-translates Firebase errors |
-| `src/contexts/AuthContext.tsx` | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()` |
-| `src/utils/orderStatusHelpers.ts` | `canEditOrder()`, `canDeleteOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
-| `src/types/index.ts` | `User`, `Order`, `UserRole`, `CourierProfile`, `DocumentRequirement`, `ChatMessage` |
+| [src/lib/constants.ts](../src/lib/constants.ts) | `countries` (24), `judetByCountry` (regions/județe), `serviceTypes` (10), `orderStatusConfig` |
+| [src/lib/cities.ts](../src/lib/cities.ts) | `oraseByCountryAndRegion`, `getOraseForRegion()`, `getAllOraseForCountry()` |
+| [src/lib/errorMessages.ts](../src/lib/errorMessages.ts) | Firebase error → Romanian message mapping (40+ errors) via `getErrorMessage()` |
+| [src/lib/toast.ts](../src/lib/toast.ts) | `showSuccess()`, `showError()`, `showInfo()`, `showWarning()` — auto-translates Firebase errors |
+| [src/contexts/AuthContext.tsx](../src/contexts/AuthContext.tsx) | `useAuth()`: `user`, `loading`, `login()`, `register()`, `loginWithGoogle()`, `logout()`, `resetPassword()` |
+| [src/utils/orderStatusHelpers.ts](../src/utils/orderStatusHelpers.ts) | `canEditOrder()`, `canDeleteOrder()`, `transitionToInLucru()`, `transitionToFinalizata()` |
+| [src/types/index.ts](../src/types/index.ts) | `User`, `Order`, `UserRole`, `CourierProfile`, `DocumentRequirement`, `ChatMessage` |
+| [firestore.rules](../firestore.rules) | Security rules—READ FIRST when debugging access issues. Lines 41-47 show owner-filter requirement |
 
 ## Critical Patterns
 
@@ -47,11 +54,16 @@ import { useEffect } from 'react';
 export default function Page() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  
   useEffect(() => {
-    if (!loading && (!user || user.role !== 'client')) router.push('/login?role=client');
+    if (!loading && (!user || user.role !== 'client')) {
+      router.push('/login?role=client');
+    }
   }, [user, loading, router]);
+  
   if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="spinner" /></div>;
   if (!user) return null;
+  
   // ... protected content
 }
 ```
@@ -74,24 +86,36 @@ const q = query(collection(db, 'mesaje'), where('orderId', '==', orderId), where
 ```tsx
 import { serverTimestamp } from 'firebase/firestore';
 import { showSuccess, showError } from '@/lib/toast';
+
 try {
-  await addDoc(collection(db, 'comenzi'), { ...data, createdAt: serverTimestamp() }); // ✅ NEVER use new Date()
+  await addDoc(collection(db, 'comenzi'), { 
+    ...data, 
+    createdAt: serverTimestamp() // ✅ NEVER use new Date()
+  }); 
   showSuccess('Salvat!');
-} catch (err) { showError(err); } // Auto-translates Firebase errors to Romanian
+} catch (err) { 
+  showError(err); // Auto-translates Firebase errors to Romanian
+}
 ```
 
 ### 5. Order Status Logic — Use Helpers
 ```tsx
 import { canEditOrder, transitionToInLucru } from '@/utils/orderStatusHelpers';
-if (canEditOrder(order.status)) { /* show edit */ } // ✅ Business logic in helpers
+
+if (canEditOrder(order.status)) { 
+  /* show edit */ 
+} // ✅ Business logic in helpers
+
 // ❌ NEVER: if (order.status === 'noua') — logic must stay in helpers
 ```
 
 ### 6. Real-time Subscriptions — Always Cleanup
 ```tsx
 useEffect(() => {
-  const unsubscribe = onSnapshot(query(...), snap => { /* ... */ });
-  return () => unsubscribe(); // MUST cleanup
+  const unsubscribe = onSnapshot(query(...), snap => { 
+    /* process snapshot */ 
+  });
+  return () => unsubscribe(); // MUST cleanup to prevent memory leaks
 }, [deps]);
 ```
 

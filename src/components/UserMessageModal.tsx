@@ -115,7 +115,7 @@ export default function UserMessageModal({ onClose }: UserMessageModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-700">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
               <ChatIcon className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -154,7 +154,7 @@ export default function UserMessageModal({ onClose }: UserMessageModalProps) {
                   <div
                     className={`max-w-[70%] rounded-lg p-3 ${
                       isFromAdmin
-                        ? 'bg-linear-to-br from-orange-500 to-orange-600 text-white'
+                        ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white'
                         : isFromMe
                         ? 'bg-slate-700 text-white'
                         : 'bg-slate-700 text-white'
@@ -195,7 +195,7 @@ export default function UserMessageModal({ onClose }: UserMessageModalProps) {
             <button
               onClick={handleSendMessage}
               disabled={!newMessage.trim() || sending}
-              className="px-6 py-3 bg-linear-to-r from-orange-500 to-orange-600 text-white rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg font-semibold hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {sending ? 'Se trimite...' : 'Trimite'}
             </button>
