@@ -4,8 +4,8 @@ import type { Metadata } from 'next';
 import { ServiceIcon } from '@/components/icons/ServiceIcons';
 
 export const metadata: Metadata = {
-  title: 'Transport România - Europa | Colete, Mobilă, Persoane | Curierul Perfect',
-  description: 'Găsește transportatori verificați între România și Europa. Colete, mobilă, persoane, mașini. Germania, Italia, Spania, Franța, UK, Austria, Belgia, Olanda.',
+  title: 'Transport Europa ✓ România-Germania, Italia, Spania | Curieri Verificați',
+  description: '🚚 Transport colete, mobilă, persoane România ↔️ Europa. Compari gratuit oferte de la curieri verificați. Germania, Italia, Spania, UK, Franța. Fără comision!',
   openGraph: {
     title: 'Transport România - Europa | Curierul Perfect',
     description: 'Găsește transportatori verificați între România și Europa.',
