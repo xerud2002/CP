@@ -45,7 +45,7 @@ export default function PreturiPage() {
       {/* Hero Section */}
       <section className="relative py-16 sm:py-20 lg:py-28 px-4 overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-slate-900 to-purple-500/10" />
+        <div className="absolute inset-0 bg-linear-to-br from-orange-500/10 via-slate-900 to-purple-500/10" />
         <div className="absolute top-20 left-10 w-72 h-72 bg-orange-500/20 rounded-full blur-3xl" />
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
         
