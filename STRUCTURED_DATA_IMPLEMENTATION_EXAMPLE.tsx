@@ -8,15 +8,29 @@
  */
 
 import Script from 'next/script';
+import { notFound } from 'next/navigation';
 import { 
   generateTransportServiceSchema, 
   generateBreadcrumbSchema, 
   generateFAQSchema 
 } from '@/lib/structuredData';
 
-// ... existing imports and routesData ...
+// Import your existing routesData from the actual page
+// Example: const routesData = { ... };
+
+interface RouteDataType {
+  title: string;
+  country: string;
+  metaDescription: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  cities: { ro: string; eu: string }[];
+  faq: { q: string; a: string }[];
+}
 
 export default function TransportRoute({ params }: { params: { ruta: string } }) {
+  // Replace 'routesData' with your actual data structure
+  const routesData: Record<string, RouteDataType> = {}; // Your actual data here
   const routeData = routesData[params.ruta];
   
   if (!routeData) {
@@ -127,7 +141,7 @@ export function RoutePageWrapper({
   slug 
 }: { 
   children: React.ReactNode; 
-  routeData: any; 
+  routeData: RouteDataType; 
   slug: string;
 }) {
   const serviceSchema = generateTransportServiceSchema({
