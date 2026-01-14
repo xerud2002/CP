@@ -172,7 +172,7 @@ export default function TermeniPage() {
             </p>
           </div>
 
-          <div className="card p-8 bg-gradient-to-br from-orange-500/10 to-amber-500/5 border-orange-500/30">
+          <div className="card p-8 bg-linear-to-br from-orange-500/10 to-amber-500/5 border-orange-500/30">
             <h2 className="text-2xl font-bold text-white mb-4">14. Ai întrebări sau probleme?</h2>
             <p className="text-gray-300 mb-4">
               Dacă ceva din documentul ăsta nu-i clar, sau ai patanias cu o comandă, scrie-ne:

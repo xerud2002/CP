@@ -60,7 +60,7 @@ export default function PreturiPage() {
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
             Prețuri stabilite de
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">piață, nu de noi</span>
+            <span className="block text-transparent bg-clip-text bg-linear-to-r from-orange-400 to-amber-500">piață, nu de noi</span>
           </h1>
           
           <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -91,10 +91,10 @@ export default function PreturiPage() {
               <div key={idx} className="relative group">
                 {/* Connector line */}
                 {idx < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-orange-500/50 to-transparent z-0" />
+                  <div className="hidden lg:block absolute top-10 left-full w-full h-0.5 bg-linear-to-r from-orange-500/50 to-transparent z-0" />
                 )}
                 <div className="card p-6 text-center hover:border-orange-500/40 transition-all duration-300 relative z-10">
-                  <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-orange-500/30">
+                  <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-orange-500/30">
                     {item.icon}
                   </div>
                   <div className="text-xs font-bold text-orange-400 mb-2">PASUL {item.step}</div>
@@ -146,7 +146,7 @@ export default function PreturiPage() {
       </section>
 
       {/* Benefits grid */}
-      <section className="py-16 sm:py-20 px-4 bg-gradient-to-b from-slate-800/50 to-slate-900">
+      <section className="py-16 sm:py-20 px-4 bg-linear-to-b from-slate-800/50 to-slate-900">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">De ce Curierul Perfect?</h2>
@@ -218,7 +218,7 @@ export default function PreturiPage() {
 
       {/* CTA Section */}
       <section className="py-16 sm:py-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 via-transparent to-amber-500/10" />
+        <div className="absolute inset-0 bg-linear-to-r from-orange-500/10 via-transparent to-amber-500/10" />
         <div className="max-w-3xl mx-auto text-center relative z-10">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Gata să primești oferte?</h2>
           <p className="text-lg text-gray-300 mb-8 max-w-xl mx-auto">
