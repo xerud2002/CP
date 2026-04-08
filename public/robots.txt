@@ -32,15 +32,16 @@ Disallow: /forgot-password
 Disallow: /_next/static/
 Disallow: /*.json$
 
-# Googlebot specific
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 1
+# Exclude dynamically generated images from indexing as pages
+Disallow: /*opengraph-image*
+Disallow: /*icon.png*
+Disallow: /*apple-icon.png*
 
-# Bingbot specific  
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 2
+# Exclude URL parameters and specific file types that don't need indexing
+Disallow: /*?serviciu=
+Disallow: /*?download=
+Disallow: /*.php$
+Disallow: /*.ico$
 
 # Block AI training crawlers from private content
 User-agent: GPTBot
