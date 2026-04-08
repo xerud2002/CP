@@ -56,7 +56,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routePriorities: Record<string, number> = {
     'romania-italia': 0.9,      // Largest Romanian diaspora
     'romania-germania': 0.9,    // Second largest diaspora
+    'romania-uk': 0.85,         // Major destination, umbrella UK page
     'romania-anglia': 0.85,     // Major destination, post-Brexit complexity
+    'romania-franta': 0.8,      // Growing diaspora, Paris, Lyon
     'romania-spania': 0.85,     // Large diaspora
     'romania-austria': 0.8,     // Proximity, frequent routes
     'romania-belgia': 0.8,
